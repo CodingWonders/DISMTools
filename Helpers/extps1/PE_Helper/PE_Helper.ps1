@@ -746,9 +746,8 @@ function Start-PECustomization
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
-            if (Test-Path -Path "$((Get-Location).Path)\let_it_rain" -PathType Leaf) {
-                Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
-            }
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE.PolicyHelper.ps1" -Destination "$imagePath\DTPE.PolicyHelper.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
             New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
@@ -802,6 +801,28 @@ function Start-PECustomization
         else
         {
             Write-Host "Scratch size could not be set."
+        }
+        try
+        {
+            $policyVersion = "0.8.0.26031"
+
+            Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
+            Write-Host "Initializing default Preinstallation Environment policy..."
+            if (-not (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)) { throw }
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /ve /t REG_SZ /d "PolicyVer=$policyVersion"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v ShowWatermark /t REG_DWORD /d 1
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v UEFICA23Preference /t REG_SZ /d "AskUser"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PartTableOverridePreference /t REG_SZ /d "NoOverride"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCConnAttempts /t REG_DWORD /d 5
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCGraphoView /t REG_DWORD /d 1
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
+            Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
+            Write-Host "Policy System initialized."
+        }
+        catch
+        {
+            Write-Host "Could not change registry..."
         }
         return $true
     }
@@ -987,6 +1008,7 @@ function Start-OSApplication
         Write-Host "This procedure must be run on Windows PE only."
         return
     }
+    . "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
     if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -lt 1)
     {
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
@@ -997,6 +1019,13 @@ function Start-OSApplication
     exit
 '@
     New-Item -Path "$env:SYSTEMDRIVE\files\diskpart" -ItemType Directory -Force | Out-Null
+    $override = [PartitionTableOverride]::NoOverride
+    $overrideStr = Get-PolicyValue -PolicyName "PartTableOverridePreference" -DefaultPolicyValue "NoOverride" -ValidOptions @("NoOverride", "AlwaysMBR", "AlwaysGPT")
+    switch ($overrideStr) {
+        "NoOverride" { $override = [PartitionTableOverride]::NoOverride }
+        "AlwaysMBR" { $override = [PartitionTableOverride]::AlwaysMBR }
+        "AlwaysGPT" { $override = [PartitionTableOverride]::AlwaysGPT }
+    }
     $diskGetterDpScript | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
@@ -1005,7 +1034,7 @@ function Start-OSApplication
         return
     }
     Write-Host "Selected disk: disk $($drive)"
-    $partitionOptions = Get-Partitions $drive
+    $partitionOptions = Get-Partitions $drive $override
     if ($partitionOptions["partitionNumber"] -eq "B")
     {
         do {
@@ -1016,7 +1045,7 @@ function Start-OSApplication
                 return
             }
             Write-Host "Selected disk: disk $($drive)"
-            $partitionOptions = Get-Partitions $drive
+            $partitionOptions = Get-Partitions $drive $override
         } until ($partitionOptions["partitionNumber"] -ne "B")
     }
     if ($partitionOptions["partitionNumber"] -eq 0)
@@ -1036,7 +1065,7 @@ function Start-OSApplication
     {
         do
         {
-            $partitionOptions = Get-Partitions $drive
+            $partitionOptions = Get-Partitions $drive $override
             if ($partitionOptions["partitionNumber"] -eq "B")
             {
                 do {
@@ -1047,7 +1076,7 @@ function Start-OSApplication
                         return
                     }
                     Write-Host "Selected disk: disk $($drive)"
-                    $partitionOptions = Get-Partitions $drive
+                    $partitionOptions = Get-Partitions $drive $override
                 } until ($partitionOptions["partitionNumber"] -ne "B")
             }
             if ($partitionOptions["partitionNumber"] -eq 0)
@@ -1111,8 +1140,15 @@ function Start-OSApplication
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
+    $bootexStr = Get-PolicyValue -PolicyName "UEFICA23Preference" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "UseNever", "UseAlways")
     $usebootex = $false
-    if (($partOverride -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+    $bootexPolicyUsed = $false
+    if ($bootexStr -ne "AskUser") { $bootexPolicyUsed = $true }
+    switch ($bootexStr) {
+        "UseNever" { $usebootex = $false }
+        "UseAlways" { $usebootex = $true }
+    }
+    if (($bootexPolicyUsed -ne $true) -and ($partOverride -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
         # Quick run-down: we only ask for EFI boot binary when no overrides are used, we find Secure Boot on the system, AND
         # if the provided bcdboot supports bootex.
         Write-Host "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions"
@@ -1312,12 +1348,14 @@ function Get-Disks
                 {
                     if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
-                        @"
+                        if ((Get-PolicyValue -PolicyName "DTDimShowPnputilOut" -DefaultPolicyValue 1 -ValidOptions @(0,1)) -eq 1) {
+                            @"
 These are the device IDs of the hardware devices that could not be detected. Please
 install device drivers based on hardware IDs. After installation, please close this window.
 "@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
-                        pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
-                        notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
+                            pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
+                            notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
+                        }
                         Clear-Host
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait

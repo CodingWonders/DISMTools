@@ -149,7 +149,7 @@ function Get-WdsInstallImages {
         $imageGroups = Get-WdsInstallImageGroup
         $images = @()
         foreach ($group in $imageGroups) {
-            $groupImages = Get-WdsInstallImage -ImageGroup $group.Name | Select-Object FileName, Name, Description, ImageGroup, Size, @{Name='Last Modification Time (UTC)'; Expression='LastModificationTime'}, Version, @{Name='Priority'; Expression='DisplayOrder'} | Sort-Object -Property Priority
+            $groupImages = Get-WdsInstallImage -ImageGroup $group.Name | Select-Object FileName, Name, Description, ImageGroup, Size, @{Name='LastModifyUtc'; Expression='LastModificationTime'}, Version, @{Name='Priority'; Expression='DisplayOrder'} | Sort-Object -Property Priority
             $images += $groupImages
         }
         Write-LogMessage -message "Returning $($images.Count) image(s)..."

@@ -24,7 +24,14 @@ if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
 	)
 )
-if exist "%sysdrive%\ShowWatermark.ps1" (
+:: Determine if we have set the policy to show a watermark
+SET ShowWatermark=0
+FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /v ShowWatermark 2^>NUL') DO (
+	IF /I "%%A" == "0x0" SET ShowWatermark=0
+	IF /I "%%A" == "0x1" SET ShowWatermark=1
+)
+
+if !ShowWatermark! EQU 1 (
 	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
 )
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (

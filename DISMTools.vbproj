@@ -1355,6 +1355,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\startup\ChangeKeyboardLayout.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE.PolicyHelper.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE_Inventory.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1395,6 +1398,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\PXEHelpers.Startup.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.designer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.resources.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\prepare_wds.ps1">
@@ -2185,10 +2197,7 @@ IF %25GEN_INSTALLER%25=="Yes" (
 		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
 		rd "$(SolutionDir)Installer\files" /s /q
 	)
-)
-
-REM make it so that DTPE reports version info via watermark
-BREAK &gt; bin\extps1\PE_Helper\let_it_rain</PostBuildEvent>
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...
