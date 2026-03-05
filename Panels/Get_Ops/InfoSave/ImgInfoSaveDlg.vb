@@ -696,129 +696,133 @@ Public Class ImgInfoSaveDlg
             Dim pkgFeaturesList As String = "<ul>"
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
                 For Each pkgFile In PackageFiles
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
-                                Case "ESN"
-                                    msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
-                                Case "FRA"
-                                    msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
-                                Case "PTB", "PTG"
-                                    msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
-                                Case "ITA"
-                                    msg = "Verifica informazioni file pacchetto... (file pacchetto " & PackageFiles.IndexOf(pkgFile) + 1 & " di " & PackageFiles.Count & ")"
-                            End Select
-                        Case 1
-                            msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
-                        Case 2
-                            msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
-                        Case 3
-                            msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
-                        Case 4
-                            msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
-                        Case 5
-                            msg = "Verifica informazioni file pacchetto... (file pacchetto " & PackageFiles.IndexOf(pkgFile) + 1 & " di " & PackageFiles.Count & ")"
-                    End Select
-                    ReportChanges(msg, (PackageFiles.IndexOf(pkgFile) / PackageFiles.Count) * 100)
-                    If File.Exists(pkgFile) Then
-                        Dim pkgInfoEx As DismPackageInfoEx = Nothing
-                        Dim pkgInfo As DismPackageInfo = Nothing
-                        Dim cProps As DismCustomPropertyCollection = Nothing
+                    Try
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
+                                    Case "ESN"
+                                        msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                                    Case "FRA"
+                                        msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                                    Case "ITA"
+                                        msg = "Verifica informazioni file pacchetto... (file pacchetto " & PackageFiles.IndexOf(pkgFile) + 1 & " di " & PackageFiles.Count & ")"
+                                End Select
+                            Case 1
+                                msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
+                            Case 2
+                                msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                            Case 3
+                                msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                            Case 4
+                                msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                            Case 5
+                                msg = "Verifica informazioni file pacchetto... (file pacchetto " & PackageFiles.IndexOf(pkgFile) + 1 & " di " & PackageFiles.Count & ")"
+                        End Select
+                        ReportChanges(msg, (PackageFiles.IndexOf(pkgFile) / PackageFiles.Count) * 100)
+                        If File.Exists(pkgFile) Then
+                            Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                            Dim pkgInfo As DismPackageInfo = Nothing
+                            Dim cProps As DismCustomPropertyCollection = Nothing
 
-                        ' Determine Windows version
-                        If OSVer.Major >= 10 Then
-                            pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
-                        Else
-                            pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                            ' Determine Windows version
+                            If OSVer.Major >= 10 Then
+                                pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                            Else
+                                pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                            End If
+                            If pkgInfoEx IsNot Nothing Then
+                                pkgCustomPropsList = "<ul>"
+                                pkgFeaturesList = "<ul>"
+                                cProps = pkgInfoEx.CustomProperties
+                                If cProps.Count > 0 Then
+                                    For Each cProp As DismCustomProperty In cProps
+                                        pkgCustomPropsList &= "<li>" & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value.Replace(CrLf, " ").Replace(Lf, " ").Replace(Cr, " ").Trim() & "</li>"
+                                    Next
+                                    pkgCustomPropsList &= "</ul>"
+                                Else
+                                    pkgCustomPropsList = "None"
+                                End If
+                                If pkgInfoEx.Features.Count > 0 Then
+                                    Dim pkgFeats As DismFeatureCollection = pkgInfoEx.Features
+                                    For Each pkgFeat As DismFeature In pkgFeats
+                                        pkgFeaturesList &= "<li>" & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & "</li>"
+                                    Next
+                                    pkgFeaturesList &= "</ul>"
+                                Else
+                                    pkgFeaturesList = "None"
+                                End If
+                                Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
+                                                                      Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
+                                                                      pkgInfoEx.Copyright,
+                                                                      pkgInfoEx.Company,
+                                                                      pkgInfoEx.CreationTime,
+                                                                      pkgInfoEx.Description,
+                                                                      If(pkgInfoEx.InstallClient = "", "None", pkgInfoEx.InstallClient),
+                                                                      If(pkgInfoEx.InstallPackageName = "", "None", CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar),
+                                                                      pkgInfoEx.InstallTime,
+                                                                      pkgInfoEx.LastUpdateTime,
+                                                                      pkgInfoEx.DisplayName,
+                                                                      pkgInfoEx.ProductName,
+                                                                      pkgInfoEx.ProductVersion.ToString(),
+                                                                      Casters.CastDismReleaseType(pkgInfoEx.ReleaseType),
+                                                                      Casters.CastDismRestartType(pkgInfoEx.RestartRequired),
+                                                                      pkgInfoEx.SupportInformation,
+                                                                      Casters.CastDismPackageState(pkgInfoEx.PackageState),
+                                                                      Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline),
+                                                                      If(pkgInfoEx.CapabilityId = "", "None", CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar),
+                                                                      pkgCustomPropsList,
+                                                                      pkgFeaturesList}.ToList())
+                            ElseIf pkgInfo IsNot Nothing Then
+                                pkgCustomPropsList = "<ul>"
+                                pkgFeaturesList = "<ul>"
+                                cProps = pkgInfo.CustomProperties
+                                If cProps.Count > 0 Then
+                                    For Each cProp As DismCustomProperty In cProps
+                                        pkgCustomPropsList &= "<li>" & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value.Replace(CrLf, " ").Replace(Lf, " ").Replace(Cr, " ").Trim() & "</li>"
+                                    Next
+                                    pkgCustomPropsList &= "</ul>"
+                                Else
+                                    pkgCustomPropsList = "None"
+                                End If
+                                If pkgInfo.Features.Count > 0 Then
+                                    Dim pkgFeats As DismFeatureCollection = pkgInfo.Features
+                                    For Each pkgFeat As DismFeature In pkgFeats
+                                        pkgFeaturesList &= "<li>" & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & "</li>"
+                                    Next
+                                    pkgFeaturesList &= "</ul>"
+                                Else
+                                    pkgFeaturesList = "None"
+                                End If
+                                Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
+                                                                      Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
+                                                                      pkgInfo.Copyright,
+                                                                      pkgInfo.Company,
+                                                                      pkgInfo.CreationTime,
+                                                                      pkgInfo.Description,
+                                                                      If(pkgInfo.InstallClient = "", "None", pkgInfo.InstallClient),
+                                                                      If(pkgInfo.InstallPackageName = "", "None", CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar),
+                                                                      pkgInfo.InstallTime,
+                                                                      pkgInfo.LastUpdateTime,
+                                                                      pkgInfo.DisplayName,
+                                                                      pkgInfo.ProductName,
+                                                                      pkgInfo.ProductVersion.ToString(),
+                                                                      Casters.CastDismReleaseType(pkgInfo.ReleaseType),
+                                                                      Casters.CastDismRestartType(pkgInfo.RestartRequired),
+                                                                      pkgInfo.SupportInformation,
+                                                                      Casters.CastDismPackageState(pkgInfo.PackageState),
+                                                                      Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline),
+                                                                      "None",
+                                                                      pkgCustomPropsList,
+                                                                      pkgFeaturesList}.ToList())
+                            End If
                         End If
-                        If pkgInfoEx IsNot Nothing Then
-                            pkgCustomPropsList = "<ul>"
-                            pkgFeaturesList = "<ul>"
-                            cProps = pkgInfoEx.CustomProperties
-                            If cProps.Count > 0 Then
-                                For Each cProp As DismCustomProperty In cProps
-                                    pkgCustomPropsList &= "<li>" & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value.Replace(CrLf, " ").Replace(Lf, " ").Replace(Cr, " ").Trim() & "</li>"
-                                Next
-                                pkgCustomPropsList &= "</ul>"
-                            Else
-                                pkgCustomPropsList = "None"
-                            End If
-                            If pkgInfoEx.Features.Count > 0 Then
-                                Dim pkgFeats As DismFeatureCollection = pkgInfoEx.Features
-                                For Each pkgFeat As DismFeature In pkgFeats
-                                    pkgFeaturesList &= "<li>" & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & "</li>"
-                                Next
-                                pkgFeaturesList &= "</ul>"
-                            Else
-                                pkgFeaturesList = "None"
-                            End If
-                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
-                                                                  Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
-                                                                  pkgInfoEx.Copyright,
-                                                                  pkgInfoEx.Company,
-                                                                  pkgInfoEx.CreationTime,
-                                                                  pkgInfoEx.Description,
-                                                                  If(pkgInfoEx.InstallClient = "", "None", pkgInfoEx.InstallClient),
-                                                                  If(pkgInfoEx.InstallPackageName = "", "None", CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar),
-                                                                  pkgInfoEx.InstallTime,
-                                                                  pkgInfoEx.LastUpdateTime,
-                                                                  pkgInfoEx.DisplayName,
-                                                                  pkgInfoEx.ProductName,
-                                                                  pkgInfoEx.ProductVersion.ToString(),
-                                                                  Casters.CastDismReleaseType(pkgInfoEx.ReleaseType),
-                                                                  Casters.CastDismRestartType(pkgInfoEx.RestartRequired),
-                                                                  pkgInfoEx.SupportInformation,
-                                                                  Casters.CastDismPackageState(pkgInfoEx.PackageState),
-                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline),
-                                                                  If(pkgInfoEx.CapabilityId = "", "None", CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar),
-                                                                  pkgCustomPropsList,
-                                                                  pkgFeaturesList}.ToList())
-                        ElseIf pkgInfo IsNot Nothing Then
-                            pkgCustomPropsList = "<ul>"
-                            pkgFeaturesList = "<ul>"
-                            cProps = pkgInfo.CustomProperties
-                            If cProps.Count > 0 Then
-                                For Each cProp As DismCustomProperty In cProps
-                                    pkgCustomPropsList &= "<li>" & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value.Replace(CrLf, " ").Replace(Lf, " ").Replace(Cr, " ").Trim() & "</li>"
-                                Next
-                                pkgCustomPropsList &= "</ul>"
-                            Else
-                                pkgCustomPropsList = "None"
-                            End If
-                            If pkgInfo.Features.Count > 0 Then
-                                Dim pkgFeats As DismFeatureCollection = pkgInfo.Features
-                                For Each pkgFeat As DismFeature In pkgFeats
-                                    pkgFeaturesList &= "<li>" & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & "</li>"
-                                Next
-                                pkgFeaturesList &= "</ul>"
-                            Else
-                                pkgFeaturesList = "None"
-                            End If
-                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
-                                                                  Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
-                                                                  pkgInfo.Copyright,
-                                                                  pkgInfo.Company,
-                                                                  pkgInfo.CreationTime,
-                                                                  pkgInfo.Description,
-                                                                  If(pkgInfo.InstallClient = "", "None", pkgInfo.InstallClient),
-                                                                  If(pkgInfo.InstallPackageName = "", "None", CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar),
-                                                                  pkgInfo.InstallTime,
-                                                                  pkgInfo.LastUpdateTime,
-                                                                  pkgInfo.DisplayName,
-                                                                  pkgInfo.ProductName,
-                                                                  pkgInfo.ProductVersion.ToString(),
-                                                                  Casters.CastDismReleaseType(pkgInfo.ReleaseType),
-                                                                  Casters.CastDismRestartType(pkgInfo.RestartRequired),
-                                                                  pkgInfo.SupportInformation,
-                                                                  Casters.CastDismPackageState(pkgInfo.PackageState),
-                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline),
-                                                                  "None",
-                                                                  pkgCustomPropsList,
-                                                                  pkgFeaturesList}.ToList())
-                        End If
-                    End If
+                    Catch PkgInfoEx As DismException
+                        Debug.WriteLine("[GetPackageFileInformation] An error occurred while getting package information: " & PkgInfoEx.ToString() & " - " & PkgInfoEx.Message)
+                    End Try
                 Next
             End Using
         Catch ex As Exception
