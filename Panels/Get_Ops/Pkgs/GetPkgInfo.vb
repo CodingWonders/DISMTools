@@ -1184,48 +1184,52 @@ Public Class GetPkgInfoDlg
                 DynaLog.LogMessage("Creating session...")
                 Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                     For Each pkgFile In ListBox1.Items
-                        DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(pkgFile) & Quote)
-                        If File.Exists(pkgFile) Then
-                            DynaLog.LogMessage("Package file exists.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
-                                        Case "ESN"
-                                            Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
-                                        Case "FRA"
-                                            Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
-                                        Case "PTB", "PTG"
-                                            Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
-                                        Case "ITA"
-                                            Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
-                                    End Select
-                                Case 1
-                                    Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
-                                Case 2
-                                    Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
-                                Case 3
-                                    Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
-                                Case 4
-                                    Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
-                                Case 5
-                                    Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
-                            End Select
-                            Application.DoEvents()
-                            Dim pkgInfoEx As DismPackageInfoEx = Nothing
-                            Dim pkgInfo As DismPackageInfo = Nothing
-                            DynaLog.LogMessage("Detecting conditions imposed by host system...")
-                            If OSVer.Major >= 10 Then
-                                DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
-                                pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
-                            Else
-                                DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
-                                pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                        Try
+                            DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(pkgFile) & Quote)
+                            If File.Exists(pkgFile) Then
+                                DynaLog.LogMessage("Package file exists.")
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENU", "ENG"
+                                                Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                            Case "ESN"
+                                                Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                            Case "FRA"
+                                                Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                            Case "PTB", "PTG"
+                                                Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                            Case "ITA"
+                                                Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
+                                        End Select
+                                    Case 1
+                                        Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                    Case 2
+                                        Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                    Case 3
+                                        Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                    Case 4
+                                        Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                    Case 5
+                                        Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
+                                End Select
+                                Application.DoEvents()
+                                Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                                Dim pkgInfo As DismPackageInfo = Nothing
+                                DynaLog.LogMessage("Detecting conditions imposed by host system...")
+                                If OSVer.Major >= 10 Then
+                                    DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
+                                    pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                                Else
+                                    DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
+                                    pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                                End If
+                                If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
+                                If pkgInfo IsNot Nothing Then PackageInfoList.Add(pkgInfo)
                             End If
-                            If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
-                            If pkgInfo IsNot Nothing Then PackageInfoList.Add(pkgInfo)
-                        End If
+                        Catch PkgInfoEx As DismException
+                            DynaLog.LogMessage("Could not get package file information. Error message: " & PkgInfoEx.Message)
+                        End Try
                     Next
                 End Using
             Catch DISMEx As DismException
