@@ -204,6 +204,15 @@ Public Class MainForm
     Public MountedImageList As New List(Of WindowsImage)
     Public CurrentImage As New WindowsImage()
 
+    ' Default PE Policy settings
+    Public ShowWatermark As Boolean = False
+    Public WDSHCGraphoView As Boolean = True
+    Public DTDimShowPnputilOut As Boolean = True
+    Public PartTableOverridePreference As Integer = 0
+    Public UEFICA23Preference As Integer = 0
+    Public WDSHCConnAttempts As Integer = 5
+
+
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
         DynaLog.LogMessage("Command-line arguments that have been passed to the program: " & String.Join(" ", args))
@@ -1378,6 +1387,14 @@ Public Class MainForm
                 SearchEngineName = SearchKey.GetValue("EngineName").ToString().Replace(Quote, "").Trim()
                 SearchEngineAITolerance = CInt(SearchKey.GetValue("AITolerance"))
                 SearchKey.Close()
+                Dim PEPolicyKey As RegistryKey = Key.OpenSubKey("PEPolicy")
+                ShowWatermark = (CInt(PEPolicyKey.GetValue("ShowWatermark", 0)) = 1)
+                WDSHCGraphoView = (CInt(PEPolicyKey.GetValue("WDSHCGraphoView", 1)) = 1)
+                DTDimShowPnputilOut = (CInt(PEPolicyKey.GetValue("DTDimShowPnputilOut", 1)) = 1)
+                WDSHCConnAttempts = (CInt(PEPolicyKey.GetValue("WDSHCConnAttempts", 5)))
+                PartTableOverridePreference = (CInt(PEPolicyKey.GetValue("PartTableOverridePreference", 0)))
+                UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
+                PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1481,6 +1498,12 @@ Public Class MainForm
                         AppxDisplayNameFormatOnRemoval = CInt(line.Replace("AppxRemovalDisplayNameFormat=", "").Trim())
                     ElseIf line.StartsWith("AITolerance=", StringComparison.OrdinalIgnoreCase) Then
                         SearchEngineAITolerance = CInt(line.Replace("AITolerance=", "").Trim())
+                    ElseIf line.StartsWith("WDSHCConnAttempts=", StringComparison.OrdinalIgnoreCase) Then
+                        WDSHCConnAttempts = CInt(line.Replace("WDSHCConnAttempts=", "").Trim())
+                    ElseIf line.StartsWith("PartTableOverridePreference=", StringComparison.OrdinalIgnoreCase) Then
+                        PartTableOverridePreference = CInt(line.Replace("PartTableOverridePreference=", "").Trim())
+                    ElseIf line.StartsWith("UEFICA23Preference=", StringComparison.OrdinalIgnoreCase) Then
+                        UEFICA23Preference = CInt(line.Replace("UEFICA23Preference=", "").Trim())
                     End If
                 Next
                 ' Apply program colors immediately
@@ -1689,6 +1712,21 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
                     AutoCompleteInfo(4) = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ShowWatermark=1") Then
+                    ShowWatermark = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowWatermark=0") Then
+                    ShowWatermark = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("WDSHCGraphoView=1") Then
+                    WDSHCGraphoView = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WDSHCGraphoView=0") Then
+                    WDSHCGraphoView = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=1") Then
+                    DTDimShowPnputilOut = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=0") Then
+                    DTDimShowPnputilOut = False
+                End If
             Else
                 DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW) and reloading settings...")
                 GenerateDTSettings()
@@ -1747,6 +1785,53 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
+        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then
+            PartTableOverridePreference = 0
+        End If
+        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then
+            UEFICA23Preference = 0
+        End If
+        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then
+            WDSHCConnAttempts = 5
+        End If
+        WriteDefaultPEPolicy()
+    End Sub
+
+    Private Sub WriteDefaultPEPolicy()
+        Dim PartTableOverridePreferenceStr As String = ""
+        Select Case PartTableOverridePreference
+            Case 0
+                PartTableOverridePreferenceStr = "NoOverride"
+            Case 1
+                PartTableOverridePreferenceStr = "AlwaysMBR"
+            Case 2
+                PartTableOverridePreferenceStr = "AlwaysGPT"
+        End Select
+        Dim UEFICA23PreferenceStr As String = ""
+        Select Case UEFICA23Preference
+            Case 0
+                UEFICA23PreferenceStr = "AskUser"
+            Case 1
+                UEFICA23PreferenceStr = "UseNever"
+            Case 2
+                UEFICA23PreferenceStr = "UseAlways"
+        End Select
+
+        Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
+                                                  "[HKEY_LOCAL_MACHINE\WINPESOFT\DISMTools\Preinstallation Environment\Policies]{0}" &
+                                                  "{1}ShowWatermark{1}=dword:0000000{2}{0}" &
+                                                  "{1}UEFICA23Preference{1}={1}{3}{1}{0}" &
+                                                  "{1}PartTableOverridePreference{1}={1}{4}{1}{0}" &
+                                                  "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
+                                                  "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
+                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}{0}",
+                                                  CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
+                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0))
+        Try
+            File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
+        Catch ex As Exception
+            Exit Sub
+        End Try
     End Sub
 
     ''' <summary>
@@ -1809,7 +1894,13 @@ Public Class MainForm
                            "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf &
                            "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf &
                            "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf &
-                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
+                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4) & CrLf &
+                           "ShowWatermark              =    " & ShowWatermark & CrLf &
+                           "WDSHCGraphoView            =    " & WDSHCGraphoView & CrLf &
+                           "DTDimShowPnputilOut        =    " & DTDimShowPnputilOut & CrLf &
+                           "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
+                           "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
+                           "UEFICA23Preference         =    " & UEFICA23Preference)
     End Sub
 
 #Region "Background Processes"
@@ -3940,6 +4031,13 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & "DuckDuckGo" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[PEPolicy]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("ShowWatermark=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCGraphoView=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "DTDimShowPnputilOut=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=5")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4035,6 +4133,14 @@ Public Class MainForm
         SearchKey.SetValue("EngineName", "DuckDuckGo", RegistryValueKind.String)
         SearchKey.SetValue("AITolerance", 1, RegistryValueKind.DWord)
         SearchKey.Close()
+        Dim PEPolicyKey As RegistryKey = Key.CreateSubKey("PEPolicy")
+        PEPolicyKey.SetValue("ShowWatermark", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("WDSHCGraphoView", 1, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("DTDimShowPnputilOut", 1, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("WDSHCConnAttempts", 5, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.Close()
         Key.Close()
     End Sub
 
@@ -4263,6 +4369,13 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & SearchEngineName & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=" & SearchEngineAITolerance)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[PEPolicy]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("ShowWatermark=" & If(ShowWatermark, 1, 0))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCGraphoView=" & If(WDSHCGraphoView, 1, 0))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "DTDimShowPnputilOut=" & If(DTDimShowPnputilOut, 1, 0))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=" & WDSHCConnAttempts)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=" & PartTableOverridePreference)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=" & UEFICA23Preference)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4374,6 +4487,14 @@ Public Class MainForm
                     SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
                     SearchKey.SetValue("AITolerance", SearchEngineAITolerance, RegistryValueKind.DWord)
                     SearchKey.Close()
+                    Dim PEPolicyKey As RegistryKey = Key.CreateSubKey("PEPolicy")
+                    PEPolicyKey.SetValue("ShowWatermark", If(ShowWatermark, 1, 0), RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("WDSHCGraphoView", If(WDSHCGraphoView, 1, 0), RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("DTDimShowPnputilOut", If(DTDimShowPnputilOut, 1, 0), RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("WDSHCConnAttempts", WDSHCConnAttempts, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("PartTableOverridePreference", PartTableOverridePreference, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
+                    PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
                     DynaLog.LogMessage("An error occurred while saving settings to registry. Error message: " & ex.Message)

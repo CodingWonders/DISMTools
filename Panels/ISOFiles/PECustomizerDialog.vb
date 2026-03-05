@@ -68,6 +68,14 @@ Public Class PECustomizerDialog
     End Sub
 
     Private Sub PECustomizerDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Load from defined policies
+        CheckBox2.Checked = MainForm.ShowWatermark
+        CheckBox3.Checked = MainForm.WDSHCGraphoView
+        CheckBox4.Checked = MainForm.DTDimShowPnputilOut
+        ComboBox1.SelectedIndex = MainForm.PartTableOverridePreference
+        ComboBox2.SelectedIndex = MainForm.UEFICA23Preference
+        NumericUpDown1.Value = MainForm.WDSHCConnAttempts
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor

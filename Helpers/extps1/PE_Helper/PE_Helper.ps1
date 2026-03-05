@@ -811,12 +811,15 @@ function Start-PECustomization
             if (-not (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)) { throw }
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /ve /t REG_SZ /d "PolicyVer=$policyVersion"
-            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v ShowWatermark /t REG_DWORD /d 1
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v ShowWatermark /t REG_DWORD /d 0
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v UEFICA23Preference /t REG_SZ /d "AskUser"
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PartTableOverridePreference /t REG_SZ /d "NoOverride"
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCConnAttempts /t REG_DWORD /d 5
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCGraphoView /t REG_DWORD /d 1
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
+            if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
+                reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
+            }
             if (Test-Path -Path "$((Get-Location).Path)\files\CustomPolicy.reg" -PathType Leaf) {
                 Write-Host "Importing custom policies..."
                 reg import "$((Get-Location).Path)\files\CustomPolicy.reg"
