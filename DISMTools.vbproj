@@ -189,6 +189,7 @@
     <Reference Include="System.ServiceModel">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms">
       <Private>True</Private>
     </Reference>
@@ -2189,6 +2190,11 @@ IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts) DO (
 		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
 	)
+)
+IF EXIST "$(SolutionDir)Tools\AutoReloadService\out" (
+	echo Copying AutoReloadService...
+	IF NOT EXIST "AutoReload" MD "AutoReload"
+	copy /y "$(SolutionDir)Tools\AutoReloadService\out\*.*" "AutoReload"
 )
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information

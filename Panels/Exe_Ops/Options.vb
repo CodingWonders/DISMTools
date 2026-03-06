@@ -16,7 +16,10 @@ Public Class Options
 
     Public SectionNum As Integer = 0
 
-    Sub DetermineSettingValidity()
+    Private AutoReloadServiceInstalled As Boolean
+    Private AutoReloadService As WindowsService
+
+    Private Sub DetermineSettingValidity()
         DynaLog.LogMessage("Validating settings...")
         If TextBox1.Text = "" Then
             DynaLog.LogMessage("No DISM executable has been specified.")
@@ -99,7 +102,7 @@ Public Class Options
         End If
     End Sub
 
-    Sub ApplyProgSettings()
+    Private Sub ApplyProgSettings()
         DynaLog.LogMessage("Beginning application of user settings...")
         DynaLog.LogMessage("Determining whether or not settings are valid...")
         DetermineSettingValidity()
@@ -225,7 +228,7 @@ Public Class Options
         MainForm.AppxDisplayNameFormatOnRemoval = ComboBox8.SelectedIndex
     End Sub
 
-    Sub GiveErrorExplanation(ErrorCode As Integer)
+    Private Sub GiveErrorExplanation(ErrorCode As Integer)
         DynaLog.LogMessage("Error Code: " & ErrorCode)
         Select Case ErrorCode
             Case 1
@@ -243,7 +246,7 @@ Public Class Options
         End Select
     End Sub
 
-    Function DetectFileAssociations() As Boolean
+    Private Function DetectFileAssociations() As Boolean
         DynaLog.LogMessage("Detecting file associations...")
         Try
             DynaLog.LogMessage("Getting values from root class " & Quote & "DISMTools.Project" & Quote & "...")
@@ -271,7 +274,7 @@ Public Class Options
     ''' <param name="AssocOp"></param>
     ''' <param name="UseCustomIcons"></param>
     ''' <remarks></remarks>
-    Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
+    Private Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
         DynaLog.LogMessage("Setting file associations...")
         DynaLog.LogMessage("- Association operation: " & If(AssocOp = 0, "set associations", "remove associations"))
         DynaLog.LogMessage("- Use a custom icon? " & If(UseCustomIcons, "Yes", "No"))
@@ -361,6 +364,44 @@ Public Class Options
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
+    End Sub
+
+    Private Sub GetAIRServiceInformation()
+        AutoReloadService = WindowsServiceHelper.GetOnlineSystemServiceInformationByName("DT_AutoReload")
+
+        Label80.Text = If(AutoReloadService IsNot Nothing, "Yes", "No")
+        Button7.Enabled = AutoReloadService Is Nothing
+        Button13.Enabled = AutoReloadService IsNot Nothing
+
+        If AutoReloadService IsNot Nothing Then
+            Label82.Text = AutoReloadService.ImagePath
+
+            ' Let's do some more checks, even though a service can be in a system, its corresponding binary may not be in there.
+            If Not String.IsNullOrEmpty(AutoReloadService.ImagePath) AndAlso File.Exists(AutoReloadService.ImagePath) Then
+                Button11.Enabled = AutoReloadService.StartType = WindowsService.ServiceStartType.Disabled
+                Button12.Enabled = AutoReloadService.StartType < WindowsService.ServiceStartType.Disabled
+
+                Try
+                    Dim airSvcFvi As FileVersionInfo = FileVersionInfo.GetVersionInfo(AutoReloadService.ImagePath)
+                    Label82.Text &= String.Format(" (version {0})", airSvcFvi.ProductVersion)
+                Catch ex As Exception
+                    ' don't grab the version then
+                End Try
+            Else
+                Label80.Text = "No"
+                Label82.Text = ""
+                Button11.Enabled = False
+                Button12.Enabled = False
+                Button7.Enabled = True
+                Button13.Enabled = False
+            End If
+        Else
+            Label80.Text = "No"
+            Label82.Text = ""
+            Button11.Enabled = False
+            Button12.Enabled = False
+        End If
+
     End Sub
 
     Private Sub Options_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1638,6 +1679,7 @@ Public Class Options
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         GroupBox5.ForeColor = CurrentTheme.ForegroundColor
         TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
         PictureBox10.Image = GetGlyphResource("options_program")
@@ -1711,6 +1753,8 @@ Public Class Options
         If SplitContainer1.SplitterDistance = 256 Then
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         End If
+
+        GetAIRServiceInformation()
     End Sub
 
     Sub GetSystemFonts()
@@ -3284,5 +3328,51 @@ Public Class Options
                                                 "Examples of such information are the operating system packages, or features in a Windows image.{0}{0}" &
                                                 "These processes are not just run when getting information about image files, but when managing online, or offline, installations as well.", Environment.NewLine)
         QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        Try
+            If WindowsServiceHelper.InstallService(New WindowsService("DT_AutoReload",
+                                                                      "DISMTools Automatic Image Reload service", "", "",
+                                                                      Path.Combine(Application.StartupPath, "AutoReload", "AutoReloadSvc.exe"),
+                                                                      "", WindowsService.ServiceStartType.Automatic, False,
+                                                                      WindowsService.ServiceType.WindowsApplication,
+                                                                      WindowsService.ServiceErrorControl.Normal,
+                                                                      {}.Cast(Of NTSecurityPrivilegeConstant).ToList(),
+                                                                      {"EventLog"}, New WindowsService.ServiceFailureActions(), Integer.MinValue)) Then
+                ' Set the description manually
+                WindowsServiceHelper.SetOnlineServiceDescription("DT_AutoReload", "This service automatically reloads the servicing sessions of all mounted images on this computer. Feel free to disable this service if you don't need it.")
+
+                GetAIRServiceInformation()
+            Else
+                Throw New Exception("The service could not be installed.")
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If WindowsServiceHelper.EnableOnlineService("DT_AutoReload") Then
+            GetAIRServiceInformation()
+        Else
+            MessageBox.Show("The service could not be enabled.", Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        If WindowsServiceHelper.DisableOnlineService("DT_AutoReload") Then
+            GetAIRServiceInformation()
+        Else
+            MessageBox.Show("The service could not be disabled.", Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        If WindowsServiceHelper.DeleteService("DT_AutoReload") Then
+            GetAIRServiceInformation()
+        Else
+            MessageBox.Show("The service could not be removed.", Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
     End Sub
 End Class

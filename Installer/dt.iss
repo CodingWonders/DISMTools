@@ -95,6 +95,7 @@ Name: "pt"; MessagesFile: ".\Languages\Portuguese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "autoreload"; Description: "Install automatic image reload service"; GroupDescription: "Services"; Flags: unchecked
 
 [Files]
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
@@ -127,6 +128,7 @@ Source: ".\files\System.Xml.Linq.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WindowsBase.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WindowsFormsIntegration.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\AutoUnattend\*"; DestDir: "{#pfDir}\AutoUnattend"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\AutoReload\*"; DestDir: "{#pfDir}\AutoReload"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\runtimes\*"; DestDir: "{#pfDir}\runtimes"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -243,10 +245,14 @@ Name: "{autodesktop}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{#pfDir}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent shellexec
+Filename: "{cmd}"; Tasks: "autoreload"; Parameters: "/C sc create DT_AutoReload binPath= ""{#pfDir}\AutoReload\AutoReloadSvc.exe"" start= auto DisplayName= ""DISMTools Automatic Image Reload Service"" depend= EventLog"; Flags: waituntilterminated shellexec runhidden
+Filename: "{cmd}"; Tasks: "autoreload"; Parameters: "/C sc description DT_AutoReload ""This service automatically reloads the servicing sessions of all mounted images on this computer. Feel free to disable this service if you don't need it."""; Flags: waituntilterminated shellexec runhidden
 
 [UninstallRun]
 ; Ends wimserv, as it causes log files to not be deleted
 RunOnceId: "EndWimServ"; Filename: "{cmd}"; Parameters: "/C qprocess wimserv.exe && if %ERRORLEVEL% equ 0 (taskkill /f /im wimserv.exe /t) else (exit 0)"; Flags: waituntilterminated runhidden
+; Stop service
+RunOnceId: "DeleteAutoReloadSvc"; Filename: "{cmd}"; Parameters: "/C sc delete DT_AutoReload & exit 0"; Flags: waituntilterminated runhidden
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{#pfDir}\logs"

@@ -642,4 +642,251 @@ Module WindowsServiceHelper
         Return svchostGroups
     End Function
 
+    ''' <summary>
+    ''' Gets information about an installed Windows service from the current system using a provided service name.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the Windows service to get information about</param>
+    ''' <returns>A <see cref="WindowsService" /> object containing information about the Windows service, or null if it can't find a service with that name.</returns>
+    ''' <remarks></remarks>
+    Public Function GetOnlineSystemServiceInformationByName(ServiceName As String) As WindowsService
+        Dim detectedService As WindowsService = Nothing
+
+        Dim serviceImagePath As String = "",
+            serviceEntryName As String = "",
+            serviceDisplayName As String = "",
+            serviceDescription As String = "",
+            serviceObjectName As String = "",
+            serviceGroupName As String = "",
+            serviceStartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Unknown,
+            serviceDelayedStart As Boolean = False,
+            serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
+            serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
+            serviceRequiredPrivilegesString() As String = New String() {},
+            serviceDependencies() As String = New String() {},
+            serviceFailActionByteArr() As Byte = New Byte() {},
+            serviceUserServFlags As Integer = Integer.MinValue
+
+        ' Because we are now targeting the active system, we can pull info from the current control set.
+        Try
+            Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("SYSTEM\CurrentControlSet\Services\{0}", ServiceName), False)
+                serviceImagePath = ServiceInfoRk.GetValue("ImagePath", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
+                If serviceImagePath = "" Then
+                    DynaLog.LogMessage("The service image path cannot be obtained.")
+                    ' This "service" is bogus
+                    Return Nothing
+                End If
+
+                serviceEntryName = ServiceName
+                serviceDisplayName = ServiceInfoRk.GetValue("DisplayName", "")
+                DynaLog.LogMessage("Raw service display name: " & serviceDisplayName)
+                If serviceDisplayName.StartsWith("@") AndAlso serviceDisplayName.ToLowerInvariant().Contains(".inf") Then
+                    DynaLog.LogMessage("Raw display name points to a device driver. Parsing...")
+                    Dim parsedInf As Tuple(Of String, String) = ParseInfLine(serviceDisplayName)
+
+                    If parsedInf IsNot Nothing Then
+                        DynaLog.LogMessage("We have grabbed the path and the token. Continuing...")
+                        Dim resolvedString As String = ResolveInfToken(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "INF", parsedInf.Item1), parsedInf.Item2)
+                        DynaLog.LogMessage("- Resolved string (using current system): " & resolvedString)
+                        If Not String.IsNullOrEmpty(resolvedString) Then
+                            DynaLog.LogMessage("We grabbed the resolved string. Using that...")
+                            serviceDisplayName = resolvedString
+                        End If
+                    End If
+                ElseIf serviceDisplayName.StartsWith("@") Then
+                    DynaLog.LogMessage("Raw display name indicates an indirect string. Parsing...")
+                    serviceDisplayName = ResolveIndirectString(serviceDisplayName)
+                End If
+                serviceDescription = ServiceInfoRk.GetValue("Description", "")
+                DynaLog.LogMessage("Raw service description: " & serviceDescription)
+                If serviceDescription.StartsWith("@") Then
+                    DynaLog.LogMessage("Raw description indicates an indirect string. Parsing...")
+                    serviceDescription = ResolveIndirectString(serviceDescription)
+                End If
+                serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
+                serviceGroupName = ServiceInfoRk.GetValue("Group", "")
+                serviceStartType = ServiceInfoRk.GetValue("Start", -1)
+                serviceDelayedStart = (ServiceInfoRk.GetValue("DelayedAutoStart", 0) = 1)
+                serviceType = ServiceInfoRk.GetValue("Type", -1)
+                serviceErrorControl = ServiceInfoRk.GetValue("ErrorControl", -1)
+                ' The required privileges property is a multi-value registry value, so we need an array
+                serviceRequiredPrivilegesString = ServiceInfoRk.GetValue("RequiredPrivileges", New String() {})
+                ' Same goes for dependencies
+                serviceDependencies = ServiceInfoRk.GetValue("DependOnService", New String() {})
+                serviceFailActionByteArr = ServiceInfoRk.GetValue("FailureActions", New Byte() {})
+                serviceUserServFlags = ServiceInfoRk.GetValue("UserServiceFlags", Integer.MinValue)
+
+                Dim serviceRequiredPrivilegeList As New List(Of NTSecurityPrivilegeConstant)
+                DynaLog.LogMessage("Privilege items defined by the service: " & serviceRequiredPrivilegesString.Count)
+
+                If serviceRequiredPrivilegesString.Count > 0 Then
+                    DynaLog.LogMessage("This service defines privileges. Getting privilege constant representations...")
+                    ' Parse the items themselves to keys that are available in the dictionary we filled
+                    ' stuff in
+                    For Each serviceRequiredPrivilegeString In serviceRequiredPrivilegesString
+                        If PrivilegeMappingDictionary.Keys.Contains(serviceRequiredPrivilegeString) Then
+                            ' Then add it
+                            Dim constantInHeader As String = PrivilegeMappingDictionary(serviceRequiredPrivilegeString)
+                            serviceRequiredPrivilegeList.Add(PrivilegeConstantDictionary(constantInHeader))
+                        End If
+                    Next
+                End If
+
+                DynaLog.LogMessage("Adding service " & serviceEntryName & " to service list...")
+                Return New WindowsService(serviceEntryName,
+                                          serviceDisplayName,
+                                          serviceDescription,
+                                          serviceObjectName,
+                                          serviceImagePath,
+                                          serviceGroupName,
+                                          serviceStartType,
+                                          serviceDelayedStart,
+                                          serviceType,
+                                          serviceErrorControl,
+                                          serviceRequiredPrivilegeList,
+                                          serviceDependencies,
+                                          ParseFailureActionByteArray(serviceFailActionByteArr),
+                                          serviceUserServFlags)
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+
+        Return detectedService
+    End Function
+
+    Public Function InstallService(NewService As WindowsService) As Boolean
+        If NewService Is Nothing Then Throw New ArgumentNullException()
+        If String.IsNullOrEmpty(NewService.Name) Then Throw New ArgumentNullException(NewService.Name)
+        If String.IsNullOrEmpty(NewService.ImagePath) OrElse Not File.Exists(NewService.ImagePath) Then Throw New FileNotFoundException(String.Format("Service Path not found: {0}", NewService.ImagePath))
+
+        ' Essential stuff out of the way
+        Dim args As String = String.Format("create {1} binPath= {0}{2}{0}", Quote, NewService.Name, NewService.ImagePath)
+
+        If {WindowsService.ServiceStartType.Automatic,
+            WindowsService.ServiceStartType.Manual,
+            WindowsService.ServiceStartType.Disabled}.Contains(NewService.StartType) Then
+            Dim svcStartArgs As String = "start= "
+
+            Select Case NewService.StartType
+                Case WindowsService.ServiceStartType.Automatic
+                    If NewService.DelayedStart Then
+                        svcStartArgs &= "delayed-auto"
+                    Else
+                        svcStartArgs &= "auto"
+                    End If
+                Case WindowsService.ServiceStartType.Manual
+                    svcStartArgs &= "demand"
+                Case WindowsService.ServiceStartType.Disabled
+                    svcStartArgs &= "disabled"
+            End Select
+            args &= String.Format(" {0}", svcStartArgs)
+        End If
+
+        If Not String.IsNullOrEmpty(NewService.DisplayName) Then args &= String.Format(" DisplayName= {0}{1}{0}", Quote, NewService.DisplayName)
+        If NewService.Dependencies.Any() Then args &= String.Format(" depend= {0}", String.Join("/", NewService.Dependencies))
+
+        Dim scProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "sc.exe"),
+                .Arguments = args,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            }
+        }
+
+        scProc.Start()
+        scProc.WaitForExit()
+
+        Return scProc.ExitCode = 0
+    End Function
+
+    Public Function DeleteService(ServiceName As String) As Boolean
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
+
+        Dim scProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "sc.exe"),
+                .Arguments = String.Format("delete {0}", ServiceName),
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            }
+        }
+
+        scProc.Start()
+        scProc.WaitForExit()
+
+        Return scProc.ExitCode = 0
+    End Function
+
+    Public Function SetOnlineServiceDescription(ServiceName As String, ServiceDescription As String) As Boolean
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
+
+        Dim scProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "sc.exe"),
+                .Arguments = String.Format("description {1} {0}{2}{0}", Quote, ServiceName, ServiceDescription),
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            }
+        }
+
+        scProc.Start()
+        scProc.WaitForExit()
+
+        Return scProc.ExitCode = 0
+    End Function
+
+    Public Function EnableOnlineService(ServiceName As String, Optional StartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Automatic) As Boolean
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
+
+        Dim args As String = String.Format("config {0}", ServiceName)
+
+        If {WindowsService.ServiceStartType.Automatic,
+            WindowsService.ServiceStartType.Manual,
+            WindowsService.ServiceStartType.Disabled}.Contains(StartType) Then
+            Dim svcStartArgs As String = "start= "
+
+            Select Case StartType
+                Case WindowsService.ServiceStartType.Automatic : svcStartArgs &= "auto"
+                Case WindowsService.ServiceStartType.Manual : svcStartArgs &= "demand"
+            End Select
+
+            args &= String.Format(" {0}", svcStartArgs)
+        Else
+            args &= " start= demand"
+        End If
+
+        Dim scProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "sc.exe"),
+                .Arguments = args,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            }
+        }
+
+        scProc.Start()
+        scProc.WaitForExit()
+
+        Return scProc.ExitCode = 0
+    End Function
+
+    Public Function DisableOnlineService(ServiceName As String) As Boolean
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
+
+        Dim scProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "sc.exe"),
+                .Arguments = String.Format("config {0} start= disabled", ServiceName),
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            }
+        }
+
+        scProc.Start()
+        scProc.WaitForExit()
+
+        Return scProc.ExitCode = 0
+    End Function
+
 End Module
