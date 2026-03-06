@@ -1431,8 +1431,26 @@ function Get-Partitions
             $overrideOption = Read-Host -Prompt "Select the option that you want to use and press ENTER"
             switch ($overrideOption) {
                 "C" { $override = [PartitionTableOverride]::NoOverride }
-                "M" { $override = [PartitionTableOverride]::AlwaysMBR }
-                "G" { $override = [PartitionTableOverride]::AlwaysGPT }
+                "M" {
+                    $override = [PartitionTableOverride]::AlwaysMBR
+                    if ($env:FIRMWARE_TYPE -eq "Legacy") {
+                        Write-Host "You have chosen a MBR partition table override on a computer whose firmware type already"
+                        Write-Host "supports MBR. While you can keep using this override, it becomes redundant and, thus, we"
+                        Write-Host "recommend that you clear this partition table override."
+                        $option = Read-Host -Prompt "Do you want to clear the override? (Y/n)"
+                        if ($option -ne "N") { $override = [PartitionTableOverride]::NoOverride }
+                    }
+                }
+                "G" {
+                    $override = [PartitionTableOverride]::AlwaysGPT
+                    if ($env:FIRMWARE_TYPE -eq "UEFI") {
+                        Write-Host "You have chosen a GPT partition table override on a computer whose firmware type already"
+                        Write-Host "supports GPT. While you can keep using this override, it becomes redundant and, thus, we"
+                        Write-Host "recommend that you clear this partition table override."
+                        $option = Read-Host -Prompt "Do you want to clear the override? (Y/n)"
+                        if ($option -ne "N") { $override = [PartitionTableOverride]::NoOverride }
+                    }
+                }
             }
         }
         Get-Partitions $driveNum $override
