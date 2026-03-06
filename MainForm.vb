@@ -98,7 +98,7 @@ Public Class MainForm
 
     ' Set branch name and codenames
     Public dtBranch As String = "dt_pre_0.8"
-    Public dt_codeName As String = "DTVII_MK4"
+    Public dt_codeName As String = "Infinity"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
