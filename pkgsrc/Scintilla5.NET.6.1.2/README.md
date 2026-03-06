@@ -8,7 +8,7 @@ Scintilla.NET is a Windows Forms control, wrapper, and bindings for the versatil
 
 > "As well as features found in standard text editing components, Scintilla includes features especially useful when editing and debugging source code. These include support for syntax styling, error indicators, code completion and call tips. The selection margin can contain markers like those used in debuggers to indicate breakpoints and the current line. Styling choices are more open than with many editors, allowing the use of proportional fonts, bold and italics, multiple foreground and background colours and multiple fonts." -- [scintilla.org](http://www.scintilla.org)
 
-Scintilla.NET can also be used with WPF using the <a href="https://msdn.microsoft.com/en-us/library/system.windows.forms.integration.windowsformshost(v=vs.110).aspx">WindowsFormsHost</a>.
+Scintilla.NET can also be used with WPF using the [WindowsFormsHost](https://msdn.microsoft.com/en-us/library/system.windows.forms.integration.windowsformshost(v=vs.110).aspx).
 For Linux, see the [Scintilla.NET.Gtk](https://github.com/VPKSoft/Scintilla.NET.Gtk).
 
 ## Utility assemblies
@@ -34,9 +34,9 @@ For the latest and greatest you can build the [Master](https://github.com/desjar
 **Versions before v.5.3.1.1:**
 [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) is required for the component to work, see [#16](https://github.com/desjarlais/Scintilla.NET/issues/16).
 
-Scintilla library version = 5.5.8
+Scintilla library version = 5.6.0
 
-Lexilla library version = 5.4.6
+Lexilla library version = 5.4.7
 
 ## Background
 For more information about the history and background information, look at the wiki [here](https://github.com/desjarlais/Scintilla.NET/wiki/Scintilla.NET-History).
