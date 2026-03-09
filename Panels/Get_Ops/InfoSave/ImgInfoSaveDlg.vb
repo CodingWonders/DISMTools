@@ -6,6 +6,7 @@ Imports Microsoft.Dism
 Imports System.Threading
 Imports DISMTools.Utilities
 Imports Microsoft.Win32
+Imports System.Threading.Tasks
 
 Public Class ImgInfoSaveDlg
 
@@ -56,14 +57,14 @@ Public Class ImgInfoSaveDlg
 
     Dim OSVer As Version
 
-    Sub ReportChanges(Message As String, ProgressPercentage As Double)
+    Private Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
         TaskbarHelper.SetIndicatorState(ProgressPercentage, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
         Application.DoEvents()
     End Sub
 
-    Sub WriteExceptionInfo(ex As Exception)
+    Private Sub WriteExceptionInfo(ex As Exception)
         Contents &= GetParagraph("The program could not get information about this task. See below for reasons why:") & CrLf &
             GetListItems(New String() {"Exception: " & ex.ToString(),
                                        "Exception message: " & ex.Message,
@@ -71,7 +72,7 @@ Public Class ImgInfoSaveDlg
                                    ToList())
     End Sub
 
-    Sub GetImageInformation()
+    Private Sub GetImageInformation()
         Dim ImageInfoCollection As DismImageInfoCollection = Nothing
         Dim ImageInfoList As New List(Of DismImageInfo)
         If ImageInfoList.Count <> 0 Then ImageInfoList.Clear()
@@ -175,7 +176,7 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
-    Sub GetPackageInformation()
+    Private Sub GetPackageInformation()
         Dim InstalledPkgInfo As DismPackageCollection = Nothing
         Dim msg As String() = New String(2) {"", "", ""}
         Select Case MainForm.Language
@@ -183,67 +184,67 @@ Public Class ImgInfoSaveDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         msg(0) = "Preparing package information processes..."
-                        msg(1) = "The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
+                        msg(1) = "The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf &
+                          "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf &
                           "Do you want to get this information and save it in the report?"
                         msg(2) = "Package information"
                     Case "ESN"
                         msg(0) = "Preparando procesos de información de paquetes..."
-                        msg(1) = "El programa ha obtenido información básica de los paquetes instalados en esta imagen. También puede obtener información completa de dichos paquetes y guardarla en el informe." & CrLf & CrLf & _
-                          "Dese cuenta de que esto tardará más, dependiendo del número de paquetes instalados." & CrLf & CrLf & _
+                        msg(1) = "El programa ha obtenido información básica de los paquetes instalados en esta imagen. También puede obtener información completa de dichos paquetes y guardarla en el informe." & CrLf & CrLf &
+                          "Dese cuenta de que esto tardará más, dependiendo del número de paquetes instalados." & CrLf & CrLf &
                           "¿Desea obtener esta información y guardarla en el informe?"
                         msg(2) = "Información de paquetes"
                     Case "FRA"
                         msg(0) = "Préparation des processus d'information sur les paquets en cours..."
-                        msg(1) = "Le programme a obtenu des informations basiques sur les paquets installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets et les enregistrer dans le rapport." & CrLf & CrLf & _
-                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf & _
+                        msg(1) = "Le programme a obtenu des informations basiques sur les paquets installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets et les enregistrer dans le rapport." & CrLf & CrLf &
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf &
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les paquets"
                     Case "PTB", "PTG"
                         msg(0) = "A preparar processos de informação de pacotes..."
-                        msg(1) = "O programa obteve informações básicas sobre os pacotes instalados nesta imagem. Também pode obter informações completas sobre esses pacotes e guardá-las no relatório." & CrLf & CrLf & _
-                          "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf & _
+                        msg(1) = "O programa obteve informações básicas sobre os pacotes instalados nesta imagem. Também pode obter informações completas sobre esses pacotes e guardá-las no relatório." & CrLf & CrLf &
+                          "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf &
                           "Deseja obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informações do pacote"
                     Case "ITA"
                         msg(0) = "Preparazione processi verifica informazioni pacchetti..."
-                        msg(1) = "Il programma ha verificato le informazioni di base sui pacchetti installati in questa immagine. È anche possibile avere informazioni complete su tali pacchetti e salvarle nel rapporto." & CrLf & CrLf & _
-                          "Nota che questa operazione richiederà più tempo a seconda del numero di pacchetti installati." & CrLf & CrLf & _
+                        msg(1) = "Il programma ha verificato le informazioni di base sui pacchetti installati in questa immagine. È anche possibile avere informazioni complete su tali pacchetti e salvarle nel rapporto." & CrLf & CrLf &
+                          "Nota che questa operazione richiederà più tempo a seconda del numero di pacchetti installati." & CrLf & CrLf &
                           "Vuoi avere queste informazioni e salvarle nel rapporto?"
                         msg(2) = "Informazioni pacchetto"
                 End Select
             Case 1
                 msg(0) = "Preparing package information processes..."
-                msg(1) = "The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
-                  "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
+                msg(1) = "The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf &
+                  "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf &
                   "Do you want to get this information and save it in the report?"
                 msg(2) = "Package information"
             Case 2
                 msg(0) = "Preparando procesos de información de paquetes..."
-                msg(1) = "El programa ha obtenido información básica de los paquetes instalados en esta imagen. También puede obtener información completa de dichos paquetes y guardarla en el informe." & CrLf & CrLf & _
-                  "Dese cuenta de que esto tardará más, dependiendo del número de paquetes instalados." & CrLf & CrLf & _
+                msg(1) = "El programa ha obtenido información básica de los paquetes instalados en esta imagen. También puede obtener información completa de dichos paquetes y guardarla en el informe." & CrLf & CrLf &
+                  "Dese cuenta de que esto tardará más, dependiendo del número de paquetes instalados." & CrLf & CrLf &
                   "¿Desea obtener esta información y guardarla en el informe?"
                 msg(2) = "Información de paquetes"
             Case 3
                 msg(0) = "Préparation des processus d'information sur les paquets en cours..."
-                msg(1) = "Le programme a obtenu des informations basiques sur les paquets installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets et les enregistrer dans le rapport." & CrLf & CrLf & _
-                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf & _
+                msg(1) = "Le programme a obtenu des informations basiques sur les paquets installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets et les enregistrer dans le rapport." & CrLf & CrLf &
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf &
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les paquets"
             Case 4
                 msg(0) = "A preparar processos de informação de pacotes..."
-                msg(1) = "O programa obteve informações básicas sobre os pacotes instalados nesta imagem. Também pode obter informações completas sobre esses pacotes e guardá-las no relatório." & CrLf & CrLf & _
-                  "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf & _
+                msg(1) = "O programa obteve informações básicas sobre os pacotes instalados nesta imagem. Também pode obter informações completas sobre esses pacotes e guardá-las no relatório." & CrLf & CrLf &
+                  "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf &
                   "Deseja obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informações do pacote"
             Case 5
                 msg(0) = "Preparazione processi verifica informazioni pacchetti..."
-                msg(1) = "Il programma ha verificato le informazioni di base sui pacchetti installati in questa immagine. È anche possibile avere informazioni complete su tali pacchetti e salvarle nel rapporto." & CrLf & CrLf & _
-                  "Nota che questa operazione richiederà più tempo a seconda del numero di pacchetti installati." & CrLf & CrLf & _
+                msg(1) = "Il programma ha verificato le informazioni di base sui pacchetti installati in questa immagine. È anche possibile avere informazioni complete su tali pacchetti e salvarle nel rapporto." & CrLf & CrLf &
+                  "Nota che questa operazione richiederà più tempo a seconda del numero di pacchetti installati." & CrLf & CrLf &
                   "Vuoi ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni pacchetto"
         End Select
-        Contents &= GetHeader("Package information", HeaderSize.Header2) & CrLf & _
+        Contents &= GetHeader("Package information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetPackageInformation] Starting task...")
         Try
@@ -634,7 +635,7 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
-    Sub GetPackageFileInformation()
+    Private Sub GetPackageFileInformation()
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0
@@ -661,7 +662,7 @@ Public Class ImgInfoSaveDlg
             Case 5
                 msg = "Preparazione processi verifica informazioni pacchetti..."
         End Select
-        Contents &= GetHeader("Package file information", HeaderSize.Header2) & CrLf & _
+        Contents &= GetHeader("Package file information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetPackageFileInformation] Starting task...")
         Try
@@ -834,7 +835,7 @@ Public Class ImgInfoSaveDlg
 
     End Sub
 
-    Sub GetFeatureInformation()
+    Private Sub GetFeatureInformation()
         Dim InstalledFeatInfo As DismFeatureCollection = Nothing
         Dim msg As String() = New String(2) {"", "", ""}
         Select Case MainForm.Language
@@ -842,67 +843,67 @@ Public Class ImgInfoSaveDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         msg(0) = "Preparing feature information processes..."
-                        msg(1) = "The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf & _
+                        msg(1) = "The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf &
+                          "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf &
                           "Do you want to get this information and save it in the report?"
                         msg(2) = "Feature information"
                     Case "ESN"
                         msg(0) = "Preparando procesos de información de características..."
-                        msg(1) = "El programa ha obtenido información básica de las características instaladas en esta imagen. También puede obtener información completa de dichas características y guardarla en el informe." & CrLf & CrLf & _
-                          "Dese cuenta de que esto tardará más, dependiendo del número de características instaladas." & CrLf & CrLf & _
+                        msg(1) = "El programa ha obtenido información básica de las características instaladas en esta imagen. También puede obtener información completa de dichas características y guardarla en el informe." & CrLf & CrLf &
+                          "Dese cuenta de que esto tardará más, dependiendo del número de características instaladas." & CrLf & CrLf &
                           "¿Desea obtener esta información y guardarla en el informe?"
                         msg(2) = "Información de características"
                     Case "FRA"
                         msg(0) = "Préparation des processus d'information sur les caractéristiques en cours..."
-                        msg(1) = "Le programme a obtenu des informations basiques sur les caractéristiques installées sur cette image. Vous pouvez également obtenir des informations complètes sur ces caractéristiques et les enregistrer dans le rapport." & CrLf & CrLf & _
-                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf & _
+                        msg(1) = "Le programme a obtenu des informations basiques sur les caractéristiques installées sur cette image. Vous pouvez également obtenir des informations complètes sur ces caractéristiques et les enregistrer dans le rapport." & CrLf & CrLf &
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf &
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les caractéristiques"
                     Case "PTB", "PTG"
                         msg(0) = "A preparar processos de informação de características..."
-                        msg(1) = "O programa obteve informações básicas sobre as características instaladas desta imagem. Também pode obter informações completas sobre essas características e guardá-las no relatório." & CrLf & CrLf & _
-                          "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf & _
+                        msg(1) = "O programa obteve informações básicas sobre as características instaladas desta imagem. Também pode obter informações completas sobre essas características e guardá-las no relatório." & CrLf & CrLf &
+                          "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf &
                           "Pretende obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informação sobre as características"
                     Case "ITA"
                         msg(0) = "Preparazione processi verifica informazioni funzionalità..."
-                        msg(1) = "Il programma ha verificato le informazioni di base sulle funzionalità installate in questa immagine. È possibile avere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf & _
-                          "Tieni presente che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf & _
+                        msg(1) = "Il programma ha verificato le informazioni di base sulle funzionalità installate in questa immagine. È possibile avere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf &
+                          "Tieni presente che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf &
                           "Vuoi avere queste informazioni e salvarle nel rapporto?"
                         msg(2) = "Informazioni funzionalità"
                 End Select
             Case 1
                 msg(0) = "Preparing feature information processes..."
-                msg(1) = "The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf & _
-                  "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf & _
+                msg(1) = "The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf &
+                  "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf &
                   "Do you want to get this information and save it in the report?"
                 msg(2) = "Feature information"
             Case 2
                 msg(0) = "Preparando procesos de información de características..."
-                msg(1) = "El programa ha obtenido información básica de las características instaladas en esta imagen. También puede obtener información completa de dichos características y guardarla en el informe." & CrLf & CrLf & _
-                  "Dese cuenta de que esto tardará más, dependiendo del número de características instalados." & CrLf & CrLf & _
+                msg(1) = "El programa ha obtenido información básica de las características instaladas en esta imagen. También puede obtener información completa de dichos características y guardarla en el informe." & CrLf & CrLf &
+                  "Dese cuenta de que esto tardará más, dependiendo del número de características instalados." & CrLf & CrLf &
                   "¿Desea obtener esta información y guardarla en el informe?"
                 msg(2) = "Información de características"
             Case 3
                 msg(0) = "Préparation des processus d'information sur les caractéristiques en cours..."
-                msg(1) = "Le programme a obtenu des informations basiques sur les caractéristiques installées sur cette image. Vous pouvez également obtenir des informations complètes sur ces caractéristiques et les enregistrer dans le rapport." & CrLf & CrLf & _
-                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf & _
+                msg(1) = "Le programme a obtenu des informations basiques sur les caractéristiques installées sur cette image. Vous pouvez également obtenir des informations complètes sur ces caractéristiques et les enregistrer dans le rapport." & CrLf & CrLf &
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf &
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les caractéristiques"
             Case 4
                 msg(0) = "A preparar processos de informação de características..."
-                msg(1) = "O programa obteve informações básicas sobre as características instaladas desta imagem. Também pode obter informações completas sobre essas características e guardá-las no relatório." & CrLf & CrLf & _
-                  "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf & _
+                msg(1) = "O programa obteve informações básicas sobre as características instaladas desta imagem. Também pode obter informações completas sobre essas características e guardá-las no relatório." & CrLf & CrLf &
+                  "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf &
                   "Pretende obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informação sobre as características"
             Case 5
                 msg(0) = "Preparazione processi verifica informazioni funzionalità..."
-                msg(1) = "Il programma ha verificato le informazioni di base sulle funzionalità installate in questa immagine. È possibile avere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf & _
-                  "Tieni presente che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf & _
+                msg(1) = "Il programma ha verificato le informazioni di base sulle funzionalità installate in questa immagine. È possibile avere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf &
+                  "Tieni presente che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf &
                   "Vuoi avere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni funzionalità"
         End Select
-        Contents &= GetHeader("Feature information", HeaderSize.Header2) & CrLf & _
+        Contents &= GetHeader("Feature information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetFeatureInformation] Starting task...")
         Try
@@ -1094,7 +1095,7 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
-    Sub GetAppxInformation()
+    Private Sub GetAppxInformation()
         Dim InstalledAppxPackageInfo As DismAppxPackageCollection = Nothing
         Dim msg As String() = New String(2) {"", "", ""}
         Select Case MainForm.Language
@@ -1102,67 +1103,67 @@ Public Class ImgInfoSaveDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         msg(0) = "Preparing AppX package information processes..."
-                        msg(1) = "The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
+                        msg(1) = "The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf &
+                          "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf &
                           "Do you want to get this information and save it in the report?"
                         msg(2) = "AppX package information"
                     Case "ESN"
                         msg(0) = "Preparando procesos de información de paquetes AppX..."
-                        msg(1) = "El programa ha obtenido información básica de los paquetes AppX instalados en esta imagen. También puede obtener información completa de dichos paquetes AppX y guardarla en el informe." & CrLf & CrLf & _
-                          "Dese cuenta de que esto tardará más, dependiendo del número de paquetes AppX instalados." & CrLf & CrLf & _
+                        msg(1) = "El programa ha obtenido información básica de los paquetes AppX instalados en esta imagen. También puede obtener información completa de dichos paquetes AppX y guardarla en el informe." & CrLf & CrLf &
+                          "Dese cuenta de que esto tardará más, dependiendo del número de paquetes AppX instalados." & CrLf & CrLf &
                           "¿Desea obtener esta información y guardarla en el informe?"
                         msg(2) = "Información de paquetes AppX"
                     Case "FRA"
                         msg(0) = "Préparation des processus d'information sur les paquets AppX en cours..."
-                        msg(1) = "Le programme a obtenu des informations basiques sur les paquets AppX installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets AppX et les enregistrer dans le rapport." & CrLf & CrLf & _
-                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf & _
+                        msg(1) = "Le programme a obtenu des informations basiques sur les paquets AppX installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets AppX et les enregistrer dans le rapport." & CrLf & CrLf &
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf &
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les paquets AppX"
                     Case "PTB", "PTG"
                         msg(0) = "A preparar processos de informação dos pacotes AppX..."
-                        msg(1) = "O programa obteve informações básicas sobre os pacotes AppX instalados nesta imagem. Também pode obter informações completas sobre esses pacotes AppX e guardá-las no relatório." & CrLf & CrLf & _
-                          "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf & _
+                        msg(1) = "O programa obteve informações básicas sobre os pacotes AppX instalados nesta imagem. Também pode obter informações completas sobre esses pacotes AppX e guardá-las no relatório." & CrLf & CrLf &
+                          "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf &
                           "Deseja obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informação dos pacotes AppX"
                     Case "ITA"
                         msg(0) = "Preparazione processi verifica informazioni pacchetti AppX..."
-                        msg(1) = "Il programma ha verificato le informazioni di base sui pacchetti AppX installati in questa immagine. È possibile avere informazioni complete su tali pacchetti AppX e salvarle nel rapporto." & CrLf & CrLf & _
-                          "Nota che questa operazione richiederà più tempo a seconda del numero di pacchetti AppX installati." & CrLf & CrLf & _
+                        msg(1) = "Il programma ha verificato le informazioni di base sui pacchetti AppX installati in questa immagine. È possibile avere informazioni complete su tali pacchetti AppX e salvarle nel rapporto." & CrLf & CrLf &
+                          "Nota che questa operazione richiederà più tempo a seconda del numero di pacchetti AppX installati." & CrLf & CrLf &
                           "Vuoi avere queste informazioni e salvarle nel rapporto?"
                         msg(2) = "Informazioni pacchetti AppX"
                 End Select
             Case 1
                 msg(0) = "Preparing AppX package information processes..."
-                msg(1) = "The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
-                  "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
+                msg(1) = "The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf &
+                  "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf &
                   "Do you want to get this information and save it in the report?"
                 msg(2) = "AppX package information"
             Case 2
                 msg(0) = "Preparando procesos de información de paquetes AppX..."
-                msg(1) = "El programa ha obtenido información básica de los paquetes AppX instalados en esta imagen. También puede obtener información completa de dichos paquetes AppX y guardarla en el informe." & CrLf & CrLf & _
-                  "Dese cuenta de que esto tardará más, dependiendo del número de paquetes AppX instalados." & CrLf & CrLf & _
+                msg(1) = "El programa ha obtenido información básica de los paquetes AppX instalados en esta imagen. También puede obtener información completa de dichos paquetes AppX y guardarla en el informe." & CrLf & CrLf &
+                  "Dese cuenta de que esto tardará más, dependiendo del número de paquetes AppX instalados." & CrLf & CrLf &
                   "¿Desea obtener esta información y guardarla en el informe?"
                 msg(2) = "Información de paquetes AppX"
             Case 3
                 msg(0) = "Préparation des processus d'information sur les paquets AppX en cours..."
-                msg(1) = "Le programme a obtenu des informations basiques sur les paquets AppX installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets AppX et les enregistrer dans le rapport." & CrLf & CrLf & _
-                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf & _
+                msg(1) = "Le programme a obtenu des informations basiques sur les paquets AppX installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets AppX et les enregistrer dans le rapport." & CrLf & CrLf &
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf &
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les paquets AppX"
             Case 4
                 msg(0) = "A preparar processos de informação dos pacotes AppX..."
-                msg(1) = "O programa obteve informações básicas sobre os pacotes AppX instalados nesta imagem. Também pode obter informações completas sobre esses pacotes AppX e guardá-las no relatório." & CrLf & CrLf & _
-                  "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf & _
+                msg(1) = "O programa obteve informações básicas sobre os pacotes AppX instalados nesta imagem. Também pode obter informações completas sobre esses pacotes AppX e guardá-las no relatório." & CrLf & CrLf &
+                  "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf &
                   "Deseja obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informação dos pacotes AppX"
             Case 5
                 msg(0) = "Preparazione dei processi di informazione sui pacchetti AppX..."
-                msg(1) = "Il programma ha ottenuto informazioni elementari sui pacchetti AppX installati in questa immagine. È inoltre possibile ottenere informazioni complete su tali pacchetti AppX e salvarle nel rapporto." & CrLf & CrLf & _
-                  "Si noti che questa operazione richiederà più tempo a seconda del numero di pacchetti AppX installati." & CrLf & CrLf & _
+                msg(1) = "Il programma ha ottenuto informazioni elementari sui pacchetti AppX installati in questa immagine. È inoltre possibile ottenere informazioni complete su tali pacchetti AppX e salvarle nel rapporto." & CrLf & CrLf &
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di pacchetti AppX installati." & CrLf & CrLf &
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sui pacchetti AppX"
         End Select
-        Contents &= GetHeader("AppX package information", HeaderSize.Header2) & CrLf & _
+        Contents &= GetHeader("AppX package information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
             ImageToGetInfoFrom.ImageEditionId = " "
@@ -1219,10 +1220,10 @@ Public Class ImgInfoSaveDlg
                         ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Backup.Count) * 100)
                         Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                         ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                        If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
+                        If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName,
                                                ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName)) Then
                             ' Get the number of pckgdep files
-                            If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
+                            If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName,
                                                                   ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
                                 registrationStatus = "Yes"
                             Else
@@ -1397,10 +1398,10 @@ Public Class ImgInfoSaveDlg
                                     ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Backup.Count) * 100)
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName,
                                                            ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName)) Then
                                         ' Get the number of pckgdep files
-                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName,
                                                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
                                             registrationStatus = "Yes"
                                         Else
@@ -1522,10 +1523,10 @@ Public Class ImgInfoSaveDlg
                                     ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName,
                                                            ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName)) Then
                                         ' Get the number of pckgdep files
-                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName,
                                                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
                                             registrationStatus = "Yes"
                                         Else
@@ -1645,10 +1646,10 @@ Public Class ImgInfoSaveDlg
                                     ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Backup.Count) * 100)
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName,
                                                            ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName)) Then
                                         ' Get the number of pckgdep files
-                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName,
                                                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
                                             registrationStatus = "Yes"
                                         Else
@@ -1770,10 +1771,10 @@ Public Class ImgInfoSaveDlg
                                     ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName,
                                                            ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName)) Then
                                         ' Get the number of pckgdep files
-                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName,
                                                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
                                             registrationStatus = "Yes"
                                         Else
@@ -1913,7 +1914,7 @@ Public Class ImgInfoSaveDlg
         End If
     End Sub
 
-    Sub GetCapabilityInformation()
+    Private Sub GetCapabilityInformation()
         Dim InstalledCapInfo As DismCapabilityCollection = Nothing
         Dim msg As String() = New String(2) {"", "", ""}
         Select Case MainForm.Language
@@ -1921,67 +1922,67 @@ Public Class ImgInfoSaveDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         msg(0) = "Preparing capability information processes..."
-                        msg(1) = "The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf & _
+                        msg(1) = "The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf &
+                          "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf &
                           "Do you want to get this information and save it in the report?"
                         msg(2) = "Capability information"
                     Case "ESN"
                         msg(0) = "Preparando procesos de información de funcionalidades..."
-                        msg(1) = "El programa ha obtenido información básica de las funcionalidades instaladas en esta imagen. También puede obtener información completa de dichas funcionalidades y guardarla en el informe." & CrLf & CrLf & _
-                          "Dese cuenta de que esto tardará más, dependiendo del número de funcionalidades instaladas." & CrLf & CrLf & _
+                        msg(1) = "El programa ha obtenido información básica de las funcionalidades instaladas en esta imagen. También puede obtener información completa de dichas funcionalidades y guardarla en el informe." & CrLf & CrLf &
+                          "Dese cuenta de que esto tardará más, dependiendo del número de funcionalidades instaladas." & CrLf & CrLf &
                           "¿Desea obtener esta información y guardarla en el informe?"
                         msg(2) = "Información de funcionalidades"
                     Case "FRA"
                         msg(0) = "Préparation des processus d'information sur les capacités en cours..."
-                        msg(1) = "Le programme a obtenu des informations basiques sur les capacités installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces capacités et les enregistrer dans le rapport." & CrLf & CrLf & _
-                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf & _
+                        msg(1) = "Le programme a obtenu des informations basiques sur les capacités installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces capacités et les enregistrer dans le rapport." & CrLf & CrLf &
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf &
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les capacités"
                     Case "PTB", "PTG"
                         msg(0) = "A preparar processos de informação de capacidades..."
-                        msg(1) = "O programa obteve informações básicas sobre as capacidades instaladas desta imagem. Também pode obter informações completas sobre essas capacidades e guardá-las no relatório." & CrLf & CrLf & _
-                          "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf & _
+                        msg(1) = "O programa obteve informações básicas sobre as capacidades instaladas desta imagem. Também pode obter informações completas sobre essas capacidades e guardá-las no relatório." & CrLf & CrLf &
+                          "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf &
                           "Deseja obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informações sobre as capacidades"
                     Case "ITA"
                         msg(0) = "Preparazione dei processi di informazione sulle capacità..."
-                        msg(1) = "Il programma ha ottenuto informazioni elementari sulle capacità installate di questa immagine. È inoltre possibile ottenere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf & _
-                          "Si noti che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf & _
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sulle capacità installate di questa immagine. È inoltre possibile ottenere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf &
+                          "Si noti che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf &
                           "Volete ottenere queste informazioni e salvarle nel rapporto?"
                         msg(2) = "Informazioni sulle capacità"
                 End Select
             Case 1
                 msg(0) = "Preparing capability information processes..."
-                msg(1) = "The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf & _
-                  "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf & _
+                msg(1) = "The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf &
+                  "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf &
                   "Do you want to get this information and save it in the report?"
                 msg(2) = "Capability information"
             Case 2
                 msg(0) = "Preparando procesos de información de funcionalidades..."
-                msg(1) = "El programa ha obtenido información básica de las funcionalidades instaladas en esta imagen. También puede obtener información completa de dichas funcionalidades y guardarla en el informe." & CrLf & CrLf & _
-                  "Dese cuenta de que esto tardará más, dependiendo del número de funcionalidades instaladas." & CrLf & CrLf & _
+                msg(1) = "El programa ha obtenido información básica de las funcionalidades instaladas en esta imagen. También puede obtener información completa de dichas funcionalidades y guardarla en el informe." & CrLf & CrLf &
+                  "Dese cuenta de que esto tardará más, dependiendo del número de funcionalidades instaladas." & CrLf & CrLf &
                   "¿Desea obtener esta información y guardarla en el informe?"
                 msg(2) = "Información de funcionalidades"
             Case 3
                 msg(0) = "Préparation des processus d'information sur les capacités en cours..."
-                msg(1) = "Le programme a obtenu des informations basiques sur les capacités installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces capacités et les enregistrer dans le rapport." & CrLf & CrLf & _
-                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf & _
+                msg(1) = "Le programme a obtenu des informations basiques sur les capacités installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces capacités et les enregistrer dans le rapport." & CrLf & CrLf &
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf &
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les capacités"
             Case 4
                 msg(0) = "A preparar processos de informação de capacidades..."
-                msg(1) = "O programa obteve informações básicas sobre as capacidades instaladas desta imagem. Também pode obter informações completas sobre essas capacidades e guardá-las no relatório." & CrLf & CrLf & _
-                  "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf & _
+                msg(1) = "O programa obteve informações básicas sobre as capacidades instaladas desta imagem. Também pode obter informações completas sobre essas capacidades e guardá-las no relatório." & CrLf & CrLf &
+                  "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf &
                   "Deseja obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informações sobre as capacidades"
             Case 5
                 msg(0) = "Preparazione dei processi di informazione sulle capacità..."
-                msg(1) = "Il programma ha ottenuto informazioni elementari sulle capacità installate di questa immagine. È inoltre possibile ottenere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf & _
-                  "Si noti che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf & _
+                msg(1) = "Il programma ha ottenuto informazioni elementari sulle capacità installate di questa immagine. È inoltre possibile ottenere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf &
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf &
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sulle capacità"
         End Select
-        Contents &= GetHeader("Capability information", HeaderSize.Header2) & CrLf & _
+        Contents &= GetHeader("Capability information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
             ImageToGetInfoFrom.ImageEditionId = " "
@@ -2159,7 +2160,7 @@ Public Class ImgInfoSaveDlg
         End If
     End Sub
 
-    Sub GetDriverInformation()
+    Private Sub GetDriverInformation()
         Dim InstalledDrvInfo As DismDriverPackageCollection = Nothing
         Dim msg As String() = New String(3) {"", "", "", ""}
         Select Case MainForm.Language
@@ -2167,94 +2168,94 @@ Public Class ImgInfoSaveDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         msg(0) = "Preparing driver information processes..."
-                        msg(1) = "The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf & _
+                        msg(1) = "The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf &
+                          "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf &
                           "Do you want to get this information and save it in the report?"
                         msg(2) = "Driver information"
-                        msg(3) = "You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf & _
-                      "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
+                        msg(3) = "You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf &
+                      "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf &
                       "Do you want to get the information of all drivers, including drivers part of the Windows distribution?"
                     Case "ESN"
                         msg(0) = "Preparando procesos de información de controladores..."
-                        msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf & _
-                          "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf & _
+                        msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf &
+                          "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf &
                           "¿Desea obtener esta información y guardarla en el informe?"
                         msg(2) = "Información de controladores"
-                        msg(3) = "Ha configurado los procesos en segundo plano para no detectar todos los controladores, lo que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa." & CrLf & CrLf & _
-                      "Esta configuración también se aplica a esta tarea, pero puede obtener la información de todos los controladores ahora. Dese cuenta de que esto puede llevar mucho tiempo, dependiendo del número de controladores de serie." & CrLf & CrLf & _
+                        msg(3) = "Ha configurado los procesos en segundo plano para no detectar todos los controladores, lo que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa." & CrLf & CrLf &
+                      "Esta configuración también se aplica a esta tarea, pero puede obtener la información de todos los controladores ahora. Dese cuenta de que esto puede llevar mucho tiempo, dependiendo del número de controladores de serie." & CrLf & CrLf &
                       "¿Desea obtener la información de todos los controladores, incluyendo los controladores que son parte de la distribución de Windows?"
                     Case "FRA"
                         msg(0) = "Préparation des processus d'information sur les pilotes en cours..."
-                        msg(1) = "Le programme a obtenu des informations basiques sur les pilotes installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces pilotes et les enregistrer dans le rapport." & CrLf & CrLf & _
-                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de pilotes installés." & CrLf & CrLf & _
+                        msg(1) = "Le programme a obtenu des informations basiques sur les pilotes installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces pilotes et les enregistrer dans le rapport." & CrLf & CrLf &
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de pilotes installés." & CrLf & CrLf &
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les pilotes"
-                        msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf & _
-                      "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf & _
+                        msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf &
+                      "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf &
                       "Voulez-vous obtenir les informations de tous les pilotes, y compris les pilotes faisant partie de la distribution Windows ?"
                     Case "PTB", "PTG"
                         msg(0) = "A preparar processos de informação sobre controladores..."
-                        msg(1) = "O programa obteve informações básicas sobre os controladores instalados nesta imagem. Também pode obter informações completas sobre esses controladores e guardá-las no relatório." & CrLf & CrLf & _
-                          "Tenha em atenção que isto pode demorar mais tempo dependendo do número de controladores instalados." & CrLf & CrLf & _
+                        msg(1) = "O programa obteve informações básicas sobre os controladores instalados nesta imagem. Também pode obter informações completas sobre esses controladores e guardá-las no relatório." & CrLf & CrLf &
+                          "Tenha em atenção que isto pode demorar mais tempo dependendo do número de controladores instalados." & CrLf & CrLf &
                           "Pretende obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informações do controlador"
-                        msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf & _
-                      "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf & _
+                        msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf &
+                      "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf &
                       "Pretende obter as informações de todos os controladores, incluindo os controladores que fazem parte da distribuição do Windows?"
                     Case "ITA"
                         msg(0) = "Preparazione dei processi di informazione sui driver..."
-                        msg(1) = "Il programma ha ottenuto informazioni elementari sui driver installati su questa immagine. È inoltre possibile ottenere informazioni complete su tali driver e salvarle nel rapporto." & CrLf & CrLf & _
-                          "Si noti che questa operazione richiederà più tempo a seconda del numero di driver installati." & CrLf & CrLf & _
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sui driver installati su questa immagine. È inoltre possibile ottenere informazioni complete su tali driver e salvarle nel rapporto." & CrLf & CrLf &
+                          "Si noti che questa operazione richiederà più tempo a seconda del numero di driver installati." & CrLf & CrLf &
                           "Volete ottenere queste informazioni e salvarle nel rapporto?"
                         msg(2) = "Informazioni sul driver"
-                        msg(3) = "Avete configurato i processi in background in modo che non rilevino tutti i driver, compresi quelli che fanno parte della distribuzione di Windows, quindi potreste non vedere il driver che vi interessa." & CrLf & CrLf & _
-                      "Questa impostazione viene applicata anche a questa attività, ma ora è possibile ottenere le informazioni su tutti i driver. Tenere presente che questa operazione può richiedere molto tempo, a seconda della quantità di driver di prima parte." & CrLf & CrLf & _
+                        msg(3) = "Avete configurato i processi in background in modo che non rilevino tutti i driver, compresi quelli che fanno parte della distribuzione di Windows, quindi potreste non vedere il driver che vi interessa." & CrLf & CrLf &
+                      "Questa impostazione viene applicata anche a questa attività, ma ora è possibile ottenere le informazioni su tutti i driver. Tenere presente che questa operazione può richiedere molto tempo, a seconda della quantità di driver di prima parte." & CrLf & CrLf &
                       "Volete ottenere le informazioni su tutti i driver, compresi quelli che fanno parte della distribuzione di Windows?"
                 End Select
             Case 1
                 msg(0) = "Preparing driver information processes..."
-                msg(1) = "The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf & _
-                  "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf & _
+                msg(1) = "The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf &
+                  "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf &
                   "Do you want to get this information and save it in the report?"
                 msg(2) = "Driver information"
-                msg(3) = "You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf & _
-              "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
+                msg(3) = "You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf &
+              "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf &
               "Do you want to get the information of all drivers, including drivers part of the Windows distribution?"
             Case 2
                 msg(0) = "Preparando procesos de información de controladores..."
-                msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf & _
-                  "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf & _
+                msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf &
+                  "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf &
                   "¿Desea obtener esta información y guardarla en el informe?"
                 msg(2) = "Información de controladores"
-                msg(3) = "Ha configurado los procesos en segundo plano para no detectar todos los controladores, lo que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa." & CrLf & CrLf & _
-              "Esta configuración también se aplica a esta tarea, pero puede obtener la información de todos los controladores ahora. Dese cuenta de que esto puede llevar mucho tiempo, dependiendo del número de controladores de serie." & CrLf & CrLf & _
+                msg(3) = "Ha configurado los procesos en segundo plano para no detectar todos los controladores, lo que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa." & CrLf & CrLf &
+              "Esta configuración también se aplica a esta tarea, pero puede obtener la información de todos los controladores ahora. Dese cuenta de que esto puede llevar mucho tiempo, dependiendo del número de controladores de serie." & CrLf & CrLf &
               "¿Desea obtener la información de todos los controladores, incluyendo los controladores que son parte de la distribución de Windows?"
             Case 3
                 msg(0) = "Préparation des processus d'information sur les pilotes en cours..."
-                msg(1) = "Le programme a obtenu des informations basiques sur les pilotes installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces pilotes et les enregistrer dans le rapport." & CrLf & CrLf & _
-                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de pilotes installés." & CrLf & CrLf & _
+                msg(1) = "Le programme a obtenu des informations basiques sur les pilotes installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces pilotes et les enregistrer dans le rapport." & CrLf & CrLf &
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de pilotes installés." & CrLf & CrLf &
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les pilotes"
-                msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf & _
-              "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf & _
+                msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf &
+              "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf &
               "Voulez-vous obtenir les informations de tous les pilotes, y compris les pilotes faisant partie de la distribution Windows ?"
             Case 4
                 msg(0) = "A preparar processos de informação sobre controladores..."
-                msg(1) = "O programa obteve informações básicas sobre os controladores instalados nesta imagem. Também pode obter informações completas sobre esses controladores e guardá-las no relatório." & CrLf & CrLf & _
-                  "Tenha em atenção que isto pode demorar mais tempo dependendo do número de controladores instalados." & CrLf & CrLf & _
+                msg(1) = "O programa obteve informações básicas sobre os controladores instalados nesta imagem. Também pode obter informações completas sobre esses controladores e guardá-las no relatório." & CrLf & CrLf &
+                  "Tenha em atenção que isto pode demorar mais tempo dependendo do número de controladores instalados." & CrLf & CrLf &
                   "Pretende obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informações do controlador"
-                msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf & _
-              "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf & _
+                msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf &
+              "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf &
               "Pretende obter as informações de todos os controladores, incluindo os controladores que fazem parte da distribuição do Windows?"
             Case 5
                 msg(0) = "Preparazione dei processi di informazione sui driver..."
-                msg(1) = "Il programma ha ottenuto informazioni elementari sui driver installati su questa immagine. È inoltre possibile ottenere informazioni complete su tali driver e salvarle nel rapporto." & CrLf & CrLf & _
-                  "Si noti che questa operazione richiederà più tempo a seconda del numero di driver installati." & CrLf & CrLf & _
+                msg(1) = "Il programma ha ottenuto informazioni elementari sui driver installati su questa immagine. È inoltre possibile ottenere informazioni complete su tali driver e salvarle nel rapporto." & CrLf & CrLf &
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di driver installati." & CrLf & CrLf &
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sul driver"
-                msg(3) = "Avete configurato i processi in background in modo che non rilevino tutti i driver, compresi quelli che fanno parte della distribuzione di Windows, quindi potreste non vedere il driver che vi interessa." & CrLf & CrLf & _
-              "Questa impostazione viene applicata anche a questa attività, ma ora è possibile ottenere le informazioni su tutti i driver. Tenere presente che questa operazione può richiedere molto tempo, a seconda della quantità di driver di prima parte." & CrLf & CrLf & _
+                msg(3) = "Avete configurato i processi in background in modo che non rilevino tutti i driver, compresi quelli che fanno parte della distribuzione di Windows, quindi potreste non vedere il driver che vi interessa." & CrLf & CrLf &
+              "Questa impostazione viene applicata anche a questa attività, ma ora è possibile ottenere le informazioni su tutti i driver. Tenere presente che questa operazione può richiedere molto tempo, a seconda della quantità di driver di prima parte." & CrLf & CrLf &
               "Volete ottenere le informazioni su tutti i driver, compresi quelli che fanno parte della distribuzione di Windows?"
         End Select
         If SaveTask = 7 And Not AllDrivers Then
@@ -2262,7 +2263,7 @@ Public Class ImgInfoSaveDlg
                 AllDrivers = True
             End If
         End If
-        Contents &= GetHeader("Driver information", HeaderSize.Header2) & CrLf & _
+        Contents &= GetHeader("Driver information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation"),
                                                "In-box driver information " & If(AllDrivers, "was saved", "was not saved")}.ToList()) & CrLf
         Debug.WriteLine("[GetDriverInformation] Starting task...")
@@ -2467,7 +2468,7 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
-    Sub GetDriverFileInformation()
+    Private Sub GetDriverFileInformation()
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0
@@ -2494,7 +2495,7 @@ Public Class ImgInfoSaveDlg
             Case 5
                 msg = "Preparazione dei processi di informazione del driver..."
         End Select
-        Contents &= GetHeader("Driver package information", HeaderSize.Header2) & CrLf & CrLf & _
+        Contents &= GetHeader("Driver package information", HeaderSize.Header2) & CrLf & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetDriverFileInformation] Starting task...")
         Try
@@ -2591,7 +2592,7 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
-    Sub GetWinPEConfiguration()
+    Private Sub GetWinPEConfiguration()
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0
@@ -2706,7 +2707,7 @@ Public Class ImgInfoSaveDlg
         End If
     End Sub
 
-    Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not InfoSaveResults.IsDisposed Then
             InfoSaveResults.Close()
             InfoSaveResults.Dispose()
@@ -2886,8 +2887,8 @@ Public Class ImgInfoSaveDlg
 
         ' Set the beginning of the contents
         Contents = GetHeader("DISMTools Image Information Report", HeaderSize.Header1) &
-                   GetParagraph("This is an automatically generated report created by DISMTools. It can be viewed at any time to check image information." & CrLf & CrLf & _
-                                "This report contains information about the tasks that you wanted to get information about, which are reflected below this message." & CrLf & CrLf & _
+                   GetParagraph("This is an automatically generated report created by DISMTools. It can be viewed at any time to check image information." & CrLf & CrLf &
+                                "This report contains information about the tasks that you wanted to get information about, which are reflected below this message." & CrLf & CrLf &
                                 "This process primarily uses the DISM API to get information. If you want to get information of the API operations, this file does not include it. However, you can get that information from the log file stored in the standard location of: " & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote & CrLf, ParagraphStyle.Normal) & CrLf &
                    GetHeader("Task details", HeaderSize.Header2) & CrLf &
                    GetListItems(New String() {"Processes started at: " & Date.Now, "Report file target: " & Quote & SaveTarget & Quote}.ToList())
@@ -2901,40 +2902,60 @@ Public Class ImgInfoSaveDlg
         Select Case SaveTask
             Case 0
                 Contents &= GetListItems(New String() {"Information tasks: get complete image information"}.ToList()) & CrLf & CrLf
-                GetImageInformation()
-                GetPackageInformation()
-                GetFeatureInformation()
-                GetAppxInformation()
-                GetCapabilityInformation()
-                GetDriverInformation()
-                GetWinPEConfiguration()
+                Await Task.Run(Sub()
+                                   GetImageInformation()
+                                   GetPackageInformation()
+                                   GetFeatureInformation()
+                                   GetAppxInformation()
+                                   GetCapabilityInformation()
+                                   GetDriverInformation()
+                                   GetWinPEConfiguration()
+                               End Sub)
             Case 1
                 Contents &= GetListItems(New String() {"Information tasks: get image file information"}.ToList()) & CrLf & CrLf
-                GetImageInformation()
+                Await Task.Run(Sub()
+                                   GetImageInformation()
+                               End Sub)
             Case 2
                 Contents &= GetListItems(New String() {"Information tasks: get installed package information"}.ToList()) & CrLf & CrLf
-                GetPackageInformation()
+                Await Task.Run(Sub()
+                                   GetPackageInformation()
+                               End Sub)
             Case 3
                 Contents &= GetListItems(New String() {"Information tasks: get package file information"}.ToList()) & CrLf & CrLf
-                GetPackageFileInformation()
+                Await Task.Run(Sub()
+                                   GetPackageFileInformation()
+                               End Sub)
             Case 4
                 Contents &= GetListItems(New String() {"Information tasks: get feature information"}.ToList()) & CrLf & CrLf
-                GetFeatureInformation()
+                Await Task.Run(Sub()
+                                   GetFeatureInformation()
+                               End Sub)
             Case 5
                 Contents &= GetListItems(New String() {"Information tasks: get installed AppX package information"}.ToList()) & CrLf & CrLf
-                GetAppxInformation()
+                Await Task.Run(Sub()
+                                   GetAppxInformation()
+                               End Sub)
             Case 6
                 Contents &= GetListItems(New String() {"Information tasks: get capability information"}.ToList()) & CrLf & CrLf
-                GetCapabilityInformation()
+                Await Task.Run(Sub()
+                                   GetCapabilityInformation()
+                               End Sub)
             Case 7
                 Contents &= GetListItems(New String() {"Information tasks: get installed driver information"}.ToList()) & CrLf & CrLf
-                GetDriverInformation()
+                Await Task.Run(Sub()
+                                   GetDriverInformation()
+                               End Sub)
             Case 8
                 Contents &= GetListItems(New String() {"Information tasks: get driver package information"}.ToList()) & CrLf & CrLf
-                GetDriverFileInformation()
+                Await Task.Run(Sub()
+                                   GetDriverFileInformation()
+                               End Sub)
             Case 9
                 Contents &= GetListItems(New String() {"Information tasks: get Windows PE configuration"}.ToList()) & CrLf & CrLf
-                GetWinPEConfiguration()
+                Await Task.Run(Sub()
+                                   GetWinPEConfiguration()
+                               End Sub)
         End Select
 
         ' Put an ending to the contents
