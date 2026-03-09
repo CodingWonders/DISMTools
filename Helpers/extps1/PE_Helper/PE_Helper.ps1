@@ -1,4 +1,5 @@
 #requires -version 5.0
+#requires -runasadministrator
 #                                              ....
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
