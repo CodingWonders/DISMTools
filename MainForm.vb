@@ -14230,7 +14230,7 @@ Public Class MainForm
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
         DynaLog.LogMessage("Refreshing news feed...")
-        FeedWorker.RunWorkerAsync()
+        If Not FeedWorker.IsBusy Then FeedWorker.RunWorkerAsync()
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
