@@ -2728,14 +2728,63 @@ Public Class ImgInfoSaveDlg
         If serviceList.Any() Then
             Contents &= GetParagraph("Information summary for " & serviceList.Count & " service(s) in default control set:", ParagraphStyle.Bold) & CrLf &
                 GetTableHeader({"Service Name", "Display Name", "Description", "Start Type", "Service Type", "On The Web"}.ToList())
+            ' Do the service listing overview first; then do a loop again for each service.
             For Each service In serviceList
-                ReportChanges(String.Format("Saving information of service {0} of {1}...", serviceList.IndexOf(service) + 1, serviceList.Count),
+                ReportChanges(String.Format("Saving information overview of service {0} of {1}...", serviceList.IndexOf(service) + 1, serviceList.Count),
                               (serviceList.IndexOf(service) / serviceList.Count) * 100)
                 Contents &= GetTableRow({service.Name, service.DisplayName, service.Description, service.StartTypeToString(), service.TypeToString(),
                                          MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, service.Name)),
                                                                 "Look this item online")}.ToList())
             Next
             Contents &= CrLf
+            For Each service In serviceList
+                ReportChanges(String.Format("Saving detailed information of service {0} of {1}...", serviceList.IndexOf(service) + 1, serviceList.Count),
+                              (serviceList.IndexOf(service) / serviceList.Count) * 100)
+
+                Dim peruserServiceStatus As String = ""
+                If {80, 96}.Contains(service.Type) Then
+                    If service.UserServiceFlags = Integer.MinValue Then
+                        peruserServiceStatus = "Undefined"
+                    Else
+                        peruserServiceStatus = service.UserServiceFlags
+                    End If
+                Else
+                    peruserServiceStatus = "Not a per-user service"
+                End If
+
+                Contents &= GetHeader(String.Format("Information for service: {0}", service.Name), HeaderSize.Header3) & CrLf &
+                    GetListItems({String.Format("Service Display Name: {0}", service.DisplayName),
+                                  String.Format("Service Description: {0}", service.Description),
+                                  String.Format("Image Path: {0}", service.ImagePath),
+                                  String.Format("Object Name: {0}", service.ObjectName),
+                                  String.Format("Start Type: {0}", service.StartTypeToString()),
+                                  String.Format("Delayed Start? {0}", If(service.StartType = WindowsService.ServiceStartType.Automatic AndAlso service.DelayedStart, "Yes", "No")),
+                                  String.Format("Service Type: {0}", service.TypeToString()),
+                                  String.Format("Per-user Service Flags: {0}", peruserServiceStatus),
+                                  String.Format("Group: {0}", service.Group)}.ToList()) & CrLf &
+                          GetParagraph("Windows NT&reg; privileges:", ParagraphStyle.Bold) & CrLf &
+                          GetTableHeader({"Privilege Name", "Privilege Display Name", "Privilege Description"}.ToList()) &
+                          String.Join("", service.RequiredPrivileges.Select(Function(privilege) GetTableRow({privilege.ConstantNameText, privilege.ConstantUserRight, privilege.ConstantDescription}.ToList()))) & CrLf &
+                          GetParagraph("Error Control:", ParagraphStyle.Bold) & CrLf &
+                          GetListItems({String.Format("On service error: {0}", service.ErrorControlToString()),
+                                        String.Format("Failure action on first error: {0}", service.FailureActionToString(service.FailureActions.FirstFailure)),
+                                        String.Format("Failure action on second error: {0}", service.FailureActionToString(service.FailureActions.SecondFailure)),
+                                        String.Format("Failure action on subsequent errors: {0}", service.FailureActionToString(service.FailureActions.SubsequentFailure)),
+                                        String.Format("Reset error count after the following minutes: {0} minute(s)", service.FailureActions.ResetDelayInSeconds / 60),
+                                        String.Format("Restart service after the following minutes: {0} minute(s) ({1} seconds) after first failure, {2} minute(s) ({3} seconds) after second failure, {4} minute(s) ({5} seconds) after subsequent failures",
+                                                      Math.Round((service.FailureActions.FirstDelayInMillis / 60000), 2),
+                                                      Math.Round((service.FailureActions.FirstDelayInMillis / 1000), 2),
+                                                      Math.Round((service.FailureActions.SecondDelayInMillis / 60000), 2),
+                                                      Math.Round((service.FailureActions.SecondDelayInMillis / 1000), 2),
+                                                      Math.Round((service.FailureActions.SubsequentDelaysInMillis / 60000), 2),
+                                                      Math.Round((service.FailureActions.SubsequentDelaysInMillis / 1000), 2))}.ToList()) & CrLf &
+                          GetParagraph("Dependencies:", ParagraphStyle.Bold) & CrLf &
+                          GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
+                          String.Join("", serviceList.Where(Function(srv) service.Dependencies.Contains(srv.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
+                          GetParagraph("Dependents:", ParagraphStyle.Bold) & CrLf &
+                          GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
+                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Contains(service.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf
+            Next
         Else
             Contents &= GetParagraph("No services were found.", ParagraphStyle.Bold) & CrLf
         End If
