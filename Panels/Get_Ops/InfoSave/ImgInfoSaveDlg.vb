@@ -950,7 +950,8 @@ Public Class ImgInfoSaveDlg
                                                                     "Description",
                                                                     "Restart required?",
                                                                     "Feature state",
-                                                                    "Custom properties"}.ToList())
+                                                                    "Custom properties",
+                                                                    "On The Web"}.ToList())
                     Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                     For Each feature As DismFeature In InstalledFeatInfo
                         featCustomPropsList = "<ul>"
@@ -995,7 +996,8 @@ Public Class ImgInfoSaveDlg
                                                               featInfo.Description,
                                                               Casters.CastDismRestartType(featInfo.RestartRequired),
                                                               Casters.CastDismFeatureState(featInfo.FeatureState),
-                                                              featCustomPropsList}.ToList())
+                                                              featCustomPropsList,
+                                                              MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, featInfo.FeatureName)), "Look this item online")}.ToList())
                     Next
                     Contents &= CrLf & GetParagraph("Complete feature information has been gathered") & CrLf
                 ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(1)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
@@ -1004,7 +1006,8 @@ Public Class ImgInfoSaveDlg
                                                                     "Description",
                                                                     "Restart required?",
                                                                     "Feature state",
-                                                                    "Custom properties"}.ToList())
+                                                                    "Custom properties",
+                                                                    "On The Web"}.ToList())
                     Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                     For Each feature As DismFeature In InstalledFeatInfo
                         featCustomPropsList = "<ul>"
@@ -1049,7 +1052,8 @@ Public Class ImgInfoSaveDlg
                                                               featInfo.Description,
                                                               Casters.CastDismRestartType(featInfo.RestartRequired),
                                                               Casters.CastDismFeatureState(featInfo.FeatureState),
-                                                              featCustomPropsList}.ToList())
+                                                              featCustomPropsList,
+                                                              MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, featInfo.FeatureName)), "Look this item online")}.ToList())
                     Next
                     Contents &= CrLf & GetParagraph("Complete feature information has been gathered") & CrLf
                 Else
@@ -1080,10 +1084,12 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= GetTableHeader(New String() {"Feature name",
-                                                             "Feature state"}.ToList())
+                                                             "Feature state",
+                                                             "On The Web"}.ToList())
                     For Each installedFeature As DismFeature In InstalledFeatInfo
                         Contents &= GetTableRow(New String() {installedFeature.FeatureName,
-                                                              Casters.CastDismFeatureState(installedFeature.State)}.ToList()) & CrLf
+                                                              Casters.CastDismFeatureState(installedFeature.State),
+                                                              MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, installedFeature.FeatureName)), "Look this item online")}.ToList()) & CrLf
                     Next
                     Contents &= CrLf & GetParagraph("Complete feature information has not been gathered") & CrLf
                 End If
@@ -2034,7 +2040,8 @@ Public Class ImgInfoSaveDlg
                                                                         "Capability state",
                                                                         "Display name",
                                                                         "Download size",
-                                                                        "Installation size"}.ToList())
+                                                                        "Installation size",
+                                                                        "On The Web"}.ToList())
                         Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
                         For Each capability As DismCapability In InstalledCapInfo
                             Select Case MainForm.Language
@@ -2069,7 +2076,8 @@ Public Class ImgInfoSaveDlg
                                                                   Casters.CastDismPackageState(capInfo.State),
                                                                   capInfo.Description,
                                                                   capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", ""),
-                                                                  capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")}.ToList())
+                                                                  capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", ""),
+                                                                  MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, capInfo.Name)), "Look this item online")}.ToList())
                         Next
                         Contents &= CrLf & GetParagraph("Complete capability information has been gathered") & CrLf
                     ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(3)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
@@ -2078,7 +2086,8 @@ Public Class ImgInfoSaveDlg
                                                                         "Capability state",
                                                                         "Display name",
                                                                         "Download size",
-                                                                        "Installation size"}.ToList())
+                                                                        "Installation size",
+                                                                        "On The Web"}.ToList())
                         Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
                         For Each capability As DismCapability In InstalledCapInfo
                             Select Case MainForm.Language
@@ -2113,7 +2122,8 @@ Public Class ImgInfoSaveDlg
                                                                   Casters.CastDismPackageState(capInfo.State),
                                                                   capInfo.Description,
                                                                   capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", ""),
-                                                                  capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")}.ToList())
+                                                                  capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", ""),
+                                                                  MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, capInfo.Name)), "Look this item online")}.ToList())
                         Next
                         Contents &= CrLf & GetParagraph("Complete capability information has been gathered") & CrLf
                     Else
@@ -2144,10 +2154,12 @@ Public Class ImgInfoSaveDlg
                         End Select
                         ReportChanges(msg(0), 50)
                         Contents &= GetTableHeader(New String() {"Capability identity",
-                                                                 "Capability state"}.ToList()) & CrLf
+                                                                 "Capability state",
+                                                                 "On The Web"}.ToList()) & CrLf
                         For Each installedCapability As DismCapability In InstalledCapInfo
                             Contents &= GetTableRow(New String() {CodeBlockChar & installedCapability.Name & CodeBlockChar,
-                                                                  Casters.CastDismPackageState(installedCapability.State)}.ToList())
+                                                                  Casters.CastDismPackageState(installedCapability.State),
+                                                                  MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, installedCapability.Name)), "Look this item online")}.ToList())
                         Next
                         Contents &= CrLf & GetParagraph("Complete capability information has not been gathered") & CrLf
                     End If
@@ -2709,16 +2721,19 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Private Sub GetDefaultCSServiceInformation()
-        Contents &= GetHeader("Service Information", HeaderSize.Header2) & CrLf & CrLf
+        Contents &= GetHeader("Service Information", HeaderSize.Header2) & CrLf &
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         ReportChanges("Getting service information...", 0.0)
         Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImageToGetInfoFrom.ImageMountDirectory)
         If serviceList.Any() Then
             Contents &= GetParagraph("Information summary for " & serviceList.Count & " service(s) in default control set:", ParagraphStyle.Bold) & CrLf &
-                GetTableHeader({"Service Name", "Display Name", "Description", "Start Type", "Service Type"}.ToList())
+                GetTableHeader({"Service Name", "Display Name", "Description", "Start Type", "Service Type", "On The Web"}.ToList())
             For Each service In serviceList
-                ReportChanges(String.Format("Saving information of {0}{1}{0} ({2} of {3})", Quote, service.Name, serviceList.IndexOf(service) + 1, serviceList.Count),
+                ReportChanges(String.Format("Saving information of service {0} of {1}...", serviceList.IndexOf(service) + 1, serviceList.Count),
                               (serviceList.IndexOf(service) / serviceList.Count) * 100)
-                Contents &= GetTableRow({service.Name, service.DisplayName, service.Description, service.StartTypeToString(), service.TypeToString()}.ToList())
+                Contents &= GetTableRow({service.Name, service.DisplayName, service.Description, service.StartTypeToString(), service.TypeToString(),
+                                         MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, service.Name)),
+                                                                "Look this item online")}.ToList())
             Next
             Contents &= CrLf
         Else
@@ -2929,6 +2944,7 @@ Public Class ImgInfoSaveDlg
                                    GetCapabilityInformation()
                                    GetDriverInformation()
                                    GetWinPEConfiguration()
+                                   GetDefaultCSServiceInformation()
                                End Sub)
             Case 1
                 Contents &= GetListItems(New String() {"Information tasks: get image file information"}.ToList()) & CrLf & CrLf

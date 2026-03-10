@@ -262,6 +262,8 @@ Public Class InfoSaveResults
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
+        ' TODO When using google to look up items online what we get is a cookie consent prompt that gets rid of our udm=14 thing, therefore showing google results with AI overview crap. Either find a way to pass in udm=14 or stop using google search. This CANNOT be replicated with saved reports, only here.
+
         If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("An external link has been clicked. Opening it in the default browser...")
             Process.Start(e.Url.AbsoluteUri)

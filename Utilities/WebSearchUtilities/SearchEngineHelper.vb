@@ -40,4 +40,11 @@
         End If
     End Sub
 
+    Public Function GetSearchQueryUri(SearchQuery As String) As String
+        Dim selectedEngine As SearchEngine = SearchEngines.FirstOrDefault(Function(engine) engine.AIPermission = SearchEngine.AIPermissionType.Mixed AndAlso engine.Name.IndexOf("Google Search", StringComparison.OrdinalIgnoreCase) > -1)
+        If selectedEngine Is Nothing Then Return ""
+
+        Return String.Format(selectedEngine.SearchURI, SearchQuery.Replace(Quote, "%22").Replace(" ", "%20"))
+    End Function
+
 End Module
