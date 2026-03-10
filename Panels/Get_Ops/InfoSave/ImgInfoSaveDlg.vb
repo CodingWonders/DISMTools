@@ -22,6 +22,7 @@ Public Class ImgInfoSaveDlg
     '   Do note that, if background processes have been configured to not detect all drivers, this dialog will ask you
     ' - 8, to save information of the driver files specified
     ' - 9, to save Windows PE configuration (only for WinPE images)
+    ' - 10, to save service information from the default control set
     Public SaveTask As Integer
 
     Public ImageToGetInfoFrom As WindowsImage
@@ -2707,6 +2708,24 @@ Public Class ImgInfoSaveDlg
         End If
     End Sub
 
+    Private Sub GetDefaultCSServiceInformation()
+        Contents &= GetHeader("Service Information", HeaderSize.Header2) & CrLf & CrLf
+        ReportChanges("Getting service information...", 0.0)
+        Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImageToGetInfoFrom.ImageMountDirectory)
+        If serviceList.Any() Then
+            Contents &= GetParagraph("Information summary for " & serviceList.Count & " service(s) in default control set:", ParagraphStyle.Bold) & CrLf &
+                GetTableHeader({"Service Name", "Display Name", "Description", "Start Type", "Service Type"}.ToList())
+            For Each service In serviceList
+                ReportChanges(String.Format("Saving information of {0}{1}{0} ({2} of {3})", Quote, service.Name, serviceList.IndexOf(service) + 1, serviceList.Count),
+                              (serviceList.IndexOf(service) / serviceList.Count) * 100)
+                Contents &= GetTableRow({service.Name, service.DisplayName, service.Description, service.StartTypeToString(), service.TypeToString()}.ToList())
+            Next
+            Contents &= CrLf
+        Else
+            Contents &= GetParagraph("No services were found.", ParagraphStyle.Bold) & CrLf
+        End If
+    End Sub
+
     Private Async Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not InfoSaveResults.IsDisposed Then
             InfoSaveResults.Close()
@@ -2956,6 +2975,11 @@ Public Class ImgInfoSaveDlg
                 Await Task.Run(Sub()
                                    GetWinPEConfiguration()
                                End Sub)
+            Case 10
+                Contents &= GetListItems({"Information tasks: get services from default control set"}.ToList()) & CrLf & CrLf
+                Await Task.Run(Sub()
+                                   GetDefaultCSServiceInformation()
+                               End Sub)
         End Select
 
         ' Put an ending to the contents
@@ -3001,4 +3025,5 @@ Public Class ImgInfoSaveDlg
         MainForm.StartMountedImageDetector()
         Close()
     End Sub
+
 End Class
