@@ -2556,32 +2556,6 @@ Public Class ImgInfoSaveDlg
                                                              "Hardware manufacturer",
                                                              "Architecture"}.ToList())
                             For Each hwTarget As DismDriver In drvInfoCollection
-                                Select Case MainForm.Language
-                                    Case 0
-                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENU", "ENG"
-                                                msg = "Getting information from hardware targets... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
-                                            Case "ESN"
-                                                msg = "Obteniendo información de destinos de hardware... (destino " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
-                                            Case "FRA"
-                                                msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
-                                            Case "PTB", "PTG"
-                                                msg = "Obtendo informações de alvos de hardware... (alvo " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
-                                            Case "ITA"
-                                                msg = "Ottenere informazioni dai target hardware... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
-                                        End Select
-                                    Case 1
-                                        msg = "Getting information from hardware targets... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
-                                    Case 2
-                                        msg = "Obteniendo información de destinos de hardware... (destino " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
-                                    Case 3
-                                        msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
-                                    Case 4
-                                        msg = "Obtendo informações de alvos de hardware... (alvo " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
-                                    Case 5
-                                        msg = "Ottenere informazioni dai target hardware... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
-                                End Select
-                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
                                 Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
                                                                       hwTarget.HardwareId,
                                                                       If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
