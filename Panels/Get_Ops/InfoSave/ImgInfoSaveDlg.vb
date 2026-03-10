@@ -62,7 +62,6 @@ Public Class ImgInfoSaveDlg
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
         TaskbarHelper.SetIndicatorState(ProgressPercentage, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
-        Application.DoEvents()
     End Sub
 
     Private Sub WriteExceptionInfo(ex As Exception)
