@@ -321,18 +321,139 @@ Module WindowsServiceHelper
         Return ""
     End Function
 
+    Private Function GetOnlineServiceList() As List(Of WindowsService)
+        Dim serviceList As New List(Of WindowsService)
+
+        Try
+            ' We only document a maximum of 999 control sets. CurrentControlSet is not a thing in an offline system, as the registry
+            ' subsystems guess the control set to use based on values in HKLM\SYSTEM\Select.
+            DynaLog.LogMessage("Opening mount path services key for read access...")
+            Dim ServiceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Services", False)
+            ' For some stupid reason, .NET keys are stored in HKLM\SYSTEM\ControlSet<nnn>\Services. GUID keys are also not allowed
+            DynaLog.LogMessage("Getting service names...")
+            Dim ServiceNames() As String = ServiceRk.GetSubKeyNames().Where(Function(serviceName) Not serviceName.StartsWith(".NET", StringComparison.OrdinalIgnoreCase) AndAlso Not serviceName.StartsWith("{")).ToArray()
+            ServiceRk.Close()
+
+            ' Now we have to grab as much information as we can
+            For Each ServiceName In ServiceNames
+                Dim serviceImagePath As String = "",
+                    serviceEntryName As String = "",
+                    serviceDisplayName As String = "",
+                    serviceDescription As String = "",
+                    serviceObjectName As String = "",
+                    serviceGroupName As String = "",
+                    serviceStartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Unknown,
+                    serviceDelayedStart As Boolean = False,
+                    serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
+                    serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
+                    serviceRequiredPrivilegesString() As String = New String() {},
+                    serviceDependencies() As String = New String() {},
+                    serviceFailActionByteArr() As Byte = New Byte() {},
+                    serviceUserServFlags As Integer = Integer.MinValue
+                Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("SYSTEM\CurrentControlSet\Services\{0}", ServiceName), False)
+                    ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
+                    ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
+                    ' it will show that value.
+                    serviceImagePath = ServiceInfoRk.GetValue("ImagePath", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
+                    If serviceImagePath = "" Then
+                        DynaLog.LogMessage("The service image path cannot be obtained.")
+                        ' This "service" is bogus
+                        Continue For
+                    End If
+
+                    serviceEntryName = ServiceName
+                    serviceDisplayName = ServiceInfoRk.GetValue("DisplayName", "")
+                    DynaLog.LogMessage("Raw service display name: " & serviceDisplayName)
+                    If serviceDisplayName.StartsWith("@") AndAlso serviceDisplayName.ToLowerInvariant().Contains(".inf") Then
+                        DynaLog.LogMessage("Raw display name points to a device driver. Parsing...")
+                        Dim parsedInf As Tuple(Of String, String) = ParseInfLine(serviceDisplayName)
+
+                        If parsedInf IsNot Nothing Then
+                            DynaLog.LogMessage("We have grabbed the path and the token. Continuing...")
+                            Dim resolvedString As String = ResolveInfToken(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "INF", parsedInf.Item1), parsedInf.Item2)
+                            DynaLog.LogMessage("- Resolved string (using current system): " & resolvedString)
+                            If Not String.IsNullOrEmpty(resolvedString) Then
+                                DynaLog.LogMessage("We grabbed the resolved string. Using that...")
+                                serviceDisplayName = resolvedString
+                            End If
+                        End If
+                    ElseIf serviceDisplayName.StartsWith("@") Then
+                        DynaLog.LogMessage("Raw display name indicates an indirect string. Parsing...")
+                        serviceDisplayName = ResolveIndirectString(serviceDisplayName)
+                    End If
+                    serviceDescription = ServiceInfoRk.GetValue("Description", "")
+                    DynaLog.LogMessage("Raw service description: " & serviceDescription)
+                    If serviceDescription.StartsWith("@") Then
+                        DynaLog.LogMessage("Raw description indicates an indirect string. Parsing...")
+                        serviceDescription = ResolveIndirectString(serviceDescription)
+                    End If
+                    serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
+                    serviceGroupName = ServiceInfoRk.GetValue("Group", "")
+                    serviceStartType = ServiceInfoRk.GetValue("Start", -1)
+                    serviceDelayedStart = (ServiceInfoRk.GetValue("DelayedAutoStart", 0) = 1)
+                    serviceType = ServiceInfoRk.GetValue("Type", -1)
+                    serviceErrorControl = ServiceInfoRk.GetValue("ErrorControl", -1)
+                    ' The required privileges property is a multi-value registry value, so we need an array
+                    serviceRequiredPrivilegesString = ServiceInfoRk.GetValue("RequiredPrivileges", New String() {})
+                    ' Same goes for dependencies
+                    serviceDependencies = ServiceInfoRk.GetValue("DependOnService", New String() {})
+                    serviceFailActionByteArr = ServiceInfoRk.GetValue("FailureActions", New Byte() {})
+                    serviceUserServFlags = ServiceInfoRk.GetValue("UserServiceFlags", Integer.MinValue)
+
+                    Dim serviceRequiredPrivilegeList As New List(Of NTSecurityPrivilegeConstant)
+                    DynaLog.LogMessage("Privilege items defined by the service: " & serviceRequiredPrivilegesString.Count)
+
+                    If serviceRequiredPrivilegesString.Count > 0 Then
+                        DynaLog.LogMessage("This service defines privileges. Getting privilege constant representations...")
+                        ' Parse the items themselves to keys that are available in the dictionary we filled
+                        ' stuff in
+                        For Each serviceRequiredPrivilegeString In serviceRequiredPrivilegesString
+                            If PrivilegeMappingDictionary.Keys.Contains(serviceRequiredPrivilegeString) Then
+                                ' Then add it
+                                Dim constantInHeader As String = PrivilegeMappingDictionary(serviceRequiredPrivilegeString)
+                                serviceRequiredPrivilegeList.Add(PrivilegeConstantDictionary(constantInHeader))
+                            End If
+                        Next
+                    End If
+
+                    DynaLog.LogMessage("Adding service " & serviceEntryName & " to service list...")
+                    serviceList.Add(New WindowsService(serviceEntryName,
+                                                       serviceDisplayName,
+                                                       serviceDescription,
+                                                       serviceObjectName,
+                                                       serviceImagePath,
+                                                       serviceGroupName,
+                                                       serviceStartType,
+                                                       serviceDelayedStart,
+                                                       serviceType,
+                                                       serviceErrorControl,
+                                                       serviceRequiredPrivilegeList,
+                                                       serviceDependencies,
+                                                       ParseFailureActionByteArray(serviceFailActionByteArr),
+                                                       serviceUserServFlags))
+                End Using
+            Next
+        Catch ex As Exception
+
+        End Try
+
+        Return serviceList
+    End Function
+
     ''' <summary>
     ''' Gets a list of system services/devices from the mounted image
     ''' </summary>
     ''' <param name="MountPath">The path to the mounted image</param>
     ''' <returns>The service list</returns>
     ''' <remarks></remarks>
-    Function GetServiceList(MountPath As String) As List(Of WindowsService)
+    Function GetServiceList(MountPath As String, Optional OnlineManagement As Boolean = False) As List(Of WindowsService)
         ' For the required privileges a service may have, we have to fill in the constants first so that we don't have things like
         ' "SeUndockPrivilege", "SeShutdownPrivilege"; but rather "Remove computer from docking station", and so on... we want the
         ' friendly things.
         DynaLog.LogMessage("Preparing to get all services in this image...")
         DynaLog.LogMessage("- Mount Path: " & MountPath)
+        If OnlineManagement Then Return GetOnlineServiceList()
+
         DynaLog.LogMessage("Filling dictionaries...")
         FillInConstants()
         Dim serviceList As New List(Of WindowsService)
