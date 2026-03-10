@@ -2155,7 +2155,7 @@ Public Class ImgInfoSaveDlg
                         ReportChanges(msg(0), 50)
                         Contents &= GetTableHeader(New String() {"Capability identity",
                                                                  "Capability state",
-                                                                 "On The Web"}.ToList()) & CrLf
+                                                                 "On The Web"}.ToList())
                         For Each installedCapability As DismCapability In InstalledCapInfo
                             Contents &= GetTableRow(New String() {CodeBlockChar & installedCapability.Name & CodeBlockChar,
                                                                   Casters.CastDismPackageState(installedCapability.State),
