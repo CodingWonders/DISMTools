@@ -26,6 +26,9 @@ Public Class ServiceManagementForm
         Dim selectedService As WindowsService = ServiceList.ElementAtOrDefault(Index)
         If selectedService Is Nothing Then Exit Sub
 
+        DeleteServiceBtn.Enabled = Not selectedService.MarkedForDeletion
+        RestoreServiceBtn.Enabled = selectedService.MarkedForDeletion
+
         TextBox1.Text = selectedService.Name
         TextBox2.Text = selectedService.DisplayName
         TextBox3.Text = selectedService.Description
@@ -181,6 +184,9 @@ Public Class ServiceManagementForm
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        DeleteServiceBtn.Enabled = ListView1.SelectedItems.Count = 1
+        RestoreServiceBtn.Enabled = ListView1.SelectedItems.Count = 1
+
         If ListView1.SelectedItems.Count = 1 Then
             DisplayServiceInformation(ListView1.FocusedItem.Index)
         End If
@@ -327,6 +333,31 @@ Public Class ServiceManagementForm
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
+        If ListView1.SelectedItems.Count = 1 Then
+            If MessageBox.Show("Continuing with the removal of this service can cause the target system to become either unstable or unbootable. Do you want to continue?",
+                               "Remove service", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
+
+            ServiceList(ListView1.FocusedItem.Index).MarkedForDeletion = True
+
+            MessageBox.Show("The service has been successfully scheduled for deletion. The removal of this service will take place when you save the changes. " &
+                            "Should you ever need this service back, please import the service information backup that will be made during the save process.",
+                            "Remove service", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Force refresh of service information
+            DisplayServiceInformation(ListView1.FocusedItem.Index)
+        End If
+    End Sub
+
+    Private Sub RestoreServiceBtn_Click(sender As Object, e As EventArgs) Handles RestoreServiceBtn.Click
+        If ListView1.SelectedItems.Count = 1 Then
+            ServiceList(ListView1.FocusedItem.Index).MarkedForDeletion = False
+
+            ' Force refresh of service information
+            DisplayServiceInformation(ListView1.FocusedItem.Index)
         End If
     End Sub
 End Class

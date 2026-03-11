@@ -682,20 +682,27 @@ Module WindowsServiceHelper
             DynaLog.DisableLogging()
             For Each Service As WindowsService In ServiceList
                 currentService += 1
+                Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name)
                 ' For those wondering: why not .NET APIs? Well, they throw access denied exceptions. Handling the exceptions tells us that
                 ' none of the information will be saved. For example, if we have 672 service entries, all of them will fail if we use .NET APIs.
                 ' However, if we use the APIs provided by the Registry Helper (which runs the reg program under the hood), we bring the failed
                 ' set operations down to 9, and we **do** set this information using this method. We'll roll with it, though we'll disable
                 ' DynaLog logging so it doesn't take about a minute.
-                Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name)
-                If RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "Start", RegistryItem.ValueType.RegDword, Service.StartType)) <> 0 Then
-                    failedSets += 1
-                    Continue For
-                End If
-                If Service.StartType = WindowsService.ServiceStartType.Automatic Then
-                    ' Currently, we assume that setting DelayedAutoStart to 0 does the same thing as removing this value altogether: turning off
-                    ' delayed start. If this is not the case, we'll just get rid of it.
-                    RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
+                If Service.MarkedForDeletion Then
+                    If RegistryHelper.RemoveRegistryItem(registryPath, "/va /f") <> 0 Then
+                        failedSets += 1
+                        Continue For
+                    End If
+                Else
+                    If RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "Start", RegistryItem.ValueType.RegDword, Service.StartType)) <> 0 Then
+                        failedSets += 1
+                        Continue For
+                    End If
+                    If Service.StartType = WindowsService.ServiceStartType.Automatic Then
+                        ' Currently, we assume that setting DelayedAutoStart to 0 does the same thing as removing this value altogether: turning off
+                        ' delayed start. If this is not the case, we'll just get rid of it.
+                        RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
+                    End If
                 End If
                 If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
             Next

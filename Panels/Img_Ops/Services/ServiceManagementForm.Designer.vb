@@ -105,6 +105,8 @@ Partial Class ServiceManagementForm
         Me.SelectedServicePanel = New System.Windows.Forms.Panel()
         Me.ReportServiceInfoBtn = New System.Windows.Forms.Button()
         Me.ServiceInfoSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.RestoreServiceBtn = New System.Windows.Forms.Button()
+        Me.DeleteServiceBtn = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -150,7 +152,7 @@ Partial Class ServiceManagementForm
         Me.ListView1.Location = New System.Drawing.Point(12, 59)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1240, 310)
+        Me.ListView1.Size = New System.Drawing.Size(1240, 282)
         Me.ListView1.TabIndex = 2
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -916,11 +918,37 @@ Partial Class ServiceManagementForm
         '
         Me.ServiceInfoSFD.Filter = "Markdown files|*.md"
         '
+        'RestoreServiceBtn
+        '
+        Me.RestoreServiceBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RestoreServiceBtn.Enabled = False
+        Me.RestoreServiceBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RestoreServiceBtn.Location = New System.Drawing.Point(1097, 347)
+        Me.RestoreServiceBtn.Name = "RestoreServiceBtn"
+        Me.RestoreServiceBtn.Size = New System.Drawing.Size(156, 23)
+        Me.RestoreServiceBtn.TabIndex = 8
+        Me.RestoreServiceBtn.Text = "Restore service"
+        Me.RestoreServiceBtn.UseVisualStyleBackColor = True
+        '
+        'DeleteServiceBtn
+        '
+        Me.DeleteServiceBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DeleteServiceBtn.Enabled = False
+        Me.DeleteServiceBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DeleteServiceBtn.Location = New System.Drawing.Point(935, 347)
+        Me.DeleteServiceBtn.Name = "DeleteServiceBtn"
+        Me.DeleteServiceBtn.Size = New System.Drawing.Size(156, 23)
+        Me.DeleteServiceBtn.TabIndex = 8
+        Me.DeleteServiceBtn.Text = "Delete service"
+        Me.DeleteServiceBtn.UseVisualStyleBackColor = True
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.DeleteServiceBtn)
+        Me.Controls.Add(Me.RestoreServiceBtn)
         Me.Controls.Add(Me.ReportServiceInfoBtn)
         Me.Controls.Add(Me.ServiceInfoContainerPanel)
         Me.Controls.Add(Me.ReloadServiceInformationBtn)
@@ -1048,4 +1076,6 @@ Partial Class ServiceManagementForm
     Friend WithEvents Label19 As System.Windows.Forms.Label
     Friend WithEvents ReportServiceInfoBtn As System.Windows.Forms.Button
     Friend WithEvents ServiceInfoSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents RestoreServiceBtn As System.Windows.Forms.Button
+    Friend WithEvents DeleteServiceBtn As System.Windows.Forms.Button
 End Class
