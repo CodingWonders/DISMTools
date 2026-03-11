@@ -205,6 +205,10 @@ if ($providerList.Count -gt 0) {
     $util = -1
     do {
         $utilStr = Read-Host -Prompt "Choose a utility from the list above and press ENTER"
+        
+        if ($utilStr -eq "") {
+            continue
+        }
 
         if ($utilStr -eq "N") {
             Show-InstallNetAdapterScreen
