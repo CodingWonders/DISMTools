@@ -2181,15 +2181,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes
+        '''- Fixed an issue where removed features would appear in the wrong place
+        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
         '''
-        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
-        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
-        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
-        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
-        '''- Fixed issues with recursive driver addition on Windo [resto de la cadena truncado]&quot;;.
+        '''New features:
+        '''
+        '''- The Sysprep Preparation Tool has seen support for &quot;CopyProfile&quot;
+        '''- Guards have been added to prevent running the PE Helper on a PXE environment, and to warn when running the PXE Helpers on a non-PXE environment
+        '''- The autorun menu now has options to browse disc co [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
