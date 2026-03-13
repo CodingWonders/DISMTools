@@ -495,6 +495,7 @@ Public Class GetDriverInfo
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
+        WizardBtn.Image = GetGlyphResource("assistant")
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -1433,5 +1434,15 @@ Public Class GetDriverInfo
             e.SuppressKeyPress = True
             SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
+    End Sub
+
+    Private Sub WizardBtn_Click(sender As Object, e As EventArgs) Handles WizardBtn.Click
+        If DriverFilterAssistantDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            SearchBox1.Text = DriverFilterAssistantDialog.AppliedQuery
+        End If
+    End Sub
+
+    Private Sub WizardBtn_MouseHover(sender As Object, e As EventArgs) Handles WizardBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Build query with the Assistant...")
     End Sub
 End Class

@@ -183,7 +183,9 @@ Public Class ADDSJoinDialog
         ProgressReporter.Hide()
         DSNoDomainPanel.Visible = Not dsIsInDomain
         If dsIsInDomain Then
+            RemoveHandler TextBox4.TextChanged, AddressOf TextBox4_TextChanged
             TextBox4.Text = dsDomainName
+            AddHandler TextBox4.TextChanged, AddressOf TextBox4_TextChanged
             If NtLogonPathStart = "" Then
                 NtLogonPathStart = "Primary DC NetBIOS"
             End If
@@ -518,7 +520,7 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName, TextBox4.Text)
+        AddsUpnPathText.Text = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).UserPrincipalName
         AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName)
         initialUserName = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName
 

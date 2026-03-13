@@ -307,6 +307,12 @@
     Public Property UserServiceFlags As Integer
 
     ''' <summary>
+    ''' Whether the service will be scheduled for deletion
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Property MarkedForDeletion As Boolean
+
+    ''' <summary>
     ''' Initializes an object of the Windows Service class with specified values
     ''' </summary>
     ''' <param name="name">The name of the Windows service</param>

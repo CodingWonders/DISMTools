@@ -31,6 +31,7 @@ Partial Class GetCapabilityInfoDlg
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.WizardBtn = New System.Windows.Forms.Button()
         Me.SearchBox1 = New DISMTools.SearchBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -162,12 +163,26 @@ Partial Class GetCapabilityInfoDlg
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.WizardBtn)
         Me.Panel1.Controls.Add(Me.SearchBox1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(24, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(416, 24)
         Me.Panel1.TabIndex = 3
+        '
+        'WizardBtn
+        '
+        Me.WizardBtn.Dock = System.Windows.Forms.DockStyle.Right
+        Me.WizardBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+        Me.WizardBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray
+        Me.WizardBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.WizardBtn.Image = Global.DISMTools.My.Resources.Resources.assistant_light
+        Me.WizardBtn.Location = New System.Drawing.Point(392, 0)
+        Me.WizardBtn.Name = "WizardBtn"
+        Me.WizardBtn.Size = New System.Drawing.Size(24, 24)
+        Me.WizardBtn.TabIndex = 3
+        Me.WizardBtn.UseVisualStyleBackColor = True
         '
         'SearchBox1
         '
@@ -176,7 +191,7 @@ Partial Class GetCapabilityInfoDlg
         Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
         Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.Size = New System.Drawing.Size(378, 18)
         Me.SearchBox1.TabIndex = 1
         '
         'SearchPic
@@ -557,5 +572,6 @@ Partial Class GetCapabilityInfoDlg
     Friend WithEvents SearchBox1 As DISMTools.SearchBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents WizardBtn As System.Windows.Forms.Button
 
 End Class

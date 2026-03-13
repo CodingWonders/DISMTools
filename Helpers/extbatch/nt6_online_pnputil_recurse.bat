@@ -14,7 +14,7 @@ IF %ERRORLEVEL% GTR 0 (
 	EXIT /B 1
 )
 
-FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuild 2^>nul') DO (
+FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber 2^>nul') DO (
 	IF %%A GEQ 6000 IF %%A GTR 9600 (
 		ECHO This script can only be run from Windows Vista to 8.1.
 		PAUSE > NUL

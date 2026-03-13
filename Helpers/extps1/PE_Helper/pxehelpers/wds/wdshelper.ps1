@@ -28,6 +28,7 @@
 #           .'`^^^`'                        `i1jrt[:.
 
 . "$PSScriptRoot\..\Common\PXEHelpers.Common.ps1"
+. "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
 
 class ServerAuthentication {
     [string]$serverIP
@@ -216,6 +217,14 @@ function Get-Disks
                 {
                     if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
+                        if ((Get-PolicyValue -PolicyName "DTDimShowPnputilOut" -DefaultPolicyValue 1 -ValidOptions @(0,1)) -eq 1) {
+                            @"
+These are the device IDs of the hardware devices that could not be detected. Please
+install device drivers based on hardware IDs. After installation, please close this window.
+"@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
+                            pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
+                            notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
+                        }
                         Clear-Host
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
@@ -681,9 +690,16 @@ function Start-OSApplication {
     Show-SectionMessage -sectionTitle "Select the Windows image to install"
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
-    
+    $bootexStr = Get-PolicyValue -PolicyName "UEFICA23Preference" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "UseNever", "UseAlways")
     $usebootex = $false
-    if (((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+    $bootexPolicyUsed = $false
+    if ($bootexStr -ne "AskUser") { $bootexPolicyUsed = $true }
+    switch ($bootexStr) {
+        "UseNever" { $usebootex = $false }
+        "UseAlways" { $usebootex = $true }
+    }
+    $usebootex = $false
+    if (($bootexPolicyUsed -ne $true) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
         Show-SectionMessage -sectionTitle "Select UEFI boot binary" -sectionDescription "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions of the EFI boot binary that will later be used when creating boot files:"
         # Quick run-down: we only ask for EFI boot binary when we find Secure Boot on the system, AND
         # if the provided bcdboot supports bootex.
@@ -1334,22 +1350,25 @@ $connectionBody = @{
 } | ConvertTo-Json
 
 $connectionResult = $null
+
+$maxAttempts = Get-PolicyValue -PolicyName "WDSHCConnAttempts" -DefaultPolicyValue 5 -ValidOptions @(2..16)
 $attempts = 0
+
 do {
     try {
-        Show-CenteredTextBox -Text "Connecting to the WDS server . . . (Attempt $($attempts + 1) of 5)" -MaxWidth 100 -CenterOfAll
+        Show-CenteredTextBox -Text "Connecting to the WDS server . . . (Attempt $($attempts + 1) of $maxAttempts)" -MaxWidth 100 -CenterOfAll
         $connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/connect"
     } catch {
         # Could not connect to the server. Try again.
     }
     $attempts++
-    if ($attempts -ge 5) {
+    if ($attempts -ge $maxAttempts) {
         break
     }
-} until ($connectionResult -ne $null)
+} until ($null -ne $connectionResult)
 
-if (($connectionResult -eq $null) -or ($connectionResult.output.successful -eq $false)) {
-    if ($connectionResult -ne $null) {
+if (($null -eq $connectionResult) -or ($connectionResult.output.successful -eq $false)) {
+    if ($null -ne $connectionResult) {
         Show-CenteredTextBox -Text "Could not connect to the server. Reason: $($connectionResult.output.failureReason). The server has imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
     } else {
         Show-CenteredTextBox -Text "Could not connect to the server. The server has imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
@@ -1367,8 +1386,6 @@ if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($in
     wpeutil reboot
 }
 
-Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
-$installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
 
 $installationImageToDeploy = ""
 $installationImageGroup = ""
@@ -1376,71 +1393,142 @@ $installationImageGroup = ""
 $imageFileValidated = $false
 $imageGroupValidated = $false
 
-do {
-    $installationImageToDeploy = Read-Host -Prompt "Please type the file name of the installation image and press ENTER. Press R to refresh"
-    
-    if ($installationImageToDeploy -eq "R") {
-        Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
-        $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
+$graphoView = Get-PolicyValue -PolicyName "WDSHCGraphoView" -DefaultPolicyValue 1 -ValidOptions @(0, 1)
 
-        if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
-            Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
-            Start-Sleep -Seconds 5
-            wpeutil reboot
+if (-not (Test-Path -Path "$PSScriptRoot\GraphoView\wdshcGraphoView.ps1" -PathType Leaf)) {
+    $graphoView = $false
+}
+
+if ($graphoView) {
+    # We don't really have to show anything because we do it in a separate window
+    Show-SectionMessage -sectionTitle ""
+    do {
+        $installImages.images | ConvertTo-Json | Out-File "$PSScriptRoot\GraphoView\images.json" -Encoding UTF8 -Force
+
+        Push-Location -Path "$PSScriptRoot\GraphoView"
+        & ".\wdshcGraphoView.ps1"
+        Pop-Location
+
+        if (Test-Path -Path "$PSScriptRoot\GraphoView\rescan") {
+            Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
+            $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
+
+            if (($null -eq $installImages) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
+                Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+                Start-Sleep -Seconds 5
+                wpeutil reboot
+            }
+
+            Show-SectionMessage -sectionTitle ""
+            continue
         }
 
-        Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
-        $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
-        continue
-    }
-    
-    $installationImageGroup = Read-Host -Prompt "Please type the group the desired image is in. Type `"--refresh`" to refresh the list"
-    
-    if ($installationImageGroup -eq "--refresh") {
-        Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
-        $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
+        if (Test-Path -Path "$PSScriptRoot\GraphoView\selected.json" -PathType Leaf) {
+            $selectedImage = Get-Content -Path "$PSScriptRoot\GraphoView\selected.json" | ConvertFrom-Json
 
-        if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
-            Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
-            Start-Sleep -Seconds 5
-            wpeutil reboot
+            $installationImageToDeploy = $selectedImage.image
+            $installationImageGroup = $selectedImage.group
+
+            # Perform the validation to make sure the selected image file and group values exist in the server.
+            $imageFiles = $installImages.images | Select-Object -ExpandProperty FileName
+            $imageGroups = $installImages.images | Select-Object -ExpandProperty ImageGroup
+            
+            # Check if the image file exists in the overall list of images.
+            if (-not ($imageFiles.Contains("$installationImageToDeploy"))) {
+                Write-Host "The installation image does not exist in the server. Press ENTER to specify the file and group again."
+                Read-Host | Out-Null
+                continue
+            }
+            
+            # Check if the image group exist in the overall list of groups.
+            if (-not ($imageGroups.Contains("$installationImageGroup"))) {
+                Write-Host "The specified installation image group does not exist in the server. Press ENTER to specify the file and group again."
+                Read-Host | Out-Null
+                continue
+            }
+            
+            # Check if the selected image belongs to the selected group.
+            $image = $installImages.images | Where-Object { $_.FileName -eq "$installationImageToDeploy" -and $_.ImageGroup -eq "$installationImageGroup" }
+            if ($image -eq $null) {
+                Write-Host "The specified installation image, `"$installationImageToDeploy`", does not appear to be in the specified installation image group, `"$installationImageGroup`"."
+                Write-Host "Press ENTER to specify the file and group again."
+                Read-Host | Out-Null
+                continue
+            }
+            
+            $imageFileValidated = $true
+            $imageGroupValidated = $true
         }
+    } until (($imageFileValidated -eq $true) -and ($imageGroupValidated -eq $true))
+} else {
+    Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
+    $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
+    do {
+        $installationImageToDeploy = Read-Host -Prompt "Please type the file name of the installation image and press ENTER. Press R to refresh"
+        
+        if ($installationImageToDeploy -eq "R") {
+            Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
+            $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
 
-        Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
-        $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
-        continue
-    }
-    
-    # Perform the validation to make sure the selected image file and group values exist in the server.
-    $imageFiles = $installImages.images | Select-Object -ExpandProperty FileName
-    $imageGroups = $installImages.images | Select-Object -ExpandProperty ImageGroup
-    
-    # Check if the image file exists in the overall list of images.
-    if (-not ($imageFiles.Contains("$installationImageToDeploy"))) {
-        Write-Host "The installation image does not exist in the server. Press ENTER to specify the file and group again."
-        Read-Host | Out-Null
-        continue
-    }
-    
-    # Check if the image group exist in the overall list of groups.
-    if (-not ($imageGroups.Contains("$installationImageGroup"))) {
-        Write-Host "The specified installation image group does not exist in the server. Press ENTER to specify the file and group again."
-        Read-Host | Out-Null
-        continue
-    }
-    
-    # Check if the selected image belongs to the selected group.
-    $image = $installImages.images | Where-Object { $_.FileName -eq "$installationImageToDeploy" -and $_.ImageGroup -eq "$installationImageGroup" }
-    if ($image -eq $null) {
-        Write-Host "The specified installation image, `"$installationImageToDeploy`", does not appear to be in the specified installation image group, `"$installationImageGroup`"."
-        Write-Host "Press ENTER to specify the file and group again."
-        Read-Host | Out-Null
-        continue
-    }
-    
-    $imageFileValidated = $true
-    $imageGroupValidated = $true
-} until (($imageFileValidated -eq $true) -and ($imageGroupValidated -eq $true))
+            if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
+                Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+                Start-Sleep -Seconds 5
+                wpeutil reboot
+            }
+
+            Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
+            $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
+            continue
+        }
+        
+        $installationImageGroup = Read-Host -Prompt "Please type the group the desired image is in. Type `"--refresh`" to refresh the list"
+        
+        if ($installationImageGroup -eq "--refresh") {
+            Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
+            $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
+
+            if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
+                Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+                Start-Sleep -Seconds 5
+                wpeutil reboot
+            }
+
+            Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
+            $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
+            continue
+        }
+        
+        # Perform the validation to make sure the selected image file and group values exist in the server.
+        $imageFiles = $installImages.images | Select-Object -ExpandProperty FileName
+        $imageGroups = $installImages.images | Select-Object -ExpandProperty ImageGroup
+        
+        # Check if the image file exists in the overall list of images.
+        if (-not ($imageFiles.Contains("$installationImageToDeploy"))) {
+            Write-Host "The installation image does not exist in the server. Press ENTER to specify the file and group again."
+            Read-Host | Out-Null
+            continue
+        }
+        
+        # Check if the image group exist in the overall list of groups.
+        if (-not ($imageGroups.Contains("$installationImageGroup"))) {
+            Write-Host "The specified installation image group does not exist in the server. Press ENTER to specify the file and group again."
+            Read-Host | Out-Null
+            continue
+        }
+        
+        # Check if the selected image belongs to the selected group.
+        $image = $installImages.images | Where-Object { $_.FileName -eq "$installationImageToDeploy" -and $_.ImageGroup -eq "$installationImageGroup" }
+        if ($image -eq $null) {
+            Write-Host "The specified installation image, `"$installationImageToDeploy`", does not appear to be in the specified installation image group, `"$installationImageGroup`"."
+            Write-Host "Press ENTER to specify the file and group again."
+            Read-Host | Out-Null
+            continue
+        }
+        
+        $imageFileValidated = $true
+        $imageGroupValidated = $true
+    } until (($imageFileValidated -eq $true) -and ($imageGroupValidated -eq $true))
+}
 
 if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
     Show-CenteredTextBox -Text "Preparing the deployment of the selected image file . . ." -MaxWidth 100 -CenterOfAll
