@@ -357,7 +357,7 @@ Partial Class ImgMount
         'FileSpecDialog
         '
         Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx|ISO fil" & _
-    "es|*.iso"
+    "es|*.iso|Full Flash Utility files|*.ffu"
         '
         'IsoExtractorBW
         '
