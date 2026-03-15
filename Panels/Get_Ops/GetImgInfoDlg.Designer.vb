@@ -136,7 +136,7 @@ Partial Class GetImgInfoDlg
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Filter = "WIM files|*.wim|Virtual Hard Disk files|*.vhd, *.vhdx|ESD files|*.esd|SWM files|*" & _
-    ".swm"
+    ".swm|Full Flash Utility files|*.ffu"
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Specify the image to get the information from"
         '

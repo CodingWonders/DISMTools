@@ -2882,10 +2882,18 @@ Public Class MainForm
                         CurrentImage.ImageSystemRoot = ImageInformation.SystemRoot
                         CurrentImage.ImageLanguages = ImageInformation.Languages
                         CurrentImage.ImageDefaultLanguage = ImageInformation.DefaultLanguage
-                        CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
-                        CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
-                        CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
-                        CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        If ImageInformation.CustomizedInfo IsNot Nothing Then
+                            CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
+                            CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
+                            CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
+                            CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        Else
+                            ' Either this is a FFU file or it's a badly made WIM.
+                            CurrentImage.ImageFileCount = 0
+                            CurrentImage.ImageDirectoryCount = 0
+                            CurrentImage.ImageCreationDate = Date.MinValue
+                            CurrentImage.ImageModificationDate = Date.MinValue
+                        End If
                         CurrentImage.ImageSize = ImageInformation.ImageSize
                         DynaLog.LogMessage("Getting WIMBoot information")
                         Dim args As String = "/English",

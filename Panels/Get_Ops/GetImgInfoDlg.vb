@@ -531,51 +531,56 @@ Public Class GetImgInfoDlg
                     LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
             End Select
         Next
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
-                        Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "ESN"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
-                        Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "FRA"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
-                        Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "PTB", "PTG"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
-                        Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "ITA"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
-                        Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                End Select
-            Case 1
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
-                Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 2
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
-                Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 3
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
-                Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 4
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
-                Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 5
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
-                Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-        End Select
+        If ImageInfoList(Index).CustomizedInfo IsNot Nothing Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
+                            Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "ESN"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
+                            Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "FRA"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
+                            Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "PTB", "PTG"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
+                            Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "ITA"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
+                            Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                    End Select
+                Case 1
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
+                    Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 2
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
+                    Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 3
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
+                    Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 4
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
+                    Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 5
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
+                    Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+            End Select
+        Else
+            Label6.Text = ""
+            Label10.Text = ""
+        End If
 
         DynaLog.LogMessage("Getting WIMBoot status...")
 
