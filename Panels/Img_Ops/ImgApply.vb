@@ -44,13 +44,8 @@ Public Class ImgApply
         End If
         ProgressPanel.ApplicationSourceImg = TextBox1.Text
         ProgressPanel.ApplicationIndex = ComboBox1.SelectedIndex + 1
-        If RadioButton1.Checked Then
-            ProgressPanel.ApplicationDestDir = TextBox2.Text
-            ProgressPanel.ApplicationDestDrive = ""
-        Else
-            ProgressPanel.ApplicationDestDir = ""
-            ProgressPanel.ApplicationDestDrive = TextBox3.Text
-        End If
+        ProgressPanel.ApplicationDestDir = TextBox2.Text
+        ProgressPanel.ApplicationDestDrive = ""
         If CheckBox1.Checked Then
             ProgressPanel.ApplicationCheckInt = True
         Else
@@ -103,22 +98,6 @@ Public Class ImgApply
         Me.Close()
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        ApplicationDriveSpecifier.ShowDialog(Me)
-    End Sub
-
-    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        If RadioButton1.Checked Then
-            TextBox2.Enabled = True
-            Button2.Enabled = True
-            Button3.Enabled = False
-        Else
-            TextBox2.Enabled = False
-            Button2.Enabled = False
-            Button3.Enabled = True
-        End If
-    End Sub
-
     Private Sub ImgApply_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -139,14 +118,12 @@ Public Class ImgApply
                         CheckBox8.Text = "Apply extended attributes"
                         Button1.Text = "Browse..."
                         Button2.Text = "Browse..."
-                        Button3.Text = "Specify..."
                         Button4.Text = "Use name of the image"
                         Button5.Text = "Scan pattern"
                         UseMountedImgBtn.Text = "Use mounted image"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
-                        RadioButton1.Text = "Destination directory:"
-                        RadioButton2.Text = "Destination drive:"
+                        Label5.Text = "Destination directory:"
                         GroupBox1.Text = "Source"
                         GroupBox2.Text = "Options"
                         GroupBox3.Text = "Destination"
@@ -167,14 +144,12 @@ Public Class ImgApply
                         CheckBox8.Text = "Aplicar atributos extendidos"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Examinar..."
-                        Button3.Text = "Especificar"
                         Button4.Text = "Usar nombre de imagen"
                         Button5.Text = "Escanear patrón"
                         UseMountedImgBtn.Text = "Usar imagen montada"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
-                        RadioButton1.Text = "Directorio de destino:"
-                        RadioButton2.Text = "Disco de destino:"
+                        Label5.Text = "Directorio de destino:"
                         GroupBox1.Text = "Origen"
                         GroupBox2.Text = "Opciones"
                         GroupBox3.Text = "Destino"
@@ -195,14 +170,12 @@ Public Class ImgApply
                         CheckBox8.Text = "Appliquer des attributs étendus"
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Parcourir..."
-                        Button3.Text = "Spécifier..."
                         Button4.Text = "Utiliser le nom de l'image"
                         Button5.Text = "Scanner le modèle"
                         UseMountedImgBtn.Text = "Utiliser une image montée"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
-                        RadioButton1.Text = "Répertoire de destination :"
-                        RadioButton2.Text = "Disque de destination :"
+                        Label5.Text = "Répertoire de destination :"
                         GroupBox1.Text = "Source"
                         GroupBox2.Text = "Paramètres"
                         GroupBox3.Text = "Destination"
@@ -223,14 +196,12 @@ Public Class ImgApply
                         CheckBox8.Text = "Aplicar atributos alargados"
                         Button1.Text = "Navegar..."
                         Button2.Text = "Navegar..."
-                        Button3.Text = "Especificar..."
                         Button4.Text = "Utilizar o nome da imagem"
                         Button5.Text = "Padrão de digitalização"
                         UseMountedImgBtn.Text = "Utilizar imagem montada"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
-                        RadioButton1.Text = "Diretório de destino:"
-                        RadioButton2.Text = "Unidade de destino:"
+                        Label5.Text = "Diretório de destino:"
                         GroupBox1.Text = "Origem"
                         GroupBox2.Text = "Opções"
                         GroupBox3.Text = "Destino"
@@ -251,14 +222,12 @@ Public Class ImgApply
                         CheckBox8.Text = "Applica gli attributi estesi"
                         Button1.Text = "Sfoglia..."
                         Button2.Text = "Sfoglia..."
-                        Button3.Text = "Specificare..."
                         Button4.Text = "Usa il nome dell'immagine"
                         Button5.Text = "Modello di scansione"
                         UseMountedImgBtn.Text = "Usa immagine montata"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annulla"
-                        RadioButton1.Text = "Directory di destinazione:"
-                        RadioButton2.Text = "Unità di destinazione:"
+                        Label5.Text = "Directory di destinazione:"
                         GroupBox1.Text = "Origine"
                         GroupBox2.Text = "Opzioni"
                         GroupBox3.Text = "Destinazione"
@@ -280,14 +249,12 @@ Public Class ImgApply
                 CheckBox8.Text = "Apply extended attributes"
                 Button1.Text = "Browse..."
                 Button2.Text = "Browse..."
-                Button3.Text = "Specify..."
                 Button4.Text = "Use name of the image"
                 Button5.Text = "Scan pattern"
                 UseMountedImgBtn.Text = "Use mounted image"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
-                RadioButton1.Text = "Destination directory:"
-                RadioButton2.Text = "Destination drive:"
+                Label5.Text = "Destination directory:"
                 GroupBox1.Text = "Source"
                 GroupBox2.Text = "Options"
                 GroupBox3.Text = "Destination"
@@ -308,14 +275,12 @@ Public Class ImgApply
                 CheckBox8.Text = "Aplicar atributos extendidos"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Examinar..."
-                Button3.Text = "Especificar"
                 Button4.Text = "Usar nombre de imagen"
                 Button5.Text = "Escanear patrón"
                 UseMountedImgBtn.Text = "Usar imagen montada"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
-                RadioButton1.Text = "Directorio de destino:"
-                RadioButton2.Text = "Disco de destino:"
+                Label5.Text = "Directorio de destino:"
                 GroupBox1.Text = "Origen"
                 GroupBox2.Text = "Opciones"
                 GroupBox3.Text = "Destino"
@@ -336,14 +301,12 @@ Public Class ImgApply
                 CheckBox8.Text = "Appliquer des attributs étendus"
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Parcourir..."
-                Button3.Text = "Spécifier..."
                 Button4.Text = "Utiliser le nom de l'image"
                 Button5.Text = "Scanner le modèle"
                 UseMountedImgBtn.Text = "Utiliser une image montée"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
-                RadioButton1.Text = "Répertoire de destination :"
-                RadioButton2.Text = "Disque de destination :"
+                Label5.Text = "Répertoire de destination :"
                 GroupBox1.Text = "Source"
                 GroupBox2.Text = "Paramètres"
                 GroupBox3.Text = "Destination"
@@ -364,14 +327,12 @@ Public Class ImgApply
                 CheckBox8.Text = "Aplicar atributos alargados"
                 Button1.Text = "Navegar..."
                 Button2.Text = "Navegar..."
-                Button3.Text = "Especificar..."
                 Button4.Text = "Utilizar o nome da imagem"
                 Button5.Text = "Padrão de digitalização"
                 UseMountedImgBtn.Text = "Utilizar imagem montada"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
-                RadioButton1.Text = "Diretório de destino:"
-                RadioButton2.Text = "Unidade de destino:"
+                Label5.Text = "Diretório de destino:"
                 GroupBox1.Text = "Origem"
                 GroupBox2.Text = "Opções"
                 GroupBox3.Text = "Destino"
@@ -392,14 +353,12 @@ Public Class ImgApply
                 CheckBox8.Text = "Applica gli attributi estesi"
                 Button1.Text = "Sfoglia..."
                 Button2.Text = "Sfoglia..."
-                Button3.Text = "Specificare..."
                 Button4.Text = "Usa il nome dell'immagine"
                 Button5.Text = "Modello di scansione"
                 UseMountedImgBtn.Text = "Usa immagine montata"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annulla"
-                RadioButton1.Text = "Directory di destinazione:"
-                RadioButton2.Text = "Unità di destinazione:"
+                Label5.Text = "Directory di destinazione:"
                 GroupBox1.Text = "Origine"
                 GroupBox2.Text = "Opzioni"
                 GroupBox3.Text = "Destinazione"
@@ -410,7 +369,6 @@ Public Class ImgApply
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
-        TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
@@ -422,7 +380,6 @@ Public Class ImgApply
         ComboBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
-        TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then

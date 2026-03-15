@@ -45,11 +45,7 @@ Partial Class ImgApply
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -64,6 +60,7 @@ Partial Class ImgApply
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -209,7 +206,7 @@ Partial Class ImgApply
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 125)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(659, 182)
+        Me.GroupBox2.Size = New System.Drawing.Size(659, 201)
         Me.GroupBox2.TabIndex = 6
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
@@ -316,51 +313,15 @@ Partial Class ImgApply
         '
         'GroupBox3
         '
-        Me.GroupBox3.Controls.Add(Me.RadioButton2)
-        Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Controls.Add(Me.Button3)
+        Me.GroupBox3.Controls.Add(Me.Label5)
         Me.GroupBox3.Controls.Add(Me.Button2)
-        Me.GroupBox3.Controls.Add(Me.TextBox3)
         Me.GroupBox3.Controls.Add(Me.TextBox2)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 313)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 332)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(659, 81)
+        Me.GroupBox3.Size = New System.Drawing.Size(659, 62)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Destination"
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(19, 51)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(110, 17)
-        Me.RadioButton2.TabIndex = 3
-        Me.RadioButton2.Text = "Destination drive:"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(19, 24)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(129, 17)
-        Me.RadioButton1.TabIndex = 3
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Destination directory:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.Enabled = False
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(568, 48)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 23)
-        Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Specify..."
-        Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
         '
@@ -371,14 +332,6 @@ Partial Class ImgApply
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'TextBox3
-        '
-        Me.TextBox3.Enabled = False
-        Me.TextBox3.Location = New System.Drawing.Point(141, 49)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(421, 21)
-        Me.TextBox3.TabIndex = 1
         '
         'TextBox2
         '
@@ -502,6 +455,15 @@ Partial Class ImgApply
         Me.FolderBrowserDialog1.Description = "Please specify the destination directory to apply the image to:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(19, 26)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(111, 13)
+        Me.Label5.TabIndex = 4
+        Me.Label5.Text = "Destination directory:"
+        '
         'ImgApply
         '
         Me.AcceptButton = Me.OK_Button
@@ -570,10 +532,6 @@ Partial Class ImgApply
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents Button1 As System.Windows.Forms.Button
@@ -586,5 +544,6 @@ Partial Class ImgApply
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label5 As System.Windows.Forms.Label
 
 End Class

@@ -9,7 +9,6 @@ Imports DISMTools.Utilities
 Public Class ApplicationDriveSpecifier
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        ImgApply.TextBox3.Text = TextBox1.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
