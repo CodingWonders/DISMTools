@@ -17,6 +17,7 @@ Imports System.ComponentModel
 Imports IniParser
 Imports IniParser.Parser
 Imports IniParser.Model
+Imports System.Management
 
 Public Class MainForm
 
@@ -2845,6 +2846,10 @@ Public Class MainForm
                     Catch ex As Exception
                         ' Don't get that data then
                     End Try
+
+                    ' Use the size of the entire virtual disk as the expanded size of our FFU.
+                    Dim sizeMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Size FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, ImageFile.FFUInfo.MountDiskPath.Replace("\", "\\")))
+                    If sizeMO IsNot Nothing Then ImageFile.ImageSize = WMIHelper.GetObjectValue(sizeMO(0), "Size")
 
                     Exit For
                 End If
