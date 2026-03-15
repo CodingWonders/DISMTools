@@ -262,6 +262,7 @@
     <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
+    <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -2037,6 +2038,7 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
+    <Folder Include="Panels\Img_Ops\FFU\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />

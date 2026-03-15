@@ -12,7 +12,11 @@ Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
 Imports DISMTools.Elements
 Imports DISMTools.Elements.Contemporaneus
+Imports DISMTools.Elements.IniParserConfigurators
 Imports System.ComponentModel
+Imports IniParser
+Imports IniParser.Parser
+Imports IniParser.Model
 
 Public Class MainForm
 
@@ -2829,6 +2833,19 @@ Public Class MainForm
                     ImageFile.FFUInfo.OptimizedPartitionNumber = MountedFFUVolumeRk.GetValue("Optimized Partition Number", 0)
 
                     MountedFFUVolumeRk.Close()
+
+                    ' Try processing the ini manifest so we can fill in the information that we couldn't
+                    Try
+                        Dim parser As New IniDataParser(New FfuIniParserConfiguration())
+                        Dim ffuData As IniData = parser.Parse(ImageFile.FFUInfo.IniManifest)
+
+                        ImageFile.ImageArchitecture = CInt(ffuData("FullFlash")("Architecture"))
+                        ImageFile.ImageCreationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("CreationTime"))).Date
+                        ImageFile.ImageModificationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("LastModificationTime"))).Date
+                    Catch ex As Exception
+                        ' Don't get that data then
+                    End Try
+
                     Exit For
                 End If
 
