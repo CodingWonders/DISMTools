@@ -2801,6 +2801,46 @@ Public Class MainForm
         Return disguised
     End Function
 
+    Private Sub GetFFUInformation(ByRef ImageFile As WindowsImage)
+        If ImageFile Is Nothing Then Exit Sub
+        Dim MountedFFURk As RegistryKey = Nothing
+
+        Try
+            MountedFFURk = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\DISM\Mounted FFUs", False)
+            ' Since the information is stored in subkeys of the aforementioned subkey, we'll have to iterate over them to get the one that
+            ' we wanted.
+            For Each MountedFFUVolume In MountedFFURk.GetSubKeyNames()
+                Dim MountedFFUVolumeRk As RegistryKey = MountedFFURk.OpenSubKey(MountedFFUVolume, False)
+                Dim MountedFFUMountPath As String = MountedFFUVolumeRk.GetValue("Mount Path", "")
+
+                If MountedFFUMountPath.Equals(ImageFile.ImageMountDirectory, StringComparison.OrdinalIgnoreCase) Then
+                    ' Then it's this one
+                    Dim IniManifestContents As Byte() = MountedFFUVolumeRk.GetValue("Manifest", {})
+                    ImageFile.FFUInfo.IniManifest = ASCII.GetString(IniManifestContents)
+                    ImageFile.FFUInfo.VhdPath = MountedFFUVolumeRk.GetValue("VHD Path", "")
+                    ImageFile.FFUInfo.VhdId = MountedFFUVolumeRk.GetValue("VHD Id", "")
+                    ImageFile.FFUInfo.VhdStorageDeviceId = MountedFFUVolumeRk.GetValue("VHD Storage Device Id", 0)
+                    ImageFile.FFUInfo.MountDiskPath = MountedFFUVolumeRk.GetValue("Mount Disk Path", "")
+                    ImageFile.FFUInfo.FullFlashVersionInfo = New Version(MountedFFUVolumeRk.GetValue("Full Flash Major Version", 0),
+                                                                         MountedFFUVolumeRk.GetValue("Full Flash Minor Version", 0))
+                    ImageFile.FFUInfo.VersionInfo = New Version(MountedFFUVolumeRk.GetValue("Major Version", 0), MountedFFUVolumeRk.GetValue("Minor Version", 0))
+                    ImageFile.FFUInfo.MountVersion = MountedFFUVolumeRk.GetValue("Mount Version", 0)
+                    ImageFile.FFUInfo.Compression = MountedFFUVolumeRk.GetValue("Compression", 0)
+                    ImageFile.FFUInfo.OptimizedPartitionNumber = MountedFFUVolumeRk.GetValue("Optimized Partition Number", 0)
+
+                    MountedFFUVolumeRk.Close()
+                    Exit For
+                End If
+
+                MountedFFUVolumeRk.Close()
+            Next
+        Catch ex As Exception
+
+        Finally
+            If MountedFFURk IsNot Nothing Then MountedFFURk.Close()
+        End Try
+    End Sub
+
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
@@ -2923,6 +2963,9 @@ Public Class MainForm
                                 CurrentImage.ImageWimBootCompatible = out.ToLower().Contains("wim bootable : yes")
                             End If
                         End Using
+                        If Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
+                            GetFFUInformation(CurrentImage)
+                        End If
                         DynaLog.LogMessage(CurrentImage.ToString())
                         DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
                     End If

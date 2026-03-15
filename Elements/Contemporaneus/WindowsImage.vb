@@ -293,6 +293,12 @@ Namespace Elements.Contemporaneus
 
 #End Region
 
+#Region "Full Flash Utility only"
+
+        Public Property FFUInfo As FullFlashUtilityImage
+
+#End Region
+
         ''' <summary>
         ''' Creates a <see cref="WindowsImage"/> object instance with default values.
         ''' </summary>
@@ -304,6 +310,7 @@ Namespace Elements.Contemporaneus
             ImageAppxPackages_Backup = New List(Of ImageAppxPackage)
             ImageCapabilities_Backup = New List(Of ImageCapability)
             ImageDrivers_Backup = New List(Of ImageDriver)
+            FFUInfo = New FullFlashUtilityImage()
         End Sub
 
         ''' <summary>
@@ -328,6 +335,8 @@ Namespace Elements.Contemporaneus
             ImageAppxPackages_Backup = New List(Of ImageAppxPackage)
             ImageCapabilities_Backup = New List(Of ImageCapability)
             ImageDrivers_Backup = New List(Of ImageDriver)
+
+            FFUInfo = New FullFlashUtilityImage()
         End Sub
 
         ''' <summary>
@@ -575,7 +584,8 @@ Namespace Elements.Contemporaneus
                                  "- Image creation time: {17}{0}" &
                                  "- Image modification time: {18}{0}" &
                                  "- Image installation type: {19}{0}" &
-                                 "-------- Mount Point GUID: {20}",
+                                 "-------- Mount Point GUID: {20}{0}" &
+                                 "-------- FFU Information: {0}{21}",
                                  Environment.NewLine,
                                  ImageVersion.ToString(),
                                  ImageName,
@@ -596,7 +606,8 @@ Namespace Elements.Contemporaneus
                                  ImageCreationDate,
                                  ImageModificationDate,
                                  ImageInstallationType,
-                                 ImageMountGuid)
+                                 ImageMountGuid,
+                                 If(Path.GetExtension(ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase), FFUInfo.ToString(), ""))
         End Function
     End Class
 
