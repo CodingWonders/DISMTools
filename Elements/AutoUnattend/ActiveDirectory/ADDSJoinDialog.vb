@@ -192,7 +192,7 @@ Public Class ADDSJoinDialog
         Else
             NtLogonPathStart = "Primary DC NetBIOS"
         End If
-        AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
+        If ComboBox3.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
