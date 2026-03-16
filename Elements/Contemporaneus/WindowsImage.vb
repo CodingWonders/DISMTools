@@ -26,7 +26,7 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageFile As String
+        Public Property ImageFile As String = ""
 
         ''' <summary>
         ''' The index of the mounted image.
@@ -40,7 +40,7 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageMountDirectory As String
+        Public Property ImageMountDirectory As String = ""
 
         ''' <summary>
         ''' The status of the mounted image.
@@ -65,14 +65,14 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageName As String
+        Public Property ImageName As String = ""
 
         ''' <summary>
         ''' The description of the mounted Windows image.
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageDescription As String
+        Public Property ImageDescription As String = ""
 
         ''' <summary>
         ''' The size, in bytes, of the mounted Windows image.
@@ -107,7 +107,7 @@ Namespace Elements.Contemporaneus
         ''' The image may not have a default HAL. This does not happen for captured Windows images
         ''' in some cases.
         ''' </remarks>
-        Public Property ImageHal As String
+        Public Property ImageHal As String = ""
 
         ''' <summary>
         ''' The version of the mounted Windows image.
@@ -135,7 +135,7 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageEditionId As String
+        Public Property ImageEditionId As String = ""
 
         ''' <summary>
         ''' Determines whether a certain Windows image is a Windows PE image in disguise.
@@ -152,28 +152,28 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageInstallationType As String
+        Public Property ImageInstallationType As String = ""
 
         ''' <summary>
         ''' The product type of the mounted Windows image.
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageProductType As String
+        Public Property ImageProductType As String = ""
 
         ''' <summary>
         ''' The product suite of the mounted Windows image.
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageProductSuite As String
+        Public Property ImageProductSuite As String = ""
 
         ''' <summary>
         ''' The system root directory of the mounted Windows image.
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ImageSystemRoot As String
+        Public Property ImageSystemRoot As String = ""
 
         ''' <summary>
         ''' The number of directories in the mounted Windows image.
