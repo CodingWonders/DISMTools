@@ -181,10 +181,6 @@ Public Class FfuApply
         TextBox2.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            ImageTaskHeader1.Visible = True
-        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

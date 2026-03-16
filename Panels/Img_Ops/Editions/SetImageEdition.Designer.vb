@@ -179,7 +179,6 @@ Partial Class SetImageEdition
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(624, 48)
         Me.ImageTaskHeader1.TabIndex = 1
-        Me.ImageTaskHeader1.Visible = False
         '
         'FolderBrowserDialog1
         '

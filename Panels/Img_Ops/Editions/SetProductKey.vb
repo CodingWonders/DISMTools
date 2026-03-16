@@ -189,10 +189,6 @@ Public Class SetImageKey
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annulla"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            ImageTaskHeader1.Visible = True
-        End If
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
