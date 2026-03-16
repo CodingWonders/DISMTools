@@ -265,8 +265,16 @@ Public Class ADDSJoinDialog
                     Return False
                 End If
                 If TextBox6.Text = "" Then
-                    MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
-                    Return False
+                    Try
+                        If DomainServicesModule.DSAccountHasRequiredPassword(dsDomainName, initialUserName) Then
+                            MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
+                            Return False
+                        End If
+                    Catch ex As Exception
+                        MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
+                        Return False
+                    End Try
+
                 End If
                 Return MsgBox("Please verify the information that you typed. If you incorrectly typed a field, the client device may not join the domain." & CrLf & CrLf & "The client device will also not join the domain if it will run home editions of Windows." & CrLf & CrLf & "Are you sure that these settings are correct?", vbYesNo + vbQuestion, "Verify Settings") = MsgBoxResult.Yes
         End Select
