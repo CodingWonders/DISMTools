@@ -51,7 +51,7 @@ Public Class ImgExport
                 Case 5
                     msg = "Specificare un file immagine di origine da esportare e riprovare."
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox2.Text <> "" Then
@@ -85,7 +85,7 @@ Public Class ImgExport
                 Case 5
                     msg = "Specificare un file immagine di destinazione e riprovare"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         ProgressPanel.imgExportSourceIndex = NumericUpDown1.Value
@@ -132,7 +132,7 @@ Public Class ImgExport
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Export an image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Destination image file:"
                         Label3.Text = "Source image file:"
                         Label4.Text = "Naming pattern:"
@@ -162,7 +162,7 @@ Public Class ImgExport
                         CompressionTypeStrings(3) = "The compression level for push-button reset images will be applied. This requires exporting the image as an ESD file."
                     Case "ESN"
                         Text = "Exportar una imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Archivo de imagen de destino:"
                         Label3.Text = "Archivo de imagen de origen:"
                         Label4.Text = "Patrón de nomenclatura:"
@@ -192,7 +192,7 @@ Public Class ImgExport
                         CompressionTypeStrings(3) = "Se aplicará el nivel de compresión de imágenes de restablecimiento por botón. Esto requiere exportar la imagen como un archivo ESD."
                     Case "FRA"
                         Text = "Exporter une image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier d'image de destination :"
                         Label3.Text = "Fichier d'image source :"
                         Label4.Text = "Modèle de dénomination :"
@@ -222,7 +222,7 @@ Public Class ImgExport
                         CompressionTypeStrings(3) = "Le niveau de compression des images réinitialisées par bouton-poussoir sera appliqué. Cela nécessite l'exportation de l'image en tant que fichier ESD."
                     Case "PTB", "PTG"
                         Text = "Exportar uma imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro de imagem de destino:"
                         Label3.Text = "Ficheiro de imagem de origem:"
                         Label4.Text = "Padrão de nomenclatura:"
@@ -252,7 +252,7 @@ Public Class ImgExport
                         CompressionTypeStrings(3) = "Será aplicado o nível de compressão para imagens reiniciadas por botão de pressão. Para tal, é necessário exportar a imagem como um ficheiro ESD."
                     Case "ITA"
                         Text = "Esportazione di un'immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File immagine di destinazione:"
                         Label3.Text = "File immagine di origine:"
                         Label4.Text = "Modello di denominazione:"
@@ -283,7 +283,7 @@ Public Class ImgExport
                 End Select
             Case 1
                 Text = "Export an image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Destination image file:"
                 Label3.Text = "Source image file:"
                 Label4.Text = "Naming pattern:"
@@ -313,7 +313,7 @@ Public Class ImgExport
                 CompressionTypeStrings(3) = "The compression level for push-button reset images will be applied. This requires exporting the image as an ESD file."
             Case 2
                 Text = "Exportar una imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Archivo de imagen de destino:"
                 Label3.Text = "Archivo de imagen de origen:"
                 Label4.Text = "Patrón de nomenclatura:"
@@ -343,7 +343,7 @@ Public Class ImgExport
                 CompressionTypeStrings(3) = "Se aplicará el nivel de compresión de imágenes de restablecimiento por botón. Esto requiere exportar la imagen como un archivo ESD."
             Case 3
                 Text = "Exporter une image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier d'image de destination :"
                 Label3.Text = "Fichier d'image source :"
                 Label4.Text = "Modèle de dénomination :"
@@ -373,7 +373,7 @@ Public Class ImgExport
                 CompressionTypeStrings(3) = "Le niveau de compression des images réinitialisées par bouton-poussoir sera appliqué. Cela nécessite l'exportation de l'image en tant que fichier ESD."
             Case 4
                 Text = "Exportar uma imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro de imagem de destino:"
                 Label3.Text = "Ficheiro de imagem de origem:"
                 Label4.Text = "Padrão de nomenclatura:"
@@ -403,7 +403,7 @@ Public Class ImgExport
                 CompressionTypeStrings(3) = "Será aplicado o nível de compressão para imagens reiniciadas por botão de pressão. Para tal, é necessário exportar a imagem como um ficheiro ESD."
             Case 5
                 Text = "Esportazione di un'immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File immagine di destinazione:"
                 Label3.Text = "File immagine di origine:"
                 Label4.Text = "Modello di denominazione:"
@@ -432,7 +432,7 @@ Public Class ImgExport
                 CompressionTypeStrings(2) = "Verrà applicata la compressione massima. Questa opzione richiede più tempo, ma produce un'immagine più piccola"
                 CompressionTypeStrings(3) = "Verrà applicato il livello di compressione per le immagini con reset a pulsante. Ciò richiede l'esportazione dell'immagine come file ESD"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -454,10 +454,6 @@ Public Class ImgExport
         NumericUpDown1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -530,7 +526,7 @@ Public Class ImgExport
                 Next
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
-                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
+                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 Try
                     DynaLog.LogMessage("Shutting down API...")
@@ -596,35 +592,35 @@ Public Class ImgExport
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
                         Case "ESN"
-                            MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
                         Case "FRA"
-                            MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                         Case "PTB", "PTG"
-                            MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
                         Case "ITA"
-                            MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
                     End Select
                 Case 1
-                    MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
                 Case 2
-                    MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
                 Case 3
-                    MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                 Case 4
-                    MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
                 Case 5
-                    MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
             End Select
             Beep()

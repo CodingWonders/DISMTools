@@ -80,7 +80,7 @@ Public Class ImgIndexDelete
                 Case 5
                     msg = "Il programma ha rilevato che questa immagine è montata. Per rimuovere le immagini di volume da un file, è necessario smontarlo. È possibile rimontarla in seguito, se si desidera." & CrLf & CrLf & "Si noti che questa operazione smonterà l'immagine senza salvare le modifiche. Assicurarsi che tutte le modifiche siano state salvate prima di procedere." & CrLf & CrLf & "Si desidera smontare questa immagine?"
             End Select
-            If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
+            If MsgBox(msg, vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                 Dim mountedImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageFile = TextBox1.Text)
                 If mountedImage IsNot Nothing Then
                     DynaLog.LogMessage("The image has been detected. Marking for unmount...")
@@ -144,7 +144,7 @@ Public Class ImgIndexDelete
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove a volume image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Source image:"
                         Label3.Text = "Please mark the volume images to delete on the left. The image will then have the indexes shown on the right"
                         Label4.Text = "Getting indexes from the image. Please wait..."
@@ -160,7 +160,7 @@ Public Class ImgIndexDelete
                         GroupBox1.Text = "Volume images"
                     Case "ESN"
                         Text = "Eliminar una imagen de volumen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagen:"
                         Label3.Text = "Marque las imágenes de volumen a eliminar en la parte izquierda. La imagen tendrá luego los índices mostrados en la parte derecha"
                         Label4.Text = "Obteniendo índices de la imagen. Espere..."
@@ -176,7 +176,7 @@ Public Class ImgIndexDelete
                         GroupBox1.Text = "Imágenes de volumen"
                     Case "FRA"
                         Text = "Supprimer une image de volume"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Image source :"
                         Label3.Text = "Veuillez marquer les images de volume à supprimer sur la gauche. L'image aura alors les index affichés à droite."
                         Label4.Text = "Obtention des index de l'image en cours. Veuillez patienter..."
@@ -192,7 +192,7 @@ Public Class ImgIndexDelete
                         GroupBox1.Text = "Images de volume"
                     Case "PTB", "PTG"
                         Text = "Remover uma imagem de volume"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagem de origem:"
                         Label3.Text = "Marque as imagens de volume a eliminar à esquerda. A imagem ficará então com os índices apresentados à direita"
                         Label4.Text = "A obter os índices da imagem. Aguarde..."
@@ -208,7 +208,7 @@ Public Class ImgIndexDelete
                         GroupBox1.Text = "Imagens de volume"
                     Case "ITA"
                         Text = "Rimuovere l'immagine di un volume"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Immagine sorgente:"
                         Label3.Text = "Contrassegnare le immagini del volume da eliminare a sinistra. L'immagine avrà poi gli indici mostrati a destra"
                         Label4.Text = "Ottenere gli indici dall'immagine. Attendere..."
@@ -225,7 +225,7 @@ Public Class ImgIndexDelete
                 End Select
             Case 1
                 Text = "Remove a volume image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Source image:"
                 Label3.Text = "Please mark the volume images to delete on the left. The image will then have the indexes shown on the right"
                 Label4.Text = "Getting indexes from the image. Please wait..."
@@ -241,7 +241,7 @@ Public Class ImgIndexDelete
                 GroupBox1.Text = "Volume images"
             Case 2
                 Text = "Eliminar una imagen de volumen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagen:"
                 Label3.Text = "Marque las imágenes de volumen a eliminar en la parte izquierda. La imagen tendrá luego los índices mostrados en la parte derecha"
                 Label4.Text = "Obteniendo índices de la imagen. Espere..."
@@ -257,7 +257,7 @@ Public Class ImgIndexDelete
                 GroupBox1.Text = "Imágenes de volumen"
             Case 3
                 Text = "Supprimer une image de volume"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Image source :"
                 Label3.Text = "Veuillez marquer les images de volume à supprimer sur la gauche. L'image aura alors les index affichés à droite."
                 Label4.Text = "Obtention des index de l'image en cours. Veuillez patienter..."
@@ -273,7 +273,7 @@ Public Class ImgIndexDelete
                 GroupBox1.Text = "Images de volume"
             Case 4
                 Text = "Remover uma imagem de volume"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagem de origem:"
                 Label3.Text = "Marque as imagens de volume a eliminar à esquerda. A imagem ficará então com os índices apresentados à direita"
                 Label4.Text = "A obter os índices da imagem. Aguarde..."
@@ -289,7 +289,7 @@ Public Class ImgIndexDelete
                 GroupBox1.Text = "Imagens de volume"
             Case 5
                 Text = "Rimuovere l'immagine di un volume"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Immagine sorgente:"
                 Label3.Text = "Contrassegnare le immagini del volume da eliminare a sinistra. L'immagine avrà poi gli indici mostrati a destra"
                 Label4.Text = "Ottenere gli indici dall'immagine. Attendere..."
@@ -304,12 +304,8 @@ Public Class ImgIndexDelete
                 ListView2.Columns(1).Text = "Nome dell'immagine"
                 GroupBox1.Text = "Immagini volume"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then Button2.Enabled = False Else Button2.Enabled = True
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor

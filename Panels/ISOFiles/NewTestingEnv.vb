@@ -17,7 +17,7 @@ Public Class NewTestingEnv
                         progressMessages(1) = "Creating project. This can take some time. Please wait..."
                         progressMessages(2) = "The project has been created"
                         Text = "Create a testing environment"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "This wizard will create an environment that will help you test your applications on Windows Preinstallation Environments." & CrLf & CrLf &
                                       "The project that will be created contains a template solution compatible with all environments and resources for the creation of applications for Windows Preinstallation Environments. You can learn more about these projects in the included README file."
                         Label3.Text = "Once you're ready, click the Create button."
@@ -36,7 +36,7 @@ Public Class NewTestingEnv
                         progressMessages(1) = "Creando proyecto. Esto puede llevar algo de tiempo. Espere..."
                         progressMessages(2) = "El proyecto ha sido creado"
                         Text = "Crear un entorno de pruebas"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Este asistente le creará un entorno que le ayudará a probar sus aplicaciones en entornos de preinstalación de Windows." & CrLf & CrLf &
                                       "El proyecto que será creado contiene una plantilla de solución compatible con todos los entornos, y recursos para crear aplicaciones para entornos de preinstalación de Windows. Puede aprender más acerca de estos proyectos en el archivo LÉAME incluido."
                         Label3.Text = "Cuando esté listo, haga clic en Crear."
@@ -55,7 +55,7 @@ Public Class NewTestingEnv
                         progressMessages(1) = "Création du projet. Cela peut prendre un certain temps. Veuillez patienter..."
                         progressMessages(2) = "Le projet a été créé"
                         Text = "Créer un environnement de test"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Cet assistant va créer un environnement qui vous aidera à tester vos applications sur les environnements de préinstallation Windows." & CrLf & CrLf &
                                       "Le projet qui sera créé contient une solution modèle compatible avec tous les environnements et ressources pour la création d'applications pour les environnements de préinstallation Windows. Vous pouvez en savoir plus sur ces projets dans le fichier LISEZMOI inclus."
                         Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
@@ -74,7 +74,7 @@ Public Class NewTestingEnv
                         progressMessages(1) = "A criar projeto. Isto pode demorar algum tempo. Por favor, aguarde..."
                         progressMessages(2) = "O projeto foi criado"
                         Text = "Criar um ambiente de teste"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Este assistente irá criar um ambiente que o ajudará a testar as suas aplicações em ambientes de pré-instalação do Windows." & CrLf & CrLf &
                                       "O projeto que será criado contém uma solução modelo compatível com todos os ambientes e recursos para a criação de aplicações para Ambientes de Pré-instalação do Windows. Pode obter mais informações sobre estes projectos no ficheiro LEIAME incluído."
                         Label3.Text = "Quando estiver pronto, clique no botão Criar."
@@ -93,7 +93,7 @@ Public Class NewTestingEnv
                         progressMessages(1) = "Creazione del progetto. L'operazione può richiedere del tempo. Attendere..."
                         progressMessages(2) = "Il progetto è stato creato"
                         Text = "Creare un ambiente di test"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Questa procedura guidata creerà un ambiente che vi aiuterà a testare le vostre applicazioni sugli ambienti di preinstallazione di Windows." & CrLf & CrLf &
                                       "Il progetto che verrà creato contiene una soluzione modello compatibile con tutti gli ambienti e le risorse per la creazione di applicazioni per gli ambienti di preinstallazione di Windows. Per ulteriori informazioni su questi progetti, consultare il file LEGGIMI incluso."
                         Label3.Text = "Una volta pronti, fate clic sul pulsante Crea."
@@ -113,7 +113,7 @@ Public Class NewTestingEnv
                 progressMessages(1) = "Creating project. This can take some time. Please wait..."
                 progressMessages(2) = "The project has been created"
                 Text = "Create a testing environment"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "This wizard will create an environment that will help you test your applications on Windows Preinstallation Environments." & CrLf & CrLf &
                               "The project that will be created contains a template solution compatible with all environments and resources for the creation of applications for Windows Preinstallation Environments. You can learn more about these projects in the included README file."
                 Label3.Text = "Once you're ready, click the Create button."
@@ -132,7 +132,7 @@ Public Class NewTestingEnv
                 progressMessages(1) = "Creando proyecto. Esto puede llevar algo de tiempo. Espere..."
                 progressMessages(2) = "El proyecto ha sido creado"
                 Text = "Crear un entorno de pruebas"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Este asistente le creará un entorno que le ayudará a probar sus aplicaciones en entornos de preinstalación de Windows." & CrLf & CrLf &
                               "El proyecto que será creado contiene una plantilla de solución compatible con todos los entornos, y recursos para crear aplicaciones para entornos de preinstalación de Windows. Puede aprender más acerca de estos proyectos en el archivo LÉAME incluido."
                 Label3.Text = "Cuando esté listo, haga clic en Crear."
@@ -151,7 +151,7 @@ Public Class NewTestingEnv
                 progressMessages(1) = "Création du projet. Cela peut prendre un certain temps. Veuillez patienter..."
                 progressMessages(2) = "Le projet a été créé"
                 Text = "Créer un environnement de test"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Cet assistant va créer un environnement qui vous aidera à tester vos applications sur les environnements de préinstallation Windows." & CrLf & CrLf &
                               "Le projet qui sera créé contient une solution modèle compatible avec tous les environnements et ressources pour la création d'applications pour les environnements de préinstallation Windows. Vous pouvez en savoir plus sur ces projets dans le fichier LISEZMOI inclus."
                 Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
@@ -170,7 +170,7 @@ Public Class NewTestingEnv
                 progressMessages(1) = "A criar projeto. Isto pode demorar algum tempo. Por favor, aguarde..."
                 progressMessages(2) = "O projeto foi criado"
                 Text = "Criar um ambiente de teste"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Este assistente irá criar um ambiente que o ajudará a testar as suas aplicações em ambientes de pré-instalação do Windows." & CrLf & CrLf &
                               "O projeto que será criado contém uma solução modelo compatível com todos os ambientes e recursos para a criação de aplicações para Ambientes de Pré-instalação do Windows. Pode obter mais informações sobre estes projectos no ficheiro LEIAME incluído."
                 Label3.Text = "Quando estiver pronto, clique no botão Criar."
@@ -189,7 +189,7 @@ Public Class NewTestingEnv
                 progressMessages(1) = "Creazione del progetto. L'operazione può richiedere del tempo. Attendere..."
                 progressMessages(2) = "Il progetto è stato creato"
                 Text = "Creare un ambiente di test"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Questa procedura guidata creerà un ambiente che vi aiuterà a testare le vostre applicazioni sugli ambienti di preinstallazione di Windows." & CrLf & CrLf &
                               "Il progetto che verrà creato contiene una soluzione modello compatibile con tutti gli ambienti e le risorse per la creazione di applicazioni per gli ambienti di preinstallazione di Windows. Per ulteriori informazioni su questi progetti, consultare il file LEGGIMI incluso."
                 Label3.Text = "Una volta pronti, fate clic sul pulsante Crea."
@@ -204,7 +204,7 @@ Public Class NewTestingEnv
                 GroupBox2.Text = "Stato di avanzamento"
                 LinkLabel1.Text = "Scarica l'ADK di Windows"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
@@ -214,10 +214,6 @@ Public Class NewTestingEnv
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
 
         ' Declare path constant for Windows ADK
         Dim ADKPath As String = Path.Combine(If(Environment.Is64BitOperatingSystem,
@@ -384,7 +380,7 @@ Public Class NewTestingEnv
             Case 5
                 msg = If(success, "Il progetto è stato creato con successo", "La creazione del progetto non è riuscita")
         End Select
-        MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+        MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
         OptionsPanel.Enabled = True

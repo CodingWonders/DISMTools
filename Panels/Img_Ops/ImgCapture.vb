@@ -91,7 +91,7 @@ Public Class ImgCapture
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Capture an image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Destination image file:"
                         Label3.Text = "Source image directory:"
                         Label4.Text = "Destination image description:"
@@ -119,7 +119,7 @@ Public Class ImgCapture
                         CompressionTypeStrings(2) = "Maximum compression will be applied. This will take the most time, but will result in a smaller image."
                     Case "ESN"
                         Text = "Capturar una imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Archivo de imagen de destino:"
                         Label3.Text = "Directorio de imagen de origen:"
                         Label4.Text = "Descripción de la imagen de destino:"
@@ -147,7 +147,7 @@ Public Class ImgCapture
                         CompressionTypeStrings(2) = "Se aplicará compresión máxima. Esto tardará más tiempo, pero resultará en una imagen más pequeña."
                     Case "FRA"
                         Text = "Capturer une image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier de l'image de destination :"
                         Label3.Text = "Répertoire de l'image source :"
                         Label4.Text = "Description de l'image de destination :"
@@ -175,7 +175,7 @@ Public Class ImgCapture
                         CompressionTypeStrings(2) = "La compression maximale sera appliquée. C'est ce qui prendra le plus de temps, mais l'image sera plus petite."
                     Case "PTB", "PTG"
                         Text = "Capturar uma imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro de imagem de destino:"
                         Label3.Text = "Diretório da imagem de origem:"
                         Label4.Text = "Descrição da imagem de destino:"
@@ -203,7 +203,7 @@ Public Class ImgCapture
                         CompressionTypeStrings(2) = "Será aplicada a compressão máxima. Esta opção demora mais tempo, mas resulta numa imagem mais pequena."
                     Case "ITA"
                         Text = "Cattura un'immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File immagine di destinazione:"
                         Label3.Text = " Cartella dell'immagine di origine:"
                         Label4.Text = "Descrizione immagine di destinazione:"
@@ -232,7 +232,7 @@ Public Class ImgCapture
                 End Select
             Case 1
                 Text = "Capture an image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Destination image file:"
                 Label3.Text = "Source image directory:"
                 Label4.Text = "Destination image description:"
@@ -260,7 +260,7 @@ Public Class ImgCapture
                 CompressionTypeStrings(2) = "Maximum compression will be applied. This will take the most time, but will result in a smaller image."
             Case 2
                 Text = "Capturar una imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Archivo de imagen de destino:"
                 Label3.Text = "Directorio de imagen de origen:"
                 Label4.Text = "Descripción de la imagen de destino:"
@@ -288,7 +288,7 @@ Public Class ImgCapture
                 CompressionTypeStrings(2) = "Se aplicará compresión máxima. Esto tardará más tiempo, pero resultará en una imagen más pequeña."
             Case 3
                 Text = "Capturer une image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier de l'image de destination :"
                 Label3.Text = "Répertoire de l'image source :"
                 Label4.Text = "Description de l'image de destination :"
@@ -316,7 +316,7 @@ Public Class ImgCapture
                 CompressionTypeStrings(2) = "La compression maximale sera appliquée. C'est ce qui prendra le plus de temps, mais l'image sera plus petite."
             Case 4
                 Text = "Capturar uma imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro de imagem de destino:"
                 Label3.Text = "Diretório da imagem de origem:"
                 Label4.Text = "Descrição da imagem de destino:"
@@ -344,7 +344,7 @@ Public Class ImgCapture
                 CompressionTypeStrings(2) = "Será aplicada a compressão máxima. Esta opção demora mais tempo, mas resulta numa imagem mais pequena."
             Case 5
                 Text = "Cattura un'immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File immagine di destinazione:"
                 Label3.Text = " Cartella dell'immagine di origine:"
                 Label4.Text = "Descrizione immagine di destinazione:"
@@ -371,7 +371,7 @@ Public Class ImgCapture
                 CompressionTypeStrings(1) = "Verrà applicata la compressione veloce. È l'opzione predefinita"
                 CompressionTypeStrings(2) = "Verrà applicata la compressione massima. Questa opzione richiede più tempo, ma produce un'immagine più piccola."
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -388,10 +388,6 @@ Public Class ImgCapture
         TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         TextBox5.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         If MainForm.OnlineManagement Or MainForm.OfflineManagement Then

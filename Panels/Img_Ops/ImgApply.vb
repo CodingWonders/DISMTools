@@ -19,26 +19,26 @@ Public Class ImgApply
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ESN"
-                            MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "FRA"
-                            MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "PTB", "PTG"
-                            MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ITA"
-                            MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                 Case 1
-                    MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 2
-                    MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 3
-                    MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 4
-                    MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 5
-                    MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Select
             Exit Sub
         End If
@@ -103,7 +103,7 @@ Public Class ImgApply
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Apply an image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Source image file:"
                         Label3.Text = "Image index:"
                         Label4.Text = "Naming pattern:"
@@ -129,7 +129,7 @@ Public Class ImgApply
                         GroupBox4.Text = "SWM file pattern"
                     Case "ESN"
                         Text = "Aplicar una imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagen de origen:"
                         Label3.Text = "Índice:"
                         Label4.Text = "Nomenclatura:"
@@ -155,7 +155,7 @@ Public Class ImgApply
                         GroupBox4.Text = "Patrón de archivos SWM"
                     Case "FRA"
                         Text = "Appliquer une image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier de l'image originale :"
                         Label3.Text = "Index de l'image:"
                         Label4.Text = "Modèle de dénomination :"
@@ -181,7 +181,7 @@ Public Class ImgApply
                         GroupBox4.Text = "Modèle de fichier SWM"
                     Case "PTB", "PTG"
                         Text = "Aplicar uma imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro de imagem de origem:"
                         Label3.Text = "Índice da imagem:"
                         Label4.Text = "Padrão de nomenclatura:"
@@ -207,7 +207,7 @@ Public Class ImgApply
                         GroupBox4.Text = "Padrão de ficheiro SWM"
                     Case "ITA"
                         Text = "Applica un'immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File immagine di origine:"
                         Label3.Text = "Indice immagine:"
                         Label4.Text = "Modello di denominazione:"
@@ -234,7 +234,7 @@ Public Class ImgApply
                 End Select
             Case 1
                 Text = "Apply an image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Source image file:"
                 Label3.Text = "Image index:"
                 Label4.Text = "Naming pattern:"
@@ -260,7 +260,7 @@ Public Class ImgApply
                 GroupBox4.Text = "SWM file pattern"
             Case 2
                 Text = "Aplicar una imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagen de origen:"
                 Label3.Text = "Índice:"
                 Label4.Text = "Nomenclatura:"
@@ -286,7 +286,7 @@ Public Class ImgApply
                 GroupBox4.Text = "Patrón de archivos SWM"
             Case 3
                 Text = "Appliquer une image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier de l'image originale :"
                 Label3.Text = "Index de l'image:"
                 Label4.Text = "Modèle de dénomination :"
@@ -312,7 +312,7 @@ Public Class ImgApply
                 GroupBox4.Text = "Modèle de fichier SWM"
             Case 4
                 Text = "Aplicar uma imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro de imagem de origem:"
                 Label3.Text = "Índice da imagem:"
                 Label4.Text = "Padrão de nomenclatura:"
@@ -338,7 +338,7 @@ Public Class ImgApply
                 GroupBox4.Text = "Padrão de ficheiro SWM"
             Case 5
                 Text = "Applica un'immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File immagine di origine:"
                 Label3.Text = "Indice immagine:"
                 Label4.Text = "Modello di denominazione:"
@@ -363,7 +363,7 @@ Public Class ImgApply
                 GroupBox3.Text = "Destinazione"
                 GroupBox4.Text = "Schema di file SWM"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -381,10 +381,6 @@ Public Class ImgApply
         TextBox2.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -484,7 +480,7 @@ Public Class ImgApply
                 Case 5
                     msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             Try
                 DynaLog.LogMessage("Shutting down API...")

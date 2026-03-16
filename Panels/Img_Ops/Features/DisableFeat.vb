@@ -106,7 +106,7 @@ Public Class DisableFeat
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Disable features"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Package name:"
                         GroupBox1.Text = "Features"
                         GroupBox2.Text = "Options"
@@ -119,7 +119,7 @@ Public Class DisableFeat
                         CheckBox2.Text = "Remove feature without removing manifest"
                     Case "ESN"
                         Text = "Deshabilitar características"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Paquete:"
                         GroupBox1.Text = "Características"
                         GroupBox2.Text = "Opciones"
@@ -132,7 +132,7 @@ Public Class DisableFeat
                         CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
                     Case "FRA"
                         Text = "Désactiver des caractéristiques"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nom du paquet :"
                         GroupBox1.Text = "Caractéristiques"
                         GroupBox2.Text = "Paramètres"
@@ -145,7 +145,7 @@ Public Class DisableFeat
                         CheckBox2.Text = "Supprimer une caractéristique sans supprimer le manifeste"
                     Case "PTB", "PTG"
                         Text = "Desativar características"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nome do pacote:"
                         GroupBox1.Text = "Características"
                         GroupBox2.Text = "Opções"
@@ -158,7 +158,7 @@ Public Class DisableFeat
                         CheckBox2.Text = "Remover caraterística sem remover manifesto"
                     Case "ITA"
                         Text = "Disabilita caratteristiche"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nome pacchetto:"
                         GroupBox1.Text = "Caratteristiche"
                         GroupBox2.Text = "Opzioni"
@@ -172,7 +172,7 @@ Public Class DisableFeat
                 End Select
             Case 1
                 Text = "Disable features"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Package name:"
                 GroupBox1.Text = "Features"
                 GroupBox2.Text = "Options"
@@ -185,7 +185,7 @@ Public Class DisableFeat
                 CheckBox2.Text = "Remove feature without removing manifest"
             Case 2
                 Text = "Deshabilitar características"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Paquete:"
                 GroupBox1.Text = "Características"
                 GroupBox2.Text = "Opciones"
@@ -198,7 +198,7 @@ Public Class DisableFeat
                 CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
             Case 3
                 Text = "Désactiver des caractéristiques"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nom du paquet :"
                 GroupBox1.Text = "Caractéristiques"
                 GroupBox2.Text = "Paramètres"
@@ -211,7 +211,7 @@ Public Class DisableFeat
                 CheckBox2.Text = "Supprimer une caractéristique sans supprimer le manifeste"
             Case 4
                 Text = "Desativar características"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nome do pacote:"
                 GroupBox1.Text = "Características"
                 GroupBox2.Text = "Opções"
@@ -224,7 +224,7 @@ Public Class DisableFeat
                 CheckBox2.Text = "Remover caraterística sem remover manifesto"
             Case 5
                 Text = "Disabilita caratteristiche"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nome pacchetto:"
                 GroupBox1.Text = "Caratteristiche"
                 GroupBox2.Text = "Opzioni"
@@ -236,7 +236,7 @@ Public Class DisableFeat
                 CheckBox1.Text = "Specificare il nome del pacchetto padre per le caratteristiche"
                 CheckBox2.Text = "Rimuovi la caratteristica senza rimuovere il manifesto"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -245,10 +245,6 @@ Public Class DisableFeat
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 

@@ -55,26 +55,26 @@ Public Class AddDrivers
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ESN"
-                            MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "FRA"
-                            MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "PTB", "PTG"
-                            MsgBox("Não existem pacotes de controladores seleccionados para instalar. Especifique os pacotes de controladores que gostaria de instalar e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Não existem pacotes de controladores seleccionados para instalar. Especifique os pacotes de controladores que gostaria de instalar e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ITA"
-                            MsgBox("Non sono stati selezionati pacchetti driver da installare. Specificare i pacchetti di driver che si desidera installare e riprovare", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Non sono stati selezionati pacchetti driver da installare. Specificare i pacchetti di driver che si desidera installare e riprovare", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                 Case 1
-                    MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 2
-                    MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 3
-                    MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 4
-                    MsgBox("Não existem pacotes de controladores seleccionados para instalar. Especifique os pacotes de controladores que gostaria de instalar e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Não existem pacotes de controladores seleccionados para instalar. Especifique os pacotes de controladores que gostaria de instalar e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 5
-                    MsgBox("Non sono stati selezionati pacchetti driver da installare. Specificare i pacchetti di driver che si desidera installare e riprovare", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Non sono stati selezionati pacchetti driver da installare. Specificare i pacchetti di driver che si desidera installare e riprovare", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Select
             Exit Sub
         End If
@@ -188,7 +188,7 @@ Public Class AddDrivers
                               "- Per scegliere manualmente i driver in questa cartella, fare clic su No" & CrLf & _
                               "- Per non aggiungere questa cartella, fare clic su Annulla"
                 End Select
-                Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
+                Select Case MsgBox(msg, vbYesNoCancel + vbInformation, ImageTaskHeader1.ItemText)
                     Case MsgBoxResult.Yes
                         DynaLog.LogMessage("Adding folder to queue...")
                         Select Case MainForm.Language
@@ -232,26 +232,26 @@ Public Class AddDrivers
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ESN"
-                                MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "FRA"
-                                MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "PTB", "PTG"
-                                MsgBox("Não existem pacotes de controladores na pasta especificada", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Não existem pacotes de controladores na pasta especificada", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ITA"
-                                MsgBox("Non ci sono pacchetti driver nella cartella specificata", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Non ci sono pacchetti driver nella cartella specificata", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         End Select
                     Case 1
-                        MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 2
-                        MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 3
-                        MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 4
-                        MsgBox("Não existem pacotes de controladores na pasta especificada", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Não existem pacotes de controladores na pasta especificada", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 5
-                        MsgBox("Non ci sono pacchetti driver nella cartella specificata", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Non ci sono pacchetti driver nella cartella specificata", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 End Select
             End If
             Cursor = Cursors.Arrow
@@ -299,7 +299,7 @@ Public Class AddDrivers
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Add drivers"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them to the list below:"
                         Label3.Text = "You can let the program scan the driver folders present on the list below recursively and add them as well. To do so, tick the entries you'd like to be scanned:"
                         OK_Button.Text = "OK"
@@ -319,7 +319,7 @@ Public Class AddDrivers
                         FolderBrowserDialog1.Description = "Specify the folder containing driver packages. You will then be able to specify if it needs to be scanned recursively:"
                     Case "ESN"
                         Text = "Añadir controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique los controladores a añadir usando los botones de abajo o colocándolos en la lista de abajo:"
                         Label3.Text = "Puede dejar que el programa escanee las carpetas de controladores presentes en la lista de abajo de forma recursiva y añadirlos también. Para hacerlo, marque las entradas que le gustaría que fuesen escaneadas:"
                         OK_Button.Text = "Aceptar"
@@ -339,7 +339,7 @@ Public Class AddDrivers
                         FolderBrowserDialog1.Description = "Especifique la carpeta que contiene paquetes de controladores. Luego podrá especificar si necesita ser escaneada de forma recursiva:"
                     Case "FRA"
                         Text = "Ajouter des pilotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Veuillez spécifier les pilotes à ajouter en utilisant les boutons ci-dessous ou en les déposant dans la liste ci-dessous :"
                         Label3.Text = "Vous pouvez laisser le programme analyser les répertoires de pilotes présents dans la liste ci-dessous de manière récursive et les ajouter également. Pour ce faire, cochez les entrées que vous souhaitez voir analysées :"
                         OK_Button.Text = "OK"
@@ -359,7 +359,7 @@ Public Class AddDrivers
                         FolderBrowserDialog1.Description = "Indiquez le répertoire contenant les pilotes. Vous pourrez ensuite préciser s'il doit être analysé de manière récursive :"
                     Case "PTB", "PTG"
                         Text = "Adicionar controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique os controladores a adicionar utilizando os botões abaixo ou colocando-os na lista abaixo:"
                         Label3.Text = "Pode deixar o programa procurar recursivamente as pastas de controladores presentes na lista abaixo e adicioná-las também. Para o fazer, assinale as entradas que pretende que sejam verificadas:"
                         OK_Button.Text = "OK"
@@ -379,7 +379,7 @@ Public Class AddDrivers
                         FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes de controladores. Poderá então especificar se é necessário efetuar uma verificação recursiva:"
                     Case "ITA"
                         Text = "Aggiungi driver"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specificare i driver da aggiungere utilizzando i pulsanti sottostanti o rilasciandoli nell'elenco sottostante:"
                         Label3.Text = "È possibile lasciare che il programma esegua una scansione ricorsiva delle cartelle dei driver presenti nell'elenco sottostante e aggiungerli. A tale scopo, selezionare le voci che si desidera sottoporre a scansione:"
                         OK_Button.Text = "OK"
@@ -400,7 +400,7 @@ Public Class AddDrivers
                 End Select
             Case 1
                 Text = "Add drivers"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them to the list below:"
                 Label3.Text = "You can let the program scan the driver folders present on the list below recursively and add them as well. To do so, tick the entries you'd like to be scanned:"
                 OK_Button.Text = "OK"
@@ -420,7 +420,7 @@ Public Class AddDrivers
                 FolderBrowserDialog1.Description = "Specify the folder containing driver packages. You will then be able to specify if it needs to be scanned recursively:"
             Case 2
                 Text = "Añadir controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique los controladores a añadir usando los botones de abajo o colocándolos en la lista de abajo:"
                 Label3.Text = "Puede dejar que el programa escanee las carpetas de controladores presentes en la lista de abajo de forma recursiva y añadirlos también. Para hacerlo, marque las entradas que le gustaría que fuesen escaneadas:"
                 OK_Button.Text = "Aceptar"
@@ -440,7 +440,7 @@ Public Class AddDrivers
                 FolderBrowserDialog1.Description = "Especifique la carpeta que contiene paquetes de controladores. Luego podrá especificar si necesita ser escaneada de forma recursiva:"
             Case 3
                 Text = "Ajouter des pilotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Veuillez spécifier les pilotes à ajouter en utilisant les boutons ci-dessous ou en les déposant dans la liste ci-dessous :"
                 Label3.Text = "Vous pouvez laisser le programme analyser les répertoires de pilotes présents dans la liste ci-dessous de manière récursive et les ajouter également. Pour ce faire, cochez les entrées que vous souhaitez voir analysées :"
                 OK_Button.Text = "OK"
@@ -460,7 +460,7 @@ Public Class AddDrivers
                 FolderBrowserDialog1.Description = "Indiquez le répertoire contenant les pilotes. Vous pourrez ensuite préciser s'il doit être analysé de manière récursive :"
             Case 4
                 Text = "Adicionar controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique os controladores a adicionar utilizando os botões abaixo ou colocando-os na lista abaixo:"
                 Label3.Text = "Pode deixar o programa procurar recursivamente as pastas de controladores presentes na lista abaixo e adicioná-las também. Para o fazer, assinale as entradas que pretende que sejam verificadas:"
                 OK_Button.Text = "OK"
@@ -480,7 +480,7 @@ Public Class AddDrivers
                 FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes de controladores. Poderá então especificar se é necessário efetuar uma verificação recursiva:"
             Case 5
                 Text = "Aggiungi driver"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specificare i driver da aggiungere utilizzando i pulsanti sottostanti o rilasciandoli nell'elenco sottostante:"
                 Label3.Text = "È possibile lasciare che il programma esegua una scansione ricorsiva delle cartelle dei driver presenti nell'elenco sottostante e aggiungerli. A tale scopo, selezionare le voci che si desidera sottoporre a scansione:"
                 OK_Button.Text = "OK"
@@ -499,7 +499,7 @@ Public Class AddDrivers
                 OpenFileDialog1.Title = "Specificare il pacchetto driver da aggiungere"
                 FolderBrowserDialog1.Description = "Specificare la cartella contenente i pacchetti di driver. Sarà quindi possibile specificare se è necessario eseguire una scansione ricorsiva:"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -509,10 +509,6 @@ Public Class AddDrivers
         CheckedListBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         CheckedListBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -590,7 +586,7 @@ Public Class AddDrivers
                               "- Per scegliere manualmente i driver in questa cartella, fare clic su No" & CrLf & _
                               "- Per non aggiungere questa cartella, fare clic su Annulla"
                 End Select
-                Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
+                Select Case MsgBox(msg, vbYesNoCancel + vbInformation, ImageTaskHeader1.ItemText)
                     Case MsgBoxResult.Yes
                         DynaLog.LogMessage("Adding folder to queue...")
                         Select Case MainForm.Language

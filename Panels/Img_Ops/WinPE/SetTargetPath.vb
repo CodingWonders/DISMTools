@@ -63,7 +63,7 @@ Public Class SetPETargetPath
                 Case 5
                     msg = "Il percorso di destinazione deve essere di almeno 3 caratteri e non più lungo di 32 caratteri"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox1.Text.StartsWith("A", StringComparison.OrdinalIgnoreCase) Or TextBox1.Text.StartsWith("B", StringComparison.OrdinalIgnoreCase) Then
@@ -93,7 +93,7 @@ Public Class SetPETargetPath
                 Case 5
                     msg = "Il percorso di destinazione deve iniziare con una lettera diversa da A o B"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If Not TextBox1.Text.Chars(1).Equals(":"c) Then
@@ -123,7 +123,7 @@ Public Class SetPETargetPath
                 Case 5
                     msg = "Una lettera di unità deve essere seguita da :"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox1.Text.Contains(".\") Or TextBox1.Text.Contains("..\") Then
@@ -153,7 +153,7 @@ Public Class SetPETargetPath
                 Case 5
                     msg = "Il percorso di destinazione deve essere assoluto e non deve contenere elementi relativi"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox1.Text.Contains(" ") Or TextBox1.Text.Contains(Quote) Then
@@ -183,7 +183,7 @@ Public Class SetPETargetPath
                 Case 5
                     msg = "Il percorso di destinazione non deve contenere spazi o virgolette"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         ProgressPanel.peNewTargetPath = TextBox1.Text
@@ -218,35 +218,35 @@ Public Class SetPETargetPath
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Set Windows PE target path"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "The target path is a directory where the Windows PE files will be copied to in order to boot to the environment. Please specify a target path and click OK."
                         Label3.Text = "Target path:"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                     Case "ESN"
                         Text = "Establecer ruta de destino de Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "La ruta de destino es una carpeta donde los archivos de Windows PE serán copiados para iniciar el entorno. Especifique una ruta de destino y haga clic en Aceptar."
                         Label3.Text = "Ruta de destino:"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                     Case "FRA"
                         Text = "Configurer le chemin cible de Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Le chemin cible est un répertoire dans lequel les fichiers Windows PE seront copiés afin de démarrer dans l'environnement. Veuillez indiquer un chemin cible et cliquer sur OK."
                         Label3.Text = "Chemin cible :"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
                     Case "PTB", "PTG"
                         Text = "Configurar a localização de destino do Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "A localização de destino é um diretório para onde os ficheiros do Windows PE serão copiados para arrancar no ambiente. Especifique uma localização de destino e clique em OK."
                         Label3.Text = "Localização de destino:"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                     Case "ITA"
                         Text = "Imposta il percorso di destinazione di Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Il percorso di destinazione è una directory in cui verranno copiati i file di Windows PE per l'avvio dell'ambiente. Specificare un percorso di destinazione e fare clic su OK"
                         Label3.Text = "Percorso di destinazione:"
                         OK_Button.Text = "OK"
@@ -254,45 +254,41 @@ Public Class SetPETargetPath
                 End Select
             Case 1
                 Text = "Set Windows PE target path"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "The target path is a directory where the Windows PE files will be copied to in order to boot to the environment. Please specify a target path and click OK."
                 Label3.Text = "Target path:"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
             Case 2
                 Text = "Establecer ruta de destino de Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "La ruta de destino es una carpeta donde los archivos de Windows PE serán copiados para iniciar el entorno. Especifique una ruta de destino y haga clic en Aceptar."
                 Label3.Text = "Ruta de destino:"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
             Case 3
                 Text = "Configurer le chemin cible de Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Le chemin cible est un répertoire dans lequel les fichiers Windows PE seront copiés afin de démarrer dans l'environnement. Veuillez indiquer un chemin cible et cliquer sur OK."
                 Label3.Text = "Chemin cible :"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
             Case 4
                 Text = "Configurar a localização de destino do Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "A localização de destino é um diretório para onde os ficheiros do Windows PE serão copiados para arrancar no ambiente. Especifique uma localização de destino e clique em OK."
                 Label3.Text = "Localização de destino:"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
             Case 5
                 Text = "Imposta il percorso di destinazione di Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Il percorso di destinazione è una directory in cui verranno copiati i file di Windows PE per l'avvio dell'ambiente. Specificare un percorso di destinazione e fare clic su OK"
                 Label3.Text = "Percorso di destinazione:"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor

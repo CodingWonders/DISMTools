@@ -568,29 +568,29 @@ Public Class ProjProperties
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        Label1.Text = "Properties"
+                        ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        Label1.Text = "Propiedades"
+                        ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        Label1.Text = "Propriétés"
+                        ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        Label1.Text = "Propriedades"
+                        ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        Label1.Text = "Proprietà"
+                        ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                Label1.Text = "Properties"
+                ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                Label1.Text = "Propiedades"
+                ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                Label1.Text = "Propriétés"
+                ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                Label1.Text = "Propriedades"
+                ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                Label1.Text = "Proprietà"
+                ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         ' Set program colors
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
@@ -623,10 +623,6 @@ Public Class ProjProperties
         imgRW.Text = ""
         LanguageList.Items.Clear()
         Visible = True
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Label4.Visible = True
         Label9.Text = MainForm.Label49.Text
         Label10.Text = MainForm.projPath

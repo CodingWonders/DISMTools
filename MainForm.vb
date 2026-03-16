@@ -10861,31 +10861,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -10897,31 +10897,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13465,31 +13465,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13547,31 +13547,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)

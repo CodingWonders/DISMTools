@@ -95,11 +95,11 @@ Public Class ExportDrivers
                 Case 5
                     msg = "Specificare una destinazione in cui esportare i driver e assicurarsi che la destinazione specificata esista"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If RadioButton2.Checked AndAlso Not DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
-            MsgBox("You must specify a class name from the list below.", vbOKOnly + vbCritical, Label1.Text)
+            MsgBox("You must specify a class name from the list below.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         ProgressPanel.drvExportAllDrvs = RadioButton1.Checked
@@ -122,7 +122,7 @@ Public Class ExportDrivers
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Export drivers"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Export target:"
                         Button1.Text = "Browse..."
                         OK_Button.Text = "OK"
@@ -130,7 +130,7 @@ Public Class ExportDrivers
                         FolderBrowserDialog1.Description = "Please specify the path where the drivers will be exported to:"
                     Case "ESN"
                         Text = "Exportar controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Destino de exportación:"
                         Button1.Text = "Examinar..."
                         OK_Button.Text = "Aceptar"
@@ -138,7 +138,7 @@ Public Class ExportDrivers
                         FolderBrowserDialog1.Description = "Especifique la ruta a la que los controladores serán exportados:"
                     Case "FRA"
                         Text = "Exporter les pilotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Cible d'exportation :"
                         Button1.Text = "Parcourir..."
                         OK_Button.Text = "OK"
@@ -146,7 +146,7 @@ Public Class ExportDrivers
                         FolderBrowserDialog1.Description = "Veuillez indiquer le chemin vers lequel les pilotes seront exportés :"
                     Case "PTB", "PTG"
                         Text = "Controladores de exportação"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Exportar destino:"
                         Button1.Text = "Navegar..."
                         OK_Button.Text = "OK"
@@ -154,7 +154,7 @@ Public Class ExportDrivers
                         FolderBrowserDialog1.Description = "Especifique o caminho para onde os controladores serão exportados:"
                     Case "ITA"
                         Text = "Esportazione di driver"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Destinazione di esportazione:"
                         Button1.Text = "Sfoglia..."
                         OK_Button.Text = "OK"
@@ -163,7 +163,7 @@ Public Class ExportDrivers
                 End Select
             Case 1
                 Text = "Export drivers"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Export target:"
                 Button1.Text = "Browse..."
                 OK_Button.Text = "OK"
@@ -171,7 +171,7 @@ Public Class ExportDrivers
                 FolderBrowserDialog1.Description = "Please specify the path where the drivers will be exported to:"
             Case 2
                 Text = "Exportar controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Destino de exportación:"
                 Button1.Text = "Examinar..."
                 OK_Button.Text = "Aceptar"
@@ -179,7 +179,7 @@ Public Class ExportDrivers
                 FolderBrowserDialog1.Description = "Especifique la ruta a la que los controladores serán exportados:"
             Case 3
                 Text = "Exporter les pilotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Cible d'exportation :"
                 Button1.Text = "Parcourir..."
                 OK_Button.Text = "OK"
@@ -187,7 +187,7 @@ Public Class ExportDrivers
                 FolderBrowserDialog1.Description = "Veuillez indiquer le chemin vers lequel les pilotes seront exportés :"
             Case 4
                 Text = "Controladores de exportação"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Exportar destino:"
                 Button1.Text = "Navegar..."
                 OK_Button.Text = "OK"
@@ -195,14 +195,14 @@ Public Class ExportDrivers
                 FolderBrowserDialog1.Description = "Especifique o caminho para onde os controladores serão exportados:"
             Case 5
                 Text = "Esportazione di driver"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Destinazione di esportazione:"
                 Button1.Text = "Sfoglia..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
                 FolderBrowserDialog1.Description = "Specificare il percorso in cui verranno esportati i driver:"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = ForeColor
@@ -210,10 +210,6 @@ Public Class ExportDrivers
         TextBox1.ForeColor = ForeColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 

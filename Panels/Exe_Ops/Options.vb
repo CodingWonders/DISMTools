@@ -422,7 +422,7 @@ Public Class Options
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Options"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Program"
                         Label50.Text = "Personalization"
                         Label51.Text = "Logs"
@@ -525,7 +525,7 @@ Public Class Options
                         CheckBox20.Text = "Disable DynaLog logging"
                     Case "ESN"
                         Text = "Opciones"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programa"
                         Label50.Text = "Personalización"
                         Label51.Text = "Registros"
@@ -627,7 +627,7 @@ Public Class Options
                         CheckBox20.Text = "Desactivar el registro de DynaLog"
                     Case "FRA"
                         Text = "Paramètres"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programme"
                         Label50.Text = "Personnalisation"
                         Label51.Text = "Journaux"
@@ -730,7 +730,7 @@ Public Class Options
                         CheckBox20.Text = "Désactiver la journalisation DynaLog"
                     Case "PTB", "PTG"
                         Text = "Opções"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programa"
                         Label50.Text = "Personalização"
                         Label51.Text = "Registos"
@@ -833,7 +833,7 @@ Public Class Options
                         CheckBox20.Text = "Desativar o registo DynaLog"
                     Case "ITA"
                         Text = "Opzioni"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programma"
                         Label50.Text = "Personalizzazione"
                         Label51.Text = "Registri"
@@ -937,7 +937,7 @@ Public Class Options
                 End Select
             Case 1
                 Text = "Options"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Program"
                 Label50.Text = "Personalization"
                 Label51.Text = "Logs"
@@ -1040,7 +1040,7 @@ Public Class Options
                 CheckBox20.Text = "Disable DynaLog logging"
             Case 2
                 Text = "Opciones"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programa"
                 Label50.Text = "Personalización"
                 Label51.Text = "Registros"
@@ -1143,7 +1143,7 @@ Public Class Options
                 CheckBox20.Text = "Desactivar el registro de DynaLog"
             Case 3
                 Text = "Paramètres"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programme"
                 Label50.Text = "Personnalisation"
                 Label51.Text = "Journaux"
@@ -1246,7 +1246,7 @@ Public Class Options
                 CheckBox20.Text = "Désactiver la journalisation DynaLog"
             Case 4
                 Text = "Opções"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programa"
                 Label50.Text = "Personalização"
                 Label51.Text = "Registos"
@@ -1349,7 +1349,7 @@ Public Class Options
                 CheckBox20.Text = "Desativar o registo DynaLog"
             Case 5
                 Text = "Opzioni"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programma"
                 Label50.Text = "Personalizzazione"
                 Label51.Text = "Registri"
@@ -1624,10 +1624,6 @@ Public Class Options
         ComboBox7.Items.AddRange(SearchEngineHelper.GetAllSearchEngines().Select(Function(engine) engine.Name).ToArray())
         DynaLog.LogMessage("Checking if portable marker exists...")
         If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         DynaLog.LogMessage("Getting system fonts...")
         GetSystemFonts()
         ' Set default values before loading custom ones
@@ -1639,7 +1635,7 @@ Public Class Options
         GatherCustomSettings()
 
         ' Set program colors
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1748,7 +1744,7 @@ Public Class Options
             Panel3.Visible = False
         End If
         ChangeSections(SectionNum)
-        FlowLayoutPanel1.BackColor = Win10Title.BackColor
+        FlowLayoutPanel1.BackColor = ImageTaskHeader1.BackColor
 
         If SplitContainer1.SplitterDistance = 256 Then
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
@@ -1980,7 +1976,7 @@ Public Class Options
                 Case 5
                     msg = "Non è stato possibile trovare la cartella dei componenti DISM. Se tutti i componenti si trovano nella stessa cartella dell'eseguibile DISM, crea una cartella " & Quote & "dism" & Quote & " e riprova."
             End Select
-            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         DynaLog.LogMessage("Showing component information...")
@@ -2835,16 +2831,16 @@ Public Class Options
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 1
                 Options_Program.Visible = False
                 Options_Personalization.Visible = True
@@ -2868,17 +2864,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 PersonalizationSectionBtn.BackColor = BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 2
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2902,17 +2898,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 LogSectionBtn.BackColor = BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 3
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2936,17 +2932,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 ImgOpsSectionBtn.BackColor = BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 4
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2970,17 +2966,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 ScDirSectionBtn.BackColor = BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 5
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -3004,17 +3000,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 OutputSectionBtn.BackColor = BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 6
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -3038,17 +3034,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 BgProcsSectionBtn.BackColor = BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 7
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -3072,17 +3068,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 ImgDetectSectionBtn.BackColor = BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 8
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -3106,17 +3102,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 AssocsSectionBtn.BackColor = BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 9
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -3140,17 +3136,17 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 StartupSectionBtn.BackColor = BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
             Case 10
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -3174,16 +3170,16 @@ Public Class Options
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label34.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
+                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
+                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
                 ShutdownSectionBtn.BackColor = BackColor
         End Select
         SectionNum = Number
@@ -3348,7 +3344,7 @@ Public Class Options
                 Throw New Exception("The service could not be installed.")
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message, Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(ex.Message, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
 
@@ -3356,7 +3352,7 @@ Public Class Options
         If WindowsServiceHelper.EnableOnlineService("DT_AutoReload") Then
             GetAIRServiceInformation()
         Else
-            MessageBox.Show("The service could not be enabled.", Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("The service could not be enabled.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -3364,7 +3360,7 @@ Public Class Options
         If WindowsServiceHelper.DisableOnlineService("DT_AutoReload") Then
             GetAIRServiceInformation()
         Else
-            MessageBox.Show("The service could not be disabled.", Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("The service could not be disabled.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -3372,7 +3368,7 @@ Public Class Options
         If WindowsServiceHelper.DeleteService("DT_AutoReload") Then
             GetAIRServiceInformation()
         Else
-            MessageBox.Show("The service could not be removed.", Label1.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("The service could not be removed.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 End Class

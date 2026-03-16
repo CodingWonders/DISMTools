@@ -226,7 +226,7 @@ Public Class EnableFeat
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Enable features"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Package name:"
                         Label4.Text = "Feature source:"
                         Button1.Text = "Lookup..."
@@ -246,7 +246,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
                     Case "ESN"
                         Text = "Habilitar característica"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Paquete:"
                         Label4.Text = "Origen:"
                         Button1.Text = "Consultar"
@@ -266,7 +266,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
                     Case "FRA"
                         Text = "Activer les caractéristiques"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nom du paquet :"
                         Label4.Text = "Source de la caractéristique :"
                         Button1.Text = "Rechercher..."
@@ -286,7 +286,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Spécifiez un répertoire qui servira de source des caractéristiques :"
                     Case "PTB", "PTG"
                         Text = "Ativar características"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nome do pacote:"
                         Label4.Text = "Fonte da caraterística:"
                         Button1.Text = "Navegar..."
@@ -306,7 +306,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
                     Case "ITA"
                         Text = "Abilita funzionalità"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nome pacchetto:"
                         Label4.Text = "Origine caratteristiche:"
                         Button1.Text = "Cerca..."
@@ -327,7 +327,7 @@ Public Class EnableFeat
                 End Select
             Case 1
                 Text = "Enable features"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Package name:"
                 Label4.Text = "Feature source:"
                 Button1.Text = "Lookup..."
@@ -347,7 +347,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
             Case 2
                 Text = "Habilitar característica"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Paquete:"
                 Label4.Text = "Origen:"
                 Button1.Text = "Consultar"
@@ -367,7 +367,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
             Case 3
                 Text = "Activer les caractéristiques"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nom du paquet :"
                 Label4.Text = "Source de la caractéristique :"
                 Button1.Text = "Rechercher..."
@@ -387,7 +387,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Spécifiez un répertoire qui servira de source des caractéristiques :"
             Case 4
                 Text = "Ativar características"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nome do pacote:"
                 Label4.Text = "Fonte da caraterística:"
                 Button1.Text = "Navegar..."
@@ -407,7 +407,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
             Case 5
                 Text = "Abilita funzionalità"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nome pacchetto:"
                 Label4.Text = "Origine caratteristiche:"
                 Button1.Text = "Cerca..."
@@ -426,7 +426,7 @@ Public Class EnableFeat
                 ListView1.Columns(1).Text = "Stato"
                 FolderBrowserDialog1.Description = "Specificare una cartella che fungerà da origine delle caratteristiche:"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -438,10 +438,6 @@ Public Class EnableFeat
         TextBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
         PictureBox2.Image = GetGlyphResource("image_glyph")
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         DynaLog.LogMessage("Detecting ability to contact Windows Update (in the case of active installation management)...")
         DynaLog.LogMessage("Boot Mode of Host System: " & SystemInformation.BootMode.ToString())

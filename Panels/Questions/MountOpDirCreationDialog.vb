@@ -13,7 +13,7 @@ Public Class MountOpDirCreationDialog
     End Sub
 
     Private Sub MountOpDirCreationDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Text = ImgMount.Label1.Text
+        Text = ImgMount.ImageTaskHeader1.ItemText
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

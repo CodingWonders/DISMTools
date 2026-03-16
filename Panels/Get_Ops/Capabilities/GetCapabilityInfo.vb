@@ -9,7 +9,7 @@ Public Class GetCapabilityInfoDlg
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -23,7 +23,7 @@ Public Class GetCapabilityInfoDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get capability information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ready"
                         Label22.Text = "Capability identity:"
                         Label24.Text = "Capability name:"
@@ -39,7 +39,7 @@ Public Class GetCapabilityInfoDlg
                         SearchBox1.cueBanner = "Type here to search for a capability..."
                     Case "ESN"
                         Text = "Obtener información de funcionalidades"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Listo"
                         Label22.Text = "Identidad de la funcionalidad:"
                         Label24.Text = "Nombre de la funcionalidad:"
@@ -55,7 +55,7 @@ Public Class GetCapabilityInfoDlg
                         SearchBox1.cueBanner = "Escriba aquí para buscar una funcionalidad..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les capacités"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Prêt"
                         Label22.Text = "Identité de la capacité :"
                         Label24.Text = "Nom de la capacité :"
@@ -71,7 +71,7 @@ Public Class GetCapabilityInfoDlg
                         SearchBox1.cueBanner = "Tapez ici pour rechercher une capacité..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre as capacidades"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Pronto"
                         Label22.Text = "Identidade da capacidade:"
                         Label24.Text = "Nome da capacidade:"
@@ -87,7 +87,7 @@ Public Class GetCapabilityInfoDlg
                         SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
                     Case "ITA"
                         Text = "Verifica informazioni capacità"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Pronto"
                         Label22.Text = "Identità capacità:"
                         Label24.Text = "Nome capacità:"
@@ -104,7 +104,7 @@ Public Class GetCapabilityInfoDlg
                 End Select
             Case 1
                 Text = "Get capability information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ready"
                 Label22.Text = "Capability identity:"
                 Label24.Text = "Capability name:"
@@ -120,7 +120,7 @@ Public Class GetCapabilityInfoDlg
                 SearchBox1.cueBanner = "Type here to search for a capability..."
             Case 2
                 Text = "Obtener información de funcionalidades"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Listo"
                 Label22.Text = "Identidad de la funcionalidad:"
                 Label24.Text = "Nombre de la funcionalidad:"
@@ -136,7 +136,7 @@ Public Class GetCapabilityInfoDlg
                 SearchBox1.cueBanner = "Escriba aquí para buscar una funcionalidad..."
             Case 3
                 Text = "Obtenir des informations sur les capacités"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Prêt"
                 Label22.Text = "Identité de la capacité :"
                 Label24.Text = "Nom de la capacité :"
@@ -152,7 +152,7 @@ Public Class GetCapabilityInfoDlg
                 SearchBox1.cueBanner = "Tapez ici pour rechercher une capacité..."
             Case 4
                 Text = "Obter informações sobre as capacidades"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Pronto"
                 Label22.Text = "Identidade da capacidade:"
                 Label24.Text = "Nome da capacidade:"
@@ -168,7 +168,7 @@ Public Class GetCapabilityInfoDlg
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
             Case 5
                 Text = "Verifica informazioni capacità"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Pronto"
                 Label22.Text = "Identità capacità:"
                 Label24.Text = "Nome capacità:"
@@ -183,10 +183,6 @@ Public Class GetCapabilityInfoDlg
                 Button2.Text = "Salva..."
                 SearchBox1.cueBanner = "Digita qui per cercare una capacità..."
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If SplitContainer2.SplitterDistance = 440 Then
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
@@ -244,7 +240,7 @@ Public Class GetCapabilityInfoDlg
                         Case 5
                             msg = "Prima di poter visualizzare le informazioni sulle funzionalità devono essere stati completati i processi in background. Attendi che siano completati"
                     End Select
-                    MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -407,7 +403,7 @@ Public Class GetCapabilityInfoDlg
                         Case 5
                             msg = "Impossibile verificare informazioni sulle capacità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
-                    MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Finally
                     DynaLog.LogMessage("Shutting down API...")
                     Try

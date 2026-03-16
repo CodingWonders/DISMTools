@@ -158,7 +158,7 @@ Public Class RemPackage
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove packages"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Package source:"
                         Label4.Text = "NOTE: the program may show packages that weren't added in the first place. However, if a package is not added, the program will skip it."
                         GroupBox1.Text = "Package removal"
@@ -170,7 +170,7 @@ Public Class RemPackage
                         FolderBrowserDialog1.Description = "Please specify a package source:"
                     Case "ESN"
                         Text = "Eliminar paquetes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Origen:"
                         Label4.Text = "NOTA: el programa podría mostrar paquetes que no se hayan añadido en primer lugar. Si un paquete no se ha añadido, el programa lo omitirá."
                         GroupBox1.Text = "Eliminación de paquetes"
@@ -182,7 +182,7 @@ Public Class RemPackage
                         FolderBrowserDialog1.Description = "Especifique un origen de paquetes:"
                     Case "FRA"
                         Text = "Supprimer les paquets"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Source du paquet :"
                         Label4.Text = "REMARQUE : le programme peut afficher des paquets qui n'ont pas été ajoutés en premier lieu. Toutefois, si un paquet n'est pas ajouté, le programme l'ignorera."
                         GroupBox1.Text = "Suppression des paquets"
@@ -194,7 +194,7 @@ Public Class RemPackage
                         FolderBrowserDialog1.Description = "Veuillez indiquer la source des paquets :"
                     Case "PTB", "PTG"
                         Text = "Remover pacotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Origem dos pacotes:"
                         Label4.Text = "NOTA: o programa pode mostrar pacotes que não foram adicionados em primeiro lugar. No entanto, se um pacote não for adicionado, o programa irá ignorá-lo."
                         GroupBox1.Text = "Remoção de pacotes"
@@ -206,7 +206,7 @@ Public Class RemPackage
                         FolderBrowserDialog1.Description = "Especifique uma origem de pacote:"
                     Case "ITA"
                         Text = "Rimuovi pacchetti"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Origine del pacchetto:"
                         Label4.Text = "NOTA: il programma può mostrare pacchetti che non sono stati aggiunti. Tuttavia, se un pacchetto non viene aggiunto, il programma lo salta."
                         GroupBox1.Text = "Rimozione del pacchetto"
@@ -219,7 +219,7 @@ Public Class RemPackage
                 End Select
             Case 1
                 Text = "Remove packages"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Package source:"
                 Label4.Text = "NOTE: the program may show packages that weren't added in the first place. However, if a package is not added, the program will skip it."
                 GroupBox1.Text = "Package removal"
@@ -231,7 +231,7 @@ Public Class RemPackage
                 FolderBrowserDialog1.Description = "Please specify a package source:"
             Case 2
                 Text = "Eliminar paquetes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Origen:"
                 Label4.Text = "NOTA: el programa podría mostrar paquetes que no se hayan añadido en primer lugar. Si un paquete no se ha añadido, el programa lo omitirá."
                 GroupBox1.Text = "Eliminación de paquetes"
@@ -243,7 +243,7 @@ Public Class RemPackage
                 FolderBrowserDialog1.Description = "Especifique un origen de paquetes:"
             Case 3
                 Text = "Supprimer les paquets"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Source du paquet :"
                 Label4.Text = "REMARQUE : le programme peut afficher des paquets qui n'ont pas été ajoutés en premier lieu. Toutefois, si un paquet n'est pas ajouté, le programme l'ignorera."
                 GroupBox1.Text = "Suppression des paquets"
@@ -255,7 +255,7 @@ Public Class RemPackage
                 FolderBrowserDialog1.Description = "Veuillez indiquer la source des paquets :"
             Case 4
                 Text = "Remover pacotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Origem dos pacotes:"
                 Label4.Text = "NOTA: o programa pode mostrar pacotes que não foram adicionados em primeiro lugar. No entanto, se um pacote não for adicionado, o programa irá ignorá-lo."
                 GroupBox1.Text = "Remoção de pacotes"
@@ -267,7 +267,7 @@ Public Class RemPackage
                 FolderBrowserDialog1.Description = "Especifique uma origem de pacote:"
             Case 5
                 Text = "Rimuovi pacchetti"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Origine del pacchetto:"
                 Label4.Text = "NOTA: il programma può mostrare pacchetti che non sono stati aggiunti. Tuttavia, se un pacchetto non viene aggiunto, il programma lo salta."
                 GroupBox1.Text = "Rimozione del pacchetto"
@@ -278,7 +278,7 @@ Public Class RemPackage
                 OK_Button.Text = "OK"
                 FolderBrowserDialog1.Description = "Specificare l'origine del pacchetto:"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -288,10 +288,6 @@ Public Class RemPackage
         TextBox1.ForeColor = ForeColor
         CheckedListBox1.ForeColor = ForeColor
         CheckedListBox2.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub

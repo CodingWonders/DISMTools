@@ -37,7 +37,7 @@ Public Class ImgAppend
                 Case 5
                     msg = "Specificare una directory di origine dell'immagine e riprovare."
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
             ProgressPanel.AppendixSourceDir = TextBox1.Text
@@ -70,7 +70,7 @@ Public Class ImgAppend
                 Case 5
                     msg = "Specificare un file immagine di destinazione e riprovare."
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
             ProgressPanel.AppendixDestinationImage = TextBox2.Text
@@ -103,7 +103,7 @@ Public Class ImgAppend
                 Case 5
                     msg = "Specificare un nome per il file immagine di destinazione e riprovare."
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
             ProgressPanel.AppendixName = TextBox3.Text
@@ -142,7 +142,7 @@ Public Class ImgAppend
                     Case 5
                         msg = "Non è stato specificato alcun file dell'elenco di configurazione oppure non è stato possibile rilevare il file dell'elenco di configurazione nel file system. Si desidera continuare senza alcun file dell'elenco di configurazione?"
                 End Select
-                If MsgBox(msg, vbYesNo + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
+                If MsgBox(msg, vbYesNo + vbCritical, ImageTaskHeader1.ItemText) = MsgBoxResult.Ok Then
                     DynaLog.LogMessage("The user does not mind if we continue without the configuration list file.")
                     ProgressPanel.AppendixWimScriptConfig = ""
                 Else
@@ -178,7 +178,7 @@ Public Class ImgAppend
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Append to an image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Path of configuration file:"
                         Label3.Text = "Source image directory:"
                         Label5.Text = "Destination image description:"
@@ -202,7 +202,7 @@ Public Class ImgAppend
                         GroupBox2.Text = "Options"
                     Case "ESN"
                         Text = "Anexar a una imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ruta del archivo de configuración:"
                         Label3.Text = "Directorio de la imagen de origen:"
                         Label5.Text = "Descripción de la imagen de destino:"
@@ -226,7 +226,7 @@ Public Class ImgAppend
                         GroupBox2.Text = "Opciones"
                     Case "FRA"
                         Text = "Ajouter à une image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Chemin du fichier de configuration :"
                         Label3.Text = "Répertoire de l'image source :"
                         Label5.Text = "Description de l'image de destination :"
@@ -250,7 +250,7 @@ Public Class ImgAppend
                         GroupBox2.Text = "Paramètres"
                     Case "PTB", "PTG"
                         Text = "Anexar a uma imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Localização do ficheiro de configuração:"
                         Label3.Text = "Diretório da imagem de origem:"
                         Label5.Text = "Descrição da imagem de destino:"
@@ -274,7 +274,7 @@ Public Class ImgAppend
                         GroupBox2.Text = "Opções"
                     Case "ITA"
                         Text = "Aggiungi a un'immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Percorso del file di configurazione:"
                         Label3.Text = "Cartella dell'immagine di origine:"
                         Label5.Text = "Descrizione immagine di destinazione:"
@@ -299,7 +299,7 @@ Public Class ImgAppend
                 End Select
             Case 1
                 Text = "Append to an image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Path of configuration file:"
                 Label3.Text = "Source image directory:"
                 Label5.Text = "Destination image description:"
@@ -323,7 +323,7 @@ Public Class ImgAppend
                 GroupBox2.Text = "Options"
             Case 2
                 Text = "Anexar a una imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ruta del archivo de configuración:"
                 Label3.Text = "Directorio de la imagen de origen:"
                 Label5.Text = "Descripción de la imagen de destino:"
@@ -347,7 +347,7 @@ Public Class ImgAppend
                 GroupBox2.Text = "Opciones"
             Case 3
                 Text = "Ajouter à une image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Chemin du fichier de configuration :"
                 Label3.Text = "Répertoire de l'image source :"
                 Label5.Text = "Description de l'image de destination :"
@@ -371,7 +371,7 @@ Public Class ImgAppend
                 GroupBox2.Text = "Paramètres"
             Case 4
                 Text = "Anexar a uma imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Localização do ficheiro de configuração:"
                 Label3.Text = "Diretório da imagem de origem:"
                 Label5.Text = "Descrição da imagem de destino:"
@@ -395,7 +395,7 @@ Public Class ImgAppend
                 GroupBox2.Text = "Opções"
             Case 5
                 Text = "Aggiungi a un'immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Percorso del file di configurazione:"
                 Label3.Text = "Cartella dell'immagine di origine:"
                 Label5.Text = "Descrizione immagine di destinazione:"
@@ -418,7 +418,7 @@ Public Class ImgAppend
                 GroupBox1.Text = "Sorgenti e destinazioni"
                 GroupBox2.Text = "Opzioni"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -433,10 +433,6 @@ Public Class ImgAppend
         TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         TextBox5.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
@@ -518,7 +514,7 @@ Public Class ImgAppend
             imageName = ImageInfoCollection.Last.ImageName
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
-            MsgBox("Could not grab last image name. Error information:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
+            MsgBox("Could not grab last image name. Error information:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             Try
                 DynaLog.LogMessage("Shutting down API...")
