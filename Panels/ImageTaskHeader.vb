@@ -22,4 +22,9 @@
             ItemPictureBox.Image = value
         End Set
     End Property
+
+    Private Sub ImageTaskHeader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ItemTitle.Size = WindowHelper.ScaleSizeLogical(ItemTitle.Width, ItemTitle.Height)
+        ItemPictureBox.Location = WindowHelper.ScalePositionLogical(ItemPictureBox.Left, ItemPictureBox.Top)
+    End Sub
 End Class
