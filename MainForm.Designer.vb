@@ -825,7 +825,6 @@ Partial Class MainForm
         Me.CaptureFFU.Name = "CaptureFFU"
         Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
         Me.CaptureFFU.Text = "Capture partitions to FFU file..."
-        Me.CaptureFFU.Visible = False
         '
         'CaptureImage
         '

@@ -16072,4 +16072,9 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image application dialog...")
         FfuApply.ShowDialog(Me)
     End Sub
+
+    Private Sub CaptureFFU_Click(sender As Object, e As EventArgs) Handles CaptureFFU.Click
+        DynaLog.LogMessage("Opening image capture dialog...")
+        FfuCapture.ShowDialog(Me)
+    End Sub
 End Class

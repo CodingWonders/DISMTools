@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="DISMTools.Elements.Contemporaneus" />
+    <Import Include="DISMTools.Utilities" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.ControlChars" />
     <Import Include="System" />
@@ -215,6 +216,8 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Management" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
@@ -631,6 +634,12 @@
     <Compile Include="Panels\Img_Ops\FFU\FfuApply.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuCapture.Designer.vb">
+      <DependentUpon>FfuCapture.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuCapture.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </Compile>
@@ -942,6 +951,7 @@
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
+    <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\RegistryHelper.vb" />
@@ -1138,6 +1148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuApply.resx">
       <DependentUpon>FfuApply.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuCapture.resx">
+      <DependentUpon>FfuCapture.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>

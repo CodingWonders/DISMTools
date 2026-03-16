@@ -264,6 +264,13 @@ Public Class ProgressPanel
     Public ApplicationCompactMode As Boolean                ' Determine whether to apply image in Compact mode (Win10+ only)
     Public ApplicationUseExtAttr As Boolean                 ' Determine whether to apply extended attributes (Win10 1607+ only)
 
+    ' OperationNum: 5
+    Public FFUCaptureSourceDrive As String                  ' Source drive to be captured
+    Public FFUCaptureDestinationFfuImage As String          ' Destination FFU image
+    Public FFUCaptureName As String                         ' Captured FFU name
+    Public FFUCaptureDescription As String                  ' Captured FFU description (optional)
+    Public FFUCaptureCompressType As Integer                ' Compression used for the capture (0: none; 1: default)
+
     ' OperationNum: 6
     Public CaptureSourceDir As String                       ' Source directory to be captured
     Public CaptureDestinationImage As String                ' Destination image
@@ -896,6 +903,8 @@ Public Class ProgressPanel
                 ApplyFfuImage()
             Case 3
                 ApplyImage()
+            Case 5
+                CaptureFfuImage()
             Case 6
                 CaptureImage()
             Case 7
@@ -1452,6 +1461,113 @@ Public Class ProgressPanel
         Else
             LogView.AppendText("- Apply using extended attributes? No" & CrLf)
         End If
+        RunProcess(DismProgram, CommandArgs)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+        End If
+    End Sub
+
+    Private Sub CaptureFfuImage()
+        DynaLog.LogMessage("Capturing physical drive to the target image...")
+        DynaLog.LogMessage("- Source drive: " & FFUCaptureSourceDrive)
+        DynaLog.LogMessage("- Destination image: " & Quote & FFUCaptureDestinationFfuImage & Quote)
+        DynaLog.LogMessage("- Destination image name: " & Quote & FFUCaptureName & Quote)
+        DynaLog.LogMessage("- Destination image description: " & Quote & FFUCaptureDescription & Quote)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Capturing image..."
+                        currentTask.Text = "Capturing specified directory into a new image..."
+                    Case "ESN"
+                        allTasks.Text = "Capturando imagen..."
+                        currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+                    Case "FRA"
+                        allTasks.Text = "Capture de l'image en cours..."
+                        currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Capturar imagem..."
+                        currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
+                    Case "ITA"
+                        allTasks.Text = "Cattura immagine..."
+                        currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
+                End Select
+            Case 1
+                allTasks.Text = "Capturing image..."
+                currentTask.Text = "Capturing specified directory into a new image..."
+            Case 2
+                allTasks.Text = "Capturando imagen..."
+                currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+            Case 3
+                allTasks.Text = "Capture de l'image en cours..."
+                currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
+            Case 4
+                allTasks.Text = "Capturar imagem..."
+                currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
+            Case 5
+                allTasks.Text = "Cattura immagine..."
+                currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
+        End Select
+        LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
+                           "- Source directory: " & FFUCaptureSourceDrive & CrLf &
+                           "- Destination image: " & FFUCaptureDestinationFfuImage & CrLf &
+                           "- Captured image name: " & FFUCaptureName & CrLf)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' Not available
+                    Case Is >= 2
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-ffu /imagefile=" & Quote & FFUCaptureDestinationFfuImage & Quote & " /capturedrive=" & FFUCaptureSourceDrive & " /name=" & Quote & FFUCaptureName & Quote
+                End Select
+            Case 10
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-ffu /imagefile=" & Quote & FFUCaptureDestinationFfuImage & Quote & " /capturedrive=" & FFUCaptureSourceDrive & " /name=" & Quote & FFUCaptureName & Quote
+        End Select
+        ' Get additional options
+        If FFUCaptureDescription = "" Then
+            LogView.AppendText("- Captured image description: none specified" & CrLf)
+        Else
+            DynaLog.LogMessage("A description has been provided.")
+            LogView.AppendText("- Captured image description: " & Quote & FFUCaptureDescription & Quote & CrLf)
+            CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
+        End If
+        If CaptureCompressType = 0 Then
+            LogView.AppendText("- Compression type: none" & CrLf)
+            CommandArgs &= " /compress=none"
+        ElseIf CaptureCompressType = 1 Then
+            LogView.AppendText("- Compression type: default" & CrLf)
+            CommandArgs &= " /compress=default"
+        End If
+        LogView.AppendText(CrLf & "Capturing image...")
         RunProcess(DismProgram, CommandArgs)
         Select Case Language
             Case 0
