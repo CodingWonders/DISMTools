@@ -45,7 +45,6 @@ Public Class ImgApply
         ProgressPanel.ApplicationSourceImg = TextBox1.Text
         ProgressPanel.ApplicationIndex = ComboBox1.SelectedIndex + 1
         ProgressPanel.ApplicationDestDir = TextBox2.Text
-        ProgressPanel.ApplicationDestDrive = ""
         If CheckBox1.Checked Then
             ProgressPanel.ApplicationCheckInt = True
         Else

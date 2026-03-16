@@ -45,6 +45,7 @@ Partial Class ImgApply
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -60,7 +61,6 @@ Partial Class ImgApply
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -323,6 +323,15 @@ Partial Class ImgApply
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Destination"
         '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(19, 26)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(111, 13)
+        Me.Label5.TabIndex = 4
+        Me.Label5.Text = "Destination directory:"
+        '
         'Button2
         '
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -454,15 +463,6 @@ Partial Class ImgApply
         '
         Me.FolderBrowserDialog1.Description = "Please specify the destination directory to apply the image to:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(19, 26)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(111, 13)
-        Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Destination directory:"
         '
         'ImgApply
         '

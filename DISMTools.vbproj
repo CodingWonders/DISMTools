@@ -487,10 +487,10 @@
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.Designer.vb">
+    <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.Designer.vb">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.vb">
+    <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.Designer.vb">
@@ -623,6 +623,12 @@
       <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuApply.Designer.vb">
+      <DependentUpon>FfuApply.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuApply.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
@@ -1061,7 +1067,7 @@
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Img_Ops\ApplicationDriveSpecifier.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.resx">
@@ -1129,6 +1135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.resx">
       <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuApply.resx">
+      <DependentUpon>FfuApply.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>
@@ -2038,7 +2047,6 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
-    <Folder Include="Panels\Img_Ops\FFU\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />

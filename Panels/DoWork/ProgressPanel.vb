@@ -246,6 +246,11 @@ Public Class ProgressPanel
     Public AppendixReparsePt As Boolean                     ' Determine whether to use the reparse point tag fix
     Public AppendixCaptureExtendedAttribs As Boolean        ' Determine whether to capture extended attributes
 
+    ' OperationNum: 2
+    Public FFUApplicationSourceImg As String                ' String which determines which image to apply
+    Public FFUApplicationDestDrive As String                ' Gather destination disk ID
+    Public FFUApplicationSFUPattern As String               ' Spanned/Split WIM (SWM) file pattern string. Usually "install*.sfu", so don't use an array
+
     ' OperationNum: 3
     Public ApplicationSourceImg As String                   ' String which determines which image to apply
     Public ApplicationIndex As Integer                      ' Index to apply to destination
@@ -258,7 +263,6 @@ Public Class ProgressPanel
     Public ApplicationUseWimBoot As Boolean                 ' Determine whether to append image with WIMBoot configuration
     Public ApplicationCompactMode As Boolean                ' Determine whether to apply image in Compact mode (Win10+ only)
     Public ApplicationUseExtAttr As Boolean                 ' Determine whether to apply extended attributes (Win10 1607+ only)
-    Public ApplicationDestDrive As String                   ' Gather destination disk ID
 
     ' OperationNum: 6
     Public CaptureSourceDir As String                       ' Source directory to be captured
@@ -868,7 +872,7 @@ Public Class ProgressPanel
         Return targetImage
     End Function
 
-    Sub RunOps(opNum As Integer)
+    Private Sub RunOps(opNum As Integer)
         DynaLog.LogMessage("Running operations...")
         DynaLog.LogMessage("Operation number: " & opNum)
         DynaLog.LogMessage("Setting DISM program and grabbing version information...")
@@ -888,6 +892,8 @@ Public Class ProgressPanel
                 CreateProject()
             Case 1
                 AppendImage()
+            Case 2
+                ApplyFfuImage()
             Case 3
                 ApplyImage()
             Case 6
@@ -1235,12 +1241,109 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub ApplyFfuImage()
+        DynaLog.LogMessage("Applying specified FFU image to the specified application drive...")
+        DynaLog.LogMessage("- Image to apply: " & Quote & FFUApplicationSourceImg & Quote)
+        DynaLog.LogMessage("- Application drive: " & Quote & FFUApplicationDestDrive & Quote)
+        DynaLog.LogMessage("- SFU name pattern: " & Quote & FFUApplicationSFUPattern & Quote)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Applying image..."
+                        currentTask.Text = "Applying specified image to the specified destination..."
+                    Case "ESN"
+                        allTasks.Text = "Aplicando imagen..."
+                        currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+                    Case "FRA"
+                        allTasks.Text = "Application de l'image en cours..."
+                        currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Aplicar imagem..."
+                        currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
+                    Case "ITA"
+                        allTasks.Text = "Applicazione dell'immagine..."
+                        currentTask.Text = "Applicazione immagine specificata alla destinazione specificata..."
+                End Select
+            Case 1
+                allTasks.Text = "Applying image..."
+                currentTask.Text = "Applying specified image to the specified destination..."
+            Case 2
+                allTasks.Text = "Aplicando imagen..."
+                currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+            Case 3
+                allTasks.Text = "Application de l'image en cours..."
+                currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
+            Case 4
+                allTasks.Text = "Aplicar imagem..."
+                currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
+            Case 5
+                allTasks.Text = "Applicazione dell'immagine..."
+                currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
+        End Select
+        LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
+                           "- Source image file: " & ApplicationSourceImg & CrLf &
+                           "- Index to apply: " & ApplicationIndex & CrLf &
+                           "- Target directory: " & ApplicationDestDir & CrLf)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' It seems like it's not available :(
+                    Case Is >= 2
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-ffu /imagefile=" & Quote & FFUApplicationSourceImg & Quote
+                End Select
+            Case 10
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-ffu /imagefile=" & Quote & FFUApplicationSourceImg & Quote
+        End Select
+        ' Detect additional options and set CommandArgs
+        CommandArgs &= " /applydrive=" & Quote & FFUApplicationDestDrive & Quote
+        If FFUApplicationSFUPattern = "" Then
+            LogView.AppendText("- Split FFU (SFU) file pattern: not specified/not using SFU file" & CrLf)
+        Else
+            LogView.AppendText("- Split FFU (SFU) file pattern: " & FFUApplicationSFUPattern & CrLf)
+            CommandArgs &= " /sfufile=" & FFUApplicationSFUPattern
+        End If
+        RunProcess(DismProgram, CommandArgs)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+        End If
+    End Sub
+
     Private Sub ApplyImage()
         DynaLog.LogMessage("Applying specified Windows image to the specified application directory...")
         DynaLog.LogMessage("- Image to apply: " & Quote & ApplicationSourceImg & Quote)
         DynaLog.LogMessage("- Image index: " & ApplicationIndex)
-        DynaLog.LogMessage("- Application directory: " & Quote & If(ApplicationDestDrive <> "", ApplicationDestDrive, ApplicationDestDir) & Quote)
-        If ApplicationDestDrive <> "" Then DynaLog.LogMessage("  A drive has been specified")
+        DynaLog.LogMessage("- Application directory: " & Quote & ApplicationDestDir & Quote)
         DynaLog.LogMessage("- Verify image integrity? " & If(ApplicationCheckInt, "Yes", "No"))
         DynaLog.LogMessage("- Check for file errors? " & If(ApplicationVerify, "Yes", "No"))
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(ApplicationReparsePt, "Yes", "No"))
@@ -1300,11 +1403,7 @@ Public Class ProgressPanel
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
         End Select
         ' Detect additional options and set CommandArgs
-        If ApplicationDestDrive = "" Then
-            CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
-        Else
-            CommandArgs &= " /applydrive=" & ApplicationDestDrive
-        End If
+        CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
         If ApplicationCheckInt Then
             LogView.AppendText("- Verify image integrity? Yes" & CrLf)
             CommandArgs &= " /checkintegrity"
@@ -1352,11 +1451,6 @@ Public Class ProgressPanel
             CommandArgs &= " /ea"
         Else
             LogView.AppendText("- Apply using extended attributes? No" & CrLf)
-        End If
-        If ApplicationDestDrive = "" Then
-            LogView.AppendText("- Destination drive ID: not specified/not applying on drive" & CrLf)
-        Else
-            LogView.AppendText("- Destination drive ID: " & ApplicationDestDrive & CrLf)
         End If
         RunProcess(DismProgram, CommandArgs)
         Select Case Language

@@ -13629,7 +13629,11 @@ Public Class MainForm
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        ImgApply.ShowDialog(Me)
+        If CurrentImage IsNot Nothing AndAlso Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
+            FfuApply.ShowDialog(Me)
+        Else
+            ImgApply.ShowDialog(Me)
+        End If
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
@@ -16062,5 +16066,10 @@ Public Class MainForm
         Finally
             If SecureBootKey IsNot Nothing Then SecureBootKey.Close()
         End Try
+    End Sub
+
+    Private Sub ApplyFFU_Click(sender As Object, e As EventArgs) Handles ApplyFFU.Click
+        DynaLog.LogMessage("Opening image application dialog...")
+        FfuApply.ShowDialog(Me)
     End Sub
 End Class

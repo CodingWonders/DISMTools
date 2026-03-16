@@ -192,6 +192,8 @@ Partial Class MainForm
         Me.ToolStripSeparator46 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnixFogInstructionTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
@@ -498,8 +500,6 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -806,7 +806,6 @@ Partial Class MainForm
         Me.ApplyFFU.Name = "ApplyFFU"
         Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
         Me.ApplyFFU.Text = "Apply FFU or SFU file..."
-        Me.ApplyFFU.Visible = False
         '
         'ApplyImage
         '
@@ -1636,6 +1635,17 @@ Partial Class MainForm
         '
         Me.ToolStripSeparator41.Name = "ToolStripSeparator41"
         Me.ToolStripSeparator41.Size = New System.Drawing.Size(370, 6)
+        '
+        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
+        '
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
+        '
+        'ToolStripSeparator47
+        '
+        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
+        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
         '
         'ReportManagerToolStripMenuItem
         '
@@ -4598,17 +4608,6 @@ Partial Class MainForm
         'MountedImageDetectorBWRestarterTimer
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
-        '
-        'ToolStripSeparator47
-        '
-        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
-        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
-        '
-        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
-        '
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
         '
         'MainForm
         '
