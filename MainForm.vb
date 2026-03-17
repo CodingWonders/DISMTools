@@ -2841,8 +2841,8 @@ Public Class MainForm
                         Dim ffuData As IniData = parser.Parse(ImageFile.FFUInfo.IniManifest)
 
                         ImageFile.ImageArchitecture = CInt(ffuData("FullFlash")("Architecture"))
-                        ImageFile.ImageCreationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("CreationTime"))).Date
-                        ImageFile.ImageModificationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("LastModificationTime"))).Date
+                        ImageFile.ImageCreationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("CreationTime"))).DateTime
+                        ImageFile.ImageModificationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("LastModificationTime"))).DateTime
                     Catch ex As Exception
                         ' Don't get that data then
                     End Try
