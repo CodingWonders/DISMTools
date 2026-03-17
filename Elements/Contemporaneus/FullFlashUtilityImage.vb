@@ -52,10 +52,10 @@
         ''' <remarks></remarks>
         None = 0
         ''' <summary>
-        ''' LZMS compression
+        ''' XPRESS-Huffman compression
         ''' </summary>
         ''' <remarks></remarks>
-        LZMS = 3
+        XPRESSHuffman = 3
     End Enum
 
 End Namespace
