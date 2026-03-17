@@ -40,10 +40,14 @@ Public Class FfuApply
         ProgressPanel.FFUApplicationSourceImg = TextBox1.Text
         ProgressPanel.FFUApplicationDestDrive = TextBox2.Text
         If CheckBox4.Checked Then
-            ProgressPanel.FFUApplicationSFUPattern = Path.GetDirectoryName(TextBox1.Text) & "\" & TextBox4.Text & "*.swm"
+            ProgressPanel.FFUApplicationSFUPattern = Path.GetDirectoryName(TextBox1.Text) & "\" & TextBox4.Text & "*.sfu"
         Else
             ProgressPanel.FFUApplicationSFUPattern = ""
         End If
+
+        ' TODO until we find a way to grab the manifest of the unmounted FFU, simply ask.
+        MsgBox("Make sure that the destination disk is as large or larger than the specified FFU file when mounted. If the destination disk is larger than the FFU's expanded partitions, please extend partitions to their full extent.", vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
+
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         ProgressPanel.OperationNum = 2
         Visible = False
