@@ -893,7 +893,6 @@ Partial Class MainForm
         Me.OptimizeImage.Name = "OptimizeImage"
         Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeImage.Text = "Optimize image..."
-        Me.OptimizeImage.Visible = False
         '
         'RemountImage
         '

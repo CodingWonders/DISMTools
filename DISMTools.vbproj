@@ -676,6 +676,12 @@
     <Compile Include="Panels\Img_Ops\ImgIndexDelete.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\ImgOptimize.Designer.vb">
+      <DependentUpon>ImgOptimize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgOptimize.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ImgSplit.Designer.vb">
       <DependentUpon>ImgSplit.vb</DependentUpon>
     </Compile>
@@ -1175,6 +1181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgIndexDelete.resx">
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgOptimize.resx">
+      <DependentUpon>ImgOptimize.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgSplit.resx">
       <DependentUpon>ImgSplit.vb</DependentUpon>
@@ -1715,6 +1724,7 @@
     <None Include="Resources\service_pic_32px.png" />
     <None Include="Resources\menus\tour_glyph_dark.png" />
     <None Include="Resources\menus\tour_glyph_light.png" />
+    <None Include="Resources\optimize_img.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

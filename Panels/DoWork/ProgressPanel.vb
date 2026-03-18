@@ -322,6 +322,10 @@ Public Class ProgressPanel
     Public isOptimized As Boolean                           ' Determine whether image will be optimized to mount in a shorter time
     Public isIntegrityTested As Boolean                     ' Determine whether the integrity of the image should be tested before mounting the image
 
+    ' OperationNum: 17
+    Public OptimizationSource As String                     ' Source image file to optimize
+    Public OptimizationMode As Integer                      ' The mode with which the image must be optimized (0: boot; 1: wimboot)
+
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
 
@@ -923,6 +927,8 @@ Public Class ProgressPanel
                 ExportImage()
             Case 15
                 MountImage()
+            Case 17
+                OptimizeImage()
             Case 18
                 RemountImage()
             Case 19
@@ -2366,6 +2372,37 @@ Public Class ProgressPanel
         Else
             LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub OptimizeImage()
+        DynaLog.LogMessage("Optimizing the Windows image...")
+        DynaLog.LogMessage("- Source image to optimize: " & Quote & OptimizationSource & Quote)
+        DynaLog.LogMessage("- Optimization mode: " & OptimizationMode)
+        allTasks.Text = "Optimizing image..."
+        currentTask.Text = "Optimize Windows image..."
+        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
+                           "- Source image to optimize: " & Quote & OptimizationSource & Quote & CrLf &
+                           "- Optimization mode: " & If(OptimizationMode = 0, "Reduce online configuration time", "Prepare image for WIMBoot system") & CrLf)
+        ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                ' Not supported
+            Case 10
+                CommandArgs &= " /image=" & Quote & OptimizationSource & Quote & " /optimize-image " & If(OptimizationMode = 0, "/boot", "/wimboot")
+        End Select
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
     End Sub
 
     Private Sub RemountImage()

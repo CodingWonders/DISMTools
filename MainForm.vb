@@ -16082,4 +16082,9 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image split dialog...")
         FfuSplit.ShowDialog(Me)
     End Sub
+
+    Private Sub OptimizeImage_Click(sender As Object, e As EventArgs) Handles OptimizeImage.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        ImgOptimize.ShowDialog(Me)
+    End Sub
 End Class
