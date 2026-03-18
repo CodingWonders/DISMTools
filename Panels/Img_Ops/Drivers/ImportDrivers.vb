@@ -422,6 +422,7 @@ Public Class ImportDrivers
         ColumnHeader6.Width = WindowHelper.ScaleLogical(77)
         ColumnHeader7.Width = WindowHelper.ScaleLogical(110)
         ColumnHeader8.Width = WindowHelper.ScaleLogical(104)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

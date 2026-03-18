@@ -247,6 +247,7 @@ Public Class ImgSwmToWim
         ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked

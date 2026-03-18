@@ -986,6 +986,7 @@ Public Class ProjProperties
             Panel3.Visible = True
             Label4.Visible = False
         End If
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub RWRemountBtn_Click(sender As Object, e As EventArgs) Handles RWRemountBtn.Click

@@ -410,6 +410,7 @@ Public Class ImgCapture
             DynaLog.LogMessage("Could not detect WIMBoot compatibility. Error Message: " & ex.Message)
             CheckBox6.Enabled = False
         End Try
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

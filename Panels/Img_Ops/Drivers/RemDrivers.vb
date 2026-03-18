@@ -397,6 +397,7 @@ Public Class RemDrivers
         ColumnHeader6.Width = WindowHelper.ScaleLogical(96)
         ColumnHeader7.Width = WindowHelper.ScaleLogical(71)
         ColumnHeader8.Width = WindowHelper.ScaleLogical(67)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged, CheckBox2.CheckedChanged

@@ -365,6 +365,7 @@ Public Class RemProvAppxPackage
         ColumnHeader4.Width = WindowHelper.ScaleLogical(74)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(80)
         ColumnHeader6.Width = WindowHelper.ScaleLogical(130)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick

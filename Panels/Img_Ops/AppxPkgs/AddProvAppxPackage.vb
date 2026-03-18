@@ -752,6 +752,7 @@ Public Class AddProvAppxPackage
         ColumnHeader3.Width = WindowHelper.ScaleLogical(139)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(275)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(162)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

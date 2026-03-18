@@ -514,6 +514,7 @@ Public Class AddDrivers
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ColumnHeader1.Width = WindowHelper.ScaleLogical(350)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(154)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter

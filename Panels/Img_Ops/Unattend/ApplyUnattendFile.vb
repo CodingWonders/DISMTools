@@ -146,5 +146,6 @@ Public Class ApplyUnattendFile
         TextBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 End Class

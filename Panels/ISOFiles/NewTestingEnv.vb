@@ -269,6 +269,7 @@ Public Class NewTestingEnv
             ComboBox1.Items.AddRange(architectures)
         End If
         ComboBox1.SelectedIndex = 0
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click

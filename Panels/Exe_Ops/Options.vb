@@ -1751,6 +1751,7 @@ Public Class Options
         End If
 
         GetAIRServiceInformation()
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Sub GetSystemFonts()

@@ -201,5 +201,6 @@ Public Class RemCapabilities
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ColumnHeader1.Width = WindowHelper.ScaleLogical(524)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(199)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 End Class

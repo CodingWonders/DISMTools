@@ -173,5 +173,6 @@ Public Class SetOSUninstWindow
         ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 End Class

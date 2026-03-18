@@ -459,6 +459,7 @@ Public Class AddCapabilities
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ColumnHeader1.Width = WindowHelper.ScaleLogical(520)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(204)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

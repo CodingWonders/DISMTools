@@ -276,6 +276,7 @@ Public Class SetImageEdition
             DynaLog.LogMessage("Either one or none of the two requirements described above is met. The image we are managing is not an active installation, or a Windows Server installation")
             GroupBox1.Enabled = False
         End If
+        ImageTaskHeader1.HideWindowTitle(Handle)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged

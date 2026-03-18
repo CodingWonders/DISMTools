@@ -366,6 +366,7 @@ Public Class GetImgInfoDlg
         End If
         ColumnHeader1.Width = WindowHelper.ScaleLogical(60)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(344)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)

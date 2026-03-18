@@ -453,6 +453,7 @@ Public Class ISOCreator
         ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub DownloadADK()

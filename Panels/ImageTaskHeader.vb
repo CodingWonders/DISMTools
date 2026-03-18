@@ -7,6 +7,15 @@
         ForeColor = CurrentTheme.ForegroundColor
     End Sub
 
+    Sub HideWindowTitle(WindowHandle As IntPtr)
+        Try
+            Dim refForm As Form = CType(Control.FromHandle(WindowHandle), Form)
+            If refForm IsNot Nothing Then refForm.Text = ""
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Public Property ItemText As String
         Get
             Return ItemTitle.Text

@@ -328,6 +328,7 @@ Public Class ImgIndexDelete
         ColumnHeader2.Width = WindowHelper.ScaleLogical(254)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(41)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(254)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Sub GetImageIndexInfo(SourceImage As String)

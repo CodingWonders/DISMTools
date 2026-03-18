@@ -501,6 +501,7 @@ Public Class ImgExport
         ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

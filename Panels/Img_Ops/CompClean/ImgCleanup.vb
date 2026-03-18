@@ -518,6 +518,7 @@ Public Class ImgCleanup
         End If
 
         If SelTask >= 0 And SelTask < ComboBox1.Items.Count Then ComboBox1.SelectedIndex = SelTask
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

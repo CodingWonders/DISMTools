@@ -261,6 +261,7 @@ Public Class GetWinPESettings
 
         ' Get Windows PE settings
         GetPESettings()
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

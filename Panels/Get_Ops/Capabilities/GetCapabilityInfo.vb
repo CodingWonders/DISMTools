@@ -203,6 +203,7 @@ Public Class GetCapabilityInfoDlg
         SearchBox1.Text = ""
         ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

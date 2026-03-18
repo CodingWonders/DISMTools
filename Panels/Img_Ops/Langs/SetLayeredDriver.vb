@@ -164,6 +164,7 @@ Public Class SetLayeredDriverDialog
             Label6.Visible = False
             OK_Button.Enabled = True
         End If
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

@@ -252,6 +252,7 @@ Public Class GetAppxPkgInfoDlg
 
         AppxHelper.ClearRootPaths()
         AppxHelper.SetRootPaths(MainForm.MountDir)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged

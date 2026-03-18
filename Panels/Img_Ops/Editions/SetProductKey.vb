@@ -195,5 +195,6 @@ Public Class SetImageKey
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = CurrentTheme.ForegroundColor
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
+        ImageTaskHeader1.HideWindowTitle(Handle)
     End Sub
 End Class
