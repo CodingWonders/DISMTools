@@ -207,9 +207,9 @@ Partial Class GetPkgInfoDlg
         Me.MenuPanel.Controls.Add(Me.PackageFileLink)
         Me.MenuPanel.Controls.Add(Me.Label2)
         Me.MenuPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.MenuPanel.Location = New System.Drawing.Point(0, 0)
+        Me.MenuPanel.Location = New System.Drawing.Point(0, 48)
         Me.MenuPanel.Name = "MenuPanel"
-        Me.MenuPanel.Size = New System.Drawing.Size(1008, 561)
+        Me.MenuPanel.Size = New System.Drawing.Size(1008, 513)
         Me.MenuPanel.TabIndex = 9
         '
         'Label4
@@ -1820,8 +1820,8 @@ Partial Class GetPkgInfoDlg
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.PackageInfoPanel)
-        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.MenuPanel)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
