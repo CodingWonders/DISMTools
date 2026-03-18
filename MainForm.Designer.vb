@@ -886,7 +886,6 @@ Partial Class MainForm
         Me.OptimizeFFU.Name = "OptimizeFFU"
         Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeFFU.Text = "Optimize FFU file..."
-        Me.OptimizeFFU.Visible = False
         '
         'OptimizeImage
         '

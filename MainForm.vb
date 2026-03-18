@@ -16087,4 +16087,9 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image optimization dialog...")
         ImgOptimize.ShowDialog(Me)
     End Sub
+
+    Private Sub OptimizeFFU_Click(sender As Object, e As EventArgs) Handles OptimizeFFU.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        FfuOptimize.ShowDialog(Me)
+    End Sub
 End Class
