@@ -16077,4 +16077,9 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image capture dialog...")
         FfuCapture.ShowDialog(Me)
     End Sub
+
+    Private Sub SplitFFU_Click(sender As Object, e As EventArgs) Handles SplitFFU.Click
+        DynaLog.LogMessage("Opening image split dialog...")
+        FfuSplit.ShowDialog(Me)
+    End Sub
 End Class

@@ -906,7 +906,6 @@ Partial Class MainForm
         Me.SplitFFU.Name = "SplitFFU"
         Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
         Me.SplitFFU.Text = "Splt FFU file into SFU files..."
-        Me.SplitFFU.Visible = False
         '
         'SplitImage
         '

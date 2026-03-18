@@ -325,6 +325,12 @@ Public Class ProgressPanel
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
 
+    ' OperationNum: 19
+    Public SFUSplitSourceFile As String                     ' Source image file to be split into SFU files
+    Public SFUSplitFileSize As Integer                      ' The maximum size in MB for each created image
+    Public SFUSplitTargetFile As String                     ' The path of the SFU files
+    Public SFUSplitCheckIntegrity As Boolean                ' Checks the integrity of the source image before splitting it
+
     ' OperationNum: 20
     Public SWMSplitSourceFile As String                     ' Source image file to be split into SWM files
     Public SWMSplitFileSize As Integer                      ' The maximum size in MB for each created image
@@ -919,6 +925,8 @@ Public Class ProgressPanel
                 MountImage()
             Case 18
                 RemountImage()
+            Case 19
+                SplitFfuImage()
             Case 20
                 SplitImage()
             Case 21
@@ -2455,6 +2463,80 @@ Public Class ProgressPanel
         Else
             LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub SplitFfuImage()
+        DynaLog.LogMessage("Splitting the Windows FFU image...")
+        DynaLog.LogMessage("- Source image file to split: " & Quote & SFUSplitSourceFile & Quote)
+        DynaLog.LogMessage("- Maximum size of split images: " & SFUSplitFileSize & " MB")
+        DynaLog.LogMessage("- Destination of SFU files: " & Quote & SFUSplitTargetFile & Quote)
+        DynaLog.LogMessage("- Check image integrity? " & If(SFUSplitCheckIntegrity, "Yes", "No"))
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Splitting image..."
+                        currentTask.Text = "Splitting FFU file..."
+                    Case "ESN"
+                        allTasks.Text = "Dividiendo imagen..."
+                        currentTask.Text = "Dividiendo archivo FFU..."
+                    Case "FRA"
+                        allTasks.Text = "Division de l'image en cours..."
+                        currentTask.Text = "Division du fichier FFU en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Dividir imagem..."
+                        currentTask.Text = "Dividir ficheiro FFU..."
+                    Case "ITA"
+                        allTasks.Text = "Divisione immagine..."
+                        currentTask.Text = "Divisione file FFU..."
+                End Select
+            Case 1
+                allTasks.Text = "Splitting image..."
+                currentTask.Text = "Splitting FFU file..."
+            Case 2
+                allTasks.Text = "Dividiendo imagen..."
+                currentTask.Text = "Dividiendo archivo FFU..."
+            Case 3
+                allTasks.Text = "Division de l'image en cours..."
+                currentTask.Text = "Division du fichier FFU en cours..."
+            Case 4
+                allTasks.Text = "Dividir imagem..."
+                currentTask.Text = "Dividir ficheiro FFU..."
+            Case 5
+                allTasks.Text = "Divisione immagine..."
+                currentTask.Text = "Divisione file FFU..."
+        End Select
+        LogView.AppendText(CrLf & "Splitting FFU file into SFU files..." & CrLf &
+                           "- Source image file to split: " & Quote & SFUSplitSourceFile & Quote & CrLf &
+                           "- Maximum size of the split images (in MB): " & SFUSplitFileSize & " MB" & CrLf &
+                           "- Name and path of the target SFU file: " & Quote & SFUSplitTargetFile & Quote & CrLf &
+                           "- Check integrity before splitting this image? " & If(SFUSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf &
+                           "Do note that, if the image contains a large file that can't fit within the maximum size, a SFU file may be larger than the rest, to accommodate it." & CrLf)
+        ' Check the DISM version, as the Windows 7 version doesn't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' Not supported
+                    Case Is >= 2
+                        CommandArgs &= " /split-ffu /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
+                End Select
+            Case 10
+                CommandArgs &= " /split-image /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
+        End Select
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
     End Sub
 
     Private Sub SplitImage()
