@@ -2848,7 +2848,7 @@ Public Class MainForm
                     End Try
 
                     ' Use the size of the entire virtual disk as the expanded size of our FFU.
-                    Dim sizeMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Size FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, ImageFile.FFUInfo.MountDiskPath.Replace("\", "\\")))
+                    Dim sizeMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Size FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(ImageFile.FFUInfo.MountDiskPath)))
                     If sizeMO IsNot Nothing Then ImageFile.ImageSize = WMIHelper.GetObjectValue(sizeMO(0), "Size")
 
                     Exit For

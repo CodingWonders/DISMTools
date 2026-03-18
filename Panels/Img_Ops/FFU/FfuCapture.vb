@@ -77,7 +77,7 @@ Public Class FfuCapture
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
         RichTextBox1.Clear()
         Try
-            Dim SelectedDriveMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Description, Manufacturer, Model, PNPDeviceID, Size, Status, Partitions FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, TextBox2.Text.Replace("\", "\\")))
+            Dim SelectedDriveMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Description, Manufacturer, Model, PNPDeviceID, Size, Status, Partitions FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(TextBox2.Text)))
             If SelectedDriveMO IsNot Nothing Then
                 RichTextBox1.Text = String.Format("  - Model: {1}{0}" &
                                                   "  - Manufacturer: {2}{0}" &
