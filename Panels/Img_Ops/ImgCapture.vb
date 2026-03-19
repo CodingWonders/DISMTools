@@ -9,6 +9,20 @@ Public Class ImgCapture
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+
+        If TextBox1.Text = "" OrElse Not Directory.Exists(TextBox1.Text) Then
+            MsgBox("Please provide a source directory or drive to capture.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            Exit Sub
+        End If
+
+        Dim sysprepTag As String = String.Format("{0}\Windows\system32\sysprep\sysprep_succeeded.tag", TextBox1.Text)
+        If Not File.Exists(sysprepTag) Then
+            If MsgBox(String.Format("The source directory or drive that you are capturing has not been previously prepared by Sysprep. " &
+                                    "It is recommended that you run it on that installation before proceeding with the capture task.{0}{0}" &
+                                    "Do you want to continue?", Environment.NewLine),
+                                vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then Exit Sub
+        End If
+
         ProgressPanel.CaptureSourceDir = TextBox1.Text
         ProgressPanel.CaptureDestinationImage = TextBox2.Text
         ProgressPanel.CaptureName = TextBox3.Text
