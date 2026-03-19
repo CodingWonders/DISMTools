@@ -17,7 +17,7 @@ Public Class ImgCapture
 
         Dim sysprepTag As String = String.Format("{0}\Windows\system32\sysprep\sysprep_succeeded.tag", TextBox1.Text)
         If Not File.Exists(sysprepTag) Then
-            If MsgBox(String.Format("The source directory or drive that you are capturing has not been previously prepared by Sysprep. " &
+            If MsgBox(String.Format("The source directory or drive that you are capturing may not have been previously prepared by Sysprep. " &
                                     "It is recommended that you run it on that installation before proceeding with the capture task.{0}{0}" &
                                     "Do you want to continue?", Environment.NewLine),
                                 vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then Exit Sub

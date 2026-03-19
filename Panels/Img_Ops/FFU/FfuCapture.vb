@@ -15,6 +15,13 @@ Public Class FfuCapture
             Exit Sub
         End If
 
+        If Not IsAnyPartitionSysprepped(TextBox2.Text) Then
+            If MsgBox(String.Format("The source drive that you are capturing may not have been previously prepared by Sysprep. " &
+                                    "It is recommended that you run it on that installation before proceeding with the capture task.{0}{0}" &
+                                    "Do you want to continue?", Environment.NewLine),
+                                vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then Exit Sub
+        End If
+
         If TextBox1.Text = "" Then
             MsgBox("Please provide a destination path for the FFU file.", vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -37,6 +44,32 @@ Public Class FfuCapture
         ProgressPanel.ShowDialog(MainForm)
         Me.Close()
     End Sub
+
+    Private Function IsAnyPartitionSysprepped(PhysicalDriveId As String) As Boolean
+        Dim syspreppedVolumes As New List(Of String)
+
+        Try
+            ' Win32_DiskDrive -- ASSOCIATORS --> Win32_DiskPartition -- ASSOCIATORS --> Win32_LogicalDisk --> Then we check
+            Dim rootDiskAssociationMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("ASSOCIATORS OF {{Win32_DiskDrive.DeviceID={0}{1}{0}}} WHERE RESULTCLASS = Win32_DiskPartition", Quote, WMIHelper.GetEscapedValue(PhysicalDriveId)))
+            If rootDiskAssociationMO IsNot Nothing AndAlso rootDiskAssociationMO.Count > 0 Then
+                For Each diskPartitionMO As ManagementObject In rootDiskAssociationMO
+                    Dim logicalVolumeAssociationMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("ASSOCIATORS OF {{Win32_DiskPartition.DeviceID={0}{1}{0}}} WHERE RESULTCLASS = Win32_LogicalDisk", Quote, WMIHelper.GetObjectValue(diskPartitionMO, "DeviceID")))
+
+                    If logicalVolumeAssociationMO IsNot Nothing AndAlso logicalVolumeAssociationMO.Count > 0 Then
+                        ' Typically the second ASSOCIATORS OF query returns 1 object.
+                        Dim volLetter As String = WMIHelper.GetObjectValue(logicalVolumeAssociationMO(0), "DeviceID")
+
+                        Dim sysprepTag As String = String.Format("{0}\Windows\system32\sysprep\sysprep_succeeded.tag", volLetter)
+                        If File.Exists(sysprepTag) Then syspreppedVolumes.Add(volLetter)
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+
+        End Try
+
+        Return syspreppedVolumes.Any()
+    End Function
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
