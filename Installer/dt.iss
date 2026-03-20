@@ -95,7 +95,7 @@ Name: "pt"; MessagesFile: ".\Languages\Portuguese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "autoreload"; Description: "Install automatic image reload service"; GroupDescription: "Services"; Flags: unchecked
+Name: "autoreload"; Description: "Install automatic image reload service"; GroupDescription: "Services"
 
 [Files]
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
