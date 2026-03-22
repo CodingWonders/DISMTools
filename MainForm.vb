@@ -16092,4 +16092,8 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image optimization dialog...")
         FfuOptimize.ShowDialog(Me)
     End Sub
+
+    Private Sub CopyImageToWdsServerTSMI_Click(sender As Object, e As EventArgs) Handles CopyImageToWdsServerTSMI.Click
+        WDSInstallImageCopy.Show()
+    End Sub
 End Class

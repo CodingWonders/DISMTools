@@ -7,7 +7,7 @@ Public Class PopupMountedImagePicker
     Private Shared mountedImages As New List(Of WindowsImage)
     Private Shared focusedIndex As Integer
 
-    Public Shared Function PickImage() As WindowsImage
+    Public Shared Function PickImage(ParamArray requiredExtensions() As String) As WindowsImage
         Dim pmipForm As Form = New Form With {
             .Size = WindowHelper.ScaleSizeLogical(800, 376),
             .FormBorderStyle = FormBorderStyle.None,
@@ -108,6 +108,8 @@ Public Class PopupMountedImagePicker
                                                                                                                pmipOkButton.Enabled = False
                                                                                                                pmipMountedImageList.Items.Clear()
                                                                                                                If mountedImages IsNot Nothing Then
+                                                                                                                   If requiredExtensions.Any() Then mountedImages = mountedImages.Where(Function(image) requiredExtensions.Contains(Path.GetExtension(image.ImageFile))).ToList()
+
                                                                                                                    pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFile,
                                                                                                                                                                                                                                   mountedImage.ImageIndex,
                                                                                                                                                                                                                                   mountedImage.ImageMountDirectory})).ToArray())
@@ -122,6 +124,8 @@ Public Class PopupMountedImagePicker
                                                                     pmipOkButton.Enabled = False
                                                                     pmipMountedImageList.Items.Clear()
                                                                     If mountedImages IsNot Nothing Then
+                                                                        If requiredExtensions.Any() Then mountedImages = mountedImages.Where(Function(image) requiredExtensions.Contains(Path.GetExtension(image.ImageFile))).ToList()
+
                                                                         pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFile,
                                                                                                                                                                                        mountedImage.ImageIndex,
                                                                                                                                                                                        mountedImage.ImageMountDirectory})).ToArray())
@@ -227,6 +231,8 @@ Public Class PopupMountedImagePicker
         ' Initial population and show the dialog
         GetMountedImages()
         If mountedImages IsNot Nothing Then
+            If requiredExtensions.Any() Then mountedImages = mountedImages.Where(Function(image) requiredExtensions.Contains(Path.GetExtension(image.ImageFile))).ToList()
+
             pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFile,
                                                                                                                            mountedImage.ImageIndex,
                                                                                                                            mountedImage.ImageMountDirectory})).ToArray())

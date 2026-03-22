@@ -191,6 +191,7 @@ Partial Class MainForm
         Me.StartFogHelperTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator46 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnixFogInstructionTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CopyImageToWdsServerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
         Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
@@ -1599,7 +1600,7 @@ Partial Class MainForm
         '
         'PxeHelperServersTSMI
         '
-        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI})
+        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI, Me.CopyImageToWdsServerTSMI})
         Me.PxeHelperServersTSMI.Name = "PxeHelperServersTSMI"
         Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(373, 22)
         Me.PxeHelperServersTSMI.Text = "Start PXE Helper Server for..."
@@ -1626,6 +1627,12 @@ Partial Class MainForm
         Me.UnixFogInstructionTSMI.Name = "UnixFogInstructionTSMI"
         Me.UnixFogInstructionTSMI.Size = New System.Drawing.Size(377, 22)
         Me.UnixFogInstructionTSMI.Text = "Show instructions for FOG Helper Server on UNIX systems"
+        '
+        'CopyImageToWdsServerTSMI
+        '
+        Me.CopyImageToWdsServerTSMI.Name = "CopyImageToWdsServerTSMI"
+        Me.CopyImageToWdsServerTSMI.Size = New System.Drawing.Size(377, 22)
+        Me.CopyImageToWdsServerTSMI.Text = "Copy my Windows image to a WDS server..."
         '
         'ToolStripSeparator41
         '
@@ -5192,4 +5199,5 @@ Partial Class MainForm
     Friend WithEvents BWFailLabel As System.Windows.Forms.Label
     Friend WithEvents EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator47 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyImageToWdsServerTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class
