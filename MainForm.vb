@@ -2588,7 +2588,17 @@ Public Class MainForm
         End If
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
-            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            ' Revision number may not be the one that we're actually on when getting info about ntoskrnl; use UBR if we can
+            Dim revisionNumber As Integer
+            Try
+                Dim ubrRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+                revisionNumber = ubrRk.GetValue("UBR")
+                ubrRk.Close()
+            Catch ex As Exception
+                revisionNumber = FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            End Try
+
+            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber
             CurrentImage.ImageVersion = Environment.OSVersion.Version
             Select Case Language
                 Case 0
