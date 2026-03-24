@@ -16106,4 +16106,21 @@ Public Class MainForm
     Private Sub CopyImageToWdsServerTSMI_Click(sender As Object, e As EventArgs) Handles CopyImageToWdsServerTSMI.Click
         WDSInstallImageCopy.Show()
     End Sub
+
+    Private Sub AuditModeTSMI_Click(sender As Object, e As EventArgs) Handles AuditModeTSMI.Click
+        ' Create a new answer file with default options for entering audit mode, then copy that file to the system
+        Dim auditFile As String = Path.Combine(Path.GetTempPath(), "sysprep_audit_unatt.xml")
+
+        Try
+            File.WriteAllText(auditFile, My.Resources.DefaultUnattended_AuditMode, UTF8)
+            If File.Exists(auditFile) Then
+                If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                ProgressPanel.UnattendedFile = auditFile
+                ProgressPanel.OperationNum = 79
+                ProgressPanel.ShowDialog(Me)
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class

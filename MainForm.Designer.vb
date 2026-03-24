@@ -149,6 +149,8 @@ Partial Class MainForm
         Me.UnattendedAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyUnattend = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoveAppliedAnswerFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator48 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AuditModeTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsPEServicingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetPESettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetScratchSpace = New System.Windows.Forms.ToolStripMenuItem()
@@ -1356,7 +1358,7 @@ Partial Class MainForm
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem})
+        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem, Me.ToolStripSeparator48, Me.AuditModeTSMI})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
@@ -1372,6 +1374,17 @@ Partial Class MainForm
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Name = "RemoveAppliedAnswerFileToolStripMenuItem"
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = "Remove applied answer file"
+        '
+        'ToolStripSeparator48
+        '
+        Me.ToolStripSeparator48.Name = "ToolStripSeparator48"
+        Me.ToolStripSeparator48.Size = New System.Drawing.Size(234, 6)
+        '
+        'AuditModeTSMI
+        '
+        Me.AuditModeTSMI.Name = "AuditModeTSMI"
+        Me.AuditModeTSMI.Size = New System.Drawing.Size(237, 22)
+        Me.AuditModeTSMI.Text = "Make system enter audit mode"
         '
         'WindowsPEServicingToolStripMenuItem
         '
@@ -5200,4 +5213,6 @@ Partial Class MainForm
     Friend WithEvents EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator47 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CopyImageToWdsServerTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator48 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AuditModeTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class

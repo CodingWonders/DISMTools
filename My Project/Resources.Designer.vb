@@ -606,6 +606,23 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca una cadena traducida similar a &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        '''&lt;unattend xmlns=&quot;urn:schemas-microsoft-com:unattend&quot;&gt;
+        '''    &lt;settings pass=&quot;oobeSystem&quot;&gt;
+        '''        &lt;component name=&quot;Microsoft-Windows-Deployment&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        '''            &lt;Reseal&gt;
+        '''                &lt;Mode&gt;Audit&lt;/Mode&gt;
+        '''            &lt;/Reseal&gt;
+        '''        &lt;/component&gt;
+        '''   [resto de la cadena truncado]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property DefaultUnattended_AuditMode() As String
+            Get
+                Return ResourceManager.GetString("DefaultUnattended_AuditMode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
