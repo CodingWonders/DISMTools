@@ -43,6 +43,7 @@ Public Class ApplyUnattendFile
             Exit Sub
         End If
         ProgressPanel.OperationNum = 79
+        ProgressPanel.UnattendedCopyToSysprep = True
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Visible = False
         ProgressPanel.ShowDialog(MainForm)

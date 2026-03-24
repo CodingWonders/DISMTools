@@ -521,6 +521,7 @@ Public Class ProgressPanel
 
     ' OperationNum: 79
     Public UnattendedFile As String                         ' The path of the unattended answer file
+    Public UnattendedCopyToSysprep As Boolean               ' Determines whether to copy the unattended answer file to Sysprep
 
     ' OperationNum: 83
     Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
@@ -6439,11 +6440,13 @@ Public Class ProgressPanel
                 Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
             End If
             File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"), True)
-            DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
-            If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
-                Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+            If UnattendedCopyToSysprep Then
+                DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             End If
-            File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
             GetErrorCode(True)
         Catch ex As Exception

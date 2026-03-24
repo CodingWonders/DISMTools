@@ -15880,9 +15880,9 @@ Public Class MainForm
             If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
             DynaLog.LogMessage("Removing existing answer files...")
             DynaLog.LogMessage("Removing answer file from Panther directory...")
-            File.Delete(pantherXml)
+            If File.Exists(pantherXml) Then File.Delete(pantherXml)
             DynaLog.LogMessage("Removing answer file from Sysprep directory...")
-            File.Delete(sysprepXml)
+            If File.Exists(sysprepXml) Then File.Delete(sysprepXml)
             If nonExistentFiles >= 2 Then
                 Throw New Exception("No answer files have been detected in the mounted image.")
             End If
@@ -16116,6 +16116,10 @@ Public Class MainForm
             If File.Exists(auditFile) Then
                 If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                 ProgressPanel.UnattendedFile = auditFile
+                ' Just copying our custom answer file to the sysprep folder of the target system seems to make it enter an infinite loop
+                ' where it can generalize, but won't go back to OOBE; so it keeps entering audit mode. This time do NOT copy the file to
+                ' sysprep.
+                ProgressPanel.UnattendedCopyToSysprep = False
                 ProgressPanel.OperationNum = 79
                 ProgressPanel.ShowDialog(Me)
             End If
