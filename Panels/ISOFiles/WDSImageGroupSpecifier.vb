@@ -18,12 +18,12 @@ Public Class WDSImageGroupSpecifier
 
     Private Sub GetWdsGroups()
         Try
-            Dim PSExtAppxGetterOutput As String = GetGroupGetterOutput()
+            Dim PSWdsGroupGetterOutput As String = GetGroupGetterOutput()
 
-            If PSExtAppxGetterOutput <> "" Then
+            If PSWdsGroupGetterOutput <> "" Then
                 Dim deserializer As New XmlSerializer(GetType(PSInterop.PsObjects))
                 Dim objectsCollection As New PSInterop.PsObjects()
-                Using reader As New StringReader(PSExtAppxGetterOutput)
+                Using reader As New StringReader(PSWdsGroupGetterOutput)
                     objectsCollection = CType(deserializer.Deserialize(reader), PSInterop.PsObjects)
                 End Using
                 If objectsCollection.Items.Count > 0 Then
@@ -66,6 +66,16 @@ Public Class WDSImageGroupSpecifier
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ComboBox1.Items.Clear()
+        GetWdsGroups()
+        Try
+            ComboBox1.SelectedIndex = 0
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Refresh_Button_Click(sender As Object, e As EventArgs) Handles Refresh_Button.Click
         ComboBox1.Items.Clear()
         GetWdsGroups()
         Try

@@ -27,6 +27,7 @@ Partial Class WDSImageGroupSpecifier
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Refresh_Button = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,6 +86,16 @@ Partial Class WDSImageGroupSpecifier
         Me.ComboBox1.Size = New System.Drawing.Size(442, 21)
         Me.ComboBox1.TabIndex = 2
         '
+        'Refresh_Button
+        '
+        Me.Refresh_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Refresh_Button.Location = New System.Drawing.Point(12, 63)
+        Me.Refresh_Button.Name = "Refresh_Button"
+        Me.Refresh_Button.Size = New System.Drawing.Size(75, 23)
+        Me.Refresh_Button.TabIndex = 3
+        Me.Refresh_Button.Text = "Refresh"
+        Me.Refresh_Button.UseVisualStyleBackColor = True
+        '
         'WDSImageGroupSpecifier
         '
         Me.AcceptButton = Me.OK_Button
@@ -92,6 +103,7 @@ Partial Class WDSImageGroupSpecifier
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(466, 101)
+        Me.Controls.Add(Me.Refresh_Button)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -113,5 +125,6 @@ Partial Class WDSImageGroupSpecifier
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents Refresh_Button As System.Windows.Forms.Button
 
 End Class
