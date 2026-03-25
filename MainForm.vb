@@ -217,6 +217,8 @@ Public Class MainForm
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
 
+    Public ReinitializeCurImage As Boolean = True
+
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -2736,7 +2738,10 @@ Public Class MainForm
             DynaLog.LogMessage("- Image version: " & Label48.Text)
         Else
             Try
-                CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                If ReinitializeCurImage Then
+                    CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                End If
+                ReinitializeCurImage = True
                 If CurrentImage IsNot Nothing Then
                     Label41.Text = CurrentImage.ImageIndex
                     Label44.Text = CurrentImage.ImageMountDirectory

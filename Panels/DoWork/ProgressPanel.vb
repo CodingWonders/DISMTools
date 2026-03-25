@@ -7441,11 +7441,13 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 27 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
