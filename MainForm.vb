@@ -3815,6 +3815,11 @@ Public Class MainForm
                 .RedirectStandardOutput = True
             }
         }
+            Try
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            Catch ex As Exception
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = Nothing
+            End Try
             PSExtAppxProc.Start()
             output = PSExtAppxProc.StandardOutput.ReadToEnd()
             PSExtAppxProc.WaitForExit()

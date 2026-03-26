@@ -51,6 +51,12 @@ Public Class WDSImageGroupSpecifier
                 .RedirectStandardOutput = True
             }
         }
+            Try
+                ' Set the stdout encoding
+                PSWdsGroupProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            Catch ex As Exception
+                PSWdsGroupProc.StartInfo.StandardOutputEncoding = Nothing
+            End Try
             PSWdsGroupProc.Start()
             output = PSWdsGroupProc.StandardOutput.ReadToEnd()
             PSWdsGroupProc.WaitForExit()
