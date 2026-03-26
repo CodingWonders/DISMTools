@@ -1408,6 +1408,9 @@
     <None Include="Helpers\extps1\mImgMgr.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\online_appx_removal.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\boot_image_to_wds.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
