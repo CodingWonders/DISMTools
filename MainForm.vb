@@ -628,7 +628,13 @@ Public Class MainForm
             DynaLog.LogMessage("AME 10/11 has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
         End If
 
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
