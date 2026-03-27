@@ -457,6 +457,8 @@ Partial Class ServiceManagementForm
         '
         'Panel4
         '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel4.Controls.Add(Me.TextBox8)
         Me.Panel4.Location = New System.Drawing.Point(258, 14)
         Me.Panel4.Name = "Panel4"

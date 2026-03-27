@@ -30,8 +30,10 @@ Public Class MainForm
                 LinkLabel3.Text = "Start a PXE Helper Server for Network Installation"
                 LinkLabel4.Text = "Prepare System for Image Capture"
                 LinkLabel5.Text = "Back"
+                LinkLabel6.Text = "Explore contents of this disc"
                 LinkLabel7.Text = "Start PXE Helper Server for FOG"
                 LinkLabel8.Text = "Start PXE Helper Server for Windows Deployment Services"
+                LinkLabel9.Text = "Copy boot image to WDS server"
                 ExitLink.Text = "Exit"
             Case "ESN"
                 RestartMessage = "Esto reiniciará su equipo. Asegúrese de haber configurado el equipo para iniciar este medio de instalación. ¿Desea reiniciar?"
@@ -43,8 +45,10 @@ Public Class MainForm
                 LinkLabel3.Text = "Iniciar un servidor de PXE Helpers para instalación en red"
                 LinkLabel4.Text = "Preparar el sistema para captura de imágenes"
                 LinkLabel5.Text = "Atrás"
+                LinkLabel6.Text = "Explorar los contenidos de este disco"
                 LinkLabel7.Text = "Iniciar el servidor de PXE Helpers para FOG"
                 LinkLabel8.Text = "Iniciar el servidor de PXE Helpers para WDS"
+                LinkLabel9.Text = "Copiar imagen de arranque al servidor WDS"
                 ExitLink.Text = "Salir"
             Case "FRA"
                 RestartMessage = "Votre ordinateur va redémarrer. Assurez-vous qu’il est configuré pour démarrer sur le média d’installation. Voulez-vous redémarrer ?"
@@ -56,8 +60,10 @@ Public Class MainForm
                 LinkLabel3.Text = "Démarrer un serveur PXE Helper pour l’installation réseau"
                 LinkLabel4.Text = "Préparer le système pour la capture d’image"
                 LinkLabel5.Text = "Retour"
+                LinkLabel6.Text = "Explorer le contenu de ce disque"
                 LinkLabel7.Text = "Démarrer un serveur PXE Helper pour FOG"
                 LinkLabel8.Text = "Démarrer un serveur PXE Helper pour WDS"
+                LinkLabel9.Text = "Copier l'image de démarrage sur le serveur WDS"
                 ExitLink.Text = "Sortie"
             Case "PTB", "PTG"
                 RestartMessage = "O computador será reiniciado. Certifique-se de que está configurado para iniciar pelo meio de instalação. Deseja reiniciar?"
@@ -69,8 +75,10 @@ Public Class MainForm
                 LinkLabel3.Text = "Iniciar servidor PXE Helper para instalação em rede"
                 LinkLabel4.Text = "Preparar sistema para captura de imagem"
                 LinkLabel5.Text = "Voltar"
+                LinkLabel6.Text = "Explore o conteúdo deste disco"
                 LinkLabel7.Text = "Iniciar servidor PXE Helper para FOG"
                 LinkLabel8.Text = "Iniciar servidor PXE Helper para WDS"
+                LinkLabel9.Text = "Copiar imagem de arranque para o servidor WDS"
                 ExitLink.Text = "Sair"
             Case "ITA"
                 RestartMessage = "Il computer verrà riavviato. Assicurati che sia configurato per avviarsi dal supporto di installazione. Vuoi riavviare?"
@@ -82,8 +90,10 @@ Public Class MainForm
                 LinkLabel3.Text = "Avvia server PXE Helper per installazione di rete"
                 LinkLabel4.Text = "Prepara sistema per acquisizione immagine"
                 LinkLabel5.Text = "Indietro"
+                LinkLabel6.Text = "Esplora i contenuti di questo disco"
                 LinkLabel7.Text = "Avvia server PXE Helper per FOG"
                 LinkLabel8.Text = "Avvia server PXE Helper per WDS"
+                LinkLabel9.Text = "Copia l'immagine di avvio sul server WDS"
                 ExitLink.Text = "Esci"
         End Select
     End Sub
@@ -92,11 +102,11 @@ Public Class MainForm
         Close()
     End Sub
 
-    Private Sub ArrowPic_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseEnter, PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox5.MouseEnter, PictureBox9.MouseEnter, PictureBox8.MouseEnter
+    Private Sub ArrowPic_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseEnter, PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox5.MouseEnter, PictureBox9.MouseEnter, PictureBox8.MouseEnter, PictureBox7.MouseEnter, PictureBox10.MouseEnter
         CType(sender, PictureBox).Image = My.Resources.arrow_hovered
     End Sub
 
-    Private Sub ArrowPic_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox4.MouseLeave, PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox5.MouseLeave, PictureBox9.MouseLeave, PictureBox8.MouseLeave
+    Private Sub ArrowPic_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox4.MouseLeave, PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox5.MouseLeave, PictureBox9.MouseLeave, PictureBox8.MouseLeave, PictureBox7.MouseLeave, PictureBox10.MouseLeave
         CType(sender, PictureBox).Image = My.Resources.arrow_normal
     End Sub
 
@@ -118,9 +128,9 @@ Public Class MainForm
         CType(sender, PictureBox).Image = My.Resources.arrow_normal_left
     End Sub
 
-    Sub RunProcess(FilePath As String, Optional Arguments As String = "", Optional RunAsAdmin As Boolean = False)
+    Sub RunProcess(FilePath As String, Optional Arguments As String = "", Optional WorkingDirectory As String = "", Optional RunAsAdmin As Boolean = False)
         Visible = False
-        Dim exitCode As Integer = ProcessHelper.RunProcess(FilePath, Arguments, RunAsAdmin)
+        Dim exitCode As Integer = ProcessHelper.RunProcess(FilePath, Arguments, WorkingDirectory, RunAsAdmin)
         Visible = True
         If exitCode <> 0 Then
             MsgBox(String.Format(ProcessExitCodeMessage, Hex(exitCode), New Win32Exception(exitCode).Message),
@@ -160,5 +170,14 @@ Public Class MainForm
         If AutoCapture Then args &= " /dt_capture"
 
         RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), args, True)
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe"), Application.StartupPath)
+    End Sub
+
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
+                   "/c " & Quote & Path.Combine(Application.StartupPath, "boot_image_to_wds.bat") & Quote, Application.StartupPath, True)
     End Sub
 End Class

@@ -442,7 +442,7 @@ Public Class MainForm
     ''' <param name="Destination">The destination folder to copy files to</param>
     ''' <param name="ExcludedFile">The file to exclude from the copy process</param>
     ''' <remarks></remarks>
-    Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFile As String = "")
+    Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFile As String = "", Optional ReportProgress As Boolean = True)
         DynaLog.LogMessage("Preparing to copy files and directories...")
         DynaLog.LogMessage("- Source Directory: " & Source)
         DynaLog.LogMessage("- Destination Directory: " & Destination)
@@ -470,7 +470,7 @@ Public Class MainForm
             DynaLog.LogMessage("Copying files to each directory...")
             For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
                 ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), CopiedFiles, FileCount)
-                InstallerBW.ReportProgress(5)
+                If ReportProgress Then InstallerBW.ReportProgress(5)
                 If Path.GetFileName(FileToCopy) = ExcludedFile Then
                     CopiedFiles += 1
                     Continue For
@@ -585,6 +585,54 @@ Public Class MainForm
             End If
         Catch ex As Exception
             Throw
+        End Try
+    End Sub
+
+    Private Function GetSystemDrivers() As DismDriverPackageCollection
+        Dim drivers As DismDriverPackageCollection = Nothing
+        Try
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Using session As DismSession = DismApi.OpenOnlineSession()
+                drivers = DismApi.GetDrivers(session, False)
+            End Using
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get system third-party drivers. Error message: " & ex.Message)
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
+        End Try
+
+        Return drivers
+    End Function
+
+    Private Sub AddScsiAdapters()
+        Dim scsiExportTempPath As String = String.Format("{0}\$DISMTOOLS.~WS\CWS_HI_SCSI", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+        Try
+            Dim scsiAdapterPaths As String() = Directory.GetFiles(scsiExportTempPath, "*.inf", SearchOption.AllDirectories)
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Using session As DismSession = DismApi.OpenOfflineSession(String.Format("{0}\$DISMTOOLS.~WS", Environment.GetEnvironmentVariable("SYSTEMDRIVE")))
+                For Each scsiAdapterPath In scsiAdapterPaths
+                    DynaLog.LogMessage("Installing SCSI adapter/Storage controller driver " & Path.GetFileName(scsiAdapterPath) & " ...")
+                    Try
+                        DismApi.AddDriver(session, scsiAdapterPath, True)
+                        DynaLog.LogMessage("Driver " & Path.GetFileName(scsiAdapterPath) & " was added successfully.")
+                    Catch ex As Exception
+                        DynaLog.LogMessage("Could not add driver " & Path.GetFileName(scsiAdapterPath) & ".")
+                    End Try
+                Next
+            End Using
+            File.WriteAllText(String.Format("{0}\$DISMTOOLS.~WS\driver_supplements_added", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), String.Empty)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not prepare SCSI driver import. Error message: " & ex.Message)
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 
@@ -735,6 +783,26 @@ Public Class MainForm
             If File.Exists(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "DscReport.txt")) Then
                 File.Move(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "DscReport.txt"),
                           Path.Combine(HotInstallInfoPath, "DscReport.txt"))
+            End If
+            DynaLog.LogMessage("Exporting SCSI adapters...")
+            Dim systemDrivers As DismDriverPackageCollection = GetSystemDrivers()
+            If systemDrivers IsNot Nothing Then
+                Dim scsiExportTempPath As String = String.Format("{0}\$DISMTOOLS.~WS\CWS_HI_SCSI", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+                If Not Directory.Exists(scsiExportTempPath) Then
+                    Directory.CreateDirectory(scsiExportTempPath)
+                End If
+                ' Export all the SCSI adapters and storage controllers to add them to DTPE
+                Dim scsiAdapters As IEnumerable(Of DismDriverPackage) = systemDrivers.Where(Function(driver) driver.ClassName.Equals("ScsiAdapter", StringComparison.OrdinalIgnoreCase))
+                If scsiAdapters IsNot Nothing Then
+                    For Each scsiAdapter In scsiAdapters
+                        ' Extract the name from the original path
+                        Dim drvName As String = Path.GetFileName(scsiAdapter.OriginalFileName)
+                        Dim destinationAdapterPath As String = Path.Combine(scsiExportTempPath, drvName)
+                        DynaLog.LogMessage("Exporting driver " & drvName & " ...")
+                        CopyFiles(Path.GetDirectoryName(scsiAdapter.OriginalFileName), destinationAdapterPath, ReportProgress:=False)
+                    Next
+                    AddScsiAdapters()
+                End If
             End If
         Catch ex As Exception
             Throw ex

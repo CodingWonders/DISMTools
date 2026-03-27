@@ -7,6 +7,7 @@ Public Class WimScriptEditor
 
     Public ConfigListFile As String
     Dim EditedLVI As String
+    Dim scaled As Boolean
 
     Private Sub WimScriptEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -270,7 +271,10 @@ Public Class WimScriptEditor
         For Each fntFamily As FontFamily In FontFamily.Families
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
-        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+        If Not scaled Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+            scaled = True
+        End If
         InitScintilla("Consolas", 11)
         FontFamilyTSCB.SelectedItem = "Consolas"
     End Sub

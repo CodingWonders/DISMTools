@@ -2181,15 +2181,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''-- Bugfixes
-        '''
-        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
-        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
-        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
-        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
-        '''- Fixed issues with recursive driver addition on Windo [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.7.3_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

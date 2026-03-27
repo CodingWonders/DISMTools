@@ -6980,11 +6980,13 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 27 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
@@ -7539,7 +7541,13 @@ Public Class ProgressPanel
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         ' Detect settings
         DynaLog.LogMessage("Configuring settings...")
         OnlineMgmt = MainForm.OnlineManagement

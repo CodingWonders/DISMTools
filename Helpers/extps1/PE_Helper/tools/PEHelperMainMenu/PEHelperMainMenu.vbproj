@@ -147,7 +147,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(ProjectDir)Tests\*.*" . /cehyi</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(ProjectDir)Tests\*.*" . /cehyi
+COPY /Y autorun.exe "$(ProjectDir)out"
+COPY /Y autorun.exe.config "$(ProjectDir)out"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
