@@ -84,7 +84,7 @@
       <HintPath>packages\Markdig.1.1.2\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.4.0.7\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.5.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
