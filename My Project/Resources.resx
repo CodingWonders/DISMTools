@@ -983,32 +983,22 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where removed features would appear in the wrong place
-- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
+- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
+- Fixed some HiDPI issues
+- Fixed an issue where, when managing the active installation, the version's revision number would sometimes not coincide with the actual revision number
+- Fixed an issue where information about a Windows image would be cleared after adding or removing packages
+- Fixed an issue where the program would throw an exception if it couldn't create the logs directory (#344, thanks @Low351)
 
 New features:
 
-- The Sysprep Preparation Tool has seen support for "CopyProfile"
-- Guards have been added to prevent running the PE Helper on a PXE environment, and to warn when running the PXE Helpers on a non-PXE environment
-- The autorun menu now has options to browse disc contents and copy the boot image to a WDS server
-- The DISMTools Preinstallation Environment can now be configured via policies
-- You can now view images and groups in a WDS server graphically
-- When launching the Driver Installation Module, the Preinstallation Environment can now tell you the hardware IDs of unknown devices
-- HotInstall can now export SCSI adapters to install them in the DTPE image
-- You can now specify scripts written in VBScript and JScript
-- The "Enable Batch script file locks" starter script has been added
-- The "Remove MAX_PATH length limit" starter script has been introduced
-- The "Show and Hide System Desktop icons" starter script has been introduced
-- The Starter Script Editor has seen several improvements
-- Service information can now be saved to a report, whether you manage a Windows image or an installation
-- Services can now be removed
-- The image information saver is now run asynchronously
-- When information about a package file can't be obtained, DISMTools will now continue processing the rest of the queue
-- Filter assistants have been added to the feature, capability, and driver information dialogs to allow you to build queries more easily
-- A new automatic image reload service is now included, to let you have all your images reloaded on system startup
-- You can now export drivers by class name
-- Markdig has been updated to version 1.1.1
-- Scintilla.NET has been updated to version 6.1.2</value>
+- If a non-sysprepped volume is selected in the image capture script, it will now warn you
+- A new task has been added to copy installation images to a Windows Deployment Services (WDS) server
+- Organizational units and users in OUs are now sorted alphabetically in the ADDS domain join wizard
+- The ADDS domain join wizard will now let you continue if you had selected an account that does not require a password
+- A task has been added to copy a pre-configured answer file to an image so that it boots to Audit mode automatically
+- Image capture tasks will now warn you when source installations have not been prepared with Sysprep
+- A new task has been added to optimize Windows images
+- Support for Full Flash Utility (FFU) has been introduced. Variations of the image application, capture, split, and optimization have been introduced with FFU support</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

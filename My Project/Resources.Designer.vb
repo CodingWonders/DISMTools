@@ -2220,14 +2220,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where removed features would appear in the wrong place
-        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
-        '''
-        '''New features:
-        '''
-        '''- The Sysprep Preparation Tool has seen support for &quot;CopyProfile&quot;
-        '''- Guards have been added to prevent running the PE Helper on a PXE environment, and to warn when running the PXE Helpers on a non-PXE environment
-        '''- The autorun menu now has options to browse disc co [resto de la cadena truncado]&quot;;.
+        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
+        '''- Fixed some HiDPI issues
+        '''- Fixed an issue where, when managing the active installation, the version&apos;s revision number would sometimes not coincide with the actual revision number
+        '''- Fixed an issue where information about a Windows image would be cleared after adding or removing packages
+        '''- Fixed an issue where the program would throw an exception  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
