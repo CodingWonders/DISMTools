@@ -473,6 +473,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property copy_img_to_wds() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("copy_img_to_wds", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property copytoclip() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("copytoclip", resourceCulture)
@@ -592,6 +602,23 @@ Namespace My.Resources
         Friend ReadOnly Property DefaultPostInstallScriptCode() As String
             Get
                 Return ResourceManager.GetString("DefaultPostInstallScriptCode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca una cadena traducida similar a &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        '''&lt;unattend xmlns=&quot;urn:schemas-microsoft-com:unattend&quot;&gt;
+        '''    &lt;settings pass=&quot;oobeSystem&quot;&gt;
+        '''        &lt;component name=&quot;Microsoft-Windows-Deployment&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        '''            &lt;Reseal&gt;
+        '''                &lt;Mode&gt;Audit&lt;/Mode&gt;
+        '''            &lt;/Reseal&gt;
+        '''        &lt;/component&gt;
+        '''   [resto de la cadena truncado]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property DefaultUnattended_AuditMode() As String
+            Get
+                Return ResourceManager.GetString("DefaultUnattended_AuditMode", resourceCulture)
             End Get
         End Property
         
@@ -1433,6 +1460,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property optimize_img() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("optimize_img", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property options_bgprocs_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("options_bgprocs_dark", resourceCulture)
@@ -2183,14 +2220,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where removed features would appear in the wrong place
-        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
-        '''
-        '''New features:
-        '''
-        '''- The Sysprep Preparation Tool has seen support for &quot;CopyProfile&quot;
-        '''- Guards have been added to prevent running the PE Helper on a PXE environment, and to warn when running the PXE Helpers on a non-PXE environment
-        '''- The autorun menu now has options to browse disc co [resto de la cadena truncado]&quot;;.
+        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
+        '''- Fixed some HiDPI issues
+        '''- Fixed an issue where, when managing the active installation, the version&apos;s revision number would sometimes not coincide with the actual revision number
+        '''- Fixed an issue where information about a Windows image would be cleared after adding or removing packages
+        '''- Fixed an issue where the program would throw an exception  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

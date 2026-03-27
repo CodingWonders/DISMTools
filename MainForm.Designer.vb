@@ -149,6 +149,8 @@ Partial Class MainForm
         Me.UnattendedAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyUnattend = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoveAppliedAnswerFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator48 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AuditModeTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsPEServicingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetPESettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetScratchSpace = New System.Windows.Forms.ToolStripMenuItem()
@@ -191,7 +193,10 @@ Partial Class MainForm
         Me.StartFogHelperTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator46 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnixFogInstructionTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CopyImageToWdsServerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
@@ -498,8 +503,6 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -806,7 +809,6 @@ Partial Class MainForm
         Me.ApplyFFU.Name = "ApplyFFU"
         Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
         Me.ApplyFFU.Text = "Apply FFU or SFU file..."
-        Me.ApplyFFU.Visible = False
         '
         'ApplyImage
         '
@@ -826,7 +828,6 @@ Partial Class MainForm
         Me.CaptureFFU.Name = "CaptureFFU"
         Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
         Me.CaptureFFU.Text = "Capture partitions to FFU file..."
-        Me.CaptureFFU.Visible = False
         '
         'CaptureImage
         '
@@ -888,14 +889,12 @@ Partial Class MainForm
         Me.OptimizeFFU.Name = "OptimizeFFU"
         Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeFFU.Text = "Optimize FFU file..."
-        Me.OptimizeFFU.Visible = False
         '
         'OptimizeImage
         '
         Me.OptimizeImage.Name = "OptimizeImage"
         Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeImage.Text = "Optimize image..."
-        Me.OptimizeImage.Visible = False
         '
         'RemountImage
         '
@@ -908,7 +907,6 @@ Partial Class MainForm
         Me.SplitFFU.Name = "SplitFFU"
         Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
         Me.SplitFFU.Text = "Splt FFU file into SFU files..."
-        Me.SplitFFU.Visible = False
         '
         'SplitImage
         '
@@ -1360,7 +1358,7 @@ Partial Class MainForm
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem})
+        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem, Me.ToolStripSeparator48, Me.AuditModeTSMI})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
@@ -1376,6 +1374,17 @@ Partial Class MainForm
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Name = "RemoveAppliedAnswerFileToolStripMenuItem"
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = "Remove applied answer file"
+        '
+        'ToolStripSeparator48
+        '
+        Me.ToolStripSeparator48.Name = "ToolStripSeparator48"
+        Me.ToolStripSeparator48.Size = New System.Drawing.Size(234, 6)
+        '
+        'AuditModeTSMI
+        '
+        Me.AuditModeTSMI.Name = "AuditModeTSMI"
+        Me.AuditModeTSMI.Size = New System.Drawing.Size(237, 22)
+        Me.AuditModeTSMI.Text = "Make system enter audit mode"
         '
         'WindowsPEServicingToolStripMenuItem
         '
@@ -1604,7 +1613,7 @@ Partial Class MainForm
         '
         'PxeHelperServersTSMI
         '
-        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI})
+        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI, Me.CopyImageToWdsServerTSMI})
         Me.PxeHelperServersTSMI.Name = "PxeHelperServersTSMI"
         Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(373, 22)
         Me.PxeHelperServersTSMI.Text = "Start PXE Helper Server for..."
@@ -1632,10 +1641,27 @@ Partial Class MainForm
         Me.UnixFogInstructionTSMI.Size = New System.Drawing.Size(377, 22)
         Me.UnixFogInstructionTSMI.Text = "Show instructions for FOG Helper Server on UNIX systems"
         '
+        'CopyImageToWdsServerTSMI
+        '
+        Me.CopyImageToWdsServerTSMI.Name = "CopyImageToWdsServerTSMI"
+        Me.CopyImageToWdsServerTSMI.Size = New System.Drawing.Size(377, 22)
+        Me.CopyImageToWdsServerTSMI.Text = "Copy my Windows image to a WDS server..."
+        '
         'ToolStripSeparator41
         '
         Me.ToolStripSeparator41.Name = "ToolStripSeparator41"
         Me.ToolStripSeparator41.Size = New System.Drawing.Size(370, 6)
+        '
+        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
+        '
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
+        '
+        'ToolStripSeparator47
+        '
+        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
+        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
         '
         'ReportManagerToolStripMenuItem
         '
@@ -4599,17 +4625,6 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
-        'ToolStripSeparator47
-        '
-        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
-        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
-        '
-        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
-        '
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -5197,4 +5212,7 @@ Partial Class MainForm
     Friend WithEvents BWFailLabel As System.Windows.Forms.Label
     Friend WithEvents EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator47 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyImageToWdsServerTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator48 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AuditModeTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class

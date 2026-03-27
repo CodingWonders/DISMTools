@@ -46,7 +46,7 @@ Public Class ImgSwmToWim
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Merge SWM files"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Source SWM file:"
                         Label3.Text = "NOTE: when specifying the SWM file, choose the first file. DISMTools will take care of additional SWM files stored in that directory."
                         Label4.Text = "Destination WIM file:"
@@ -64,7 +64,7 @@ Public Class ImgSwmToWim
                         SaveFileDialog1.Title = "Specify the destination WIM file to merge the source SWM files to"
                     Case "ESN"
                         Text = "Combinar archivos SWM"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Archivo SWM de origen:"
                         Label3.Text = "NOTA: al especificar el archivo SWM, escoja el primer archivo. DISMTools se encargará de los archivos SWM adicionales en ese directorio."
                         Label4.Text = "Archivo WIM de destino:"
@@ -82,7 +82,7 @@ Public Class ImgSwmToWim
                         SaveFileDialog1.Title = "Especifique el archivo WIM de destino al que combinar los archivos SWM"
                     Case "FRA"
                         Text = "Fusionner des fichiers SWM"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier SWM source :"
                         Label3.Text = "NOTE : lorsque vous spécifiez le fichier SWM, choisissez le premier fichier. DISMTools s'occupera des fichiers SWM supplémentaires stockés dans ce répertoire."
                         Label4.Text = "Fichier WIM de destination :"
@@ -100,7 +100,7 @@ Public Class ImgSwmToWim
                         SaveFileDialog1.Title = "Spécifier le fichier WIM de destination dans lequel fusionner les fichiers SWM sources"
                     Case "PTB", "PTG"
                         Text = "Combinar ficheiros SWM"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro SWM de origem:"
                         Label3.Text = "NOTA: ao especificar o arquivo SWM, escolha o primeiro arquivo. DISMTools cuidará dos arquivos SWM adicionais armazenados nesse diretório."
                         Label4.Text = "Ficheiro WIM de destino:"
@@ -118,7 +118,7 @@ Public Class ImgSwmToWim
                         SaveFileDialog1.Title = "Especificar o ficheiro WIM de destino para combinar os ficheiros SWM de origem"
                     Case "ITA"
                         Text = "Unire i file SWM"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File SWM di origine:"
                         Label3.Text = "NOTA: quando si specifica il file SWM, scegliere il primo file. DISMTools si occuperà dei file SWM aggiuntivi memorizzati in quella directory."
                         Label4.Text = "File WIM di destinazione:"
@@ -137,7 +137,7 @@ Public Class ImgSwmToWim
                 End Select
             Case 1
                 Text = "Merge SWM files"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Source SWM file:"
                 Label3.Text = "NOTE: when specifying the SWM file, choose the first file. DISMTools will take care of additional SWM files stored in that directory."
                 Label4.Text = "Destination WIM file:"
@@ -155,7 +155,7 @@ Public Class ImgSwmToWim
                 SaveFileDialog1.Title = "Specify the destination WIM file to merge the source SWM files to"
             Case 2
                 Text = "Combinar archivos SWM"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Archivo SWM de origen:"
                 Label3.Text = "NOTA: al especificar el archivo SWM, escoja el primer archivo. DISMTools se encargará de los archivos SWM adicionales en ese directorio."
                 Label4.Text = "Archivo WIM de destino:"
@@ -173,7 +173,7 @@ Public Class ImgSwmToWim
                 SaveFileDialog1.Title = "Especifique el archivo WIM de destino al que combinar los archivos SWM"
             Case 3
                 Text = "Fusionner des fichiers SWM"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier SWM source :"
                 Label3.Text = "NOTE : lorsque vous spécifiez le fichier SWM, choisissez le premier fichier. DISMTools s'occupera des fichiers SWM supplémentaires stockés dans ce répertoire."
                 Label4.Text = "Fichier WIM de destination :"
@@ -191,7 +191,7 @@ Public Class ImgSwmToWim
                 SaveFileDialog1.Title = "Spécifier le fichier WIM de destination dans lequel fusionner les fichiers SWM sources"
             Case 4
                 Text = "Combinar ficheiros SWM"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro SWM de origem:"
                 Label3.Text = "NOTA: ao especificar o arquivo SWM, escolha o primeiro arquivo. DISMTools cuidará dos arquivos SWM adicionais armazenados nesse diretório."
                 Label4.Text = "Ficheiro WIM de destino:"
@@ -209,7 +209,7 @@ Public Class ImgSwmToWim
                 SaveFileDialog1.Title = "Especificar o ficheiro WIM de destino para combinar os ficheiros SWM de origem"
             Case 5
                 Text = "Unire i file SWM"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File SWM di origine:"
                 Label3.Text = "NOTA: quando si specifica il file SWM, scegliere il primo file. DISMTools si occuperà dei file SWM aggiuntivi memorizzati in quella directory."
                 Label4.Text = "File WIM di destinazione:"
@@ -226,7 +226,7 @@ Public Class ImgSwmToWim
                 OpenFileDialog1.Title = "Specificare il file SWM di origine da unire"
                 SaveFileDialog1.Title = "Specificare il file WIM di destinazione in cui unire i file SWM di origine"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -240,10 +240,6 @@ Public Class ImgSwmToWim
         TextBox2.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
@@ -251,6 +247,7 @@ Public Class ImgSwmToWim
         ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -273,7 +270,7 @@ Public Class ImgSwmToWim
                 ListView1.Items.AddRange(imgInfoCollection.Select(Function(imgInfo) New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()})).ToArray())
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
-                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
+                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 DynaLog.LogMessage("Shutting down API...")
                 Try

@@ -47,7 +47,7 @@ Public Class ImgWim2Esd
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Convert image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Source image file:"
                         Label3.Text = "Format of converted image:"
                         Label5.Text = "Destination image file:"
@@ -68,7 +68,7 @@ Public Class ImgWim2Esd
                         SaveFileDialog1.Title = "Where will the target image be stored?"
                     Case "ESN"
                         Text = "Convertir imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Archivo de imagen de origen:"
                         Label3.Text = "Formato de imagen convertida:"
                         Label5.Text = "Archivo de imagen de destino:"
@@ -89,7 +89,7 @@ Public Class ImgWim2Esd
                         SaveFileDialog1.Title = "¿Dónde se almacenará el archivo de imagen de destino?"
                     Case "FRA"
                         Text = "Convertir l'image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier de l'image source :"
                         Label3.Text = "Format de l'image convertie :"
                         Label5.Text = "Fichier de l'image de destination :"
@@ -110,7 +110,7 @@ Public Class ImgWim2Esd
                         SaveFileDialog1.Title = "Où l'image cible sera-t-elle stockée ?"
                     Case "PTB", "PTG"
                         Text = "Converter imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro de imagem de origem:"
                         Label3.Text = "Formato da imagem convertida:"
                         Label5.Text = "Ficheiro de imagem de destino:"
@@ -131,7 +131,7 @@ Public Class ImgWim2Esd
                         SaveFileDialog1.Title = "Onde será guardada a imagem de destino?"
                     Case "ITA"
                         Text = "Convertire immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File immagine di origine:"
                         Label3.Text = "Formato dell'immagine convertita:"
                         Label5.Text = "File immagine di destinazione:"
@@ -153,7 +153,7 @@ Public Class ImgWim2Esd
                 End Select
             Case 1
                 Text = "Convert image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Source image file:"
                 Label3.Text = "Format of converted image:"
                 Label5.Text = "Destination image file:"
@@ -174,7 +174,7 @@ Public Class ImgWim2Esd
                 SaveFileDialog1.Title = "Where will the target image be stored?"
             Case 2
                 Text = "Convertir imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Archivo de imagen de origen:"
                 Label3.Text = "Formato de imagen convertida:"
                 Label5.Text = "Archivo de imagen de destino:"
@@ -195,7 +195,7 @@ Public Class ImgWim2Esd
                 SaveFileDialog1.Title = "¿Dónde se almacenará el archivo de imagen de destino?"
             Case 3
                 Text = "Convertir l'image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier de l'image source :"
                 Label3.Text = "Format de l'image convertie :"
                 Label5.Text = "Fichier de l'image de destination :"
@@ -216,7 +216,7 @@ Public Class ImgWim2Esd
                 SaveFileDialog1.Title = "Où l'image cible sera-t-elle stockée ?"
             Case 4
                 Text = "Converter imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro de imagem de origem:"
                 Label3.Text = "Formato da imagem convertida:"
                 Label5.Text = "Ficheiro de imagem de destino:"
@@ -237,7 +237,7 @@ Public Class ImgWim2Esd
                 SaveFileDialog1.Title = "Onde será guardada a imagem de destino?"
             Case 5
                 Text = "Convertire immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File immagine di origine:"
                 Label3.Text = "Formato dell'immagine convertita:"
                 Label5.Text = "File immagine di destinazione:"
@@ -257,7 +257,7 @@ Public Class ImgWim2Esd
                 OpenFileDialog1.Title = "Specificare il file immagine di origine che si desidera convertire"
                 SaveFileDialog1.Title = "Dove verrà memorizzata l'immagine di destinazione?"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -273,16 +273,13 @@ Public Class ImgWim2Esd
         ComboBox1.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -312,7 +309,7 @@ Public Class ImgWim2Esd
                     ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
                 Next
             Catch ex As Exception
-                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
+                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 DynaLog.LogMessage("Shutting down API...")
                 Try

@@ -73,7 +73,7 @@ Public Class ImgCleanup
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Image cleanup"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Choose a task:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Choose a task to see its description"
                         Label4.Text = "There are no configurable options for this task. However, you should only run this task to try to recover a Windows image that fails to boot."
@@ -105,7 +105,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limit access to Windows Update"
                     Case "ESN"
                         Text = "Limpieza de imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Elija una tarea:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Elija una tarea para ver su descripción"
                         Label4.Text = "No hay opciones configurables para esta tarea. Sin embargo, debería ejecutar esta tarea para intentar recuperar una imagen de Windows que no inicia."
@@ -137,7 +137,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limitar acceso a Windows Update"
                     Case "FRA"
                         Text = "Nettoyage de l'image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Choisissez une tâche :"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Choisissez une tâche pour voir sa description"
                         Label4.Text = "Il n'y a pas d'options configurables pour cette tâche. Cependant, vous ne devez exécuter cette tâche que pour essayer de récupérer une image Windows qui ne démarre pas."
@@ -169,7 +169,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limiter l'accès à Windows Update"
                     Case "PTB", "PTG"
                         Text = "Limpeza de imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Escolha uma tarefa:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Escolha uma tarefa para ver a sua descrição"
                         Label4.Text = "Não existem opções configuráveis para esta tarefa. No entanto, só deve executar esta tarefa para tentar recuperar uma imagem do Windows que não arranque."
@@ -201,7 +201,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limitar o acesso ao Windows Update"
                     Case "ITA"
                         Text = "Pulizia immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Scegliere un'attività:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Scegliere un'attività per vederne la descrizione"
                         Label4.Text = "Non ci sono opzioni configurabili per questa attività. Tuttavia, si dovrebbe eseguire questa attività solo per tentare di ripristinare un'immagine di Windows che non riesce ad avviarsi"
@@ -234,7 +234,7 @@ Public Class ImgCleanup
                 End Select
             Case 1
                 Text = "Image cleanup"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Choose a task:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Choose a task to see its description"
                 Label4.Text = "There are no configurable options for this task. However, you should only run this task to try to recover a Windows image that fails to boot."
@@ -266,7 +266,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limit access to Windows Update"
             Case 2
                 Text = "Limpieza de imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Elija una tarea:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Elija una tarea para ver su descripción"
                 Label4.Text = "No hay opciones configurables para esta tarea. Sin embargo, debería ejecutar esta tarea para intentar recuperar una imagen de Windows que no inicia."
@@ -298,7 +298,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limitar acceso a Windows Update"
             Case 3
                 Text = "Nettoyage de l'image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Choisissez une tâche :"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Choisissez une tâche pour voir sa description"
                 Label4.Text = "Il n'y a pas d'options configurables pour cette tâche. Cependant, vous ne devez exécuter cette tâche que pour essayer de récupérer une image Windows qui ne démarre pas."
@@ -330,7 +330,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limiter l'accès à Windows Update"
             Case 4
                 Text = "Limpeza de imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Escolha uma tarefa:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Escolha uma tarefa para ver a sua descrição"
                 Label4.Text = "Não existem opções configuráveis para esta tarefa. No entanto, só deve executar esta tarefa para tentar recuperar uma imagem do Windows que não arranque."
@@ -362,7 +362,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limitar o acesso ao Windows Update"
             Case 5
                 Text = "Pulizia immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Scegliere un'attività:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Scegliere un'attività per vederne la descrizione"
                 Label4.Text = "Non ci sono opzioni configurabili per questa attività. Tuttavia, si dovrebbe eseguire questa attività solo per tentare di ripristinare un'immagine di Windows che non riesce ad avviarsi"
@@ -393,11 +393,7 @@ Public Class ImgCleanup
                 CheckBox4.Text = "Usa un'altra fonte per la riparazione dei componenti"
                 CheckBox5.Text = "Limita l'accesso a Windows Update"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = BackColor
@@ -522,6 +518,7 @@ Public Class ImgCleanup
         End If
 
         If SelTask >= 0 And SelTask < ComboBox1.Items.Count Then ComboBox1.SelectedIndex = SelTask
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

@@ -149,7 +149,7 @@ Public Class GetWinPESettings
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get Windows PE settings"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "These are the Windows PE settings for this image:"
                         Label3.Text = "Target path:"
                         Label4.Text = "Scratch space:"
@@ -159,7 +159,7 @@ Public Class GetWinPESettings
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Obtener configuraciones de Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Estas son las configuraciones de Windows PE para esta imagen:"
                         Label3.Text = "Carpeta de destino:"
                         Label4.Text = "Espacio temporal:"
@@ -169,7 +169,7 @@ Public Class GetWinPESettings
                         Button4.Text = "Guardar..."
                     Case "FRA"
                         Text = "Obtenir les paramètres de Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Il s'agit des paramètres Windows PE pour cette image :"
                         Label3.Text = "Chemin cible :"
                         Label4.Text = "Espace temporaire :"
@@ -179,7 +179,7 @@ Public Class GetWinPESettings
                         Button4.Text = "Sauvegarder..."
                     Case "PTB", "PTG"
                         Text = "Obter as configurações do Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Estas são as configurações do Windows PE para esta imagem:"
                         Label3.Text = "Localização do destino:"
                         Label4.Text = "Espaço temporário:"
@@ -189,7 +189,7 @@ Public Class GetWinPESettings
                         OK_Button.Text = "OK"
                     Case "ITA"
                         Text = "Ottieni le impostazioni di Windows PE"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Queste sono le impostazioni di Windows PE per questa immagine:"
                         Label3.Text = "Percorso di destinazione:"
                         Label4.Text = "Spazio temporaneo:"
@@ -200,7 +200,7 @@ Public Class GetWinPESettings
                 End Select
             Case 1
                 Text = "Get Windows PE settings"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "These are the Windows PE settings for this image:"
                 Label3.Text = "Target path:"
                 Label4.Text = "Scratch space:"
@@ -210,7 +210,7 @@ Public Class GetWinPESettings
                 Button4.Text = "Save..."
             Case 2
                 Text = "Obtener configuraciones de Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Estas son las configuraciones de Windows PE para esta imagen:"
                 Label3.Text = "Carpeta de destino:"
                 Label4.Text = "Espacio temporal:"
@@ -220,7 +220,7 @@ Public Class GetWinPESettings
                 Button4.Text = "Guardar..."
             Case 3
                 Text = "Obtenir les paramètres de Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Il s'agit des paramètres Windows PE pour cette image :"
                 Label3.Text = "Chemin cible :"
                 Label4.Text = "Espace temporaire :"
@@ -230,7 +230,7 @@ Public Class GetWinPESettings
                 Button4.Text = "Sauvegarder..."
             Case 4
                 Text = "Obter as configurações do Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Estas são as configurações do Windows PE para esta imagem:"
                 Label3.Text = "Localização do destino:"
                 Label4.Text = "Espaço temporário:"
@@ -240,7 +240,7 @@ Public Class GetWinPESettings
                 OK_Button.Text = "OK"
             Case 5
                 Text = "Ottieni le impostazioni di Windows PE"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Queste sono le impostazioni di Windows PE per questa immagine:"
                 Label3.Text = "Percorso di destinazione:"
                 Label4.Text = "Spazio temporaneo:"
@@ -249,11 +249,7 @@ Public Class GetWinPESettings
                 Button4.Text = "Salva..."
                 OK_Button.Text = "OK"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
 
@@ -265,6 +261,7 @@ Public Class GetWinPESettings
 
         ' Get Windows PE settings
         GetPESettings()
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

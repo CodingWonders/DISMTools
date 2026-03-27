@@ -31,7 +31,7 @@ Public Class SetLayeredDriverDialog
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Set keyboard layered driver"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "This action will let you set a keyboard layered driver for Japanese and Korean keyboards, as some users have keyboards with additional keys. Simply specify the new layered driver from the list below and click OK"
                         Label3.Text = "Current keyboard layered driver:"
                         Label5.Text = "New keyboard layered driver:"
@@ -40,7 +40,7 @@ Public Class SetLayeredDriverDialog
                         Cancel_Button.Text = "Cancel"
                     Case "ESN"
                         Text = "Establecer controlador de teclado superpuesto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Esta acción le permitirá establecer un controlador de teclado superpuesto para teclados japoneses y coreanos, debido a que algunos usuarios poseen teclados con teclas adicionales. Simplemente especifique el nuevo controlador superpuesto de la lista y haga clic en Aceptar"
                         Label3.Text = "Controlador de teclado superpuesto actual:"
                         Label5.Text = "Nuevo controlador de teclado superpuesto:"
@@ -49,7 +49,7 @@ Public Class SetLayeredDriverDialog
                         Cancel_Button.Text = "Cancelar"
                     Case "FRA"
                         Text = "Définir le pilote du clavier en couches"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Cette action vous permet de définir un pilote de clavier superposé pour les claviers japonais et coréens, car certains utilisateurs ont des claviers avec des touches supplémentaires. Il vous suffit de spécifier le nouveau pilote de clavier dans la liste ci-dessous et de cliquer sur OK"
                         Label3.Text = "Pilote de clavier actuel :"
                         Label5.Text = "Nouveau pilote de clavier superposé :"
@@ -58,7 +58,7 @@ Public Class SetLayeredDriverDialog
                         Cancel_Button.Text = "Annuler"
                     Case "PTB", "PTG"
                         Text = "Configurar controlador de teclado em camadas"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Esta ação permite-lhe configurar um controlador de teclado em camadas para teclados japoneses e coreanos, uma vez que alguns utilizadores têm teclados com teclas adicionais. Basta especificar o novo controlador da lista abaixo e clicar em OK"
                         Label3.Text = "Controlador atual do teclado em camadas:"
                         Label5.Text = "Novo controlador de teclado em camadas:"
@@ -67,7 +67,7 @@ Public Class SetLayeredDriverDialog
                         Cancel_Button.Text = "Cancelar"
                     Case "ITA"
                         Text = "Imposta driver a strati per tastiera"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Questa azione consente di impostare un driver a strati per le tastiere giapponesi e coreane, poiché alcuni utenti dispongono di tastiere con tasti aggiuntivi. È sufficiente specificare il nuovo driver stratificato dall'elenco sottostante e fare clic su OK"
                         Label3.Text = "Driver a strati per la tastiera attuale:"
                         Label5.Text = "Nuovo driver a strati per tastiera:"
@@ -77,7 +77,7 @@ Public Class SetLayeredDriverDialog
                 End Select
             Case 1
                 Text = "Set keyboard layered driver"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "This action will let you set a keyboard layered driver for Japanese and Korean keyboards, as some users have keyboards with additional keys. Simply specify the new layered driver from the list below and click OK"
                 Label3.Text = "Current keyboard layered driver:"
                 Label5.Text = "New keyboard layered driver:"
@@ -86,7 +86,7 @@ Public Class SetLayeredDriverDialog
                 Cancel_Button.Text = "Cancel"
             Case 2
                 Text = "Establecer controlador de teclado superpuesto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Esta acción le permitirá establecer un controlador de teclado superpuesto para teclados japoneses y coreanos, debido a que algunos usuarios poseen teclados con teclas adicionales. Simplemente especifique el nuevo controlador superpuesto de la lista y haga clic en Aceptar"
                 Label3.Text = "Controlador de teclado superpuesto actual:"
                 Label5.Text = "Nuevo controlador de teclado superpuesto:"
@@ -95,7 +95,7 @@ Public Class SetLayeredDriverDialog
                 Cancel_Button.Text = "Cancelar"
             Case 3
                 Text = "Définir le pilote du clavier en couches"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Cette action vous permet de définir un pilote de clavier superposé pour les claviers japonais et coréens, car certains utilisateurs ont des claviers avec des touches supplémentaires. Il vous suffit de spécifier le nouveau pilote de clavier dans la liste ci-dessous et de cliquer sur OK"
                 Label3.Text = "Pilote de clavier actuel :"
                 Label5.Text = "Nouveau pilote de clavier superposé :"
@@ -104,7 +104,7 @@ Public Class SetLayeredDriverDialog
                 Cancel_Button.Text = "Annuler"
             Case 4
                 Text = "Configurar controlador de teclado em camadas"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Esta ação permite-lhe configurar um controlador de teclado em camadas para teclados japoneses e coreanos, uma vez que alguns utilizadores têm teclados com teclas adicionais. Basta especificar o novo controlador da lista abaixo e clicar em OK"
                 Label3.Text = "Controlador atual do teclado em camadas:"
                 Label5.Text = "Novo controlador de teclado em camadas:"
@@ -113,7 +113,7 @@ Public Class SetLayeredDriverDialog
                 Cancel_Button.Text = "Cancelar"
             Case 5
                 Text = "Imposta driver a strati per tastiera"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Questa azione consente di impostare un driver a strati per le tastiere giapponesi e coreane, poiché alcuni utenti dispongono di tastiere con tasti aggiuntivi. È sufficiente specificare il nuovo driver stratificato dall'elenco sottostante e fare clic su OK"
                 Label3.Text = "Driver a strati per la tastiera attuale:"
                 Label5.Text = "Nuovo driver a strati per tastiera:"
@@ -121,15 +121,11 @@ Public Class SetLayeredDriverDialog
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
@@ -168,6 +164,7 @@ Public Class SetLayeredDriverDialog
             Label6.Visible = False
             OK_Button.Enabled = True
         End If
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

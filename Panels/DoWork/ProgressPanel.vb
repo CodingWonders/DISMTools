@@ -246,6 +246,11 @@ Public Class ProgressPanel
     Public AppendixReparsePt As Boolean                     ' Determine whether to use the reparse point tag fix
     Public AppendixCaptureExtendedAttribs As Boolean        ' Determine whether to capture extended attributes
 
+    ' OperationNum: 2
+    Public FFUApplicationSourceImg As String                ' String which determines which image to apply
+    Public FFUApplicationDestDrive As String                ' Gather destination disk ID
+    Public FFUApplicationSFUPattern As String               ' Spanned/Split WIM (SWM) file pattern string. Usually "install*.sfu", so don't use an array
+
     ' OperationNum: 3
     Public ApplicationSourceImg As String                   ' String which determines which image to apply
     Public ApplicationIndex As Integer                      ' Index to apply to destination
@@ -258,7 +263,13 @@ Public Class ProgressPanel
     Public ApplicationUseWimBoot As Boolean                 ' Determine whether to append image with WIMBoot configuration
     Public ApplicationCompactMode As Boolean                ' Determine whether to apply image in Compact mode (Win10+ only)
     Public ApplicationUseExtAttr As Boolean                 ' Determine whether to apply extended attributes (Win10 1607+ only)
-    Public ApplicationDestDrive As String                   ' Gather destination disk ID
+
+    ' OperationNum: 5
+    Public FFUCaptureSourceDrive As String                  ' Source drive to be captured
+    Public FFUCaptureDestinationFfuImage As String          ' Destination FFU image
+    Public FFUCaptureName As String                         ' Captured FFU name
+    Public FFUCaptureDescription As String                  ' Captured FFU description (optional)
+    Public FFUCaptureCompressType As Integer                ' Compression used for the capture (0: none; 1: default)
 
     ' OperationNum: 6
     Public CaptureSourceDir As String                       ' Source directory to be captured
@@ -311,8 +322,22 @@ Public Class ProgressPanel
     Public isOptimized As Boolean                           ' Determine whether image will be optimized to mount in a shorter time
     Public isIntegrityTested As Boolean                     ' Determine whether the integrity of the image should be tested before mounting the image
 
+    ' OperationNum: 16
+    Public FFUOptimizationSource As String                  ' Source image file to optimize
+    Public FFUOptimizationCustomPartitionNum As Integer     ' The number of the partition to optimize. If set to 0, the default one will be used
+
+    ' OperationNum: 17
+    Public OptimizationSource As String                     ' Source image file to optimize
+    Public OptimizationMode As Integer                      ' The mode with which the image must be optimized (0: boot; 1: wimboot)
+
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
+
+    ' OperationNum: 19
+    Public SFUSplitSourceFile As String                     ' Source image file to be split into SFU files
+    Public SFUSplitFileSize As Integer                      ' The maximum size in MB for each created image
+    Public SFUSplitTargetFile As String                     ' The path of the SFU files
+    Public SFUSplitCheckIntegrity As Boolean                ' Checks the integrity of the source image before splitting it
 
     ' OperationNum: 20
     Public SWMSplitSourceFile As String                     ' Source image file to be split into SWM files
@@ -496,6 +521,7 @@ Public Class ProgressPanel
 
     ' OperationNum: 79
     Public UnattendedFile As String                         ' The path of the unattended answer file
+    Public UnattendedCopyToSysprep As Boolean               ' Determines whether to copy the unattended answer file to Sysprep
 
     ' OperationNum: 83
     Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
@@ -868,7 +894,7 @@ Public Class ProgressPanel
         Return targetImage
     End Function
 
-    Sub RunOps(opNum As Integer)
+    Private Sub RunOps(opNum As Integer)
         DynaLog.LogMessage("Running operations...")
         DynaLog.LogMessage("Operation number: " & opNum)
         DynaLog.LogMessage("Setting DISM program and grabbing version information...")
@@ -888,8 +914,12 @@ Public Class ProgressPanel
                 CreateProject()
             Case 1
                 AppendImage()
+            Case 2
+                ApplyFfuImage()
             Case 3
                 ApplyImage()
+            Case 5
+                CaptureFfuImage()
             Case 6
                 CaptureImage()
             Case 7
@@ -902,8 +932,14 @@ Public Class ProgressPanel
                 ExportImage()
             Case 15
                 MountImage()
+            Case 16
+                OptimizeFfuImage()
+            Case 17
+                OptimizeImage()
             Case 18
                 RemountImage()
+            Case 19
+                SplitFfuImage()
             Case 20
                 SplitImage()
             Case 21
@@ -1235,12 +1271,109 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub ApplyFfuImage()
+        DynaLog.LogMessage("Applying specified FFU image to the specified application drive...")
+        DynaLog.LogMessage("- Image to apply: " & Quote & FFUApplicationSourceImg & Quote)
+        DynaLog.LogMessage("- Application drive: " & Quote & FFUApplicationDestDrive & Quote)
+        DynaLog.LogMessage("- SFU name pattern: " & Quote & FFUApplicationSFUPattern & Quote)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Applying image..."
+                        currentTask.Text = "Applying specified image to the specified destination..."
+                    Case "ESN"
+                        allTasks.Text = "Aplicando imagen..."
+                        currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+                    Case "FRA"
+                        allTasks.Text = "Application de l'image en cours..."
+                        currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Aplicar imagem..."
+                        currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
+                    Case "ITA"
+                        allTasks.Text = "Applicazione dell'immagine..."
+                        currentTask.Text = "Applicazione immagine specificata alla destinazione specificata..."
+                End Select
+            Case 1
+                allTasks.Text = "Applying image..."
+                currentTask.Text = "Applying specified image to the specified destination..."
+            Case 2
+                allTasks.Text = "Aplicando imagen..."
+                currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+            Case 3
+                allTasks.Text = "Application de l'image en cours..."
+                currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
+            Case 4
+                allTasks.Text = "Aplicar imagem..."
+                currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
+            Case 5
+                allTasks.Text = "Applicazione dell'immagine..."
+                currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
+        End Select
+        LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
+                           "- Source image file: " & ApplicationSourceImg & CrLf &
+                           "- Index to apply: " & ApplicationIndex & CrLf &
+                           "- Target directory: " & ApplicationDestDir & CrLf)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' It seems like it's not available :(
+                    Case Is >= 2
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-ffu /imagefile=" & Quote & FFUApplicationSourceImg & Quote
+                End Select
+            Case 10
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-ffu /imagefile=" & Quote & FFUApplicationSourceImg & Quote
+        End Select
+        ' Detect additional options and set CommandArgs
+        CommandArgs &= " /applydrive=" & Quote & FFUApplicationDestDrive & Quote
+        If FFUApplicationSFUPattern = "" Then
+            LogView.AppendText("- Split FFU (SFU) file pattern: not specified/not using SFU file" & CrLf)
+        Else
+            LogView.AppendText("- Split FFU (SFU) file pattern: " & FFUApplicationSFUPattern & CrLf)
+            CommandArgs &= " /sfufile=" & FFUApplicationSFUPattern
+        End If
+        RunProcess(DismProgram, CommandArgs)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+        End If
+    End Sub
+
     Private Sub ApplyImage()
         DynaLog.LogMessage("Applying specified Windows image to the specified application directory...")
         DynaLog.LogMessage("- Image to apply: " & Quote & ApplicationSourceImg & Quote)
         DynaLog.LogMessage("- Image index: " & ApplicationIndex)
-        DynaLog.LogMessage("- Application directory: " & Quote & If(ApplicationDestDrive <> "", ApplicationDestDrive, ApplicationDestDir) & Quote)
-        If ApplicationDestDrive <> "" Then DynaLog.LogMessage("  A drive has been specified")
+        DynaLog.LogMessage("- Application directory: " & Quote & ApplicationDestDir & Quote)
         DynaLog.LogMessage("- Verify image integrity? " & If(ApplicationCheckInt, "Yes", "No"))
         DynaLog.LogMessage("- Check for file errors? " & If(ApplicationVerify, "Yes", "No"))
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(ApplicationReparsePt, "Yes", "No"))
@@ -1300,11 +1433,7 @@ Public Class ProgressPanel
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
         End Select
         ' Detect additional options and set CommandArgs
-        If ApplicationDestDrive = "" Then
-            CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
-        Else
-            CommandArgs &= " /applydrive=" & ApplicationDestDrive
-        End If
+        CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
         If ApplicationCheckInt Then
             LogView.AppendText("- Verify image integrity? Yes" & CrLf)
             CommandArgs &= " /checkintegrity"
@@ -1353,11 +1482,113 @@ Public Class ProgressPanel
         Else
             LogView.AppendText("- Apply using extended attributes? No" & CrLf)
         End If
-        If ApplicationDestDrive = "" Then
-            LogView.AppendText("- Destination drive ID: not specified/not applying on drive" & CrLf)
+        RunProcess(DismProgram, CommandArgs)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
         Else
-            LogView.AppendText("- Destination drive ID: " & ApplicationDestDrive & CrLf)
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub CaptureFfuImage()
+        DynaLog.LogMessage("Capturing physical drive to the target image...")
+        DynaLog.LogMessage("- Source drive: " & FFUCaptureSourceDrive)
+        DynaLog.LogMessage("- Destination image: " & Quote & FFUCaptureDestinationFfuImage & Quote)
+        DynaLog.LogMessage("- Destination image name: " & Quote & FFUCaptureName & Quote)
+        DynaLog.LogMessage("- Destination image description: " & Quote & FFUCaptureDescription & Quote)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Capturing image..."
+                        currentTask.Text = "Capturing specified directory into a new image..."
+                    Case "ESN"
+                        allTasks.Text = "Capturando imagen..."
+                        currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+                    Case "FRA"
+                        allTasks.Text = "Capture de l'image en cours..."
+                        currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Capturar imagem..."
+                        currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
+                    Case "ITA"
+                        allTasks.Text = "Cattura immagine..."
+                        currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
+                End Select
+            Case 1
+                allTasks.Text = "Capturing image..."
+                currentTask.Text = "Capturing specified directory into a new image..."
+            Case 2
+                allTasks.Text = "Capturando imagen..."
+                currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+            Case 3
+                allTasks.Text = "Capture de l'image en cours..."
+                currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
+            Case 4
+                allTasks.Text = "Capturar imagem..."
+                currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
+            Case 5
+                allTasks.Text = "Cattura immagine..."
+                currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
+        End Select
+        LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
+                           "- Source directory: " & FFUCaptureSourceDrive & CrLf &
+                           "- Destination image: " & FFUCaptureDestinationFfuImage & CrLf &
+                           "- Captured image name: " & FFUCaptureName & CrLf)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' Not available
+                    Case Is >= 2
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-ffu /imagefile=" & Quote & FFUCaptureDestinationFfuImage & Quote & " /capturedrive=" & FFUCaptureSourceDrive & " /name=" & Quote & FFUCaptureName & Quote
+                End Select
+            Case 10
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-ffu /imagefile=" & Quote & FFUCaptureDestinationFfuImage & Quote & " /capturedrive=" & FFUCaptureSourceDrive & " /name=" & Quote & FFUCaptureName & Quote
+        End Select
+        ' Get additional options
+        If FFUCaptureDescription = "" Then
+            LogView.AppendText("- Captured image description: none specified" & CrLf)
+        Else
+            DynaLog.LogMessage("A description has been provided.")
+            LogView.AppendText("- Captured image description: " & Quote & FFUCaptureDescription & Quote & CrLf)
+            CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
+        End If
+        If CaptureCompressType = 0 Then
+            LogView.AppendText("- Compression type: none" & CrLf)
+            CommandArgs &= " /compress=none"
+        ElseIf CaptureCompressType = 1 Then
+            LogView.AppendText("- Compression type: default" & CrLf)
+            CommandArgs &= " /compress=default"
+        End If
+        LogView.AppendText(CrLf & "Capturing image...")
         RunProcess(DismProgram, CommandArgs)
         Select Case Language
             Case 0
@@ -2150,6 +2381,71 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub OptimizeFfuImage()
+        DynaLog.LogMessage("Optimizing the Windows FFU image...")
+        DynaLog.LogMessage("- Source image to optimize: " & Quote & FFUOptimizationSource & Quote)
+        DynaLog.LogMessage("- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", ""))
+        allTasks.Text = "Optimizing image..."
+        currentTask.Text = "Optimizing Windows image..."
+        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
+                           "- Source image to optimize: " & Quote & FFUOptimizationSource & Quote & CrLf &
+                           "- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", "") & CrLf)
+        ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                ' Not supported
+            Case 10
+                CommandArgs &= " /optimize-ffu /imagefile=" & Quote & FFUOptimizationSource & Quote
+        End Select
+
+        If FFUOptimizationCustomPartitionNum > 0 Then CommandArgs &= " /partitionnumber=" & FFUOptimizationCustomPartitionNum
+
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
+    End Sub
+
+    Private Sub OptimizeImage()
+        DynaLog.LogMessage("Optimizing the Windows image...")
+        DynaLog.LogMessage("- Source image to optimize: " & Quote & OptimizationSource & Quote)
+        DynaLog.LogMessage("- Optimization mode: " & OptimizationMode)
+        allTasks.Text = "Optimizing image..."
+        currentTask.Text = "Optimizing Windows image..."
+        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
+                           "- Source image to optimize: " & Quote & OptimizationSource & Quote & CrLf &
+                           "- Optimization mode: " & If(OptimizationMode = 0, "Reduce online configuration time", "Prepare image for WIMBoot system") & CrLf)
+        ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                ' Not supported
+            Case 10
+                CommandArgs &= " /image=" & Quote & OptimizationSource & Quote & " /optimize-image " & If(OptimizationMode = 0, "/boot", "/wimboot")
+        End Select
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
+    End Sub
+
     Private Sub RemountImage()
         DynaLog.LogMessage("Reloading the servicing session of the mounted image...")
         DynaLog.LogMessage("- Mount location of the image file we are interested in reloading: " & Quote & MountDir & Quote)
@@ -2245,6 +2541,80 @@ Public Class ProgressPanel
         Else
             LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub SplitFfuImage()
+        DynaLog.LogMessage("Splitting the Windows FFU image...")
+        DynaLog.LogMessage("- Source image file to split: " & Quote & SFUSplitSourceFile & Quote)
+        DynaLog.LogMessage("- Maximum size of split images: " & SFUSplitFileSize & " MB")
+        DynaLog.LogMessage("- Destination of SFU files: " & Quote & SFUSplitTargetFile & Quote)
+        DynaLog.LogMessage("- Check image integrity? " & If(SFUSplitCheckIntegrity, "Yes", "No"))
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Splitting image..."
+                        currentTask.Text = "Splitting FFU file..."
+                    Case "ESN"
+                        allTasks.Text = "Dividiendo imagen..."
+                        currentTask.Text = "Dividiendo archivo FFU..."
+                    Case "FRA"
+                        allTasks.Text = "Division de l'image en cours..."
+                        currentTask.Text = "Division du fichier FFU en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Dividir imagem..."
+                        currentTask.Text = "Dividir ficheiro FFU..."
+                    Case "ITA"
+                        allTasks.Text = "Divisione immagine..."
+                        currentTask.Text = "Divisione file FFU..."
+                End Select
+            Case 1
+                allTasks.Text = "Splitting image..."
+                currentTask.Text = "Splitting FFU file..."
+            Case 2
+                allTasks.Text = "Dividiendo imagen..."
+                currentTask.Text = "Dividiendo archivo FFU..."
+            Case 3
+                allTasks.Text = "Division de l'image en cours..."
+                currentTask.Text = "Division du fichier FFU en cours..."
+            Case 4
+                allTasks.Text = "Dividir imagem..."
+                currentTask.Text = "Dividir ficheiro FFU..."
+            Case 5
+                allTasks.Text = "Divisione immagine..."
+                currentTask.Text = "Divisione file FFU..."
+        End Select
+        LogView.AppendText(CrLf & "Splitting FFU file into SFU files..." & CrLf &
+                           "- Source image file to split: " & Quote & SFUSplitSourceFile & Quote & CrLf &
+                           "- Maximum size of the split images (in MB): " & SFUSplitFileSize & " MB" & CrLf &
+                           "- Name and path of the target SFU file: " & Quote & SFUSplitTargetFile & Quote & CrLf &
+                           "- Check integrity before splitting this image? " & If(SFUSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf &
+                           "Do note that, if the image contains a large file that can't fit within the maximum size, a SFU file may be larger than the rest, to accommodate it." & CrLf)
+        ' Check the DISM version, as the Windows 7 version doesn't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' Not supported
+                    Case Is >= 2
+                        CommandArgs &= " /split-ffu /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
+                End Select
+            Case 10
+                CommandArgs &= " /split-image /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
+        End Select
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
     End Sub
 
     Private Sub SplitImage()
@@ -6070,11 +6440,13 @@ Public Class ProgressPanel
                 Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
             End If
             File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"), True)
-            DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
-            If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
-                Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+            If UnattendedCopyToSysprep Then
+                DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             End If
-            File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
             GetErrorCode(True)
         Catch ex As Exception
@@ -7069,11 +7441,13 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 27 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
@@ -7628,7 +8002,13 @@ Public Class ProgressPanel
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         ' Detect settings
         DynaLog.LogMessage("Configuring settings...")
         OnlineMgmt = MainForm.OnlineManagement

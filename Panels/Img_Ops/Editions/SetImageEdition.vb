@@ -254,10 +254,6 @@ Public Class SetImageEdition
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annulla"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            ImageTaskHeader1.Visible = True
-        End If
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -280,6 +276,7 @@ Public Class SetImageEdition
             DynaLog.LogMessage("Either one or none of the two requirements described above is met. The image we are managing is not an active installation, or a Windows Server installation")
             GroupBox1.Enabled = False
         End If
+        ImageTaskHeader1.HideWindowTitle(Handle)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged

@@ -25,7 +25,7 @@ Public Class ISOCreator
                         progressMessages(1) = "Creating ISO file. This can take some time. Please wait..."
                         progressMessages(2) = "The ISO file has been created"
                         Text = "Create an ISO file"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. ISO files created with this utility should be used only on Virtual Machines (VMs) and on computers with standard disk controllers." & CrLf & CrLf &
                                       "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                         Label3.Text = "Once you're ready, click the Create button."
@@ -56,7 +56,7 @@ Public Class ISOCreator
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
                         progressMessages(2) = "El archivo ISO ha sido creado"
                         Text = "Crear un archivo ISO"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Los archivos ISO creados solo deberían ser utilizados en máquinas virtuales y en ordenadores con controladores de disco estándares." & CrLf & CrLf &
                                       "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                         Label3.Text = "Cuando esté listo, haga clic en Crear."
@@ -87,7 +87,7 @@ Public Class ISOCreator
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
                         progressMessages(2) = "Le fichier ISO a été créé"
                         Text = "Créer un fichier ISO"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Les fichiers ISO créés à l'aide de cet utilitaire ne doivent être utilisés que sur des machines virtuelles (VM) et des ordinateurs dotés de contrôleurs de disque standard." & CrLf & CrLf &
                                       "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                         Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
@@ -118,7 +118,7 @@ Public Class ISOCreator
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
                         progressMessages(2) = "O ficheiro ISO foi criado"
                         Text = "Criar um ficheiro ISO"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Os ficheiros ISO criados com este utilitário só devem ser utilizados em Máquinas Virtuais (VMs) e computadores com controladores de disco padrão." & CrLf & CrLf &
                                       "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                         Label3.Text = "Quando estiver pronto, clique no botão Criar."
@@ -149,7 +149,7 @@ Public Class ISOCreator
                         progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
                         progressMessages(2) = "Il file ISO è stato creato"
                         Text = "Creare un file ISO"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. I file ISO creati con questa utility devono essere utilizzati solo su macchine virtuali (VM) e su computer con controller del disco standard." & CrLf & CrLf &
                                       "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                         Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
@@ -181,7 +181,7 @@ Public Class ISOCreator
                 progressMessages(1) = "Creating ISO file. This can take some time. Please wait..."
                 progressMessages(2) = "The ISO file has been created"
                 Text = "Create an ISO file"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. ISO files created with this utility should be used only on Virtual Machines (VMs) and computers with standard disk controllers." & CrLf & CrLf &
                               "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                 Label3.Text = "Once you're ready, click the Create button."
@@ -212,7 +212,7 @@ Public Class ISOCreator
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
                 progressMessages(2) = "El archivo ISO ha sido creado"
                 Text = "Crear un archivo ISO"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Los archivos ISO creados solo deberían ser utilizados en máquinas virtuales y en ordenadores con controladores de disco estándares." & CrLf & CrLf &
                               "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                 Label3.Text = "Cuando esté listo, haga clic en Crear."
@@ -243,7 +243,7 @@ Public Class ISOCreator
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
                 progressMessages(2) = "Le fichier ISO a été créé"
                 Text = "Créer un fichier ISO"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Les fichiers ISO créés à l'aide de cet utilitaire ne doivent être utilisés que sur des machines virtuelles (VM) et des ordinateurs dotés de contrôleurs de disque standard." & CrLf & CrLf &
                               "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                 Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
@@ -274,7 +274,7 @@ Public Class ISOCreator
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
                 progressMessages(2) = "O ficheiro ISO foi criado"
                 Text = "Criar um ficheiro ISO"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Os ficheiros ISO criados com este utilitário só devem ser utilizados em Máquinas Virtuais (VMs) e computadores com controladores de disco padrão." & CrLf & CrLf &
                               "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                 Label3.Text = "Quando estiver pronto, clique no botão Criar."
@@ -305,7 +305,7 @@ Public Class ISOCreator
                 progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
                 progressMessages(2) = "Il file ISO è stato creato"
                 Text = "Creare un file ISO"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. I file ISO creati con questa utility devono essere utilizzati solo su macchine virtuali (VM) e su computer con controller del disco standard." & CrLf & CrLf &
                               "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                 Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
@@ -332,7 +332,7 @@ Public Class ISOCreator
                 CheckBox2.Text = "Copia su unità Ventoy"
                 CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -354,10 +354,6 @@ Public Class ISOCreator
             Button4.Enabled = True
         End If
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
 
         ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
         Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
@@ -457,6 +453,7 @@ Public Class ISOCreator
         ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub DownloadADK()
@@ -573,7 +570,7 @@ Public Class ISOCreator
                 Case 5
                     msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             DynaLog.LogMessage("Shutting down API...")
             Try
@@ -621,7 +618,7 @@ Public Class ISOCreator
                 Case 5
                     ISOMsg = "Il file immagine di origine non esiste o non è stato fornito alcun file immagine. Specificare un file immagine valido e riprovare."
             End Select
-            MsgBox(ISOMsg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(ISOMsg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox3.Text = "" Then
@@ -650,7 +647,7 @@ Public Class ISOCreator
                 Case 5
                     ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
             End Select
-            MsgBox(ISOMsg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(ISOMsg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         Select Case MainForm.Language
@@ -678,7 +675,7 @@ Public Class ISOCreator
             Case 5
                 ISOMsg = "Assicurarsi di aver salvato tutte le modifiche prima di continuare." & CrLf & CrLf & "Se non lo si è fatto, fare clic su No, salvare l'immagine e ricominciare il processo. Non è necessario chiudere questa finestra." & CrLf & CrLf & "Si desidera creare una ISO con questo file?"
         End Select
-        If MsgBox(ISOMsg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.No Then
+        If MsgBox(ISOMsg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
             Exit Sub
         End If
         If File.Exists(TextBox3.Text) Then
@@ -707,7 +704,7 @@ Public Class ISOCreator
                 Case 5
                     ISOMsg = "L'ISO di destinazione esiste già. Si desidera sostituirla?"
             End Select
-            If MsgBox(ISOMsg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+            If MsgBox(ISOMsg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                 Try
                     File.Delete(TextBox3.Text)
                 Catch ex As Exception
@@ -804,7 +801,7 @@ Public Class ISOCreator
             Case 5
                 msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
         End Select
-        MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+        MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
         GroupBox1.Enabled = True

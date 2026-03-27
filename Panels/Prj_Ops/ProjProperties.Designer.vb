@@ -25,9 +25,6 @@ Partial Class ProjProperties
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -101,9 +98,8 @@ Partial Class ProjProperties
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.Win10Title.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.ProjPropertiesTLP.SuspendLayout()
@@ -149,39 +145,6 @@ Partial Class ProjProperties
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
         Me.Cancel_Button.Text = "Cancel"
-        '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.PictureBox1)
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(1008, 48)
-        Me.Win10Title.TabIndex = 3
-        Me.Win10Title.Visible = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.icons8_info_32px
-        Me.PictureBox1.Location = New System.Drawing.Point(964, 8)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(106, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Properties"
         '
         'Label8
         '
@@ -230,7 +193,7 @@ Partial Class ProjProperties
         Me.Label12.Location = New System.Drawing.Point(198, 60)
         Me.Label12.Name = "Label12"
         Me.Label12.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label12.Size = New System.Drawing.Size(772, 19)
+        Me.Label12.Size = New System.Drawing.Size(774, 19)
         Me.Label12.TabIndex = 5
         Me.Label12.Text = "projGuid"
         '
@@ -242,7 +205,7 @@ Partial Class ProjProperties
         Me.Label11.Location = New System.Drawing.Point(198, 41)
         Me.Label11.Name = "Label11"
         Me.Label11.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label11.Size = New System.Drawing.Size(772, 19)
+        Me.Label11.Size = New System.Drawing.Size(774, 19)
         Me.Label11.TabIndex = 5
         Me.Label11.Text = "projTZData"
         '
@@ -254,7 +217,7 @@ Partial Class ProjProperties
         Me.Label10.Location = New System.Drawing.Point(198, 22)
         Me.Label10.Name = "Label10"
         Me.Label10.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label10.Size = New System.Drawing.Size(772, 19)
+        Me.Label10.Size = New System.Drawing.Size(774, 19)
         Me.Label10.TabIndex = 5
         Me.Label10.Text = "projPath"
         '
@@ -266,7 +229,7 @@ Partial Class ProjProperties
         Me.Label9.Location = New System.Drawing.Point(198, 3)
         Me.Label9.Name = "Label9"
         Me.Label9.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label9.Size = New System.Drawing.Size(772, 19)
+        Me.Label9.Size = New System.Drawing.Size(774, 19)
         Me.Label9.TabIndex = 5
         Me.Label9.Text = "projName"
         '
@@ -292,7 +255,7 @@ Partial Class ProjProperties
         Me.LanguageList.Location = New System.Drawing.Point(624, 283)
         Me.LanguageList.Name = "LanguageList"
         Me.LanguageList.ScrollAlwaysVisible = True
-        Me.LanguageList.Size = New System.Drawing.Size(349, 48)
+        Me.LanguageList.Size = New System.Drawing.Size(351, 48)
         Me.LanguageList.TabIndex = 20
         '
         'RemountImgBtn
@@ -627,7 +590,7 @@ Partial Class ProjProperties
         Me.imgFormat.Location = New System.Drawing.Point(624, 334)
         Me.imgFormat.Name = "imgFormat"
         Me.imgFormat.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgFormat.Size = New System.Drawing.Size(349, 21)
+        Me.imgFormat.Size = New System.Drawing.Size(351, 21)
         Me.imgFormat.TabIndex = 10
         Me.imgFormat.Text = "imgFormat"
         '
@@ -639,7 +602,7 @@ Partial Class ProjProperties
         Me.imgModification.Location = New System.Drawing.Point(624, 259)
         Me.imgModification.Name = "imgModification"
         Me.imgModification.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgModification.Size = New System.Drawing.Size(347, 21)
+        Me.imgModification.Size = New System.Drawing.Size(351, 21)
         Me.imgModification.TabIndex = 10
         Me.imgModification.Text = "imgModification"
         '
@@ -651,7 +614,7 @@ Partial Class ProjProperties
         Me.imgCreation.Location = New System.Drawing.Point(624, 238)
         Me.imgCreation.Name = "imgCreation"
         Me.imgCreation.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgCreation.Size = New System.Drawing.Size(347, 21)
+        Me.imgCreation.Size = New System.Drawing.Size(351, 21)
         Me.imgCreation.TabIndex = 10
         Me.imgCreation.Text = "imgCreation"
         '
@@ -663,7 +626,7 @@ Partial Class ProjProperties
         Me.imgFiles.Location = New System.Drawing.Point(624, 217)
         Me.imgFiles.Name = "imgFiles"
         Me.imgFiles.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgFiles.Size = New System.Drawing.Size(347, 21)
+        Me.imgFiles.Size = New System.Drawing.Size(351, 21)
         Me.imgFiles.TabIndex = 10
         Me.imgFiles.Text = "imgFiles"
         '
@@ -675,7 +638,7 @@ Partial Class ProjProperties
         Me.imgDirs.Location = New System.Drawing.Point(624, 196)
         Me.imgDirs.Name = "imgDirs"
         Me.imgDirs.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgDirs.Size = New System.Drawing.Size(347, 21)
+        Me.imgDirs.Size = New System.Drawing.Size(351, 21)
         Me.imgDirs.TabIndex = 10
         Me.imgDirs.Text = "imgDirs"
         '
@@ -687,7 +650,7 @@ Partial Class ProjProperties
         Me.imgSysRoot.Location = New System.Drawing.Point(624, 175)
         Me.imgSysRoot.Name = "imgSysRoot"
         Me.imgSysRoot.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgSysRoot.Size = New System.Drawing.Size(347, 21)
+        Me.imgSysRoot.Size = New System.Drawing.Size(351, 21)
         Me.imgSysRoot.TabIndex = 10
         Me.imgSysRoot.Text = "imgSysRoot"
         '
@@ -699,7 +662,7 @@ Partial Class ProjProperties
         Me.imgPSuite.Location = New System.Drawing.Point(624, 154)
         Me.imgPSuite.Name = "imgPSuite"
         Me.imgPSuite.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgPSuite.Size = New System.Drawing.Size(347, 21)
+        Me.imgPSuite.Size = New System.Drawing.Size(351, 21)
         Me.imgPSuite.TabIndex = 10
         Me.imgPSuite.Text = "imgPSuite"
         '
@@ -711,7 +674,7 @@ Partial Class ProjProperties
         Me.imgPType.Location = New System.Drawing.Point(624, 133)
         Me.imgPType.Name = "imgPType"
         Me.imgPType.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgPType.Size = New System.Drawing.Size(347, 21)
+        Me.imgPType.Size = New System.Drawing.Size(351, 21)
         Me.imgPType.TabIndex = 10
         Me.imgPType.Text = "imgPType"
         '
@@ -723,7 +686,7 @@ Partial Class ProjProperties
         Me.imgEdition.Location = New System.Drawing.Point(624, 82)
         Me.imgEdition.Name = "imgEdition"
         Me.imgEdition.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgEdition.Size = New System.Drawing.Size(347, 30)
+        Me.imgEdition.Size = New System.Drawing.Size(351, 30)
         Me.imgEdition.TabIndex = 10
         Me.imgEdition.Text = "imgEdition"
         Me.imgEdition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -736,7 +699,7 @@ Partial Class ProjProperties
         Me.imgSPLvl.Location = New System.Drawing.Point(624, 61)
         Me.imgSPLvl.Name = "imgSPLvl"
         Me.imgSPLvl.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgSPLvl.Size = New System.Drawing.Size(347, 21)
+        Me.imgSPLvl.Size = New System.Drawing.Size(351, 21)
         Me.imgSPLvl.TabIndex = 10
         Me.imgSPLvl.Text = "imgSPLvl"
         '
@@ -748,7 +711,7 @@ Partial Class ProjProperties
         Me.imgSPBuild.Location = New System.Drawing.Point(624, 40)
         Me.imgSPBuild.Name = "imgSPBuild"
         Me.imgSPBuild.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgSPBuild.Size = New System.Drawing.Size(347, 21)
+        Me.imgSPBuild.Size = New System.Drawing.Size(351, 21)
         Me.imgSPBuild.TabIndex = 10
         Me.imgSPBuild.Text = "imgSPBuild"
         '
@@ -760,7 +723,7 @@ Partial Class ProjProperties
         Me.imgHal.Location = New System.Drawing.Point(624, 19)
         Me.imgHal.Name = "imgHal"
         Me.imgHal.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgHal.Size = New System.Drawing.Size(347, 21)
+        Me.imgHal.Size = New System.Drawing.Size(351, 21)
         Me.imgHal.TabIndex = 10
         Me.imgHal.Text = "imgHal"
         '
@@ -944,7 +907,7 @@ Partial Class ProjProperties
         Me.ProjPropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ProjPropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ProjPropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ProjPropertiesTLP.Size = New System.Drawing.Size(976, 82)
+        Me.ProjPropertiesTLP.Size = New System.Drawing.Size(978, 82)
         Me.ProjPropertiesTLP.TabIndex = 6
         '
         'ImagePropertiesTLP
@@ -957,7 +920,7 @@ Partial Class ProjProperties
         Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3444405!))
         Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 138.0!))
         Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3277893!))
-        Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 208.0!))
+        Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210.0!))
         Me.ImagePropertiesTLP.Controls.Add(Me.RWRemountBtn, 5, 15)
         Me.ImagePropertiesTLP.Controls.Add(Me.LanguageList, 4, 13)
         Me.ImagePropertiesTLP.Controls.Add(Me.imgRW, 4, 15)
@@ -1030,7 +993,7 @@ Partial Class ProjProperties
         Me.ImagePropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ImagePropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ImagePropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ImagePropertiesTLP.Size = New System.Drawing.Size(976, 384)
+        Me.ImagePropertiesTLP.Size = New System.Drawing.Size(978, 384)
         Me.ImagePropertiesTLP.TabIndex = 21
         '
         'RWRemountBtn
@@ -1101,7 +1064,7 @@ Partial Class ProjProperties
         Me.imgInstType.Location = New System.Drawing.Point(624, 112)
         Me.imgInstType.Name = "imgInstType"
         Me.imgInstType.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgInstType.Size = New System.Drawing.Size(347, 21)
+        Me.imgInstType.Size = New System.Drawing.Size(351, 21)
         Me.imgInstType.TabIndex = 10
         Me.imgInstType.Text = "imgInstType"
         '
@@ -1121,7 +1084,7 @@ Partial Class ProjProperties
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(970, 13)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(972, 13)
         Me.TableLayoutPanel2.TabIndex = 26
         '
         'Label20
@@ -1132,7 +1095,7 @@ Partial Class ProjProperties
         Me.Label20.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
         Me.Label20.Location = New System.Drawing.Point(3, 0)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(479, 13)
+        Me.Label20.Size = New System.Drawing.Size(480, 13)
         Me.Label20.TabIndex = 15
         Me.Label20.Text = "Image present on project?"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -1143,9 +1106,9 @@ Partial Class ProjProperties
         Me.Label19.AutoSize = True
         Me.Label19.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label19.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.Label19.Location = New System.Drawing.Point(488, 0)
+        Me.Label19.Location = New System.Drawing.Point(489, 0)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(479, 13)
+        Me.Label19.Size = New System.Drawing.Size(480, 13)
         Me.Label19.TabIndex = 14
         Me.Label19.Text = "imgStatus"
         '
@@ -1185,6 +1148,20 @@ Partial Class ProjProperties
     "e"
         Me.LinkLabel2.UseCompatibleTextRendering = True
         '
+        'ImageTaskHeader1
+        '
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Global.DISMTools.My.Resources.Resources.icons8_info_32px
+        Me.ImageTaskHeader1.ItemText = "Properties"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
+        Me.ImageTaskHeader1.TabIndex = 16
+        '
         'ProjProperties
         '
         Me.AcceptButton = Me.OK_Button
@@ -1193,9 +1170,9 @@ Partial Class ProjProperties
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 621)
         Me.Controls.Add(Me.FlowLayoutPanel1)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -1205,9 +1182,6 @@ Partial Class ProjProperties
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Properties"
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.FlowLayoutPanel1.ResumeLayout(False)
@@ -1228,9 +1202,6 @@ Partial Class ProjProperties
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents Label6 As System.Windows.Forms.Label
@@ -1304,5 +1275,6 @@ Partial Class ProjProperties
     Friend WithEvents RWRemountBtn As System.Windows.Forms.Button
     Friend WithEvents imgRW As System.Windows.Forms.Label
     Friend WithEvents Label62 As System.Windows.Forms.Label
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
 
 End Class

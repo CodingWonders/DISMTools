@@ -78,10 +78,19 @@ Public Class ImgInfoSaveDlg
         If ImageInfoList.Count <> 0 Then ImageInfoList.Clear()
         Contents &= GetHeader("Image information", HeaderSize.Header2) & CrLf
         If OnlineMode Then
+            Dim revisionNumber As Integer
+            Try
+                Dim ubrRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+                revisionNumber = ubrRk.GetValue("UBR")
+                ubrRk.Close()
+            Catch ex As Exception
+                revisionNumber = FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            End Try
+
             Contents &= GetHeader("Active installation information:", HeaderSize.Header3) & CrLf &
                 GetListItems(New String() {"Name: " & My.Computer.Info.OSFullName,
                                            "Boot point (mount point): " & Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
-                                           "Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart}.
+                                           "Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber}.
                                        ToList()) & CrLf
             Exit Sub
         ElseIf OfflineMode Then

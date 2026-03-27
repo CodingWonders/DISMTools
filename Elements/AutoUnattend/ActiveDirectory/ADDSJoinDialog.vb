@@ -143,7 +143,7 @@ Public Class ADDSJoinDialog
             ADDSInitBW.ReportProgress(90)
             userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
             If userMappings IsNot Nothing Then
-                ComboBox2.Items.AddRange(userMappings.Keys.ToArray())
+                ComboBox2.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
                 ComboBox2.SelectedIndex = 0
             End If
         Else
@@ -192,7 +192,7 @@ Public Class ADDSJoinDialog
         Else
             NtLogonPathStart = "Primary DC NetBIOS"
         End If
-        AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
+        If ComboBox3.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -265,8 +265,16 @@ Public Class ADDSJoinDialog
                     Return False
                 End If
                 If TextBox6.Text = "" Then
-                    MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
-                    Return False
+                    Try
+                        If DomainServicesModule.DSAccountHasRequiredPassword(dsDomainName, initialUserName) Then
+                            MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
+                            Return False
+                        End If
+                    Catch ex As Exception
+                        MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
+                        Return False
+                    End Try
+
                 End If
                 Return MsgBox("Please verify the information that you typed. If you incorrectly typed a field, the client device may not join the domain." & CrLf & CrLf & "The client device will also not join the domain if it will run home editions of Windows." & CrLf & CrLf & "Are you sure that these settings are correct?", vbYesNo + vbQuestion, "Verify Settings") = MsgBoxResult.Yes
         End Select
@@ -512,7 +520,7 @@ Public Class ADDSJoinDialog
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
         Try
             ComboBox3.Items.Clear()
-            ComboBox3.Items.AddRange(userMappings(ComboBox2.SelectedItem).Select(Function(adUser) adUser.DisplayName).ToArray())
+            ComboBox3.Items.AddRange(userMappings(ComboBox2.SelectedItem).OrderBy(Function(adUser) adUser.DisplayName).Select(Function(adUser) adUser.DisplayName).ToArray())
             ComboBox3.SelectedIndex = 0
         Catch ex As Exception
 
@@ -520,11 +528,15 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
-        AddsUpnPathText.Text = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).UserPrincipalName
-        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName)
-        initialUserName = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName
+        Dim referenceUserDispName As String = ComboBox3.SelectedItem
+        Dim referenceUser As Principal = userMappings(ComboBox2.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
+        If referenceUser Is Nothing Then Exit Sub
 
-        If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName) Then
+        AddsUpnPathText.Text = referenceUser.UserPrincipalName
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, referenceUser.SamAccountName)
+        initialUserName = referenceUser.SamAccountName
+
+        If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, referenceUser.SamAccountName) Then
             MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
         End If
     End Sub

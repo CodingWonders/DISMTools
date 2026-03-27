@@ -37,7 +37,7 @@ Public Class GetDriverInfo
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get driver information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "What do you want to get information about?"
                         Label3.Text = "Click here to get information about drivers that you've installed or that came with the Windows image you're servicing"
                         Label4.Text = "Click here to get information about drivers that you want to add to the Windows image you're servicing before proceeding with the driver addition process"
@@ -82,7 +82,7 @@ Public Class GetDriverInfo
                         SearchBox1.Text = "Type here to search for a driver..."
                     Case "ESN"
                         Text = "Obtener información de controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "¿Acerca de qué le gustaría obtener información?"
                         Label3.Text = "Haga clic aquí para obtener información de controladores que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
                         Label4.Text = "Haga clic aquí para obtener información de controladores que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de controladores"
@@ -127,7 +127,7 @@ Public Class GetDriverInfo
                         SearchBox1.Text = "Escriba aquí para buscar un controlador..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les pilotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
                         Label3.Text = "Cliquez ici pour obtenir des informations sur les pilotes que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance"
                         Label4.Text = "Cliquez ici pour obtenir des informations sur les pilotes que vous souhaitez ajouter à l'image Windows que vous maintenez avant de poursuivre le processus d'ajout de pilote"
@@ -172,7 +172,7 @@ Public Class GetDriverInfo
                         SearchBox1.Text = "Tapez ici pour rechercher un pilote..."
                     Case "PTB", "PTG"
                         Text = "Obter informações do controlador"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Sobre o que é que pretende obter informações?"
                         Label3.Text = "Clique aqui para obter informações sobre os controladores que instalou ou que vieram com a imagem do Windows que está a reparar"
                         Label4.Text = "Clique aqui para obter informações sobre os controladores que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de controladores"
@@ -215,7 +215,7 @@ Public Class GetDriverInfo
                         SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
                     Case "ITA"
                         Text = "Verifica informazioni driver"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Su cosa vuoi verificare informazioni?"
                         Label3.Text = "Fai clic qui per verificare informazioni sui driver installati o forniti con l'immagine di Windows che stai revisionando"
                         Label4.Text = "Fai clic qui per verificare informazioni sui driver che vuoi aggiungere all'immagine di Windows prima di procedere con il processo di aggiunta dei driver"
@@ -261,7 +261,7 @@ Public Class GetDriverInfo
                 End Select
             Case 1
                 Text = "Get driver information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "What do you want to get information about?"
                 Label3.Text = "Click here to get information about drivers that you've installed or that came with the Windows image you're servicing"
                 Label4.Text = "Click here to get information about drivers that you want to add to the Windows image you're servicing before proceeding with the driver addition process"
@@ -306,7 +306,7 @@ Public Class GetDriverInfo
                 SearchBox1.Text = "Type here to search for a driver..."
             Case 2
                 Text = "Obtener información de controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "¿Acerca de qué le gustaría obtener información?"
                 Label3.Text = "Haga clic aquí para obtener información de controladores que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
                 Label4.Text = "Haga clic aquí para obtener información de controladores que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de controladores"
@@ -351,7 +351,7 @@ Public Class GetDriverInfo
                 SearchBox1.Text = "Escriba aquí para buscar un controlador..."
             Case 3
                 Text = "Obtenir des informations sur les pilotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
                 Label3.Text = "Cliquez ici pour obtenir des informations sur les pilotes que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance"
                 Label4.Text = "Cliquez ici pour obtenir des informations sur les pilotes que vous souhaitez ajouter à l'image Windows que vous maintenez avant de poursuivre le processus d'ajout de pilote"
@@ -396,7 +396,7 @@ Public Class GetDriverInfo
                 SearchBox1.Text = "Tapez ici pour rechercher un pilote..."
             Case 4
                 Text = "Obter informações do controlador"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Sobre o que é que pretende obter informações?"
                 Label3.Text = "Clique aqui para obter informações sobre os controladores que instalou ou que vieram com a imagem do Windows que está a reparar"
                 Label4.Text = "Clique aqui para obter informações sobre os controladores que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de controladores"
@@ -439,7 +439,7 @@ Public Class GetDriverInfo
                 SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
             Case 5
                 Text = "Verifica informazioni driver"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Su cosa vuoi verificare informazioni?"
                 Label3.Text = "Fai clic qui per verificare informazioni sui driver installati o forniti con l'immagine di Windows che stai revisionando"
                 Label4.Text = "Fai clic qui per verificare informazioni sui driver che vuoi aggiungere all'immagine di Windows prima di procedere con il processo di aggiunta dei driver"
@@ -483,7 +483,7 @@ Public Class GetDriverInfo
                 OpenFileDialog1.Title = "Rilevazione file driver"
                 SearchBox1.Text = "Digita qui per cercare un driver..."
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -496,10 +496,6 @@ Public Class GetDriverInfo
         SearchBox1.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
         WizardBtn.Image = GetGlyphResource("assistant")
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If SplitContainer1.SplitterDistance = 440 Then
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
@@ -538,6 +534,7 @@ Public Class GetDriverInfo
         SearchBox1.Text = ""
         ColumnHeader1.Width = WindowHelper.ScaleLogical(188)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(220)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -618,7 +615,7 @@ Public Class GetDriverInfo
                     Case 5
                         msg = "Prima di visualizzare le informazioni sul pacchetto devono essere completati i processi in secondo piano. Attendi che siano completati."
                 End Select
-                MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

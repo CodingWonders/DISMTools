@@ -8,8 +8,9 @@ Imports DISMTools.Utilities
 
 Public Class ApplicationDriveSpecifier
 
+    Public SelectedDriveId As String
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        ImgApply.TextBox3.Text = TextBox1.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -25,7 +26,7 @@ Public Class ApplicationDriveSpecifier
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT DeviceID, Model, Partitions, Size FROM Win32_DiskDrive")
         Dim dskResults As ManagementObjectCollection = searcher.Get()
         DynaLog.LogMessage("Management object searcher returned " & dskResults.Count & " result(s)")
-        ListView1.Items.AddRange(dskResults.Cast(Of ManagementObject)().Select(Function(result) New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"})).ToArray())
+        ListView1.Items.AddRange(dskResults.Cast(Of ManagementObject)().OrderBy(Function(result) result("DeviceID")).Select(Function(result) New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " bytes (~" & Converters.BytesToReadableSize(result("Size")) & ")"})).ToArray())
     End Sub
 
     Private Sub ApplicationDriveSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -164,5 +165,15 @@ Public Class ApplicationDriveSpecifier
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
         TextBox1.Text = ListView1.FocusedItem.SubItems(0).Text
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        SelectedDriveId = TextBox1.Text
+    End Sub
+
+    Private Sub ListView1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseDoubleClick
+        If ListView1.SelectedItems.Count = 1 Then
+            OK_Button.PerformClick()
+        End If
     End Sub
 End Class

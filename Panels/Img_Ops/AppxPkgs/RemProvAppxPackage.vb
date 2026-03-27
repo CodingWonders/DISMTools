@@ -103,7 +103,7 @@ Public Class RemProvAppxPackage
                                 Case 5
                                     msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
                             End Select
-                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Exit Sub
                         End If
                     End If
@@ -200,7 +200,7 @@ Public Class RemProvAppxPackage
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove provisioned AppX packages"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "If an application is registered to a user, you will need to run this PowerShell command in order to completely remove it:"
                         Label4.Text = "Remove-AppxPackage -Package <package name>"
                         Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
@@ -215,7 +215,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Registered to any user?"
                     Case "ESN"
                         Text = "Eliminar paquetes aprovisionados AppX"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Si una aplicación está registrada a un usuario, debe ejecutar este comando de PowerShell para eliminarla completamente:"
                         Label4.Text = "Remove-AppxPackage -Package <nombre de paquete>"
                         Label5.Text = "Si no, la aplicación no será aprovisionada para nuevos usuarios. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
@@ -230,7 +230,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "¿Registrada a un usuario?"
                     Case "FRA"
                         Text = "Supprimer les paquets AppX provisionnés"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Si une application est enregistrée auprès d'un utilisateur, vous devrez exécuter cette commande PowerShell afin de la supprimer complètement :"
                         Label4.Text = "Remove-AppxPackage -Package <nom du paquet>"
                         Label5.Text = "Dans le cas contraire, l'application ne sera pas approvisionnée pour les nouveaux utilisateurs. Pour plus de détails, consultez la colonne " & Quote & "Enregistré auprès d'un utilisateur ?" & Quote
@@ -245,7 +245,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
                     Case "PTB", "PTG"
                         Text = "Remover pacotes AppX provisionados"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Se um aplicativo estiver registrado para um usuário, você precisará executar este comando do PowerShell para removê-lo completamente:"
                         Label4.Text = "Remove-AppxPackage -Package <nome do pacote>"
                         Label5.Text = "Caso contrário, a aplicação não será aprovisionada para novos utilizadores. Consulte a coluna " & Quote & "Registado em qualquer utilizador?" & Quote & " para obter mais detalhes"
@@ -260,7 +260,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Registado por algum utilizador?"
                     Case "ITA"
                         Text = "Rimuovi i pacchetti AppX in provisioning"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Se un'applicazione è registrata per un utente, è necessario eseguire questo comando PowerShell per rimuoverla completamente:"
                         Label4.Text = "Remove-AppxPackage -Package <nome pacchetto>"
                         Label5.Text = "Altrimenti, l'applicazione non potrà essere fornita ai nuovi utenti. Controllare la colonna " & Quote & "Registrato a qualche utente?" & Quote & " per maggiori dettagli"
@@ -276,7 +276,7 @@ Public Class RemProvAppxPackage
                 End Select
             Case 1
                 Text = "Remove provisioned AppX packages"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "If an application is registered to a user, you will need to run this PowerShell command in order to completely remove it:"
                 Label4.Text = "Remove-AppxPackage -Package <package name>"
                 Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
@@ -291,7 +291,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Registered to any user?"
             Case 2
                 Text = "Eliminar paquetes aprovisionados AppX"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Si una aplicación está registrada a un usuario, debe ejecutar este comando de PowerShell para eliminarla completamente:"
                 Label4.Text = "Remove-AppxPackage -Package <nombre de paquete>"
                 Label5.Text = "Si no, la aplicación no será aprovisionada para nuevos usuarios. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
@@ -306,7 +306,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "¿Registrada a un usuario?"
             Case 3
                 Text = "Supprimer les paquets AppX provisionnés"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Si une application est enregistrée auprès d'un utilisateur, vous devrez exécuter cette commande PowerShell afin de la supprimer complètement :"
                 Label4.Text = "Remove-AppxPackage -Package <nom du paquet>"
                 Label5.Text = "Dans le cas contraire, l'application ne sera pas approvisionnée pour les nouveaux utilisateurs. Pour plus de détails, consultez la colonne " & Quote & "Enregistré auprès d'un utilisateur ?" & Quote
@@ -321,7 +321,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
             Case 4
                 Text = "Remover pacotes AppX provisionados"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Se um aplicativo estiver registrado para um usuário, você precisará executar este comando do PowerShell para removê-lo completamente:"
                 Label4.Text = "Remove-AppxPackage -Package <nome do pacote>"
                 Label5.Text = "Caso contrário, a aplicação não será aprovisionada para novos utilizadores. Consulte a coluna " & Quote & "Registado em qualquer utilizador?" & Quote & " para obter mais detalhes"
@@ -336,7 +336,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Registado por algum utilizador?"
             Case 5
                 Text = "Rimuovi i pacchetti AppX in provisioning"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Se un'applicazione è registrata per un utente, è necessario eseguire questo comando PowerShell per rimuoverla completamente:"
                 Label4.Text = "Remove-AppxPackage -Package <nome pacchetto>"
                 Label5.Text = "Altrimenti, l'applicazione non potrà essere fornita ai nuovi utenti. Controllare la colonna " & Quote & "Registrato a qualche utente?" & Quote & " per maggiori dettagli"
@@ -350,11 +350,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(4).Text = "Versione"
                 ListView1.Columns(5).Text = "Registrato a qualche utente?"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -369,6 +365,7 @@ Public Class RemProvAppxPackage
         ColumnHeader4.Width = WindowHelper.ScaleLogical(74)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(80)
         ColumnHeader6.Width = WindowHelper.ScaleLogical(130)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick

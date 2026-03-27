@@ -276,7 +276,7 @@ Public Class AddPackageDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Add packages"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Package source:"
                         Label3.Text = "Package operation:"
                         Button1.Text = "Browse..."
@@ -295,7 +295,7 @@ Public Class AddPackageDlg
                         GroupBox2.Text = "Options"
                     Case "ESN"
                         Text = "Añadir paquetes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Origen:"
                         Label3.Text = "Operación de paquetes:"
                         Button1.Text = "Examinar..."
@@ -314,7 +314,7 @@ Public Class AddPackageDlg
                         GroupBox2.Text = "Opciones"
                     Case "FRA"
                         Text = "Ajouter des paquets"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Source des paquets :"
                         Label3.Text = "Opération d'ajout des paquets :"
                         Button1.Text = "Parcourir..."
@@ -333,7 +333,7 @@ Public Class AddPackageDlg
                         GroupBox2.Text = "Paramètres"
                     Case "PTB", "PTG"
                         Text = "Adicionar pacotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Origem do pacote:"
                         Label3.Text = "Operação do pacote:"
                         Button1.Text = "Navegar..."
@@ -352,7 +352,7 @@ Public Class AddPackageDlg
                         GroupBox2.Text = "Opções"
                     Case "ITA"
                         Text = "Aggiungi pacchetti"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Origine pacchetto:"
                         Label3.Text = "Operazione pacchetto:"
                         Button1.Text = "Sfoglia..."
@@ -372,7 +372,7 @@ Public Class AddPackageDlg
                 End Select
             Case 1
                 Text = "Add packages"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Package source:"
                 Label3.Text = "Package operation:"
                 Button1.Text = "Browse..."
@@ -391,7 +391,7 @@ Public Class AddPackageDlg
                 GroupBox2.Text = "Options"
             Case 2
                 Text = "Añadir paquetes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Origen:"
                 Label3.Text = "Operación de paquetes:"
                 Button1.Text = "Examinar..."
@@ -410,7 +410,7 @@ Public Class AddPackageDlg
                 GroupBox2.Text = "Opciones"
             Case 3
                 Text = "Ajouter des paquets"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Source des paquets :"
                 Label3.Text = "Opération d'ajout des paquets :"
                 Button1.Text = "Parcourir..."
@@ -429,7 +429,7 @@ Public Class AddPackageDlg
                 GroupBox2.Text = "Paramètres"
             Case 4
                 Text = "Adicionar pacotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Origem do pacote:"
                 Label3.Text = "Operação do pacote:"
                 Button1.Text = "Navegar..."
@@ -448,7 +448,7 @@ Public Class AddPackageDlg
                 GroupBox2.Text = "Opções"
             Case 5
                 Text = "Aggiungi pacchetti"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Origine pacchetto:"
                 Label3.Text = "Operazione pacchetto:"
                 Button1.Text = "Sfoglia..."
@@ -466,7 +466,7 @@ Public Class AddPackageDlg
                 GroupBox1.Text = "Pacchetti"
                 GroupBox2.Text = "Opzioni"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -476,10 +476,6 @@ Public Class AddPackageDlg
         CheckedListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         Control.CheckForIllegalCrossThreadCalls = False
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If CheckedListBox1.Items.Count = 0 Then
             Select Case MainForm.Language
                 Case 0
@@ -512,6 +508,7 @@ Public Class AddPackageDlg
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Addition_MUMFile = ""
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged

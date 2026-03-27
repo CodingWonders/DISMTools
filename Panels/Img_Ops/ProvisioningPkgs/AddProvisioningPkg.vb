@@ -19,26 +19,26 @@ Public Class AddProvisioningPkg
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ESN"
-                                MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "FRA"
-                                MsgBox("Le paquet de provisionnement spécifié n'existe pas. Assurez-vous qu'il existe dans le système de fichiers et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Le paquet de provisionnement spécifié n'existe pas. Assurez-vous qu'il existe dans le système de fichiers et réessayez.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "PTB", "PTG"
-                                MsgBox("O pacote de provisionamento especificado não existe. Certifique-se de que existe no sistema de ficheiros e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("O pacote de provisionamento especificado não existe. Certifique-se de que existe no sistema de ficheiros e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ITA"
-                                MsgBox("Il pacchetto di provisioning specificato non esiste. Assicuratevi che esista nel file system e riprovate.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Il pacchetto di provisioning specificato non esiste. Assicuratevi che esista nel file system e riprovate.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         End Select
                     Case 1
-                        MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 2
-                        MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 3
-                        MsgBox("Le paquet de provisionnement spécifié n'existe pas. Assurez-vous qu'il existe dans le système de fichiers et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Le paquet de provisionnement spécifié n'existe pas. Assurez-vous qu'il existe dans le système de fichiers et réessayez.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 4
-                        MsgBox("O pacote de provisionamento especificado não existe. Certifique-se de que existe no sistema de ficheiros e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("O pacote de provisionamento especificado não existe. Certifique-se de que existe no sistema de ficheiros e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 5
-                        MsgBox("Il pacchetto di provisioning specificato non esiste. Assicuratevi che esista nel file system e riprovate.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Il pacchetto di provisioning specificato non esiste. Assicuratevi che esista nel file system e riprovate.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 End Select
                 Exit Sub
             End If
@@ -74,7 +74,7 @@ Public Class AddProvisioningPkg
                     Case 5
                         msg = "Il file di catalogo specificato non esiste. Non utilizzeremo questo file se si procede." & CrLf & CrLf & "Si desidera continuare?"
                 End Select
-                If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                If MsgBox(msg, vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                     Exit Sub
                 End If
             Else
@@ -85,26 +85,26 @@ Public Class AddProvisioningPkg
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ESN"
-                            MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "FRA"
-                            MsgBox("Aucun paquet de provisionnement n'a été spécifié. Veuillez spécifier un paquet de provisionnement à ajouter et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Aucun paquet de provisionnement n'a été spécifié. Veuillez spécifier un paquet de provisionnement à ajouter et réessayer.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "PTB", "PTG"
-                            MsgBox("Não foi especificado nenhum pacote de aprovisionamento. Especifique um pacote de provisionamento para adicionar e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Não foi especificado nenhum pacote de aprovisionamento. Especifique um pacote de provisionamento para adicionar e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ITA"
-                            MsgBox("Non è stato specificato alcun pacchetto di provisioning. Specificare un pacchetto di provisioning da aggiungere e riprovare.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Non è stato specificato alcun pacchetto di provisioning. Specificare un pacchetto di provisioning da aggiungere e riprovare.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                 Case 1
-                    MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 2
-                    MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 3
-                    MsgBox("Aucun paquet de provisionnement n'a été spécifié. Veuillez spécifier un paquet de provisionnement à ajouter et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Aucun paquet de provisionnement n'a été spécifié. Veuillez spécifier un paquet de provisionnement à ajouter et réessayer.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 4
-                    MsgBox("Não foi especificado nenhum pacote de aprovisionamento. Especifique um pacote de provisionamento para adicionar e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Não foi especificado nenhum pacote de aprovisionamento. Especifique um pacote de provisionamento para adicionar e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 5
-                    MsgBox("Non è stato specificato alcun pacchetto di provisioning. Specificare un pacchetto di provisioning da aggiungere e riprovare.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Non è stato specificato alcun pacchetto di provisioning. Specificare un pacchetto di provisioning da aggiungere e riprovare.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Select
             Exit Sub
         End If
@@ -163,7 +163,7 @@ Public Class AddProvisioningPkg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Add provisioning packages"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Package path:"
                         Label3.Text = "This action can't be reverted. Once you add a provisioning package, you won't be able to remove it from your Windows image."
                         Label4.Text = "Catalog path:"
@@ -174,7 +174,7 @@ Public Class AddProvisioningPkg
                         CheckBox1.Text = "Commit image after adding this provisioning package"
                     Case "ESN"
                         Text = "Añadir paquete de aprovisionamiento"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ruta de paquete:"
                         Label3.Text = "Esta acción no puede ser revertida. Cuando añada un paquete de aprovisionamiento, no lo podrá eliminar de la imagen de Windows."
                         Label4.Text = "Ruta de catálogo:"
@@ -185,7 +185,7 @@ Public Class AddProvisioningPkg
                         CheckBox1.Text = "Guardar imagen tras añadir este paquete de aprovisionamiento"
                     Case "FRA"
                         Text = "Ajouter des paquets de provisionnement"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Chemin du paquet :"
                         Label3.Text = "Cette action ne peut pas être annulée. Une fois que vous avez ajouté un package de provisionnement, vous ne pourrez plus le supprimer de votre image Windows."
                         Label4.Text = "Chemin du catalogue :"
@@ -196,7 +196,7 @@ Public Class AddProvisioningPkg
                         CheckBox1.Text = "Enregistrer l'image après l'ajout de ce paquet de provisionnement"
                     Case "PTB", "PTG"
                         Text = "Adicionar pacotes de aprovisionamento"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Localização do pacote:"
                         Label3.Text = "Esta ação não pode ser revertida. Depois de adicionar um pacote de aprovisionamento, não o poderá remover da sua imagem do Windows."
                         Label4.Text = "Localização do catálogo:"
@@ -207,7 +207,7 @@ Public Class AddProvisioningPkg
                         CheckBox1.Text = "Confirmar imagem após adicionar este pacote de provisionamento"
                     Case "ITA"
                         Text = "Aggiungi pacchetti di approvvigionamento"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Percorso del pacchetto:"
                         Label3.Text = "Questa azione non può essere annullata. Una volta aggiunto un pacchetto di approvvigionamento, non sarà più possibile rimuoverlo dall'immagine di Windows."
                         Label4.Text = "Percorso catalogo:"
@@ -219,7 +219,7 @@ Public Class AddProvisioningPkg
                 End Select
             Case 1
                 Text = "Add provisioning packages"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Package path:"
                 Label3.Text = "This action can't be reverted. Once you add a provisioning package, you won't be able to remove it from your Windows image."
                 Label4.Text = "Catalog path:"
@@ -230,7 +230,7 @@ Public Class AddProvisioningPkg
                 CheckBox1.Text = "Commit image after adding this provisioning package"
             Case 2
                 Text = "Añadir paquete de aprovisionamiento"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ruta de paquete:"
                 Label3.Text = "Esta acción no puede ser revertida. Cuando añada un paquete de aprovisionamiento, no lo podrá eliminar de la imagen de Windows."
                 Label4.Text = "Ruta de catálogo:"
@@ -241,7 +241,7 @@ Public Class AddProvisioningPkg
                 CheckBox1.Text = "Guardar imagen tras añadir este paquete de aprovisionamiento"
             Case 3
                 Text = "Ajouter des paquets de provisionnement"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Chemin du paquet :"
                 Label3.Text = "Cette action ne peut pas être annulée. Une fois que vous avez ajouté un package de provisionnement, vous ne pourrez plus le supprimer de votre image Windows."
                 Label4.Text = "Chemin du catalogue :"
@@ -252,7 +252,7 @@ Public Class AddProvisioningPkg
                 CheckBox1.Text = "Enregistrer l'image après l'ajout de ce paquet de provisionnement"
             Case 4
                 Text = "Adicionar pacotes de aprovisionamento"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Localização do pacote:"
                 Label3.Text = "Esta ação não pode ser revertida. Depois de adicionar um pacote de aprovisionamento, não o poderá remover da sua imagem do Windows."
                 Label4.Text = "Localização do catálogo:"
@@ -263,7 +263,7 @@ Public Class AddProvisioningPkg
                 CheckBox1.Text = "Confirmar imagem após adicionar este pacote de provisionamento"
             Case 5
                 Text = "Aggiungi pacchetti di approvvigionamento"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Percorso del pacchetto:"
                 Label3.Text = "Questa azione non può essere annullata. Una volta aggiunto un pacchetto di approvvigionamento, non sarà più possibile rimuoverlo dall'immagine di Windows."
                 Label4.Text = "Percorso catalogo:"
@@ -273,18 +273,15 @@ Public Class AddProvisioningPkg
                 Button2.Text = "Sfoglia..."
                 CheckBox1.Text = "Applica l'immagine dopo aver aggiunto questo pacchetto di approvvigionamento"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 End Class

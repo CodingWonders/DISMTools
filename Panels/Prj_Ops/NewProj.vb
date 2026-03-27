@@ -41,7 +41,7 @@ Public Class NewProj
                 Case 5
                     msg = "La cartella: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "non esiste. Si desidera crearla?"
             End Select
-            If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+            If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("The user has decided to create the folder. Attempting to create it...")
                 Try
                     Directory.CreateDirectory(TextBox2.Text)
@@ -72,7 +72,7 @@ Public Class NewProj
                         Case 5
                             msg = "Non è stato possibile creare la cartella del progetto a causa di: " & CrLf & ex.ToString() & "; " & ex.Message
                     End Select
-                    MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Exit Sub
                 End Try
             Else
@@ -110,7 +110,7 @@ Public Class NewProj
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Create a new project"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Please specify the options to create a new project:"
                         Label3.Text = "Name*:"
                         Label4.Text = "Location*:"
@@ -122,7 +122,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Please select a folder to store this project:"
                     Case "ESN"
                         Text = "Crear un nuevo proyecto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique las opciones para crear un nuevo proyecto:"
                         Label3.Text = "Nombre*:"
                         Label4.Text = "Ubicación*:"
@@ -134,7 +134,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
                     Case "FRA"
                         Text = "Créer un nouveau projet"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Veuillez spécifier les options pour créer un nouveau projet :"
                         Label3.Text = "Nom* :"
                         Label4.Text = "Emplacement* :"
@@ -146,7 +146,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
                     Case "PTB", "PTG"
                         Text = "Criar um novo projeto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
                         Label3.Text = "Nome*:"
                         Label4.Text = "Localização*:"
@@ -158,7 +158,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
                     Case "ITA"
                         Text = "Crea un nuovo progetto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
                         Label3.Text = "Nome*:"
                         Label4.Text = "Ubicazione*:"
@@ -171,7 +171,7 @@ Public Class NewProj
                 End Select
             Case 1
                 Text = "Create a new project"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Please specify the options to create a new project:"
                 Label3.Text = "Name*:"
                 Label4.Text = "Location*:"
@@ -183,7 +183,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Please select a folder to store this project:"
             Case 2
                 Text = "Crear un nuevo proyecto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique las opciones para crear un nuevo proyecto:"
                 Label3.Text = "Nombre*:"
                 Label4.Text = "Ubicación*:"
@@ -195,7 +195,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
             Case 3
                 Text = "Créer un nouveau projet"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Veuillez spécifier les options pour créer un nouveau projet :"
                 Label3.Text = "Nom* :"
                 Label4.Text = "Emplacement* :"
@@ -207,7 +207,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
             Case 4
                 Text = "Criar um novo projeto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
                 Label3.Text = "Nome*:"
                 Label4.Text = "Localização*:"
@@ -219,7 +219,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
             Case 5
                 Text = "Crea un nuovo progetto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
                 Label3.Text = "Nome*:"
                 Label4.Text = "Ubicazione*:"
@@ -230,11 +230,7 @@ Public Class NewProj
                 GroupBox1.Text = "Progetto"
                 FolderBrowserDialog1.Description = "Selezionare una cartella per memorizzare questo progetto:"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -244,6 +240,7 @@ Public Class NewProj
         TextBox2.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

@@ -12,7 +12,7 @@ Public Class GetPkgInfoDlg
     Dim OSVer As Version
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -30,7 +30,7 @@ Public Class GetPkgInfoDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get package information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "What do you want to get information about?"
                         Label3.Text = "Click here to get information about packages that you've installed or that came with the Windows image you're servicing"
                         Label4.Text = "Click here to get information about packages that you want to add to the Windows image you're servicing before proceeding with the package addition process"
@@ -92,7 +92,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Type here to search for a package..."
                     Case "ESN"
                         Text = "Obtener información de paquetes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "¿Acerca de qué le gustaría obtener información?"
                         Label3.Text = "Haga clic aquí para obtener información de paquetes que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
                         Label4.Text = "Haga clic aquí para obtener información de paquetes que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de paquetes"
@@ -154,7 +154,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
                         Label3.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance."
                         Label4.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous souhaitez ajouter à l'image Windows que vous maintenez avant de procéder à l'ajout de paquets."
@@ -216,7 +216,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre o pacote"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Sobre o que é que pretende obter informações?"
                         Label3.Text = "Clique aqui para obter informações sobre os pacotes que instalou ou que vieram com a imagem do Windows que está a reparar"
                         Label4.Text = "Clique aqui para obter informações sobre os pacotes que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de pacotes"
@@ -278,7 +278,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
                     Case "ITA"
                         Text = "Ottieni informazioni sui pacchetti"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Su cosa vuoi ottenere informazioni?"
                         Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
                         Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
@@ -341,7 +341,7 @@ Public Class GetPkgInfoDlg
                 End Select
             Case 1
                 Text = "Get package information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "What do you want to get information about?"
                 Label3.Text = "Click here to get information about packages that you've installed or that came with the Windows image you're servicing"
                 Label4.Text = "Click here to get information about packages that you want to add to the Windows image you're servicing before proceeding with the package addition process"
@@ -403,7 +403,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Type here to search for a package..."
             Case 2
                 Text = "Obtener información de paquetes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "¿Acerca de qué le gustaría obtener información?"
                 Label3.Text = "Haga clic aquí para obtener información de paquetes que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
                 Label4.Text = "Haga clic aquí para obtener información de paquetes que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de paquetes"
@@ -465,7 +465,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
             Case 3
                 Text = "Obtenir des informations sur les paquets"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
                 Label3.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance."
                 Label4.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous souhaitez ajouter à l'image Windows que vous maintenez avant de procéder à l'ajout de paquets."
@@ -527,7 +527,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
             Case 4
                 Text = "Obter informações sobre o pacote"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Sobre o que é que pretende obter informações?"
                 Label3.Text = "Clique aqui para obter informações sobre os pacotes que instalou ou que vieram com a imagem do Windows que está a reparar"
                 Label4.Text = "Clique aqui para obter informações sobre os pacotes que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de pacotes"
@@ -589,7 +589,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
             Case 5
                 Text = "Ottieni informazioni sui pacchetti"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Su cosa vuoi ottenere informazioni?"
                 Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
                 Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
@@ -652,10 +652,6 @@ Public Class GetPkgInfoDlg
         End Select
         ListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If SplitContainer1.SplitterDistance = 440 Then
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
@@ -679,6 +675,7 @@ Public Class GetPkgInfoDlg
         SearchBox1.Text = ""
 
         OSVer = Environment.OSVersion.Version
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -736,7 +733,7 @@ Public Class GetPkgInfoDlg
                         Case 5
                             msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                     End Select
-                    MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1120,7 +1117,7 @@ Public Class GetPkgInfoDlg
                     Case 5
                         msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                 End Select
-                MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1234,7 +1231,7 @@ Public Class GetPkgInfoDlg
                 End Using
             Catch DISMEx As DismException
                 DynaLog.LogMessage("Could not get package file information. Error message: " & DISMEx.Message)
-                MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, Label1.Text)
+                MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 Try
                     DismApi.Shutdown()

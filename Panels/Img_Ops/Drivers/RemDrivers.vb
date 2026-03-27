@@ -29,44 +29,44 @@ Public Class RemDrivers
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "ESN"
-                                    If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "FRA"
-                                    If MsgBox("Vous avez sélectionné des paquets de pilotes critiques pour le démarrage. En procédant à la suppression de ces paquets, vous risquez de rendre l'image cible non amorçable." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Vous avez sélectionné des paquets de pilotes critiques pour le démarrage. En procédant à la suppression de ces paquets, vous risquez de rendre l'image cible non amorçable." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "PTB", "PTG"
-                                    If MsgBox("Seleccionou pacotes de controladores que são críticos para o arranque. Continuar com a remoção de tais pacotes pode deixar a imagem de destino não inicializável." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Seleccionou pacotes de controladores que são críticos para o arranque. Continuar com a remoção de tais pacotes pode deixar a imagem de destino não inicializável." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "ITA"
-                                    If MsgBox("Sono stati selezionati pacchetti di driver critici per l'avvio. La rimozione di tali pacchetti potrebbe rendere l'immagine di destinazione non avviabile" & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Sono stati selezionati pacchetti di driver critici per l'avvio. La rimozione di tali pacchetti potrebbe rendere l'immagine di destinazione non avviabile" & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                             End Select
                         Case 1
-                            If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 2
-                            If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 3
-                            If MsgBox("Vous avez sélectionné des paquets de pilotes critiques pour le démarrage. En procédant à la suppression de ces paquets, vous risquez de rendre l'image cible non amorçable." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Vous avez sélectionné des paquets de pilotes critiques pour le démarrage. En procédant à la suppression de ces paquets, vous risquez de rendre l'image cible non amorçable." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 4
-                            If MsgBox("Seleccionou pacotes de controladores que são críticos para o arranque. Continuar com a remoção de tais pacotes pode deixar a imagem de destino não inicializável." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Seleccionou pacotes de controladores que são críticos para o arranque. Continuar com a remoção de tais pacotes pode deixar a imagem de destino não inicializável." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 5
-                            If MsgBox("Sono stati selezionati pacchetti di driver critici per l'avvio. La rimozione di tali pacchetti potrebbe rendere l'immagine di destinazione non avviabile" & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Sono stati selezionati pacchetti di driver critici per l'avvio. La rimozione di tali pacchetti potrebbe rendere l'immagine di destinazione non avviabile" & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                     End Select
@@ -78,44 +78,44 @@ Public Class RemDrivers
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "ESN"
-                                    If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "FRA"
-                                    If MsgBox("Vous avez sélectionné des paquets de pilotes qui font partie de la distribution de Windows. La poursuite de l'opération peut rendre inaccessibles certaines parties de Windows qui dépendent de ces pilotes." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Vous avez sélectionné des paquets de pilotes qui font partie de la distribution de Windows. La poursuite de l'opération peut rendre inaccessibles certaines parties de Windows qui dépendent de ces pilotes." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "PTB", "PTG"
-                                    If MsgBox("Seleccionou pacotes de controladores que fazem parte da distribuição do Windows. Continuar pode deixar inacessíveis certas partes do Windows que dependem destes controladores." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Seleccionou pacotes de controladores que fazem parte da distribuição do Windows. Continuar pode deixar inacessíveis certas partes do Windows que dependem destes controladores." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                                 Case "ITA"
-                                    If MsgBox("Sono stati selezionati pacchetti di driver che fanno parte della distribuzione di Windows. Procedere potrebbe rendere inaccessibili alcune parti di Windows che dipendono da questi driver." & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                    If MsgBox("Sono stati selezionati pacchetti di driver che fanno parte della distribuzione di Windows. Procedere potrebbe rendere inaccessibili alcune parti di Windows che dipendono da questi driver." & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
                             End Select
                         Case 1
-                            If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 2
-                            If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 3
-                            If MsgBox("Vous avez sélectionné des paquets de pilotes qui font partie de la distribution de Windows. La poursuite de l'opération peut rendre inaccessibles certaines parties de Windows qui dépendent de ces pilotes." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Vous avez sélectionné des paquets de pilotes qui font partie de la distribution de Windows. La poursuite de l'opération peut rendre inaccessibles certaines parties de Windows qui dépendent de ces pilotes." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 4
-                            If MsgBox("Seleccionou pacotes de controladores que fazem parte da distribuição do Windows. Continuar pode deixar inacessíveis certas partes do Windows que dependem destes controladores." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Seleccionou pacotes de controladores que fazem parte da distribuição do Windows. Continuar pode deixar inacessíveis certas partes do Windows que dependem destes controladores." & CrLf & CrLf & "Deseja continuar?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                         Case 5
-                            If MsgBox("Sono stati selezionati pacchetti di driver che fanno parte della distribuzione di Windows. Procedere potrebbe rendere inaccessibili alcune parti di Windows che dipendono da questi driver." & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                            If MsgBox("Sono stati selezionati pacchetti di driver che fanno parte della distribuzione di Windows. Procedere potrebbe rendere inaccessibili alcune parti di Windows che dipendono da questi driver." & CrLf & CrLf & "Si desidera continuare?", vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                     End Select
@@ -132,26 +132,26 @@ Public Class RemDrivers
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ESN"
-                            MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "FRA"
-                            MsgBox("Veuillez spécifier les paquets de pilotes que vous souhaitez supprimer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Veuillez spécifier les paquets de pilotes que vous souhaitez supprimer et réessayez.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "PTB", "PTG"
-                            MsgBox("Especifique os pacotes de controladores que pretende remover e tente novamente", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Especifique os pacotes de controladores que pretende remover e tente novamente", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ITA"
-                            MsgBox("Specificare i pacchetti di driver da rimuovere e riprovare", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Specificare i pacchetti di driver da rimuovere e riprovare", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                 Case 1
-                    MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 2
-                    MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 3
-                    MsgBox("Veuillez spécifier les paquets de pilotes que vous souhaitez supprimer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Veuillez spécifier les paquets de pilotes que vous souhaitez supprimer et réessayez.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 4
-                    MsgBox("Especifique os pacotes de controladores que pretende remover e tente novamente", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Especifique os pacotes de controladores que pretende remover e tente novamente", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 5
-                    MsgBox("Specificare i pacchetti di driver da rimuovere e riprovare", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Specificare i pacchetti di driver da rimuovere e riprovare", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Select
             Exit Sub
         End If
@@ -222,7 +222,7 @@ Public Class RemDrivers
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove drivers"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specify the driver packages you wish to remove and click OK:"
                         CheckBox1.Text = "Hide boot-critical drivers"
                         CheckBox2.Text = "Hide drivers part of the Windows distribution"
@@ -238,7 +238,7 @@ Public Class RemDrivers
                         ListView1.Columns(7).Text = "Date"
                     Case "ESN"
                         Text = "Eliminar controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique los paquetes de controladores que desea eliminar y haga clic en Aceptar:"
                         CheckBox1.Text = "Ocultar controladores críticos para el arranque"
                         CheckBox2.Text = "Ocultar controladores que son parte de la distribución de Windows"
@@ -254,7 +254,7 @@ Public Class RemDrivers
                         ListView1.Columns(7).Text = "Fecha"
                     Case "FRA"
                         Text = "Supprimer les pilotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Indiquez les paquets de pilotes que vous souhaitez supprimer et cliquez sur OK :"
                         CheckBox1.Text = "Cacher les pilotes critiques pour le démarrage"
                         CheckBox2.Text = "Cacher les pilotes qui font partie de la distribution de Windows"
@@ -270,7 +270,7 @@ Public Class RemDrivers
                         ListView1.Columns(7).Text = "Date"
                     Case "PTB", "PTG"
                         Text = "Remover controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique os pacotes de controladores que pretende remover e clique em OK:"
                         CheckBox1.Text = "Ocultar controladores críticos para o arranque"
                         CheckBox2.Text = "Ocultar controladores que fazem parte da distribuição do Windows"
@@ -286,7 +286,7 @@ Public Class RemDrivers
                         ListView1.Columns(7).Text = "Data"
                     Case "ITA"
                         Text = "Rimuovere i conducenti"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specificare i pacchetti di driver che si desidera rimuovere e fare clic su OK:"
                         CheckBox1.Text = "Nascondere i driver critici per l'avvio"
                         CheckBox2.Text = "Nascondi i driver che fanno parte della distribuzione di Windows"
@@ -303,7 +303,7 @@ Public Class RemDrivers
                 End Select
             Case 1
                 Text = "Remove drivers"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specify the driver packages you wish to remove and click OK:"
                 CheckBox1.Text = "Hide boot-critical drivers"
                 CheckBox2.Text = "Hide drivers part of the Windows distribution"
@@ -319,7 +319,7 @@ Public Class RemDrivers
                 ListView1.Columns(7).Text = "Date"
             Case 2
                 Text = "Eliminar controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique los paquetes de controladores que desea eliminar y haga clic en Aceptar:"
                 CheckBox1.Text = "Ocultar controladores críticos para el arranque"
                 CheckBox2.Text = "Ocultar controladores que son parte de la distribución de Windows"
@@ -335,7 +335,7 @@ Public Class RemDrivers
                 ListView1.Columns(7).Text = "Fecha"
             Case 3
                 Text = "Supprimer les pilotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Indiquez les paquets de pilotes que vous souhaitez supprimer et cliquez sur OK :"
                 CheckBox1.Text = "Cacher les pilotes critiques pour le démarrage"
                 CheckBox2.Text = "Cacher les pilotes qui font partie de la distribution de Windows"
@@ -351,7 +351,7 @@ Public Class RemDrivers
                 ListView1.Columns(7).Text = "Date"
             Case 4
                 Text = "Remover controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique os pacotes de controladores que pretende remover e clique em OK:"
                 CheckBox1.Text = "Ocultar controladores críticos para o arranque"
                 CheckBox2.Text = "Ocultar controladores que fazem parte da distribuição do Windows"
@@ -367,7 +367,7 @@ Public Class RemDrivers
                 ListView1.Columns(7).Text = "Data"
             Case 5
                 Text = "Rimuovere i conducenti"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specificare i pacchetti di driver che si desidera rimuovere e fare clic su OK:"
                 CheckBox1.Text = "Nascondere i driver critici per l'avvio"
                 CheckBox2.Text = "Nascondi i driver che fanno parte della distribuzione di Windows"
@@ -382,15 +382,11 @@ Public Class RemDrivers
                 ListView1.Columns(6).Text = "Versione"
                 ListView1.Columns(7).Text = "Data"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ColumnHeader1.Width = WindowHelper.ScaleLogical(89)
@@ -401,6 +397,7 @@ Public Class RemDrivers
         ColumnHeader6.Width = WindowHelper.ScaleLogical(96)
         ColumnHeader7.Width = WindowHelper.ScaleLogical(71)
         ColumnHeader8.Width = WindowHelper.ScaleLogical(67)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged, CheckBox2.CheckedChanged

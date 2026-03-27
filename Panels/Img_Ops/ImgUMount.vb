@@ -33,26 +33,26 @@ Public Class ImgUMount
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "ESN"
-                                    MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "FRA"
-                                    MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "PTB", "PTG"
-                                    MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "ITA"
-                                    MsgBox("La directory specificata non è una directory di montaggio valida.", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("La directory specificata non è una directory di montaggio valida.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             End Select
                         Case 1
-                            MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 2
-                            MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 3
-                            MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 4
-                            MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 5
-                            MsgBox("La directory specificata non è una directory di montaggio valida.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("La directory specificata non è una directory di montaggio valida.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                     Exit Sub
                 End If
@@ -62,26 +62,26 @@ Public Class ImgUMount
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ESN"
-                                MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "FRA"
-                                MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "PTB", "PTG"
-                                MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ITA"
-                                MsgBox("La directory di montaggio non esiste", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("La directory di montaggio non esiste", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         End Select
                     Case 1
-                        MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 2
-                        MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 3
-                        MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 4
-                        MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 5
-                        MsgBox("La directory di montaggio non esiste", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("La directory di montaggio non esiste", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 End Select
                 Exit Sub
             End If
@@ -124,7 +124,7 @@ Public Class ImgUMount
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Unmount an image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Please specify the options to unmount this image:"
                         Label3.Text = "The mount directory:"
                         Label4.Text = "Mount directory:"
@@ -143,7 +143,7 @@ Public Class ImgUMount
                         GroupBox2.Text = "Additional options"
                     Case "ESN"
                         Text = "Desmontar una imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique las opciones para desmontar esta imagen:"
                         Label3.Text = "El directorio de montaje:"
                         Label4.Text = "Directorio de montaje:"
@@ -162,7 +162,7 @@ Public Class ImgUMount
                         GroupBox2.Text = "Opciones adicionales"
                     Case "FRA"
                         Text = "Démonter une image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
                         Label3.Text = "Le répertoire de montage :"
                         Label4.Text = "Répertoire de montage :"
@@ -181,7 +181,7 @@ Public Class ImgUMount
                         GroupBox2.Text = "Paramètres supplémentaires"
                     Case "PTB", "PTG"
                         Text = "Desmontar uma imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Por favor, especifique as opções para desmontar esta imagem:"
                         Label3.Text = "O diretório de montagem:"
                         Label4.Text = "Diretório de montagem:"
@@ -200,7 +200,7 @@ Public Class ImgUMount
                         GroupBox2.Text = "Opções adicionais"
                     Case "ITA"
                         Text = "Smontare un'immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specificare le opzioni per smontare questa immagine:"
                         Label3.Text = "La directory di montaggio:"
                         Label4.Text = "Directory di montaggio:"
@@ -220,7 +220,7 @@ Public Class ImgUMount
                 End Select
             Case 1
                 Text = "Unmount an image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Please specify the options to unmount this image:"
                 Label3.Text = "The mount directory:"
                 Label4.Text = "Mount directory:"
@@ -239,7 +239,7 @@ Public Class ImgUMount
                 GroupBox2.Text = "Additional options"
             Case 2
                 Text = "Desmontar una imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique las opciones para desmontar esta imagen:"
                 Label3.Text = "El directorio de montaje:"
                 Label4.Text = "Directorio de montaje:"
@@ -258,7 +258,7 @@ Public Class ImgUMount
                 GroupBox2.Text = "Opciones adicionales"
             Case 3
                 Text = "Démonter une image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
                 Label3.Text = "Le répertoire de montage :"
                 Label4.Text = "Répertoire de montage :"
@@ -277,7 +277,7 @@ Public Class ImgUMount
                 GroupBox2.Text = "Paramètres supplémentaires"
             Case 4
                 Text = "Desmontar uma imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Por favor, especifique as opções para desmontar esta imagem:"
                 Label3.Text = "O diretório de montagem:"
                 Label4.Text = "Diretório de montagem:"
@@ -296,7 +296,7 @@ Public Class ImgUMount
                 GroupBox2.Text = "Opções adicionais"
             Case 5
                 Text = "Smontare un'immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specificare le opzioni per smontare questa immagine:"
                 Label3.Text = "La directory di montaggio:"
                 Label4.Text = "Directory di montaggio:"
@@ -316,7 +316,7 @@ Public Class ImgUMount
         End Select
         ComboBox1.Items.AddRange(UMountOperations)
         ComboBox1.SelectedIndex = 0
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -325,10 +325,6 @@ Public Class ImgUMount
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If RadioButton1.Checked Then
             Label4.Enabled = False
             TextBox1.Enabled = False
@@ -340,6 +336,7 @@ Public Class ImgUMount
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged

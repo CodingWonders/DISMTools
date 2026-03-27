@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="DISMTools.Elements.Contemporaneus" />
+    <Import Include="DISMTools.Utilities" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.ControlChars" />
     <Import Include="System" />
@@ -215,6 +216,8 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Management" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
@@ -250,6 +253,7 @@
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
     <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\Contemporaneus\FullFlashUtilityImage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageCapability.vb" />
     <Compile Include="Elements\Contemporaneus\ImageDriver.vb" />
@@ -261,6 +265,7 @@
     <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
+    <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -485,10 +490,10 @@
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.Designer.vb">
+    <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.Designer.vb">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.vb">
+    <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.Designer.vb">
@@ -623,6 +628,30 @@
     <Compile Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuApply.Designer.vb">
+      <DependentUpon>FfuApply.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuApply.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuCapture.Designer.vb">
+      <DependentUpon>FfuCapture.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuCapture.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuOptimize.Designer.vb">
+      <DependentUpon>FfuOptimize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuOptimize.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuSplit.Designer.vb">
+      <DependentUpon>FfuSplit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuSplit.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </Compile>
@@ -651,6 +680,12 @@
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgIndexDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgOptimize.Designer.vb">
+      <DependentUpon>ImgOptimize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgOptimize.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgSplit.Designer.vb">
@@ -789,6 +824,18 @@
       <DependentUpon>PECustomizerDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\ISOFiles\PECustomizerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSImageGroupSpecifier.Designer.vb">
+      <DependentUpon>WDSImageGroupSpecifier.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSImageGroupSpecifier.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSInstallImageCopy.Designer.vb">
+      <DependentUpon>WDSInstallImageCopy.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSInstallImageCopy.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\MSEdge\AddEdgeBrowser.Designer.vb">
@@ -934,6 +981,7 @@
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
+    <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\RegistryHelper.vb" />
@@ -1059,7 +1107,7 @@
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Img_Ops\ApplicationDriveSpecifier.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.resx">
@@ -1128,6 +1176,18 @@
     <EmbeddedResource Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.resx">
       <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuApply.resx">
+      <DependentUpon>FfuApply.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuCapture.resx">
+      <DependentUpon>FfuCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuOptimize.resx">
+      <DependentUpon>FfuOptimize.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuSplit.resx">
+      <DependentUpon>FfuSplit.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </EmbeddedResource>
@@ -1142,6 +1202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgIndexDelete.resx">
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgOptimize.resx">
+      <DependentUpon>ImgOptimize.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgSplit.resx">
       <DependentUpon>ImgSplit.vb</DependentUpon>
@@ -1211,6 +1274,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\ISOFiles\PECustomizerDialog.resx">
       <DependentUpon>PECustomizerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\WDSImageGroupSpecifier.resx">
+      <DependentUpon>WDSImageGroupSpecifier.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\WDSInstallImageCopy.resx">
+      <DependentUpon>WDSInstallImageCopy.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeBrowser.resx">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
@@ -1339,6 +1408,9 @@
     <None Include="Helpers\extps1\mImgMgr.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\online_appx_removal.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\boot_image_to_wds.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1349,6 +1421,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\install_image_to_wds.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
@@ -1677,11 +1752,13 @@
     <None Include="Resources\about\cws_discord.png" />
     <Content Include="Resources\assistant_dark.png" />
     <Content Include="Resources\assistant_light.png" />
+    <None Include="Resources\copy_img_to_wds.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
     <None Include="Resources\menus\tour_glyph_dark.png" />
     <None Include="Resources\menus\tour_glyph_light.png" />
+    <None Include="Resources\optimize_img.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

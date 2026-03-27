@@ -164,13 +164,19 @@ Public Class AppInstallerDownloader
                                 Using tReader As TextReader = New StringReader(reader(x))
                                     Dim propertyLine As String = ""
                                     If Not reader(x).EndsWith(" />") Then
-                                        DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
+                                        DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next lines until tag closure...")
                                         Dim Properties As New List(Of String)
                                         Properties.Add(If(reader(x).EndsWith("MainBundle"), reader(x).Replace(" ", "").Trim(), reader(x)))
-                                        Properties.Add(reader(x + 1).Replace(" ", "").Trim())
-                                        Properties.Add(reader(x + 2).Replace(" ", "").Trim())
-                                        Properties.Add(reader(x + 3).Replace(" ", "").Trim())
-                                        Properties.Add(reader(x + 4).Replace(" ", "").Trim())
+                                        Dim nextLineIdx As Integer = 1
+                                        Do Until String.Join(" ", Properties).EndsWith(">")
+                                            Try
+                                                Properties.Add(reader(x + nextLineIdx).Replace(" ", "").Trim())
+                                                nextLineIdx += 1
+                                            Catch ex As Exception
+                                                ' We'll roll with what we have
+                                                Exit Do
+                                            End Try
+                                        Loop
                                         propertyLine = String.Join(" ", Properties)
                                         Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallerBundle)
                                         AppInstallerUri = id.MainBundleUri
@@ -191,14 +197,19 @@ Public Class AppInstallerDownloader
                         Using tReader As TextReader = New StringReader(reader(startingIndex))
                             Dim propertyLine As String = ""
                             If Not reader(startingIndex).EndsWith(" />") Then
-                                DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
+                                DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next lines until tag closure...")
                                 Dim Properties As New List(Of String)
                                 Properties.Add(If(reader(startingIndex).EndsWith("MainPackage"), reader(startingIndex).Replace(" ", "").Trim(), reader(startingIndex)))
-                                Properties.Add(reader(startingIndex + 1).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 2).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 3).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 4).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 5).Replace(" ", "").Trim())
+                                Dim nextLineIdx As Integer = 1
+                                Do Until String.Join(" ", Properties).EndsWith(">")
+                                    Try
+                                        Properties.Add(reader(startingIndex + nextLineIdx).Replace(" ", "").Trim())
+                                        nextLineIdx += 1
+                                    Catch ex As Exception
+                                        ' We'll roll with what we have
+                                        Exit Do
+                                    End Try
+                                Loop
                                 propertyLine = String.Join(" ", Properties)
                                 Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallerStandalone)
                                 AppInstallerUri = id.MainPackageUri

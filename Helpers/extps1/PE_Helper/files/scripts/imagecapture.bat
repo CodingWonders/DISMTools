@@ -113,6 +113,16 @@ if /i "%sourcedrive%" equ "KBD" (
 	goto :main
 )
 
+if %_DEBUG% EQU 1 echo Checking presence of marker...
+if %_DEBUG% EQU 1 echo "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag"
+if not exist "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag" (
+	echo The installation in the drive that you selected has not been prepared by Sysprep. It is recommended that you
+	echo prepare the installation on a reference computer before running this script.
+	echo.
+	set /p question=Continue? ^(y/N^): || goto :main
+	if /i "!question!" == "n" goto :main
+)
+
 if defined destdrive if %_DEBUG% equ 1 echo Destination drive already set by networking code.
 if not defined destdrive ( set /p destdrive=Please enter the letter of the volume the file will be stored on: )
 if not defined destdrive (

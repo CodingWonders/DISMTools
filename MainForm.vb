@@ -12,7 +12,12 @@ Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
 Imports DISMTools.Elements
 Imports DISMTools.Elements.Contemporaneus
+Imports DISMTools.Elements.IniParserConfigurators
 Imports System.ComponentModel
+Imports IniParser
+Imports IniParser.Parser
+Imports IniParser.Model
+Imports System.Management
 
 Public Class MainForm
 
@@ -211,6 +216,8 @@ Public Class MainForm
     Public PartTableOverridePreference As Integer = 0
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
+
+    Public ReinitializeCurImage As Boolean = True
 
 
     Sub GetArguments()
@@ -634,7 +641,13 @@ Public Class MainForm
             DynaLog.LogMessage("AME 10/11 has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
         End If
 
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
@@ -2583,7 +2596,17 @@ Public Class MainForm
         End If
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
-            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            ' Revision number may not be the one that we're actually on when getting info about ntoskrnl; use UBR if we can
+            Dim revisionNumber As Integer
+            Try
+                Dim ubrRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+                revisionNumber = ubrRk.GetValue("UBR")
+                ubrRk.Close()
+            Catch ex As Exception
+                revisionNumber = FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            End Try
+
+            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber
             CurrentImage.ImageVersion = Environment.OSVersion.Version
             Select Case Language
                 Case 0
@@ -2721,7 +2744,10 @@ Public Class MainForm
             DynaLog.LogMessage("- Image version: " & Label48.Text)
         Else
             Try
-                CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                If ReinitializeCurImage Then
+                    CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                End If
+                ReinitializeCurImage = True
                 If CurrentImage IsNot Nothing Then
                     Label41.Text = CurrentImage.ImageIndex
                     Label44.Text = CurrentImage.ImageMountDirectory
@@ -2800,6 +2826,63 @@ Public Class MainForm
 
         Return disguised
     End Function
+
+    Private Sub GetFFUInformation(ByRef ImageFile As WindowsImage)
+        If ImageFile Is Nothing Then Exit Sub
+        Dim MountedFFURk As RegistryKey = Nothing
+
+        Try
+            MountedFFURk = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\DISM\Mounted FFUs", False)
+            ' Since the information is stored in subkeys of the aforementioned subkey, we'll have to iterate over them to get the one that
+            ' we wanted.
+            For Each MountedFFUVolume In MountedFFURk.GetSubKeyNames()
+                Dim MountedFFUVolumeRk As RegistryKey = MountedFFURk.OpenSubKey(MountedFFUVolume, False)
+                Dim MountedFFUMountPath As String = MountedFFUVolumeRk.GetValue("Mount Path", "")
+
+                If MountedFFUMountPath.Equals(ImageFile.ImageMountDirectory, StringComparison.OrdinalIgnoreCase) Then
+                    ' Then it's this one
+                    Dim IniManifestContents As Byte() = MountedFFUVolumeRk.GetValue("Manifest", {})
+                    ImageFile.FFUInfo.IniManifest = ASCII.GetString(IniManifestContents)
+                    ImageFile.FFUInfo.VhdPath = MountedFFUVolumeRk.GetValue("VHD Path", "")
+                    ImageFile.FFUInfo.VhdId = MountedFFUVolumeRk.GetValue("VHD Id", "")
+                    ImageFile.FFUInfo.VhdStorageDeviceId = MountedFFUVolumeRk.GetValue("VHD Storage Device Id", 0)
+                    ImageFile.FFUInfo.MountDiskPath = MountedFFUVolumeRk.GetValue("Mount Disk Path", "")
+                    ImageFile.FFUInfo.FullFlashVersionInfo = New Version(MountedFFUVolumeRk.GetValue("Full Flash Major Version", 0),
+                                                                         MountedFFUVolumeRk.GetValue("Full Flash Minor Version", 0))
+                    ImageFile.FFUInfo.VersionInfo = New Version(MountedFFUVolumeRk.GetValue("Major Version", 0), MountedFFUVolumeRk.GetValue("Minor Version", 0))
+                    ImageFile.FFUInfo.MountVersion = MountedFFUVolumeRk.GetValue("Mount Version", 0)
+                    ImageFile.FFUInfo.Compression = MountedFFUVolumeRk.GetValue("Compression", 0)
+                    ImageFile.FFUInfo.OptimizedPartitionNumber = MountedFFUVolumeRk.GetValue("Optimized Partition Number", 0)
+
+                    MountedFFUVolumeRk.Close()
+
+                    ' Try processing the ini manifest so we can fill in the information that we couldn't
+                    Try
+                        Dim parser As New IniDataParser(New FfuIniParserConfiguration())
+                        Dim ffuData As IniData = parser.Parse(ImageFile.FFUInfo.IniManifest)
+
+                        ImageFile.ImageArchitecture = CInt(ffuData("FullFlash")("Architecture"))
+                        ImageFile.ImageCreationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("CreationTime"))).DateTime
+                        ImageFile.ImageModificationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("LastModificationTime"))).DateTime
+                    Catch ex As Exception
+                        ' Don't get that data then
+                    End Try
+
+                    ' Use the size of the entire virtual disk as the expanded size of our FFU.
+                    Dim sizeMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Size FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(ImageFile.FFUInfo.MountDiskPath)))
+                    If sizeMO IsNot Nothing Then ImageFile.ImageSize = WMIHelper.GetObjectValue(sizeMO(0), "Size")
+
+                    Exit For
+                End If
+
+                MountedFFUVolumeRk.Close()
+            Next
+        Catch ex As Exception
+
+        Finally
+            If MountedFFURk IsNot Nothing Then MountedFFURk.Close()
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
@@ -2882,10 +2965,18 @@ Public Class MainForm
                         CurrentImage.ImageSystemRoot = ImageInformation.SystemRoot
                         CurrentImage.ImageLanguages = ImageInformation.Languages
                         CurrentImage.ImageDefaultLanguage = ImageInformation.DefaultLanguage
-                        CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
-                        CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
-                        CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
-                        CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        If ImageInformation.CustomizedInfo IsNot Nothing Then
+                            CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
+                            CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
+                            CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
+                            CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        Else
+                            ' Either this is a FFU file or it's a badly made WIM.
+                            CurrentImage.ImageFileCount = 0
+                            CurrentImage.ImageDirectoryCount = 0
+                            CurrentImage.ImageCreationDate = Date.MinValue
+                            CurrentImage.ImageModificationDate = Date.MinValue
+                        End If
                         CurrentImage.ImageSize = ImageInformation.ImageSize
                         DynaLog.LogMessage("Getting WIMBoot information")
                         Dim args As String = "/English",
@@ -2915,6 +3006,9 @@ Public Class MainForm
                                 CurrentImage.ImageWimBootCompatible = out.ToLower().Contains("wim bootable : yes")
                             End If
                         End Using
+                        If Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
+                            GetFFUInformation(CurrentImage)
+                        End If
                         DynaLog.LogMessage(CurrentImage.ToString())
                         DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
                     End If
@@ -3727,6 +3821,11 @@ Public Class MainForm
                 .RedirectStandardOutput = True
             }
         }
+            Try
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            Catch ex As Exception
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = Nothing
+            End Try
             PSExtAppxProc.Start()
             output = PSExtAppxProc.StandardOutput.ReadToEnd()
             PSExtAppxProc.WaitForExit()
@@ -10788,31 +10887,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -10824,31 +10923,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13392,31 +13491,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13474,31 +13573,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13556,7 +13655,11 @@ Public Class MainForm
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        ImgApply.ShowDialog(Me)
+        If CurrentImage IsNot Nothing AndAlso Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
+            FfuApply.ShowDialog(Me)
+        Else
+            ImgApply.ShowDialog(Me)
+        End If
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
@@ -15793,9 +15896,9 @@ Public Class MainForm
             If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
             DynaLog.LogMessage("Removing existing answer files...")
             DynaLog.LogMessage("Removing answer file from Panther directory...")
-            File.Delete(pantherXml)
+            If File.Exists(pantherXml) Then File.Delete(pantherXml)
             DynaLog.LogMessage("Removing answer file from Sysprep directory...")
-            File.Delete(sysprepXml)
+            If File.Exists(sysprepXml) Then File.Delete(sysprepXml)
             If nonExistentFiles >= 2 Then
                 Throw New Exception("No answer files have been detected in the mounted image.")
             End If
@@ -15988,6 +16091,56 @@ Public Class MainForm
 
         Finally
             If SecureBootKey IsNot Nothing Then SecureBootKey.Close()
+        End Try
+    End Sub
+
+    Private Sub ApplyFFU_Click(sender As Object, e As EventArgs) Handles ApplyFFU.Click
+        DynaLog.LogMessage("Opening image application dialog...")
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFFU_Click(sender As Object, e As EventArgs) Handles CaptureFFU.Click
+        DynaLog.LogMessage("Opening image capture dialog...")
+        FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub SplitFFU_Click(sender As Object, e As EventArgs) Handles SplitFFU.Click
+        DynaLog.LogMessage("Opening image split dialog...")
+        FfuSplit.ShowDialog(Me)
+    End Sub
+
+    Private Sub OptimizeImage_Click(sender As Object, e As EventArgs) Handles OptimizeImage.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        ImgOptimize.ShowDialog(Me)
+    End Sub
+
+    Private Sub OptimizeFFU_Click(sender As Object, e As EventArgs) Handles OptimizeFFU.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        FfuOptimize.ShowDialog(Me)
+    End Sub
+
+    Private Sub CopyImageToWdsServerTSMI_Click(sender As Object, e As EventArgs) Handles CopyImageToWdsServerTSMI.Click
+        WDSInstallImageCopy.Show()
+    End Sub
+
+    Private Sub AuditModeTSMI_Click(sender As Object, e As EventArgs) Handles AuditModeTSMI.Click
+        ' Create a new answer file with default options for entering audit mode, then copy that file to the system
+        Dim auditFile As String = Path.Combine(Path.GetTempPath(), "sysprep_audit_unatt.xml")
+
+        Try
+            File.WriteAllText(auditFile, My.Resources.DefaultUnattended_AuditMode, UTF8)
+            If File.Exists(auditFile) Then
+                If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                ProgressPanel.UnattendedFile = auditFile
+                ' Just copying our custom answer file to the sysprep folder of the target system seems to make it enter an infinite loop
+                ' where it can generalize, but won't go back to OOBE; so it keeps entering audit mode. This time do NOT copy the file to
+                ' sysprep.
+                ProgressPanel.UnattendedCopyToSysprep = False
+                ProgressPanel.OperationNum = 79
+                ProgressPanel.ShowDialog(Me)
+            End If
+        Catch ex As Exception
+
         End Try
     End Sub
 End Class

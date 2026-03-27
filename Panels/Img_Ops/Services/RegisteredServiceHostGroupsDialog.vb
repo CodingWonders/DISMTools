@@ -26,7 +26,7 @@ Public Class RegisteredServiceHostGroupsDialog
 
         ServiceGroupDetailsLv.Items.AddRange(GroupInformation.Select(Function(Group) New ListViewItem(New String() {Group.Name, String.Format("{0} service(s) in group", Group.Services.Count)})).ToArray())
 
-        Dim count As Integer = GroupInformation.Select(Function(serviceGroup) serviceGroup.Services.Count).Aggregate(Function(x, y) x + y)
+        Dim count As Integer = GroupInformation.Sum(Function(serviceGroup) serviceGroup.Services.Count)
         Label2.Text = String.Format("{0} service(s) are registered in the service host.", count)
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(274)

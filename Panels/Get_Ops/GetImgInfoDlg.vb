@@ -20,7 +20,7 @@ Public Class GetImgInfoDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get image information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Image file to get information from:"
                         Label3.Text = "List of indexes of image file:"
                         Label22.Text = "Image version:"
@@ -52,7 +52,7 @@ Public Class GetImgInfoDlg
                         OpenFileDialog1.Title = "Specify the image to get the information from"
                     Case "ESN"
                         Text = "Obtener información de la imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Archivo de imagen del que obtener información:"
                         Label3.Text = "Listado de índices del archivo de imagen:"
                         Label22.Text = "Versión de la imagen:"
@@ -84,7 +84,7 @@ Public Class GetImgInfoDlg
                         OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
                     Case "FRA"
                         Text = "Obtenir des informations de l'image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier image à partir duquel les informations sont obtenues :"
                         Label3.Text = "Liste des index du fichier d'image :"
                         Label22.Text = "Version de l'image :"
@@ -116,7 +116,7 @@ Public Class GetImgInfoDlg
                         OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre a imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro de imagem de onde obter informações:"
                         Label3.Text = "Lista de índices do ficheiro de imagem:"
                         Label22.Text = "Versão da imagem:"
@@ -148,7 +148,7 @@ Public Class GetImgInfoDlg
                         OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
                     Case "ITA"
                         Text = "Verifica informazioni immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File immagine da cui ottenere informazioni:"
                         Label3.Text = "Elenco indici file immagine:"
                         Label22.Text = "Versione immagine:"
@@ -181,7 +181,7 @@ Public Class GetImgInfoDlg
                 End Select
             Case 1
                 Text = "Get image information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Image file to get information from:"
                 Label3.Text = "List of indexes of image file:"
                 Label22.Text = "Image version:"
@@ -213,7 +213,7 @@ Public Class GetImgInfoDlg
                 OpenFileDialog1.Title = "Specify the image to get the information from"
             Case 2
                 Text = "Obtener información de la imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Archivo de imagen del que obtener información:"
                 Label3.Text = "Listado de índices del archivo de imagen:"
                 Label22.Text = "Versión de la imagen:"
@@ -245,7 +245,7 @@ Public Class GetImgInfoDlg
                 OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
             Case 3
                 Text = "Obtenir des informations de l'image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier image à partir duquel les informations sont obtenues :"
                 Label3.Text = "Liste des index du fichier d'image :"
                 Label22.Text = "Version de l'image :"
@@ -277,7 +277,7 @@ Public Class GetImgInfoDlg
                 OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
             Case 4
                 Text = "Obter informações sobre a imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro de imagem de onde obter informações:"
                 Label3.Text = "Lista de índices do ficheiro de imagem:"
                 Label22.Text = "Versão da imagem:"
@@ -309,7 +309,7 @@ Public Class GetImgInfoDlg
                 OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
             Case 5
                 Text = "Verifica informazioni immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File immagine di cui verificare le informazioni:"
                 Label3.Text = "Elenco indici file immagine:"
                 Label22.Text = "Versione immagine:"
@@ -340,7 +340,7 @@ Public Class GetImgInfoDlg
                 ListView1.Columns(1).Text = "Nome immagine"
                 OpenFileDialog1.Title = "Specifica l'immagine di cui verificare le informazioni"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -356,10 +356,6 @@ Public Class GetImgInfoDlg
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If Not MainForm.IsImageMounted Or MainForm.OnlineManagement Then
             RadioButton1.Enabled = False
             RadioButton1.Checked = False
@@ -370,6 +366,7 @@ Public Class GetImgInfoDlg
         End If
         ColumnHeader1.Width = WindowHelper.ScaleLogical(60)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(344)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
@@ -425,7 +422,7 @@ Public Class GetImgInfoDlg
                 Case 5
                     msg = "Impossibile verificare informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             DynaLog.LogMessage("Shutting down API...")
             Try
@@ -531,51 +528,56 @@ Public Class GetImgInfoDlg
                     LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
             End Select
         Next
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
-                        Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "ESN"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
-                        Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "FRA"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
-                        Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "PTB", "PTG"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
-                        Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                    Case "ITA"
-                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
-                        Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-                End Select
-            Case 1
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
-                Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 2
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
-                Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 3
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
-                Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 4
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
-                Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-            Case 5
-                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
-                Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
-        End Select
+        If ImageInfoList(Index).CustomizedInfo IsNot Nothing Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
+                            Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "ESN"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
+                            Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "FRA"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
+                            Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "PTB", "PTG"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
+                            Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                        Case "ITA"
+                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
+                            Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                                "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                    End Select
+                Case 1
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
+                    Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 2
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
+                    Label10.Text = "Fecha de creación: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Fecha de modificación: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 3
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
+                    Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 4
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
+                    Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                Case 5
+                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
+                    Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                        "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+            End Select
+        Else
+            Label6.Text = ""
+            Label10.Text = ""
+        End If
 
         DynaLog.LogMessage("Getting WIMBoot status...")
 

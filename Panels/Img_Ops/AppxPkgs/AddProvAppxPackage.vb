@@ -307,7 +307,7 @@ Public Class AddProvAppxPackage
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Add provisioned AppX packages"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                         Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
                         Label4.Text = "Stub preference:"
@@ -342,7 +342,7 @@ Public Class AddProvAppxPackage
                         UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
                     Case "ESN"
                         Text = "Añadir paquetes aprovisionados AppX"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                         Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
                         Label4.Text = "Preferencia de talón:"
@@ -377,7 +377,7 @@ Public Class AddProvAppxPackage
                         UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
                     Case "FRA"
                         Text = "Ajouter des paquets AppX provisionnés"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Veuillez ajouter des paquets AppX emballés ou non emballés en utilisant les boutons ci-dessous, ou en les déposant dans la liste ci-dessous :"
                         Label3.Text = "Un paquet AppX peut avoir besoin de certaines dépendances pour être installé correctement. Si c'est le cas, vous pouvez spécifier une liste de dépendances maintenant :"
                         Label4.Text = "Préférence pour le paquet de stub :"
@@ -412,7 +412,7 @@ Public Class AddProvAppxPackage
                         UnpackedAppxFolderFBD.Description = "Veuillez spécifier un répertoire contenant les fichiers AppX décompressés :"
                     Case "PTB", "PTG"
                         Text = "Adicionar pacotes AppX provisionados"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Adicione pacotes AppX embalados ou descompactados utilizando os botões abaixo, ou largando-os na vista de lista abaixo:"
                         Label3.Text = "Um pacote AppX pode precisar de algumas dependências para ser instalado corretamente. Se assim for, pode especificar uma lista de dependências agora:"
                         Label4.Text = "Preferência de pacote de stub:"
@@ -447,7 +447,7 @@ Public Class AddProvAppxPackage
                         UnpackedAppxFolderFBD.Description = "Especifique uma pasta que contenha ficheiros AppX descompactados:"
                     Case "ITA"
                         Text = "Aggiungi pacchetti AppX approvvigionati"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Aggiungere pacchetti AppX imballati o non imballati utilizzando i pulsanti sottostanti o rilasciandoli nella vista elenco sottostante:"
                         Label3.Text = "Un pacchetto AppX può richiedere alcune dipendenze per essere installato correttamente. In tal caso, è possibile specificare un elenco di dipendenze:"
                         Label4.Text = "Preferenza pacchetto stub:"
@@ -483,7 +483,7 @@ Public Class AddProvAppxPackage
                 End Select
             Case 1
                 Text = "Add provisioned AppX packages"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                 Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
                 Label4.Text = "Stub preference:"
@@ -518,7 +518,7 @@ Public Class AddProvAppxPackage
                 UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
             Case 2
                 Text = "Añadir paquetes aprovisionados AppX"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                 Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
                 Label4.Text = "Preferencia de talón:"
@@ -553,7 +553,7 @@ Public Class AddProvAppxPackage
                 UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
             Case 3
                 Text = "Ajouter des paquets AppX provisionnés"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Veuillez ajouter des paquets AppX emballés ou non emballés en utilisant les boutons ci-dessous, ou en les déposant dans la liste ci-dessous :"
                 Label3.Text = "Un paquet AppX peut avoir besoin de certaines dépendances pour être installé correctement. Si c'est le cas, vous pouvez spécifier une liste de dépendances maintenant :"
                 Label4.Text = "Préférence pour le paquet de stub :"
@@ -588,7 +588,7 @@ Public Class AddProvAppxPackage
                 UnpackedAppxFolderFBD.Description = "Veuillez spécifier un répertoire contenant les fichiers AppX décompressés :"
             Case 4
                 Text = "Adicionar pacotes AppX provisionados"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Adicione pacotes AppX embalados ou descompactados utilizando os botões abaixo, ou largando-os na vista de lista abaixo:"
                 Label3.Text = "Um pacote AppX pode precisar de algumas dependências para ser instalado corretamente. Se assim for, pode especificar uma lista de dependências agora:"
                 Label4.Text = "Preferência de pacote de stub:"
@@ -623,7 +623,7 @@ Public Class AddProvAppxPackage
                 UnpackedAppxFolderFBD.Description = "Especifique uma pasta que contenha ficheiros AppX descompactados:"
             Case 5
                 Text = "Aggiungi pacchetti AppX approvvigionati"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Aggiungere pacchetti AppX imballati o non imballati utilizzando i pulsanti sottostanti o rilasciandoli nella vista elenco sottostante:"
                 Label3.Text = "Un pacchetto AppX può richiedere alcune dipendenze per essere installato correttamente. In tal caso, è possibile specificare un elenco di dipendenze:"
                 Label4.Text = "Preferenza pacchetto stub:"
@@ -703,7 +703,7 @@ Public Class AddProvAppxPackage
                 StubPreferences(2) = "Installa l'applicazione come pacchetto completo"
         End Select
         ComboBox1.Items.AddRange(StubPreferences)
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
@@ -720,10 +720,6 @@ Public Class AddProvAppxPackage
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -756,6 +752,7 @@ Public Class AddProvAppxPackage
         ColumnHeader3.Width = WindowHelper.ScaleLogical(139)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(275)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(162)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -1123,7 +1120,7 @@ Public Class AddProvAppxPackage
                 Case 5
                     msg = "Il pacchetto:" & CrLf & CrLf & Package & CrLf & CrLf & "è un pacchetto di applicazioni criptate. Né DISMTools né DISM supportano l'aggiunta di questi tipi di applicazioni. Se si desidera aggiungerlo, è possibile farlo dopo che l'immagine è stata applicata e avviata."
             End Select
-            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         Dim Stepper As Integer = 2
@@ -1399,26 +1396,26 @@ Public Class AddProvAppxPackage
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "ESN"
-                                    MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "FRA"
-                                    MsgBox("Le paquet que vous souhaitez ajouter est déjà ajouté à la liste et toutes ses propriétés correspondent à celles du paquet spécifié. Nous n'ajouterons pas le paquet spécifié", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("Le paquet que vous souhaitez ajouter est déjà ajouté à la liste et toutes ses propriétés correspondent à celles du paquet spécifié. Nous n'ajouterons pas le paquet spécifié", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "PTB", "PTG"
-                                    MsgBox("O pacote que pretende adicionar já foi adicionado à lista e todas as suas propriedades coincidem com as propriedades do pacote especificado. Não vamos adicionar o pacote especificado", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("O pacote que pretende adicionar já foi adicionado à lista e todas as suas propriedades coincidem com as propriedades do pacote especificado. Não vamos adicionar o pacote especificado", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Case "ITA"
-                                    MsgBox("Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco e tutte le sue proprietà corrispondono a quelle del pacchetto specificato. Non aggiungeremo il pacchetto specificato", vbOKOnly + vbCritical, Label1.Text)
+                                    MsgBox("Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco e tutte le sue proprietà corrispondono a quelle del pacchetto specificato. Non aggiungeremo il pacchetto specificato", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             End Select
                         Case 1
-                            MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 2
-                            MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 3
-                            MsgBox("Le paquet que vous souhaitez ajouter est déjà ajouté à la liste et toutes ses propriétés correspondent à celles du paquet spécifié. Nous n'ajouterons pas le paquet spécifié", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Le paquet que vous souhaitez ajouter est déjà ajouté à la liste et toutes ses propriétés correspondent à celles du paquet spécifié. Nous n'ajouterons pas le paquet spécifié", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 4
-                            MsgBox("O pacote que pretende adicionar já foi adicionado à lista e todas as suas propriedades coincidem com as propriedades do pacote especificado. Não vamos adicionar o pacote especificado", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("O pacote que pretende adicionar já foi adicionado à lista e todas as suas propriedades coincidem com as propriedades do pacote especificado. Não vamos adicionar o pacote especificado", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case 5
-                            MsgBox("Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco e tutte le sue proprietà corrispondono a quelle del pacchetto specificato. Non aggiungeremo il pacchetto specificato", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco e tutte le sue proprietà corrispondono a quelle del pacchetto specificato. Non aggiungeremo il pacchetto specificato", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                     If Directory.Exists(Application.StartupPath & "\appxscan") Then
                         Directory.Delete(Application.StartupPath & "\appxscan", True)
@@ -1452,7 +1449,7 @@ Public Class AddProvAppxPackage
                         Case 5
                             msg = "Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco, ma proviene da uno sviluppatore o da un editore diverso." & CrLf & CrLf & "Si noti che le applicazioni ridistribuite da editori o sviluppatori di terze parti possono causare danni all'immagine di Windows." & CrLf & CrLf & "Si desidera sostituire la voce nell'elenco con il pacchetto specificato?"
                     End Select
-                    If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
+                    If MsgBox(msg, vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                         DynaLog.LogMessage("Changing packages...")
                         ' Set properties
                         Item.SubItems(0).Text = Package
@@ -1527,7 +1524,7 @@ Public Class AddProvAppxPackage
                         Case 5
                             msg = "Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco, ma contiene una versione più recente." & CrLf & CrLf & "Si desidera sostituire la voce nell'elenco con il pacchetto aggiornato specificato?"
                     End Select
-                    If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+                    If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                         DynaLog.LogMessage("Updating package to add...")
                         ' Set properties
                         Item.SubItems(0).Text = Package
@@ -2421,7 +2418,7 @@ Public Class AddProvAppxPackage
                         Case 5
                             msg = "La seguente cartella:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene pacchetti di applicazioni. Si desidera elaborare anche questi?" & CrLf & CrLf & "NOTA: la scansione di questa cartella avverrà in modo ricorsivo, pertanto il completamento dell'operazione potrebbe richiedere più tempo"
                     End Select
-                    If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+                    If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                         DynaLog.LogMessage("The user has accepted the question.")
                         For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
                             If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or

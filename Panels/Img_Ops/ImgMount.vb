@@ -103,7 +103,7 @@ Public Class ImgMount
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Mount an image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Please specify the options to mount an image:"
                         Label3.Text = "Image file*:"
                         If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -132,7 +132,7 @@ Public Class ImgMount
                         CheckBox4.Text = "Check image integrity"
                     Case "ESN"
                         Text = "Montar una imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique las opciones para montar una imagen:"
                         Label3.Text = "Archivo de imagen*:"
                         If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -161,7 +161,7 @@ Public Class ImgMount
                         CheckBox4.Text = "Comprobar integridad de la imagen"
                     Case "FRA"
                         Text = "Monter une image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Veuillez spécifier les options pour monter une image :"
                         Label3.Text = "Fichier de l'image* :"
                         If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -190,7 +190,7 @@ Public Class ImgMount
                         CheckBox4.Text = "Vérifier l'intégrité de l'image"
                     Case "PTB", "PTG"
                         Text = "Montar uma imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Por favor, especifique as opções para montar uma imagem:"
                         Label3.Text = "Ficheiro de imagem*:"
                         If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -219,7 +219,7 @@ Public Class ImgMount
                         CheckBox4.Text = "Verificar a integridade da imagem"
                     Case "ITA"
                         Text = "Montare un'immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specificare le opzioni per montare un'immagine:"
                         Label3.Text = "File immagine*:"
                         If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -249,7 +249,7 @@ Public Class ImgMount
                 End Select
             Case 1
                 Text = "Mount an image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Please specify the options to mount an image:"
                 Label3.Text = "Image file*:"
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -278,7 +278,7 @@ Public Class ImgMount
                 CheckBox4.Text = "Check image integrity"
             Case 2
                 Text = "Montar una imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique las opciones para montar una imagen:"
                 Label3.Text = "Archivo de imagen*:"
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -307,7 +307,7 @@ Public Class ImgMount
                 CheckBox4.Text = "Comprobar integridad de la imagen"
             Case 3
                 Text = "Monter une image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Veuillez spécifier les options pour monter une image :"
                 Label3.Text = "Fichier de l'image* :"
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -336,7 +336,7 @@ Public Class ImgMount
                 CheckBox4.Text = "Vérifier l'intégrité de l'image"
             Case 4
                 Text = "Montar uma imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Por favor, especifique as opções para montar uma imagem:"
                 Label3.Text = "Ficheiro de imagem*:"
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -365,7 +365,7 @@ Public Class ImgMount
                 CheckBox4.Text = "Verificar a integridade da imagem"
             Case 5
                 Text = "Montare un'immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specificare le opzioni per montare un'immagine:"
                 Label3.Text = "File immagine*:"
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -393,7 +393,7 @@ Public Class ImgMount
                 CheckBox3.Text = "Ottimizza tempi di montaggio"
                 CheckBox4.Text = "Controlla l'integrità dell'immagine"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -410,10 +410,6 @@ Public Class ImgMount
         DismVerChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         If DismVerChecker.ProductMajorPart = 6 And DismVerChecker.ProductMinorPart = 1 Then
             FileSpecDialog.Filter = "WIM files|*.wim"
-        End If
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -443,6 +439,7 @@ Public Class ImgMount
         ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -501,26 +498,26 @@ Public Class ImgMount
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "ESN"
-                                    MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "FRA"
-                                    MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "PTB", "PTG"
-                                    MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "ITA"
-                                    MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             End Select
                         Case 1
-                            MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 2
-                            MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 3
-                            MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 4
-                            MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 5
-                            MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     End Select
                 End If
             ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
@@ -576,26 +573,26 @@ Public Class ImgMount
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "ESN"
-                                    MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "FRA"
-                                    MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "PTB", "PTG"
-                                    MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                                 Case "ITA"
-                                    MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, Label1.Text)
+                                    MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             End Select
                         Case 1
-                            MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 2
-                            MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 3
-                            MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 4
-                            MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         Case 5
-                            MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, Label1.Text)
+                            MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     End Select
                 End If
             ElseIf Path.GetExtension(TextBox1.Text).EndsWith(".iso", StringComparison.OrdinalIgnoreCase) Then
@@ -672,7 +669,7 @@ Public Class ImgMount
                 Case 5
                     msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             Try
                 DynaLog.LogMessage("Shutting down API...")
@@ -760,7 +757,7 @@ Public Class ImgMount
                 Case 5
                     msg = "Questa immagine è già montata e non può essere montata di nuovo. Se si desidera montarla nella directory desiderata, smontare l'immagine dalla directory di montaggio originale (salvando le modifiche, se si vuole) e aprire successivamente questa finestra di dialogo"
             End Select
-            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
         End If
     End Sub
 
@@ -796,26 +793,26 @@ Public Class ImgMount
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "ESN"
-                                MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "FRA"
-                                MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "PTB", "PTG"
-                                MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "ITA"
-                                MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         End Select
                     Case 1
-                        MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 2
-                        MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 3
-                        MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("Vous devez convertir cette image en fichier WIM pour pouvoir la monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 4
-                        MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("Tem de converter este ficheiro num ficheiro WIM para o poder montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 5
-                        MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("Per montare l'immagine è necessario convertirla in un file WIM", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                 End Select
             End If
         ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
@@ -837,26 +834,26 @@ Public Class ImgMount
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "ESN"
-                                MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "FRA"
-                                MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "PTB", "PTG"
-                                MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                             Case "ITA"
-                                MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, Label1.Text)
+                                MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                         End Select
                     Case 1
-                        MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 2
-                        MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 3
-                        MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("Vous devez fusionner les fichiers SWM en un fichier WIM afin de le monter.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 4
-                        MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("É necessário combinar os ficheiros SWM com um ficheiro WIM para o montar", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                     Case 5
-                        MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, Label1.Text)
+                        MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                 End Select
             End If
         Else

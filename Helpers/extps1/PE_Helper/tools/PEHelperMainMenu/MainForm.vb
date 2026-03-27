@@ -103,11 +103,11 @@ Public Class MainForm
         Close()
     End Sub
 
-    Private Sub ArrowPic_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseEnter, PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox5.MouseEnter, PictureBox9.MouseEnter, PictureBox8.MouseEnter, PictureBox7.MouseEnter, PictureBox10.MouseEnter
+    Private Sub ArrowPic_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseEnter, PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox5.MouseEnter, PictureBox9.MouseEnter, PictureBox8.MouseEnter, PictureBox7.MouseEnter, PictureBox10.MouseEnter, PictureBox11.MouseEnter
         CType(sender, PictureBox).Image = My.Resources.arrow_hovered
     End Sub
 
-    Private Sub ArrowPic_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox4.MouseLeave, PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox5.MouseLeave, PictureBox9.MouseLeave, PictureBox8.MouseLeave, PictureBox7.MouseLeave, PictureBox10.MouseLeave
+    Private Sub ArrowPic_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox4.MouseLeave, PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox5.MouseLeave, PictureBox9.MouseLeave, PictureBox8.MouseLeave, PictureBox7.MouseLeave, PictureBox10.MouseLeave, PictureBox11.MouseLeave
         CType(sender, PictureBox).Image = My.Resources.arrow_normal
     End Sub
 
@@ -152,13 +152,13 @@ Public Class MainForm
     Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
         RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
                    "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "pxehelpers", "wds", "wdshelper_server.ps1") & Quote,
-                   True)
+                   RunAsAdmin:=True)
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
         RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
                    "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "pxehelpers", "fog", "foghelper_server.ps1") & Quote,
-                   True)
+                   RunAsAdmin:=True)
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
@@ -180,6 +180,13 @@ Public Class MainForm
 
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
         RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                   "/c " & Quote & Path.Combine(Application.StartupPath, "boot_image_to_wds.bat") & Quote, Application.StartupPath, True)
+                   "/c " & Quote & Path.Combine(Application.StartupPath, "boot_image_to_wds.bat") & Quote, Application.StartupPath, RunAsAdmin:=True)
+    End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                   "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "install_image_to_wds.ps1") & Quote &
+                   " -imageGroup " & Quote & "Windows images" & Quote & " -installImagePath " & Quote & Path.Combine(Application.StartupPath, "sources", "install.wim") & Quote,
+                   RunAsAdmin:=True)
     End Sub
 End Class
