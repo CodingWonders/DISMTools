@@ -914,8 +914,13 @@ Public Class ImgMount
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
-        If ListView1.SelectedItems.Count = 1 Then
-            NumericUpDown1.Value = ListView1.FocusedItem.Index + 1
-        End If
+        Try
+            If ListView1.SelectedItems.Count = 1 Then
+                NumericUpDown1.Value = ListView1.FocusedItem.Index + 1
+            End If
+        Catch ex As Exception
+            NumericUpDown1.Value = 1
+            NumericUpDown1.Maximum = 1
+        End Try
     End Sub
 End Class
