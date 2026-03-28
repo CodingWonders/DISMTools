@@ -116,7 +116,7 @@ if (((Get-WindowsRole -RoleName "WDS") -eq $false) -or ((Get-WindowsRole -RoleNa
 
 Write-LogMessage -message "Checking share locations..."
 $wdsShareLocation = ""
-$wdsShareLocation = (Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Shares" -Name "REMINST" -ErrorAction SilentlyContinue)[3].Replace("Path=", "")
+$wdsShareLocation = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WDSServer\Providers\WDSTFTP" -Name "RootFolder" -ErrorAction SilentlyContinue
 
 Write-LogMessage -message "Starting Windows Deployment Services Web API..."
 Write-LogMessage -message "Server Options:"
