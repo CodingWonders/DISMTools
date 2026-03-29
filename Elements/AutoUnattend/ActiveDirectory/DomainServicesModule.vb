@@ -296,7 +296,7 @@ Module DomainServicesModule
     ''' done via Active Directory Users and Computers (dsa.msc) by enabling all advanced features first, then selecting a user and then selecting the 
     ''' "Attribute Editor" tab.
     ''' </remarks>
-    Public Function DSAccountHasRequiredPassword(dsDomainDnsName As String, accName As String) As Boolean
+    Public Function DSAccountRequiresPassword(dsDomainDnsName As String, accName As String) As Boolean
         DynaLog.LogMessage("Preparing to determine if the specified account requires a password...")
         DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
         DynaLog.LogMessage("- SAM account name: " & accName)
@@ -326,6 +326,37 @@ Module DomainServicesModule
 
         DynaLog.LogMessage("Account Enabled? (Bitwise-AND): " & passwdReqdStatus)
         Return passwdReqdStatus
+    End Function
+
+    ''' <summary>
+    ''' Determines whether an account exists in a domain.
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
+    ''' <returns>Whether the account exists in the domain</returns>
+    ''' <remarks></remarks>
+    Public Function DSAccountExists(dsDomainDnsName As String, accName As String) As Boolean
+        DynaLog.LogMessage("Preparing to determine if the specified account exists...")
+        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
+        DynaLog.LogMessage("- SAM account name: " & accName)
+        If dsDomainDnsName = "" Or accName = "" Then Return False
+        Dim dsaExists As Boolean = False
+
+        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
+        Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
+
+        Try
+            DynaLog.LogMessage("Beginning to search user...")
+            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
+            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
+            searcher.Filter = String.Format("(&(objectCategory=user)(objectClass=user)(samAccountName={0}))", accName)
+            dsaExists = searcher.FindAll().Cast(Of SearchResult)().Any()
+            searcher.Dispose()
+        Catch ex As Exception
+
+        End Try
+
+        Return dsaExists
     End Function
 
 End Module
