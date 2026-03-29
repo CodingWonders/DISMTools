@@ -106,6 +106,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Utilities\BuildGetter.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EventProperties.resx">
@@ -123,6 +124,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="My Project\Application.myapp">

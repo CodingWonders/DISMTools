@@ -1,5 +1,6 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Win32
 
 Public Class MainForm
 
@@ -7,7 +8,32 @@ Public Class MainForm
 
     Private UserDataScriptFolder As String
 
+    Private Sub SetDarkMode()
+        If Environment.OSVersion.Version.Major < 10 Then Exit Sub
+        Try
+            Dim darkMode As Boolean
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+            darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+            ColorModeRk.Close()
+
+            If Not darkMode Then Exit Sub
+            WindowHelper.ToggleDarkTitleBar(Handle, True)
+
+            BackColor = Color.FromArgb(32, 32, 32)
+            ForeColor = Color.White
+
+            TextBox1.BackColor = BackColor
+            TextBox1.ForeColor = ForeColor
+            GroupBox1.ForeColor = ForeColor
+
+            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+        Catch ex As Exception
+            Exit Sub
+        End Try
+    End Sub
+
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SetDarkMode()
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
         NewTheme = GetNewTheme()
@@ -196,10 +222,10 @@ Public Class MainForm
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
 #If VBC_VER >= 9.0 Then
-        MsgBox(String.Format("DISMTools Theme Designer version {0}" & CrLf & CrLf & "{1}. ", _
+        MsgBox(String.Format("DISMTools Theme Designer version {0}" & CrLf & CrLf & "{1}. {2}", _
                 My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), _
-                My.Application.Info.Copyright) & _
-                "INI File Parser: © 2008 Ricardo Amores Hernández", _
+                My.Application.Info.Copyright, _
+                "INI File Parser: © 2008 Ricardo Amores Hernández"), _
             vbOKOnly + vbInformation, "About")
 #Else
         MsgBox(String.Format("DISMTools Theme Designer version {0}_NET2REL" & CrLf & CrLf & "{1}. {2}", _

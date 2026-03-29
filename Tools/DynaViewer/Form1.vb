@@ -2,6 +2,10 @@ Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ControlChars
 Imports DynaViewer.Classes
+Imports Microsoft.Win32
+#If VBC_VER >= 9.0 Then
+Imports System.Linq
+#End If
 
 Public Class Form1
 
@@ -17,6 +21,30 @@ Public Class Form1
 
     Const WM_VSCROLL As Integer = &H115
     Const SB_BOTTOM As Integer = 7
+
+    Private Sub SetDarkMode()
+        If Environment.OSVersion.Version.Major < 10 Then Exit Sub
+        Try
+            Dim darkMode As Boolean
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+            darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+            ColorModeRk.Close()
+
+            If Not darkMode Then Exit Sub
+            WindowHelper.ToggleDarkTitleBar(Handle, True)
+
+            BackColor = Color.FromArgb(32, 32, 32)
+            ForeColor = Color.White
+
+            TextBox1.BackColor = BackColor
+            TextBox1.ForeColor = ForeColor
+            ListView1.BackColor = BackColor
+            ListView1.ForeColor = ForeColor
+            GroupBox1.ForeColor = ForeColor
+        Catch ex As Exception
+            Exit Sub
+        End Try
+    End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         OpenFileDialog1.ShowDialog()
@@ -38,12 +66,23 @@ Public Class Form1
         Dim dlEvent As DynaLogEvent
         If File.Exists(DynaLogFile) Then
             Dim DynaLogLines As String() = File.ReadAllLines(DynaLogFile)
+#If VBC_VER < 9.0 Then
             For Each LogLine As String In DynaLogLines
                 dlEvent = LogHelper.ParseEventLine(LogLine)
                 If dlEvent IsNot Nothing Then
                     ListView1.Items.Add(New ListViewItem(New String() {dlEvent.EventTimestamp, dlEvent.EventPid, dlEvent.EventCaller, dlEvent.EventMessage}))
                 End If
             Next
+#Else
+            Dim dlEvents As New List(of DynaLogEvent)
+            For Each LogLine As String In DynaLogLines
+                dlEvent = LogHelper.ParseEventLine(LogLine)
+                If dlEvent IsNot Nothing Then
+                    dlEvents.Add(dlEvent)
+                End If
+            Next
+            ListView1.Items.AddRange(dlEvents.Select(Function(dle) New ListViewItem(New String() {dle.EventTimestamp, dle.EventPid, dle.EventCaller, dle.EventMessage})).ToArray())
+#End If
         Else
             MsgBox("The file " & Quote & DynaLogFile & Quote & " does not exist.", vbOKOnly + vbCritical, Text)
             Exit Sub
@@ -65,6 +104,12 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SetDarkMode()
+        ' Resize column headers to match system DPI
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(145)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(149)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(443)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(94)
         If Environment.GetCommandLineArgs().Length > 0 Then
             For Each CommandArgument As String In Environment.GetCommandLineArgs()
                 If CommandArgument.Equals(Environment.GetCommandLineArgs()(0), StringComparison.OrdinalIgnoreCase) Then

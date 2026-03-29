@@ -2,6 +2,7 @@ Imports StarterScriptEditor.Classes
 Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Win32
 
 Public Class MainForm
 
@@ -13,6 +14,35 @@ Public Class MainForm
     Private Modified As Boolean
     Private SavedScriptPath As String
     Private NotWillingToSave As Boolean
+
+    Private Sub SetDarkMode()
+        If Environment.OSVersion.Version.Major < 10 Then Exit Sub
+        Try
+            Dim darkMode As Boolean
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+            darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+            ColorModeRk.Close()
+
+            If Not darkMode Then Exit Sub
+            WindowHelper.ToggleDarkTitleBar(Handle, True)
+
+            BackColor = Color.FromArgb(32, 32, 32)
+            ForeColor = Color.White
+
+            TextBox1.BackColor = BackColor
+            TextBox1.ForeColor = ForeColor
+            TextBox2.BackColor = BackColor
+            TextBox2.ForeColor = ForeColor
+            TextBox3.BackColor = BackColor
+            TextBox3.ForeColor = ForeColor
+            ComboBox1.BackColor = BackColor
+            ComboBox1.ForeColor = ForeColor
+
+            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+        Catch ex As Exception
+            Exit Sub
+        End Try
+    End Sub
 
     Private Sub GetArguments()
         Dim args As String() = Environment.GetCommandLineArgs()
@@ -145,6 +175,7 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SetDarkMode()
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
 

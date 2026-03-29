@@ -23,19 +23,19 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.TextBox1 = New System.Windows.Forms.TextBox
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.ListView1 = New System.Windows.Forms.ListView
+        Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader
+        Me.ColumnHeader4 = New System.Windows.Forms.ColumnHeader
+        Me.ColumnHeader2 = New System.Windows.Forms.ColumnHeader
+        Me.ColumnHeader3 = New System.Windows.Forms.ColumnHeader
+        Me.Button1 = New System.Windows.Forms.Button
+        Me.Button2 = New System.Windows.Forms.Button
+        Me.Label2 = New System.Windows.Forms.Label
+        Me.Button3 = New System.Windows.Forms.Button
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -51,7 +51,7 @@ Partial Class Form1
         'TextBox1
         '
         Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox1.Location = New System.Drawing.Point(111, 10)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(723, 21)
@@ -64,8 +64,8 @@ Partial Class Form1
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.ListView1)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 37)
         Me.GroupBox1.Name = "GroupBox1"
@@ -154,8 +154,8 @@ Partial Class Form1
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Label2)
