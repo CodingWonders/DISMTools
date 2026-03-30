@@ -545,4 +545,39 @@ Public Class ADDSJoinDialog
             MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
         End If
     End Sub
+
+    Private Sub DnsNsLookupBtn_Click(sender As Object, e As EventArgs) Handles DnsNsLookupBtn.Click
+        If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
+            MsgBox("Please provide a domain for which to test domain name resolution.", vbOKOnly + vbExclamation, Text)
+            Exit Sub
+        End If
+
+        Cursor = Cursors.WaitCursor
+        Dim nslookupProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "nslookup.exe"),
+                .Arguments = TextBox1.Text,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+
+        Try
+            nslookupProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            nslookupProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        Catch ex As Exception
+            nslookupProc.StartInfo.StandardOutputEncoding = Nothing
+            nslookupProc.StartInfo.StandardErrorEncoding = Nothing
+        End Try
+
+        Dim nslookupOut As String = ""
+        nslookupProc.Start()
+        nslookupOut = nslookupProc.StandardOutput.ReadToEnd() & nslookupProc.StandardError.ReadToEnd()
+        nslookupProc.WaitForExit()
+        Cursor = Cursors.Arrow
+        MsgBox(String.Format("NSLOOKUP output:{0}{0}{1}", Environment.NewLine, nslookupOut), vbOKOnly + vbInformation, "Domain name resolution results")
+    End Sub
 End Class
