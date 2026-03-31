@@ -213,6 +213,7 @@ Public Class MainForm
     Public ShowWatermark As Boolean = False
     Public WDSHCGraphoView As Boolean = True
     Public DTDimShowPnputilOut As Boolean = True
+    Public AutoUnattendCopytoSysprep As Boolean = False
     Public PartTableOverridePreference As Integer = 0
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
@@ -1407,6 +1408,7 @@ Public Class MainForm
                 WDSHCConnAttempts = (CInt(PEPolicyKey.GetValue("WDSHCConnAttempts", 5)))
                 PartTableOverridePreference = (CInt(PEPolicyKey.GetValue("PartTableOverridePreference", 0)))
                 UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
+                AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1740,6 +1742,11 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=0") Then
                     DTDimShowPnputilOut = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=1") Then
+                    AutoUnattendCopytoSysprep = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=0") Then
+                    AutoUnattendCopytoSysprep = False
+                End If
             Else
                 DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW) and reloading settings...")
                 GenerateDTSettings()
@@ -1837,9 +1844,11 @@ Public Class MainForm
                                                   "{1}PartTableOverridePreference{1}={1}{4}{1}{0}" &
                                                   "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
-                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}{0}",
+                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
-                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0))
+                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
+                                                  If(AutoUnattendCopytoSysprep, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1913,7 +1922,8 @@ Public Class MainForm
                            "DTDimShowPnputilOut        =    " & DTDimShowPnputilOut & CrLf &
                            "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
                            "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
-                           "UEFICA23Preference         =    " & UEFICA23Preference)
+                           "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
+                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep)
     End Sub
 
 #Region "Background Processes"
@@ -4137,6 +4147,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=5")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4239,6 +4250,7 @@ Public Class MainForm
         PEPolicyKey.SetValue("WDSHCConnAttempts", 5, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4475,6 +4487,7 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=" & WDSHCConnAttempts)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=" & PartTableOverridePreference)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=" & UEFICA23Preference)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=" & AutoUnattendCopytoSysprep)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4593,6 +4606,7 @@ Public Class MainForm
                     PEPolicyKey.SetValue("WDSHCConnAttempts", WDSHCConnAttempts, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("PartTableOverridePreference", PartTableOverridePreference, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
                     PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception

@@ -825,6 +825,15 @@ Public Class ISOCreator
         MainForm.PEHelper_CopyToVentoy = CheckBox2.Checked
         MainForm.PEHelper_Use2023EFI = CheckBox3.Checked
 
+        Dim customPolicyPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg")
+        If File.Exists(customPolicyPath) Then
+            Try
+                File.Delete(customPolicyPath)
+            Catch ex As Exception
+
+            End Try
+        End If
+
         RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
     End Sub
 

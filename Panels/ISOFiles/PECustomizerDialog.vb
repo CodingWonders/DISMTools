@@ -42,9 +42,11 @@ Public Class PECustomizerDialog
                                                   "{1}PartTableOverridePreference{1}={1}{4}{1}{0}" &
                                                   "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
-                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}{0}",
+                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}",
                                                   CrLf, Quote, If(CheckBox2.Checked, 1, 0), UEFICA23Preference, PartTableOverridePreference,
-                                                  Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0))
+                                                  Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0),
+                                                  If(CheckBox5.Checked, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg"), regContents)
         Catch ex As Exception
