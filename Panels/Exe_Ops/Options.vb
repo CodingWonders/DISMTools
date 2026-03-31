@@ -3372,4 +3372,9 @@ Public Class Options
             MessageBox.Show("The service could not be removed.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "dism.exe"),
+                      "/cleanup-mountpoints")
+    End Sub
 End Class
