@@ -17,4 +17,4 @@ IF NOT DEFINED _LaunchTo SET _LaunchTo=1
 IF %_LaunchTo% LSS 0 SET _LaunchTo=0
 IF %_LaunchTo% GTR 1 SET _LaunchTo=1
 
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v LaunchTo /t REG_DWORD /d %_LaunchTo% /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v LaunchTo /t REG_DWORD /d %_LaunchTo%
