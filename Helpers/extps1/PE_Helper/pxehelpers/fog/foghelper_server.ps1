@@ -321,6 +321,10 @@ try {
                                 font-size: 1.125em;
                                 font-family: "Trebuchet MS", "Arial", "Helvetica", sans-serif;
                             }
+                            button:disabled {
+                                background-color: darkgray;
+                                color: white;
+                            }
                             .important_tab {
                                 font-weight: bold;
                             }
@@ -518,6 +522,10 @@ try {
                             function invokeExit() {
                                 fetch('/api/exit', { method: "GET" });
                                 alert("The server has stopped. Close this tab now.");
+                                let buttons = document.getElementsByTagName("button");
+                                for (let i = 0; i < buttons.length; i++) {
+                                    buttons[i].disabled = true;
+                                }
                             }
 
                             function invokeLogViewer() {
