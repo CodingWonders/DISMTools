@@ -4,6 +4,7 @@ Imports Microsoft.Win32
 Imports System.Runtime.InteropServices
 Imports System.Text
 Imports System.Text.RegularExpressions
+Imports System.ServiceProcess
 
 Module WindowsServiceHelper
 
@@ -882,6 +883,12 @@ Module WindowsServiceHelper
         Return detectedService
     End Function
 
+    ''' <summary>
+    ''' Installs a system service to the current Windows installation.
+    ''' </summary>
+    ''' <param name="NewService">A <see cref="WindowsService"/> object containing information about the service to install</param>
+    ''' <returns>Whether the service was correctly installed.</returns>
+    ''' <remarks></remarks>
     Public Function InstallService(NewService As WindowsService) As Boolean
         If NewService Is Nothing Then Throw New ArgumentNullException()
         If String.IsNullOrEmpty(NewService.Name) Then Throw New ArgumentNullException(NewService.Name)
@@ -928,6 +935,12 @@ Module WindowsServiceHelper
         Return scProc.ExitCode = 0
     End Function
 
+    ''' <summary>
+    ''' Deletes a system service from the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the service to delete</param>
+    ''' <returns>Whether the service was correctly deleted.</returns>
+    ''' <remarks></remarks>
     Public Function DeleteService(ServiceName As String) As Boolean
         If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
 
@@ -946,6 +959,13 @@ Module WindowsServiceHelper
         Return scProc.ExitCode = 0
     End Function
 
+    ''' <summary>
+    ''' Sets the description of an installed system service in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the service to which to set the description</param>
+    ''' <param name="ServiceDescription">The description to set to the service</param>
+    ''' <returns>Whether the operation succeeded.</returns>
+    ''' <remarks></remarks>
     Public Function SetOnlineServiceDescription(ServiceName As String, ServiceDescription As String) As Boolean
         If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
 
@@ -964,6 +984,13 @@ Module WindowsServiceHelper
         Return scProc.ExitCode = 0
     End Function
 
+    ''' <summary>
+    ''' Enables a system service in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the system service to enable</param>
+    ''' <param name="StartType">A custom start type for the service to enable</param>
+    ''' <returns>Whether the operation succeeded.</returns>
+    ''' <remarks></remarks>
     Public Function EnableOnlineService(ServiceName As String, Optional StartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Automatic) As Boolean
         If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
 
@@ -999,6 +1026,12 @@ Module WindowsServiceHelper
         Return scProc.ExitCode = 0
     End Function
 
+    ''' <summary>
+    ''' Disables a system service in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the system service to disable</param>
+    ''' <returns>Whether the operation succeeded.</returns>
+    ''' <remarks></remarks>
     Public Function DisableOnlineService(ServiceName As String) As Boolean
         If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
 
@@ -1015,6 +1048,123 @@ Module WindowsServiceHelper
         scProc.WaitForExit()
 
         Return scProc.ExitCode = 0
+    End Function
+
+    ''' <summary>
+    ''' Gets the current status of a system service in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the system service to query</param>
+    ''' <returns>A <see cref="ServiceControllerStatus"/> object containing the current status of the queried service.</returns>
+    ''' <remarks></remarks>
+    Public Function GetOnlineServiceStartStatus(ServiceName As String) As ServiceControllerStatus
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return ServiceControllerStatus.Stopped
+        Return New ServiceController(ServiceName).Status
+    End Function
+
+    ''' <summary>
+    ''' Starts a system service in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the system service to start</param>
+    ''' <returns>Whether the operation succeeded.</returns>
+    ''' <remarks>
+    ''' This function returns False when either no service going by the provided <paramref name="ServiceName"/> value exists in the current installation,
+    ''' or if the service did not report a successful start operation after 15 seconds. Conversely, this function will return True if the system service
+    ''' is already started.
+    ''' </remarks>
+    Public Function StartOnlineService(ServiceName As String) As Boolean
+        DynaLog.LogMessage("Starting system service: " & ServiceName)
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
+
+        DynaLog.LogMessage("Getting current service status...")
+        Dim serviceStatus As ServiceControllerStatus = GetOnlineServiceStartStatus(ServiceName)
+        If {ServiceControllerStatus.Running, ServiceControllerStatus.ContinuePending, ServiceControllerStatus.StartPending}.Contains(serviceStatus) Then Return True
+
+        DynaLog.LogMessage("Starting service...")
+        Using OnlineServiceController As New ServiceController(ServiceName)
+            OnlineServiceController.Start()
+            Try
+                OnlineServiceController.WaitForStatus(ServiceControllerStatus.Running, New TimeSpan(0, 0, 0, 15, 0))
+                Return True
+            Catch serviceTimeoutEx As TimeoutException
+                DynaLog.LogMessage("Service could not be started within 15 seconds.")
+                Return False
+            End Try
+        End Using
+    End Function
+
+    ''' <summary>
+    ''' Starts a set of system services in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceNames">The names of the system services to start</param>
+    ''' <returns>Whether there are more services that successfully started than those that did not start.</returns>
+    ''' <remarks></remarks>
+    Public Function StartOnlineService(ParamArray ServiceNames As String()) As Boolean
+        Dim successfulServiceStarts As Integer = 0,
+            failedServiceStarts As Integer = 0
+
+        DynaLog.LogMessage("Starting " & ServiceNames.Count & " service(s)...")
+        For Each ServiceName In ServiceNames
+            If StartOnlineService(ServiceName) Then
+                successfulServiceStarts += 1
+            Else
+                failedServiceStarts += 1
+            End If
+        Next
+
+        Return successfulServiceStarts >= failedServiceStarts
+    End Function
+
+    ''' <summary>
+    ''' Stops a system service in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceName">The name of the system service to stop</param>
+    ''' <returns>Whether the operation succeeded.</returns>
+    ''' <remarks>
+    ''' This function returns False when either no service going by the provided <paramref name="ServiceName"/> value exists in the current installation,
+    ''' or if the service did not report a successful stop operation after 15 seconds. Conversely, this function will return True if the system service
+    ''' is already stopped.
+    ''' </remarks>
+    Public Function StopOnlineService(ServiceName As String) As Boolean
+        DynaLog.LogMessage("Stopping system service: " & ServiceName)
+        If GetOnlineSystemServiceInformationByName(ServiceName) Is Nothing Then Return False
+
+        DynaLog.LogMessage("Getting current service status...")
+        Dim serviceStatus As ServiceControllerStatus = GetOnlineServiceStartStatus(ServiceName)
+        If Not {ServiceControllerStatus.Running, ServiceControllerStatus.ContinuePending, ServiceControllerStatus.StartPending}.Contains(serviceStatus) Then Return True
+
+        DynaLog.LogMessage("Stopping service...")
+        Using OnlineServiceController As New ServiceController(ServiceName)
+            OnlineServiceController.Stop()
+            Try
+                OnlineServiceController.WaitForStatus(ServiceControllerStatus.Stopped, New TimeSpan(0, 0, 0, 15, 0))
+                Return True
+            Catch serviceTimeoutEx As TimeoutException
+                DynaLog.LogMessage("Service could not be stopped within 15 seconds.")
+                Return False
+            End Try
+        End Using
+    End Function
+
+    ''' <summary>
+    ''' Stops a set of system services in the current Windows installation.
+    ''' </summary>
+    ''' <param name="ServiceNames">The names of the system services to stop</param>
+    ''' <returns>Whether there are more services that successfully stopped than those that did not stop.</returns>
+    ''' <remarks></remarks>
+    Public Function StopOnlineService(ParamArray ServiceNames As String()) As Boolean
+        Dim successfulServiceStops As Integer = 0,
+            failedServiceStops As Integer = 0
+
+        DynaLog.LogMessage("Stopping " & ServiceNames.Count & " service(s)...")
+        For Each ServiceName In ServiceNames
+            If StopOnlineService(ServiceName) Then
+                successfulServiceStops += 1
+            Else
+                failedServiceStops += 1
+            End If
+        Next
+
+        Return successfulServiceStops >= failedServiceStops
     End Function
 
 End Module

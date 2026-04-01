@@ -43,6 +43,10 @@ Public Class WDSInstallImageCopy
     End Sub
 
     Private Sub WDSInstallImageCopy_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If WindowsServiceHelper.GetOnlineServiceStartStatus("WDSServer") <> ServiceProcess.ServiceControllerStatus.Running Then
+            DynaLog.LogMessage("WDS Server Service not running. Starting...")
+            WindowsServiceHelper.StartOnlineService("WDSServer")
+        End If
 
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
