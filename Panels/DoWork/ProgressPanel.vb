@@ -1587,10 +1587,10 @@ Public Class ProgressPanel
             LogView.AppendText("- Captured image description: " & Quote & FFUCaptureDescription & Quote & CrLf)
             CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
         End If
-        If CaptureCompressType = 0 Then
+        If FFUCaptureCompressType = 0 Then
             LogView.AppendText("- Compression type: none" & CrLf)
             CommandArgs &= " /compress=none"
-        ElseIf CaptureCompressType = 1 Then
+        ElseIf FFUCaptureCompressType = 1 Then
             LogView.AppendText("- Compression type: default" & CrLf)
             CommandArgs &= " /compress=default"
         End If
