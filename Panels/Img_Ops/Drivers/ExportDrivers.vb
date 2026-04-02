@@ -4,6 +4,8 @@ Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ExportDrivers
 
+    Private SelectedClass As String
+
     Private DriverClassInfoDictionary As New Dictionary(Of String, String) From {
         {"AudioProcessingObject", "Includes Audio processing objects (APOs). For more info, see Windows Audio Processing Objects."},
         {"Battery", "Includes battery devices and UPS devices."},
@@ -98,12 +100,12 @@ Public Class ExportDrivers
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If RadioButton2.Checked AndAlso Not DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
+        If RadioButton2.Checked AndAlso Not DriverClassInfoDictionary.ContainsKey(SelectedClass) Then
             MsgBox("You must specify a class name from the list below.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         ProgressPanel.drvExportAllDrvs = RadioButton1.Checked
-        ProgressPanel.drvExportSpecificClassName = ComboBox1.SelectedItem
+        ProgressPanel.drvExportSpecificClassName = SelectedClass
         ProgressPanel.OperationNum = 77
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Visible = False
@@ -215,6 +217,7 @@ Public Class ExportDrivers
 
         ComboBox1.Items.Clear()
         ComboBox1.Items.AddRange(DriverClassInfoDictionary.Keys.ToArray())
+        ComboBox1.SelectedItem = SelectedClass
         ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
@@ -230,6 +233,10 @@ Public Class ExportDrivers
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        Label5.Text = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex).Value
+        Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
+        If SelectedClassInfo.Value IsNot Nothing Then
+            Label5.Text = SelectedClassInfo.Value
+            SelectedClass = SelectedClassInfo.Key
+        End If
     End Sub
 End Class
