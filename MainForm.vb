@@ -1001,6 +1001,7 @@ Public Class MainForm
         InstallationTypeRk.Close()
 
         PxeHelperServersTSMI.Enabled = InstallationType.ToLower().Contains("server")
+        UploadThisImageToMyWDSServerToolStripMenuItem.Enabled = InstallationType.ToLower().Contains("server")
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
@@ -16218,5 +16219,21 @@ Public Class MainForm
 
     Private Sub CaptureFfuTSMI_Click(sender As Object, e As EventArgs) Handles CaptureFfuTSMI.Click
         FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub UploadThisImageToMyWDSServerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadThisImageToMyWDSServerToolStripMenuItem.Click
+        If WDSInstallImageCopy.BackgroundWorker1.IsBusy Then Exit Sub
+        DynaLog.LogMessage("Opening WDS upload wizard...")
+        WDSInstallImageCopy.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        If WDSInstallImageCopy.Visible Then
+            If WDSInstallImageCopy.WindowState = FormWindowState.Minimized Then
+                WDSInstallImageCopy.WindowState = FormWindowState.Normal
+            Else
+                WDSInstallImageCopy.BringToFront()
+            End If
+            WDSInstallImageCopy.Focus()
+        Else
+            WDSInstallImageCopy.Show()
+        End If
     End Sub
 End Class

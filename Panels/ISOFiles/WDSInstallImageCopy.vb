@@ -43,6 +43,12 @@ Public Class WDSInstallImageCopy
     End Sub
 
     Private Sub WDSInstallImageCopy_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If WindowsServiceHelper.GetOnlineSystemServiceInformationByName("WDSServer") Is Nothing Then
+            ' We are either not running this on Windows Server, or we are, but without the WDS role
+            MsgBox("This wizard does not support this computer. Make sure that this computer is running Windows Server and that it has the Windows Deployment Services role installed.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            Close()
+            Exit Sub
+        End If
         If WindowsServiceHelper.GetOnlineServiceStartStatus("WDSServer") <> ServiceProcess.ServiceControllerStatus.Running Then
             DynaLog.LogMessage("WDS Server Service not running. Starting...")
             WindowsServiceHelper.StartOnlineService("WDSServer")
@@ -115,6 +121,11 @@ Public Class WDSInstallImageCopy
 
                 ' By default check them all
                 WindowHelper.CheckAllItems(ListView1)
+
+                ' Block all boot images (or at least warn)
+                If ImageInfoCollection.Any(Function(ImageInfo) ImageInfo.EditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)) Then
+                    MsgBox("A boot image has been detected. You should not use these as installation images in your server.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
+                End If
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)

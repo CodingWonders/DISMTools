@@ -509,6 +509,7 @@ Partial Class MainForm
         Me.ImgCaptureModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CaptureWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -4588,10 +4589,10 @@ Partial Class MainForm
         '
         'ImgSpecialToolsCMS
         '
-        Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem, Me.ToolStripSeparator40, Me.CreateDiscImageWithThisFileToolStripMenuItem})
+        Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem, Me.ToolStripSeparator40, Me.CreateDiscImageWithThisFileToolStripMenuItem, Me.UploadThisImageToMyWDSServerToolStripMenuItem})
         Me.ImgSpecialToolsCMS.Name = "ImgSpecialToolsCMS"
         Me.ImgSpecialToolsCMS.ShowImageMargin = False
-        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(238, 82)
+        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(251, 126)
         '
         'GetImageFileInformationToolStripMenuItem
         '
@@ -4657,7 +4658,7 @@ Partial Class MainForm
         Me.ImgCaptureModeCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CaptureWimTSMI, Me.CaptureFfuTSMI})
         Me.ImgCaptureModeCMS.Name = "ImgCaptureModeCMS"
         Me.ImgCaptureModeCMS.ShowImageMargin = False
-        Me.ImgCaptureModeCMS.Size = New System.Drawing.Size(273, 70)
+        Me.ImgCaptureModeCMS.Size = New System.Drawing.Size(273, 48)
         '
         'CaptureWimTSMI
         '
@@ -4670,6 +4671,12 @@ Partial Class MainForm
         Me.CaptureFfuTSMI.Name = "CaptureFfuTSMI"
         Me.CaptureFfuTSMI.Size = New System.Drawing.Size(272, 22)
         Me.CaptureFfuTSMI.Text = "Capture installation drive to FFU file..."
+        '
+        'UploadThisImageToMyWDSServerToolStripMenuItem
+        '
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Name = "UploadThisImageToMyWDSServerToolStripMenuItem"
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Text = "Upload this image to my WDS server..."
         '
         'MainForm
         '
@@ -5269,4 +5276,5 @@ Partial Class MainForm
     Friend WithEvents ImgCaptureModeCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CaptureWimTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CaptureFfuTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UploadThisImageToMyWDSServerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
