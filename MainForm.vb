@@ -4751,6 +4751,8 @@ Public Class MainForm
         TreeViewCMS.Renderer = GetProfessionalRenderer()
         AppxResCMS.Renderer = GetProfessionalRenderer()
         ImgSpecialToolsCMS.Renderer = GetProfessionalRenderer()
+        ImgApplyModeCMS.Renderer = GetProfessionalRenderer()
+        ImgCaptureModeCMS.Renderer = GetProfessionalRenderer()
         PkgInfoCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgUMountPopupCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxPackagePopupCMS.ForeColor = CurrentTheme.ForegroundColor
@@ -4758,6 +4760,8 @@ Public Class MainForm
         TreeViewCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxResCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgSpecialToolsCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgApplyModeCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgCaptureModeCMS.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, TreeViewCMS.Items)
         InvalidSettingsTSMI.Image = GetGlyphResource("setting_error_glyph")
         ExitFullScreenTSMI.Image = GetGlyphResource("exit_full_screen_glyph")
@@ -13711,16 +13715,16 @@ Public Class MainForm
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        If CurrentImage IsNot Nothing AndAlso Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
-            FfuApply.ShowDialog(Me)
-        Else
-            ImgApply.ShowDialog(Me)
-        End If
+        Dim cmsPos As Point = Button30.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button30.Height)
+        ImgApplyModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
         DynaLog.LogMessage("Opening image capture dialog...")
-        ImgCapture.ShowDialog(Me)
+        Dim cmsPos As Point = Button31.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button31.Height)
+        ImgCaptureModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
@@ -16198,5 +16202,21 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub ApplyWimTSMI_Click(sender As Object, e As EventArgs) Handles ApplyWimTSMI.Click
+        ImgApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub ApplyFfuTSMI_Click(sender As Object, e As EventArgs) Handles ApplyFfuTSMI.Click
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureWimTSMI_Click(sender As Object, e As EventArgs) Handles CaptureWimTSMI.Click
+        ImgCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFfuTSMI_Click(sender As Object, e As EventArgs) Handles CaptureFfuTSMI.Click
+        FfuCapture.ShowDialog(Me)
     End Sub
 End Class
