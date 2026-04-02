@@ -9068,14 +9068,53 @@ Public Class MainForm
         bwGetImageInfo = True
         bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
+            Dim IsInFfuMode As Boolean
             DynaLog.LogMessage("The image will be unmounted committing changes...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            ProgressPanel.UMountOp = 0
+            If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                IsInFfuMode = True
+
+                ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+                ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+                ' but at least we save the changes...
+
+                Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+                ' Options for capture task
+                ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+                ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+                ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+                ProgressPanel.FFUCaptureCompressType = 1
+
+                ' Options for unmount task
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = 1
+
+                ' Options for replace task
+                ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+                ProgressPanel.TaskList.AddRange({5, 21, 998})
+            Else
+                IsInFfuMode = False
+
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 0
+            End If
             ProgressPanel.ShowDialog(Me)
+            If IsInFfuMode Then
+                UpdateProjProperties(False, False)
+                SaveDTProj()
+            End If
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             DynaLog.LogMessage("The image will be unmounted discarding changes...")
@@ -10994,6 +11033,7 @@ Public Class MainForm
                     e.Cancel = True
                 End If
             Else
+                imgCommitOperation = -1
                 DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
                 UnloadDTProj(True, False)
             End If
@@ -13602,10 +13642,57 @@ Public Class MainForm
     Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
         DynaLog.LogMessage("Committing changes to the image...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-        ProgressPanel.MountDir = MountDir
-        ' TODO: Add additional options later
-        ProgressPanel.OperationNum = 8
+        Dim IsInFfuMode As Boolean
+
+        If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+            IsInFfuMode = True
+
+            ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+            ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+            ' but at least we save the changes...
+
+            Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+            ' Options for capture task
+            ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+            ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+            ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+            ProgressPanel.FFUCaptureCompressType = 1
+
+            ' Options for unmount task
+            ProgressPanel.MountDir = MountDir
+            ProgressPanel.UMountOp = 1
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.RandomMountDir = ""
+            ProgressPanel.CheckImgIntegrity = False
+            ProgressPanel.SaveToNewIndex = False
+            ProgressPanel.UMountImgIndex = 1
+
+            ' Options for replace task
+            ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+            ' Options for mount task
+            ProgressPanel.SourceImg = CurrentImage.ImageFile
+            ProgressPanel.ImgIndex = 1
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ProgressPanel.TaskList.AddRange({5, 21, 998, 15})
+        Else
+            IsInFfuMode = False
+
+            ProgressPanel.MountDir = MountDir
+            ' TODO: Add additional options later
+            ProgressPanel.OperationNum = 8
+        End If
         ProgressPanel.ShowDialog(Me)
+        If IsInFfuMode Then
+            UpdateProjProperties(True, False)
+            SaveDTProj()
+        End If
     End Sub
 
     Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click

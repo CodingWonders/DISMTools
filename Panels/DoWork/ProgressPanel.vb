@@ -151,6 +151,7 @@
 ' 995                   Get-Indexes
 ' 996                   Switch-Indexes
 ' 997                   Remount-ReadWrite
+' 998                   Replace-FFU
 
 
 Imports Microsoft.VisualBasic.ControlChars
@@ -554,6 +555,10 @@ Public Class ProgressPanel
 
     ' OperationNum: 997
     Public RWRemountSourceImg As String                     ' Source image to remount with R/W permissions
+
+    ' OperationNum: 998
+    Public FFUReplaceSourceFFU As String                    ' Path to source FFU file that will act as a replacement of the destination
+    Public FFUReplaceDestinationFFU As String               ' Path to destination FFU file that will be replaced by the source FFU
 
     ' Miscellaneous error variables
     Dim PackageErrorCodes As New List(Of String)
@@ -995,6 +1000,8 @@ Public Class ProgressPanel
                 MergeSWM()
             Case 996
                 SwitchIndexes()
+            Case 998
+                ReplaceFfuFile()
         End Select
         CurrentPB.Value = CurrentPB.Maximum
         AllPB.Value = AllPB.Maximum
@@ -6884,7 +6891,6 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub SwitchIndexes()
-        ' TODO Improve significantly
         DynaLog.LogMessage("Preparing to switch image indexes...")
         DynaLog.LogMessage("- Source image file: " & Quote & SwitchSourceImg & Quote)
         DynaLog.LogMessage("- Source image index: " & SwitchSourceIndex)
@@ -7149,6 +7155,26 @@ Public Class ProgressPanel
         Else
             LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub ReplaceFfuFile()
+        DynaLog.LogMessage("Preparing to replace FFU files...")
+        DynaLog.LogMessage("- Source file: " & Quote & FFUReplaceSourceFFU & Quote)
+        DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
+        allTasks.Text = "Replacing FFU files..."
+        currentTask.Text = "Replacing original FFU file with modified FFU file..."
+        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceSourceFFU & Quote & " with " & Quote & FFUReplaceDestinationFFU & Quote & "...")
+        Try
+            If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
+            File.Delete(FFUReplaceDestinationFFU)
+            File.Move(FFUReplaceSourceFFU, FFUReplaceDestinationFFU)
+            IsSuccessful = True
+            LogView.AppendText(CrLf & "The FFU file has been successfully replaced.")
+        Catch ex As Exception
+            DynaLog.LogMessage("FFU files could not be replaced. Error message: " & ex.Message)
+            IsSuccessful = False
+            LogView.AppendText(CrLf & "The FFU file could not be replaced: " & ex.Message)
+        End Try
     End Sub
 
 #End Region
