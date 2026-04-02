@@ -8967,13 +8967,11 @@ Public Class MainForm
     ''' </summary>
     ''' <param name="IsBeingClosed">Determines whether the program is being closed</param>
     ''' <param name="SaveProject">Determines whether the program should save the project</param>
-    ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
-    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean)
         DynaLog.LogMessage("Preparing to unload project...")
         DynaLog.LogMessage("- Is the program being closed? " & If(IsBeingClosed, "Yes", "No"))
         DynaLog.LogMessage("- Will the project be saved? " & If(SaveProject, "Yes", "No"))
-        DynaLog.LogMessage("- Will the image be unmounted? " & If(UnmountImg, "Yes", "No"))
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
@@ -9095,19 +9093,6 @@ Public Class MainForm
             If File.Exists(projPath & "\settings\project.ini") Then
                 SaveDTProj()
             End If
-        End If
-        If UnmountImg Then
-            DynaLog.LogMessage("The image will be unmounted...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            If IsBeingClosed Then
-                DynaLog.LogMessage("The program will be closed...")
-                ProgressPanel.ProgramIsBeingClosed = True
-            End If
-            ProgressPanel.ShowDialog(Me)
         End If
         Text = "DISMTools"
         If Debugger.IsAttached Then
@@ -10971,21 +10956,11 @@ Public Class MainForm
         DynaLog.LogMessage("Showing save question...")
         SaveProjectQuestionDialog.ShowDialog(Me)
         If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Saving project and unmounting the image...")
-                UnloadDTProj(False, True, True)
-            Else
-                DynaLog.LogMessage("Saving project...")
-                UnloadDTProj(False, True, False)
-            End If
+            DynaLog.LogMessage("Saving project...")
+            UnloadDTProj(False, True)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                UnloadDTProj(False, False, True)
-            Else
-                DynaLog.LogMessage("Discarding project changes...")
-                UnloadDTProj(False, False, False)
-            End If
+            DynaLog.LogMessage("Discarding project changes...")
+            UnloadDTProj(False, False)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
             DynaLog.LogMessage("Nothing happened here")
             Exit Sub
@@ -11009,28 +10984,18 @@ Public Class MainForm
                 DynaLog.LogMessage("The image this project contains has been modified")
                 SaveProjectQuestionDialog.ShowDialog(Me)
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Saving project and unmounting the image...")
-                        UnloadDTProj(True, True, True)
-                    Else
-                        DynaLog.LogMessage("Saving project...")
-                        UnloadDTProj(True, True, False)
-                    End If
+                    DynaLog.LogMessage("Saving project...")
+                    UnloadDTProj(True, True)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                        UnloadDTProj(True, False, True)
-                    Else
-                        DynaLog.LogMessage("Discarding project changes...")
-                        UnloadDTProj(True, False, False)
-                    End If
+                    DynaLog.LogMessage("Discarding project changes...")
+                    UnloadDTProj(True, False)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Nothing happened here. Cancelling closure...")
                     e.Cancel = True
                 End If
             Else
                 DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-                UnloadDTProj(True, False, False)
+                UnloadDTProj(True, False)
             End If
         End If
         If ImgBW.IsBusy Then
@@ -11147,28 +11112,18 @@ Public Class MainForm
             DynaLog.LogMessage("The image this project contains has been modified")
             SaveProjectQuestionDialog.ShowDialog(Me)
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Saving project and unmounting the image...")
-                    UnloadDTProj(False, True, True)
-                Else
-                    DynaLog.LogMessage("Saving project...")
-                    UnloadDTProj(False, True, False)
-                End If
+                DynaLog.LogMessage("Saving project...")
+                UnloadDTProj(False, True)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                    UnloadDTProj(False, False, True)
-                Else
-                    DynaLog.LogMessage("Discarding project changes...")
-                    UnloadDTProj(False, False, False)
-                End If
+                DynaLog.LogMessage("Discarding project changes...")
+                UnloadDTProj(False, False)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("Nothing happened here.")
                 Exit Sub
             End If
         Else
             DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-            UnloadDTProj(False, False, False)
+            UnloadDTProj(False, False)
         End If
     End Sub
 
@@ -11665,7 +11620,7 @@ Public Class MainForm
                 ProgressPanel.ShowDialog(Me)
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("User decided not to reload the servicing session. Unloading project...")
-                UnloadDTProj(False, False, False)
+                UnloadDTProj(False, False)
                 ImgBW.CancelAsync()
             End If
         End If
@@ -11928,7 +11883,7 @@ Public Class MainForm
             DynaLog.LogMessage("File specified in OFD: " & OpenFileDialog1.FileName)
             If File.Exists(OpenFileDialog1.FileName) Then
                 DynaLog.LogMessage("Project file exists")
-                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
                 If ImgBW.IsBusy Then Exit Sub
                 Dim Project As New Recents()
                 Project.ProjPath = OpenFileDialog1.FileName
@@ -12929,7 +12884,7 @@ Public Class MainForm
             DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
             If ActiveInstAccessWarn.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then Exit Sub
-            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True)
             If ImgBW.IsBusy Then Exit Sub
         End If
         ActiveInstAccessWarn.Label2.Visible = False
@@ -12947,7 +12902,7 @@ Public Class MainForm
             End If
             If isProjectLoaded Then
                 DynaLog.LogMessage("Unloading project...")
-                UnloadDTProj(False, True, False)
+                UnloadDTProj(False, True)
                 If ImgBW.IsBusy Then Exit Sub
             End If
             BeginOfflineManagement(drivePath)
@@ -13573,7 +13528,7 @@ Public Class MainForm
             DynaLog.LogMessage("Unmounting image directly...")
             If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
             imgCommitOperation = 1
-            UnloadDTProj(False, True, True)
+            UnloadDTProj(False, True)
             Exit Sub
         End If
         DynaLog.LogMessage("Opening image unmount dialog...")
@@ -13657,14 +13612,14 @@ Public Class MainForm
         DynaLog.LogMessage("Unmounting the Windows image whilst committing changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst discarding changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
@@ -14444,7 +14399,7 @@ Public Class MainForm
                     If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
                 ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Not ready to reload. The image needs to be reloading before using this project again. Unloading project...")
-                    UnloadDTProj(False, False, False)
+                    UnloadDTProj(False, False)
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
             Case ImageWatcher.Status.NotMounted
@@ -14457,7 +14412,7 @@ Public Class MainForm
                         UpdateProjProperties(False, False)
                     ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
-                        UnloadDTProj(False, False, False)
+                        UnloadDTProj(False, False)
                         If ImgBW.IsBusy Then ImgBW.CancelAsync()
                     End If
                 End If
@@ -15116,7 +15071,7 @@ Public Class MainForm
         End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
-            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
             If ImgBW.IsBusy Then Exit Sub
             itmOrder = itemOrder
             Dim recentProj As Recents = RecentList(itmOrder)

@@ -88,7 +88,7 @@ Public Class NewProj
             ElseIf MainForm.OfflineManagement Then
                 MainForm.EndOfflineManagement()
             Else
-                MainForm.UnloadDTProj(False, True, False)
+                MainForm.UnloadDTProj(False, True)
             End If
             If MainForm.ImgBW.IsBusy Then Exit Sub
         End If

@@ -347,7 +347,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
-    Public ProgramIsBeingClosed As Boolean
     Public UMountLocalDir As Boolean
     Public UMountOp As Integer                              ' 0: commit, then unmount; 1: unmount without saving
     Public RandomMountDir As String                         ' Don't know about that mount dir, other that it was not loaded
@@ -2698,7 +2697,6 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Unmount operation (may not reflect actual operation): " & UMountOp)
         DynaLog.LogMessage("  - Check image integrity before committing changes? " & If(CheckImgIntegrity, "Yes", "No"))
         DynaLog.LogMessage("  - Append changes to new index? " & If(SaveToNewIndex, "Yes", "No"))
-        DynaLog.LogMessage("- Will the program be closed? " & If(ProgramIsBeingClosed, "Yes", "No"))
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2741,162 +2739,86 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
                            "- Mount directory: " & MountDir & CrLf &
                            "- Image index: " & UMountImgIndex)
-        If ProgramIsBeingClosed Then
-            DynaLog.LogMessage("DISMTools will be closed. Proceeding to commit changes...")
-            LogView.AppendText(CrLf & "- Unmount operation: Commit")
-            ' Commit the image and unmount it
-            Try
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
-                            Case Is >= 2
-                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
-                        End Select
-                    Case 10
-                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
-                End Select
-                RunProcess(DismProgram, CommandArgs)
-                If DismExitCode = Decimal.ToInt32(-1052638964) Then
-                    DynaLog.LogMessage("An attempt was made to save changes to an image that was mounted with read-only permissions. Unmounting image whilst discarding changes...")
-                    LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
-                    ' It mostly came from a read-only source. Discard changes
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
-                                Case Is >= 2
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
-                            End Select
-                        Case 10
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+        Try
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            If UMountLocalDir Then
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
+                            Else
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
+                            End If
+                        Case Is >= 2
+                            If UMountLocalDir Then
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                            Else
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                            End If
                     End Select
-                    RunProcess(DismProgram, CommandArgs)
-                End If
-            Catch ex As Exception
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /unmount-image /mountdir=" & MountDir,
-                                  ASCII)
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-            End Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
+                Case 10
+                    If UMountLocalDir Then
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                    Else
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                    End If
             End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            If UMountOp = 0 Then
+                LogView.AppendText(CrLf & "- Unmount operation: Commit")
+                CommandArgs &= " /commit"
+            ElseIf UMountOp = 1 Then
+                LogView.AppendText(CrLf & "- Unmount operation: Discard")
+                CommandArgs &= " /discard"
             End If
+            If UMountOp = 0 Then
+                If CheckImgIntegrity Then
+                    LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                    CommandArgs &= " /checkintegrity"
+                Else
+                    LogView.AppendText(CrLf & "- Check image integrity? No")
+                End If
+                If SaveToNewIndex Then
+                    LogView.AppendText(CrLf & "- Append changes to new index? Yes")
+                    CommandArgs &= " /append"
+                Else
+                    LogView.AppendText(CrLf & "- Append changes to new index? No")
+                End If
+            End If
+            RunProcess(DismProgram, CommandArgs)
+        Catch ex As Exception
+            ' Let's try this before setting things up here
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
         Else
-            DynaLog.LogMessage("DISMTools will not be closed.")
-            Try
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                If UMountLocalDir Then
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
-                                Else
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
-                                End If
-                            Case Is >= 2
-                                If UMountLocalDir Then
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
-                                Else
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
-                                End If
-                        End Select
-                    Case 10
-                        If UMountLocalDir Then
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
-                        Else
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
-                        End If
-                End Select
-                If UMountOp = 0 Then
-                    LogView.AppendText(CrLf & "- Unmount operation: Commit")
-                    CommandArgs &= " /commit"
-                ElseIf UMountOp = 1 Then
-                    LogView.AppendText(CrLf & "- Unmount operation: Discard")
-                    CommandArgs &= " /discard"
-                End If
-                If UMountOp = 0 Then
-                    If CheckImgIntegrity Then
-                        LogView.AppendText(CrLf & "- Check image integrity? Yes")
-                        CommandArgs &= " /checkintegrity"
-                    Else
-                        LogView.AppendText(CrLf & "- Check image integrity? No")
-                    End If
-                    If SaveToNewIndex Then
-                        LogView.AppendText(CrLf & "- Append changes to new index? Yes")
-                        CommandArgs &= " /append"
-                    Else
-                        LogView.AppendText(CrLf & "- Append changes to new index? No")
-                    End If
-                End If
-                RunProcess(DismProgram, CommandArgs)
-            Catch ex As Exception
-                ' Let's try this before setting things up here
-            End Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
-            End If
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
     End Sub
 
