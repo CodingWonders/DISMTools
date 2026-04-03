@@ -4778,6 +4778,19 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub RemoveOnlineAppxPackages(ParamArray PackageNames As String())
+        Dim extAppxHelperPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "online_appx_removal.ps1")
+        If File.Exists(extAppxHelperPath) Then
+            DynaLog.LogMessage("AppX removal helper exists. Proceeding with the removal of those bastards!")
+            LogView.AppendText(CrLf & "A PowerShell helper will be used to remove AppX packages. Please wait...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       String.Format("-executionpolicy Bypass -noprofile -nologo -file {0}{1}{0} -appxFullNames {0}{2}{0}", Quote, extAppxHelperPath,
+                                     String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))),
+                       DoNotRedirect:=True)
+            LogView.AppendText(CrLf & "Log off for the deprovisioning of applications to be fully carried out.")
+        End If
+    End Sub
+
     Private Sub RemoveProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to remove AppX packages...")
         Select Case Language
@@ -4845,91 +4858,100 @@ Public Class ProgressPanel
                 currentTask.Text = "Rimozione pacchetti AppX..."
         End Select
         CurrentPB.Maximum = appxRemovalCount
-        For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
-            If x + 1 > CurrentPB.Maximum Then Exit For
-            CommandArgs = BckArgs
-            Dim removalStoreApp As String = appxRemovalPackages(x)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-            End Select
-            LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & appxRemovalCount)
-            CurrentPB.Value = x + 1
-            ' Display package name and DisplayName
-            LogView.AppendText(CrLf &
-                               "- Package name: " & appxRemovalPackages(x) & CrLf &
-                               "- Display name: " & appxRemovalPkgNames(x))
-            ' Display whether an application is registered to a user
-            CheckAppRegistrationStatus(removalStoreApp)
-            ' Initialize command. Its syntax is simple, so don't spend too much time determining options
-            LogView.AppendText(CrLf & CrLf &
-                               "Processing package...")
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
-            RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
-            If Hex(DismExitCode).Length < 8 Then
-                errCode = DismExitCode
-            Else
-                errCode = Hex(DismExitCode)
-            End If
-            If DismExitCode = 0 Then
-                appxSuccessfulRemovals += 1
-            Else
-                appxFailedRemovals += 1
-            End If
-            If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(" Error level : " & errCode)
-            End If
-            If PackageErrorCodes.Count <= 0 Then
-                If errCode.Length >= 8 Then
-                    PackageErrorCodes.Add("0x" & errCode)
-                Else
-                    PackageErrorCodes.Add(errCode)
-                End If
-            Else
-                If errCode.Length >= 8 Then
-                    PackageErrorCodes.Add("0x" & errCode)
-                Else
-                    PackageErrorCodes.Add(errCode)
-                End If
-            End If
-        Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
-        For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
-        Next
-        Thread.Sleep(2000)
-        AllPB.Value = 100
-        If appxSuccessfulRemovals > 0 Then
+        If OnlineMgmt Then
+            RemoveOnlineAppxPackages(appxRemovalPackages)
+            CurrentPB.Value = CurrentPB.Maximum
+            Thread.Sleep(2000)
+            AllPB.Value = 100
             GetErrorCode(True)
-        ElseIf appxSuccessfulRemovals <= 0 Then
-            GetErrorCode(False)
+        Else
+            For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Dim removalStoreApp As String = appxRemovalPackages(x)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
+                            Case "PTB", "PTG"
+                                currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "ITA"
+                                currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 3
+                        currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
+                    Case 4
+                        currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 5
+                        currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
+                End Select
+                LogView.AppendText(CrLf &
+                                   "Package " & (x + 1) & " of " & appxRemovalCount)
+                CurrentPB.Value = x + 1
+                ' Display package name and DisplayName
+                LogView.AppendText(CrLf &
+                                   "- Package name: " & appxRemovalPackages(x) & CrLf &
+                                   "- Display name: " & appxRemovalPkgNames(x))
+                ' Display whether an application is registered to a user
+                CheckAppRegistrationStatus(removalStoreApp)
+                ' Initialize command. Its syntax is simple, so don't spend too much time determining options
+                LogView.AppendText(CrLf & CrLf &
+                                   "Processing package...")
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                RunProcess(DismProgram, CommandArgs)
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DismExitCode).Length < 8 Then
+                    errCode = DismExitCode
+                Else
+                    errCode = Hex(DismExitCode)
+                End If
+                If DismExitCode = 0 Then
+                    appxSuccessfulRemovals += 1
+                Else
+                    appxFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PackageErrorCodes.Count <= 0 Then
+                    If errCode.Length >= 8 Then
+                        PackageErrorCodes.Add("0x" & errCode)
+                    Else
+                        PackageErrorCodes.Add(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PackageErrorCodes.Add("0x" & errCode)
+                    Else
+                        PackageErrorCodes.Add(errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+            For x = 0 To PackageErrorCodes.Count - 1
+                LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            Next
+            Thread.Sleep(2000)
+            AllPB.Value = 100
+            If appxSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf appxSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
         End If
+
     End Sub
 
 #End Region
