@@ -3,7 +3,7 @@
 )
 
 $appxFullNamesArray = $appxFullNames.Split(";")
-Write-Host "Proceeding with the removal of $($appxFullNamesArray.Count) package(s)..."
+Write-Output "The following AppX packages ($($appxFullNamesArray.Count)) have been scheduled for removal:"
+$appxFullNamesArray
 Get-AppxPackage -AllUsers | Where-Object { $appxFullNamesArray.Contains($_.PackageFullName) } | Remove-AppxPackage -AllUsers
-Write-Host "Log off and log on again for applications to be fully deprovisioned."
-Start-Sleep -Seconds 5
+Write-Output "Log off and log on again for applications to be fully deprovisioned."
