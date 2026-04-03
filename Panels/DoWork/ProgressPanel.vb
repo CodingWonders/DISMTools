@@ -4484,8 +4484,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "A PowerShell helper will be used to remove AppX packages. Please wait...")
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
                        String.Format("-executionpolicy Bypass -noprofile -nologo -file {0}{1}{0} -appxFullNames {0}{2}{0}", Quote, extAppxHelperPath,
-                                     String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))),
-                       DoNotRedirect:=True)
+                                     String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))))
             LogView.AppendText(CrLf & "Log off for the deprovisioning of applications to be fully carried out.")
         End If
     End Sub
