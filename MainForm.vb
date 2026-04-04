@@ -9240,7 +9240,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in online mode
         ToolStripButton2.Enabled = False
@@ -9395,7 +9394,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in offline mode either
         ToolStripButton2.Enabled = False
