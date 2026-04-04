@@ -9145,10 +9145,7 @@ Public Class MainForm
         DynaLog.LogMessage("Removing items from project tree view...")
         UnpopulateProjectTree()
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
-        Refresh()
         CommandsToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         HomePanel.Visible = True
         PrjPanel.Visible = False
@@ -9579,7 +9576,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -9731,7 +9727,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
