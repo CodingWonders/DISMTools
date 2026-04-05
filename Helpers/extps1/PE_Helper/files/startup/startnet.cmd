@@ -25,7 +25,12 @@ if !ERRORLEVEL! equ 1 (
 	)
 )
 if exist "%sysdrive%\ShowWatermark.ps1" (
-	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
+	SET ShowWatermark=0
+	reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /v DRY_Watermark >nul 2>&1
+	IF !ERRORLEVEL! NEQ 0 (
+		start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
+		reg add "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /f /v DRY_Watermark /t REG_DWORD /d 1 >nul 2>&1
+	)
 )
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 	if exist "%sysdrive%\scripts\imagecapture.bat" (
