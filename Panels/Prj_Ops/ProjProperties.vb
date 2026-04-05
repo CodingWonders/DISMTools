@@ -987,6 +987,8 @@ Public Class ProjProperties
             Label4.Visible = False
         End If
         ImageTaskHeader1.HideWindowTitle(handle)
+
+        FfuInfoBtn.Visible = Path.GetExtension(MainForm.SourceImg).Equals(".ffu", StringComparison.OrdinalIgnoreCase)
     End Sub
 
     Private Sub RWRemountBtn_Click(sender As Object, e As EventArgs) Handles RWRemountBtn.Click
@@ -1166,5 +1168,10 @@ Public Class ProjProperties
             Case 5
                 WindowHelper.DisplayToolTip(sender, "Livello di astrazione hardware")
         End Select
+    End Sub
+
+    Private Sub FfuInfoBtn_Click(sender As Object, e As EventArgs) Handles FfuInfoBtn.Click
+        FfuInfoDialog.MountedFfuInformation = MainForm.CurrentImage.FFUInfo
+        FfuInfoDialog.ShowDialog(Me)
     End Sub
 End Class

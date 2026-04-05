@@ -17,6 +17,16 @@
 
         Public Property OptimizedPartitionNumber As Integer
 
+        Public Function CompressionToString() As String
+            Select Case Compression
+                Case FFUCompressionType.None
+                    Return "No compression"
+                Case FFUCompressionType.XPRESSHuffman
+                    Return "XPRESS-Huffman"
+            End Select
+            Return ""
+        End Function
+
         Public Overrides Function ToString() As String
             Return String.Format("- VHD Path                  : {1}{0}" &
                                  "- VHD ID                    : {2}{0}" &
