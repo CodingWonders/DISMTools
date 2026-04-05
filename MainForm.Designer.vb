@@ -4087,6 +4087,7 @@ Partial Class MainForm
         Me.ToolStripSeparator15.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
         Me.ToolStripSeparator15.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator15.Visible = False
         '
         'ToolStripButton4
         '
