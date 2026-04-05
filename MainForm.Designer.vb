@@ -500,6 +500,7 @@ Partial Class MainForm
         Me.SaveCompleteImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator40 = New System.Windows.Forms.ToolStripSeparator()
         Me.CreateDiscImageWithThisFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
@@ -509,7 +510,6 @@ Partial Class MainForm
         Me.ImgCaptureModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CaptureWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -4057,6 +4057,7 @@ Partial Class MainForm
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton1.Text = "Close tab"
+        Me.ToolStripButton1.Visible = False
         '
         'ToolStripButton2
         '
@@ -4592,35 +4593,41 @@ Partial Class MainForm
         Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem, Me.ToolStripSeparator40, Me.CreateDiscImageWithThisFileToolStripMenuItem, Me.UploadThisImageToMyWDSServerToolStripMenuItem})
         Me.ImgSpecialToolsCMS.Name = "ImgSpecialToolsCMS"
         Me.ImgSpecialToolsCMS.ShowImageMargin = False
-        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(251, 126)
+        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(251, 104)
         '
         'GetImageFileInformationToolStripMenuItem
         '
         Me.GetImageFileInformationToolStripMenuItem.Name = "GetImageFileInformationToolStripMenuItem"
-        Me.GetImageFileInformationToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.GetImageFileInformationToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
         '
         'ToolStripSeparator39
         '
         Me.ToolStripSeparator39.Name = "ToolStripSeparator39"
-        Me.ToolStripSeparator39.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator39.Size = New System.Drawing.Size(247, 6)
         '
         'SaveCompleteImageInformationToolStripMenuItem
         '
         Me.SaveCompleteImageInformationToolStripMenuItem.Name = "SaveCompleteImageInformationToolStripMenuItem"
-        Me.SaveCompleteImageInformationToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.SaveCompleteImageInformationToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
         '
         'ToolStripSeparator40
         '
         Me.ToolStripSeparator40.Name = "ToolStripSeparator40"
-        Me.ToolStripSeparator40.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator40.Size = New System.Drawing.Size(247, 6)
         '
         'CreateDiscImageWithThisFileToolStripMenuItem
         '
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Name = "CreateDiscImageWithThisFileToolStripMenuItem"
-        Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
+        '
+        'UploadThisImageToMyWDSServerToolStripMenuItem
+        '
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Name = "UploadThisImageToMyWDSServerToolStripMenuItem"
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Text = "Upload this image to my WDS server..."
         '
         'WIEDownloaderBW
         '
@@ -4671,12 +4678,6 @@ Partial Class MainForm
         Me.CaptureFfuTSMI.Name = "CaptureFfuTSMI"
         Me.CaptureFfuTSMI.Size = New System.Drawing.Size(272, 22)
         Me.CaptureFfuTSMI.Text = "Capture installation drive to FFU file..."
-        '
-        'UploadThisImageToMyWDSServerToolStripMenuItem
-        '
-        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Name = "UploadThisImageToMyWDSServerToolStripMenuItem"
-        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
-        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Text = "Upload this image to my WDS server..."
         '
         'MainForm
         '

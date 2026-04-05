@@ -618,7 +618,6 @@ Public Class ProgressPanel
         If Cancel_Button.Text = "Cancel" Or Cancel_Button.Text = "Cancelar" Or Cancel_Button.Text = "Annulla" Then
             ProgressBW.CancelAsync()
         ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
-            MainForm.ToolStripButton4.Visible = False
             Close()
         End If
     End Sub
@@ -7556,13 +7555,11 @@ Public Class ProgressPanel
             End Select
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
-            MainForm.ToolStripButton4.Visible = False
             MainForm.StartMountedImageDetector()
             Close()
         Else
             DynaLog.LogMessage("Tasks have not been successful.")
             Cancel_Button.Visible = True
-            MainForm.ToolStripButton4.Visible = False
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -7967,7 +7964,6 @@ Public Class ProgressPanel
         Else
             IsDebugged = False
         End If
-        MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
@@ -8109,7 +8105,6 @@ Public Class ProgressPanel
                 MainForm.MenuDesc.Text = "Pronto"
         End Select
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
-        MainForm.ToolStripButton4.Visible = False
         MainForm.StartMountedImageDetector()
     End Sub
 

@@ -11669,7 +11669,6 @@ Public Class MainForm
                     DynaLog.LogMessage("Incompatibility studied. This is a Windows Vista/Server 2008 image")
                     ' Let the user know about the incompatibility
                     If Not ProgressPanel.IsDisposed Then
-                        ToolStripButton4.Visible = False
                         ProgressPanel.Dispose()
                         ProgressPanel.Close()
                     End If
