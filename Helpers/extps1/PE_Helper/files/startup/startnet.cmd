@@ -31,8 +31,12 @@ FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation En
 	IF /I "%%A" == "0x1" SET ShowWatermark=1
 )
 
+reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /v DRY_Watermark >nul 2>&1
+IF !ERRORLEVEL! EQU 0 SET ShowWatermark=0
+
 if !ShowWatermark! EQU 1 (
 	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
+	reg add "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /f /v DRY_Watermark /t REG_DWORD /d 1 >nul 2>&1
 )
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 	if exist "%sysdrive%\scripts\imagecapture.bat" (
