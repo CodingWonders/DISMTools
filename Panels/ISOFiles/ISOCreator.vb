@@ -333,6 +333,7 @@ Public Class ISOCreator
                 CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
         End Select
         ImageTaskHeader1.SetColors()
+        ImageTaskHeader1.HideWindowTitle(Me.Handle)
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -453,7 +454,6 @@ Public Class ISOCreator
         ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
-        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub DownloadADK()
