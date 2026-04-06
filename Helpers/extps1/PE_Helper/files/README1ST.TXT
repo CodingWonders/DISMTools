@@ -88,35 +88,35 @@ in one of 2 ways:
 
 a) Within Windows:
     
-	1. Open PowerShell as an administrator
-	2. Verify the Secure Boot status with Confirm-SecureBootUEFI
-	3. Verify the presence of Windows UEFI CA 2023:
+    1. Open PowerShell as an administrator
+    2. Verify the Secure Boot status with Confirm-SecureBootUEFI
+    3. Verify the presence of Windows UEFI CA 2023:
 
-	[System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI DB).Bytes) -match 'Windows UEFI CA 2023'
+    [System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI DB).Bytes) -match 'Windows UEFI CA 2023'
 
-	Both Secure Boot presence confirmation and DB query will return either True or False.
+    Both Secure Boot presence confirmation and DB query will return either True or False.
 
 b) Within your computer's firmware (UEFI):
 
     Check the state of Secure Boot in your firmware. Depending on the manufacturer and model of
-	computer, you may find this option in different locations under different names. If Secure Boot
-	is enabled, check the keys present.
+    computer, you may find this option in different locations under different names. If Secure Boot
+    is enabled, check the keys present.
 
-	Normally, you should see these keys grouped under the various key databases (DB for allowed items,
-	DBX for blocked items, and so on). Check whether Windows UEFI CA 2023 is in DB
+    Normally, you should see these keys grouped under the various key databases (DB for allowed items,
+    DBX for blocked items, and so on). Check whether Windows UEFI CA 2023 is in DB
 
 The Preinstallation Environment Helper will perform these checks and tell you the following if they
 succeed:
 
-	You may be able to use the UEFI CA 2023 binaries on this system.
+    You may be able to use the UEFI CA 2023 binaries on this system.
 
-	    If UEFI CA 2023 certificates are in DB
+        If UEFI CA 2023 certificates are in DB
 
-	-- or --
+    -- or --
 
-	You may not be able to use the UEFI CA 2023 binaries on this system.
+    You may not be able to use the UEFI CA 2023 binaries on this system.
 
-	    If UEFI CA 2023 certificates are not in DB
+        If UEFI CA 2023 certificates are not in DB
 
 For this to happen, the Preinstallation Environment must also contain a copy of BCDBoot with support
 for copying specific versions of the boot binary based on its flags (specifically a /bootex flag). You
