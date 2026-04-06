@@ -1507,9 +1507,6 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.resources.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\prepare_wds.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
