@@ -67,12 +67,17 @@ Public Class Form1
         If File.Exists(DynaLogFile) Then
             Dim DynaLogLines As String() = File.ReadAllLines(DynaLogFile)
 #If VBC_VER < 9.0 Then
+            Dim dlItems(DynaLogLines.Length - 1) As ListViewItem
+            Dim idx As Integer = 0
+
             For Each LogLine As String In DynaLogLines
                 dlEvent = LogHelper.ParseEventLine(LogLine)
                 If dlEvent IsNot Nothing Then
-                    ListView1.Items.Add(New ListViewItem(New String() {dlEvent.EventTimestamp, dlEvent.EventPid, dlEvent.EventCaller, dlEvent.EventMessage}))
+                    dlItems(idx) = New ListViewItem(New String() {dlEvent.EventTimestamp, dlEvent.EventPid, dlEvent.EventCaller, dlEvent.EventMessage})
+                    idx += 1
                 End If
             Next
+            ListView1.Items.AddRange(dlItems)
 #Else
             Dim dlEvents As New List(of DynaLogEvent)
             For Each LogLine As String In DynaLogLines
