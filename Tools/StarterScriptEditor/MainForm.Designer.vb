@@ -28,6 +28,10 @@ Partial Class MainForm
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton
+        Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
+        Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.SystemCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
         Me.Label1 = New System.Windows.Forms.Label
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel
@@ -57,7 +61,7 @@ Partial Class MainForm
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(1016, 25)
@@ -302,6 +306,35 @@ Partial Class MainForm
             "s;*.vbe;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
         Me.OpenFileDialog2.Title = "Import Existing Script"
         '
+        'ColorModeTSDDB
+        '
+        Me.ColorModeTSDDB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ColorModeTSDDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ColorModeTSDDB.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LightCM_TSMI, Me.DarkCM_TSMI, Me.SystemCM_TSMI})
+        Me.ColorModeTSDDB.Image = Global.StarterScriptEditor.My.Resources.Resources.colormode
+        Me.ColorModeTSDDB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ColorModeTSDDB.Name = "ColorModeTSDDB"
+        Me.ColorModeTSDDB.Size = New System.Drawing.Size(29, 22)
+        Me.ColorModeTSDDB.Text = "Change Color Mode..."
+        '
+        'LightCM_TSMI
+        '
+        Me.LightCM_TSMI.Name = "LightCM_TSMI"
+        Me.LightCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.LightCM_TSMI.Text = "Light"
+        '
+        'DarkCM_TSMI
+        '
+        Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
+        Me.DarkCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.DarkCM_TSMI.Text = "Dark"
+        '
+        'SystemCM_TSMI
+        '
+        Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
+        Me.SystemCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.SystemCM_TSMI.Text = "System"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -354,5 +387,9 @@ Partial Class MainForm
     Friend WithEvents OpenFileDialog2 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents ColorModeTSDDB As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents LightCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DarkCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SystemCM_TSMI As System.Windows.Forms.ToolStripMenuItem
 
 End Class

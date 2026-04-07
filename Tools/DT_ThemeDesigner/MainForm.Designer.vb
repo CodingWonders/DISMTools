@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -59,6 +59,10 @@ Partial Class MainForm
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton
+        Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
+        Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.SystemCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
         Me.ThemePreviewPanel = New System.Windows.Forms.Panel
         Me.TestGlyph4 = New System.Windows.Forms.PictureBox
         Me.TestGlyph3 = New System.Windows.Forms.PictureBox
@@ -417,7 +421,8 @@ Partial Class MainForm
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4})
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(634, 25)
@@ -660,6 +665,35 @@ Partial Class MainForm
         Me.Panel1.Size = New System.Drawing.Size(610, 62)
         Me.Panel1.TabIndex = 11
         '
+        'ColorModeTSDDB
+        '
+        Me.ColorModeTSDDB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ColorModeTSDDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ColorModeTSDDB.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LightCM_TSMI, Me.DarkCM_TSMI, Me.SystemCM_TSMI})
+        Me.ColorModeTSDDB.Image = Global.DT_ThemeDesigner.My.Resources.Resources.colormode
+        Me.ColorModeTSDDB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ColorModeTSDDB.Name = "ColorModeTSDDB"
+        Me.ColorModeTSDDB.Size = New System.Drawing.Size(29, 22)
+        Me.ColorModeTSDDB.Text = "Change Color Mode..."
+        '
+        'LightCM_TSMI
+        '
+        Me.LightCM_TSMI.Name = "LightCM_TSMI"
+        Me.LightCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.LightCM_TSMI.Text = "Light"
+        '
+        'DarkCM_TSMI
+        '
+        Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
+        Me.DarkCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.DarkCM_TSMI.Text = "Dark"
+        '
+        'SystemCM_TSMI
+        '
+        Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
+        Me.SystemCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.SystemCM_TSMI.Text = "System"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -749,5 +783,9 @@ Partial Class MainForm
     Friend WithEvents TestGlyph1 As System.Windows.Forms.PictureBox
     Friend WithEvents ToolStripButton4 As System.Windows.Forms.ToolStripButton
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents ColorModeTSDDB As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents LightCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DarkCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SystemCM_TSMI As System.Windows.Forms.ToolStripMenuItem
 
 End Class

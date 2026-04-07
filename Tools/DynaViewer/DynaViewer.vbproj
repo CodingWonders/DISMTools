@@ -75,7 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
     <Compile Include="Classes\DynaLogEvent.vb" />
+    <Compile Include="ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="ColorTables\LightModeColorTable.vb" />
     <Compile Include="EventProperties.Designer.vb">
       <DependentUpon>EventProperties.vb</DependentUpon>
     </Compile>

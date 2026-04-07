@@ -1,6 +1,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports DT_ThemeDesigner.Classes.ColorUtilities
 
 Public Class MainForm
 
@@ -8,32 +9,71 @@ Public Class MainForm
 
     Private UserDataScriptFolder As String
 
-    Private Sub SetDarkMode()
-        If Environment.OSVersion.Version.Major < 10 Then Exit Sub
-        Try
-            Dim darkMode As Boolean
-            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
-            darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
-            ColorModeRk.Close()
+    Public CurrentColorMode As ColorThemeMode
 
-            If Not darkMode Then Exit Sub
-            WindowHelper.ToggleDarkTitleBar(Handle, True)
+    Private Sub ChangeMenuItemColors(ByVal bgColor As Color, ByVal fgColor As Color, ByVal itemCollection As ToolStripItemCollection)
+        For Each tsi As ToolStripItem In itemCollection
+            If TypeOf tsi Is ToolStripDropDownItem Then
+                Dim item As ToolStripDropDownItem = CType(tsi, ToolStripDropDownItem)
+                Try
+                    item.DropDown.BackColor = bgColor
+                    item.DropDown.ForeColor = fgColor
+                    If item.DropDownItems.Count > 0 Then
+                        ChangeMenuItemColors(bgColor, fgColor, item.DropDownItems)
+                    End If
+                Catch ex As Exception
+                    Continue For
+                End Try
+            End If
+        Next
+    End Sub
 
-            BackColor = Color.FromArgb(32, 32, 32)
-            ForeColor = Color.White
+    Private Sub SetColorMode(ByVal NewColorMode As ColorThemeMode)
+        CurrentColorMode = NewColorMode
+        Select Case NewColorMode
+            Case ColorThemeMode.Light
+                WindowHelper.ToggleDarkTitleBar(Handle, False)
 
-            TextBox1.BackColor = BackColor
-            TextBox1.ForeColor = ForeColor
-            GroupBox1.ForeColor = ForeColor
+                BackColor = Color.FromArgb(239, 239, 242)
+                ForeColor = Color.Black
+            Case ColorThemeMode.Dark
+                WindowHelper.ToggleDarkTitleBar(Handle, True)
 
-            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-        Catch ex As Exception
-            Exit Sub
-        End Try
+                BackColor = Color.FromArgb(32, 32, 32)
+                ForeColor = Color.White
+            Case ColorThemeMode.System
+                If Environment.OSVersion.Version.Major < 10 Then SetColorMode(ColorThemeMode.Light)
+
+                Try
+                    Dim darkMode As Boolean
+                    Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+                    darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+                    ColorModeRk.Close()
+
+                    If darkMode Then SetColorMode(ColorThemeMode.Dark) Else SetColorMode(ColorThemeMode.Light)
+                Catch ex As Exception
+                    SetColorMode(ColorThemeMode.Light)
+                End Try
+
+                Exit Sub
+        End Select
+
+        TextBox1.BackColor = BackColor
+        TextBox1.ForeColor = ForeColor
+        GroupBox1.ForeColor = ForeColor
+
+        If NewColorMode = ColorThemeMode.Light Then
+            ToolStrip1.Renderer = New LightModeRenderer()
+        ElseIf NewColorMode = ColorThemeMode.Dark Then
+            ToolStrip1.Renderer = New DarkModeRenderer()
+        End If
+        ChangeMenuItemColors(BackColor, ForeColor, ColorModeTSDDB.DropDownItems)
     End Sub
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        SetDarkMode()
+        SystemCM_TSMI.Enabled = Environment.OSVersion.Version.Major >= 10
+
+        SetColorMode(ColorThemeMode.System)
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
         NewTheme = GetNewTheme()
@@ -233,5 +273,17 @@ Public Class MainForm
                 My.Application.Info.Copyright, "INI File Parser: © 2008 Ricardo Amores Hernández"), _
             vbOKOnly + vbInformation, "About")
 #End If
+    End Sub
+
+    Private Sub LightCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LightCM_TSMI.Click
+        SetColorMode(ColorThemeMode.Light)
+    End Sub
+
+    Private Sub DarkCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DarkCM_TSMI.Click
+        SetColorMode(ColorThemeMode.Dark)
+    End Sub
+
+    Private Sub SystemCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SystemCM_TSMI.Click
+        SetColorMode(ColorThemeMode.System)
     End Sub
 End Class

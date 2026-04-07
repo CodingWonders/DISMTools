@@ -1,6 +1,7 @@
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports DynaViewer.Classes.ColorUtilities
 
 Public Class EventProperties
 
@@ -17,40 +18,35 @@ Public Class EventProperties
         Me.Close()
     End Sub
 
-    Private Sub SetDarkMode()
-        If Environment.OSVersion.Version.Major < 10 Then Exit Sub
-        Try
-            Dim darkMode As Boolean
-            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
-            darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
-            ColorModeRk.Close()
+    Private Sub SetColorMode(ByVal NewColorMode As ColorThemeMode)
+        Select Case NewColorMode
+            Case ColorThemeMode.Light
+                WindowHelper.ToggleDarkTitleBar(Handle, False)
 
-            If Not darkMode Then Exit Sub
+                BackColor = Color.FromArgb(239, 239, 242)
+                ForeColor = Color.Black
+            Case ColorThemeMode.Dark
+                WindowHelper.ToggleDarkTitleBar(Handle, True)
 
-            WindowHelper.ToggleDarkTitleBar(Handle, True)
+                BackColor = Color.FromArgb(32, 32, 32)
+                ForeColor = Color.White
+        End Select
 
-            ' Set a dark color palette
-            BackColor = Color.FromArgb(32, 32, 32)
-            ForeColor = Color.White
+        txtEventTimestamp.BackColor = BackColor
+        txtEventTimestamp.ForeColor = ForeColor
+        txtEventCaller.BackColor = BackColor
+        txtEventCaller.ForeColor = ForeColor
+        txtEventParentCaller.BackColor = BackColor
+        txtEventParentCaller.ForeColor = ForeColor
+        txtEventMessage.BackColor = BackColor
+        txtEventMessage.ForeColor = ForeColor
+        GroupBox1.ForeColor = ForeColor
 
-            txtEventTimestamp.BackColor = BackColor
-            txtEventTimestamp.ForeColor = ForeColor
-            txtEventCaller.BackColor = BackColor
-            txtEventCaller.ForeColor = ForeColor
-            txtEventParentCaller.BackColor = BackColor
-            txtEventParentCaller.ForeColor = ForeColor
-            txtEventMessage.BackColor = BackColor
-            txtEventMessage.ForeColor = ForeColor
-            GroupBox1.ForeColor = ForeColor
-
-            LinkLabel1.LinkColor = Color.DodgerBlue
-        Catch ex As Exception
-            Exit Sub
-        End Try
+        LinkLabel1.LinkColor = Color.DodgerBlue
     End Sub
 
     Private Sub EventProperties_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        SetDarkMode()
+        SetColorMode(Form1.CurrentColorMode)
         btnPreviousEvent.Enabled = Not (CurrentEventIndex = 0)
         btnNextEvent.Enabled = Not (CurrentEventIndex >= EventCount - 1)
     End Sub
