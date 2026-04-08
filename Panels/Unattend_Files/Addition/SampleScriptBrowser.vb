@@ -154,6 +154,8 @@ Public Class SampleScriptBrowser
         ListView1.ForeColor = ForeColor
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
+        RichTextBox2.BackColor = BackColor
+        RichTextBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -183,6 +185,7 @@ Public Class SampleScriptBrowser
                 Label4.Text = script.Description
                 Label5.Text = String.Format("Language: {0}", script.Language)
                 RichTextBox1.Text = script.ScriptCode
+                RichTextBox2.Text = script.ScriptCode
 
                 FinalScriptCode = script.ScriptCode
                 FinalScriptLanguage = script.Language
@@ -273,5 +276,28 @@ Public Class SampleScriptBrowser
         AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
         ' Force script enumeration for first stage
         ComboBox1.SelectedIndex = 0
+    End Sub
+
+    Private Sub ToggleScriptPreviewFSMode(FullScreen As Boolean)
+        ScriptListPanel.Visible = Not FullScreen
+        ScriptCodeFSPanel.Visible = FullScreen
+        ScriptDetailsContainerPanel.Visible = Not FullScreen
+        ActionPanel.Visible = Not FullScreen
+        ' When the cancel button is set it intercepts ESC, which we don't want in fullscreen mode.
+        CancelButton = If(FullScreen, Nothing, Cancel_Button)
+    End Sub
+
+    Private Sub EnterFSModeBtn_Click(sender As Object, e As EventArgs) Handles EnterFSModeBtn.Click
+        ToggleScriptPreviewFSMode(True)
+    End Sub
+
+    Private Sub ExitFSModeBtn_Click(sender As Object, e As EventArgs) Handles ExitFSModeBtn.Click
+        ToggleScriptPreviewFSMode(False)
+    End Sub
+
+    Private Sub SampleScriptBrowser_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.Escape AndAlso ScriptCodeFSPanel.Visible Then
+            ToggleScriptPreviewFSMode(False)
+        End If
     End Sub
 End Class
