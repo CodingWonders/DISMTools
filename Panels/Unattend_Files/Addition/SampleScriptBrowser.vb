@@ -133,6 +133,8 @@ Public Class SampleScriptBrowser
         UserFirstLogonScripts.Clear()
         UserScripts.Clear()
 
+        ToggleScriptPreviewFSMode(False)
+
         ' Reset screens and get rid of listview items
         ScriptDetailsPanel.Visible = False
         ListView1.Items.Clear()
