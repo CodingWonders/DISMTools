@@ -51,6 +51,9 @@ Public Class FfuInfoDialog
         FfuPartitions.Clear()
         Dim FfuPartitionsMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("ASSOCIATORS OF {{Win32_DiskDrive.DeviceID={0}{1}{0}}} WHERE RESULTCLASS = Win32_DiskPartition", Quote, WMIHelper.GetEscapedValue(MountedFfuInformation.MountDiskPath))),
             FfuDriveMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT * FROM Win32_DiskDrive WHERE DeviceID = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(MountedFfuInformation.MountDiskPath)))
+
+        ' We don't really want to flood logs here...
+        DynaLog.DisableLogging()
         If FfuPartitionsMOC IsNot Nothing Then
             For Each FfuPartitionsMO As ManagementObject In FfuPartitionsMOC
                 FfuPartitions.Add(WMIHelper.GetObjectValue(FfuPartitionsMO, "DeviceID"))
@@ -95,5 +98,9 @@ Public Class FfuInfoDialog
                                                                       WMIHelper.GetObjectValue(partDetailsMO, "BlockSize"))
             End If
         End If
+    End Sub
+
+    Private Sub FfuInfoDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        DynaLog.EnableLogging()
     End Sub
 End Class

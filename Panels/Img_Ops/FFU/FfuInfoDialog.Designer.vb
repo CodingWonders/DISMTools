@@ -27,35 +27,35 @@ Partial Class FfuInfoDialog
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.Label12 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.RichTextBox2 = New System.Windows.Forms.RichTextBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -127,39 +127,94 @@ Partial Class FfuInfoDialog
         Me.TabPage1.Text = "FFU Header"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
-        'TabPage2
+        'Label10
         '
-        Me.TabPage2.Controls.Add(Me.Panel2)
-        Me.TabPage2.Controls.Add(Me.Panel1)
-        Me.TabPage2.Controls.Add(Me.Label13)
-        Me.TabPage2.Controls.Add(Me.Label12)
-        Me.TabPage2.Controls.Add(Me.Label11)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(463, 355)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Mounted VHD"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.Label10.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Location = New System.Drawing.Point(182, 184)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(262, 13)
+        Me.Label10.TabIndex = 2
+        Me.Label10.Text = "  "
         '
-        'TabPage3
+        'Label8
         '
-        Me.TabPage3.Controls.Add(Me.RichTextBox2)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(463, 355)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Manifest"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Location = New System.Drawing.Point(182, 161)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(262, 13)
+        Me.Label8.TabIndex = 2
+        Me.Label8.Text = "  "
         '
-        'Label1
+        'Label6
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 12)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(101, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Mounted VHD path:"
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Location = New System.Drawing.Point(182, 138)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(262, 13)
+        Me.Label6.TabIndex = 2
+        Me.Label6.Text = "  "
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoEllipsis = True
+        Me.Label4.Location = New System.Drawing.Point(182, 116)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(262, 13)
+        Me.Label4.TabIndex = 2
+        Me.Label4.Text = "  "
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(15, 184)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(99, 13)
+        Me.Label9.TabIndex = 2
+        Me.Label9.Text = "Compression Type:"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(15, 161)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(68, 13)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "FFU Version:"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(15, 138)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(96, 13)
+        Me.Label5.TabIndex = 2
+        Me.Label5.Text = "Physical Disk Path:"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(15, 116)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(121, 13)
+        Me.Label3.TabIndex = 2
+        Me.Label3.Text = "VHD Storage Device ID:"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox2.Location = New System.Drawing.Point(14, 86)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ReadOnly = True
+        Me.TextBox2.Size = New System.Drawing.Size(430, 14)
+        Me.TextBox2.TabIndex = 1
         '
         'TextBox1
         '
@@ -179,106 +234,39 @@ Partial Class FfuInfoDialog
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Mounted VHD ID:"
         '
-        'TextBox2
+        'Label1
         '
-        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox2.Location = New System.Drawing.Point(14, 86)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.ReadOnly = True
-        Me.TextBox2.Size = New System.Drawing.Size(430, 14)
-        Me.TextBox2.TabIndex = 1
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(12, 12)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(101, 13)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "Mounted VHD path:"
         '
-        'Label3
+        'TabPage2
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(15, 116)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(121, 13)
-        Me.Label3.TabIndex = 2
-        Me.Label3.Text = "VHD Storage Device ID:"
+        Me.TabPage2.Controls.Add(Me.Panel2)
+        Me.TabPage2.Controls.Add(Me.Panel1)
+        Me.TabPage2.Controls.Add(Me.Label13)
+        Me.TabPage2.Controls.Add(Me.Label12)
+        Me.TabPage2.Controls.Add(Me.Label11)
+        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage2.Size = New System.Drawing.Size(463, 355)
+        Me.TabPage2.TabIndex = 1
+        Me.TabPage2.Text = "Mounted VHD"
+        Me.TabPage2.UseVisualStyleBackColor = True
         '
-        'Label4
+        'Panel2
         '
-        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label4.AutoEllipsis = True
-        Me.Label4.Location = New System.Drawing.Point(182, 116)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(262, 13)
-        Me.Label4.TabIndex = 2
-        Me.Label4.Text = "  "
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(15, 138)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(96, 13)
-        Me.Label5.TabIndex = 2
-        Me.Label5.Text = "Physical Disk Path:"
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Location = New System.Drawing.Point(182, 138)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(262, 13)
-        Me.Label6.TabIndex = 2
-        Me.Label6.Text = "  "
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(15, 161)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(68, 13)
-        Me.Label7.TabIndex = 2
-        Me.Label7.Text = "FFU Version:"
-        '
-        'Label8
-        '
-        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Location = New System.Drawing.Point(182, 161)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(262, 13)
-        Me.Label8.TabIndex = 2
-        Me.Label8.Text = "  "
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(15, 184)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(99, 13)
-        Me.Label9.TabIndex = 2
-        Me.Label9.Text = "Compression Type:"
-        '
-        'Label10
-        '
-        Me.Label10.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.Location = New System.Drawing.Point(182, 184)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(262, 13)
-        Me.Label10.TabIndex = 2
-        Me.Label10.Text = "  "
-        '
-        'Label11
-        '
-        Me.Label11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.Location = New System.Drawing.Point(12, 12)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(440, 30)
-        Me.Label11.TabIndex = 1
-        Me.Label11.Text = "This mounted FFU file contains the following partitions. To show details of a spe" & _
-    "cific partition, select it from the list below:"
+        Me.Panel2.Controls.Add(Me.ListBox1)
+        Me.Panel2.Location = New System.Drawing.Point(15, 45)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(434, 88)
+        Me.Panel2.TabIndex = 4
         '
         'ListBox1
         '
@@ -288,15 +276,6 @@ Partial Class FfuInfoDialog
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(434, 88)
         Me.ListBox1.TabIndex = 2
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(12, 136)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(203, 13)
-        Me.Label12.TabIndex = 1
-        Me.Label12.Text = "Information about the selected partition:"
         '
         'Panel1
         '
@@ -332,6 +311,37 @@ Partial Class FfuInfoDialog
         Me.Label13.Size = New System.Drawing.Size(437, 36)
         Me.Label13.TabIndex = 1
         '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(12, 136)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(203, 13)
+        Me.Label12.TabIndex = 1
+        Me.Label12.Text = "Information about the selected partition:"
+        '
+        'Label11
+        '
+        Me.Label11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.Location = New System.Drawing.Point(12, 12)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(440, 30)
+        Me.Label11.TabIndex = 1
+        Me.Label11.Text = "This mounted FFU file contains the following partitions. To show details of a spe" & _
+    "cific partition, select it from the list below:"
+        '
+        'TabPage3
+        '
+        Me.TabPage3.Controls.Add(Me.RichTextBox2)
+        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.Size = New System.Drawing.Size(463, 355)
+        Me.TabPage3.TabIndex = 2
+        Me.TabPage3.Text = "Manifest"
+        Me.TabPage3.UseVisualStyleBackColor = True
+        '
         'RichTextBox2
         '
         Me.RichTextBox2.DetectUrls = False
@@ -344,16 +354,6 @@ Partial Class FfuInfoDialog
         Me.RichTextBox2.Size = New System.Drawing.Size(463, 355)
         Me.RichTextBox2.TabIndex = 0
         Me.RichTextBox2.Text = ""
-        '
-        'Panel2
-        '
-        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.Controls.Add(Me.ListBox1)
-        Me.Panel2.Location = New System.Drawing.Point(15, 45)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(434, 88)
-        Me.Panel2.TabIndex = 4
         '
         'FfuInfoDialog
         '
@@ -378,9 +378,9 @@ Partial Class FfuInfoDialog
         Me.TabPage1.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
-        Me.TabPage3.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.TabPage3.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
