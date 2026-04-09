@@ -67,8 +67,8 @@ if /i "%sourcedrive%" equ "NET" (
 
 	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share): "
 	if not defined destip (goto :main)
-	set /p destuser=Please enter the username: 
-	set /p destpassword=Please enter the password: 
+	set /p "destuser=Please enter the username: "
+	set /p "destpassword=Please enter the password: "
 
 	echo Connecting to network share...
 	IF %_DEBUG% EQU 1 echo Running net use...
