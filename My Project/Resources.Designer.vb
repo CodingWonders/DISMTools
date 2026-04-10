@@ -2220,11 +2220,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
-        '''- Fixed some HiDPI issues
-        '''- Fixed an issue where, when managing the active installation, the version&apos;s revision number would sometimes not coincide with the actual revision number
-        '''- Fixed an issue where information about a Windows image would be cleared after adding or removing packages
-        '''- Fixed an issue where the program would throw an exception  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where GraphoView would not display information about a selected Windows image if the WDS group it belongs to only has 1 image
+        '''- Fixed an issue where capture compression type options were not being used when performing FFU captures
+        '''- Fixed an issue where the program would throw an exception when performing multiple driver exports by class name
+        '''
+        '''New features:
+        '''
+        '''- The PE Helper is no longer responsible for removing custom policies; that is now done by the ISO creator wizard w [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

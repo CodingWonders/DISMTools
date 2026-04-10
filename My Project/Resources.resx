@@ -983,22 +983,45 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
-- Fixed some HiDPI issues
-- Fixed an issue where, when managing the active installation, the version's revision number would sometimes not coincide with the actual revision number
-- Fixed an issue where information about a Windows image would be cleared after adding or removing packages
-- Fixed an issue where the program would throw an exception if it couldn't create the logs directory (#344, thanks @Low351)
+- Fixed an issue where GraphoView would not display information about a selected Windows image if the WDS group it belongs to only has 1 image
+- Fixed an issue where capture compression type options were not being used when performing FFU captures
+- Fixed an issue where the program would throw an exception when performing multiple driver exports by class name
 
 New features:
 
-- If a non-sysprepped volume is selected in the image capture script, it will now warn you
-- A new task has been added to copy installation images to a Windows Deployment Services (WDS) server
-- Organizational units and users in OUs are now sorted alphabetically in the ADDS domain join wizard
-- The ADDS domain join wizard will now let you continue if you had selected an account that does not require a password
-- A task has been added to copy a pre-configured answer file to an image so that it boots to Audit mode automatically
-- Image capture tasks will now warn you when source installations have not been prepared with Sysprep
-- A new task has been added to optimize Windows images
-- Support for Full Flash Utility (FFU) has been introduced. Variations of the image application, capture, split, and optimization have been introduced with FFU support</value>
+- The PE Helper is no longer responsible for removing custom policies; that is now done by the ISO creator wizard when it's closed
+- A new DISMTools Preinstallation Environment policy has been added to let you configure whether you want to copy unattended answer files in your ISO to the target installation's Sysprep folder
+- The WDS image upload wizard has seen several improvements:
+  - The wizard now starts up the WDS Server service if not previously started
+  - The wizard can now be accessed from the mounted image manager
+  - The wizard now warns when a boot image is used
+  - The wizard no longer launches on client Windows installations, or Windows Server installations without the WDS role
+- The ADDS domain join wizard has seen a couple of improvements:
+  - The wizard will no longer let you continue when you specify a domain account that does not exist
+  - You can now test domain name resolution by invoking nslookup
+- The "Set File Explorer Launch Folder" starter script has been introduced
+- The "Disable Windows Admin Center/Azure Arc banner" starter script for Windows Server has been introduced
+- The "Disable Shutdown Event Tracker" starter script for Windows Server has been introduced
+- The Starter Script Editor has received dark mode support
+- When applying answer files you can now choose whether to copy them to the target image's Sysprep folder
+- You can now enlarge the preview area for starter script code
+- The Theme Designer has received dark mode support
+- The DynaLog log viewer has seen some improvements:
+  - Logs are now loaded much faster
+  - Dark mode is now supported
+- From the project view you can now perform commit operations to FFU files using a workaround
+- You can now get installed driver information from Windows 7 images
+- Projects and installation management modes now load and unload much faster
+- Removing provisioned AppX packages from the online installation management mode is much more reliable now
+- You can now access WIM and FFU variants of the image capture and application tasks much more easily
+- After extracting images from ISO files, the program will now select the most suitable installation image from it
+- You can now view information specific to FFU files when viewing mounted image properties
+- Markdig has been updated to version 1.1.2
+- The managed DISM API has been updated to version 5.0.0
+
+Removed features:
+
+- The WDS image preparation script has been removed in favor of the WDS Helper</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
