@@ -1,7 +1,9 @@
 Imports StarterScriptEditor.Classes
+Imports StarterScriptEditor.Classes.ColorUtilities
 Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Win32
 
 Public Class MainForm
 
@@ -13,6 +15,73 @@ Public Class MainForm
     Private Modified As Boolean
     Private SavedScriptPath As String
     Private NotWillingToSave As Boolean
+
+    Public CurrentColorMode As ColorThemeMode
+
+    Private Sub ChangeMenuItemColors(ByVal bgColor As Color, ByVal fgColor As Color, ByVal itemCollection As ToolStripItemCollection)
+        For Each tsi As ToolStripItem In itemCollection
+            If TypeOf tsi Is ToolStripDropDownItem Then
+                Dim item As ToolStripDropDownItem = CType(tsi, ToolStripDropDownItem)
+                Try
+                    item.DropDown.BackColor = bgColor
+                    item.DropDown.ForeColor = fgColor
+                    If item.DropDownItems.Count > 0 Then
+                        ChangeMenuItemColors(bgColor, fgColor, item.DropDownItems)
+                    End If
+                Catch ex As Exception
+                    Continue For
+                End Try
+            End If
+        Next
+    End Sub
+
+    Private Sub SetColorMode(ByVal NewColorMode As ColorThemeMode)
+        CurrentColorMode = NewColorMode
+        Select Case NewColorMode
+            Case ColorThemeMode.Light
+                WindowHelper.ToggleDarkTitleBar(Handle, False)
+
+                BackColor = Color.FromArgb(239, 239, 242)
+                ForeColor = Color.Black
+            Case ColorThemeMode.Dark
+                WindowHelper.ToggleDarkTitleBar(Handle, True)
+
+                BackColor = Color.FromArgb(32, 32, 32)
+                ForeColor = Color.White
+            Case ColorThemeMode.System
+                If Environment.OSVersion.Version.Major < 10 Then SetColorMode(ColorThemeMode.Light)
+
+                Try
+                    Dim darkMode As Boolean
+                    Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+                    darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+                    ColorModeRk.Close()
+
+                    If darkMode Then SetColorMode(ColorThemeMode.Dark) Else SetColorMode(ColorThemeMode.Light)
+                Catch ex As Exception
+                    SetColorMode(ColorThemeMode.Light)
+                End Try
+
+                Exit Sub
+        End Select
+
+        TextBox1.BackColor = BackColor
+        TextBox1.ForeColor = ForeColor
+        TextBox2.BackColor = BackColor
+        TextBox2.ForeColor = ForeColor
+        TextBox3.BackColor = BackColor
+        TextBox3.ForeColor = ForeColor
+        ComboBox1.BackColor = BackColor
+        ComboBox1.ForeColor = ForeColor
+        ColorModeTSDDB.ForeColor = ForeColor
+
+        If NewColorMode = ColorThemeMode.Light Then
+            ToolStrip1.Renderer = New LightModeRenderer()
+        ElseIf NewColorMode = ColorThemeMode.Dark Then
+            ToolStrip1.Renderer = New DarkModeRenderer()
+        End If
+        ChangeMenuItemColors(BackColor, ForeColor, ColorModeTSDDB.DropDownItems)
+    End Sub
 
     Private Sub GetArguments()
         Dim args As String() = Environment.GetCommandLineArgs()
@@ -145,6 +214,9 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SystemCM_TSMI.Enabled = Environment.OSVersion.Version.Major >= 10
+
+        SetColorMode(ColorThemeMode.System)
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
 
@@ -330,5 +402,17 @@ Public Class MainForm
                     ToolStripButton3.PerformClick()
             End Select
         End If
+    End Sub
+
+    Private Sub LightCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LightCM_TSMI.Click
+        SetColorMode(ColorThemeMode.Light)
+    End Sub
+
+    Private Sub DarkCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DarkCM_TSMI.Click
+        SetColorMode(ColorThemeMode.Dark)
+    End Sub
+
+    Private Sub SystemCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SystemCM_TSMI.Click
+        SetColorMode(ColorThemeMode.System)
     End Sub
 End Class

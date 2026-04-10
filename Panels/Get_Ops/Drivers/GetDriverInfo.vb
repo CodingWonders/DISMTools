@@ -9,6 +9,7 @@ Public Class GetDriverInfo
 
     Dim DriverInfoList As New List(Of DismDriverCollection)
     Dim InstalledDriverList As New List(Of DismDriverPackage)
+    Dim InstalledDriverList_Backup As New List(Of ImageDriver)
     Dim SearchedDriverList As New List(Of DismDriverPackage)
 
     Dim CurrentHWTarget As Integer
@@ -504,10 +505,12 @@ Public Class GetDriverInfo
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Updating items in list...")
         InstalledDriverList.Clear()
+        InstalledDriverList_Backup.Clear()
         SearchedDriverList.Clear()
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting installed drivers...")
         If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+            InstalledDriverList_Backup.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) driver))
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
             SearchPanel.Visible = False
         Else
@@ -1157,89 +1160,140 @@ Public Class GetDriverInfo
             If ListView1.SelectedItems.Count = 1 Then
                 Panel4.Visible = True
                 Panel7.Visible = False
-                Dim drv As DismDriverPackage = Nothing
-                If SearchBox1.Text = "" Then
-                    drv = InstalledDriverList(ListView1.FocusedItem.Index)
-                Else
-                    DynaLog.LogMessage("A search query has been made.")
-                    drv = SearchedDriverList(ListView1.FocusedItem.Index)
-                End If
-                DynaLog.LogMessage("Getting information about driver " & Quote & Path.GetFileName(drv.OriginalFileName) & Quote & "...")
-                Label23.Text = drv.PublishedName
-                Label25.Text = Path.GetFileName(drv.OriginalFileName)
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label27.Text = If(drv.BootCritical, "Yes", "No")
-                                Label34.Text = If(drv.InBox, "Yes", "No")
-                            Case "ESN"
-                                Label27.Text = If(drv.BootCritical, "Sí", "No")
-                                Label34.Text = If(drv.InBox, "Sí", "No")
-                            Case "FRA"
-                                Label27.Text = If(drv.BootCritical, "Oui", "Non")
-                                Label34.Text = If(drv.InBox, "Oui", "Non")
-                            Case "PTB", "PTG"
-                                Label27.Text = If(drv.BootCritical, "Sim", "Não")
-                                Label34.Text = If(drv.InBox, "Sim", "Não")
-                            Case "ITA"
-                                Label27.Text = If(drv.BootCritical, "Sì", "No")
-                                Label34.Text = If(drv.InBox, "Sì", "No")
-                        End Select
-                    Case 1
-                        Label27.Text = If(drv.BootCritical, "Yes", "No")
-                        Label34.Text = If(drv.InBox, "Yes", "No")
-                    Case 2
-                        Label27.Text = If(drv.BootCritical, "Sí", "No")
-                        Label34.Text = If(drv.InBox, "Sí", "No")
-                    Case 3
-                        Label27.Text = If(drv.BootCritical, "Oui", "Non")
-                        Label34.Text = If(drv.InBox, "Oui", "Non")
-                    Case 4
-                        Label27.Text = If(drv.BootCritical, "Sim", "Não")
-                        Label34.Text = If(drv.InBox, "Sim", "Não")
-                    Case 5
-                        Label27.Text = If(drv.BootCritical, "Sì", "No")
-                        Label34.Text = If(drv.InBox, "Sì", "No")
-                End Select
-                Label29.Text = drv.Version.ToString()
-                Label32.Text = drv.ClassName
-                Label35.Text = drv.ProviderName
-                Label38.Text = drv.Date
-                Label40.Text = drv.ClassDescription
-                Label42.Text = drv.ClassGuid
-                Label44.Text = Casters.CastDismSignatureStatus(drv.DriverSignature, True)
-                Label46.Text = drv.CatalogFile
-                DynaLog.LogMessage("Getting driver signer...")
-                Dim signer As String = DriverSignerViewer.GetSignerInfo(drv.OriginalFileName)
-                If Not (signer Is Nothing OrElse signer = "") Then
-                    DynaLog.LogMessage("Driver signer information has been obtained.")
-                    DynaLog.LogMessage(String.Format("Driver file: {0} ; Signer: {1}", Quote & Path.GetFileName(drv.OriginalFileName) & Quote, signer))
+                If InstalledDriverList_Backup.Count > InstalledDriverList.Count Then
+                    Dim drv As ImageDriver = Nothing
+                    drv = InstalledDriverList_Backup(ListView1.FocusedItem.Index)
+                    DynaLog.LogMessage("Getting information about driver " & Quote & Path.GetFileName(drv.DriverOriginalFileName) & Quote & "...")
+                    Label23.Text = drv.DriverPublishedName
+                    Label25.Text = Path.GetFileName(drv.DriverOriginalFileName)
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    Label44.Text &= " by " & signer
+                                    Label27.Text = ""
+                                    Label34.Text = If(drv.DriverInbox, "Yes", "No")
                                 Case "ESN"
-                                    Label44.Text &= " por " & signer
+                                    Label27.Text = ""
+                                    Label34.Text = If(drv.DriverInbox, "Sí", "No")
                                 Case "FRA"
-                                    Label44.Text &= " par " & signer
+                                    Label27.Text = ""
+                                    Label34.Text = If(drv.DriverInbox, "Oui", "Non")
                                 Case "PTB", "PTG"
-                                    Label44.Text &= " por " & signer
+                                    Label27.Text = ""
+                                    Label34.Text = If(drv.DriverInbox, "Sim", "Não")
                                 Case "ITA"
-                                    Label44.Text &= " da " & signer
+                                    Label27.Text = ""
+                                    Label34.Text = If(drv.DriverInbox, "Sì", "No")
                             End Select
                         Case 1
-                            Label44.Text &= " by " & signer
+                            Label27.Text = ""
+                            Label34.Text = If(drv.DriverInbox, "Yes", "No")
                         Case 2
-                            Label44.Text &= " por " & signer
+                            Label27.Text = ""
+                            Label34.Text = If(drv.DriverInbox, "Sí", "No")
                         Case 3
-                            Label44.Text &= " par " & signer
+                            Label27.Text = ""
+                            Label34.Text = If(drv.DriverInbox, "Oui", "Non")
                         Case 4
-                            Label44.Text &= " por " & signer
+                            Label27.Text = ""
+                            Label34.Text = If(drv.DriverInbox, "Sim", "Não")
                         Case 5
-                            Label44.Text &= " da " & signer
+                            Label27.Text = ""
+                            Label34.Text = If(drv.DriverInbox, "Sì", "No")
                     End Select
+                    Label29.Text = drv.DriverVersion.ToString()
+                    Label32.Text = drv.DriverClassName
+                    Label35.Text = drv.DriverProviderName
+                    Label38.Text = drv.DriverDate
+                    Label40.Text = ""
+                    Label42.Text = ""
+                    Label44.Text = "Unknown"
+                    Label46.Text = "Unknown"
+                Else
+                    Dim drv As DismDriverPackage = Nothing
+                    If SearchBox1.Text = "" Then
+                        drv = InstalledDriverList(ListView1.FocusedItem.Index)
+                    Else
+                        DynaLog.LogMessage("A search query has been made.")
+                        drv = SearchedDriverList(ListView1.FocusedItem.Index)
+                    End If
+                    DynaLog.LogMessage("Getting information about driver " & Quote & Path.GetFileName(drv.OriginalFileName) & Quote & "...")
+                    Label23.Text = drv.PublishedName
+                    Label25.Text = Path.GetFileName(drv.OriginalFileName)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Label27.Text = If(drv.BootCritical, "Yes", "No")
+                                    Label34.Text = If(drv.InBox, "Yes", "No")
+                                Case "ESN"
+                                    Label27.Text = If(drv.BootCritical, "Sí", "No")
+                                    Label34.Text = If(drv.InBox, "Sí", "No")
+                                Case "FRA"
+                                    Label27.Text = If(drv.BootCritical, "Oui", "Non")
+                                    Label34.Text = If(drv.InBox, "Oui", "Non")
+                                Case "PTB", "PTG"
+                                    Label27.Text = If(drv.BootCritical, "Sim", "Não")
+                                    Label34.Text = If(drv.InBox, "Sim", "Não")
+                                Case "ITA"
+                                    Label27.Text = If(drv.BootCritical, "Sì", "No")
+                                    Label34.Text = If(drv.InBox, "Sì", "No")
+                            End Select
+                        Case 1
+                            Label27.Text = If(drv.BootCritical, "Yes", "No")
+                            Label34.Text = If(drv.InBox, "Yes", "No")
+                        Case 2
+                            Label27.Text = If(drv.BootCritical, "Sí", "No")
+                            Label34.Text = If(drv.InBox, "Sí", "No")
+                        Case 3
+                            Label27.Text = If(drv.BootCritical, "Oui", "Non")
+                            Label34.Text = If(drv.InBox, "Oui", "Non")
+                        Case 4
+                            Label27.Text = If(drv.BootCritical, "Sim", "Não")
+                            Label34.Text = If(drv.InBox, "Sim", "Não")
+                        Case 5
+                            Label27.Text = If(drv.BootCritical, "Sì", "No")
+                            Label34.Text = If(drv.InBox, "Sì", "No")
+                    End Select
+                    Label29.Text = drv.Version.ToString()
+                    Label32.Text = drv.ClassName
+                    Label35.Text = drv.ProviderName
+                    Label38.Text = drv.Date
+                    Label40.Text = drv.ClassDescription
+                    Label42.Text = drv.ClassGuid
+                    Label44.Text = Casters.CastDismSignatureStatus(drv.DriverSignature, True)
+                    Label46.Text = drv.CatalogFile
+                    DynaLog.LogMessage("Getting driver signer...")
+                    Dim signer As String = DriverSignerViewer.GetSignerInfo(drv.OriginalFileName)
+                    If Not (signer Is Nothing OrElse signer = "") Then
+                        DynaLog.LogMessage("Driver signer information has been obtained.")
+                        DynaLog.LogMessage(String.Format("Driver file: {0} ; Signer: {1}", Quote & Path.GetFileName(drv.OriginalFileName) & Quote, signer))
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Label44.Text &= " by " & signer
+                                    Case "ESN"
+                                        Label44.Text &= " por " & signer
+                                    Case "FRA"
+                                        Label44.Text &= " par " & signer
+                                    Case "PTB", "PTG"
+                                        Label44.Text &= " por " & signer
+                                    Case "ITA"
+                                        Label44.Text &= " da " & signer
+                                End Select
+                            Case 1
+                                Label44.Text &= " by " & signer
+                            Case 2
+                                Label44.Text &= " por " & signer
+                            Case 3
+                                Label44.Text &= " par " & signer
+                            Case 4
+                                Label44.Text &= " por " & signer
+                            Case 5
+                                Label44.Text &= " da " & signer
+                        End Select
+                    End If
                 End If
             Else
                 Panel4.Visible = False

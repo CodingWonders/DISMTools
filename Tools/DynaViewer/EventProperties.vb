@@ -1,5 +1,7 @@
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Win32
+Imports DynaViewer.Classes.ColorUtilities
 
 Public Class EventProperties
 
@@ -16,7 +18,35 @@ Public Class EventProperties
         Me.Close()
     End Sub
 
+    Private Sub SetColorMode(ByVal NewColorMode As ColorThemeMode)
+        Select Case NewColorMode
+            Case ColorThemeMode.Light
+                WindowHelper.ToggleDarkTitleBar(Handle, False)
+
+                BackColor = Color.FromArgb(239, 239, 242)
+                ForeColor = Color.Black
+            Case ColorThemeMode.Dark
+                WindowHelper.ToggleDarkTitleBar(Handle, True)
+
+                BackColor = Color.FromArgb(32, 32, 32)
+                ForeColor = Color.White
+        End Select
+
+        txtEventTimestamp.BackColor = BackColor
+        txtEventTimestamp.ForeColor = ForeColor
+        txtEventCaller.BackColor = BackColor
+        txtEventCaller.ForeColor = ForeColor
+        txtEventParentCaller.BackColor = BackColor
+        txtEventParentCaller.ForeColor = ForeColor
+        txtEventMessage.BackColor = BackColor
+        txtEventMessage.ForeColor = ForeColor
+        GroupBox1.ForeColor = ForeColor
+
+        LinkLabel1.LinkColor = Color.DodgerBlue
+    End Sub
+
     Private Sub EventProperties_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SetColorMode(Form1.CurrentColorMode)
         btnPreviousEvent.Enabled = Not (CurrentEventIndex = 0)
         btnNextEvent.Enabled = Not (CurrentEventIndex >= EventCount - 1)
     End Sub

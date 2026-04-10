@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -59,6 +59,10 @@ Partial Class MainForm
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton
+        Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
+        Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.SystemCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
         Me.ThemePreviewPanel = New System.Windows.Forms.Panel
         Me.TestGlyph4 = New System.Windows.Forms.PictureBox
         Me.TestGlyph3 = New System.Windows.Forms.PictureBox
@@ -77,6 +81,7 @@ Partial Class MainForm
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.CurrentColorTT = New System.Windows.Forms.ToolTip(Me.components)
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
+        Me.Panel1 = New System.Windows.Forms.Panel
         Me.GroupBox1.SuspendLayout()
         Me.ThemeParameterPanel.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
@@ -86,6 +91,7 @@ Partial Class MainForm
         CType(Me.TestGlyph2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TestGlyph1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TestSection.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -118,7 +124,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Location = New System.Drawing.Point(14, 37)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(604, 154)
+        Me.GroupBox1.Size = New System.Drawing.Size(606, 154)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Theme Colors"
@@ -165,65 +171,79 @@ Partial Class MainForm
         '
         'Label13
         '
+        Me.Label13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label13.AutoEllipsis = True
         Me.Label13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label13.Location = New System.Drawing.Point(469, 106)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(35, 21)
+        Me.Label13.Size = New System.Drawing.Size(37, 21)
         Me.Label13.TabIndex = 5
         '
         'Label12
         '
+        Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoEllipsis = True
         Me.Label12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label12.Location = New System.Drawing.Point(347, 106)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(35, 21)
+        Me.Label12.Size = New System.Drawing.Size(37, 21)
         Me.Label12.TabIndex = 5
         '
         'Label11
         '
+        Me.Label11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label11.AutoEllipsis = True
         Me.Label11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label11.Location = New System.Drawing.Point(225, 106)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(35, 21)
+        Me.Label11.Size = New System.Drawing.Size(37, 21)
         Me.Label11.TabIndex = 5
         '
         'Label10
         '
+        Me.Label10.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label10.AutoEllipsis = True
         Me.Label10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label10.Location = New System.Drawing.Point(103, 106)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(35, 21)
+        Me.Label10.Size = New System.Drawing.Size(37, 21)
         Me.Label10.TabIndex = 5
         '
         'Label9
         '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label9.AutoEllipsis = True
         Me.Label9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label9.Location = New System.Drawing.Point(208, 77)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(35, 21)
+        Me.Label9.Size = New System.Drawing.Size(37, 21)
         Me.Label9.TabIndex = 5
         '
         'Label8
         '
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoEllipsis = True
         Me.Label8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label8.Location = New System.Drawing.Point(479, 48)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(35, 21)
+        Me.Label8.Size = New System.Drawing.Size(37, 21)
         Me.Label8.TabIndex = 5
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoEllipsis = True
         Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label7.Location = New System.Drawing.Point(208, 48)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(35, 21)
+        Me.Label7.Size = New System.Drawing.Size(37, 21)
         Me.Label7.TabIndex = 4
         '
         'Button7
@@ -358,7 +378,7 @@ Partial Class MainForm
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox1.Location = New System.Drawing.Point(90, 10)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(528, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(530, 21)
         Me.TextBox1.TabIndex = 1
         '
         'Label1
@@ -383,7 +403,7 @@ Partial Class MainForm
         Me.ThemeParameterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ThemeParameterPanel.Location = New System.Drawing.Point(0, 25)
         Me.ThemeParameterPanel.Name = "ThemeParameterPanel"
-        Me.ThemeParameterPanel.Size = New System.Drawing.Size(632, 242)
+        Me.ThemeParameterPanel.Size = New System.Drawing.Size(634, 242)
         Me.ThemeParameterPanel.TabIndex = 4
         '
         'Label20
@@ -394,17 +414,18 @@ Partial Class MainForm
         Me.Label20.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label20.Location = New System.Drawing.Point(14, 203)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(604, 25)
+        Me.Label20.Size = New System.Drawing.Size(606, 25)
         Me.Label20.TabIndex = 3
         Me.Label20.Text = "See your changes live on the preview section below:"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4})
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(632, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(634, 25)
         Me.ToolStrip1.TabIndex = 5
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -447,6 +468,7 @@ Partial Class MainForm
         '
         'ThemePreviewPanel
         '
+        Me.ThemePreviewPanel.Controls.Add(Me.Panel1)
         Me.ThemePreviewPanel.Controls.Add(Me.TestGlyph4)
         Me.ThemePreviewPanel.Controls.Add(Me.TestGlyph3)
         Me.ThemePreviewPanel.Controls.Add(Me.TestGlyph2)
@@ -454,7 +476,6 @@ Partial Class MainForm
         Me.ThemePreviewPanel.Controls.Add(Me.AccentedLabel4)
         Me.ThemePreviewPanel.Controls.Add(Me.AccentedLabel3)
         Me.ThemePreviewPanel.Controls.Add(Me.AccentedLabel2)
-        Me.ThemePreviewPanel.Controls.Add(Me.TextBox2)
         Me.ThemePreviewPanel.Controls.Add(Me.InactiveLabel)
         Me.ThemePreviewPanel.Controls.Add(Me.ActiveLabel)
         Me.ThemePreviewPanel.Controls.Add(Me.TestSection)
@@ -463,14 +484,14 @@ Partial Class MainForm
         Me.ThemePreviewPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ThemePreviewPanel.Location = New System.Drawing.Point(0, 267)
         Me.ThemePreviewPanel.Name = "ThemePreviewPanel"
-        Me.ThemePreviewPanel.Size = New System.Drawing.Size(632, 211)
+        Me.ThemePreviewPanel.Size = New System.Drawing.Size(634, 211)
         Me.ThemePreviewPanel.TabIndex = 6
         '
         'TestGlyph4
         '
         Me.TestGlyph4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TestGlyph4.Image = Global.DT_ThemeDesigner.My.Resources.Resources.save_glyph
-        Me.TestGlyph4.Location = New System.Drawing.Point(604, 33)
+        Me.TestGlyph4.Location = New System.Drawing.Point(606, 33)
         Me.TestGlyph4.Name = "TestGlyph4"
         Me.TestGlyph4.Size = New System.Drawing.Size(16, 16)
         Me.TestGlyph4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -481,7 +502,7 @@ Partial Class MainForm
         '
         Me.TestGlyph3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TestGlyph3.Image = Global.DT_ThemeDesigner.My.Resources.Resources.info_glyph
-        Me.TestGlyph3.Location = New System.Drawing.Point(582, 33)
+        Me.TestGlyph3.Location = New System.Drawing.Point(584, 33)
         Me.TestGlyph3.Name = "TestGlyph3"
         Me.TestGlyph3.Size = New System.Drawing.Size(16, 16)
         Me.TestGlyph3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -492,7 +513,7 @@ Partial Class MainForm
         '
         Me.TestGlyph2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TestGlyph2.Image = Global.DT_ThemeDesigner.My.Resources.Resources.openfile
-        Me.TestGlyph2.Location = New System.Drawing.Point(560, 33)
+        Me.TestGlyph2.Location = New System.Drawing.Point(562, 33)
         Me.TestGlyph2.Name = "TestGlyph2"
         Me.TestGlyph2.Size = New System.Drawing.Size(16, 16)
         Me.TestGlyph2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -503,7 +524,7 @@ Partial Class MainForm
         '
         Me.TestGlyph1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TestGlyph1.Image = Global.DT_ThemeDesigner.My.Resources.Resources.newfile
-        Me.TestGlyph1.Location = New System.Drawing.Point(538, 33)
+        Me.TestGlyph1.Location = New System.Drawing.Point(540, 33)
         Me.TestGlyph1.Name = "TestGlyph1"
         Me.TestGlyph1.Size = New System.Drawing.Size(16, 16)
         Me.TestGlyph1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -516,7 +537,7 @@ Partial Class MainForm
         Me.AccentedLabel4.AutoEllipsis = True
         Me.AccentedLabel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.AccentedLabel4.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AccentedLabel4.Location = New System.Drawing.Point(357, 120)
+        Me.AccentedLabel4.Location = New System.Drawing.Point(358, 120)
         Me.AccentedLabel4.Name = "AccentedLabel4"
         Me.AccentedLabel4.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel4.TabIndex = 6
@@ -529,7 +550,7 @@ Partial Class MainForm
         Me.AccentedLabel3.AutoEllipsis = True
         Me.AccentedLabel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.AccentedLabel3.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AccentedLabel3.Location = New System.Drawing.Point(319, 120)
+        Me.AccentedLabel3.Location = New System.Drawing.Point(320, 120)
         Me.AccentedLabel3.Name = "AccentedLabel3"
         Me.AccentedLabel3.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel3.TabIndex = 5
@@ -542,7 +563,7 @@ Partial Class MainForm
         Me.AccentedLabel2.AutoEllipsis = True
         Me.AccentedLabel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.AccentedLabel2.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AccentedLabel2.Location = New System.Drawing.Point(281, 120)
+        Me.AccentedLabel2.Location = New System.Drawing.Point(282, 120)
         Me.AccentedLabel2.Name = "AccentedLabel2"
         Me.AccentedLabel2.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel2.TabIndex = 4
@@ -551,12 +572,12 @@ Partial Class MainForm
         '
         'TextBox2
         '
-        Me.TextBox2.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.TextBox2.Location = New System.Drawing.Point(12, 56)
+        Me.TextBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox2.Location = New System.Drawing.Point(0, 0)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ReadOnly = True
-        Me.TextBox2.Size = New System.Drawing.Size(608, 59)
+        Me.TextBox2.Size = New System.Drawing.Size(610, 62)
         Me.TextBox2.TabIndex = 3
         Me.TextBox2.Text = resources.GetString("TextBox2.Text")
         '
@@ -565,7 +586,7 @@ Partial Class MainForm
         Me.InactiveLabel.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.InactiveLabel.AutoSize = True
         Me.InactiveLabel.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.InactiveLabel.Location = New System.Drawing.Point(313, 12)
+        Me.InactiveLabel.Location = New System.Drawing.Point(314, 12)
         Me.InactiveLabel.Name = "InactiveLabel"
         Me.InactiveLabel.Size = New System.Drawing.Size(113, 13)
         Me.InactiveLabel.TabIndex = 2
@@ -576,7 +597,7 @@ Partial Class MainForm
         Me.ActiveLabel.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.ActiveLabel.AutoSize = True
         Me.ActiveLabel.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ActiveLabel.Location = New System.Drawing.Point(206, 12)
+        Me.ActiveLabel.Location = New System.Drawing.Point(207, 12)
         Me.ActiveLabel.Name = "ActiveLabel"
         Me.ActiveLabel.Size = New System.Drawing.Size(101, 13)
         Me.ActiveLabel.TabIndex = 2
@@ -589,7 +610,7 @@ Partial Class MainForm
         Me.TestSection.Controls.Add(Me.Label18)
         Me.TestSection.Location = New System.Drawing.Point(12, 161)
         Me.TestSection.Name = "TestSection"
-        Me.TestSection.Size = New System.Drawing.Size(608, 29)
+        Me.TestSection.Size = New System.Drawing.Size(610, 29)
         Me.TestSection.TabIndex = 1
         '
         'Label18
@@ -599,7 +620,7 @@ Partial Class MainForm
         Me.Label18.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label18.Location = New System.Drawing.Point(0, 0)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(608, 29)
+        Me.Label18.Size = New System.Drawing.Size(610, 29)
         Me.Label18.TabIndex = 0
         Me.Label18.Text = "Label in Inner Section"
         Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -610,7 +631,7 @@ Partial Class MainForm
         Me.AccentedLabel1.AutoEllipsis = True
         Me.AccentedLabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.AccentedLabel1.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AccentedLabel1.Location = New System.Drawing.Point(243, 120)
+        Me.AccentedLabel1.Location = New System.Drawing.Point(244, 120)
         Me.AccentedLabel1.Name = "AccentedLabel1"
         Me.AccentedLabel1.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel1.TabIndex = 0
@@ -634,16 +655,57 @@ Partial Class MainForm
         '
         Me.SaveFileDialog1.Filter = "Theme Files|*.ini"
         '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.TextBox2)
+        Me.Panel1.Location = New System.Drawing.Point(12, 55)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(610, 62)
+        Me.Panel1.TabIndex = 11
+        '
+        'ColorModeTSDDB
+        '
+        Me.ColorModeTSDDB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ColorModeTSDDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ColorModeTSDDB.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LightCM_TSMI, Me.DarkCM_TSMI, Me.SystemCM_TSMI})
+        Me.ColorModeTSDDB.Image = Global.DT_ThemeDesigner.My.Resources.Resources.colormode
+        Me.ColorModeTSDDB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ColorModeTSDDB.Name = "ColorModeTSDDB"
+        Me.ColorModeTSDDB.Size = New System.Drawing.Size(29, 22)
+        Me.ColorModeTSDDB.Text = "Change Color Mode..."
+        '
+        'LightCM_TSMI
+        '
+        Me.LightCM_TSMI.Name = "LightCM_TSMI"
+        Me.LightCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.LightCM_TSMI.Text = "Light"
+        '
+        'DarkCM_TSMI
+        '
+        Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
+        Me.DarkCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.DarkCM_TSMI.Text = "Dark"
+        '
+        'SystemCM_TSMI
+        '
+        Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
+        Me.SystemCM_TSMI.Size = New System.Drawing.Size(152, 22)
+        Me.SystemCM_TSMI.Text = "System"
+        '
         'MainForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(632, 478)
         Me.Controls.Add(Me.ThemeParameterPanel)
         Me.Controls.Add(Me.ThemePreviewPanel)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
         Me.MinimumSize = New System.Drawing.Size(640, 320)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -661,6 +723,8 @@ Partial Class MainForm
         CType(Me.TestGlyph2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TestGlyph1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TestSection.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -718,5 +782,10 @@ Partial Class MainForm
     Friend WithEvents TestGlyph2 As System.Windows.Forms.PictureBox
     Friend WithEvents TestGlyph1 As System.Windows.Forms.PictureBox
     Friend WithEvents ToolStripButton4 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents ColorModeTSDDB As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents LightCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DarkCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SystemCM_TSMI As System.Windows.Forms.ToolStripMenuItem
 
 End Class

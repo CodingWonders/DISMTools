@@ -78,6 +78,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
+    <Compile Include="ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="ColorTables\LightModeColorTable.vb" />
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +108,7 @@
     <Compile Include="ThemeUtilities\Theme.vb" />
     <Compile Include="ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Utilities\BuildGetter.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">
@@ -116,6 +122,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="My Project\Application.myapp">
@@ -134,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\colormode.png" />
     <Content Include="Resources\newtheme.png" />
     <Content Include="Resources\opentheme.png" />
     <Content Include="Resources\savetheme.png" />

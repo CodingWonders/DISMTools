@@ -806,7 +806,7 @@ function Start-PECustomization
         }
         try
         {
-            $policyVersion = "0.8.0.26031"
+            $policyVersion = "0.8.0.26041"
 
             Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
             Write-Host "Initializing default Preinstallation Environment policy..."
@@ -819,13 +819,13 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCConnAttempts /t REG_DWORD /d 5
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCGraphoView /t REG_DWORD /d 1
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AutoUnattendCopytoSysprep /t REG_DWORD /d 0
             if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
                 reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
             }
             if (Test-Path -Path "$((Get-Location).Path)\files\CustomPolicy.reg" -PathType Leaf) {
                 Write-Host "Importing custom policies..."
                 reg import "$((Get-Location).Path)\files\CustomPolicy.reg"
-                Remove-Item -Path "$((Get-Location).Path)\files\CustomPolicy.reg" -Force -ErrorAction SilentlyContinue
             }
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Policy System initialized."
@@ -2002,8 +2002,10 @@ function Start-DismCommand
                     # Copy unattended answer file to target image
                     New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\Panther"
                     Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\Panther\unattend.xml" -Force
-                    New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
-                    Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                    if ((Get-PolicyValue -PolicyName "AutoUnattendCopytoSysprep" -DefaultPolicyValue 0 -ValidOptions @(0,1)) -eq 1) {
+                        New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
+                        Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                    }
                 }
                 catch
                 {

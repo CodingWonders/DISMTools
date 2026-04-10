@@ -28,8 +28,9 @@ Partial Class ADDSJoinDialog
         Me.StepsContainer = New System.Windows.Forms.Panel()
         Me.DNSConfigPanel = New System.Windows.Forms.Panel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.DnsSyntaxCheckerBtn = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.DnsSyntaxCheckerBtn = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -45,6 +46,11 @@ Partial Class ADDSJoinDialog
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DNSConfigHeader = New System.Windows.Forms.Label()
         Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.AddsUpnPathText = New System.Windows.Forms.Label()
+        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
         Me.DomainAutoUserPanel = New System.Windows.Forms.Panel()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
@@ -52,10 +58,6 @@ Partial Class ADDSJoinDialog
         Me.Label15 = New System.Windows.Forms.Label()
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
-        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.AddsUpnPathText = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
         Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -81,14 +83,15 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.DnsNsLookupBtn = New System.Windows.Forms.Button()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
         Me.DNSConfigPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.DSDomainConfigPanel.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.DomainAutoUserPanel.SuspendLayout()
         Me.DSNoDomainPanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -97,8 +100,6 @@ Partial Class ADDSJoinDialog
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -131,6 +132,7 @@ Partial Class ADDSJoinDialog
         '
         'DNSConfigPanel
         '
+        Me.DNSConfigPanel.Controls.Add(Me.DnsNsLookupBtn)
         Me.DNSConfigPanel.Controls.Add(Me.GroupBox1)
         Me.DNSConfigPanel.Controls.Add(Me.TextBox1)
         Me.DNSConfigPanel.Controls.Add(Me.Label2)
@@ -166,16 +168,13 @@ Partial Class ADDSJoinDialog
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "NIC Settings"
         '
-        'DnsSyntaxCheckerBtn
+        'Panel1
         '
-        Me.DnsSyntaxCheckerBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DnsSyntaxCheckerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.DnsSyntaxCheckerBtn.Location = New System.Drawing.Point(492, 280)
-        Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
-        Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
-        Me.DnsSyntaxCheckerBtn.TabIndex = 7
-        Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
-        Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
+        Me.Panel1.Controls.Add(Me.RichTextBox1)
+        Me.Panel1.Location = New System.Drawing.Point(27, 208)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(657, 66)
+        Me.Panel1.TabIndex = 8
         '
         'RichTextBox1
         '
@@ -186,6 +185,17 @@ Partial Class ADDSJoinDialog
         Me.RichTextBox1.Size = New System.Drawing.Size(657, 66)
         Me.RichTextBox1.TabIndex = 6
         Me.RichTextBox1.Text = ""
+        '
+        'DnsSyntaxCheckerBtn
+        '
+        Me.DnsSyntaxCheckerBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DnsSyntaxCheckerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DnsSyntaxCheckerBtn.Location = New System.Drawing.Point(492, 280)
+        Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
+        Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
+        Me.DnsSyntaxCheckerBtn.TabIndex = 7
+        Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
+        Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
         '
         'TextBox2
         '
@@ -294,7 +304,7 @@ Partial Class ADDSJoinDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox1.Location = New System.Drawing.Point(150, 54)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(594, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(445, 21)
         Me.TextBox1.TabIndex = 5
         '
         'Label2
@@ -351,6 +361,65 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigPanel.Size = New System.Drawing.Size(784, 449)
         Me.DSDomainConfigPanel.TabIndex = 1
         Me.DSDomainConfigPanel.Visible = False
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label14, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.AddsUpnPathText, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.AddsNtLogonPathText, 1, 1)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(91, 203)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(591, 42)
+        Me.TableLayoutPanel2.TabIndex = 12
+        '
+        'Label13
+        '
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label13.Location = New System.Drawing.Point(3, 0)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(289, 21)
+        Me.Label13.TabIndex = 8
+        Me.Label13.Text = "User Principal Name (Windows 2000):"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label14.Location = New System.Drawing.Point(3, 21)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(289, 21)
+        Me.Label14.TabIndex = 8
+        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'AddsUpnPathText
+        '
+        Me.AddsUpnPathText.AutoEllipsis = True
+        Me.AddsUpnPathText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AddsUpnPathText.Location = New System.Drawing.Point(298, 0)
+        Me.AddsUpnPathText.Name = "AddsUpnPathText"
+        Me.AddsUpnPathText.Size = New System.Drawing.Size(290, 21)
+        Me.AddsUpnPathText.TabIndex = 8
+        Me.AddsUpnPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'AddsNtLogonPathText
+        '
+        Me.AddsNtLogonPathText.AutoEllipsis = True
+        Me.AddsNtLogonPathText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(298, 21)
+        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
+        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(290, 21)
+        Me.AddsNtLogonPathText.TabIndex = 8
+        Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'DomainAutoUserPanel
         '
@@ -418,48 +487,6 @@ Partial Class ADDSJoinDialog
         Me.RadioButton3.TabStop = True
         Me.RadioButton3.Text = "Pick the following user from the domain:"
         Me.RadioButton3.UseVisualStyleBackColor = True
-        '
-        'AddsNtLogonPathText
-        '
-        Me.AddsNtLogonPathText.AutoEllipsis = True
-        Me.AddsNtLogonPathText.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(298, 21)
-        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
-        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(290, 21)
-        Me.AddsNtLogonPathText.TabIndex = 8
-        Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label14
-        '
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label14.Location = New System.Drawing.Point(3, 21)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(289, 21)
-        Me.Label14.TabIndex = 8
-        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'AddsUpnPathText
-        '
-        Me.AddsUpnPathText.AutoEllipsis = True
-        Me.AddsUpnPathText.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AddsUpnPathText.Location = New System.Drawing.Point(298, 0)
-        Me.AddsUpnPathText.Name = "AddsUpnPathText"
-        Me.AddsUpnPathText.Size = New System.Drawing.Size(290, 21)
-        Me.AddsUpnPathText.TabIndex = 8
-        Me.AddsUpnPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label13
-        '
-        Me.Label13.AutoEllipsis = True
-        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label13.Location = New System.Drawing.Point(3, 0)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(289, 21)
-        Me.Label13.TabIndex = 8
-        Me.Label13.Text = "User Principal Name (Windows 2000):"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'DSNoDomainPanel
         '
@@ -714,30 +741,15 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
-        'Panel1
+        'DnsNsLookupBtn
         '
-        Me.Panel1.Controls.Add(Me.RichTextBox1)
-        Me.Panel1.Location = New System.Drawing.Point(27, 208)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(657, 66)
-        Me.Panel1.TabIndex = 8
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label14, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.AddsUpnPathText, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.AddsNtLogonPathText, 1, 1)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(91, 203)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(591, 42)
-        Me.TableLayoutPanel2.TabIndex = 12
+        Me.DnsNsLookupBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DnsNsLookupBtn.Location = New System.Drawing.Point(601, 53)
+        Me.DnsNsLookupBtn.Name = "DnsNsLookupBtn"
+        Me.DnsNsLookupBtn.Size = New System.Drawing.Size(140, 23)
+        Me.DnsNsLookupBtn.TabIndex = 7
+        Me.DnsNsLookupBtn.Text = "Test DNS resolution..."
+        Me.DnsNsLookupBtn.UseVisualStyleBackColor = True
         '
         'ADDSJoinDialog
         '
@@ -763,8 +775,10 @@ Partial Class ADDSJoinDialog
         Me.DNSConfigPanel.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.DSDomainConfigPanel.ResumeLayout(False)
         Me.DSDomainConfigPanel.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.DomainAutoUserPanel.ResumeLayout(False)
         Me.DomainAutoUserPanel.PerformLayout()
         Me.DSNoDomainPanel.ResumeLayout(False)
@@ -777,8 +791,6 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -842,4 +854,5 @@ Partial Class ADDSJoinDialog
     Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents DnsNsLookupBtn As System.Windows.Forms.Button
 End Class

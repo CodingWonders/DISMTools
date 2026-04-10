@@ -998,8 +998,10 @@ function Start-DismCommand
                     # Copy unattended answer file to target image
                     New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\Panther"
                     Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\Panther\unattend.xml" -Force
-                    New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
-                    Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                    if ((Get-PolicyValue -PolicyName "AutoUnattendCopytoSysprep" -DefaultPolicyValue 0 -ValidOptions @(0,1)) -eq 1) {
+                        New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
+                        Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                    }
                 }
                 catch
                 {

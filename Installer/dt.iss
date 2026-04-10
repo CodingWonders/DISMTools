@@ -95,7 +95,7 @@ Name: "pt"; MessagesFile: ".\Languages\Portuguese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "autoreload"; Description: "Install automatic image reload service"; GroupDescription: "Services"
+Name: "autoreload"; Description: "Install automatic image reload service"; GroupDescription: "Services"; Flags: unchecked
 
 [Files]
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
@@ -229,6 +229,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; Val
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "WDSHCConnAttempts"; ValueData: 5; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "PartTableOverridePreference"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "UEFICA23Preference"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "AutoUnattendCopytoSysprep"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist

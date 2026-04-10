@@ -116,7 +116,7 @@ if (((Get-WindowsRole -RoleName "WDS") -eq $false) -or ((Get-WindowsRole -RoleNa
 
 Write-LogMessage -message "Checking share locations..."
 $wdsShareLocation = ""
-$wdsShareLocation = (Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Shares" -Name "REMINST" -ErrorAction SilentlyContinue)[3].Replace("Path=", "")
+$wdsShareLocation = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WDSServer\Providers\WDSTFTP" -Name "RootFolder" -ErrorAction SilentlyContinue
 
 Write-LogMessage -message "Starting Windows Deployment Services Web API..."
 Write-LogMessage -message "Server Options:"
@@ -420,6 +420,10 @@ try {
                                 font-size: 1.125em;
                                 font-family: "Trebuchet MS", "Arial", "Helvetica", sans-serif;
                             }
+                            button:disabled {
+                                background-color: darkgray;
+                                color: white;
+                            }
                             .important_tab {
                                 font-weight: bold;
                             }
@@ -609,6 +613,10 @@ try {
                             function invokeExit() {
                                 fetch('/api/exit', { method: "GET" });
                                 alert("The server has stopped. Close this tab now.");
+                                let buttons = document.getElementsByTagName("button");
+                                for (let i = 0; i < buttons.length; i++) {
+                                    buttons[i].disabled = true;
+                                }
                             }
 
                             function invokeLogViewer() {

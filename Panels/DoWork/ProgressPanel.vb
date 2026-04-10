@@ -151,6 +151,7 @@
 ' 995                   Get-Indexes
 ' 996                   Switch-Indexes
 ' 997                   Remount-ReadWrite
+' 998                   Replace-FFU
 
 
 Imports Microsoft.VisualBasic.ControlChars
@@ -347,7 +348,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
-    Public ProgramIsBeingClosed As Boolean
     Public UMountLocalDir As Boolean
     Public UMountOp As Integer                              ' 0: commit, then unmount; 1: unmount without saving
     Public RandomMountDir As String                         ' Don't know about that mount dir, other that it was not loaded
@@ -556,6 +556,10 @@ Public Class ProgressPanel
     ' OperationNum: 997
     Public RWRemountSourceImg As String                     ' Source image to remount with R/W permissions
 
+    ' OperationNum: 998
+    Public FFUReplaceSourceFFU As String                    ' Path to source FFU file that will act as a replacement of the destination
+    Public FFUReplaceDestinationFFU As String               ' Path to destination FFU file that will be replaced by the source FFU
+
     ' Miscellaneous error variables
     Dim PackageErrorCodes As New List(Of String)
     Dim FeatureErrorCodes As New List(Of String)
@@ -614,7 +618,6 @@ Public Class ProgressPanel
         If Cancel_Button.Text = "Cancel" Or Cancel_Button.Text = "Cancelar" Or Cancel_Button.Text = "Annulla" Then
             ProgressBW.CancelAsync()
         ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
-            MainForm.ToolStripButton4.Visible = False
             Close()
         End If
     End Sub
@@ -996,6 +999,8 @@ Public Class ProgressPanel
                 MergeSWM()
             Case 996
                 SwitchIndexes()
+            Case 998
+                ReplaceFfuFile()
         End Select
         CurrentPB.Value = CurrentPB.Maximum
         AllPB.Value = AllPB.Maximum
@@ -1581,10 +1586,10 @@ Public Class ProgressPanel
             LogView.AppendText("- Captured image description: " & Quote & FFUCaptureDescription & Quote & CrLf)
             CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
         End If
-        If CaptureCompressType = 0 Then
+        If FFUCaptureCompressType = 0 Then
             LogView.AppendText("- Compression type: none" & CrLf)
             CommandArgs &= " /compress=none"
-        ElseIf CaptureCompressType = 1 Then
+        ElseIf FFUCaptureCompressType = 1 Then
             LogView.AppendText("- Compression type: default" & CrLf)
             CommandArgs &= " /compress=default"
         End If
@@ -2698,7 +2703,6 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Unmount operation (may not reflect actual operation): " & UMountOp)
         DynaLog.LogMessage("  - Check image integrity before committing changes? " & If(CheckImgIntegrity, "Yes", "No"))
         DynaLog.LogMessage("  - Append changes to new index? " & If(SaveToNewIndex, "Yes", "No"))
-        DynaLog.LogMessage("- Will the program be closed? " & If(ProgramIsBeingClosed, "Yes", "No"))
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2741,162 +2745,86 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
                            "- Mount directory: " & MountDir & CrLf &
                            "- Image index: " & UMountImgIndex)
-        If ProgramIsBeingClosed Then
-            DynaLog.LogMessage("DISMTools will be closed. Proceeding to commit changes...")
-            LogView.AppendText(CrLf & "- Unmount operation: Commit")
-            ' Commit the image and unmount it
-            Try
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
-                            Case Is >= 2
-                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
-                        End Select
-                    Case 10
-                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
-                End Select
-                RunProcess(DismProgram, CommandArgs)
-                If DismExitCode = Decimal.ToInt32(-1052638964) Then
-                    DynaLog.LogMessage("An attempt was made to save changes to an image that was mounted with read-only permissions. Unmounting image whilst discarding changes...")
-                    LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
-                    ' It mostly came from a read-only source. Discard changes
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
-                                Case Is >= 2
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
-                            End Select
-                        Case 10
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+        Try
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            If UMountLocalDir Then
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
+                            Else
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
+                            End If
+                        Case Is >= 2
+                            If UMountLocalDir Then
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                            Else
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                            End If
                     End Select
-                    RunProcess(DismProgram, CommandArgs)
-                End If
-            Catch ex As Exception
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /unmount-image /mountdir=" & MountDir,
-                                  ASCII)
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-            End Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
+                Case 10
+                    If UMountLocalDir Then
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                    Else
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                    End If
             End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            If UMountOp = 0 Then
+                LogView.AppendText(CrLf & "- Unmount operation: Commit")
+                CommandArgs &= " /commit"
+            ElseIf UMountOp = 1 Then
+                LogView.AppendText(CrLf & "- Unmount operation: Discard")
+                CommandArgs &= " /discard"
             End If
+            If UMountOp = 0 Then
+                If CheckImgIntegrity Then
+                    LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                    CommandArgs &= " /checkintegrity"
+                Else
+                    LogView.AppendText(CrLf & "- Check image integrity? No")
+                End If
+                If SaveToNewIndex Then
+                    LogView.AppendText(CrLf & "- Append changes to new index? Yes")
+                    CommandArgs &= " /append"
+                Else
+                    LogView.AppendText(CrLf & "- Append changes to new index? No")
+                End If
+            End If
+            RunProcess(DismProgram, CommandArgs)
+        Catch ex As Exception
+            ' Let's try this before setting things up here
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
         Else
-            DynaLog.LogMessage("DISMTools will not be closed.")
-            Try
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                If UMountLocalDir Then
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
-                                Else
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
-                                End If
-                            Case Is >= 2
-                                If UMountLocalDir Then
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
-                                Else
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
-                                End If
-                        End Select
-                    Case 10
-                        If UMountLocalDir Then
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
-                        Else
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
-                        End If
-                End Select
-                If UMountOp = 0 Then
-                    LogView.AppendText(CrLf & "- Unmount operation: Commit")
-                    CommandArgs &= " /commit"
-                ElseIf UMountOp = 1 Then
-                    LogView.AppendText(CrLf & "- Unmount operation: Discard")
-                    CommandArgs &= " /discard"
-                End If
-                If UMountOp = 0 Then
-                    If CheckImgIntegrity Then
-                        LogView.AppendText(CrLf & "- Check image integrity? Yes")
-                        CommandArgs &= " /checkintegrity"
-                    Else
-                        LogView.AppendText(CrLf & "- Check image integrity? No")
-                    End If
-                    If SaveToNewIndex Then
-                        LogView.AppendText(CrLf & "- Append changes to new index? Yes")
-                        CommandArgs &= " /append"
-                    Else
-                        LogView.AppendText(CrLf & "- Append changes to new index? No")
-                    End If
-                End If
-                RunProcess(DismProgram, CommandArgs)
-            Catch ex As Exception
-                ' Let's try this before setting things up here
-            End Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
-            End If
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
     End Sub
 
@@ -4849,6 +4777,18 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub RemoveOnlineAppxPackages(ParamArray PackageNames As String())
+        Dim extAppxHelperPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "online_appx_removal.ps1")
+        If File.Exists(extAppxHelperPath) Then
+            DynaLog.LogMessage("AppX removal helper exists. Proceeding with the removal of those bastards!")
+            LogView.AppendText(CrLf & "A PowerShell helper will be used to remove AppX packages. Please wait...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       String.Format("-executionpolicy Bypass -noprofile -nologo -file {0}{1}{0} -appxFullNames {0}{2}{0}", Quote, extAppxHelperPath,
+                                     String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))))
+            LogView.AppendText(CrLf & "Log off for the deprovisioning of applications to be fully carried out.")
+        End If
+    End Sub
+
     Private Sub RemoveProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to remove AppX packages...")
         Select Case Language
@@ -4916,91 +4856,100 @@ Public Class ProgressPanel
                 currentTask.Text = "Rimozione pacchetti AppX..."
         End Select
         CurrentPB.Maximum = appxRemovalCount
-        For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
-            If x + 1 > CurrentPB.Maximum Then Exit For
-            CommandArgs = BckArgs
-            Dim removalStoreApp As String = appxRemovalPackages(x)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-            End Select
-            LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & appxRemovalCount)
-            CurrentPB.Value = x + 1
-            ' Display package name and DisplayName
-            LogView.AppendText(CrLf &
-                               "- Package name: " & appxRemovalPackages(x) & CrLf &
-                               "- Display name: " & appxRemovalPkgNames(x))
-            ' Display whether an application is registered to a user
-            CheckAppRegistrationStatus(removalStoreApp)
-            ' Initialize command. Its syntax is simple, so don't spend too much time determining options
-            LogView.AppendText(CrLf & CrLf &
-                               "Processing package...")
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
-            RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
-            If Hex(DismExitCode).Length < 8 Then
-                errCode = DismExitCode
-            Else
-                errCode = Hex(DismExitCode)
-            End If
-            If DismExitCode = 0 Then
-                appxSuccessfulRemovals += 1
-            Else
-                appxFailedRemovals += 1
-            End If
-            If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(" Error level : " & errCode)
-            End If
-            If PackageErrorCodes.Count <= 0 Then
-                If errCode.Length >= 8 Then
-                    PackageErrorCodes.Add("0x" & errCode)
-                Else
-                    PackageErrorCodes.Add(errCode)
-                End If
-            Else
-                If errCode.Length >= 8 Then
-                    PackageErrorCodes.Add("0x" & errCode)
-                Else
-                    PackageErrorCodes.Add(errCode)
-                End If
-            End If
-        Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
-        For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
-        Next
-        Thread.Sleep(2000)
-        AllPB.Value = 100
-        If appxSuccessfulRemovals > 0 Then
+        If OnlineMgmt Then
+            RemoveOnlineAppxPackages(appxRemovalPackages)
+            CurrentPB.Value = CurrentPB.Maximum
+            Thread.Sleep(2000)
+            AllPB.Value = 100
             GetErrorCode(True)
-        ElseIf appxSuccessfulRemovals <= 0 Then
-            GetErrorCode(False)
+        Else
+            For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Dim removalStoreApp As String = appxRemovalPackages(x)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
+                            Case "PTB", "PTG"
+                                currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "ITA"
+                                currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 3
+                        currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
+                    Case 4
+                        currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 5
+                        currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
+                End Select
+                LogView.AppendText(CrLf &
+                                   "Package " & (x + 1) & " of " & appxRemovalCount)
+                CurrentPB.Value = x + 1
+                ' Display package name and DisplayName
+                LogView.AppendText(CrLf &
+                                   "- Package name: " & appxRemovalPackages(x) & CrLf &
+                                   "- Display name: " & appxRemovalPkgNames(x))
+                ' Display whether an application is registered to a user
+                CheckAppRegistrationStatus(removalStoreApp)
+                ' Initialize command. Its syntax is simple, so don't spend too much time determining options
+                LogView.AppendText(CrLf & CrLf &
+                                   "Processing package...")
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                RunProcess(DismProgram, CommandArgs)
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DismExitCode).Length < 8 Then
+                    errCode = DismExitCode
+                Else
+                    errCode = Hex(DismExitCode)
+                End If
+                If DismExitCode = 0 Then
+                    appxSuccessfulRemovals += 1
+                Else
+                    appxFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PackageErrorCodes.Count <= 0 Then
+                    If errCode.Length >= 8 Then
+                        PackageErrorCodes.Add("0x" & errCode)
+                    Else
+                        PackageErrorCodes.Add(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PackageErrorCodes.Add("0x" & errCode)
+                    Else
+                        PackageErrorCodes.Add(errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+            For x = 0 To PackageErrorCodes.Count - 1
+                LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            Next
+            Thread.Sleep(2000)
+            AllPB.Value = 100
+            If appxSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf appxSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
         End If
+
     End Sub
 
 #End Region
@@ -6962,7 +6911,6 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub SwitchIndexes()
-        ' TODO Improve significantly
         DynaLog.LogMessage("Preparing to switch image indexes...")
         DynaLog.LogMessage("- Source image file: " & Quote & SwitchSourceImg & Quote)
         DynaLog.LogMessage("- Source image index: " & SwitchSourceIndex)
@@ -7227,6 +7175,26 @@ Public Class ProgressPanel
         Else
             LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub ReplaceFfuFile()
+        DynaLog.LogMessage("Preparing to replace FFU files...")
+        DynaLog.LogMessage("- Source file: " & Quote & FFUReplaceSourceFFU & Quote)
+        DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
+        allTasks.Text = "Replacing FFU files..."
+        currentTask.Text = "Replacing original FFU file with modified FFU file..."
+        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceSourceFFU & Quote & " with " & Quote & FFUReplaceDestinationFFU & Quote & "...")
+        Try
+            If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
+            File.Delete(FFUReplaceDestinationFFU)
+            File.Move(FFUReplaceSourceFFU, FFUReplaceDestinationFFU)
+            IsSuccessful = True
+            LogView.AppendText(CrLf & "The FFU file has been successfully replaced.")
+        Catch ex As Exception
+            DynaLog.LogMessage("FFU files could not be replaced. Error message: " & ex.Message)
+            IsSuccessful = False
+            LogView.AppendText(CrLf & "The FFU file could not be replaced: " & ex.Message)
+        End Try
     End Sub
 
 #End Region
@@ -7587,13 +7555,11 @@ Public Class ProgressPanel
             End Select
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
-            MainForm.ToolStripButton4.Visible = False
             MainForm.StartMountedImageDetector()
             Close()
         Else
             DynaLog.LogMessage("Tasks have not been successful.")
             Cancel_Button.Visible = True
-            MainForm.ToolStripButton4.Visible = False
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -7998,7 +7964,6 @@ Public Class ProgressPanel
         Else
             IsDebugged = False
         End If
-        MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
@@ -8140,7 +8105,6 @@ Public Class ProgressPanel
                 MainForm.MenuDesc.Text = "Pronto"
         End Select
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
-        MainForm.ToolStripButton4.Visible = False
         MainForm.StartMountedImageDetector()
     End Sub
 

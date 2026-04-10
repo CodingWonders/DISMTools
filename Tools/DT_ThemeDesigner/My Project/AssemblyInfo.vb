@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("DISMTools Theme Designer")> 
-<Assembly: AssemblyCopyright("© 2025 CodingWonders Software")> 
+<Assembly: AssemblyCopyright("© 2025-2026 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.7.0.0")> 
-<Assembly: AssemblyFileVersion("0.7.0.0")> 
+<Assembly: AssemblyVersion("0.8.0.0")> 
+<Assembly: AssemblyFileVersion("0.8.0.0")> 

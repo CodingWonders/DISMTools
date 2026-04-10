@@ -266,15 +266,20 @@ Public Class ADDSJoinDialog
                 End If
                 If TextBox6.Text = "" Then
                     Try
-                        If DomainServicesModule.DSAccountHasRequiredPassword(dsDomainName, initialUserName) Then
-                            MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
+                        If DomainServicesModule.DSAccountRequiresPassword(dsDomainName, initialUserName) Then
+                            MsgBox(String.Format("A password for the specified user, {0}{1}{0}, must be specified as per security policies imposed by the domain controller.", Quote, initialUserName), vbOKOnly + vbCritical)
                             Return False
                         End If
                     Catch ex As Exception
-                        MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
+                        MsgBox(String.Format("A password for the specified user, {0}{1}{0}, must be specified as per security policies imposed by the domain controller.", Quote, initialUserName), vbOKOnly + vbCritical)
                         Return False
                     End Try
-
+                End If
+                If dsIsInDomain AndAlso Not DomainServicesModule.DSAccountExists(dsDomainName, initialUserName) Then
+                    If MsgBox(String.Format("The specified user, {1}, does not appear to exist in the provided domain. You may not be able to sign in with this user unless you create it first.{0}{0}" &
+                                            "Do you want to continue?", Environment.NewLine, initialUserName), vbYesNo + vbExclamation, Text) = MsgBoxResult.No Then
+                        Return False
+                    End If
                 End If
                 Return MsgBox("Please verify the information that you typed. If you incorrectly typed a field, the client device may not join the domain." & CrLf & CrLf & "The client device will also not join the domain if it will run home editions of Windows." & CrLf & CrLf & "Are you sure that these settings are correct?", vbYesNo + vbQuestion, "Verify Settings") = MsgBoxResult.Yes
         End Select
@@ -539,5 +544,40 @@ Public Class ADDSJoinDialog
         If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, referenceUser.SamAccountName) Then
             MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
         End If
+    End Sub
+
+    Private Sub DnsNsLookupBtn_Click(sender As Object, e As EventArgs) Handles DnsNsLookupBtn.Click
+        If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
+            MsgBox("Please provide a domain for which to test domain name resolution.", vbOKOnly + vbExclamation, Text)
+            Exit Sub
+        End If
+
+        Cursor = Cursors.WaitCursor
+        Dim nslookupProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "nslookup.exe"),
+                .Arguments = TextBox1.Text,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+
+        Try
+            nslookupProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            nslookupProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        Catch ex As Exception
+            nslookupProc.StartInfo.StandardOutputEncoding = Nothing
+            nslookupProc.StartInfo.StandardErrorEncoding = Nothing
+        End Try
+
+        Dim nslookupOut As String = ""
+        nslookupProc.Start()
+        nslookupOut = nslookupProc.StandardOutput.ReadToEnd() & nslookupProc.StandardError.ReadToEnd()
+        nslookupProc.WaitForExit()
+        Cursor = Cursors.Arrow
+        MsgBox(String.Format("NSLOOKUP output:{0}{0}{1}", Environment.NewLine, nslookupOut), vbOKOnly + vbInformation, "Domain name resolution results")
     End Sub
 End Class

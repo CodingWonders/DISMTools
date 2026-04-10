@@ -271,6 +271,7 @@ Partial Class Options
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.Button14 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1867,6 +1868,7 @@ Partial Class Options
         '
         'ValueContainer
         '
+        Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Controls.Add(Me.Options_Startup)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
@@ -1877,7 +1879,6 @@ Partial Class Options
         Me.ValueContainer.Controls.Add(Me.Options_BgProcs)
         Me.ValueContainer.Controls.Add(Me.Options_ImgDetection)
         Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
-        Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ValueContainer.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ValueContainer.Location = New System.Drawing.Point(0, 0)
@@ -3004,6 +3005,7 @@ Partial Class Options
         '
         'Panel23
         '
+        Me.Panel23.Controls.Add(Me.Button14)
         Me.Panel23.Controls.Add(Me.Label60)
         Me.Panel23.Controls.Add(Me.CheckBox22)
         Me.Panel23.Location = New System.Drawing.Point(0, 0)
@@ -3049,6 +3051,16 @@ Partial Class Options
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 6
+        '
+        'Button14
+        '
+        Me.Button14.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button14.Location = New System.Drawing.Point(619, 51)
+        Me.Button14.Name = "Button14"
+        Me.Button14.Size = New System.Drawing.Size(75, 23)
+        Me.Button14.TabIndex = 3
+        Me.Button14.Text = "Run now"
+        Me.Button14.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -3455,5 +3467,6 @@ Partial Class Options
     Friend WithEvents Label78 As System.Windows.Forms.Label
     Friend WithEvents Label83 As System.Windows.Forms.Label
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents Button14 As System.Windows.Forms.Button
 
 End Class

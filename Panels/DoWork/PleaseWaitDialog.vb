@@ -99,10 +99,7 @@ Public Class PleaseWaitDialog
                 ProjectValueLoadForm.ShowDialog(MainForm)
             End If
             MainForm.ProjectToolStripMenuItem.Visible = True
-            Thread.Sleep(250)
-            MainForm.Refresh()
             MainForm.CommandsToolStripMenuItem.Visible = True
-            Thread.Sleep(250)
             MainForm.Refresh()
             MainForm.HomePanel.Visible = False
             MainForm.PrjPanel.Visible = True
@@ -149,10 +146,7 @@ Public Class PleaseWaitDialog
                 ProjectValueLoadForm.ShowDialog(MainForm)
             End If
             MainForm.ProjectToolStripMenuItem.Visible = True
-            Thread.Sleep(250)
-            MainForm.Refresh()
             MainForm.CommandsToolStripMenuItem.Visible = True
-            Thread.Sleep(250)
             MainForm.Refresh()
             MainForm.HomePanel.Visible = False
             MainForm.PrjPanel.Visible = True

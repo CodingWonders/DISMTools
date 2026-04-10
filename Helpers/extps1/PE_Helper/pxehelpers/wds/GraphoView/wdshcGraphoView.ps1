@@ -28,7 +28,8 @@ $ImgGroupCombo_SelectedIndexChanged = {
 
 $ImgNameCombo_SelectedIndexChanged = {
     if ($null -ne $global:images) {
-        $global:selectedImageFileName = $global:imageFilesArray[$ImgNameCombo.SelectedIndex]
+        # When there's one image in a group the array becomes a string; we have to intervene here...
+        $global:selectedImageFileName = ([string[]]$global:imageFilesArray)[$ImgNameCombo.SelectedIndex]
 
         $selectedImage = $global:images | Where-Object { $_.ImageGroup -eq "$global:selectedImageGroup" -and $_.FileName -eq "$global:selectedImageFileName" }
 

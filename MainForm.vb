@@ -213,6 +213,7 @@ Public Class MainForm
     Public ShowWatermark As Boolean = False
     Public WDSHCGraphoView As Boolean = True
     Public DTDimShowPnputilOut As Boolean = True
+    Public AutoUnattendCopytoSysprep As Boolean = False
     Public PartTableOverridePreference As Integer = 0
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
@@ -1000,6 +1001,7 @@ Public Class MainForm
         InstallationTypeRk.Close()
 
         PxeHelperServersTSMI.Enabled = InstallationType.ToLower().Contains("server")
+        UploadThisImageToMyWDSServerToolStripMenuItem.Enabled = InstallationType.ToLower().Contains("server")
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
@@ -1407,6 +1409,7 @@ Public Class MainForm
                 WDSHCConnAttempts = (CInt(PEPolicyKey.GetValue("WDSHCConnAttempts", 5)))
                 PartTableOverridePreference = (CInt(PEPolicyKey.GetValue("PartTableOverridePreference", 0)))
                 UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
+                AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1740,6 +1743,11 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=0") Then
                     DTDimShowPnputilOut = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=1") Then
+                    AutoUnattendCopytoSysprep = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=0") Then
+                    AutoUnattendCopytoSysprep = False
+                End If
             Else
                 DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW) and reloading settings...")
                 GenerateDTSettings()
@@ -1837,9 +1845,11 @@ Public Class MainForm
                                                   "{1}PartTableOverridePreference{1}={1}{4}{1}{0}" &
                                                   "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
-                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}{0}",
+                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
-                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0))
+                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
+                                                  If(AutoUnattendCopytoSysprep, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1913,7 +1923,8 @@ Public Class MainForm
                            "DTDimShowPnputilOut        =    " & DTDimShowPnputilOut & CrLf &
                            "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
                            "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
-                           "UEFICA23Preference         =    " & UEFICA23Preference)
+                           "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
+                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep)
     End Sub
 
 #Region "Background Processes"
@@ -4137,6 +4148,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=5")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4239,6 +4251,7 @@ Public Class MainForm
         PEPolicyKey.SetValue("WDSHCConnAttempts", 5, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4475,6 +4488,7 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=" & WDSHCConnAttempts)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=" & PartTableOverridePreference)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=" & UEFICA23Preference)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=" & AutoUnattendCopytoSysprep)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4593,6 +4607,7 @@ Public Class MainForm
                     PEPolicyKey.SetValue("WDSHCConnAttempts", WDSHCConnAttempts, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("PartTableOverridePreference", PartTableOverridePreference, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
                     PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
@@ -4737,6 +4752,8 @@ Public Class MainForm
         TreeViewCMS.Renderer = GetProfessionalRenderer()
         AppxResCMS.Renderer = GetProfessionalRenderer()
         ImgSpecialToolsCMS.Renderer = GetProfessionalRenderer()
+        ImgApplyModeCMS.Renderer = GetProfessionalRenderer()
+        ImgCaptureModeCMS.Renderer = GetProfessionalRenderer()
         PkgInfoCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgUMountPopupCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxPackagePopupCMS.ForeColor = CurrentTheme.ForegroundColor
@@ -4744,6 +4761,8 @@ Public Class MainForm
         TreeViewCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxResCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgSpecialToolsCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgApplyModeCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgCaptureModeCMS.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, TreeViewCMS.Items)
         InvalidSettingsTSMI.Image = GetGlyphResource("setting_error_glyph")
         ExitFullScreenTSMI.Image = GetGlyphResource("exit_full_screen_glyph")
@@ -8953,13 +8972,11 @@ Public Class MainForm
     ''' </summary>
     ''' <param name="IsBeingClosed">Determines whether the program is being closed</param>
     ''' <param name="SaveProject">Determines whether the program should save the project</param>
-    ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
-    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean)
         DynaLog.LogMessage("Preparing to unload project...")
         DynaLog.LogMessage("- Is the program being closed? " & If(IsBeingClosed, "Yes", "No"))
         DynaLog.LogMessage("- Will the project be saved? " & If(SaveProject, "Yes", "No"))
-        DynaLog.LogMessage("- Will the image be unmounted? " & If(UnmountImg, "Yes", "No"))
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
@@ -9056,14 +9073,53 @@ Public Class MainForm
         bwGetImageInfo = True
         bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
+            Dim IsInFfuMode As Boolean
             DynaLog.LogMessage("The image will be unmounted committing changes...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            ProgressPanel.UMountOp = 0
+            If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                IsInFfuMode = True
+
+                ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+                ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+                ' but at least we save the changes...
+
+                Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+                ' Options for capture task
+                ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+                ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+                ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+                ProgressPanel.FFUCaptureCompressType = 1
+
+                ' Options for unmount task
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = 1
+
+                ' Options for replace task
+                ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+                ProgressPanel.TaskList.AddRange({5, 21, 998})
+            Else
+                IsInFfuMode = False
+
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 0
+            End If
             ProgressPanel.ShowDialog(Me)
+            If IsInFfuMode Then
+                UpdateProjProperties(False, False)
+                SaveDTProj()
+            End If
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             DynaLog.LogMessage("The image will be unmounted discarding changes...")
@@ -9082,19 +9138,6 @@ Public Class MainForm
                 SaveDTProj()
             End If
         End If
-        If UnmountImg Then
-            DynaLog.LogMessage("The image will be unmounted...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            If IsBeingClosed Then
-                DynaLog.LogMessage("The program will be closed...")
-                ProgressPanel.ProgramIsBeingClosed = True
-            End If
-            ProgressPanel.ShowDialog(Me)
-        End If
         Text = "DISMTools"
         If Debugger.IsAttached Then
             Text &= " (debug mode)"
@@ -9102,10 +9145,7 @@ Public Class MainForm
         DynaLog.LogMessage("Removing items from project tree view...")
         UnpopulateProjectTree()
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
-        Refresh()
         CommandsToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         HomePanel.Visible = True
         PrjPanel.Visible = False
@@ -9200,7 +9240,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in online mode
         ToolStripButton2.Enabled = False
@@ -9355,7 +9394,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in offline mode either
         ToolStripButton2.Enabled = False
@@ -9536,7 +9574,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -9688,7 +9725,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -10957,21 +10993,11 @@ Public Class MainForm
         DynaLog.LogMessage("Showing save question...")
         SaveProjectQuestionDialog.ShowDialog(Me)
         If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Saving project and unmounting the image...")
-                UnloadDTProj(False, True, True)
-            Else
-                DynaLog.LogMessage("Saving project...")
-                UnloadDTProj(False, True, False)
-            End If
+            DynaLog.LogMessage("Saving project...")
+            UnloadDTProj(False, True)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                UnloadDTProj(False, False, True)
-            Else
-                DynaLog.LogMessage("Discarding project changes...")
-                UnloadDTProj(False, False, False)
-            End If
+            DynaLog.LogMessage("Discarding project changes...")
+            UnloadDTProj(False, False)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
             DynaLog.LogMessage("Nothing happened here")
             Exit Sub
@@ -10995,28 +11021,19 @@ Public Class MainForm
                 DynaLog.LogMessage("The image this project contains has been modified")
                 SaveProjectQuestionDialog.ShowDialog(Me)
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Saving project and unmounting the image...")
-                        UnloadDTProj(True, True, True)
-                    Else
-                        DynaLog.LogMessage("Saving project...")
-                        UnloadDTProj(True, True, False)
-                    End If
+                    DynaLog.LogMessage("Saving project...")
+                    UnloadDTProj(True, True)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                        UnloadDTProj(True, False, True)
-                    Else
-                        DynaLog.LogMessage("Discarding project changes...")
-                        UnloadDTProj(True, False, False)
-                    End If
+                    DynaLog.LogMessage("Discarding project changes...")
+                    UnloadDTProj(True, False)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Nothing happened here. Cancelling closure...")
                     e.Cancel = True
                 End If
             Else
+                imgCommitOperation = -1
                 DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-                UnloadDTProj(True, False, False)
+                UnloadDTProj(True, False)
             End If
         End If
         If ImgBW.IsBusy Then
@@ -11133,28 +11150,18 @@ Public Class MainForm
             DynaLog.LogMessage("The image this project contains has been modified")
             SaveProjectQuestionDialog.ShowDialog(Me)
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Saving project and unmounting the image...")
-                    UnloadDTProj(False, True, True)
-                Else
-                    DynaLog.LogMessage("Saving project...")
-                    UnloadDTProj(False, True, False)
-                End If
+                DynaLog.LogMessage("Saving project...")
+                UnloadDTProj(False, True)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                    UnloadDTProj(False, False, True)
-                Else
-                    DynaLog.LogMessage("Discarding project changes...")
-                    UnloadDTProj(False, False, False)
-                End If
+                DynaLog.LogMessage("Discarding project changes...")
+                UnloadDTProj(False, False)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("Nothing happened here.")
                 Exit Sub
             End If
         Else
             DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-            UnloadDTProj(False, False, False)
+            UnloadDTProj(False, False)
         End If
     End Sub
 
@@ -11651,7 +11658,7 @@ Public Class MainForm
                 ProgressPanel.ShowDialog(Me)
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("User decided not to reload the servicing session. Unloading project...")
-                UnloadDTProj(False, False, False)
+                UnloadDTProj(False, False)
                 ImgBW.CancelAsync()
             End If
         End If
@@ -11662,7 +11669,6 @@ Public Class MainForm
                     DynaLog.LogMessage("Incompatibility studied. This is a Windows Vista/Server 2008 image")
                     ' Let the user know about the incompatibility
                     If Not ProgressPanel.IsDisposed Then
-                        ToolStripButton4.Visible = False
                         ProgressPanel.Dispose()
                         ProgressPanel.Close()
                     End If
@@ -11854,7 +11860,7 @@ Public Class MainForm
 
     Private Sub Discord_Click(sender As Object, e As EventArgs) Handles Discord.Click
         DynaLog.LogMessage("Launching discord join link...")
-        Process.Start("https://discord.gg/vPrZXHPP")
+        Process.Start("https://discord.gg/5TxEmKXNwu")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
@@ -11914,7 +11920,7 @@ Public Class MainForm
             DynaLog.LogMessage("File specified in OFD: " & OpenFileDialog1.FileName)
             If File.Exists(OpenFileDialog1.FileName) Then
                 DynaLog.LogMessage("Project file exists")
-                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
                 If ImgBW.IsBusy Then Exit Sub
                 Dim Project As New Recents()
                 Project.ProjPath = OpenFileDialog1.FileName
@@ -12915,7 +12921,7 @@ Public Class MainForm
             DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
             If ActiveInstAccessWarn.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then Exit Sub
-            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True)
             If ImgBW.IsBusy Then Exit Sub
         End If
         ActiveInstAccessWarn.Label2.Visible = False
@@ -12933,7 +12939,7 @@ Public Class MainForm
             End If
             If isProjectLoaded Then
                 DynaLog.LogMessage("Unloading project...")
-                UnloadDTProj(False, True, False)
+                UnloadDTProj(False, True)
                 If ImgBW.IsBusy Then Exit Sub
             End If
             BeginOfflineManagement(drivePath)
@@ -13559,7 +13565,7 @@ Public Class MainForm
             DynaLog.LogMessage("Unmounting image directly...")
             If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
             imgCommitOperation = 1
-            UnloadDTProj(False, True, True)
+            UnloadDTProj(False, True)
             Exit Sub
         End If
         DynaLog.LogMessage("Opening image unmount dialog...")
@@ -13633,38 +13639,85 @@ Public Class MainForm
     Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
         DynaLog.LogMessage("Committing changes to the image...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-        ProgressPanel.MountDir = MountDir
-        ' TODO: Add additional options later
-        ProgressPanel.OperationNum = 8
+        Dim IsInFfuMode As Boolean
+
+        If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+            IsInFfuMode = True
+
+            ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+            ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+            ' but at least we save the changes...
+
+            Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+            ' Options for capture task
+            ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+            ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+            ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+            ProgressPanel.FFUCaptureCompressType = 1
+
+            ' Options for unmount task
+            ProgressPanel.MountDir = MountDir
+            ProgressPanel.UMountOp = 1
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.RandomMountDir = ""
+            ProgressPanel.CheckImgIntegrity = False
+            ProgressPanel.SaveToNewIndex = False
+            ProgressPanel.UMountImgIndex = 1
+
+            ' Options for replace task
+            ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+            ' Options for mount task
+            ProgressPanel.SourceImg = CurrentImage.ImageFile
+            ProgressPanel.ImgIndex = 1
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ProgressPanel.TaskList.AddRange({5, 21, 998, 15})
+        Else
+            IsInFfuMode = False
+
+            ProgressPanel.MountDir = MountDir
+            ' TODO: Add additional options later
+            ProgressPanel.OperationNum = 8
+        End If
         ProgressPanel.ShowDialog(Me)
+        If IsInFfuMode Then
+            UpdateProjProperties(True, False)
+            SaveDTProj()
+        End If
     End Sub
 
     Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst committing changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst discarding changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        If CurrentImage IsNot Nothing AndAlso Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
-            FfuApply.ShowDialog(Me)
-        Else
-            ImgApply.ShowDialog(Me)
-        End If
+        Dim cmsPos As Point = Button30.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button30.Height)
+        ImgApplyModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
         DynaLog.LogMessage("Opening image capture dialog...")
-        ImgCapture.ShowDialog(Me)
+        Dim cmsPos As Point = Button31.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button31.Height)
+        ImgCaptureModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
@@ -14430,7 +14483,7 @@ Public Class MainForm
                     If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
                 ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Not ready to reload. The image needs to be reloading before using this project again. Unloading project...")
-                    UnloadDTProj(False, False, False)
+                    UnloadDTProj(False, False)
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
             Case ImageWatcher.Status.NotMounted
@@ -14443,7 +14496,7 @@ Public Class MainForm
                         UpdateProjProperties(False, False)
                     ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
-                        UnloadDTProj(False, False, False)
+                        UnloadDTProj(False, False)
                         If ImgBW.IsBusy Then ImgBW.CancelAsync()
                     End If
                 End If
@@ -15102,7 +15155,7 @@ Public Class MainForm
         End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
-            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
             If ImgBW.IsBusy Then Exit Sub
             itmOrder = itemOrder
             Dim recentProj As Recents = RecentList(itmOrder)
@@ -16142,5 +16195,37 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub ApplyWimTSMI_Click(sender As Object, e As EventArgs) Handles ApplyWimTSMI.Click
+        ImgApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub ApplyFfuTSMI_Click(sender As Object, e As EventArgs) Handles ApplyFfuTSMI.Click
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureWimTSMI_Click(sender As Object, e As EventArgs) Handles CaptureWimTSMI.Click
+        ImgCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFfuTSMI_Click(sender As Object, e As EventArgs) Handles CaptureFfuTSMI.Click
+        FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub UploadThisImageToMyWDSServerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadThisImageToMyWDSServerToolStripMenuItem.Click
+        If WDSInstallImageCopy.BackgroundWorker1.IsBusy Then Exit Sub
+        DynaLog.LogMessage("Opening WDS upload wizard...")
+        WDSInstallImageCopy.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        If WDSInstallImageCopy.Visible Then
+            If WDSInstallImageCopy.WindowState = FormWindowState.Minimized Then
+                WDSInstallImageCopy.WindowState = FormWindowState.Normal
+            Else
+                WDSInstallImageCopy.BringToFront()
+            End If
+            WDSInstallImageCopy.Focus()
+        Else
+            WDSInstallImageCopy.Show()
+        End If
     End Sub
 End Class

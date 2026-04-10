@@ -333,6 +333,7 @@ Public Class ISOCreator
                 CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
         End Select
         ImageTaskHeader1.SetColors()
+        ImageTaskHeader1.HideWindowTitle(Me.Handle)
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -453,7 +454,6 @@ Public Class ISOCreator
         ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
-        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub DownloadADK()
@@ -825,11 +825,20 @@ Public Class ISOCreator
         MainForm.PEHelper_CopyToVentoy = CheckBox2.Checked
         MainForm.PEHelper_Use2023EFI = CheckBox3.Checked
 
+        Dim customPolicyPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg")
+        If File.Exists(customPolicyPath) Then
+            Try
+                File.Delete(customPolicyPath)
+            Catch ex As Exception
+
+            End Try
+        End If
+
         RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage(".wim")
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Selected image: " & selectedImage.ImageFile)
             TextBox1.Text = selectedImage.ImageFile

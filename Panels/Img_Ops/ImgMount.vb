@@ -905,8 +905,14 @@ Public Class ImgMount
         ProgressReporter.Hide()
         If e.Error Is Nothing Then
             ' Then we've succeeded
-            MessageBox.Show("The Windows images in the specified ISO file have been successfully copied to your local disk under a folder called " &
-                            Quote & "IsoFileContents" & Quote & ". Now, specify one of the images there.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("The Windows images in the specified ISO file have been successfully copied. The copied installation image will be selected automatically for you, if found...", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Try to find the install image
+            Dim installImagePath_WIM As String = Path.Combine(projPath, "IsoFileContents", "install.wim")
+            Dim installImagePath_ESD As String = Path.Combine(projPath, "IsoFileContents", "install.esd")
+
+            If File.Exists(installImagePath_WIM) Then TextBox1.Text = installImagePath_WIM
+            If File.Exists(installImagePath_ESD) Then TextBox1.Text = installImagePath_ESD
         Else
             ' Then we've failed
             MessageBox.Show("The Windows images in the specified ISO file were not copied to your local disk. Copy any WIM or ESD files from the sources folder of your ISO file.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -914,8 +920,13 @@ Public Class ImgMount
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
-        If ListView1.SelectedItems.Count = 1 Then
-            NumericUpDown1.Value = ListView1.FocusedItem.Index + 1
-        End If
+        Try
+            If ListView1.SelectedItems.Count = 1 Then
+                NumericUpDown1.Value = ListView1.FocusedItem.Index + 1
+            End If
+        Catch ex As Exception
+            NumericUpDown1.Value = 1
+            NumericUpDown1.Maximum = 1
+        End Try
     End Sub
 End Class
