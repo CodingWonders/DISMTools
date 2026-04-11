@@ -80,11 +80,11 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.45.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.45.0\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.1.1.2\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.4.0.7\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.5.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -110,8 +110,8 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=6.1.1.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.6.1.1\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=6.1.2.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.6.1.2\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -189,6 +189,7 @@
     <Reference Include="System.ServiceModel">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms">
       <Private>True</Private>
     </Reference>
@@ -207,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="DISMTools.Elements.Contemporaneus" />
+    <Import Include="DISMTools.Utilities" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="Microsoft.VisualBasic.ControlChars" />
     <Import Include="System" />
@@ -214,6 +216,8 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Management" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
@@ -249,6 +253,7 @@
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
     <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\Contemporaneus\FullFlashUtilityImage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageCapability.vb" />
     <Compile Include="Elements\Contemporaneus\ImageDriver.vb" />
@@ -260,6 +265,7 @@
     <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
+    <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -423,6 +429,24 @@
     <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.Designer.vb">
+      <DependentUpon>CapabilityFilterAssistantDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\DriverFilterAssistantDialog.Designer.vb">
+      <DependentUpon>DriverFilterAssistantDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\DriverFilterAssistantDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\FeatureFilterAssistantDialog.Designer.vb">
+      <DependentUpon>FeatureFilterAssistantDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\FeatureFilterAssistantDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Get_Ops\GetImgInfoDlg.Designer.vb">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
     </Compile>
@@ -466,10 +490,10 @@
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.Designer.vb">
+    <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.Designer.vb">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.vb">
+    <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.Designer.vb">
@@ -604,6 +628,36 @@
     <Compile Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuApply.Designer.vb">
+      <DependentUpon>FfuApply.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuApply.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuCapture.Designer.vb">
+      <DependentUpon>FfuCapture.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuCapture.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuInfoDialog.Designer.vb">
+      <DependentUpon>FfuInfoDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuInfoDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuOptimize.Designer.vb">
+      <DependentUpon>FfuOptimize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuOptimize.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuSplit.Designer.vb">
+      <DependentUpon>FfuSplit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\FFU\FfuSplit.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </Compile>
@@ -632,6 +686,12 @@
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgIndexDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgOptimize.Designer.vb">
+      <DependentUpon>ImgOptimize.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgOptimize.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgSplit.Designer.vb">
@@ -764,6 +824,24 @@
       <DependentUpon>NewTestingEnv.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\ISOFiles\NewTestingEnv.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\PECustomizerDialog.Designer.vb">
+      <DependentUpon>PECustomizerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\PECustomizerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSImageGroupSpecifier.Designer.vb">
+      <DependentUpon>WDSImageGroupSpecifier.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSImageGroupSpecifier.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSInstallImageCopy.Designer.vb">
+      <DependentUpon>WDSInstallImageCopy.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\WDSInstallImageCopy.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\MSEdge\AddEdgeBrowser.Designer.vb">
@@ -909,6 +987,7 @@
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
+    <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\RegistryHelper.vb" />
@@ -1004,6 +1083,15 @@
     <EmbeddedResource Include="Panels\Get_Ops\Features\GetFeatureInfo.resx">
       <DependentUpon>GetFeatureInfo.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.resx">
+      <DependentUpon>CapabilityFilterAssistantDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\DriverFilterAssistantDialog.resx">
+      <DependentUpon>DriverFilterAssistantDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\FeatureFilterAssistantDialog.resx">
+      <DependentUpon>FeatureFilterAssistantDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\GetImgInfoDlg.resx">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
     </EmbeddedResource>
@@ -1025,7 +1113,7 @@
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Img_Ops\ApplicationDriveSpecifier.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.resx">
@@ -1094,6 +1182,21 @@
     <EmbeddedResource Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.resx">
       <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuApply.resx">
+      <DependentUpon>FfuApply.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuCapture.resx">
+      <DependentUpon>FfuCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuInfoDialog.resx">
+      <DependentUpon>FfuInfoDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuOptimize.resx">
+      <DependentUpon>FfuOptimize.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuSplit.resx">
+      <DependentUpon>FfuSplit.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </EmbeddedResource>
@@ -1108,6 +1211,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgIndexDelete.resx">
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgOptimize.resx">
+      <DependentUpon>ImgOptimize.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgSplit.resx">
       <DependentUpon>ImgSplit.vb</DependentUpon>
@@ -1174,6 +1280,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\ISOFiles\NewTestingEnv.resx">
       <DependentUpon>NewTestingEnv.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\PECustomizerDialog.resx">
+      <DependentUpon>PECustomizerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\WDSImageGroupSpecifier.resx">
+      <DependentUpon>WDSImageGroupSpecifier.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\WDSInstallImageCopy.resx">
+      <DependentUpon>WDSInstallImageCopy.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeBrowser.resx">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
@@ -1264,17 +1379,23 @@
     <None Include="docs\search\search_index.json" />
     <None Include="docs\sitemap.xml.gz" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Shutdown Event Tracker.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Windows Admin Center banner.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Display Bugcheck Parameters.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Batch script file locks.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Remove File System MAX_PATH length limit.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Configure Git folders for File Explorer.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set Registered Owner and Organization Information.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set Personalization Settings.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Show and Hide System Desktop icons.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Update Microsoft Store Apps.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Drag Tray.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Set File Explorer Launch Folder.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Show Extensions for Known File Types.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Second Chance OOBE.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Windows Notification Sources.dtss" />
@@ -1299,6 +1420,9 @@
     <None Include="Helpers\extps1\mImgMgr.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\online_appx_removal.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\boot_image_to_wds.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1309,6 +1433,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\install_image_to_wds.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
@@ -1324,6 +1451,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\ChangeKeyboardLayout.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE.PolicyHelper.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE_Inventory.ps1">
@@ -1368,7 +1498,13 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\PXEHelpers.Startup.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\prepare_wds.ps1">
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.designer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.resources.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper.ps1">
@@ -1625,11 +1761,13 @@
     <None Include="Resources\about\cws_discord.png" />
     <Content Include="Resources\assistant_dark.png" />
     <Content Include="Resources\assistant_light.png" />
+    <None Include="Resources\copy_img_to_wds.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
     <None Include="Resources\menus\tour_glyph_dark.png" />
     <None Include="Resources\menus\tour_glyph_light.png" />
+    <None Include="Resources\optimize_img.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1984,7 +2122,6 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
-    <Folder Include="Panels\Get_Ops\FilterAssistants\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
@@ -2141,6 +2278,11 @@ IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
 	)
 )
+IF EXIST "$(SolutionDir)Tools\AutoReloadService\out" (
+	echo Copying AutoReloadService...
+	IF NOT EXIST "AutoReload" MD "AutoReload"
+	copy /y "$(SolutionDir)Tools\AutoReloadService\out\*.*" "AutoReload"
+)
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
 	:: Workaround for DLLs not copying
@@ -2157,10 +2299,7 @@ IF %25GEN_INSTALLER%25=="Yes" (
 		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
 		rd "$(SolutionDir)Installer\files" /s /q
 	)
-)
-
-REM make it so that DTPE reports version info via watermark
-BREAK &gt; bin\extps1\PE_Helper\let_it_rain</PostBuildEvent>
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...
@@ -2205,11 +2344,11 @@ IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets')" />
+  <Import Project="packages\Scintilla5.NET.6.1.2\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.1.2\build\scintilla5.net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets'))" />
+    <Error Condition="!Exists('packages\Scintilla5.NET.6.1.2\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.1.2\build\scintilla5.net.targets'))" />
   </Target>
 </Project>
