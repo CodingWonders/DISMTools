@@ -16,6 +16,8 @@ Public Class MainForm
     Private SavedScriptPath As String
     Private NotWillingToSave As Boolean
 
+    Private roMode As Boolean
+
     Public CurrentColorMode As ColorThemeMode
 
     Private Sub ChangeMenuItemColors(ByVal bgColor As Color, ByVal fgColor As Color, ByVal itemCollection As ToolStripItemCollection)
@@ -132,6 +134,8 @@ Public Class MainForm
             Exit Sub
         End If
 
+        roMode = False
+        ToolStripButton5.Enabled = False
         Dim scriptFileContents As String() = File.ReadAllLines(ScriptFile)
 
         ' Script Format:
@@ -154,6 +158,12 @@ Public Class MainForm
 #End If
         SavedScriptPath = ScriptFile
         Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
+
+        If (File.GetAttributes(ScriptFile) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
+            MessageBox.Show("This script file has been loaded with read-only privileges. If you make changes to this script, you must save them to a new script file or enable write access for this script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            roMode = True
+            ToolStripButton5.Enabled = True
+        End If
     End Sub
 
     Private Sub SaveScriptFile(ByVal ScriptFile As String)
@@ -174,8 +184,11 @@ Public Class MainForm
             SavedScriptPath = ScriptFile
             Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
             Modified = False
+            roMode = False
+            ToolStripButton5.Enabled = False
         Catch ex As Exception
-
+            MessageBox.Show("Changes could not be saved to the script file. Make sure write access is present in the file. " & CrLf & CrLf & ex.Message & CrLf & CrLf & "To enable write access for this file, use the respective button in the toolbar.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            NotWillingToSave = True
         End Try
     End Sub
 
@@ -196,7 +209,7 @@ Public Class MainForm
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
         NotWillingToSave = False
-        If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) Then
+        If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) AndAlso Not roMode Then
             Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
                                             Environment.NewLine, Path.GetDirectoryName(SavedScriptPath)), _
                                             "Save Script", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
@@ -243,6 +256,8 @@ Public Class MainForm
         CurrentScript = GetNewStarterScript()
         UpdateScriptProperties()
         Modified = False
+        roMode = False
+        ToolStripButton5.Enabled = False
         SavedScriptPath = ""
         Text = "Starter Script Editor"
     End Sub
@@ -414,5 +429,20 @@ Public Class MainForm
 
     Private Sub SystemCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SystemCM_TSMI.Click
         SetColorMode(ColorThemeMode.System)
+    End Sub
+
+    Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
+        EnableWriteAccess()
+    End Sub
+
+    Private Sub EnableWriteAccess()
+        If SavedScriptPath = "" OrElse Not File.Exists(SavedScriptPath) Then Exit Sub
+        Try
+            File.SetAttributes(SavedScriptPath, (File.GetAttributes(SavedScriptPath) And Not FileAttributes.ReadOnly))
+            roMode = False
+            ToolStripButton5.Enabled = False
+        Catch ex As Exception
+            MessageBox.Show("Could not enable write access for this script file. Make sure that the script is not in read-only media.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 End Class
