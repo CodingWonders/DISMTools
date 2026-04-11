@@ -149,6 +149,8 @@ Partial Class MainForm
         Me.UnattendedAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyUnattend = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoveAppliedAnswerFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator48 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AuditModeTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsPEServicingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetPESettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetScratchSpace = New System.Windows.Forms.ToolStripMenuItem()
@@ -191,7 +193,10 @@ Partial Class MainForm
         Me.StartFogHelperTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator46 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnixFogInstructionTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CopyImageToWdsServerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
@@ -495,11 +500,16 @@ Partial Class MainForm
         Me.SaveCompleteImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator40 = New System.Windows.Forms.ToolStripSeparator()
         Me.CreateDiscImageWithThisFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImgApplyModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ApplyWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ApplyFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImgCaptureModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CaptureWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -572,6 +582,8 @@ Partial Class MainForm
         Me.AppxResCMS.SuspendLayout()
         Me.AppxRelatedLinksCMS.SuspendLayout()
         Me.ImgSpecialToolsCMS.SuspendLayout()
+        Me.ImgApplyModeCMS.SuspendLayout()
+        Me.ImgCaptureModeCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -806,7 +818,6 @@ Partial Class MainForm
         Me.ApplyFFU.Name = "ApplyFFU"
         Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
         Me.ApplyFFU.Text = "Apply FFU or SFU file..."
-        Me.ApplyFFU.Visible = False
         '
         'ApplyImage
         '
@@ -826,7 +837,6 @@ Partial Class MainForm
         Me.CaptureFFU.Name = "CaptureFFU"
         Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
         Me.CaptureFFU.Text = "Capture partitions to FFU file..."
-        Me.CaptureFFU.Visible = False
         '
         'CaptureImage
         '
@@ -888,14 +898,12 @@ Partial Class MainForm
         Me.OptimizeFFU.Name = "OptimizeFFU"
         Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeFFU.Text = "Optimize FFU file..."
-        Me.OptimizeFFU.Visible = False
         '
         'OptimizeImage
         '
         Me.OptimizeImage.Name = "OptimizeImage"
         Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeImage.Text = "Optimize image..."
-        Me.OptimizeImage.Visible = False
         '
         'RemountImage
         '
@@ -908,7 +916,6 @@ Partial Class MainForm
         Me.SplitFFU.Name = "SplitFFU"
         Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
         Me.SplitFFU.Text = "Splt FFU file into SFU files..."
-        Me.SplitFFU.Visible = False
         '
         'SplitImage
         '
@@ -1360,7 +1367,7 @@ Partial Class MainForm
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem})
+        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem, Me.ToolStripSeparator48, Me.AuditModeTSMI})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
@@ -1376,6 +1383,17 @@ Partial Class MainForm
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Name = "RemoveAppliedAnswerFileToolStripMenuItem"
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = "Remove applied answer file"
+        '
+        'ToolStripSeparator48
+        '
+        Me.ToolStripSeparator48.Name = "ToolStripSeparator48"
+        Me.ToolStripSeparator48.Size = New System.Drawing.Size(234, 6)
+        '
+        'AuditModeTSMI
+        '
+        Me.AuditModeTSMI.Name = "AuditModeTSMI"
+        Me.AuditModeTSMI.Size = New System.Drawing.Size(237, 22)
+        Me.AuditModeTSMI.Text = "Make system enter audit mode"
         '
         'WindowsPEServicingToolStripMenuItem
         '
@@ -1604,7 +1622,7 @@ Partial Class MainForm
         '
         'PxeHelperServersTSMI
         '
-        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI})
+        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI, Me.CopyImageToWdsServerTSMI})
         Me.PxeHelperServersTSMI.Name = "PxeHelperServersTSMI"
         Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(373, 22)
         Me.PxeHelperServersTSMI.Text = "Start PXE Helper Server for..."
@@ -1632,10 +1650,27 @@ Partial Class MainForm
         Me.UnixFogInstructionTSMI.Size = New System.Drawing.Size(377, 22)
         Me.UnixFogInstructionTSMI.Text = "Show instructions for FOG Helper Server on UNIX systems"
         '
+        'CopyImageToWdsServerTSMI
+        '
+        Me.CopyImageToWdsServerTSMI.Name = "CopyImageToWdsServerTSMI"
+        Me.CopyImageToWdsServerTSMI.Size = New System.Drawing.Size(377, 22)
+        Me.CopyImageToWdsServerTSMI.Text = "Copy my Windows image to a WDS server..."
+        '
         'ToolStripSeparator41
         '
         Me.ToolStripSeparator41.Name = "ToolStripSeparator41"
         Me.ToolStripSeparator41.Size = New System.Drawing.Size(370, 6)
+        '
+        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
+        '
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
+        '
+        'ToolStripSeparator47
+        '
+        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
+        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
         '
         'ReportManagerToolStripMenuItem
         '
@@ -4022,6 +4057,7 @@ Partial Class MainForm
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton1.Text = "Close tab"
+        Me.ToolStripButton1.Visible = False
         '
         'ToolStripButton2
         '
@@ -4051,6 +4087,7 @@ Partial Class MainForm
         Me.ToolStripSeparator15.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
         Me.ToolStripSeparator15.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator15.Visible = False
         '
         'ToolStripButton4
         '
@@ -4554,38 +4591,44 @@ Partial Class MainForm
         '
         'ImgSpecialToolsCMS
         '
-        Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem, Me.ToolStripSeparator40, Me.CreateDiscImageWithThisFileToolStripMenuItem})
+        Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem, Me.ToolStripSeparator40, Me.CreateDiscImageWithThisFileToolStripMenuItem, Me.UploadThisImageToMyWDSServerToolStripMenuItem})
         Me.ImgSpecialToolsCMS.Name = "ImgSpecialToolsCMS"
         Me.ImgSpecialToolsCMS.ShowImageMargin = False
-        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(238, 82)
+        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(251, 104)
         '
         'GetImageFileInformationToolStripMenuItem
         '
         Me.GetImageFileInformationToolStripMenuItem.Name = "GetImageFileInformationToolStripMenuItem"
-        Me.GetImageFileInformationToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.GetImageFileInformationToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
         '
         'ToolStripSeparator39
         '
         Me.ToolStripSeparator39.Name = "ToolStripSeparator39"
-        Me.ToolStripSeparator39.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator39.Size = New System.Drawing.Size(247, 6)
         '
         'SaveCompleteImageInformationToolStripMenuItem
         '
         Me.SaveCompleteImageInformationToolStripMenuItem.Name = "SaveCompleteImageInformationToolStripMenuItem"
-        Me.SaveCompleteImageInformationToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.SaveCompleteImageInformationToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
         '
         'ToolStripSeparator40
         '
         Me.ToolStripSeparator40.Name = "ToolStripSeparator40"
-        Me.ToolStripSeparator40.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator40.Size = New System.Drawing.Size(247, 6)
         '
         'CreateDiscImageWithThisFileToolStripMenuItem
         '
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Name = "CreateDiscImageWithThisFileToolStripMenuItem"
-        Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
+        '
+        'UploadThisImageToMyWDSServerToolStripMenuItem
+        '
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Name = "UploadThisImageToMyWDSServerToolStripMenuItem"
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Text = "Upload this image to my WDS server..."
         '
         'WIEDownloaderBW
         '
@@ -4599,16 +4642,43 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
-        'ToolStripSeparator47
+        'ImgApplyModeCMS
         '
-        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
-        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
+        Me.ImgApplyModeCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyWimTSMI, Me.ApplyFfuTSMI})
+        Me.ImgApplyModeCMS.Name = "ImgApplyModeCMS"
+        Me.ImgApplyModeCMS.ShowImageMargin = False
+        Me.ImgApplyModeCMS.Size = New System.Drawing.Size(195, 48)
         '
-        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
+        'ApplyWimTSMI
         '
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
+        Me.ApplyWimTSMI.Name = "ApplyWimTSMI"
+        Me.ApplyWimTSMI.Size = New System.Drawing.Size(194, 22)
+        Me.ApplyWimTSMI.Text = "Apply WIM/SWM/ESD file..."
+        '
+        'ApplyFfuTSMI
+        '
+        Me.ApplyFfuTSMI.Name = "ApplyFfuTSMI"
+        Me.ApplyFfuTSMI.Size = New System.Drawing.Size(194, 22)
+        Me.ApplyFfuTSMI.Text = "Apply FFU file..."
+        '
+        'ImgCaptureModeCMS
+        '
+        Me.ImgCaptureModeCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CaptureWimTSMI, Me.CaptureFfuTSMI})
+        Me.ImgCaptureModeCMS.Name = "ImgCaptureModeCMS"
+        Me.ImgCaptureModeCMS.ShowImageMargin = False
+        Me.ImgCaptureModeCMS.Size = New System.Drawing.Size(273, 48)
+        '
+        'CaptureWimTSMI
+        '
+        Me.CaptureWimTSMI.Name = "CaptureWimTSMI"
+        Me.CaptureWimTSMI.Size = New System.Drawing.Size(272, 22)
+        Me.CaptureWimTSMI.Text = "Capture installation directory to WIM file..."
+        '
+        'CaptureFfuTSMI
+        '
+        Me.CaptureFfuTSMI.Name = "CaptureFfuTSMI"
+        Me.CaptureFfuTSMI.Size = New System.Drawing.Size(272, 22)
+        Me.CaptureFfuTSMI.Text = "Capture installation drive to FFU file..."
         '
         'MainForm
         '
@@ -4717,6 +4787,8 @@ Partial Class MainForm
         Me.AppxResCMS.ResumeLayout(False)
         Me.AppxRelatedLinksCMS.ResumeLayout(False)
         Me.ImgSpecialToolsCMS.ResumeLayout(False)
+        Me.ImgApplyModeCMS.ResumeLayout(False)
+        Me.ImgCaptureModeCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -5197,4 +5269,14 @@ Partial Class MainForm
     Friend WithEvents BWFailLabel As System.Windows.Forms.Label
     Friend WithEvents EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator47 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyImageToWdsServerTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator48 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AuditModeTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ImgApplyModeCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ApplyWimTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ApplyFfuTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ImgCaptureModeCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents CaptureWimTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CaptureFfuTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UploadThisImageToMyWDSServerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

@@ -12,7 +12,12 @@ Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
 Imports DISMTools.Elements
 Imports DISMTools.Elements.Contemporaneus
+Imports DISMTools.Elements.IniParserConfigurators
 Imports System.ComponentModel
+Imports IniParser
+Imports IniParser.Parser
+Imports IniParser.Model
+Imports System.Management
 
 Public Class MainForm
 
@@ -97,8 +102,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "DTVII_MK4"
+    Public dtBranch As String = "dt_pre_0.8"
+    Public dt_codeName As String = "Infinity"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
@@ -204,6 +209,18 @@ Public Class MainForm
     Public MountedImageList As New List(Of WindowsImage)
     Public CurrentImage As New WindowsImage()
 
+    ' Default PE Policy settings
+    Public ShowWatermark As Boolean = False
+    Public WDSHCGraphoView As Boolean = True
+    Public DTDimShowPnputilOut As Boolean = True
+    Public AutoUnattendCopytoSysprep As Boolean = False
+    Public PartTableOverridePreference As Integer = 0
+    Public UEFICA23Preference As Integer = 0
+    Public WDSHCConnAttempts As Integer = 5
+
+    Public ReinitializeCurImage As Boolean = True
+
+
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
         DynaLog.LogMessage("Command-line arguments that have been passed to the program: " & String.Join(" ", args))
@@ -275,6 +292,8 @@ Public Class MainForm
                                 MsgBox("Foi especificado um projeto inválido", vbOKOnly + vbCritical, Text)
                             Case 5
                                 MsgBox("È stato specificato un progetto non valido", vbOKOnly + vbCritical, Text)
+                            Case 6
+                                MsgBox("Geçersiz bir proje belirtildi", vbOKOnly + vbCritical, Text)
                         End Select
                     End If
                 ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
@@ -625,7 +644,13 @@ Public Class MainForm
             DynaLog.LogMessage("AME 10/11 has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
         End If
 
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
@@ -857,6 +882,9 @@ Public Class MainForm
                     Case 5
                         titleMsg = "Attenzione ai temi personalizzati"
                         msg = "DISMTools ha rilevato che in questo sistema è stato impostato un tema personalizzato. Alcuni temi personalizzati fanno sì che il programma non abbia un aspetto corretto, quindi si consiglia di passare al tema predefinito."
+                    Case 6
+                        titleMsg = "Özel temelere dikkat"
+                        msg = "DISMTools bu sistemde özel bir tema ayarlandığını tespit etti. Bazı özel temalar programın doğru görünmesini engeller, bu nedenle varsayılan temaya geçmeniz önerilir."
                 End Select
                 MsgBox(msg, vbOKOnly + vbExclamation, titleMsg)
             Else
@@ -978,6 +1006,7 @@ Public Class MainForm
         InstallationTypeRk.Close()
 
         PxeHelperServersTSMI.Enabled = InstallationType.ToLower().Contains("server")
+        UploadThisImageToMyWDSServerToolStripMenuItem.Enabled = InstallationType.ToLower().Contains("server")
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
@@ -1126,6 +1155,8 @@ Public Class MainForm
                 UpdateLink.Text = "Verificar actualizações..."
             Case 5
                 UpdateLink.Text = "Verifica aggiornamenti..."
+            Case 6
+                UpdateLink.Text = "Güncellemeler kontrol ediliyor..."
         End Select
         Dim latestVer As String = ""
         Using client As New WebClient()
@@ -1192,6 +1223,9 @@ Public Class MainForm
                         Case 5
                             UpdateLink.Text = "È disponibile una nuova versione da scaricare e installare. Fai clic qui per saperne di più"
                             UpdateLink.LinkArea = New LinkArea(60, 32)
+                        Case 6
+                            UpdateLink.Text = "Yeni bir sürüm indirme ve kurulum için mevcut. Daha fazla bilgi için tıklayın"
+                            UpdateLink.LinkArea = New LinkArea(60, 32)
                     End Select
                     UpdatePanel.Visible = True
                 End If
@@ -1238,6 +1272,8 @@ Public Class MainForm
                     Label50.Text = "Não"
                 Case 5
                     Label50.Text = "No"
+                Case 6
+                    Label50.Text = "Hayır"
             End Select
             LinkLabel14.Visible = True
         Else
@@ -1266,6 +1302,8 @@ Public Class MainForm
                     Label50.Text = "Sim"
                 Case 5
                     Label50.Text = "Sì"
+                Case 6
+                    Label50.Text = "Evet"
             End Select
             LinkLabel14.Visible = False
         End If
@@ -1378,6 +1416,15 @@ Public Class MainForm
                 SearchEngineName = SearchKey.GetValue("EngineName").ToString().Replace(Quote, "").Trim()
                 SearchEngineAITolerance = CInt(SearchKey.GetValue("AITolerance"))
                 SearchKey.Close()
+                Dim PEPolicyKey As RegistryKey = Key.OpenSubKey("PEPolicy")
+                ShowWatermark = (CInt(PEPolicyKey.GetValue("ShowWatermark", 0)) = 1)
+                WDSHCGraphoView = (CInt(PEPolicyKey.GetValue("WDSHCGraphoView", 1)) = 1)
+                DTDimShowPnputilOut = (CInt(PEPolicyKey.GetValue("DTDimShowPnputilOut", 1)) = 1)
+                WDSHCConnAttempts = (CInt(PEPolicyKey.GetValue("WDSHCConnAttempts", 5)))
+                PartTableOverridePreference = (CInt(PEPolicyKey.GetValue("PartTableOverridePreference", 0)))
+                UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
+                AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
+                PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1481,6 +1528,12 @@ Public Class MainForm
                         AppxDisplayNameFormatOnRemoval = CInt(line.Replace("AppxRemovalDisplayNameFormat=", "").Trim())
                     ElseIf line.StartsWith("AITolerance=", StringComparison.OrdinalIgnoreCase) Then
                         SearchEngineAITolerance = CInt(line.Replace("AITolerance=", "").Trim())
+                    ElseIf line.StartsWith("WDSHCConnAttempts=", StringComparison.OrdinalIgnoreCase) Then
+                        WDSHCConnAttempts = CInt(line.Replace("WDSHCConnAttempts=", "").Trim())
+                    ElseIf line.StartsWith("PartTableOverridePreference=", StringComparison.OrdinalIgnoreCase) Then
+                        PartTableOverridePreference = CInt(line.Replace("PartTableOverridePreference=", "").Trim())
+                    ElseIf line.StartsWith("UEFICA23Preference=", StringComparison.OrdinalIgnoreCase) Then
+                        UEFICA23Preference = CInt(line.Replace("UEFICA23Preference=", "").Trim())
                     End If
                 Next
                 ' Apply program colors immediately
@@ -1689,6 +1742,26 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
                     AutoCompleteInfo(4) = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ShowWatermark=1") Then
+                    ShowWatermark = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowWatermark=0") Then
+                    ShowWatermark = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("WDSHCGraphoView=1") Then
+                    WDSHCGraphoView = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WDSHCGraphoView=0") Then
+                    WDSHCGraphoView = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=1") Then
+                    DTDimShowPnputilOut = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=0") Then
+                    DTDimShowPnputilOut = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=1") Then
+                    AutoUnattendCopytoSysprep = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=0") Then
+                    AutoUnattendCopytoSysprep = False
+                End If
             Else
                 DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW) and reloading settings...")
                 GenerateDTSettings()
@@ -1747,6 +1820,55 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
+        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then
+            PartTableOverridePreference = 0
+        End If
+        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then
+            UEFICA23Preference = 0
+        End If
+        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then
+            WDSHCConnAttempts = 5
+        End If
+        WriteDefaultPEPolicy()
+    End Sub
+
+    Private Sub WriteDefaultPEPolicy()
+        Dim PartTableOverridePreferenceStr As String = ""
+        Select Case PartTableOverridePreference
+            Case 0
+                PartTableOverridePreferenceStr = "NoOverride"
+            Case 1
+                PartTableOverridePreferenceStr = "AlwaysMBR"
+            Case 2
+                PartTableOverridePreferenceStr = "AlwaysGPT"
+        End Select
+        Dim UEFICA23PreferenceStr As String = ""
+        Select Case UEFICA23Preference
+            Case 0
+                UEFICA23PreferenceStr = "AskUser"
+            Case 1
+                UEFICA23PreferenceStr = "UseNever"
+            Case 2
+                UEFICA23PreferenceStr = "UseAlways"
+        End Select
+
+        Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
+                                                  "[HKEY_LOCAL_MACHINE\WINPESOFT\DISMTools\Preinstallation Environment\Policies]{0}" &
+                                                  "{1}ShowWatermark{1}=dword:0000000{2}{0}" &
+                                                  "{1}UEFICA23Preference{1}={1}{3}{1}{0}" &
+                                                  "{1}PartTableOverridePreference{1}={1}{4}{1}{0}" &
+                                                  "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
+                                                  "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
+                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}",
+                                                  CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
+                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
+                                                  If(AutoUnattendCopytoSysprep, 1, 0))
+        Try
+            File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
+        Catch ex As Exception
+            Exit Sub
+        End Try
     End Sub
 
     ''' <summary>
@@ -1809,7 +1931,14 @@ Public Class MainForm
                            "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf &
                            "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf &
                            "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf &
-                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
+                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4) & CrLf &
+                           "ShowWatermark              =    " & ShowWatermark & CrLf &
+                           "WDSHCGraphoView            =    " & WDSHCGraphoView & CrLf &
+                           "DTDimShowPnputilOut        =    " & DTDimShowPnputilOut & CrLf &
+                           "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
+                           "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
+                           "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
+                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep)
     End Sub
 
 #Region "Background Processes"
@@ -1940,6 +2069,8 @@ Public Class MainForm
                 progressLabel = "Processos em curso"
             Case 5
                 progressLabel = "Processi in corso"
+            Case 6
+                progressLabel = "İşlemler çalışıyor"
         End Select
         ImgBW.ReportProgress(0)
         If GatherBasicInfo Then
@@ -1968,6 +2099,8 @@ Public Class MainForm
                     progressLabel = "Obter informações básicas sobre a imagem..."
                 Case 5
                     progressLabel = "Verifica informazioni principali dell'immagine..."
+                Case 6
+                    progressLabel = "Temel görüntü bilgileri alınıyor..."
             End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
             GetBasicImageInfo(OnlineMode, OfflineMode)
@@ -2012,12 +2145,180 @@ Public Class MainForm
                         progressLabel = "Obter informações avançadas sobre a imagem..."
                     Case 5
                         progressLabel = "Verifica informazioni dettagliate dell'immagine..."
-                End Select
-                ImgBW.ReportProgress(progressMin + progressDivs)
-                GetAdvancedImageInfo(OnlineMode, OfflineMode)
+                    Case 6
+                        progressLabel = "Gelişmiş görüntü bilgileri alınıyor..."
+            End Select
+                End If
             End If
-        End If
-        DynaLog.LogMessage("Creating temporary directory for information...")
+    DynaLog.LogMessage("Creating temporary directory for information...")
+    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+    ' Parameters for bgProcOptn:
+    ' 0 (meta-optn): run every background process
+    ' 1: run package background processes
+    ' 2: run feature background processes
+    ' 3: run AppX package background processes
+    ' 4: run FoD background processes
+    ' 5: run driver background processes
+    Select Case bgProcOptn
+        Case 1
+            DynaLog.LogMessage("Package information processes are being run")
+            CompletedTasks(0) = False
+            CompletedTasks(1) = True
+            CompletedTasks(2) = True
+            CompletedTasks(3) = True
+            CompletedTasks(4) = True
+            ' Set pending task
+            PendingTasks(0) = True
+        Case 2
+            DynaLog.LogMessage("Feature information processes are being run")
+            CompletedTasks(0) = True
+            CompletedTasks(1) = False
+            CompletedTasks(2) = True
+            CompletedTasks(3) = True
+            CompletedTasks(4) = True
+            ' Set pending task
+            PendingTasks(1) = True
+        Case 3
+            DynaLog.LogMessage("AppX package information processes are being run")
+            CompletedTasks(0) = True
+            CompletedTasks(1) = True
+            CompletedTasks(2) = False
+            CompletedTasks(3) = True
+            CompletedTasks(4) = True
+            ' Set pending task
+            PendingTasks(2) = True
+        Case 4
+            DynaLog.LogMessage("Capability information processes are being run")
+            CompletedTasks(0) = True
+            CompletedTasks(1) = True
+            CompletedTasks(2) = True
+            CompletedTasks(3) = False
+            CompletedTasks(4) = True
+            ' Set pending task
+            PendingTasks(3) = True
+        Case 5
+            DynaLog.LogMessage("Driver information processes are being run")
+            CompletedTasks(0) = True
+            CompletedTasks(1) = True
+            CompletedTasks(2) = True
+            CompletedTasks(3) = True
+            CompletedTasks(4) = False
+            ' Set pending task
+            PendingTasks(4) = True
+    End Select
+    regJumps = True
+    progressMin = 20
+    Select Case bgProcOptn
+        Case 0
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            progressLabel = "Getting image packages..."
+                        Case "ESN"
+                            progressLabel = "Obteniendo paquetes de la imagen..."
+                        Case "FRA"
+                            progressLabel = "Obtention des paquets de l'image en cours..."
+                        Case "PTB", "PTG"
+                            progressLabel = "Obter pacotes de imagem..."
+                        Case "ITA"
+                            progressLabel = "Verifica pacchetti immagine..."
+                    End Select
+                Case 1
+                    progressLabel = "Getting image packages..."
+                Case 2
+                    progressLabel = "Obteniendo paquetes de la imagen..."
+                Case 3
+                    progressLabel = "Obtention des paquets de l'image en cours..."
+                Case 4
+                    progressLabel = "Obter pacotes de imagem..."
+                Case 5
+                    progressLabel = "Ricerca pacchetti immagine..."
+                Case 6
+                    progressLabel = "Görüntü paketleri alınıyor..."
+            End Select
+            ImgBW.ReportProgress(20)
+            GetImagePackages(OnlineMode)
+            If ImgBW.CancellationPending Then
+                DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
+                If session IsNot Nothing Then DismApi.CloseSession(session)
+                Exit Sub
+            End If
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            progressLabel = "Getting image features..."
+                        Case "ESN"
+                            progressLabel = "Obteniendo características de la imagen..."
+                        Case "FRA"
+                            progressLabel = "Obtention des caractéristiques de l'image en cours..."
+                        Case "PTB", "PTG"
+                            progressLabel = "Obter características de imagem..."
+                        Case "ITA"
+                            progressLabel = "Verifica funzionalità immagini..."
+                    End Select
+                Case 1
+                    progressLabel = "Getting image features..."
+                Case 2
+                    progressLabel = "Obteniendo características de la imagen..."
+                Case 3
+                    progressLabel = "Obtention des caractéristiques de l'image en cours..."
+                Case 4
+                    progressLabel = "Obter características de imagem..."
+                Case 5
+                    progressLabel = "Verifica funzionalità immagine..."
+                Case 6
+                    progressLabel = "Görüntü özellikleri alınıyor..."
+            End Select
+            ImgBW.ReportProgress(progressMin + progressDivs)
+            GetImageFeatures(OnlineMode)
+            If ImgBW.CancellationPending Then
+                DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
+                If session IsNot Nothing Then DismApi.CloseSession(session)
+                Exit Sub
+            End If
+            If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+                If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
+                    DynaLog.LogMessage("Windows 8 or later")
+                    pbOpNums += 1
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                                Case "ESN"
+                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                                Case "FRA"
+                                    progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
+                                Case "PTB", "PTG"
+                                    progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
+                                Case "ITA"
+                                    progressLabel = "Verifica pacchetti AppX immagine (applicazioni in stile Metro)..."
+                            End Select
+                        Case 1
+                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                        Case 2
+                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                        Case 3
+                            progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
+                        Case 4
+                            progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
+                        Case 5
+                            progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
+                    Case 6
+                        progressLabel = "Görüntü AppX paketleri alınıyor (Metro tarzı uygulamalar)..."
+                    End Select
+                    ImgBW.ReportProgress(progressMin + progressDivs)
+                    GetImageAppxPackages(OnlineMode)
+                    If ImgBW.CancellationPending Then
+                        DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
+                        If session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
+                End If
+            End If
+        End Select
         Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
         ' Parameters for bgProcOptn:
         ' 0 (meta-optn): run every background process
@@ -2101,6 +2402,8 @@ Public Class MainForm
                         progressLabel = "Obter pacotes de imagem..."
                     Case 5
                         progressLabel = "Ricerca pacchetti immagine..."
+                    Case 6
+                        progressLabel = "Görüntü paketleri alınıyor..."
                 End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages(OnlineMode)
@@ -2133,6 +2436,8 @@ Public Class MainForm
                         progressLabel = "Obter características de imagem..."
                     Case 5
                         progressLabel = "Verifica funzionalità immagine..."
+                    Case 6
+                        progressLabel = "Görüntü özellikleri alınıyor..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(OnlineMode)
@@ -2169,6 +2474,8 @@ Public Class MainForm
                                 progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                             Case 5
                                 progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
+                    Case 6
+                        progressLabel = "Görüntü AppX paketleri alınıyor (Metro tarzı uygulamalar)..."
                         End Select
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageAppxPackages(OnlineMode)
@@ -2211,6 +2518,8 @@ Public Class MainForm
                                 progressLabel = "Obter capacidades de imagem..."
                             Case 5
                                 progressLabel = "Verifica funzionalità su richiesta dell'immagine (capacità)..."
+                            Case 6
+                                progressLabel = "Görüntü isteğe bağlı özellikleri alınıyor (özellikler)..."
                         End Select
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageCapabilities(OnlineMode)
@@ -2249,6 +2558,8 @@ Public Class MainForm
                         progressLabel = "Obter controladores de imagem..."
                     Case 5
                         progressLabel = "Ricerca driver immagine..."
+                    Case 6
+                        progressLabel = "Görüntü sürücüleri alınıyor..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(OnlineMode)
@@ -2283,6 +2594,8 @@ Public Class MainForm
                         progressLabel = "Obter pacotes de imagem..."
                     Case 5
                         progressLabel = "Ricerca pacchetti immagine..."
+                    Case 6
+                        progressLabel = "Görüntü paketleri alınıyor..."
                 End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages(OnlineMode)
@@ -2312,6 +2625,8 @@ Public Class MainForm
                         progressLabel = "Obter características de imagem..."
                     Case 5
                         progressLabel = "Verifica funzionalità immagine..."
+                    Case 6
+                        progressLabel = "Görüntü özellikleri alınıyor..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(OnlineMode)
@@ -2344,6 +2659,8 @@ Public Class MainForm
                             progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                         Case 5
                             progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
+                    Case 6
+                        progressLabel = "Görüntü AppX paketleri alınıyor (Metro tarzı uygulamalar)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages(OnlineMode)
@@ -2413,6 +2730,8 @@ Public Class MainForm
                         progressLabel = "Obter controladores de imagem..."
                     Case 5
                         progressLabel = "Ricerca driver immagine..."
+                    Case 6
+                        progressLabel = "Görüntü sürücüleri alınıyor..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(OnlineMode)
@@ -2492,7 +2811,17 @@ Public Class MainForm
         End If
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
-            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            ' Revision number may not be the one that we're actually on when getting info about ntoskrnl; use UBR if we can
+            Dim revisionNumber As Integer
+            Try
+                Dim ubrRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+                revisionNumber = ubrRk.GetValue("UBR")
+                ubrRk.Close()
+            Catch ex As Exception
+                revisionNumber = FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            End Try
+
+            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber
             CurrentImage.ImageVersion = Environment.OSVersion.Version
             Select Case Language
                 Case 0
@@ -2630,7 +2959,10 @@ Public Class MainForm
             DynaLog.LogMessage("- Image version: " & Label48.Text)
         Else
             Try
-                CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                If ReinitializeCurImage Then
+                    CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                End If
+                ReinitializeCurImage = True
                 If CurrentImage IsNot Nothing Then
                     Label41.Text = CurrentImage.ImageIndex
                     Label44.Text = CurrentImage.ImageMountDirectory
@@ -2709,6 +3041,63 @@ Public Class MainForm
 
         Return disguised
     End Function
+
+    Private Sub GetFFUInformation(ByRef ImageFile As WindowsImage)
+        If ImageFile Is Nothing Then Exit Sub
+        Dim MountedFFURk As RegistryKey = Nothing
+
+        Try
+            MountedFFURk = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\DISM\Mounted FFUs", False)
+            ' Since the information is stored in subkeys of the aforementioned subkey, we'll have to iterate over them to get the one that
+            ' we wanted.
+            For Each MountedFFUVolume In MountedFFURk.GetSubKeyNames()
+                Dim MountedFFUVolumeRk As RegistryKey = MountedFFURk.OpenSubKey(MountedFFUVolume, False)
+                Dim MountedFFUMountPath As String = MountedFFUVolumeRk.GetValue("Mount Path", "")
+
+                If MountedFFUMountPath.Equals(ImageFile.ImageMountDirectory, StringComparison.OrdinalIgnoreCase) Then
+                    ' Then it's this one
+                    Dim IniManifestContents As Byte() = MountedFFUVolumeRk.GetValue("Manifest", {})
+                    ImageFile.FFUInfo.IniManifest = ASCII.GetString(IniManifestContents)
+                    ImageFile.FFUInfo.VhdPath = MountedFFUVolumeRk.GetValue("VHD Path", "")
+                    ImageFile.FFUInfo.VhdId = MountedFFUVolumeRk.GetValue("VHD Id", "")
+                    ImageFile.FFUInfo.VhdStorageDeviceId = MountedFFUVolumeRk.GetValue("VHD Storage Device Id", 0)
+                    ImageFile.FFUInfo.MountDiskPath = MountedFFUVolumeRk.GetValue("Mount Disk Path", "")
+                    ImageFile.FFUInfo.FullFlashVersionInfo = New Version(MountedFFUVolumeRk.GetValue("Full Flash Major Version", 0),
+                                                                         MountedFFUVolumeRk.GetValue("Full Flash Minor Version", 0))
+                    ImageFile.FFUInfo.VersionInfo = New Version(MountedFFUVolumeRk.GetValue("Major Version", 0), MountedFFUVolumeRk.GetValue("Minor Version", 0))
+                    ImageFile.FFUInfo.MountVersion = MountedFFUVolumeRk.GetValue("Mount Version", 0)
+                    ImageFile.FFUInfo.Compression = MountedFFUVolumeRk.GetValue("Compression", 0)
+                    ImageFile.FFUInfo.OptimizedPartitionNumber = MountedFFUVolumeRk.GetValue("Optimized Partition Number", 0)
+
+                    MountedFFUVolumeRk.Close()
+
+                    ' Try processing the ini manifest so we can fill in the information that we couldn't
+                    Try
+                        Dim parser As New IniDataParser(New FfuIniParserConfiguration())
+                        Dim ffuData As IniData = parser.Parse(ImageFile.FFUInfo.IniManifest)
+
+                        ImageFile.ImageArchitecture = CInt(ffuData("FullFlash")("Architecture"))
+                        ImageFile.ImageCreationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("CreationTime"))).DateTime
+                        ImageFile.ImageModificationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("LastModificationTime"))).DateTime
+                    Catch ex As Exception
+                        ' Don't get that data then
+                    End Try
+
+                    ' Use the size of the entire virtual disk as the expanded size of our FFU.
+                    Dim sizeMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Size FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(ImageFile.FFUInfo.MountDiskPath)))
+                    If sizeMO IsNot Nothing Then ImageFile.ImageSize = WMIHelper.GetObjectValue(sizeMO(0), "Size")
+
+                    Exit For
+                End If
+
+                MountedFFUVolumeRk.Close()
+            Next
+        Catch ex As Exception
+
+        Finally
+            If MountedFFURk IsNot Nothing Then MountedFFURk.Close()
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
@@ -2791,10 +3180,18 @@ Public Class MainForm
                         CurrentImage.ImageSystemRoot = ImageInformation.SystemRoot
                         CurrentImage.ImageLanguages = ImageInformation.Languages
                         CurrentImage.ImageDefaultLanguage = ImageInformation.DefaultLanguage
-                        CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
-                        CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
-                        CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
-                        CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        If ImageInformation.CustomizedInfo IsNot Nothing Then
+                            CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
+                            CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
+                            CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
+                            CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        Else
+                            ' Either this is a FFU file or it's a badly made WIM.
+                            CurrentImage.ImageFileCount = 0
+                            CurrentImage.ImageDirectoryCount = 0
+                            CurrentImage.ImageCreationDate = Date.MinValue
+                            CurrentImage.ImageModificationDate = Date.MinValue
+                        End If
                         CurrentImage.ImageSize = ImageInformation.ImageSize
                         DynaLog.LogMessage("Getting WIMBoot information")
                         Dim args As String = "/English",
@@ -2824,6 +3221,9 @@ Public Class MainForm
                                 CurrentImage.ImageWimBootCompatible = out.ToLower().Contains("wim bootable : yes")
                             End If
                         End Using
+                        If Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
+                            GetFFUInformation(CurrentImage)
+                        End If
                         DynaLog.LogMessage(CurrentImage.ToString())
                         DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
                     End If
@@ -3636,6 +4036,11 @@ Public Class MainForm
                 .RedirectStandardOutput = True
             }
         }
+            Try
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            Catch ex As Exception
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = Nothing
+            End Try
             PSExtAppxProc.Start()
             output = PSExtAppxProc.StandardOutput.ReadToEnd()
             PSExtAppxProc.WaitForExit()
@@ -3862,7 +4267,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DynaLog.LogMessage("Generating new settings file...")
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.7.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.8) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -3940,6 +4345,14 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & "DuckDuckGo" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[PEPolicy]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("ShowWatermark=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCGraphoView=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "DTDimShowPnputilOut=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=5")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4035,6 +4448,15 @@ Public Class MainForm
         SearchKey.SetValue("EngineName", "DuckDuckGo", RegistryValueKind.String)
         SearchKey.SetValue("AITolerance", 1, RegistryValueKind.DWord)
         SearchKey.Close()
+        Dim PEPolicyKey As RegistryKey = Key.CreateSubKey("PEPolicy")
+        PEPolicyKey.SetValue("ShowWatermark", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("WDSHCGraphoView", 1, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("DTDimShowPnputilOut", 1, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("WDSHCConnAttempts", 5, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
+        PEPolicyKey.Close()
         Key.Close()
     End Sub
 
@@ -4054,7 +4476,7 @@ Public Class MainForm
                 End If
                 DynaLog.LogMessage("Writing to INI...")
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.7.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.8) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -4263,6 +4685,14 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & SearchEngineName & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=" & SearchEngineAITolerance)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[PEPolicy]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("ShowWatermark=" & If(ShowWatermark, 1, 0))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCGraphoView=" & If(WDSHCGraphoView, 1, 0))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "DTDimShowPnputilOut=" & If(DTDimShowPnputilOut, 1, 0))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=" & WDSHCConnAttempts)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=" & PartTableOverridePreference)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=" & UEFICA23Preference)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=" & AutoUnattendCopytoSysprep)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4374,6 +4804,15 @@ Public Class MainForm
                     SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
                     SearchKey.SetValue("AITolerance", SearchEngineAITolerance, RegistryValueKind.DWord)
                     SearchKey.Close()
+                    Dim PEPolicyKey As RegistryKey = Key.CreateSubKey("PEPolicy")
+                    PEPolicyKey.SetValue("ShowWatermark", If(ShowWatermark, 1, 0), RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("WDSHCGraphoView", If(WDSHCGraphoView, 1, 0), RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("DTDimShowPnputilOut", If(DTDimShowPnputilOut, 1, 0), RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("WDSHCConnAttempts", WDSHCConnAttempts, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("PartTableOverridePreference", PartTableOverridePreference, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
+                    PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
                     DynaLog.LogMessage("An error occurred while saving settings to registry. Error message: " & ex.Message)
@@ -4517,6 +4956,8 @@ Public Class MainForm
         TreeViewCMS.Renderer = GetProfessionalRenderer()
         AppxResCMS.Renderer = GetProfessionalRenderer()
         ImgSpecialToolsCMS.Renderer = GetProfessionalRenderer()
+        ImgApplyModeCMS.Renderer = GetProfessionalRenderer()
+        ImgCaptureModeCMS.Renderer = GetProfessionalRenderer()
         PkgInfoCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgUMountPopupCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxPackagePopupCMS.ForeColor = CurrentTheme.ForegroundColor
@@ -4524,6 +4965,8 @@ Public Class MainForm
         TreeViewCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxResCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgSpecialToolsCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgApplyModeCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgCaptureModeCMS.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, TreeViewCMS.Items)
         InvalidSettingsTSMI.Image = GetGlyphResource("setting_error_glyph")
         ExitFullScreenTSMI.Image = GetGlyphResource("exit_full_screen_glyph")
@@ -4592,11 +5035,19 @@ Public Class MainForm
 
     Sub ChangeLangs(LangCode As Integer)
         DynaLog.LogMessage("Changing program language... (language code: " & LangCode & ")")
+        If LangCode = 6 Then
+            ChangeLangs_Turkish()
+            Exit Sub
+        End If
         Select Case LangCode
             Case 0
                 DynaLog.LogMessage("Language code is 0. Getting language from host system (may give inaccurate results on systems with multiple MUI packs)...")
                 DynaLog.LogMessage("Host System language in 3 letters: " & My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName)
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "TRK"
+                        Language = 6
+                        ChangeLangs_Turkish()
+                        Exit Sub
                     Case "ENU", "ENG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
@@ -8020,6 +8471,12 @@ Public Class MainForm
                     Label41.Text = "(Installazione online)"
                     Label47.Text = "(Installazione online)"
                     Label49.Text = "(Installazione online)"
+                Case 6
+                    Label50.Text = If(IsImageMounted, "Evet", "Hayır")
+                    Text = "Çevrimiçi kurulum - DISMTools"
+                    Label41.Text = "(Çevrimiçi kurulum)"
+                    Label47.Text = "(Çevrimiçi kurulum)"
+                    Label49.Text = "(Çevrimiçi kurulum)"
             End Select
         ElseIf OfflineManagement Then
             Select Case Language
@@ -8096,7 +8553,372 @@ Public Class MainForm
                     Label46.Text = "(Installazione offline)"
                     Label47.Text = "(Installazione offline)"
                     Label49.Text = "(Installazione offline)"
+                Case 6
+                    Label50.Text = If(IsImageMounted, "Evet", "Hayır")
+                    Text = "Çevrimdışı kurulum - DISMTools"
+                    Label41.Text = "(Çevrimdışı kurulum)"
+                    Label46.Text = "(Çevrimdışı kurulum)"
+                    Label47.Text = "(Çevrimdışı kurulum)"
+                    Label49.Text = "(Çevrimdışı kurulum)"
             End Select
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Applies Turkish language strings to the main form UI
+    ''' </summary>
+    Sub ChangeLangs_Turkish()
+        DynaLog.LogMessage("Language code is 6. Switching to Turkish...")
+        ' Top-level menu items
+        FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&DOSYA", "&Dosya")
+        ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&PROJE", "&Proje")
+        CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&KOMUTLAR", "&Komutlar")
+        ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&ARAÇLAR", "&Araçlar")
+        HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&YARDIM", "&Yardım")
+        InvalidSettingsTSMI.Text = "Geçersiz ayarlar tespit edildi"
+        ' Menu - File
+        NewProjectToolStripMenuItem.Text = "&Yeni proje..."
+        OpenExistingProjectToolStripMenuItem.Text = "&Mevcut projeyi aç"
+        ManageOnlineInstallationToolStripMenuItem.Text = "&Çevrimiçi kurulumu yönet"
+        ManageOfflineInstallationToolStripMenuItem.Text = "Çevrimdışı kurulumu &yönet..."
+        RecentProjectsListMenu.Text = "Son projeler"
+        SaveProjectToolStripMenuItem.Text = "Projeyi &kaydet..."
+        SaveProjectasToolStripMenuItem.Text = "Projeyi farklı &kaydet..."
+        ExitToolStripMenuItem.Text = "Çı&kış"
+        ' Menu - Project
+        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Proje dosyalarını Dosya Gezgini'nde görüntüle"
+        UnloadProjectToolStripMenuItem.Text = "Projeyi kaldır..."
+        SwitchImageIndexesToolStripMenuItem.Text = "Görüntü dizinlerini değiştir..."
+        ProjectPropertiesToolStripMenuItem.Text = "Proje özellikleri"
+        ImagePropertiesToolStripMenuItem.Text = "Görüntü özellikleri"
+        ' Menu - Commands
+        ImageManagementToolStripMenuItem.Text = "Görüntü yönetimi"
+        OSPackagesToolStripMenuItem.Text = "İşletim sistemi paketleri"
+        ProvisioningPackagesToolStripMenuItem.Text = "Sağlama paketleri"
+        AppPackagesToolStripMenuItem.Text = "Uygulama paketleri"
+        AppPatchesToolStripMenuItem.Text = "Uygulama (MSP) bakımı"
+        DefaultAppAssociationsToolStripMenuItem.Text = "Varsayılan uygulama ilişkilendirmeleri"
+        LanguagesAndRegionSettingsToolStripMenuItem.Text = "Diller ve bölgesel ayarlar"
+        CapabilitiesToolStripMenuItem.Text = "Özellikler"
+        WindowsEditionsToolStripMenuItem.Text = "Windows sürümleri"
+        DriversToolStripMenuItem.Text = "Sürücüler"
+        UnattendedAnswerFilesToolStripMenuItem.Text = "Katılımsız yanıt dosyaları"
+        WindowsPEServicingToolStripMenuItem.Text = "Windows PE bakımı"
+        OSUninstallToolStripMenuItem.Text = "İşletim sistemi kaldırma"
+        ReservedStorageToolStripMenuItem.Text = "Ayrılmış depolama"
+        ' Menu - Commands - Image management
+        AppendImage.Text = "Görüntüye dizin ekle..."
+        ApplyFFU.Text = "FFU veya SFU dosyası uygula..."
+        ApplyImage.Text = "WIM veya SWM dosyası uygula..."
+        CaptureCustomImage.Text = "Artımlı değişiklikleri dosyaya yakala..."
+        CaptureFFU.Text = "Bölümleri FFU dosyasına yakala..."
+        CaptureImage.Text = "Sürücü görüntüsünü WIM dosyasına yakala..."
+        CleanupMountpoints.Text = "Bozuk görüntüden kaynakları sil..."
+        CommitImage.Text = "Görüntüye değişiklikleri uygula..."
+        DeleteImage.Text = "WIM dosyasından birim görüntülerini sil..."
+        ExportImage.Text = "Görüntüyü dışa aktar..."
+        GetImageInfo.Text = "Görüntü bilgilerini al..."
+        GetWIMBootEntry.Text = "WIMBoot yapılandırma girişlerini al..."
+        ListImage.Text = "Görüntüdeki dosya ve dizinleri listele..."
+        MountImage.Text = "Görüntüyü bağla..."
+        OptimizeFFU.Text = "FFU dosyasını optimize et..."
+        OptimizeImage.Text = "Görüntüyü optimize et..."
+        RemountImage.Text = "Görüntüyü bakım için yeniden bağla..."
+        SplitFFU.Text = "FFU dosyasını SFU dosyalarına böl..."
+        SplitImage.Text = "WIM dosyasını SWM dosyalarına böl..."
+        UnmountImage.Text = "Görüntüyü ayır..."
+        UpdateWIMBootEntry.Text = "WIMBoot yapılandırma girişini güncelle..."
+        ApplySiloedPackage.Text = "Silolu sağlama paketi uygula..."
+        ' Menu - Commands - OS packages
+        GetPackages.Text = "Paket bilgilerini al..."
+        AddPackage.Text = "Paket ekle..."
+        RemovePackage.Text = "Paket kaldır..."
+        GetFeatures.Text = "Özellik bilgilerini al..."
+        EnableFeature.Text = "Özelliği etkinleştir..."
+        DisableFeature.Text = "Özelliği devre dışı bırak..."
+        CleanupImage.Text = "Temizleme veya kurtarma işlemleri yap..."
+        SaveImageInformationToolStripMenuItem.Text = "Görüntü bilgilerini kaydet..."
+        ' Menu - Commands - Provisioning packages
+        AddProvisioningPackage.Text = "Sağlama paketi ekle..."
+        GetProvisioningPackageInfo.Text = "Sağlama paketi bilgilerini al..."
+        ApplyCustomDataImage.Text = "Özel veri görüntüsü uygula..."
+        ' Menu - Commands - App packages
+        GetProvisionedAppxPackages.Text = "Uygulama paketi bilgilerini al..."
+        AddProvisionedAppxPackage.Text = "Sağlanan uygulama paketi ekle..."
+        RemoveProvisionedAppxPackage.Text = "Uygulama paketi sağlamasını kaldır..."
+        OptimizeProvisionedAppxPackages.Text = "Sağlanan paketleri optimize et..."
+        SetProvisionedAppxDataFile.Text = "Uygulama paketine özel veri dosyası ekle..."
+        ' Menu - Commands - App (MSP) servicing
+        CheckAppPatch.Text = "Uygulama yaması bilgilerini al..."
+        GetAppPatchInfo.Text = "Ayrıntılı uygulama yaması bilgilerini al..."
+        GetAppPatches.Text = "Temel yüklü uygulama yaması bilgilerini al..."
+        GetAppInfo.Text = "Ayrıntılı Windows Installer (*.msi) uygulama bilgilerini al..."
+        GetApps.Text = "Temel Windows Installer (*.msi) uygulama bilgilerini al..."
+        ' Menu - Commands - Default app associations
+        ExportDefaultAppAssociations.Text = "Varsayılan uygulama ilişkilendirmelerini dışa aktar..."
+        GetDefaultAppAssociations.Text = "Varsayılan uygulama ilişkilendirme bilgilerini al..."
+        ImportDefaultAppAssociations.Text = "Varsayılan uygulama ilişkilendirmelerini içe aktar..."
+        RemoveDefaultAppAssociations.Text = "Varsayılan uygulama ilişkilendirmelerini kaldır..."
+        ' Menu - Commands - Languages and regional settings
+        GetIntl.Text = "Uluslararası ayarları ve dilleri al..."
+        SetUILang.Text = "Arayüz dilini ayarla..."
+        SetUILangFallback.Text = "Varsayılan arayüz yedek dilini ayarla..."
+        SetSysUILang.Text = "Sistem tercih edilen arayüz dilini ayarla..."
+        SetSysLocale.Text = "Sistem yerel ayarını ayarla..."
+        SetUserLocale.Text = "Kullanıcı yerel ayarını ayarla..."
+        SetInputLocale.Text = "Giriş yerel ayarını ayarla..."
+        SetAllIntl.Text = "Arayüz dili ve yerel ayarları ayarla..."
+        SetTimeZone.Text = "Varsayılan saat dilimini ayarla..."
+        SetSKUIntlDefaults.Text = "Varsayılan dil ve yerel ayarları ayarla..."
+        SetLayeredDriver.Text = "Katmanlı sürücü ayarla..."
+        GenLangINI.Text = "Lang.ini dosyası oluştur..."
+        SetSetupUILang.Text = "Varsayılan kurulum dilini ayarla..."
+        ' Menu - Commands - Microsoft Edge
+        Try
+            AddEdge.Text = "Edge ekle..."
+            AddEdgeBrowser.Text = "Edge tarayıcı ekle..."
+            AddEdgeWebView.Text = "Edge WebView ekle..."
+        Catch
+        End Try
+        ' Menu - Commands - Capabilities
+        AddCapability.Text = "Özellik ekle..."
+        ExportSource.Text = "Özellikleri depoya aktar..."
+        GetCapabilities.Text = "Özellik bilgilerini al..."
+        RemoveCapability.Text = "Özelliği kaldır..."
+        ' Menu - Commands - Windows editions
+        GetCurrentEdition.Text = "Mevcut sürümü al..."
+        GetTargetEditions.Text = "Yükseltme hedeflerini al..."
+        SetEdition.Text = "Görüntüyü yükselt..."
+        SetProductKey.Text = "Ürün anahtarı ayarla..."
+        ' Menu - Commands - Drivers
+        GetDrivers.Text = "Sürücü bilgilerini al..."
+        AddDriver.Text = "Sürücü ekle..."
+        RemoveDriver.Text = "Sürücü kaldır..."
+        ExportDriver.Text = "Sürücü paketlerini dışa aktar..."
+        ImportDriver.Text = "Sürücü paketlerini içe aktar..."
+        ' Menu - Commands - Unattended answer files
+        ApplyUnattend.Text = "Katılımsız yanıt dosyası uygula..."
+        ' Menu - Commands - Windows PE servicing
+        GetPESettings.Text = "Ayarları al..."
+        SetScratchSpace.Text = "Geçici alan ayarla..."
+        SetTargetPath.Text = "Hedef yolu ayarla..."
+        ' Menu - Commands - OS uninstall
+        GetOSUninstallWindow.Text = "Kaldırma penceresini al..."
+        InitiateOSUninstall.Text = "Kaldırmayı başlat..."
+        RemoveOSUninstall.Text = "Geri alma özelliğini kaldır..."
+        SetOSUninstallWindow.Text = "Kaldırma penceresini ayarla..."
+        ' Menu - Commands - Reserved storage
+        SetReservedStorageState.Text = "Ayrılmış depolama durumunu ayarla..."
+        GetReservedStorageState.Text = "Ayrılmış depolama durumunu al..."
+        ' Menu - Tools
+        ImageConversionToolStripMenuItem.Text = "Görüntü dönüştürme"
+        MergeSWM.Text = "SWM dosyalarını birleştir..."
+        RemountImageWithWritePermissionsToolStripMenuItem.Text = "Görüntüyü yazma izniyle yeniden bağla"
+        CommandShellToolStripMenuItem.Text = "Komut Konsolu"
+        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Katılımsız yanıt dosyası yöneticisi"
+        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Katılımsız yanıt dosyası oluşturucu"
+        RegCplToolStripMenuItem.Text = "Görüntü kayıt defteri kovanlarını yönet..."
+        ManageSystemServicesToolStripMenuItem.Text = "Sistem hizmetlerini yönet..."
+        ManageSystemEnvironmentVariablesToolStripMenuItem.Text = "Sistem ortam değişkenlerini yönet..."
+        WebResourcesToolStripMenuItem.Text = "Web Kaynakları"
+        PxeHelperServersTSMI.Text = "PXE Yardımcı Sunucusunu başlat..."
+        StartWdsHelperTSMI.Text = "Windows Dağıtım Hizmetleri"
+        StartFogHelperTSMI.Text = "FOG"
+        UnixFogInstructionTSMI.Text = "UNIX sistemlerinde FOG Yardımcı Sunucusu için talimatları göster"
+        EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Bu sistemde Windows UEFI CA 2023 hazırlığını değerlendir"
+        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Dil ve İsteğe Bağlı Özellik ISO'larını indir..."
+        LanguagesAndFODWin10ToolStripMenuItem.Text = "Windows 10 için Dil ve FOD disklerini indir..."
+        ReportManagerToolStripMenuItem.Text = "Rapor yöneticisi"
+        MountedImageManagerTSMI.Text = "Bağlı görüntü yöneticisi"
+        CreateDiscImageToolStripMenuItem.Text = "Disk görüntüsü oluştur..."
+        CreateTestingEnvironmentToolStripMenuItem.Text = "Test ortamı oluştur..."
+        WimScriptEditorCommand.Text = "Yapılandırma listesi düzenleyicisi"
+        OptionsToolStripMenuItem.Text = "Seçenekler"
+        ' Menu - Help
+        HelpTopicsToolStripMenuItem.Text = "Yardım konuları"
+        GlossaryToolStripMenuItem.Text = "Sözlük"
+        CommandHelpToolStripMenuItem.Text = "Komut yardımı..."
+        AboutDISMToolsToolStripMenuItem.Text = "DISMTools Hakkında"
+        ' Menu - Invalid settings
+        ISFix.Text = "Daha fazla bilgi"
+        ISHelp.Text = "Bu nedir?"
+        ' Menu - DevState
+        ReportFeedbackToolStripMenuItem.Text = "Geri bildirim gönder (web tarayıcısında açılır)"
+        ' Menu - Contributions
+        ContributeToTheHelpSystemToolStripMenuItem.Text = "Yardım sistemine katkıda bulun"
+        ' Menu - Tour Server
+        TourActionsTSMI.Text = "Tur Eylemleri"
+        ServerStatusTSMI.Text = String.Format("Tur Sunucusu {0} portunda aktif", tourServer.GetTcpPort())
+        RestartDTTourTSMI.Text = "Turu Yeniden Başlat"
+        StopDTTourServerTSMI.Text = "Tur Sunucusunu Durdur"
+        ' Start Panel
+        LabelHeader1.Text = "Başlangıç"
+        Label10.Text = "Son projeler"
+        NewProjLink.Text = "Yeni proje..."
+        ExistingProjLink.Text = "Mevcut projeyi aç..."
+        OnlineInstMgmt.Text = "Çevrimiçi kurulumu yönet"
+        OfflineInstMgmt.Text = "Çevrimdışı kurulumu yönet..."
+        RecentRemoveLink.Text = "Girişi kaldır"
+        ' ToolStrip buttons
+        ToolStripButton1.Text = "Sekmeyi kapat"
+        ToolStripButton2.Text = "Projeyi kaydet"
+        ToolStripButton3.Text = "Projeyi kaldır"
+        ToolStripButton3.ToolTipText = "Projeyi programdan kaldır"
+        ToolStripButton4.Text = "İlerleme penceresini göster"
+        RefreshViewTSB.Text = "Görünümü yenile"
+        ExpandCollapseTSB.Text = "Genişlet"
+        ' Pop-up context menus
+        PkgBasicInfo.Text = "Temel bilgileri al (tüm paketler)"
+        PkgDetailedInfo.Text = "Ayrıntılı bilgileri al (belirli paket)"
+        CommitAndUnmountTSMI.Text = "Değişiklikleri uygula ve görüntüyü ayır"
+        DiscardAndUnmountTSMI.Text = "Değişiklikleri iptal et ve görüntüyü ayır"
+        UnmountSettingsToolStripMenuItem.Text = "Ayırma ayarları..."
+        ViewPackageDirectoryToolStripMenuItem.Text = "Paket dizinini görüntüle"
+        GetImageFileInformationToolStripMenuItem.Text = "Görüntü dosyası bilgilerini al..."
+        SaveCompleteImageInformationToolStripMenuItem.Text = "Tam görüntü bilgilerini kaydet..."
+        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Bu dosyayla disk görüntüsü oluştur..."
+        OpenFileDialog1.Title = "Yüklenecek proje dosyasını belirtin"
+        LocalMountDirFBD.Description = "Bu projeye yüklemek istediğiniz bağlama dizinini belirtin:"
+        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
+            BGProcDetails.Label2.Text = "Görüntü işlemleri tamamlandı"
+        End If
+        MenuDesc.Text = "Hazır"
+        ' ToolStrip status bar
+        Try : UpdateLink.Text = "Yeni bir sürüm indirme ve kurulum için mevcut. Daha fazla bilgi için tıklayın" : Catch : End Try
+        ' Tree view context menu
+        AccessDirectoryToolStripMenuItem.Text = "Dizine eriş"
+        UnloadProjectToolStripMenuItem1.Text = "Projeyi kaldır"
+        CopyDeploymentToolsToolStripMenuItem.Text = "Dağıtım araçlarını kopyala"
+        OfAllArchitecturesToolStripMenuItem.Text = "Tüm mimariler için"
+        OfSelectedArchitectureToolStripMenuItem.Text = "Seçili mimari için"
+        ForX86ArchitectureToolStripMenuItem.Text = "x86 mimarisi için"
+        ForAmd64ArchitectureToolStripMenuItem.Text = "AMD64 mimarisi için"
+        ForARMArchitectureToolStripMenuItem.Text = "ARM mimarisi için"
+        ForARM64ArchitectureToolStripMenuItem.Text = "ARM64 mimarisi için"
+        ImageOperationsToolStripMenuItem.Text = "Görüntü işlemleri"
+        MountImageToolStripMenuItem.Text = "Görüntüyü bağla..."
+        UnmountImageToolStripMenuItem.Text = "Görüntüyü ayır..."
+        RemoveVolumeImagesToolStripMenuItem.Text = "Birim görüntülerini kaldır..."
+        SwitchImageIndexesToolStripMenuItem1.Text = "Görüntü dizinlerini değiştir..."
+        UnattendedAnswerFilesToolStripMenuItem1.Text = "Katılımsız yanıt dosyaları"
+        ManageToolStripMenuItem.Text = "Yönet"
+        CreationWizardToolStripMenuItem.Text = "Oluştur"
+        ScratchDirectorySettingsToolStripMenuItem.Text = "Geçici dizini yapılandır"
+        ManageReportsToolStripMenuItem.Text = "Raporları yönet"
+        AddToolStripMenuItem.Text = "Ekle"
+        NewFileToolStripMenuItem.Text = "Yeni dosya..."
+        ExistingFileToolStripMenuItem.Text = "Mevcut dosya..."
+        SaveResourceToolStripMenuItem.Text = "Kaynağı kaydet..."
+        CopyToolStripMenuItem.Text = "Kaynağı kopyala"
+        MicrosoftAppsToolStripMenuItem.Text = "Microsoft Apps web sitesini ziyaret et"
+        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Microsoft Store Generation Project web sitesini ziyaret et"
+        AppxDownloadHelpToolStripMenuItem.Text = "Uygulamaları nasıl edinebilirim?"
+        ' New design
+        GreetingLabel.Text = "Bu bakım oturumuna hoş geldiniz"
+        LinkLabel12.Text = "PROJE"
+        LinkLabel13.Text = "GÖRÜNTÜ"
+        Label54.Text = "Ad:"
+        Label51.Text = "Konum:"
+        Label53.Text = "Bağlı görüntüler?"
+        LinkLabel14.Text = "Görüntü bağlamak için tıklayın"
+        Label55.Text = "Proje Görevleri"
+        LinkLabel15.Text = "Proje özelliklerini görüntüle"
+        LinkLabel16.Text = "Dosya Gezgini'nde aç"
+        LinkLabel17.Text = "Projeyi kaldır"
+        Label59.Text = "Hiçbir görüntü bağlanmadı"
+        Label58.Text = "Bilgilerini görüntülemek için bir görüntü bağlamanız gerekiyor"
+        Label57.Text = "Seçenekler"
+        LinkLabel21.Text = "Görüntü bağla..."
+        LinkLabel18.Text = "Bağlı görüntü seç..."
+        Label39.Text = "Görüntü dizini:"
+        Label43.Text = "Bağlama noktası:"
+        Label45.Text = "Sürüm:"
+        Label42.Text = "Ad:"
+        Label40.Text = "Açıklama:"
+        Label56.Text = "Görüntü Görevleri"
+        LinkLabel20.Text = "Görüntü özelliklerini görüntüle"
+        LinkLabel19.Text = "Görüntüyü ayır"
+        GroupBox4.Text = "Görüntü işlemleri"
+        Button26.Text = "Görüntü bağla..."
+        Button27.Text = "Mevcut değişiklikleri uygula"
+        Button28.Text = "Değişiklikleri uygula ve ayır"
+        Button29.Text = "Değişiklikleri iptal ederek ayır"
+        Button25.Text = "Bakım oturumunu yenile"
+        Button24.Text = "Görüntü dizinlerini değiştir..."
+        Button30.Text = "Görüntü uygula..."
+        Button31.Text = "Görüntü yakala..."
+        Button32.Text = "Birim görüntülerini kaldır..."
+        Button33.Text = "Tam görüntü bilgilerini kaydet..."
+        GroupBox5.Text = "Paket işlemleri"
+        Button36.Text = "Paket ekle..."
+        Button34.Text = "Paket bilgilerini al..."
+        Button38.Text = "Yüklü paket bilgilerini kaydet..."
+        Button35.Text = "Paket kaldır..."
+        Button37.Text = "Bileşen deposu bakımı ve temizliği yap..."
+        GroupBox6.Text = "Özellik işlemleri"
+        Button41.Text = "Özelliği etkinleştir..."
+        Button39.Text = "Özellik bilgilerini al..."
+        Button42.Text = "Özellik bilgilerini kaydet..."
+        Button40.Text = "Özelliği devre dışı bırak..."
+        GroupBox7.Text = "AppX paketi işlemleri"
+        Button44.Text = "AppX paketi ekle..."
+        Button45.Text = "Uygulama bilgilerini al..."
+        Button46.Text = "Yüklü AppX paketi bilgilerini kaydet..."
+        Button43.Text = "AppX paketini kaldır..."
+        GroupBox8.Text = "Özellik işlemleri"
+        Button48.Text = "Özellik ekle..."
+        Button49.Text = "Özellik bilgilerini al..."
+        Button50.Text = "Özellik bilgilerini kaydet..."
+        Button47.Text = "Özelliği kaldır..."
+        GroupBox9.Text = "Sürücü işlemleri"
+        Button53.Text = "Sürücü paketi ekle..."
+        Button52.Text = "Sürücü bilgilerini al..."
+        Button54.Text = "Yüklü sürücü bilgilerini kaydet..."
+        Button51.Text = "Sürücü kaldır..."
+        GroupBox10.Text = "Windows PE işlemleri"
+        Button55.Text = "Yapılandırmayı al"
+        Button56.Text = "Yapılandırmayı kaydet..."
+        Button57.Text = "Hedef yolu ayarla..."
+        Button58.Text = "Geçici alanı ayarla..."
+        ' New home panel design
+        LinkLabel22.Text = "HOŞ GELDİNİZ"
+        LinkLabel23.Text = "SON HABERLER"
+        LinkLabel24.Text = "EĞİTİM VİDEOLARI"
+        Label36.Text = "Bu beta yazılımdır"
+        Label8.Text = "Bu program tamamlanmamıştır ve sorunlarla karşılaşabilirsiniz. Böyle bir durumda geri bildirim göndermekten çekinmeyin"
+        Label37.Text = "Başlarken"
+        LinkLabel6.Text = "Görüntü bakımına başlarken"
+        LinkLabel7.Text = "DISMTools'a başlarken"
+        LinkLabel8.Text = "Diğer araçlardan mı geliyorsunuz?"
+        Label38.Text = "İşlem yapma"
+        LinkLabel9.Text = "Harika bakım için ipuçları"
+        LinkLabel10.Text = "Görüntü bilgilerini alma"
+        LinkLabel11.Text = "Görüntü bilgilerini kaydetme"
+        LinkLabel4.Text = "Aktif kurulumunuzu yönetme"
+        LinkLabel5.Text = "Herhangi bir sürücüdeki kurulumları yönetme"
+        Label9.Text = "En son DISMTools geliştirme haberlerini almak için My Digital Life forumlarındaki tartışmayı inceleyin."
+        LinkLabel25.Text = "Ziyaret et"
+        Label22.Text = "Son haberler alınamadı"
+        Label34.Text = "Hata bilgisi:"
+        Label35.Text = "Sisteminizi ağa bağlamayı deneyin. Sorun devam ediyorsa web sitelerine erişip erişemediğinizi kontrol edin."
+        Button59.Text = "Tekrar dene"
+        Label11.Text = "Son videolar alınamadı"
+        Label7.Text = "Hata bilgisi:"
+        Label6.Text = "Sisteminizi ağa bağlamayı deneyin. Sorun devam ediyorsa web sitelerine erişip erişemediğinizi kontrol edin."
+        Button17.Text = "Tekrar dene"
+        ' Main form labels
+        Label50.Text = If(IsImageMounted, "Evet", "Hayır")
+        If OnlineManagement Then
+            Text = "Çevrimiçi kurulum - DISMTools"
+            Label41.Text = "(Çevrimiçi kurulum)"
+            Label47.Text = "(Çevrimiçi kurulum)"
+            Label49.Text = "(Çevrimiçi kurulum)"
+        ElseIf OfflineManagement Then
+            Text = "Çevrimdışı kurulum - DISMTools"
+            Label41.Text = "(Çevrimdışı kurulum)"
+            Label46.Text = "(Çevrimdışı kurulum)"
+            Label47.Text = "(Çevrimdışı kurulum)"
+            Label49.Text = "(Çevrimdışı kurulum)"
         End If
     End Sub
 
@@ -8346,20 +9168,25 @@ Public Class MainForm
                         DynaLog.LogMessage("Beginning to update project properties to run bg processes...")
 
                         ' Detect individual stuff
-                        If Directory.Exists(projPath & "\mount" & "\Windows") Then
-                            DynaLog.LogMessage("Mount directory is in project directory")
-                            ' Detect whether image is mounted by checking its Windows directory.
-                            ' This will be changed in the future but, because this is in alpha, scan
-                            ' whether the image's Windows folder exists
+                        DynaLog.LogMessage("projPath value: '" & projPath & "'")
+                        DynaLog.LogMessage("MountDir value before check: '" & MountDir & "'")
+                        Dim DefaultMountDir As String = projPath & "\mount"
+                        DynaLog.LogMessage("DefaultMountDir value: '" & DefaultMountDir & "'")
+                        If MountDir = "" OrElse MountDir = "N/A" Then
+                            MountDir = DefaultMountDir
+                            DynaLog.LogMessage("MountDir was empty or N/A. Using default: " & MountDir)
+                        End If
+                        If Directory.Exists(DefaultMountDir & "\Windows") Then
+                            DynaLog.LogMessage("Mount directory is in project directory: " & DefaultMountDir)
+                            MountDir = DefaultMountDir
                             IsImageMounted = True
                             UpdateProjProperties(True, False, SkipBGProcs)
                         ElseIf Directory.Exists(MountDir & "\Windows") Then
-                            DynaLog.LogMessage("An image was mounted somewhere else")
-                            ' This is for these cases where image was mounted to outside the project
+                            DynaLog.LogMessage("An image was mounted at: " & MountDir)
                             IsImageMounted = True
                             UpdateProjProperties(True, False, SkipBGProcs)
                         Else
-                            DynaLog.LogMessage("This image is bad.")
+                            DynaLog.LogMessage("No mounted image detected. Checked: " & DefaultMountDir & " and " & MountDir)
                             IsImageMounted = False
                             UpdateProjProperties(False, False, SkipBGProcs)
                         End If
@@ -8370,7 +9197,13 @@ Public Class MainForm
                             Button28.Enabled = True
                             Button29.Enabled = True
                             Button24.Enabled = True
-                            Button25.Enabled = True
+                            ' Button25 (Reload servicing session) sadece görüntü "NeedsRemount" veya bozuk durumundaysa aktif olmalı
+                            ' Eğer görüntü düzgün mount edilmişse (OK durumundaysa) bu buton pasif olmalı
+                            If ImageStatus = ImageWatcher.Status.NeedsRemount Then
+                                Button25.Enabled = True
+                            Else
+                                Button25.Enabled = False
+                            End If
                             Button30.Enabled = True
                             Button31.Enabled = True
                             Button32.Enabled = True
@@ -8515,20 +9348,24 @@ Public Class MainForm
                     DynaLog.LogMessage("Beginning to update project properties to run bg processes...")
 
                     ' Detect individual stuff
-                    If Directory.Exists(projPath & "\mount" & "\Windows") Then
-                        DynaLog.LogMessage("Mount directory is in project directory")
+                    Dim DefaultMountDir As String = projPath & "\mount"
+                    If MountDir = "" OrElse MountDir = "N/A" Then
+                        MountDir = DefaultMountDir
+                        DynaLog.LogMessage("MountDir was empty or N/A. Using default: " & MountDir)
+                    End If
+                    If Directory.Exists(DefaultMountDir & "\Windows") Then
+                        DynaLog.LogMessage("Mount directory is in project directory: " & DefaultMountDir)
                         ' Detect whether image is mounted by checking its Windows directory.
-                        ' This will be changed in the future but, because this is in alpha, scan
-                        ' whether the image's Windows folder exists
+                        MountDir = DefaultMountDir
                         IsImageMounted = True
-                        UpdateProjProperties(True, False, SkipBGProcs)
+                        UpdateProjProperties(True, False)
                     ElseIf Directory.Exists(MountDir & "\Windows") Then
-                        DynaLog.LogMessage("An image was mounted somewhere else")
+                        DynaLog.LogMessage("An image was mounted at: " & MountDir)
                         ' This is for these cases where image was mounted to outside the project
                         IsImageMounted = True
                         UpdateProjProperties(True, False)
                     Else
-                        DynaLog.LogMessage("This image is bad.")
+                        DynaLog.LogMessage("No mounted image detected. Checked: " & DefaultMountDir & " and " & MountDir)
                         IsImageMounted = False
                         UpdateProjProperties(False, False)
                     End If
@@ -8539,7 +9376,13 @@ Public Class MainForm
                         Button28.Enabled = True
                         Button29.Enabled = True
                         Button24.Enabled = True
-                        Button25.Enabled = True
+                        ' Button25 (Reload servicing session) sadece görüntü "NeedsRemount" veya bozuk durumundaysa aktif olmalı
+                        ' Eğer görüntü düzgün mount edilmişse (OK durumundaysa) bu buton pasif olmalı
+                        If ImageStatus = ImageWatcher.Status.NeedsRemount Then
+                            Button25.Enabled = True
+                        Else
+                            Button25.Enabled = False
+                        End If
                         Button30.Enabled = True
                         Button31.Enabled = True
                         Button32.Enabled = True
@@ -8733,13 +9576,11 @@ Public Class MainForm
     ''' </summary>
     ''' <param name="IsBeingClosed">Determines whether the program is being closed</param>
     ''' <param name="SaveProject">Determines whether the program should save the project</param>
-    ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
-    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean)
         DynaLog.LogMessage("Preparing to unload project...")
         DynaLog.LogMessage("- Is the program being closed? " & If(IsBeingClosed, "Yes", "No"))
         DynaLog.LogMessage("- Will the project be saved? " & If(SaveProject, "Yes", "No"))
-        DynaLog.LogMessage("- Will the image be unmounted? " & If(UnmountImg, "Yes", "No"))
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
@@ -8836,14 +9677,53 @@ Public Class MainForm
         bwGetImageInfo = True
         bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
+            Dim IsInFfuMode As Boolean
             DynaLog.LogMessage("The image will be unmounted committing changes...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            ProgressPanel.UMountOp = 0
+            If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                IsInFfuMode = True
+
+                ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+                ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+                ' but at least we save the changes...
+
+                Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+                ' Options for capture task
+                ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+                ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+                ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+                ProgressPanel.FFUCaptureCompressType = 1
+
+                ' Options for unmount task
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = 1
+
+                ' Options for replace task
+                ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+                ProgressPanel.TaskList.AddRange({5, 21, 998})
+            Else
+                IsInFfuMode = False
+
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 0
+            End If
             ProgressPanel.ShowDialog(Me)
+            If IsInFfuMode Then
+                UpdateProjProperties(False, False)
+                SaveDTProj()
+            End If
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             DynaLog.LogMessage("The image will be unmounted discarding changes...")
@@ -8862,19 +9742,6 @@ Public Class MainForm
                 SaveDTProj()
             End If
         End If
-        If UnmountImg Then
-            DynaLog.LogMessage("The image will be unmounted...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            If IsBeingClosed Then
-                DynaLog.LogMessage("The program will be closed...")
-                ProgressPanel.ProgramIsBeingClosed = True
-            End If
-            ProgressPanel.ShowDialog(Me)
-        End If
         Text = "DISMTools"
         If Debugger.IsAttached Then
             Text &= " (debug mode)"
@@ -8882,10 +9749,7 @@ Public Class MainForm
         DynaLog.LogMessage("Removing items from project tree view...")
         UnpopulateProjectTree()
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
-        Refresh()
         CommandsToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         HomePanel.Visible = True
         PrjPanel.Visible = False
@@ -8980,7 +9844,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in online mode
         ToolStripButton2.Enabled = False
@@ -9135,7 +9998,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in offline mode either
         ToolStripButton2.Enabled = False
@@ -9316,7 +10178,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -9468,7 +10329,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -9517,13 +10377,43 @@ Public Class MainForm
                     Label50.Text = "Sim"
                 Case 5
                     Label50.Text = "Sì"
+                Case 6
+                    Label50.Text = "Evet"
             End Select
             LinkLabel14.Visible = False
             ImageView_NoImage.Visible = False
             ImageView_BasicInfo.Visible = True
             IsImageMounted = True
         Else
-            Label50.Text = "No"
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label50.Text = "No"
+                        Case "ESN"
+                            Label50.Text = "No"
+                        Case "FRA"
+                            Label50.Text = "Non"
+                        Case "PTB", "PTG"
+                            Label50.Text = "Não"
+                        Case "ITA"
+                            Label50.Text = "No"
+                        Case "TRK"
+                            Label50.Text = "Hayır"
+                    End Select
+                Case 1
+                    Label50.Text = "No"
+                Case 2
+                    Label50.Text = "No"
+                Case 3
+                    Label50.Text = "Non"
+                Case 4
+                    Label50.Text = "Não"
+                Case 5
+                    Label50.Text = "No"
+                Case 6
+                    Label50.Text = "Hayır"
+            End Select
             LinkLabel14.Visible = True
             ImageView_NoImage.Visible = True
             ImageView_BasicInfo.Visible = False
@@ -9648,6 +10538,17 @@ Public Class MainForm
                             prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "File risposte non presidiate")
                             prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Cartella temporanea")
                             prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapporti progetto")
+                        Case "TUR"
+                            prjTreeView.Nodes.Add("parent", "Proje: " & Quote & MainProjNameNode & Quote)
+                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Dağıtım Araçları")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Dağıtım Araçları (x86)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Dağıtım Araçları (AMD64)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Dağıtım Araçları (ARM)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Dağıtım Araçları (ARM64)")
+                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Bağlama noktası")
+                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Katılımsız yanıt dosyaları")
+                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Geçici dizin")
+                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Proje raporları")
                     End Select
                 Case 1
                     prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
@@ -9704,6 +10605,17 @@ Public Class MainForm
                     prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "File di risposta non presidiati")
                     prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directory temporanea")
                     prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapporti del progetto")
+                Case 6
+                    prjTreeView.Nodes.Add("parent", "Proje: " & Quote & MainProjNameNode & Quote)
+                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Dağıtım Araçları")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Dağıtım Araçları (x86)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Dağıtım Araçları (AMD64)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Dağıtım Araçları (ARM)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Dağıtım Araçları (ARM64)")
+                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Bağlama noktası")
+                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Katılımsız yanıt dosyaları")
+                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Geçici dizin")
+                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Proje raporları")
             End Select
             prjTreeView.ExpandAll()
         Catch ex As Exception
@@ -10667,31 +11579,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -10703,31 +11615,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -10737,21 +11649,11 @@ Public Class MainForm
         DynaLog.LogMessage("Showing save question...")
         SaveProjectQuestionDialog.ShowDialog(Me)
         If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Saving project and unmounting the image...")
-                UnloadDTProj(False, True, True)
-            Else
-                DynaLog.LogMessage("Saving project...")
-                UnloadDTProj(False, True, False)
-            End If
+            DynaLog.LogMessage("Saving project...")
+            UnloadDTProj(False, True)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                UnloadDTProj(False, False, True)
-            Else
-                DynaLog.LogMessage("Discarding project changes...")
-                UnloadDTProj(False, False, False)
-            End If
+            DynaLog.LogMessage("Discarding project changes...")
+            UnloadDTProj(False, False)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
             DynaLog.LogMessage("Nothing happened here")
             Exit Sub
@@ -10775,28 +11677,19 @@ Public Class MainForm
                 DynaLog.LogMessage("The image this project contains has been modified")
                 SaveProjectQuestionDialog.ShowDialog(Me)
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Saving project and unmounting the image...")
-                        UnloadDTProj(True, True, True)
-                    Else
-                        DynaLog.LogMessage("Saving project...")
-                        UnloadDTProj(True, True, False)
-                    End If
+                    DynaLog.LogMessage("Saving project...")
+                    UnloadDTProj(True, True)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                        UnloadDTProj(True, False, True)
-                    Else
-                        DynaLog.LogMessage("Discarding project changes...")
-                        UnloadDTProj(True, False, False)
-                    End If
+                    DynaLog.LogMessage("Discarding project changes...")
+                    UnloadDTProj(True, False)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Nothing happened here. Cancelling closure...")
                     e.Cancel = True
                 End If
             Else
+                imgCommitOperation = -1
                 DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-                UnloadDTProj(True, False, False)
+                UnloadDTProj(True, False)
             End If
         End If
         If ImgBW.IsBusy Then
@@ -10913,28 +11806,18 @@ Public Class MainForm
             DynaLog.LogMessage("The image this project contains has been modified")
             SaveProjectQuestionDialog.ShowDialog(Me)
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Saving project and unmounting the image...")
-                    UnloadDTProj(False, True, True)
-                Else
-                    DynaLog.LogMessage("Saving project...")
-                    UnloadDTProj(False, True, False)
-                End If
+                DynaLog.LogMessage("Saving project...")
+                UnloadDTProj(False, True)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                    UnloadDTProj(False, False, True)
-                Else
-                    DynaLog.LogMessage("Discarding project changes...")
-                    UnloadDTProj(False, False, False)
-                End If
+                DynaLog.LogMessage("Discarding project changes...")
+                UnloadDTProj(False, False)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("Nothing happened here.")
                 Exit Sub
             End If
         Else
             DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-            UnloadDTProj(False, False, False)
+            UnloadDTProj(False, False)
         End If
     End Sub
 
@@ -11371,6 +12254,47 @@ Public Class MainForm
         DynaLog.LogMessage("Background processes have finished")
         If FailedBGProcResultDic.Count > 0 Then
             DynaLog.LogMessage("One or more background processes has failed.")
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality may not be available."
+                            BWFailLearnMoreBtn.Text = "Learn more..."
+                        Case "ESN"
+                            BWFailLabel.Text = "Uno o más procesos en segundo plano no finalizaron correctamente. Es posible que algunas funciones no estén disponibles."
+                            BWFailLearnMoreBtn.Text = "Más información..."
+                        Case "FRA"
+                            BWFailLabel.Text = "Un ou plusieurs processus en arrière-plan ne se sont pas terminés correctement. Certaines fonctionnalités peuvent ne pas être disponibles."
+                            BWFailLearnMoreBtn.Text = "En savoir plus..."
+                        Case "PTB", "PTG"
+                            BWFailLabel.Text = "Um ou mais processos em segundo plano não foram concluídos com êxito. Algumas funcionalidades podem não estar disponíveis."
+                            BWFailLearnMoreBtn.Text = "Saber mais..."
+                        Case "ITA"
+                            BWFailLabel.Text = "Uno o più processi in background non sono stati completati correttamente. Alcune funzionalità potrebbero non essere disponibili."
+                            BWFailLearnMoreBtn.Text = "Ulteriori informazioni..."
+                        Case "TUR"
+                            BWFailLabel.Text = "Bir veya daha fazla arka plan işlemi başarıyla tamamlanamadı. Bazı işlevler kullanılamayabilir."
+                            BWFailLearnMoreBtn.Text = "Daha fazla bilgi..."
+                    End Select
+                Case 1
+                    BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality may not be available."
+                    BWFailLearnMoreBtn.Text = "Learn more..."
+                Case 2
+                    BWFailLabel.Text = "Uno o más procesos en segundo plano no finalizaron correctamente. Es posible que algunas funciones no estén disponibles."
+                    BWFailLearnMoreBtn.Text = "Más información..."
+                Case 3
+                    BWFailLabel.Text = "Un ou plusieurs processus en arrière-plan ne se sont pas terminés correctement. Certaines fonctionnalités peuvent ne pas être disponibles."
+                    BWFailLearnMoreBtn.Text = "En savoir plus..."
+                Case 4
+                    BWFailLabel.Text = "Um ou mais processos em segundo plano não foram concluídos com êxito. Algumas funcionalidades podem não estar disponíveis."
+                    BWFailLearnMoreBtn.Text = "Saber mais..."
+                Case 5
+                    BWFailLabel.Text = "Uno o più processi in background non sono stati completati correttamente. Alcune funzionalità potrebbero non essere disponibili."
+                    BWFailLearnMoreBtn.Text = "Ulteriori informazioni..."
+                Case 6
+                    BWFailLabel.Text = "Bir veya daha fazla arka plan işlemi başarıyla tamamlanamadı. Bazı işlevler kullanılamayabilir."
+                    BWFailLearnMoreBtn.Text = "Daha fazla bilgi..."
+            End Select
             BWFailPanel.Visible = True
             Beep()
         End If
@@ -11431,7 +12355,7 @@ Public Class MainForm
                 ProgressPanel.ShowDialog(Me)
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("User decided not to reload the servicing session. Unloading project...")
-                UnloadDTProj(False, False, False)
+                UnloadDTProj(False, False)
                 ImgBW.CancelAsync()
             End If
         End If
@@ -11442,7 +12366,6 @@ Public Class MainForm
                     DynaLog.LogMessage("Incompatibility studied. This is a Windows Vista/Server 2008 image")
                     ' Let the user know about the incompatibility
                     If Not ProgressPanel.IsDisposed Then
-                        ToolStripButton4.Visible = False
                         ProgressPanel.Dispose()
                         ProgressPanel.Close()
                     End If
@@ -11634,7 +12557,7 @@ Public Class MainForm
 
     Private Sub Discord_Click(sender As Object, e As EventArgs) Handles Discord.Click
         DynaLog.LogMessage("Launching discord join link...")
-        Process.Start("https://discord.gg/vPrZXHPP")
+        Process.Start("https://discord.gg/5TxEmKXNwu")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
@@ -11694,7 +12617,7 @@ Public Class MainForm
             DynaLog.LogMessage("File specified in OFD: " & OpenFileDialog1.FileName)
             If File.Exists(OpenFileDialog1.FileName) Then
                 DynaLog.LogMessage("Project file exists")
-                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
                 If ImgBW.IsBusy Then Exit Sub
                 Dim Project As New Recents()
                 Project.ProjPath = OpenFileDialog1.FileName
@@ -12695,7 +13618,7 @@ Public Class MainForm
             DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
             If ActiveInstAccessWarn.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then Exit Sub
-            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True)
             If ImgBW.IsBusy Then Exit Sub
         End If
         ActiveInstAccessWarn.Label2.Visible = False
@@ -12713,7 +13636,7 @@ Public Class MainForm
             End If
             If isProjectLoaded Then
                 DynaLog.LogMessage("Unloading project...")
-                UnloadDTProj(False, True, False)
+                UnloadDTProj(False, True)
                 If ImgBW.IsBusy Then Exit Sub
             End If
             BeginOfflineManagement(drivePath)
@@ -13271,31 +14194,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13339,7 +14262,7 @@ Public Class MainForm
             DynaLog.LogMessage("Unmounting image directly...")
             If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
             imgCommitOperation = 1
-            UnloadDTProj(False, True, True)
+            UnloadDTProj(False, True)
             Exit Sub
         End If
         DynaLog.LogMessage("Opening image unmount dialog...")
@@ -13353,31 +14276,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13413,34 +14336,85 @@ Public Class MainForm
     Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
         DynaLog.LogMessage("Committing changes to the image...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-        ProgressPanel.MountDir = MountDir
-        ' TODO: Add additional options later
-        ProgressPanel.OperationNum = 8
+        Dim IsInFfuMode As Boolean
+
+        If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+            IsInFfuMode = True
+
+            ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+            ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+            ' but at least we save the changes...
+
+            Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+            ' Options for capture task
+            ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+            ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+            ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+            ProgressPanel.FFUCaptureCompressType = 1
+
+            ' Options for unmount task
+            ProgressPanel.MountDir = MountDir
+            ProgressPanel.UMountOp = 1
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.RandomMountDir = ""
+            ProgressPanel.CheckImgIntegrity = False
+            ProgressPanel.SaveToNewIndex = False
+            ProgressPanel.UMountImgIndex = 1
+
+            ' Options for replace task
+            ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+            ' Options for mount task
+            ProgressPanel.SourceImg = CurrentImage.ImageFile
+            ProgressPanel.ImgIndex = 1
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ProgressPanel.TaskList.AddRange({5, 21, 998, 15})
+        Else
+            IsInFfuMode = False
+
+            ProgressPanel.MountDir = MountDir
+            ' TODO: Add additional options later
+            ProgressPanel.OperationNum = 8
+        End If
         ProgressPanel.ShowDialog(Me)
+        If IsInFfuMode Then
+            UpdateProjProperties(True, False)
+            SaveDTProj()
+        End If
     End Sub
 
     Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst committing changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst discarding changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        ImgApply.ShowDialog(Me)
+        Dim cmsPos As Point = Button30.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button30.Height)
+        ImgApplyModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
         DynaLog.LogMessage("Opening image capture dialog...")
-        ImgCapture.ShowDialog(Me)
+        Dim cmsPos As Point = Button31.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button31.Height)
+        ImgCaptureModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
@@ -13897,14 +14871,15 @@ Public Class MainForm
 #End Region
 
     Sub GetFeedNews()
-        DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
+        DynaLog.LogMessage("Pulling news feed from GitHub Releases...")
         FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         Try
-            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
+            Dim rssUrl As String = "https://github.com/CodingWonders/DISMTools/releases.atom"
             Dim rssContent As String = ""
             Using client As New WebClient()
-                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                client.Headers.Add("User-Agent", "DISMTools-Client")
+                client.Headers.Add("Accept", "application/atom+xml")
                 rssContent = client.DownloadString(rssUrl)
             End Using
             If Not String.IsNullOrWhiteSpace(rssContent) Then
@@ -13914,6 +14889,9 @@ Public Class MainForm
                 FeedContents = SyndicationFeed.Load(reader)
                 reader.Close()
             End If
+        Catch webEx As System.Net.WebException
+            DynaLog.LogMessage("Web error getting feed news (this is expected if offline). Error: " & webEx.Message)
+            FeedEx = webEx
         Catch ex As Exception
             DynaLog.LogMessage("Failed to get feed news. Error message: " & ex.Message)
             FeedEx = ex
@@ -14015,9 +14993,19 @@ Public Class MainForm
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
             Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
+            ' Get culture based on selected language
+            Dim cultureCode As String = "en-US"
+            Select Case Language
+                Case 1 : cultureCode = "es-ES"
+                Case 2 : cultureCode = "fr-FR"
+                Case 3 : cultureCode = "pt-PT"
+                Case 4 : cultureCode = "it-IT"
+                Case 6 : cultureCode = "tr-TR"
+            End Select
+            Dim culture As New System.Globalization.CultureInfo(cultureCode)
             ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
                                                                                                                                                          TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
-                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss", culture)})).ToArray())
             FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
         Else
             DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
@@ -14109,7 +15097,7 @@ Public Class MainForm
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
         DynaLog.LogMessage("Refreshing news feed...")
-        FeedWorker.RunWorkerAsync()
+        If Not FeedWorker.IsBusy Then FeedWorker.RunWorkerAsync()
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
@@ -14195,6 +15183,8 @@ Public Class MainForm
         Select Case ImageStatus
             Case ImageWatcher.Status.NeedsRemount
                 DynaLog.LogMessage("The image is in need of a servicing session reload.")
+                ' Görüntü "NeedsRemount" durumundaysa Button25'i aktif et
+                Button25.Enabled = True
                 If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
                 OrphanedMountedImgDialog.ShowDialog(Me)
                 If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
@@ -14203,13 +15193,22 @@ Public Class MainForm
                     ProgressPanel.MountDir = MountDir
                     ProgressPanel.OperationNum = 18
                     ProgressPanel.ShowDialog(Me)
-                    If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
+                    If ProgressPanel.IsSuccessful Then
+                        ImageStatus = ImageWatcher.Status.OK
+                        ' Görüntü başarıyla reload edildiyse Button25'i pasif et
+                        Button25.Enabled = False
+                    End If
                 ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Not ready to reload. The image needs to be reloading before using this project again. Unloading project...")
-                    UnloadDTProj(False, False, False)
+                    UnloadDTProj(False, False)
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
+            Case ImageWatcher.Status.OK
+                ' Görüntü "OK" durumundaysa Button25'i pasif et
+                Button25.Enabled = False
             Case ImageWatcher.Status.NotMounted
+                ' Görüntü "NotMounted" durumundaysa Button25'i pasif et
+                Button25.Enabled = False
                 If IsImageMounted Then
                     DynaLog.LogMessage("The image is no longer mounted. The project needs to be reconfigured")
                     If Not ReloadProjectQuestionDialog.IsDisposed Then ReloadProjectQuestionDialog.Dispose()
@@ -14219,7 +15218,7 @@ Public Class MainForm
                         UpdateProjProperties(False, False)
                     ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
-                        UnloadDTProj(False, False, False)
+                        UnloadDTProj(False, False)
                         If ImgBW.IsBusy Then ImgBW.CancelAsync()
                     End If
                 End If
@@ -14878,7 +15877,7 @@ Public Class MainForm
         End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
-            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
             If ImgBW.IsBusy Then Exit Sub
             itmOrder = itemOrder
             Dim recentProj As Recents = RecentList(itmOrder)
@@ -15672,9 +16671,9 @@ Public Class MainForm
             If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
             DynaLog.LogMessage("Removing existing answer files...")
             DynaLog.LogMessage("Removing answer file from Panther directory...")
-            File.Delete(pantherXml)
+            If File.Exists(pantherXml) Then File.Delete(pantherXml)
             DynaLog.LogMessage("Removing answer file from Sysprep directory...")
-            File.Delete(sysprepXml)
+            If File.Exists(sysprepXml) Then File.Delete(sysprepXml)
             If nonExistentFiles >= 2 Then
                 Throw New Exception("No answer files have been detected in the mounted image.")
             End If
@@ -15868,5 +16867,87 @@ Public Class MainForm
         Finally
             If SecureBootKey IsNot Nothing Then SecureBootKey.Close()
         End Try
+    End Sub
+
+    Private Sub ApplyFFU_Click(sender As Object, e As EventArgs) Handles ApplyFFU.Click
+        DynaLog.LogMessage("Opening image application dialog...")
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFFU_Click(sender As Object, e As EventArgs) Handles CaptureFFU.Click
+        DynaLog.LogMessage("Opening image capture dialog...")
+        FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub SplitFFU_Click(sender As Object, e As EventArgs) Handles SplitFFU.Click
+        DynaLog.LogMessage("Opening image split dialog...")
+        FfuSplit.ShowDialog(Me)
+    End Sub
+
+    Private Sub OptimizeImage_Click(sender As Object, e As EventArgs) Handles OptimizeImage.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        ImgOptimize.ShowDialog(Me)
+    End Sub
+
+    Private Sub OptimizeFFU_Click(sender As Object, e As EventArgs) Handles OptimizeFFU.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        FfuOptimize.ShowDialog(Me)
+    End Sub
+
+    Private Sub CopyImageToWdsServerTSMI_Click(sender As Object, e As EventArgs) Handles CopyImageToWdsServerTSMI.Click
+        WDSInstallImageCopy.Show()
+    End Sub
+
+    Private Sub AuditModeTSMI_Click(sender As Object, e As EventArgs) Handles AuditModeTSMI.Click
+        ' Create a new answer file with default options for entering audit mode, then copy that file to the system
+        Dim auditFile As String = Path.Combine(Path.GetTempPath(), "sysprep_audit_unatt.xml")
+
+        Try
+            File.WriteAllText(auditFile, My.Resources.DefaultUnattended_AuditMode, UTF8)
+            If File.Exists(auditFile) Then
+                If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                ProgressPanel.UnattendedFile = auditFile
+                ' Just copying our custom answer file to the sysprep folder of the target system seems to make it enter an infinite loop
+                ' where it can generalize, but won't go back to OOBE; so it keeps entering audit mode. This time do NOT copy the file to
+                ' sysprep.
+                ProgressPanel.UnattendedCopyToSysprep = False
+                ProgressPanel.OperationNum = 79
+                ProgressPanel.ShowDialog(Me)
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ApplyWimTSMI_Click(sender As Object, e As EventArgs) Handles ApplyWimTSMI.Click
+        ImgApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub ApplyFfuTSMI_Click(sender As Object, e As EventArgs) Handles ApplyFfuTSMI.Click
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureWimTSMI_Click(sender As Object, e As EventArgs) Handles CaptureWimTSMI.Click
+        ImgCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFfuTSMI_Click(sender As Object, e As EventArgs) Handles CaptureFfuTSMI.Click
+        FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub UploadThisImageToMyWDSServerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadThisImageToMyWDSServerToolStripMenuItem.Click
+        If WDSInstallImageCopy.BackgroundWorker1.IsBusy Then Exit Sub
+        DynaLog.LogMessage("Opening WDS upload wizard...")
+        WDSInstallImageCopy.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        If WDSInstallImageCopy.Visible Then
+            If WDSInstallImageCopy.WindowState = FormWindowState.Minimized Then
+                WDSInstallImageCopy.WindowState = FormWindowState.Normal
+            Else
+                WDSInstallImageCopy.BringToFront()
+            End If
+            WDSInstallImageCopy.Focus()
+        Else
+            WDSInstallImageCopy.Show()
+        End If
     End Sub
 End Class
