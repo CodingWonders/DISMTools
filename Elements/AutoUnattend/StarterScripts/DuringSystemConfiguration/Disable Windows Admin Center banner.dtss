@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Disable Windows Admin Center/Azure Arc banner
 Description: This script disables the initial Server Manager banner promoting Windows Admin Center and Azure Arc (Windows Server 2022 onwards.) 
+Customizable: No
 
 @echo off
 REM This script disables banners in Server Manager

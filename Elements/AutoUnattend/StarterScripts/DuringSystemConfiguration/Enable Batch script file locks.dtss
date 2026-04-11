@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Enable Batch script file locks
 Description: This script enables file locks in Batch scripts to keep them from being modified externally.  
+Customizable: No
 
 @echo off
 

@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Disable Shutdown Event Tracker
 Description: This script disables the shutdown event tracker on Windows Server 
+Customizable: No
 
 @echo off
 REM This script disables Shutdown Event Tracker

@@ -62,18 +62,35 @@ Namespace Classes
         End Property
 #End If
 
+#If VBC_VER < 10.0 Then
+        Private scriptOptionsCustomizable As Boolean
+#End If
+
+        Public Property OptionsCustomizable() As Boolean
+#If VBC_VER < 10.0 Then
+            Get
+                Return scriptOptionsCustomizable
+            End Get
+            Set(ByVal value As Boolean)
+                scriptOptionsCustomizable = value
+            End Set
+        End Property
+#End If
+
         Public Sub New(ByVal scriptLanguage As String)
             Name = ""
             Description = ""
             Language = scriptLanguage
             Code = ""
+            OptionsCustomizable = False
         End Sub
 
-        Public Sub New(ByVal scriptName As String, ByVal scriptDescription As String, ByVal scriptLanguage As String, ByVal scriptCode As String)
+        Public Sub New(ByVal scriptName As String, ByVal scriptDescription As String, ByVal scriptLanguage As String, ByVal scriptCode As String, ByVal customizable As Boolean)
             Name = scriptName
             Description = scriptDescription
             Language = scriptLanguage
             Code = scriptCode
+            OptionsCustomizable = customizable
         End Sub
 
         Public Overrides Function ToString() As String

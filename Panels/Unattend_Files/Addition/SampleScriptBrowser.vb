@@ -7,12 +7,17 @@ Public Class SampleScriptBrowser
     Public FinalScriptLanguage As String
     Public FinalScriptStage As Integer
 
+    Private OptionsCustomizable As Boolean
+
     Private SysConfigScripts As New List(Of StarterScript)
     Private FirstUserLogonScripts As New List(Of StarterScript)
     Private UserFirstLogonScripts As New List(Of StarterScript)
     Private UserScripts As New List(Of StarterScript)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If OptionsCustomizable Then
+            MessageBox.Show("After this script is imported, please check its code for any options that you can set. That way you can customize its behavior.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -34,16 +39,21 @@ Public Class SampleScriptBrowser
         Try
             Dim scriptFileContents As String() = File.ReadAllLines(ScriptPath)
 
+            Dim CodeBlockStartingIndex As Integer = 3
+            If scriptFileContents(3).StartsWith("Customizable:", StringComparison.OrdinalIgnoreCase) Then CodeBlockStartingIndex = 4
+
             ' Script Format:
             ' <Language>
             ' <Name>
             ' <Description>
+            ' <Customizable> (0.8+)
             ' <code>
             Dim scriptLang As String = scriptFileContents(0).Replace("Language: ", "")
             Dim scriptName As String = scriptFileContents(1).Replace("Name: ", "")
             Dim scriptDescription As String = scriptFileContents(2).Replace("Description: ", "")
+            Dim scriptOptionsCustomizable As Boolean = scriptFileContents(3).Equals("Customizable: Yes", StringComparison.OrdinalIgnoreCase)
 
-            starterScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, scriptFileContents.Skip(3).ToArray()))
+            starterScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, scriptFileContents.Skip(CodeBlockStartingIndex).ToArray()), scriptOptionsCustomizable)
             If starterScript IsNot Nothing Then DynaLog.LogMessage(starterScript.ToString())
         Catch ex As Exception
             DynaLog.LogMessage("Could not read this file. Error message: " & ex.Message)
@@ -191,6 +201,7 @@ Public Class SampleScriptBrowser
 
                 FinalScriptCode = script.ScriptCode
                 FinalScriptLanguage = script.Language
+                OptionsCustomizable = script.OptionsCustomizable
             End If
 
             ScriptDetailsPanel.Visible = (ListView1.SelectedItems.Count = 1)

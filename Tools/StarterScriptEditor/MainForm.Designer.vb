@@ -50,6 +50,7 @@ Partial Class MainForm
         Me.Label2 = New System.Windows.Forms.Label
         Me.TextBox1 = New System.Windows.Forms.TextBox
         Me.ComboBox1 = New System.Windows.Forms.ComboBox
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog
@@ -142,22 +143,24 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 192.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Panel1, 1, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Panel1, 1, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.TextBox2, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.TextBox1, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.ComboBox1, 1, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox2, 1, 3)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(11, 63)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 4
+        Me.TableLayoutPanel2.RowCount = 5
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle)
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle)
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(994, 474)
         Me.TableLayoutPanel2.TabIndex = 1
         '
@@ -166,9 +169,9 @@ Partial Class MainForm
         Me.Panel1.Controls.Add(Me.TextBox3)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(195, 77)
+        Me.Panel1.Location = New System.Drawing.Point(195, 106)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(796, 394)
+        Me.Panel1.Size = New System.Drawing.Size(796, 365)
         Me.Panel1.TabIndex = 8
         '
         'TextBox3
@@ -179,7 +182,7 @@ Partial Class MainForm
         Me.TextBox3.Multiline = True
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox3.Size = New System.Drawing.Size(796, 358)
+        Me.TextBox3.Size = New System.Drawing.Size(796, 329)
         Me.TextBox3.TabIndex = 0
         Me.TextBox3.WordWrap = False
         '
@@ -189,7 +192,7 @@ Partial Class MainForm
         Me.Panel2.Controls.Add(Me.CheckBox1)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 358)
+        Me.Panel2.Location = New System.Drawing.Point(0, 329)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(796, 36)
         Me.Panel2.TabIndex = 1
@@ -232,10 +235,10 @@ Partial Class MainForm
         '
         Me.Label5.AutoSize = True
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(3, 74)
+        Me.Label5.Location = New System.Drawing.Point(3, 103)
         Me.Label5.Name = "Label5"
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label5.Size = New System.Drawing.Size(186, 400)
+        Me.Label5.Size = New System.Drawing.Size(186, 371)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "Script Code:"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -246,7 +249,7 @@ Partial Class MainForm
         Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label4.Location = New System.Drawing.Point(3, 54)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(186, 20)
+        Me.Label4.Size = New System.Drawing.Size(186, 26)
         Me.Label4.TabIndex = 4
         Me.Label4.Text = "Script Language:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -298,6 +301,17 @@ Partial Class MainForm
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(796, 21)
         Me.ComboBox1.TabIndex = 5
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox2.Location = New System.Drawing.Point(195, 83)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(202, 17)
+        Me.CheckBox2.TabIndex = 9
+        Me.CheckBox2.Text = "Script contains configurable options"
+        Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'OpenFileDialog1
         '
@@ -410,5 +424,6 @@ Partial Class MainForm
     Friend WithEvents SystemCM_TSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
 
 End Class
