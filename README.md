@@ -1,288 +1,191 @@
-![Product image](./res/product_overview.png)
+# DISMTools 0.8 Preview — Türkçe Dil Desteği
 
-<!-- Tags (powered by Shields.io) -->
+> **English version below / İngilizce sürüm aşağıda**
 
-<p align="center">
-	<img src="https://img.shields.io/github/downloads/CodingWonders/DISMTools/total" />
-	<!-- For those who are new to GitHub and have lots to say - kudos to the SMELLY NERDS! (anyway, https://www.reddit.com/r/github/comments/1at9br4/i_am_new_to_github_and_i_have_lots_to_say/) -->
-	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools?display_name=release&label=Latest%20Version" /></a>
-	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
-	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
-	<a href="https://discord.gg/5TxEmKXNwu"><img src="https://dcbadge.limes.pink/api/server/https://discord.gg/hJJTrMNP5p?theme=default-inverted&style=for-the-badge" /></a>
-</p>
-<hr>
+---
 
-DISMTools is a front-end for DISM that lets you manage your Windows Imaging (WIM) files and a whole lot more.
+## 🇹🇷 Türkçe
 
-## About this project
+### Bu Nedir?
 
-This project was created simply because of the lack of free, open-source, and updated graphical interfaces for DISM. Before this tool was started, these popular UIs were available:
+Bu depo, [DISMTools](https://github.com/CodingWonders/DISMTools) projesinin **0.8 Preview** sürümünü temel alan ve kapsamlı **Türkçe dil desteği** eklenmiş özel bir fork'udur.
 
-- [NTLite](https://www.ntlite.com/), which is the most popular offering. This software is free, but puts certain features (like downloading OS and program updates) behind a paywall, so it may not be for you if you are looking for a free, fully-featured program
-- [MSMG Toolkit](https://forums.mydigitallife.net/threads/msmg-toolkit.50572/), which is one popular alternative. This is free and open-source (given that it is a script), but it may not be easily accessible for download, and may not be intuitive given its command-line user interface (TUI)
-- [DISM GUI](https://github.com/mikecel79/DISMGUI), the first popular, .NET powered GUI that lets you perform a couple of actions with your Windows images. While it is open-source (with its source code available on GitHub), it has not been updated since 2017
-- [DISM++](https://github.com/Chuyu-Team/Dism-Multi-language), another fully-featured, CBS-powered GUI. However, it has not been updated since 2023 and it is not open-source (even though there is a GitHub repository, it is only meant for the website and language translations)
+DISMTools, Windows görüntü dosyalarını (WIM/ESD/FFU) yönetmek için kullanılan DISM aracının gelişmiş bir grafik arayüzüdür.
 
-There are also more GUIs for DISM, but they are way less known, so they are not mentioned here. Given this situation, this project was created to be a viable alternative to NTLite that was free, open-source, easily accessible, and constantly updated.
+---
 
-## Key features
+### Yapılan Değişiklikler
 
-### Working with projects
+#### Türkçe Çeviriler (Dil Kodu: 6)
 
-Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image, unattended answer files you want to apply, and a scratch directory for temporary operations.
+Aşağıdaki tüm pencere ve diyaloglar Türkçeye çevrilmiştir:
 
-DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
+**Görüntü İşlemleri**
+- Özellik etkinleştirme / devre dışı bırakma
+- Paket ekleme / kaldırma
+- AppX paketi ekleme / kaldırma
+- Sürücü ekleme / kaldırma / dışa aktarma / içe aktarma
+- Özellik (Capability) ekleme / kaldırma
+- Windows PE ayarları (Geçici alan, Hedef yol)
+- Görüntü yakalama (WIM ve FFU)
+- Görüntü uygulama (WIM/SWM/ESD ve FFU)
+- Birim görüntüsü kaldırma
+- Görüntü bakımı (Bileşen deposu temizliği)
+- Çevrimiçi kurulum yönetimi uyarı diyaloğu
+- Çevrimdışı kurulum disk seçimi diyaloğu
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/project_sizes.png" />
-</p>
+**Bilgi Pencereleri**
+- Özellik bilgileri, Özellik (Capability) bilgileri
+- Sürücü bilgileri, AppX paketi bilgileri
+- Paket bilgileri (yüklü ve dosya bazlı)
+- Windows PE ayarları görüntüleme
+- Proje özellikleri (tüm etiketler ve değerler)
 
-The program also supports setting and removing file associations for projects with the click of a button (only on portable installations), so you can load your projects instantly by double-clicking them. You can also **copy your installed deployment tools** to your projects, allowing you to use those anywhere you take them.
+**Arka Plan İşlemleri**
+- "Görüntü bilgileri toplanıyor..." paneli
+- "Arka plan işlemleri devam ediyor" diyaloğu
+- Başarısız arka plan işlemleri diyaloğu
+- Bildirim balonu
 
-### Manage your active installation, or installations on any drive
+**İlerleme Paneli (ProgressPanel)**
+- Tüm görev durum mesajları Türkçe
+- "Günlüğü göster / Günlüğü gizle" butonu
+- Görev sayacı ("Görevler: 1/1")
+- Tüm işlem mesajları (bağlama, ayırma, paket ekleme vb.)
 
-With the **online** and **offline installation management modes**, you can easily manage any installation of a modern Windows version.
+**Ana Form**
+- Proje ağaç görünümü (ADK Dağıtım Araçları, Bağlama noktası vb.)
+- Hata banner'ı ve "Daha fazla bilgi" butonu
+- Menü açıklamaları ve tüm menü öğeleri
+- Görüntü yakalama / uygulama dropdown menüleri
+- Genişlet/Daralt butonu
 
-### Compatibility and performance go hand in hand
+**Seçenekler Penceresi**
+- Tüm seçenekler ve açıklamaları Türkçe
 
-Unlike other user interfaces for DISM that use either the DISM API or the DISM executable, DISMTools uses both, providing great performance to get the information you want from your images and installations quickly, and compatibility, allowing you to use any version of the DISM program, ranging from the Windows 7 version all the way up to the latest versions in Windows 10 and 11, so that your existing command-line workflows are not affected when you move to the graphical interface.
+#### Hata Düzeltmeleri
 
-### An advanced front-end
+- **Dinamik ilerleme çubuğu**: DISM işlemi sırasında progress bar artık DISM'in raporladığı yüzdeye göre dinamik olarak ilerliyor
+- **Boş mesaj kutusu**: İşlem devam ederken X butonuna basıldığında boş mesaj kutusu yerine Türkçe onay diyaloğu gösteriliyor
+- **BGProcDetails panel konumu**: "Görüntü bilgileri toplanıyor..." panelinin durum çubuğunun üzerine binmesi sorunu düzeltildi
+- **İtalyanca kalan metinler**: ProgressPanel ve MainForm'daki İtalyanca kalan tüm metinler Türkçeye çevrildi
 
-DISMTools isn't just a front-end for DISM, but an advanced one. As you perform tasks with your images and installations, you're presented with rich information and functionality. Here are some examples:
+#### Yardım Sistemi (docs/)
 
-- **Rich information during AppX package addition.** When adding an AppX package, you'll see rich information and, in most cases, the main Store logo asset. You can also add encrypted application packages to active installations, and configure stub package preferences, for full AppX package management:
+- `docs/tr/` klasörü oluşturuldu
+- Türkçe yardım sayfaları: Başlarken, Windows bakımına başlarken, Bilgi diyalogları, Çevrimiçi/Çevrimdışı kurulum yönetimi
+- Türkçe dil seçiliyken yardım linkleri otomatik olarak Türkçe sayfalara yönlendiriyor
+- `build.ps1` güncellendi: derleme sonrası `docs/` klasörü otomatik olarak `bin/Release/docs/`'a kopyalanıyor
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/rich_appx_info.gif" />
-</p>
+---
 
-- **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
+### Derleme
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/app_installer_downloader.png" />
-</p>
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File build.ps1
+```
 
-- **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
+Çıktı: `bin\Release\DISMTools.exe`
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/group_policy_caps.gif" />
-</p>
+> Not: `build.ps1` otomatik olarak `settings.ini` dosyasında `Language=6` ayarını yapar.
 
-- **Easily create configuration lists.** With the *DISM Configuration List Editor* you can quickly create your configuration list to exclude certain items during operations like capturing an image:
+### Gereksinimler
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/config_list_editor.png" />
-</p>
+- Windows 8.1 veya üzeri
+- .NET Framework 4.8
 
-- **Quickly manage all your mounted images in one interface.** The mounted image manager lets you perform basic image management tasks with your mounted images:
+---
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/mounted_image_manager.png" />
-</p>
+## 🇬🇧 English
 
-You can also get and save image file information using the manager:
+### What Is This?
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_quick_action.png" />
-</p>
+This repository is a custom fork of [DISMTools](https://github.com/CodingWonders/DISMTools) **0.8 Preview**, with comprehensive **Turkish language support** added.
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_saver_quick_action.png" />
-</p>
+DISMTools is an advanced graphical front-end for DISM that lets you manage Windows image files (WIM/ESD/FFU).
 
-- **Generate and print image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference as a Markdown file. You can also see your Markdown report in HTML form thanks to Markdig:
+---
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/info_report_viewer.png" />
-</p>
+### Changes Made
 
-- **Generate unattended answer files with ease.** Using the unattended answer file creation wizard, powered by the answer file generator from Christoph Schneegans, you can create your files by simply following the pages:
+#### Turkish Translations (Language Code: 6)
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/autounattend_wizard.png" />
-</p>
+All dialogs and windows have been translated to Turkish, including:
 
-- **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily. You can also use your unattended answer files to test them, or to speed up the installation process by removing tedious steps from the out-of-box experience:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/iso_creator.png" />
-</p>
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/iso_creator_installation.png" />
-</p>
+**Image Operations**
+- Feature enable/disable dialogs
+- Package add/remove dialogs
+- AppX package add/remove dialogs
+- Driver add/remove/export/import dialogs
+- Capability add/remove dialogs
+- Windows PE settings (Scratch space, Target path)
+- Image capture (WIM and FFU)
+- Image apply (WIM/SWM/ESD and FFU)
+- Volume image removal
+- Image cleanup (Component store)
+- Online installation management warning dialog
+- Offline installation disk selection dialog
 
-> [!NOTE]
-> The Windows ADK and its Windows PE plugin are required for this feature to work
+**Info Dialogs**
+- Feature info, Capability info
+- Driver info, AppX package info
+- Package info (installed and file-based)
+- Windows PE settings viewer
+- Project properties (all labels and values)
 
-- **View who signed an installed driver.** When getting installed driver information, you can view the signer information of a driver if it is signed:
+**Background Process Dialogs**
+- "Gathering image information..." panel
+- Background processes busy dialog
+- Failed background processes dialog
+- Notification balloon
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/9c84b0c3-6571-4b28-8ee4-44c4e6511e89" />
-</p>
+**Progress Panel**
+- All task status messages in Turkish
+- "Show log / Hide log" button
+- Task counter ("Görevler: 1/1")
+- All operation messages (mount, unmount, package add, etc.)
 
-### And, whether you like it or not, a Copilot bias magnet
+**Main Form**
+- Project tree view nodes
+- Error banner and "Learn more" button
+- Menu descriptions and all menu items
+- Image capture / apply dropdown menus
+- Expand/Collapse button
 
-I'm not kidding. Ask Microsoft Copilot about free, open-source DISM GUIs and it is very likely to mention this, or to even put it first. I'm not taking advantage of this, but it's quite interesting seeing this level of bias in a large-language model.
+**Options Window**
+- All options and descriptions in Turkish
 
-I did this on some of my systems and in test VMs, and it *does* deliver on that:
+#### Bug Fixes
 
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/copilot_bias_magnet_why_the_heck_microsoft.png" />
-</p>
+- **Dynamic progress bar**: Progress bar now updates dynamically based on DISM's reported percentage
+- **Empty message box on close**: Fixed empty message box when closing during background processes
+- **BGProcDetails panel positioning**: Fixed panel overlapping the status bar
+- **Remaining Italian text**: All Italian text in ProgressPanel and MainForm translated to Turkish
 
-*Now, if the WDSI pieces of s... stop flagging my program as a false positive, given how much Microsoft seems to like this, I will be happier and I won't have to upload it to the WDSI portal every time only for them to then tell me that no threats are detected.*
+#### Help System (docs/)
 
-## Supported actions
+- Created `docs/tr/` folder with Turkish help pages
+- Turkish pages: Getting started, Windows servicing intro, Info dialogs, Online/Offline installation management
+- Help links automatically redirect to Turkish pages when Turkish language is selected
+- `build.ps1` updated: `docs/` folder is automatically copied to `bin/Release/docs/` after build
 
-The following actions are supported by DISMTools:
+---
 
-  > This program is **in beta stages**, so not every possible action is implemented. Check the "Unsupported actions" section for more details
+### Building
 
-- Image management
-  - WIM/SWM/ESD file application
-  - Image capture
-  - Image commits
-  - Volume image removal (removal of unnecessary Windows editions)
-  - Image mounting and unmounting
-  - Image servicing session reloads
-  - Image index switches
-  - WIM -> ESD and viceversa conversion
-  - SWM file merger
-  - Component cleanup
-  - Image splitting
-  - Appending changes to Windows images
-  - Exporting Windows images to new image files
-- OS packages and features
-  - Package addition and removal
-  - Feature enablement and disablement
-- AppX package servicing
-  - Application addition and removal
-- Capabilities
-  - Capability addition and removal
-- Drivers
-  - Driver addition and removal
-- Provisioning packages
-  - Add provisioning packages to an image
-- Languages and regional servicing
-  - Setting keyboard layered drivers
-- Unattended answer files
-  - Creating and managing unattended answer files
-  - Applying unattended answer files
-- Other
-  - Get complete information of an image
-  - Using the project's or program's scratch directory
-  - Get information of packages, features, AppX packages, capabilities, and drivers
-  - Configure Windows PE settings
-  
-## Unsupported actions
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File build.ps1
+```
 
-- Regional settings
-- and more, it's in beta stages
+Output: `bin\Release\DISMTools.exe`
 
-These actions will be supported in future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
+> Note: `build.ps1` automatically sets `Language=6` in `settings.ini`.
 
-## System requirements
+### System Requirements
 
-DISMTools is compatible with the following operating systems:
+- Windows 8.1 or later
+- .NET Framework 4.8
 
-- **Client:** Windows 8.1 and later (excluding Windows 10 versions 1507 and 1511)
-- **Server:** Windows Server 2012 and later (excluding Server Core variants)
+---
 
-> [!NOTE]
-> DISMTools is not compatible with Windows 7/Server 2008 R2 (versions 0.2.1 onwards), [Wine](https://www.winehq.org/), or [ReactOS](https://github.com/reactos/reactos)
-
-## Downloading
-
-You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet:
-
-- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`) (available on the [Windows Utility](https://github.com/ChrisTitusTech/winutil))
-- Preview version: `winget install CodingWondersSoftware.DISMTools.Preview` (moniker: `DISMTools-pre`)
-
-This program is also 100% Free.
-
-<p align="center">
-	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: July 30, 2025</i></p>
-</p>
-
-The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
-
-## Notable mentions
-
-DISMTools has been featured in news sites. Check them out if you're interested:
-
-- [DeskModder](https://www.deskmodder.de/blog/2024/06/24/dismtools-iso-oder-image-bearbeiten-in-neuer-stable-version-erschienen/)
-- [Computer BILD](https://www.computerbild.de/artikel/cb-Tipps-Windows-Windows-Media-Player-deinstallieren-31424181.html)
-- [PC World](https://www.pcworld.com/article/2430467/operating-command-line-tools-with-the-mouse-the-best-guis.html)
-- Windows Central:
-  - https://www.windowscentral.com/software-apps/windows-11/what-is-dismtools-and-how-do-you-get-started-windows-11-and-10-image-gui-manager-explained
-  - https://www.windowscentral.com/software-apps/windows-11/how-to-easily-create-an-unattended-answer-file-for-windows-11
-
-## Support this project
-
-If you find this project useful, consider giving it a star to encourage further development.
-
-## Building
-
-If you want to grab a copy straight from the source code, follow these instructions:
-
-- **Requirements**:
-  - [7-Zip](https://7-zip.org)
-  - [.NET Framework 4.8 Developer Pack](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-offline-installer)
-  - PowerShell 5 (part of [Windows Management Framework 5](https://www.microsoft.com/en-us/download/confirmation.aspx?id=54616)), or [newer](https://github.com/powershell/powershell), for script debugging
-
-1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
-2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
-3. Open the solution in Visual Studio 2012 or later
-4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
-
-> [!NOTE]
-> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2026 build tools. Install, at least, the Community edition and the **MSVC v145- VS 2026 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
->
-> Simply searching for "MSVC" in the list of components can get you the necessary component.
-
-> [!NOTE]
-> To build the Driver Installation Module project for all architectures, run the `build.bat` script in the project root.
-
-### Additional startup flags
-
-To speed up testing, you can perform these steps before running the program from within Visual Studio:
-
-1. In the Solution Explorer, double-click `My Project`
-2. Go to the Debug tab
-3. Under the Startup options, type the following in the command line arguments text box: `/nomig /noupd`
-
-- `/nomig` skips setting migration
-- `/noupd` disables update check functionality
-
-You should have this setting configured like this:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
-</p>
-
-### JetBrains users
-
-If you use an IDE from JetBrains, you can also work on DISMTools. However, you can only modify the source code of forms, so there will not be any designer.
-
-## Contributions
-
-If you want to contribute to this project, you can do so in many ways:
-
-- Code changes: changes that WILL make it to the next release. If you want to do these, please read [the contribution guidelines](https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md)
-- Documentation and/or artwork: if you like the visual side of things more, we recommend contributing to the help system! Check out the last section for instructions.
-
-## Testing the latest
-
-We continue the development of the next version in the Preview branch. To go to it, select "dt_pre_0.7.3" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
-
-**NOTE:** this branch contains release candidate builds of DISMTools 0.7.3, and will be deleted once this version gets published as a stable release
-
-## Stay in touch
-
-Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff. Also, check out the [My Digital Life discussion](https://forums.mydigitallife.net/threads/discussion-dismtools.87263/) to know about features being worked on.
-
-## Contribute to the help system
-
-We want your help to build a great help system for DISMTools. If you want to contribute to it, you can read more [here](https://github.com/CodingWonders/dt_help).
+*Based on [DISMTools](https://github.com/CodingWonders/DISMTools) by CodingWonders — original project README available in the upstream repository.*
