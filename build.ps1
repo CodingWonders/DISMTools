@@ -62,6 +62,14 @@ if ($exitCode -eq 0) {
     if (Test-Path $settingsPath) {
         (Get-Content $settingsPath -Raw) -replace 'Language=\d+', 'Language=6' | Set-Content $settingsPath -NoNewline
     }
+    # docs klasörünü bin\Release'e kopyala (yardım linkleri için)
+    $docsSource = "$PSScriptRoot\docs"
+    $docsDest   = "$PSScriptRoot\bin\Release\docs"
+    if (Test-Path $docsSource) {
+        if (Test-Path $docsDest) { Remove-Item $docsDest -Recurse -Force }
+        Copy-Item $docsSource $docsDest -Recurse -Force
+        Write-Host "docs\ -> bin\Release\docs\" -ForegroundColor Gray
+    }
     Write-Host "========================================" -ForegroundColor Green
     Write-Host "  DERLEME BASARILI!" -ForegroundColor Green
     Write-Host "  Cikti: bin\Release\DISMTools.exe" -ForegroundColor Green
