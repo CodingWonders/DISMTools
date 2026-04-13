@@ -1,0 +1,17 @@
+﻿Language: PowerShell
+Name: Refresh Windows Explorer
+Description: This starter script automatically reloads the Windows Explorer workspace to apply certain user settings without fully restarting it. Use this script as many times as you need, making sure you use it immediately after a script.
+Customizable: No
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+public class Shell32 {
+    [DllImport("shell32.dll")]
+    public static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+}
+"@
+
+$SHCNE_ASSOCCHANGED = 0x8000000
+$SHCNF_IDLIST = 0x0
+
+[Shell32]::SHChangeNotify($SHCNE_ASSOCCHANGED, $SHCNF_IDLIST, [IntPtr]::Zero, [IntPtr]::Zero)
