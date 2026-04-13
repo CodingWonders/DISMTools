@@ -184,9 +184,13 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
-        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                   "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "install_image_to_wds.ps1") & Quote &
-                   " -imageGroup " & Quote & "Windows images" & Quote & " -installImagePath " & Quote & Path.Combine(Application.StartupPath, "sources", "install.wim") & Quote,
-                   RunAsAdmin:=True)
+        Dim selectedImageGroup As String = ""
+        If WDSImageGroupSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            selectedImageGroup = WDSImageGroupSpecifier.SpecifiedImageGroup
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "install_image_to_wds.ps1") & Quote &
+                       " -imageGroup " & Quote & selectedImageGroup & Quote & " -installImagePath " & Quote & Path.Combine(Application.StartupPath, "sources", "install.wim") & Quote,
+                       RunAsAdmin:=True)
+        End If
     End Sub
 End Class
