@@ -10,6 +10,8 @@ Public Class MainForm
     Friend AutoCapture As Boolean = False
     Friend CopyProfile As Boolean = False
 
+    Private serverPort As Integer = 8080
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Since we need Windows Server to run PXE Helper Servers, we'll block access to that page
         ' on non-Server Windows.
@@ -150,14 +152,22 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+        If ModifierKeys.HasFlag(Keys.Shift) AndAlso ServerPortSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            ' Use a different port then
+            serverPort = ServerPortSpecifier.ServerPort
+        End If
         RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                   "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "pxehelpers", "wds", "wdshelper_server.ps1") & Quote,
+                   "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "pxehelpers", "wds", "wdshelper_server.ps1") & Quote & " -sPort " & serverPort,
                    RunAsAdmin:=True)
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        If ModifierKeys.HasFlag(Keys.Shift) AndAlso ServerPortSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            ' Use a different port then
+            serverPort = ServerPortSpecifier.ServerPort
+        End If
         RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                   "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "pxehelpers", "fog", "foghelper_server.ps1") & Quote,
+                   "-Executionpolicy Bypass -File " & Quote & Path.Combine(Application.StartupPath, "pxehelpers", "fog", "foghelper_server.ps1") & Quote & " -sPort " & serverPort,
                    RunAsAdmin:=True)
     End Sub
 

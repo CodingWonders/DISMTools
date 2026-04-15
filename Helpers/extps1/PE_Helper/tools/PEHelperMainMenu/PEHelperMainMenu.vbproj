@@ -101,6 +101,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="PSInterop\PSObjects.vb" />
+    <Compile Include="ServerPortSpecifier.Designer.vb">
+      <DependentUpon>ServerPortSpecifier.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ServerPortSpecifier.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SysprepPreparatorModeDialog.Designer.vb">
       <DependentUpon>SysprepPreparatorModeDialog.vb</DependentUpon>
     </Compile>
@@ -123,6 +129,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ServerPortSpecifier.resx">
+      <DependentUpon>ServerPortSpecifier.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SysprepPreparatorModeDialog.resx">
       <DependentUpon>SysprepPreparatorModeDialog.vb</DependentUpon>

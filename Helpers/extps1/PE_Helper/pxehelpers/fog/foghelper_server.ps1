@@ -65,11 +65,14 @@
 #
 #   Settings for the server are declared in the Server Options section.
 
+param (
+    [int] $sPort = 8080
+)
 
 
 # ----------------------- Server Options -----------------------
 $webHost = "*"
-$port = 8080
+$port = $sPort
 # --------------------------------------------------------------
 
 function Write-LogMessage {
