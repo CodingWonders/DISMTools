@@ -156,6 +156,7 @@
     <Content Include="Resources\TestGlyphs\openfile_dark.png" />
     <Content Include="Resources\TestGlyphs\save_glyph.png" />
     <Content Include="Resources\TestGlyphs\save_glyph_dark.png" />
+    <Content Include="Resources\writable.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
