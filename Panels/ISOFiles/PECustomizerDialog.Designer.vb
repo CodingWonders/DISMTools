@@ -44,9 +44,12 @@ Partial Class PECustomizerDialog
         Me.Label7 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -57,7 +60,7 @@ Partial Class PECustomizerDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 432)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 460)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -277,15 +280,37 @@ Partial Class PECustomizerDialog
     "y of the target system"
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(34, 406)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(324, 13)
+        Me.Label8.TabIndex = 5
+        Me.Label8.Text = "Port to be used by PXE Helper clients to send requests by default:"
+        '
+        'NumericUpDown2
+        '
+        Me.NumericUpDown2.Location = New System.Drawing.Point(224, 426)
+        Me.NumericUpDown2.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
+        Me.NumericUpDown2.Minimum = New Decimal(New Integer() {80, 0, 0, 0})
+        Me.NumericUpDown2.Name = "NumericUpDown2"
+        Me.NumericUpDown2.Size = New System.Drawing.Size(177, 21)
+        Me.NumericUpDown2.TabIndex = 6
+        Me.NumericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.NumericUpDown2.Value = New Decimal(New Integer() {8080, 0, 0, 0})
+        '
         'PECustomizerDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(624, 473)
+        Me.ClientSize = New System.Drawing.Size(624, 501)
+        Me.Controls.Add(Me.NumericUpDown2)
         Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.ComboBox2)
         Me.Controls.Add(Me.ComboBox1)
@@ -311,6 +336,7 @@ Partial Class PECustomizerDialog
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -337,5 +363,7 @@ Partial Class PECustomizerDialog
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents NumericUpDown2 As System.Windows.Forms.NumericUpDown
 
 End Class

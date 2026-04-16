@@ -113,13 +113,15 @@ function Invoke-ServerAuthentication {
         }
     } until ($validAddress -eq $true)
     
+    $defaultPort = Get-PolicyValue -PolicyName "PXEServerPort" -DefaultPolicyValue 8080 -ValidOptions @(80..65535)
+    
     do {
-        $portStr = Read-Host -Prompt "Please enter the port to which the WDS Helper Server is listening, or press ENTER to use the default port [8080]"
+        $portStr = Read-Host -Prompt "Please enter the port to which the WDS Helper Server is listening, or press ENTER to use the default port [$($defaultPort)]"
         
         # if we haven't input anything here we'll make it 8080, if we don't do anything it will default to 0
         if ($portStr -eq "") {
             Write-Host "Using default port..."
-            $portStr = "8080"
+            $portStr = [string]$defaultPort
         }
         
         try {
