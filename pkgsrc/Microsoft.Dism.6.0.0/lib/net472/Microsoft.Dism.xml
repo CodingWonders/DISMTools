@@ -41,12 +41,57 @@
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.AddCapabilityAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously adds a capability to an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="capabilityName">The name of the capability that is being added.</param>
+            <param name="limitAccess">The flag indicates whether WU/WSUS should be contacted as a source location for downloading the payload of a capability. If payload of the capability to be added exists, the flag is ignored.</param>
+            <param name="sourcePaths">A list of source locations. The function shall look up removed payload files from the locations specified in SourcePaths, and if not found, continue the search by contacting WU/WSUS depending on parameter LimitAccess.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.AddCapabilityAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously adds a capability to an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="capabilityName">The name of the capability that is being added.</param>
+            <param name="limitAccess">The flag indicates whether WU/WSUS should be contacted as a source location for downloading the payload of a capability. If payload of the capability to be added exists, the flag is ignored.</param>
+            <param name="sourcePaths">A list of source locations. The function shall look up removed payload files from the locations specified in SourcePaths, and if not found, continue the search by contacting WU/WSUS depending on parameter LimitAccess.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.AddCapabilityAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously adds a capability to an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="capabilityName">The name of the capability that is being added.</param>
+            <param name="limitAccess">The flag indicates whether WU/WSUS should be contacted as a source location for downloading the payload of a capability. If payload of the capability to be added exists, the flag is ignored.</param>
+            <param name="sourcePaths">A list of source locations. The function shall look up removed payload files from the locations specified in SourcePaths, and if not found, continue the search by contacting WU/WSUS depending on parameter LimitAccess.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
         <member name="T:Microsoft.Dism.DismApi.NativeMethods">
             <summary>
             Represents native functions called by DismApi.
             </summary>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismAddCapability(Microsoft.Dism.DismSession,System.String,System.Boolean,System.String[],System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismAddCapability(Microsoft.Dism.DismSession,System.String,System.Boolean,System.String[],System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
             <summary>
             Add a capability to an image.
             </summary>
@@ -59,10 +104,7 @@
             <param name="progress">Pointer to a client defined callback function to report progress.</param>
             <param name="userData">User defined custom data. This will be passed back to the user through the callback.</param>
             <returns>Returns S_OK on success.</returns>
-            <remarks>
-            <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/mt684919.aspx" />
-            HRESULT WINAPI DismAddCapability(_In_ DismSession Session, _In_ PCWSTR Name, _In_ BOOL LimitAccess, _In_ PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK  Progress, _In_opt_ PVOID UserData);
-            </remarks>
+            <remarks><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/mt684919.aspx" /> HRESULT WINAPI DismAddCapability(_In_ DismSession Session, _In_ PCWSTR Name, _In_ BOOL LimitAccess, _In_ PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);</remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismAddDriver(Microsoft.Dism.DismSession,System.String,System.Boolean)">
             <summary>
@@ -77,7 +119,7 @@
             CDATA[HRESULT WINAPI DismAddDriver (_In_ DismSession Session, _In_ PCWSTR DriverPath, _In_ BOOL ForceUnsigned);
             </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismAddPackage(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismAddPackage(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
              <summary>
              Adds a single .cab or .msu file to a Windows® image.
              </summary>
@@ -89,11 +131,10 @@
              <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
              <param name="userData">Optional. User defined custom data.</param>
              <returns>Returns S_OK on success.</returns>
-             <remarks>Only .cab files can be added to an online image. Either .cab or .msu files can be added to an offline image.
+             <remarks>
+             Only .cab files can be added to an online image. Either .cab or .msu files can be added to an offline image.
             
-             This function will return a special error code if the package is not applicable. You can use the DismGetPackageInfo Function to determine if a package is applicable to the target image.
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824788.aspx" />
-             HRESULT WINAPI DismAddPackage (_In_ DismSession Session, _In_ PCWSTR PackagePath, _In_ BOOL IgnoreCheck, _In_ BOOL PreventPending _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData)
+             This function will return a special error code if the package is not applicable. You can use the DismGetPackageInfo Function to determine if a package is applicable to the target image. <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824788.aspx" /> HRESULT WINAPI DismAddPackage (_In_ DismSession Session, _In_ PCWSTR PackagePath, _In_ BOOL IgnoreCheck, _In_ BOOL PreventPending _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData)
              </remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods._DismAddProvisionedAppxPackage(Microsoft.Dism.DismSession,System.String,System.String[],System.UInt32,System.String[],System.UInt32,System.String[],System.UInt32,System.Boolean,System.String,System.String,Microsoft.Dism.DismStubPackageOption)">
@@ -153,7 +194,7 @@
              HRESULT WINAPI DismApplyUnattend (_In_ DismSession Session, _In_ PCWSTR UnattendFile, _In_ BOOL SingleSession);
              </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismCheckImageHealth(Microsoft.Dism.DismSession,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr,Microsoft.Dism.DismImageHealthState@)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismCheckImageHealth(Microsoft.Dism.DismSession,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr,Microsoft.Dism.DismImageHealthState@)">
              <summary>
              Checks whether the image can be serviced or whether it is corrupted.
              </summary>
@@ -164,10 +205,10 @@
              <param name="userData">Optional. User defined custom data.</param>
              <param name="imageHealth">A pointer to the DismImageHealthState Enumeration. The enumeration value is set during this operation.</param>
              <returns>Returns S_OK on success.</returns>
-             <remarks>If ScanImage is set to True, this function will take longer to finish.
+             <remarks>
+             If ScanImage is set to True, this function will take longer to finish.
             
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824769.aspx" />
-             HRESULT WINAPI DismCheckImageHealth(_In_ DismSession Session, _In_ BOOL ScanImage, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData, _Out_ DismImageHealthState* ImageHealth);
+             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824769.aspx" /> HRESULT WINAPI DismCheckImageHealth(_In_ DismSession Session, _In_ BOOL ScanImage, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData, _Out_ DismImageHealthState* ImageHealth);
              </remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismCleanupMountpoints">
@@ -192,22 +233,21 @@
              <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh825839.aspx" />
              HRESULT WINAPI DismCloseSession(_In_ DismSession Session);
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismCommitImage(Microsoft.Dism.DismSession,System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
-             <summary>
-             Commits the changes made to a Windows® image in a mounted .wim or .vhd file. The image must be mounted using the DismMountImage Function.
-             </summary>
-             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
-             <param name="flags">The commit flags to use for this operation. For more information about mount flags, see DISM API Constants.</param>
-             <param name="cancelEvent">Optional. You can set a CancelEvent for this function in order to cancel the operation in progress when signaled by the client. If the CancelEvent is received at a stage when the operation cannot be canceled, the operation will continue and return a success code. If the CancelEvent is received and the operation is canceled, the image state is unknown. You should verify the image state before continuing or discard the changes and start again.</param>
-             <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
-             <param name="userData">Optional. User defined custom data.</param>
-             <returns>Returns S_OK on success.</returns>
-             <remarks>The DismCommitImage function does not unmount the image.
-             <para>DismCommitImage can only be used on an image that is mounted within the DISM infrastructure. It does not apply to images mounted by another tool, such as the DiskPart tool, which are serviced using the DismOpenSession Function. You must use the DismMountImage Function to mount an image within the DISM infrastructure.</para>
-            
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh825835.aspx" />
-             HRESULT WINAPI DismCommitImage(_In_ DismSession Session, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
-             </remarks>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismCommitImage(Microsoft.Dism.DismSession,System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
+            <summary>
+            Commits the changes made to a Windows® image in a mounted .wim or .vhd file. The image must be mounted using the DismMountImage Function.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="flags">The commit flags to use for this operation. For more information about mount flags, see DISM API Constants.</param>
+            <param name="cancelEvent">Optional. You can set a CancelEvent for this function in order to cancel the operation in progress when signaled by the client. If the CancelEvent is received at a stage when the operation cannot be canceled, the operation will continue and return a success code. If the CancelEvent is received and the operation is canceled, the image state is unknown. You should verify the image state before continuing or discard the changes and start again.</param>
+            <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
+            <param name="userData">Optional. User defined custom data.</param>
+            <returns>Returns S_OK on success.</returns>
+            <remarks>
+            The DismCommitImage function does not unmount the image.
+            <para>DismCommitImage can only be used on an image that is mounted within the DISM infrastructure. It does not apply to images mounted by another tool, such as the DiskPart tool, which are serviced using the DismOpenSession Function. You must use the DismMountImage Function to mount an image within the DISM infrastructure.</para>
+            <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh825835.aspx" /> HRESULT WINAPI DismCommitImage(_In_ DismSession Session, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
+            </remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismDelete(System.IntPtr)">
              <summary>
@@ -221,26 +261,25 @@
              HRESULT WINAPI DismDelete(_In_ VOID* DismStructure);
              </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismDisableFeature(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismDisableFeature(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
              <summary>
              Disables a feature in the current image.
              </summary>
              <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
              <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
-             <param name="packageName">Optional. The name of the parent package that the feature is a part of.
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
             
-             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.</param>
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
              <param name="removePayload">A Boolean value specifying whether to remove the files required to enable the feature.</param>
              <param name="cancelEvent">Optional. You can set a CancelEvent for this function in order to cancel the operation in progress when signaled by the client. If the CancelEvent is received at a stage when the operation cannot be canceled, the operation will continue and return a success code. If the CancelEvent is received and the operation is canceled, the image state is unknown. You should verify the image state before continuing or discard the changes and start again.</param>
              <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
              <param name="userData">Optional. User specified data.</param>
              <returns>Returns S_OK on success.</returns>
-             <remarks>
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824766.aspx" />
-             HRESULT WINAPI DismDisableFeature (_In_ DismSession Session, _In_ PCWSTR FeatureName, _In_opt_ PCWSTR PackageName, _In_ BOOL RemovePayload, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
-             </remarks>
+             <remarks><a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824766.aspx" /> HRESULT WINAPI DismDisableFeature (_In_ DismSession Session, _In_ PCWSTR FeatureName, _In_opt_ PCWSTR PackageName, _In_ BOOL RemovePayload, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);</remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismEnableFeature(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismPackageIdentifier,System.Boolean,System.String[],System.UInt32,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismEnableFeature(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismPackageIdentifier,System.Boolean,System.String[],System.UInt32,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
              <summary>
              Enables a feature in an image. Features are identified by a name and can optionally be tied to a package.
              </summary>
@@ -256,12 +295,12 @@
              <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
              <param name="userData">Optional. User defined custom data.</param>
              <returns>Returns S_OK on success.</returns>
-             <remarks>If the feature is present in the foundation package, you do not have to specify any package information. If the feature is in an optional package or feature pack that has already been installed in the image, specify a package name in the Identifier parameter and specify DismPackageName as the PackageIdentifier.If the feature cannot be enabled due to the parent feature not being enabled, a special error code will be returned. You can use EnableAll to enable the parent features when you enable the specified features, or you can use the DismGetFeatureParent Function to enumerate the parent features and enable them first.
+             <remarks>
+             If the feature is present in the foundation package, you do not have to specify any package information. If the feature is in an optional package or feature pack that has already been installed in the image, specify a package name in the Identifier parameter and specify DismPackageName as the PackageIdentifier.If the feature cannot be enabled due to the parent feature not being enabled, a special error code will be returned. You can use EnableAll to enable the parent features when you enable the specified features, or you can use the DismGetFeatureParent Function to enumerate the parent features and enable them first.
             
              If the feature to be enabled is not a component of the foundation package, you must add the parent optional package with the DismAddPackage Function before you enable the feature. Do not you specify a path to a .cab file of an optional package that has not been added to the image in the Identifier parameter. If you specify a package that has not been added, and you specify DismPackagePath as the PackageIdentifier, the function will complete successfully but the feature will not be enabled.
             
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824737.aspx" />
-             HRESULT WINAPI DismEnableFeature (_In_ DismSession Session, _In_ PCWSTR FeatureName, _In_opt_ PCWSTR Identifier, _In_opt_ DismPackageIdentifier PackageIdentifier, _In_ BOOL LimitAccess, _In_reads_opt_(SourcePathCount) PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
+             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824737.aspx" /> HRESULT WINAPI DismEnableFeature (_In_ DismSession Session, _In_ PCWSTR FeatureName, _In_opt_ PCWSTR Identifier, _In_opt_ DismPackageIdentifier PackageIdentifier, _In_ BOOL LimitAccess, _In_reads_opt_(SourcePathCount) PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
              </remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetCapabilities(Microsoft.Dism.DismSession,System.IntPtr@,System.UInt32@)">
@@ -515,7 +554,7 @@
              HRESULT WINAPI DismInitialize(_In_ DismLogLevel LogLevel, _In_opt_ PCWSTR LogFilePath, _In_opt_ PCWSTR ScratchDirectory);
              </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismMountImage(System.String,System.String,System.UInt32,System.String,Microsoft.Dism.DismImageIdentifier,System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismMountImage(System.String,System.String,System.UInt32,System.String,Microsoft.Dism.DismImageIdentifier,System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
              <summary>
              Mounts a WIM or VHD image file to a specified location.
              </summary>
@@ -528,12 +567,15 @@
              <param name="cancelEvent">Optional. You can set a CancelEvent for this function in order to cancel the operation in progress when signaled by the client. If the CancelEvent is received at a stage when the operation cannot be canceled, the operation will continue and return a success code. If the CancelEvent is received and the operation is canceled, the image state is unknown. You should verify the image state before continuing or discard the changes and start again.</param>
              <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
              <param name="userData">Optional. User defined custom data.</param>
-             <returns>Returns OK on success.
+             <returns>
+             Returns OK on success.
             
              Returns E_INVALIDARG if any of the paths are not well-formed or if MountPath or ImageFilePath does not exist or is invalid.
             
-             Returns a Win32 error code mapped to an HRESULT for other errors.</returns>
-             <remarks>After mounting an image, use the DismOpenSession Function to start a servicing session. For more information, see Using the DISM API.
+             Returns a Win32 error code mapped to an HRESULT for other errors.
+             </returns>
+             <remarks>
+             After mounting an image, use the DismOpenSession Function to start a servicing session. For more information, see Using the DISM API.
             
              Mounting an image from a WIM or VHD file that is stored on the network is not supported. You must specify a file on the local computer.
             
@@ -543,8 +585,7 @@
             
              When mounting an image in a WIM file, the image can either be identified by the image index number specified by ImageIndex, or the name of the image specified by ImageName. ImageIdentifier specifies whether to use the ImageIndex or ImageName parameter to identify the image.
             
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824731.aspx" />
-             HRESULT WINAPI DismMountImage (_In_ PCWSTR ImageFilePath, _In_ PCWSTR MountPath, _In_ UINT ImageIndex, _In_opt_ PCWSTR ImageName, _In_ DismImageIdentifier ImageIdentifier, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
+             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824731.aspx" /> HRESULT WINAPI DismMountImage (_In_ PCWSTR ImageFilePath, _In_ PCWSTR MountPath, _In_ UINT ImageIndex, _In_opt_ PCWSTR ImageName, _In_ DismImageIdentifier ImageIdentifier, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
              </remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismOpenSession(System.String,System.String,System.String,System.IntPtr@)">
@@ -589,7 +630,7 @@
              HRESULT WINAPI DismRemountImage(_In_ PCWSTR MountPath);
              </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRemoveCapability(Microsoft.Dism.DismSession,System.String,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRemoveCapability(Microsoft.Dism.DismSession,System.String,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
             <summary>
             Add a capability to an image.
             </summary>
@@ -599,10 +640,7 @@
             <param name="progress">Pointer to a client defined callback function to report progress.</param>
             <param name="userData">User defined custom data. This will be passed back to the user through the callback.</param>
             <returns>Returns S_OK on success.</returns>
-            <remarks>
-            <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/mt684925.aspx" />
-            HRESULT WINAPI DismRemoveCapability(_In_ DismSession Session, _In_ PCWSTR Name, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK  Progress, _In_opt_ PVOID UserData);
-            </remarks>
+            <remarks><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/mt684925.aspx" /> HRESULT WINAPI DismRemoveCapability(_In_ DismSession Session, _In_ PCWSTR Name, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);</remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRemoveDriver(Microsoft.Dism.DismSession,System.String)">
              <summary>
@@ -620,7 +658,7 @@
              HRESULT WINAPI DismRemoveDriver (_In_ DismSession Session, _In_ PCWSTR DriverPath);
              </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRemovePackage(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismPackageIdentifier,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRemovePackage(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismPackageIdentifier,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
             <summary>
             Removes a package from an image.
             </summary>
@@ -643,7 +681,7 @@
             <param name="packageName">The package name.</param>
             <returns>Returns S_OK on success.</returns>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRestoreImageHealth(Microsoft.Dism.DismSession,System.String[],System.UInt32,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismRestoreImageHealth(Microsoft.Dism.DismSession,System.String[],System.UInt32,System.Boolean,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
              <summary>
              Repairs a corrupted image that has been identified as repairable by the DismCheckImageHealth Function.
              </summary>
@@ -655,15 +693,15 @@
              <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
              <param name="userData">Optional. User defined custom data.</param>
              <returns>Returns S_OK on success.</returns>
-             <remarks>Run the DismCheckImageHealth Function to determine if the image is corrupted and if the image is repairable. If the DismCheckImageHealth Function returns DismImageRepairable, the DismRestoreImageHealth function can repair the image.
+             <remarks>
+             Run the DismCheckImageHealth Function to determine if the image is corrupted and if the image is repairable. If the DismCheckImageHealth Function returns DismImageRepairable, the DismRestoreImageHealth function can repair the image.
             
              If a repair file is not found in any of the locations specified by the SourcePaths parameter or the location paths in the registry specified by Group Policy, the DismRestoreImageHealth function will contact WU to check for a repair file unless the LimitAccess parameter is set to True.
             
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh825836.aspx" />
-             HRESULT WINAPI DismRestoreImageHealth(_In_ DismSession Session, _In_reads_opt_(SourcePathCount) PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_ BOOL LimitAccess, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
+             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh825836.aspx" /> HRESULT WINAPI DismRestoreImageHealth(_In_ DismSession Session, _In_reads_opt_(SourcePathCount) PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_ BOOL LimitAccess, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
              </remarks>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismSetEdition(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismSetEdition(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
             <summary>
             Changes an offline Windows image to a higher edition.
             </summary>
@@ -709,7 +747,7 @@
             <param name="PartSize">The maximum size in megabytes (MB) for each created file.</param>
             <returns>Retrusn S_OK on success.</returns>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismUnmountImage(System.String,System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismUnmountImage(System.String,System.UInt32,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallbackNative,System.IntPtr)">
              <summary>
              Unmounts a Windows image from a specified location.
              </summary>
@@ -719,10 +757,10 @@
              <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
              <param name="userData">Optional. User defined custom data.</param>
              <returns>Returns OK on success.</returns>
-             <remarks>After you use the DismCloseSession Function to end every active DISMSession, you can unmount the image using the DismUnmountImage function.
+             <remarks>
+             After you use the DismCloseSession Function to end every active DISMSession, you can unmount the image using the DismUnmountImage function.
             
-             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824802.aspx" />
-             HRESULT WINAPI DismUnmountImage(_In_ PCWSTR MountPath, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
+             <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824802.aspx" /> HRESULT WINAPI DismUnmountImage(_In_ PCWSTR MountPath, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
              </remarks>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismValidateProductKey(Microsoft.Dism.DismSession,System.String)">
@@ -755,7 +793,7 @@
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
             <param name="driverDirectory">A relative or absolute path to a directory containing driver .inf files.</param>
             <param name="forceUnsigned">Indicates whether to accept unsigned drivers to an x64-based image. Unsigned drivers will automatically be added to an x86-based image.</param>
-            <param name="recursive"><code>true</code> to search recursively for driver files, otherwise <code>false</code>.</param>
+            <param name="recursive"><see langword="true" /> to search recursively for driver files, otherwise <see langword="false" /> to only enumrate the specified directory.</param>
             <exception cref="T:System.IO.DirectoryNotFoundException">The directory specified by the <paramref name="driverDirectory" /> parameter does not exist.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.AddPackage(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean)">
@@ -796,6 +834,54 @@
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+            <exception cref="T:Microsoft.Dism.DismPackageNotApplicableException">When the package is not applicable to the specified session.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.AddPackageAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously adds a single .cab or .msu file to a Windows® image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the OpenSession method.</param>
+            <param name="packagePath">A relative or absolute path to the .cab or .msu file being added or a folder containing the expanded files of a single .cab file.</param>
+            <param name="ignoreCheck">Specifies whether to ignore the internal applicability checks that are done when a package is added.</param>
+            <param name="preventPending">Specifies whether to add a package if it has pending online actions.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+            <exception cref="T:Microsoft.Dism.DismPackageNotApplicableException">When the package is not applicable to the specified session.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.AddPackageAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously adds a single .cab or .msu file to a Windows® image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the OpenSession method.</param>
+            <param name="packagePath">A relative or absolute path to the .cab or .msu file being added or a folder containing the expanded files of a single .cab file.</param>
+            <param name="ignoreCheck">Specifies whether to ignore the internal applicability checks that are done when a package is added.</param>
+            <param name="preventPending">Specifies whether to add a package if it has pending online actions.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+            <exception cref="T:Microsoft.Dism.DismPackageNotApplicableException">When the package is not applicable to the specified session.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.AddPackageAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously adds a single .cab or .msu file to a Windows® image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the OpenSession method.</param>
+            <param name="packagePath">A relative or absolute path to the .cab or .msu file being added or a folder containing the expanded files of a single .cab file.</param>
+            <param name="ignoreCheck">Specifies whether to ignore the internal applicability checks that are done when a package is added.</param>
+            <param name="preventPending">Specifies whether to add a package if it has pending online actions.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
             <exception cref="T:Microsoft.Dism.DismPackageNotApplicableException">When the package is not applicable to the specified session.</exception>
         </member>
@@ -892,6 +978,42 @@
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.CheckImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously checks whether the image can be serviced or whether it is corrupted.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="scanImage">Specifies whether to scan the image or just check for flags from a previous scan.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> representing the asynchronous operation, containing the health state of the image.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.CheckImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously checks whether the image can be serviced or whether it is corrupted.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="scanImage">Specifies whether to scan the image or just check for flags from a previous scan.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> representing the asynchronous operation, containing the health state of the image.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.CheckImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously checks whether the image can be serviced or whether it is corrupted.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="scanImage">Specifies whether to scan the image or just check for flags from a previous scan.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> representing the asynchronous operation, containing the health state of the image.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.CleanupMountpoints">
             <summary>
             Removes files and releases resources associated with corrupted or invalid mount paths.
@@ -911,7 +1033,7 @@
             Commits the changes made to a Windows® image in a mounted .wim or .vhd file.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
-            <param name="discardChanges">true or false to discard changes made to the image.</param>
+            <param name="discardChanges"><see langword="true" /> to discard changes made to the image, otherwise <see langword="false" /> to keep changes made to the image.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.CommitImage(Microsoft.Dism.DismSession,System.Boolean,Microsoft.Dism.DismProgressCallback)">
@@ -919,7 +1041,7 @@
             Commits the changes made to a Windows® image in a mounted .wim or .vhd file.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
-            <param name="discardChanges">true or false to discard changes made to the image.</param>
+            <param name="discardChanges"><see langword="true" /> to discard changes made to the image, otherwise <see langword="false" /> to keep changes made to the image.</param>
             <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
@@ -929,11 +1051,47 @@
             Commits the changes made to a Windows® image in a mounted .wim or .vhd file.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
-            <param name="discardChanges">true or false to discard changes made to the image.</param>
+            <param name="discardChanges"><see langword="true" /> to discard changes made to the image, otherwise <see langword="false" /> to keep changes made to the image.</param>
             <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.CommitImageAsync(Microsoft.Dism.DismSession,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously commits the changes made to a Windows® image in a mounted .wim or .vhd file.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="discardChanges"><see langword="true" /> to discard changes made to the image, otherwise <see langword="false" /> to keep changes made to the image.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.CommitImageAsync(Microsoft.Dism.DismSession,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously commits the changes made to a Windows® image in a mounted .wim or .vhd file.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="discardChanges"><see langword="true" /> to discard changes made to the image, otherwise <see langword="false" /> to keep changes made to the image.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.CommitImageAsync(Microsoft.Dism.DismSession,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously commits the changes made to a Windows® image in a mounted .wim or .vhd file.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="discardChanges"><see langword="true" /> to discard changes made to the image, otherwise <see langword="false" /> to keep changes made to the image.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.Delete(System.IntPtr)">
             <summary>
@@ -947,9 +1105,11 @@
              </summary>
              <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
              <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
-             <param name="packageName">Optional. The name of the parent package that the feature is a part of.
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
             
-             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.</param>
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
              <param name="removePayload">Specifies whether to remove the files required to enable the feature.</param>
              <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
              <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
@@ -960,9 +1120,11 @@
              </summary>
              <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
              <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
-             <param name="packageName">Optional. The name of the parent package that the feature is a part of.
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
             
-             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.</param>
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
              <param name="removePayload">Specifies whether to remove the files required to enable the feature.</param>
              <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
              <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
@@ -975,15 +1137,171 @@
              </summary>
              <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
              <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
-             <param name="packageName">Optional. The name of the parent package that the feature is a part of.
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
             
-             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.</param>
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
              <param name="removePayload">Specifies whether to remove the files required to enable the feature.</param>
              <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
              <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
              <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
              <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
              <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.DisableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+             <summary>
+             Asynchronously disables a feature in the current image.
+             </summary>
+             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+             <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
+            
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
+             <param name="removePayload">Specifies whether to remove the files required to enable the feature.</param>
+             <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+             <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+             <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.DisableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+             <summary>
+             Asynchronously disables a feature in the current image.
+             </summary>
+             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+             <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
+            
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
+             <param name="removePayload">Specifies whether to remove the files required to enable the feature.</param>
+             <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+             <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+             <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+             <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.DisableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+             <summary>
+             Asynchronously disables a feature in the current image.
+             </summary>
+             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+             <param name="featureName">The name of the feature that you want to disable. To disable more than one feature, separate each feature name with a semicolon.</param>
+             <param name="packageName">
+             Optional. The name of the parent package that the feature is a part of.
+            
+             This is an optional parameter. If no package is specified, then the default Windows® Foundation package is used.
+             </param>
+             <param name="removePayload">Specifies whether to remove the files required to enable the feature.</param>
+             <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+             <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+             <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+             <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+             <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},Microsoft.Dism.DismProgressCallback)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},Microsoft.Dism.DismProgressCallback,System.Object)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureAsync(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package path.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackageName(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -1037,6 +1355,72 @@
             <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
             <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackageNameAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package name.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packageName">The name of the package that contains the feature.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="cancellationToken">The token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackageNameAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package name.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packageName">The name of the package that contains the feature.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="cancellationToken">The token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackageNameAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package name.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packageName">The name of the package that contains the feature.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackageNameAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Enables a feature from the specified package name.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packageName">The name of the package that contains the feature.</param>
+            <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
+            <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
@@ -1097,51 +1481,71 @@
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean)">
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackagePathAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Enables a feature from the specified package path.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
             <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packagePath">The path of the package that contains the feature.</param>
             <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
             <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String})">
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackagePathAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
             <summary>
             Enables a feature from the specified package path.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
             <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packagePath">The path of the package that contains the feature.</param>
             <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
             <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
             <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},Microsoft.Dism.DismProgressCallback)">
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackagePathAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
             <summary>
             Enables a feature from the specified package path.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
             <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packagePath">The path of the package that contains the feature.</param>
             <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
             <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
             <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
-            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
-        <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},Microsoft.Dism.DismProgressCallback,System.Object)">
+        <member name="M:Microsoft.Dism.DismApi.EnableFeatureByPackagePathAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
             <summary>
             Enables a feature from the specified package path.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
             <param name="featureName">The name of the feature that is being enabled. To enable more than one feature, separate each feature name with a semicolon.</param>
+            <param name="packagePath">The path of the package that contains the feature.</param>
             <param name="limitAccess">Specifies whether Windows Update (WU) should be contacted as a source location for downloading files if none are found in other specified locations. Before checking WU, DISM will check for the files in the SourcePaths provided and in any locations specified in the registry by group policy. If the files required to enable the feature are still present on the computer, this flag is ignored.</param>
             <param name="enableAll">Specifies whether to enable all dependencies of the feature. If the specified feature or any one of its dependencies cannot be enabled, none of them will be changed from their existing state.</param>
             <param name="sourcePaths">A list of source locations to check for files needed to enable the feature.</param>
-            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
-            <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.EnableFeature(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismPackageIdentifier,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},Microsoft.Dism.DismProgressCallback,System.Object)">
             <summary>
@@ -1207,7 +1611,7 @@
             Gets the drivers in an image.
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
-            <param name="allDrivers">true or false to specify to retrieve all drivers or just out-of-box drivers.</param>
+            <param name="allDrivers"><see langword="true" /> to retrieve all drivers or <see langword="false" /> to retrieve just out-of-box drivers.</param>
             <returns>A <see cref="T:Microsoft.Dism.DismDriverPackageCollection" /> object containing a collection of <see cref="T:Microsoft.Dism.DismDriverPackage" /> objects.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
@@ -1631,6 +2035,118 @@
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageIndex">The index of the image in the WIM file that you want to mount. For a VHD file, you must specify an index of 1.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.Int32,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageIndex">The index of the image in the WIM file that you want to mount. For a VHD file, you must specify an index of 1.</param>
+            <param name="readOnly">Specifies if the image should be mounted in read-only mode.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.Int32,System.Boolean,Microsoft.Dism.DismMountImageOptions,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageIndex">The index of the image in the WIM file that you want to mount. For a VHD file, you must specify an index of 1.</param>
+            <param name="readOnly">Specifies if the image should be mounted in read-only mode.</param>
+            <param name="options">Specifies options to use when mounting an image.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.Int32,System.Boolean,Microsoft.Dism.DismMountImageOptions,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageIndex">The index of the image in the WIM file that you want to mount. For a VHD file, you must specify an index of 1.</param>
+            <param name="readOnly">Specifies if the image should be mounted in read-only mode.</param>
+            <param name="options">Specifies options to use when mounting an image.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageName">The name of the image that you want to mount.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageName">The name of the image that you want to mount.</param>
+            <param name="readOnly">Specifies if the image should be mounted in read-only mode.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.String,System.Boolean,Microsoft.Dism.DismMountImageOptions,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageName">The name of the image that you want to mount.</param>
+            <param name="readOnly">Specifies if the image should be mounted in read-only mode.</param>
+            <param name="options">Specifies options to use when mounting an image.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.MountImageAsync(System.String,System.String,System.String,System.Boolean,Microsoft.Dism.DismMountImageOptions,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously mounts a WIM or VHD image file to a specified location.
+            </summary>
+            <param name="imageFilePath">The path to the WIM or VHD file on the local computer. A .wim, .vhd, or .vhdx file name extension is required.</param>
+            <param name="mountPath">The path of the location where the image should be mounted. This mount path must already exist on the computer. The Windows image in a .wim, .vhd, or .vhdx file can be mounted to an empty folder on an NTFS formatted drive. A Windows image in a .vhd or .vhdx file can also be mounted to an unassigned drive letter. You cannot mount an image to the root of the existing drive.</param>
+            <param name="imageName">The name of the image that you want to mount.</param>
+            <param name="readOnly">Specifies if the image should be mounted in read-only mode.</param>
+            <param name="options">Specifies options to use when mounting an image.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.MountImage(System.String,System.String,System.Int32,System.String,Microsoft.Dism.DismImageIdentifier,System.Boolean,Microsoft.Dism.DismMountImageOptions,Microsoft.Dism.DismProgressCallback,System.Object)">
             <summary>
             Mounts a WIM or VHD image file to a specified location.
@@ -1734,6 +2250,17 @@
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.RemoveCapability(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismProgressCallback)">
+            <summary>
+            Removes the capability from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="capabilityName">The name of the capability that is being removed</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.RemoveCapability(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismProgressCallback,System.Object)">
             <summary>
             Removes the capability from an image.
@@ -1744,6 +2271,45 @@
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemoveCapabilityAsync(Microsoft.Dism.DismSession,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes the capability from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="capabilityName">The name of the capability that is being removed.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemoveCapabilityAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes the capability from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="capabilityName">The name of the capability that is being removed.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemoveCapabilityAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes the capability from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="capabilityName">The name of the capability that is being removed.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.RemoveDriver(Microsoft.Dism.DismSession,System.String)">
@@ -1819,6 +2385,84 @@
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.RemovePackageByNameAsync(Microsoft.Dism.DismSession,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes a package by package name from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="packageName">The package name.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemovePackageByNameAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes a package by package name from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="packageName">The package name.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemovePackageByNameAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes a package by package name from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="packageName">The package name.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemovePackageByPathAsync(Microsoft.Dism.DismSession,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes a package by package path from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="packagePath">The package path.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemovePackageByPathAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes a package by package path from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="packagePath">The package path.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RemovePackageByPathAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously removes a package by package path from an image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="packagePath">The package path.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.RemovePackage(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismPackageIdentifier,Microsoft.Dism.DismProgressCallback,System.Object)">
             <summary>
             Removes a package from an image.
@@ -1879,6 +2523,60 @@
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RestoreImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously repairs a corrupted image that has been identified as repairable by the CheckImageHealth Function.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="limitAccess">Specifies whether the RestoreImageHealth method should contact Windows Update (WU) as a source location for downloading repair files. Before checking WU, DISM will check for the files in the sourcePaths provided and in any locations specified in the registry by Group Policy. If the files that are required to enable the feature are found in these other specified locations, this flag is ignored.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RestoreImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously repairs a corrupted image that has been identified as repairable by the CheckImageHealth Function.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="limitAccess">Specifies whether the RestoreImageHealth method should contact Windows Update (WU) as a source location for downloading repair files. Before checking WU, DISM will check for the files in the sourcePaths provided and in any locations specified in the registry by Group Policy. If the files that are required to enable the feature are found in these other specified locations, this flag is ignored.</param>
+            <param name="sourcePaths">List of source locations to check for repair files.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RestoreImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously repairs a corrupted image that has been identified as repairable by the CheckImageHealth Function.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="limitAccess">Specifies whether the RestoreImageHealth method should contact Windows Update (WU) as a source location for downloading repair files. Before checking WU, DISM will check for the files in the sourcePaths provided and in any locations specified in the registry by Group Policy. If the files that are required to enable the feature are found in these other specified locations, this flag is ignored.</param>
+            <param name="sourcePaths">List of source locations to check for repair files.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.RestoreImageHealthAsync(Microsoft.Dism.DismSession,System.Boolean,System.Collections.Generic.List{System.String},System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously repairs a corrupted image that has been identified as repairable by the CheckImageHealth Function.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="limitAccess">Specifies whether the RestoreImageHealth method should contact Windows Update (WU) as a source location for downloading repair files. Before checking WU, DISM will check for the files in the sourcePaths provided and in any locations specified in the registry by Group Policy. If the files that are required to enable the feature are found in these other specified locations, this flag is ignored.</param>
+            <param name="sourcePaths">List of source locations to check for repair files.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.SetEdition(Microsoft.Dism.DismSession,System.String)">
@@ -1944,6 +2642,87 @@
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAndProductKeyAsync(Microsoft.Dism.DismSession,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously changes an offline Windows image to a higher edition and sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">A product key for the specified edition.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAndProductKeyAsync(Microsoft.Dism.DismSession,System.String,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously changes an offline Windows image to a higher edition and sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">A product key for the specified edition.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAndProductKeyAsync(Microsoft.Dism.DismSession,System.String,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously changes an offline Windows image to a higher edition and sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">A product key for the specified edition.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAsync(Microsoft.Dism.DismSession,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAsync(Microsoft.Dism.DismSession,System.String,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.SetEdition(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismProgressCallback,System.Object)">
             <summary>
             Changes an offline Windows image to a higher edition and optionaly sets the product key.
@@ -2005,6 +2784,42 @@
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.UnmountImageAsync(System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously unmounts a Windows image from a specified location.
+            </summary>
+            <param name="mountPath">A relative or absolute path to the mount directory of the image.</param>
+            <param name="commitChanges">Specifies whether or not the changes to the image should be saved.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.UnmountImageAsync(System.String,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously unmounts a Windows image from a specified location.
+            </summary>
+            <param name="mountPath">A relative or absolute path to the mount directory of the image.</param>
+            <param name="commitChanges">Specifies whether or not the changes to the image should be saved.</param>
+            <param name="progress">An optional progress provider to receive progress updates.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.UnmountImageAsync(System.String,System.Boolean,System.IProgress{Microsoft.Dism.DismProgress},System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously unmounts a Windows image from a specified location.
+            </summary>
+            <param name="mountPath">A relative or absolute path to the mount directory of the image.</param>
+            <param name="commitChanges">Specifies whether or not the changes to the image should be saved.</param>
+            <param name="progress">An optional <see cref="T:System.IProgress`1" /> provider to receive progress updates.</param>
+            <param name="userData">Optional user data to pass to the specified <see cref="T:System.IProgress`1" />.</param>
+            <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:System.OperationCanceledException">When the operation is canceled.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.ValidateProductKey(Microsoft.Dism.DismSession,System.String)">
             <summary>
@@ -2878,7 +3693,7 @@
             The capability ID of the package.
             </summary>
         </member>
-        <member name="T:Microsoft.Dism.DismApi.DismProgressCallback">
+        <member name="T:Microsoft.Dism.DismApi.DismProgressCallbackNative">
             <summary>
             A client-defined callback function that DISM API uses to report progress on time-consuming operations. API functions that report progress accept a pointer to a DismProgressCallback function. DISM_PROGRESS_CALLBACK is a typedef to this function type.
             </summary>
@@ -3387,7 +4202,7 @@
             Determines whether the specified <see cref="T:Microsoft.Dism.DismCustomProperty" /> is equal to the current <see cref="T:Microsoft.Dism.DismCustomProperty" />.
             </summary>
             <param name="other">A <see cref="T:Microsoft.Dism.DismCustomProperty" /> object to compare with the current object.</param>
-            <returns><code>true</code> if the specified <see cref="T:Microsoft.Dism.DismCustomProperty" /> is equal to the current <see cref="T:Microsoft.Dism.DismCustomProperty" />, otherwise <see langword="false" />.</returns>
+            <returns><see langword="true" /> if the specified <see cref="T:Microsoft.Dism.DismCustomProperty" /> is equal to the current <see cref="T:Microsoft.Dism.DismCustomProperty" />, otherwise <see langword="false" />.</returns>
         </member>
         <member name="M:Microsoft.Dism.DismCustomProperty.GetHashCode">
             <summary>
