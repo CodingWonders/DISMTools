@@ -193,8 +193,10 @@ Public Class RegistryControlPanel
         Dim regName As String = "z" & Path.GetFileNameWithoutExtension(HiveLocation)
         Dim regExitCode As Integer
         If Load Then
+            If RegistryHelper.RegistryKeyExists(String.Format("HKLM\{0}", regName)) Then Return True
             regExitCode = RegistryHelper.LoadRegistryHive(HiveLocation, String.Format("HKLM\{0}", regName))
         Else
+            If Not RegistryHelper.RegistryKeyExists(String.Format("HKLM\{0}", regName)) Then Return True
             regExitCode = RegistryHelper.UnloadRegistryHive(String.Format("HKLM\{0}", regName))
         End If
         DynaLog.LogMessage("The REG process finished with exit code " & Hex(regExitCode))

@@ -6,8 +6,10 @@ Imports Microsoft.VisualBasic.ControlChars
 Module RegistryHelper
 
     ' The error constant values don't have any meaning. This goes to you, SPEEDY. Only me and you know it.
-    Const DTERR_RegNotFound As Integer = &H24D80191
-    Const DTERR_RegItemObjectNull As Integer = &H24D80192
+    Private Const DTERR_RegNotFound As Integer = &H24D80191
+    Private Const DTERR_RegItemObjectNull As Integer = &H24D80192
+
+    Private Const ERROR_SUCCESS As Integer = 0
 
     ''' <summary>
     ''' Runs a REG process
@@ -35,6 +37,16 @@ Module RegistryHelper
         regProc.Start()
         regProc.WaitForExit()
         Return regProc.ExitCode
+    End Function
+
+    Public Function RegistryKeyExists(KeyPath As String) As Boolean
+        Return RunRegProcess(String.Format("query {0}{1}{0}", Quote, KeyPath.Replace(Quote, ""))) = ERROR_SUCCESS
+    End Function
+
+    Public Function RegistryValueExists(KeyPath As String, ValueName As String) As Boolean
+        Return RunRegProcess(String.Format("query {0}{1}{0} {2}", Quote, KeyPath.Replace(Quote, ""),
+                                           If(ValueName = "", "/ve",
+                                              String.Format("/v {0}{1}{0}", Quote, ValueName.Replace(Quote, ""))))) = ERROR_SUCCESS
     End Function
 
     ''' <summary>
