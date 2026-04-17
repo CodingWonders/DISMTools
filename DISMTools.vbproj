@@ -1549,7 +1549,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
-    <None Include="Tools\DT_WinADK.reg" />
     <None Include="Tools\UnattendGen\UnattendGen-arm64-Linux.zip" />
     <None Include="Tools\UnattendGen\UnattendGen-arm64-MacOS.zip" />
     <None Include="Tools\UnattendGen\UnattendGen-x64-Linux.zip" />
