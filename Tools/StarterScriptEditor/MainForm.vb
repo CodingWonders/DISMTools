@@ -20,6 +20,8 @@ Public Class MainForm
 
     Public CurrentColorMode As ColorThemeMode
 
+    Private VersionModifierKeyPressed As Boolean
+
     Private Enum ScriptVersion As Integer
         ''' <summary>
         ''' Starter scripts for the DISMTools 0.7 Series (0.7.2, 0.7.3)
@@ -191,8 +193,8 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub SaveScriptFile(ByVal ScriptFile As String)
-        If ScriptVer < ScriptVersion.Infinity Then
+    Private Sub SaveScriptFile(ByVal ScriptFile As String, Optional ByVal DefaultScriptVersion As Boolean = True)
+        If DefaultScriptVersion AndAlso ScriptVer < ScriptVersion.Infinity Then
             If MessageBox.Show("The starter script had been created with an earlier version of the Starter Script Editor and will be saved with properties that will make it compatible with the current format. After this is done, the starter script will no longer be compatible with earlier versions of DISMTools or the Starter Script Editor." & CrLf & CrLf & _
                                "Do you want to save this file?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
                 NotWillingToSave = True
@@ -216,18 +218,24 @@ Public Class MainForm
                 customizableStr = "No"
             End If
 
-            File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
-            "Name: {2}{1}" & _
-            "Description: {3}{1}" & _
-            "Customizable: {4}{1}" & _
-            "{5}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, customizableStr, CurrentScript.Code), UTF8)
+            If Not DefaultScriptVersion AndAlso ScriptVer = ScriptVersion.Seven Then
+                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
+                "Name: {2}{1}" & _
+                "Description: {3}{1}" & _
+                "{4}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, CurrentScript.Code), UTF8)
+            Else
+                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
+                "Name: {2}{1}" & _
+                "Description: {3}{1}" & _
+                "Customizable: {4}{1}" & _
+                "{5}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, customizableStr, CurrentScript.Code), UTF8)
+            End If
 
             SavedScriptPath = ScriptFile
             Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
             Modified = False
             roMode = False
             ToolStripButton5.Enabled = False
-            ScriptVer = ScriptVersion.Infinity
         Catch ex As Exception
             MessageBox.Show("Changes could not be saved to the script file. Make sure write access is present in the file. " & CrLf & CrLf & ex.Message & CrLf & CrLf & "To enable write access for this file, use the respective button in the toolbar.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             NotWillingToSave = True
@@ -250,6 +258,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
+        VersionModifierKeyPressed = (ModifierKeys And Keys.Shift) = Keys.Shift
         NotWillingToSave = False
         If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) AndAlso Not roMode Then
             Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
@@ -316,7 +325,15 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
-        SaveScriptFile(SaveFileDialog1.FileName)
+        ScriptVer = ScriptVersion.Infinity
+        If VersionModifierKeyPressed AndAlso ScriptVersionChooser.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If ScriptVersionChooser.IsInfinityScript Then
+                ScriptVer = ScriptVersion.Infinity
+            Else
+                ScriptVer = ScriptVersion.Seven
+            End If
+        End If
+        SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
     End Sub
 
     Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged

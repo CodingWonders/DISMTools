@@ -102,6 +102,8 @@ Partial Class MainForm
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton3.Text = "Save Starter Script File... (Ctrl + S)"
+        Me.ToolStripButton3.ToolTipText = "Save Starter Script File... (Ctrl + S)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hold down SHIFT while clicking the icon t" & _
+            "o specify the target version for the starter script while saving."
         '
         'ToolStripButton4
         '
