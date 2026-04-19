@@ -4653,7 +4653,6 @@ Public Class MainForm
                 DynaLog.LogMessage("Settings file was last modified at a date older than build date. Migrating settings...")
                 ' Perform setting file migration
                 MigrationForm.ShowDialog()
-                Thread.Sleep(1500)
             End If
         Else
             DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW)...")
