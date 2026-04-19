@@ -385,4 +385,10 @@ Public Class AppInstallerDownloader
         Cancel_Button.Enabled = False
         Label3.Visible = True
     End Sub
+
+    Private Sub CopyUri_Button_Click(sender As Object, e As EventArgs) Handles CopyUri_Button.Click
+        Dim data As New DataObject()
+        data.SetText(downUriLbl.Text)
+        Clipboard.SetDataObject(data, True)
+    End Sub
 End Class

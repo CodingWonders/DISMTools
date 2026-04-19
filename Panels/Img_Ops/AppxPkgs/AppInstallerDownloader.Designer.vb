@@ -36,6 +36,7 @@ Partial Class AppInstallerDownloader
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.CopyUri_Button = New System.Windows.Forms.Button()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -90,6 +91,7 @@ Partial Class AppInstallerDownloader
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CopyUri_Button)
         Me.GroupBox1.Controls.Add(Me.downUriLbl)
         Me.GroupBox1.Controls.Add(Me.downETALbl)
         Me.GroupBox1.Controls.Add(Me.downSpdLbl)
@@ -108,7 +110,7 @@ Partial Class AppInstallerDownloader
         Me.downUriLbl.AutoEllipsis = True
         Me.downUriLbl.Location = New System.Drawing.Point(18, 44)
         Me.downUriLbl.Name = "downUriLbl"
-        Me.downUriLbl.Size = New System.Drawing.Size(600, 14)
+        Me.downUriLbl.Size = New System.Drawing.Size(519, 14)
         Me.downUriLbl.TabIndex = 1
         '
         'downETALbl
@@ -165,6 +167,16 @@ Partial Class AppInstallerDownloader
         Me.Label3.Text = "Please wait..."
         Me.Label3.Visible = False
         '
+        'CopyUri_Button
+        '
+        Me.CopyUri_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CopyUri_Button.Location = New System.Drawing.Point(543, 40)
+        Me.CopyUri_Button.Name = "CopyUri_Button"
+        Me.CopyUri_Button.Size = New System.Drawing.Size(75, 23)
+        Me.CopyUri_Button.TabIndex = 2
+        Me.CopyUri_Button.Text = "Copy"
+        Me.CopyUri_Button.UseVisualStyleBackColor = True
+        '
         'AppInstallerDownloader
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -206,5 +218,6 @@ Partial Class AppInstallerDownloader
     Friend WithEvents downSpdLbl As System.Windows.Forms.Label
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents CopyUri_Button As System.Windows.Forms.Button
 
 End Class
