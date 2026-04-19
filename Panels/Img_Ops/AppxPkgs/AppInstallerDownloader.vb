@@ -26,7 +26,10 @@ Public Class AppInstallerDownloader
 
     Private originalTitle As String
 
+    Private DownloadError As Exception
+
     Private Sub AppInstallerDownloader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DownloadError = Nothing
         Timer1.Enabled = True
         downUriLbl.Text = ""
         sw.Reset()
@@ -287,34 +290,7 @@ Public Class AppInstallerDownloader
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
         If Not e.Cancelled AndAlso e.Error IsNot Nothing Then
-            DynaLog.LogMessage("An error has occurred and was not caused by user cancellation. Error message: " & e.Error.Message)
-            Dim msg As String = ""
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "An error occurred while downloading the file: " & e.Error.Message
-                        Case "ESN"
-                            msg = "Se produjo un error al descargar el archivo: " & e.Error.Message
-                        Case "FRA"
-                            msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
-                        Case "PTB", "PTG"
-                            msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
-                        Case "ITA"
-                            msg = "Si è verificato un errore durante il scaricamento del file: " & e.Error.Message
-                    End Select
-                Case 1
-                    msg = "An error occurred while downloading the file: " & e.Error.Message
-                Case 2
-                    msg = "Se produjo un error al descargar el archivo: " & e.Error.Message
-                Case 3
-                    msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
-                Case 4
-                    msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
-                Case 5
-                    msg = "Si è verificato un errore durante il scaricamento del file: " & e.Error.Message
-            End Select
-            MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
+            DownloadError = e.Error
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
                 DynaLog.LogMessage("Deleting incomplete download...")
                 File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
@@ -378,6 +354,37 @@ Public Class AppInstallerDownloader
     Private Sub AppInstallerDownloader_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         Timer1.Stop()
+
+        If DownloadError IsNot Nothing Then
+            DynaLog.LogMessage("An error has occurred and was not caused by user cancellation. Error message: " & DownloadError.Message)
+            Dim msg As String = ""
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "An error occurred while downloading the file: " & DownloadError.Message
+                        Case "ESN"
+                            msg = "Se produjo un error al descargar el archivo: " & DownloadError.Message
+                        Case "FRA"
+                            msg = "Une erreur s'est produite lors du téléchargement du fichier : " & DownloadError.Message
+                        Case "PTB", "PTG"
+                            msg = "Ocorreu um erro ao baixar o arquivo: " & DownloadError.Message
+                        Case "ITA"
+                            msg = "Si è verificato un errore durante il scaricamento del file: " & DownloadError.Message
+                    End Select
+                Case 1
+                    msg = "An error occurred while downloading the file: " & DownloadError.Message
+                Case 2
+                    msg = "Se produjo un error al descargar el archivo: " & DownloadError.Message
+                Case 3
+                    msg = "Une erreur s'est produite lors du téléchargement du fichier : " & DownloadError.Message
+                Case 4
+                    msg = "Ocorreu um erro ao baixar o arquivo: " & DownloadError.Message
+                Case 5
+                    msg = "Si è verificato un errore durante il scaricamento del file: " & DownloadError.Message
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
+        End If
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
