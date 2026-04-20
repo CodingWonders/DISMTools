@@ -334,6 +334,10 @@ try {
         $request = $context.Request
         $response = $context.Response
 
+        $response.Headers.Add("Access-Control-Allow-Origin", "*")
+        $response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        $response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
         $sendJson = {
             param($data, $status = 200)
             $response.StatusCode = $status
