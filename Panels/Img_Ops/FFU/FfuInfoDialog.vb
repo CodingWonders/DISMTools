@@ -90,17 +90,17 @@ Public Class FfuInfoDialog
                                                   "Size: {6} bytes (~{7}){0}" &
                                                   "Offset: {8}{0}" &
                                                   "Number of Blocks: {9}{0}" &
-                                                  "Block Size: {10}", Environment.NewLine,
-                                                                      PartitionDetailProperties("DiskIndex"),
-                                                                      PartitionDetailProperties("Index"),
-                                                                      PartitionDetailProperties("PrimaryPartition"),
-                                                                      PartitionDetailProperties("BootPartition"),
-                                                                      PartitionDetailProperties("Bootable"),
-                                                                      PartitionDetailProperties("Size"),
-                                                                      Converters.BytesToReadableSize(PartitionDetailProperties("Size")),
-                                                                      PartitionDetailProperties("StartingOffset"),
-                                                                      PartitionDetailProperties("NumberOfBlocks"),
-                                                                      PartitionDetailProperties("BlockSize"))
+                                                  "Block Size: {10} bytes", Environment.NewLine,
+                                                                            PartitionDetailProperties("DiskIndex"),
+                                                                            PartitionDetailProperties("Index"),
+                                                                            PartitionDetailProperties("PrimaryPartition"),
+                                                                            PartitionDetailProperties("BootPartition"),
+                                                                            PartitionDetailProperties("Bootable"),
+                                                                            PartitionDetailProperties("Size"),
+                                                                            Converters.BytesToReadableSize(PartitionDetailProperties("Size")),
+                                                                            PartitionDetailProperties("StartingOffset"),
+                                                                            PartitionDetailProperties("NumberOfBlocks"),
+                                                                            PartitionDetailProperties("BlockSize"))
             End If
         End If
     End Sub
