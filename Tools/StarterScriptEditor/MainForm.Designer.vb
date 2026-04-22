@@ -30,6 +30,7 @@ Partial Class MainForm
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton
         Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
         Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
         Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
@@ -64,7 +65,7 @@ Partial Class MainForm
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB, Me.ToolStripSeparator1, Me.ToolStripButton5})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB, Me.ToolStripSeparator1, Me.ToolStripButton5, Me.ToolStripButton6})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(1016, 25)
@@ -368,6 +369,15 @@ Partial Class MainForm
         Me.ToolStripButton5.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton5.Text = "Enable write access..."
         '
+        'ToolStripButton6
+        '
+        Me.ToolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton6.Image = Global.StarterScriptEditor.My.Resources.Resources.targetversion
+        Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton6.Name = "ToolStripButton6"
+        Me.ToolStripButton6.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton6.Text = "Configure target script version..."
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -427,5 +437,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
 
 End Class

@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\targetversion.png" />
     <None Include="Resources\writable.png" />
     <None Include="Resources\colormode.png" />
   </ItemGroup>

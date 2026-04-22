@@ -20,8 +20,6 @@ Public Class MainForm
 
     Public CurrentColorMode As ColorThemeMode
 
-    Private VersionModifierKeyPressed As Boolean
-
     Private Enum ScriptVersion As Integer
         ''' <summary>
         ''' Starter scripts for the DISMTools 0.7 Series (0.7.2, 0.7.3)
@@ -258,14 +256,13 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
-        VersionModifierKeyPressed = (ModifierKeys And Keys.Shift) = Keys.Shift
         NotWillingToSave = False
         If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) AndAlso Not roMode Then
             Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
                                             Environment.NewLine, Path.GetDirectoryName(SavedScriptPath)), _
                                             "Save Script", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 Case Windows.Forms.DialogResult.Yes
-                    SaveScriptFile(SavedScriptPath)
+                    SaveScriptFile(SavedScriptPath, ScriptVer = ScriptVersion.Infinity)
                     Exit Sub
                 Case Windows.Forms.DialogResult.Cancel
                     NotWillingToSave = True
@@ -325,14 +322,6 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
-        ScriptVer = ScriptVersion.Infinity
-        If VersionModifierKeyPressed AndAlso ScriptVersionChooser.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            If ScriptVersionChooser.IsInfinityScript Then
-                ScriptVer = ScriptVersion.Infinity
-            Else
-                ScriptVer = ScriptVersion.Seven
-            End If
-        End If
         SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
     End Sub
 
@@ -516,5 +505,17 @@ Public Class MainForm
 
     Private Sub CheckBox2_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.MouseHover
         WindowHelper.DisplayToolTip(sender, "Check this option if this script contains settings that can be configured by the user" & CrLf & "after importing the starter script from the Starter Script Browser.")
+    End Sub
+
+    Private Sub ToolStripButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton6.Click
+        ScriptVersionChooser.RadioButton1.Checked = ScriptVer = ScriptVersion.Infinity
+        ScriptVersionChooser.RadioButton2.Checked = ScriptVer = ScriptVersion.Seven
+        If ScriptVersionChooser.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            If ScriptVersionChooser.IsInfinityScript Then
+                ScriptVer = ScriptVersion.Infinity
+            Else
+                ScriptVer = ScriptVersion.Seven
+            End If
+        End If
     End Sub
 End Class
