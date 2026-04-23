@@ -70,6 +70,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property changefont() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("changefont", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property colormode() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("colormode", resourceCulture)

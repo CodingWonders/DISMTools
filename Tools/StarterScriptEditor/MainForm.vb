@@ -518,4 +518,42 @@ Public Class MainForm
             End If
         End If
     End Sub
+
+    Private Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
+        EditorFD.Font = TextBox3.Font
+        Dim fontConfigured As Boolean = False
+        Do Until fontConfigured
+            Try
+                If EditorFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                    If Not IsMonospacedFont(EditorFD.Font.Name) AndAlso MessageBox.Show("You have selected a non-monospaced font. Text may not look correctly. Do you want to continue?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                        Exit Sub
+                    End If
+                    TextBox3.Font = EditorFD.Font
+                End If
+                fontConfigured = True
+            Catch arEx As ArgumentException
+                ' The user may have selected a non-TrueType font
+                MessageBox.Show(arEx.Message, "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End Try
+        Loop
+    End Sub
+
+    Private Function IsMonospacedFont(ByVal ftName As String) As Boolean
+        Using testFont As Font = New Font(ftName, 10)
+            Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
+            Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            Return widthI = widthW
+        End Using
+        Return False
+    End Function
+
+    Private Function MeasureCharacterWidth(ByVal ft As Font, ByVal character As Char) As Decimal
+        Using bmp As Bitmap = New Bitmap(1, 1)
+            Using g As Graphics = Graphics.FromImage(bmp)
+                Dim size As SizeF = g.MeasureString(character.ToString(), ft)
+                Return size.Width
+            End Using
+        End Using
+        Return 0
+    End Function
 End Class
