@@ -654,12 +654,13 @@ function Start-OSApplication {
         wpeutil reboot
     }
 
-    Show-CenteredTextBox -Text "Downloading unattended answer file. This can take some time, depending on the speed of the network connection..." -MaxWidth 100 -CenterOfAll
-
-    if ((Test-Path -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -PathType Leaf) -and ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false)) {
-        Show-CenteredTextBox -Text "An unattended answer file was detected, but could not be downloaded. The target installation will not be unattended." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
-        Write-Host "`n`nPress ENTER to continue..."
-        Read-Host | Out-Null
+    if (Test-Path -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -PathType Leaf) {
+        Show-CenteredTextBox -Text "Downloading unattended answer file. This can take some time, depending on the speed of the network connection..." -MaxWidth 100 -CenterOfAll
+        if ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false) {
+            Show-CenteredTextBox -Text "An unattended answer file was detected, but could not be downloaded. The target installation will not be unattended." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
+            Write-Host "`n`nPress ENTER to continue..."
+            Read-Host | Out-Null
+        }
     }
 
     if ((Get-WindowsDriver -Online).Count -gt 0) {
