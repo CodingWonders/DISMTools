@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode79 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode80 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode81 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode82 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode83 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode84 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode85 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode86 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode87 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode88 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode89 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode90 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode91 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,6 +49,62 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.UserAccountPanel = New System.Windows.Forms.Panel()
+        Me.Label34 = New System.Windows.Forms.Label()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.ManualAccountPanel = New System.Windows.Forms.FlowLayoutPanel()
+        Me.UserAccountListing = New System.Windows.Forms.Panel()
+        Me.AccountsPanel = New System.Windows.Forms.TableLayoutPanel()
+        Me.DisplayNamePanel5 = New System.Windows.Forms.Panel()
+        Me.TextBox23 = New System.Windows.Forms.TextBox()
+        Me.CheckBox27 = New System.Windows.Forms.CheckBox()
+        Me.DisplayNamePanel4 = New System.Windows.Forms.Panel()
+        Me.TextBox22 = New System.Windows.Forms.TextBox()
+        Me.CheckBox26 = New System.Windows.Forms.CheckBox()
+        Me.DisplayNamePanel3 = New System.Windows.Forms.Panel()
+        Me.TextBox21 = New System.Windows.Forms.TextBox()
+        Me.CheckBox25 = New System.Windows.Forms.CheckBox()
+        Me.DisplayNamePanel2 = New System.Windows.Forms.Panel()
+        Me.TextBox20 = New System.Windows.Forms.TextBox()
+        Me.CheckBox24 = New System.Windows.Forms.CheckBox()
+        Me.TextBox17 = New System.Windows.Forms.TextBox()
+        Me.TextBox14 = New System.Windows.Forms.TextBox()
+        Me.TextBox11 = New System.Windows.Forms.TextBox()
+        Me.TextBox8 = New System.Windows.Forms.TextBox()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.Label38 = New System.Windows.Forms.Label()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox9 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.UserListOverviewLabel = New System.Windows.Forms.Label()
+        Me.ComboBox12 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox11 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox10 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox9 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
+        Me.Label37 = New System.Windows.Forms.Label()
+        Me.Label36 = New System.Windows.Forms.Label()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.TextBox12 = New System.Windows.Forms.TextBox()
+        Me.TextBox15 = New System.Windows.Forms.TextBox()
+        Me.TextBox18 = New System.Windows.Forms.TextBox()
+        Me.Label69 = New System.Windows.Forms.Label()
+        Me.DisplayNamePanel1 = New System.Windows.Forms.Panel()
+        Me.TextBox19 = New System.Windows.Forms.TextBox()
+        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.AutoLogonSettingsPanel = New System.Windows.Forms.Panel()
+        Me.TextBox5 = New System.Windows.Forms.TextBox()
+        Me.RadioButton16 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton15 = New System.Windows.Forms.RadioButton()
+        Me.CheckBox12 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+        Me.FillerLabel2 = New System.Windows.Forms.Label()
+        Me.UserAccountHeader = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
@@ -185,46 +241,6 @@ Partial Class NewUnattendWiz
         Me.RadioButton18 = New System.Windows.Forms.RadioButton()
         Me.RadioButton17 = New System.Windows.Forms.RadioButton()
         Me.PWExpirationHeader = New System.Windows.Forms.Label()
-        Me.UserAccountPanel = New System.Windows.Forms.Panel()
-        Me.Label34 = New System.Windows.Forms.Label()
-        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
-        Me.ManualAccountPanel = New System.Windows.Forms.FlowLayoutPanel()
-        Me.UserAccountListing = New System.Windows.Forms.Panel()
-        Me.AccountsPanel = New System.Windows.Forms.TableLayoutPanel()
-        Me.ComboBox12 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox11 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox10 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox9 = New System.Windows.Forms.ComboBox()
-        Me.TextBox18 = New System.Windows.Forms.TextBox()
-        Me.TextBox17 = New System.Windows.Forms.TextBox()
-        Me.TextBox15 = New System.Windows.Forms.TextBox()
-        Me.TextBox14 = New System.Windows.Forms.TextBox()
-        Me.TextBox12 = New System.Windows.Forms.TextBox()
-        Me.TextBox11 = New System.Windows.Forms.TextBox()
-        Me.TextBox9 = New System.Windows.Forms.TextBox()
-        Me.TextBox8 = New System.Windows.Forms.TextBox()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
-        Me.Label35 = New System.Windows.Forms.Label()
-        Me.Label36 = New System.Windows.Forms.Label()
-        Me.Label37 = New System.Windows.Forms.Label()
-        Me.Label38 = New System.Windows.Forms.Label()
-        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox9 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox11 = New System.Windows.Forms.CheckBox()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
-        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
-        Me.UserListOverviewLabel = New System.Windows.Forms.Label()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.AutoLogonSettingsPanel = New System.Windows.Forms.Panel()
-        Me.TextBox5 = New System.Windows.Forms.TextBox()
-        Me.RadioButton16 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton15 = New System.Windows.Forms.RadioButton()
-        Me.CheckBox12 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
-        Me.FillerLabel2 = New System.Windows.Forms.Label()
-        Me.UserAccountHeader = New System.Windows.Forms.Label()
         Me.ProductKeyPanel = New System.Windows.Forms.Panel()
         Me.CheckBox21 = New System.Windows.Forms.CheckBox()
         Me.ManualProductKeyOptionsPanel = New System.Windows.Forms.Panel()
@@ -386,6 +402,17 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.UserAccountPanel.SuspendLayout()
+        Me.ManualAccountPanel.SuspendLayout()
+        Me.UserAccountListing.SuspendLayout()
+        Me.AccountsPanel.SuspendLayout()
+        Me.DisplayNamePanel5.SuspendLayout()
+        Me.DisplayNamePanel4.SuspendLayout()
+        Me.DisplayNamePanel3.SuspendLayout()
+        Me.DisplayNamePanel2.SuspendLayout()
+        Me.DisplayNamePanel1.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        Me.AutoLogonSettingsPanel.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
@@ -426,12 +453,6 @@ Partial Class NewUnattendWiz
         Me.AutoExpirationPanel.SuspendLayout()
         Me.TimedExpirationPanel.SuspendLayout()
         CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.UserAccountPanel.SuspendLayout()
-        Me.ManualAccountPanel.SuspendLayout()
-        Me.UserAccountListing.SuspendLayout()
-        Me.AccountsPanel.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.AutoLogonSettingsPanel.SuspendLayout()
         Me.ProductKeyPanel.SuspendLayout()
         Me.ManualProductKeyOptionsPanel.SuspendLayout()
         Me.ManualKeyPanel.SuspendLayout()
@@ -508,33 +529,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode14.Name = "Nodo0"
-        TreeNode14.Text = "Welcome"
-        TreeNode15.Name = "Nodo1"
-        TreeNode15.Text = "Regional Configuration"
-        TreeNode16.Name = "Nodo2"
-        TreeNode16.Text = "Basic System Configuration"
-        TreeNode17.Name = "Nodo3"
-        TreeNode17.Text = "Time Zone"
-        TreeNode18.Name = "Nodo4"
-        TreeNode18.Text = "Disk Configuration"
-        TreeNode19.Name = "Nodo5"
-        TreeNode19.Text = "Product Key"
-        TreeNode20.Name = "Nodo6"
-        TreeNode20.Text = "User Accounts"
-        TreeNode21.Name = "Nodo9"
-        TreeNode21.Text = "Virtual Machine Support"
-        TreeNode22.Name = "Nodo10"
-        TreeNode22.Text = "Wireless Networking"
-        TreeNode23.Name = "Nodo11"
-        TreeNode23.Text = "System Telemetry"
-        TreeNode24.Name = "Nodo12"
-        TreeNode24.Text = "Post-Installation Scripts"
-        TreeNode25.Name = "Nodo13"
-        TreeNode25.Text = "Component Settings"
-        TreeNode26.Name = "Nodo14"
-        TreeNode26.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
+        TreeNode79.Name = "Nodo0"
+        TreeNode79.Text = "Welcome"
+        TreeNode80.Name = "Nodo1"
+        TreeNode80.Text = "Regional Configuration"
+        TreeNode81.Name = "Nodo2"
+        TreeNode81.Text = "Basic System Configuration"
+        TreeNode82.Name = "Nodo3"
+        TreeNode82.Text = "Time Zone"
+        TreeNode83.Name = "Nodo4"
+        TreeNode83.Text = "Disk Configuration"
+        TreeNode84.Name = "Nodo5"
+        TreeNode84.Text = "Product Key"
+        TreeNode85.Name = "Nodo6"
+        TreeNode85.Text = "User Accounts"
+        TreeNode86.Name = "Nodo9"
+        TreeNode86.Text = "Virtual Machine Support"
+        TreeNode87.Name = "Nodo10"
+        TreeNode87.Text = "Wireless Networking"
+        TreeNode88.Name = "Nodo11"
+        TreeNode88.Text = "System Telemetry"
+        TreeNode89.Name = "Nodo12"
+        TreeNode89.Text = "Post-Installation Scripts"
+        TreeNode90.Name = "Nodo13"
+        TreeNode90.Text = "Component Settings"
+        TreeNode91.Name = "Nodo14"
+        TreeNode91.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode79, TreeNode80, TreeNode81, TreeNode82, TreeNode83, TreeNode84, TreeNode85, TreeNode86, TreeNode87, TreeNode88, TreeNode89, TreeNode90, TreeNode91})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -624,6 +645,7 @@ Partial Class NewUnattendWiz
         '
         'StepsContainer
         '
+        Me.StepsContainer.Controls.Add(Me.UserAccountPanel)
         Me.StepsContainer.Controls.Add(Me.FinishPanel)
         Me.StepsContainer.Controls.Add(Me.UnattendProgressPanel)
         Me.StepsContainer.Controls.Add(Me.FinalReviewPanel)
@@ -634,7 +656,6 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Controls.Add(Me.VirtualMachinePanel)
         Me.StepsContainer.Controls.Add(Me.AccountLockoutPanel)
         Me.StepsContainer.Controls.Add(Me.PWExpirationPanel)
-        Me.StepsContainer.Controls.Add(Me.UserAccountPanel)
         Me.StepsContainer.Controls.Add(Me.ProductKeyPanel)
         Me.StepsContainer.Controls.Add(Me.DiskConfigurationPanel)
         Me.StepsContainer.Controls.Add(Me.TimeZonePanel)
@@ -646,6 +667,658 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(1008, 569)
         Me.StepsContainer.TabIndex = 1
+        '
+        'UserAccountPanel
+        '
+        Me.UserAccountPanel.Controls.Add(Me.Label34)
+        Me.UserAccountPanel.Controls.Add(Me.CheckBox6)
+        Me.UserAccountPanel.Controls.Add(Me.ManualAccountPanel)
+        Me.UserAccountPanel.Controls.Add(Me.FillerLabel2)
+        Me.UserAccountPanel.Controls.Add(Me.UserAccountHeader)
+        Me.UserAccountPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserAccountPanel.Location = New System.Drawing.Point(0, 0)
+        Me.UserAccountPanel.Name = "UserAccountPanel"
+        Me.UserAccountPanel.Size = New System.Drawing.Size(1008, 569)
+        Me.UserAccountPanel.TabIndex = 6
+        '
+        'Label34
+        '
+        Me.Label34.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label34.AutoSize = True
+        Me.Label34.Location = New System.Drawing.Point(81, 534)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Size = New System.Drawing.Size(286, 13)
+        Me.Label34.TabIndex = 11
+        Me.Label34.Text = "Uncheck this only if you want to set up local accounts now"
+        '
+        'CheckBox6
+        '
+        Me.CheckBox6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox6.AutoSize = True
+        Me.CheckBox6.Checked = True
+        Me.CheckBox6.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox6.Location = New System.Drawing.Point(65, 512)
+        Me.CheckBox6.Name = "CheckBox6"
+        Me.CheckBox6.Size = New System.Drawing.Size(276, 17)
+        Me.CheckBox6.TabIndex = 10
+        Me.CheckBox6.Text = "I want to configure these settings during installation"
+        Me.CheckBox6.UseVisualStyleBackColor = True
+        '
+        'ManualAccountPanel
+        '
+        Me.ManualAccountPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ManualAccountPanel.AutoScroll = True
+        Me.ManualAccountPanel.Controls.Add(Me.UserAccountListing)
+        Me.ManualAccountPanel.Controls.Add(Me.GroupBox1)
+        Me.ManualAccountPanel.Controls.Add(Me.CheckBox7)
+        Me.ManualAccountPanel.Controls.Add(Me.CheckBox18)
+        Me.ManualAccountPanel.Enabled = False
+        Me.ManualAccountPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.ManualAccountPanel.Location = New System.Drawing.Point(65, 71)
+        Me.ManualAccountPanel.Name = "ManualAccountPanel"
+        Me.ManualAccountPanel.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
+        Me.ManualAccountPanel.Size = New System.Drawing.Size(878, 425)
+        Me.ManualAccountPanel.TabIndex = 9
+        Me.ManualAccountPanel.WrapContents = False
+        '
+        'UserAccountListing
+        '
+        Me.UserAccountListing.Controls.Add(Me.AccountsPanel)
+        Me.UserAccountListing.Location = New System.Drawing.Point(7, 9)
+        Me.UserAccountListing.Name = "UserAccountListing"
+        Me.UserAccountListing.Size = New System.Drawing.Size(829, 153)
+        Me.UserAccountListing.TabIndex = 2
+        '
+        'AccountsPanel
+        '
+        Me.AccountsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AccountsPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
+        Me.AccountsPanel.ColumnCount = 5
+        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.AccountsPanel.Controls.Add(Me.DisplayNamePanel5, 2, 5)
+        Me.AccountsPanel.Controls.Add(Me.DisplayNamePanel4, 2, 4)
+        Me.AccountsPanel.Controls.Add(Me.DisplayNamePanel3, 2, 3)
+        Me.AccountsPanel.Controls.Add(Me.DisplayNamePanel2, 2, 2)
+        Me.AccountsPanel.Controls.Add(Me.TextBox17, 1, 5)
+        Me.AccountsPanel.Controls.Add(Me.TextBox14, 1, 4)
+        Me.AccountsPanel.Controls.Add(Me.TextBox11, 1, 3)
+        Me.AccountsPanel.Controls.Add(Me.TextBox8, 1, 2)
+        Me.AccountsPanel.Controls.Add(Me.Label35, 1, 0)
+        Me.AccountsPanel.Controls.Add(Me.Label38, 0, 1)
+        Me.AccountsPanel.Controls.Add(Me.CheckBox8, 0, 2)
+        Me.AccountsPanel.Controls.Add(Me.CheckBox9, 0, 3)
+        Me.AccountsPanel.Controls.Add(Me.CheckBox10, 0, 4)
+        Me.AccountsPanel.Controls.Add(Me.CheckBox11, 0, 5)
+        Me.AccountsPanel.Controls.Add(Me.TextBox4, 1, 1)
+        Me.AccountsPanel.Controls.Add(Me.UserListOverviewLabel, 0, 0)
+        Me.AccountsPanel.Controls.Add(Me.ComboBox12, 4, 5)
+        Me.AccountsPanel.Controls.Add(Me.ComboBox11, 4, 4)
+        Me.AccountsPanel.Controls.Add(Me.ComboBox10, 4, 3)
+        Me.AccountsPanel.Controls.Add(Me.ComboBox9, 4, 2)
+        Me.AccountsPanel.Controls.Add(Me.ComboBox7, 4, 1)
+        Me.AccountsPanel.Controls.Add(Me.Label37, 4, 0)
+        Me.AccountsPanel.Controls.Add(Me.Label36, 3, 0)
+        Me.AccountsPanel.Controls.Add(Me.TextBox6, 3, 1)
+        Me.AccountsPanel.Controls.Add(Me.TextBox9, 3, 2)
+        Me.AccountsPanel.Controls.Add(Me.TextBox12, 3, 3)
+        Me.AccountsPanel.Controls.Add(Me.TextBox15, 3, 4)
+        Me.AccountsPanel.Controls.Add(Me.TextBox18, 3, 5)
+        Me.AccountsPanel.Controls.Add(Me.Label69, 2, 0)
+        Me.AccountsPanel.Controls.Add(Me.DisplayNamePanel1, 2, 1)
+        Me.AccountsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.AccountsPanel.Name = "AccountsPanel"
+        Me.AccountsPanel.RowCount = 6
+        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.AccountsPanel.Size = New System.Drawing.Size(829, 153)
+        Me.AccountsPanel.TabIndex = 0
+        '
+        'DisplayNamePanel5
+        '
+        Me.DisplayNamePanel5.Controls.Add(Me.TextBox23)
+        Me.DisplayNamePanel5.Controls.Add(Me.CheckBox27)
+        Me.DisplayNamePanel5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DisplayNamePanel5.Enabled = False
+        Me.DisplayNamePanel5.Location = New System.Drawing.Point(331, 126)
+        Me.DisplayNamePanel5.Margin = New System.Windows.Forms.Padding(0)
+        Me.DisplayNamePanel5.Name = "DisplayNamePanel5"
+        Me.DisplayNamePanel5.Size = New System.Drawing.Size(164, 26)
+        Me.DisplayNamePanel5.TabIndex = 30
+        '
+        'TextBox23
+        '
+        Me.TextBox23.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox23.Enabled = False
+        Me.TextBox23.Location = New System.Drawing.Point(23, 0)
+        Me.TextBox23.MaxLength = 256
+        Me.TextBox23.Name = "TextBox23"
+        Me.TextBox23.Size = New System.Drawing.Size(141, 21)
+        Me.TextBox23.TabIndex = 5
+        '
+        'CheckBox27
+        '
+        Me.CheckBox27.AutoSize = True
+        Me.CheckBox27.Dock = System.Windows.Forms.DockStyle.Left
+        Me.CheckBox27.Location = New System.Drawing.Point(0, 0)
+        Me.CheckBox27.Name = "CheckBox27"
+        Me.CheckBox27.Padding = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.CheckBox27.Size = New System.Drawing.Size(23, 26)
+        Me.CheckBox27.TabIndex = 0
+        Me.CheckBox27.UseVisualStyleBackColor = True
+        '
+        'DisplayNamePanel4
+        '
+        Me.DisplayNamePanel4.Controls.Add(Me.TextBox22)
+        Me.DisplayNamePanel4.Controls.Add(Me.CheckBox26)
+        Me.DisplayNamePanel4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DisplayNamePanel4.Enabled = False
+        Me.DisplayNamePanel4.Location = New System.Drawing.Point(331, 101)
+        Me.DisplayNamePanel4.Margin = New System.Windows.Forms.Padding(0)
+        Me.DisplayNamePanel4.Name = "DisplayNamePanel4"
+        Me.DisplayNamePanel4.Size = New System.Drawing.Size(164, 24)
+        Me.DisplayNamePanel4.TabIndex = 29
+        '
+        'TextBox22
+        '
+        Me.TextBox22.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox22.Enabled = False
+        Me.TextBox22.Location = New System.Drawing.Point(23, 0)
+        Me.TextBox22.MaxLength = 256
+        Me.TextBox22.Name = "TextBox22"
+        Me.TextBox22.Size = New System.Drawing.Size(141, 21)
+        Me.TextBox22.TabIndex = 5
+        '
+        'CheckBox26
+        '
+        Me.CheckBox26.AutoSize = True
+        Me.CheckBox26.Dock = System.Windows.Forms.DockStyle.Left
+        Me.CheckBox26.Location = New System.Drawing.Point(0, 0)
+        Me.CheckBox26.Name = "CheckBox26"
+        Me.CheckBox26.Padding = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.CheckBox26.Size = New System.Drawing.Size(23, 24)
+        Me.CheckBox26.TabIndex = 0
+        Me.CheckBox26.UseVisualStyleBackColor = True
+        '
+        'DisplayNamePanel3
+        '
+        Me.DisplayNamePanel3.Controls.Add(Me.TextBox21)
+        Me.DisplayNamePanel3.Controls.Add(Me.CheckBox25)
+        Me.DisplayNamePanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DisplayNamePanel3.Enabled = False
+        Me.DisplayNamePanel3.Location = New System.Drawing.Point(331, 76)
+        Me.DisplayNamePanel3.Margin = New System.Windows.Forms.Padding(0)
+        Me.DisplayNamePanel3.Name = "DisplayNamePanel3"
+        Me.DisplayNamePanel3.Size = New System.Drawing.Size(164, 24)
+        Me.DisplayNamePanel3.TabIndex = 28
+        '
+        'TextBox21
+        '
+        Me.TextBox21.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox21.Enabled = False
+        Me.TextBox21.Location = New System.Drawing.Point(23, 0)
+        Me.TextBox21.MaxLength = 256
+        Me.TextBox21.Name = "TextBox21"
+        Me.TextBox21.Size = New System.Drawing.Size(141, 21)
+        Me.TextBox21.TabIndex = 5
+        '
+        'CheckBox25
+        '
+        Me.CheckBox25.AutoSize = True
+        Me.CheckBox25.Dock = System.Windows.Forms.DockStyle.Left
+        Me.CheckBox25.Location = New System.Drawing.Point(0, 0)
+        Me.CheckBox25.Name = "CheckBox25"
+        Me.CheckBox25.Padding = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.CheckBox25.Size = New System.Drawing.Size(23, 24)
+        Me.CheckBox25.TabIndex = 0
+        Me.CheckBox25.UseVisualStyleBackColor = True
+        '
+        'DisplayNamePanel2
+        '
+        Me.DisplayNamePanel2.Controls.Add(Me.TextBox20)
+        Me.DisplayNamePanel2.Controls.Add(Me.CheckBox24)
+        Me.DisplayNamePanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DisplayNamePanel2.Enabled = False
+        Me.DisplayNamePanel2.Location = New System.Drawing.Point(331, 51)
+        Me.DisplayNamePanel2.Margin = New System.Windows.Forms.Padding(0)
+        Me.DisplayNamePanel2.Name = "DisplayNamePanel2"
+        Me.DisplayNamePanel2.Size = New System.Drawing.Size(164, 24)
+        Me.DisplayNamePanel2.TabIndex = 27
+        '
+        'TextBox20
+        '
+        Me.TextBox20.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox20.Enabled = False
+        Me.TextBox20.Location = New System.Drawing.Point(23, 0)
+        Me.TextBox20.MaxLength = 256
+        Me.TextBox20.Name = "TextBox20"
+        Me.TextBox20.Size = New System.Drawing.Size(141, 21)
+        Me.TextBox20.TabIndex = 5
+        '
+        'CheckBox24
+        '
+        Me.CheckBox24.AutoSize = True
+        Me.CheckBox24.Dock = System.Windows.Forms.DockStyle.Left
+        Me.CheckBox24.Location = New System.Drawing.Point(0, 0)
+        Me.CheckBox24.Name = "CheckBox24"
+        Me.CheckBox24.Padding = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.CheckBox24.Size = New System.Drawing.Size(23, 24)
+        Me.CheckBox24.TabIndex = 0
+        Me.CheckBox24.UseVisualStyleBackColor = True
+        '
+        'TextBox17
+        '
+        Me.TextBox17.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox17.Enabled = False
+        Me.TextBox17.Location = New System.Drawing.Point(169, 129)
+        Me.TextBox17.MaxLength = 20
+        Me.TextBox17.Name = "TextBox17"
+        Me.TextBox17.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox17.TabIndex = 17
+        '
+        'TextBox14
+        '
+        Me.TextBox14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox14.Enabled = False
+        Me.TextBox14.Location = New System.Drawing.Point(169, 104)
+        Me.TextBox14.MaxLength = 20
+        Me.TextBox14.Name = "TextBox14"
+        Me.TextBox14.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox14.TabIndex = 14
+        '
+        'TextBox11
+        '
+        Me.TextBox11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox11.Enabled = False
+        Me.TextBox11.Location = New System.Drawing.Point(169, 79)
+        Me.TextBox11.MaxLength = 20
+        Me.TextBox11.Name = "TextBox11"
+        Me.TextBox11.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox11.TabIndex = 11
+        '
+        'TextBox8
+        '
+        Me.TextBox8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox8.Enabled = False
+        Me.TextBox8.Location = New System.Drawing.Point(169, 54)
+        Me.TextBox8.MaxLength = 20
+        Me.TextBox8.Name = "TextBox8"
+        Me.TextBox8.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox8.TabIndex = 8
+        '
+        'Label35
+        '
+        Me.Label35.AutoEllipsis = True
+        Me.Label35.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label35.Location = New System.Drawing.Point(169, 1)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(158, 24)
+        Me.Label35.TabIndex = 0
+        Me.Label35.Text = "Account name:"
+        Me.Label35.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label38
+        '
+        Me.Label38.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label38.Location = New System.Drawing.Point(4, 26)
+        Me.Label38.Name = "Label38"
+        Me.Label38.Size = New System.Drawing.Size(158, 24)
+        Me.Label38.TabIndex = 2
+        Me.Label38.Text = "Account 1:"
+        Me.Label38.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'CheckBox8
+        '
+        Me.CheckBox8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBox8.Location = New System.Drawing.Point(4, 54)
+        Me.CheckBox8.Name = "CheckBox8"
+        Me.CheckBox8.Size = New System.Drawing.Size(158, 18)
+        Me.CheckBox8.TabIndex = 3
+        Me.CheckBox8.Text = "Account 2:"
+        Me.CheckBox8.UseVisualStyleBackColor = True
+        '
+        'CheckBox9
+        '
+        Me.CheckBox9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBox9.Location = New System.Drawing.Point(4, 79)
+        Me.CheckBox9.Name = "CheckBox9"
+        Me.CheckBox9.Size = New System.Drawing.Size(158, 18)
+        Me.CheckBox9.TabIndex = 3
+        Me.CheckBox9.Text = "Account 3:"
+        Me.CheckBox9.UseVisualStyleBackColor = True
+        '
+        'CheckBox10
+        '
+        Me.CheckBox10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBox10.Location = New System.Drawing.Point(4, 104)
+        Me.CheckBox10.Name = "CheckBox10"
+        Me.CheckBox10.Size = New System.Drawing.Size(158, 18)
+        Me.CheckBox10.TabIndex = 3
+        Me.CheckBox10.Text = "Account 4:"
+        Me.CheckBox10.UseVisualStyleBackColor = True
+        '
+        'CheckBox11
+        '
+        Me.CheckBox11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBox11.Location = New System.Drawing.Point(4, 129)
+        Me.CheckBox11.Name = "CheckBox11"
+        Me.CheckBox11.Size = New System.Drawing.Size(158, 20)
+        Me.CheckBox11.TabIndex = 3
+        Me.CheckBox11.Text = "Account 5:"
+        Me.CheckBox11.UseVisualStyleBackColor = True
+        '
+        'TextBox4
+        '
+        Me.TextBox4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox4.Location = New System.Drawing.Point(169, 29)
+        Me.TextBox4.MaxLength = 20
+        Me.TextBox4.Name = "TextBox4"
+        Me.TextBox4.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox4.TabIndex = 4
+        Me.TextBox4.Text = "Admin"
+        '
+        'UserListOverviewLabel
+        '
+        Me.UserListOverviewLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserListOverviewLabel.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.UserListOverviewLabel.Location = New System.Drawing.Point(4, 1)
+        Me.UserListOverviewLabel.Name = "UserListOverviewLabel"
+        Me.UserListOverviewLabel.Size = New System.Drawing.Size(158, 24)
+        Me.UserListOverviewLabel.TabIndex = 25
+        Me.UserListOverviewLabel.Text = "User accounts:"
+        Me.UserListOverviewLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComboBox12
+        '
+        Me.ComboBox12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox12.Enabled = False
+        Me.ComboBox12.FormattingEnabled = True
+        Me.ComboBox12.Items.AddRange(New Object() {"Administrators", "Users"})
+        Me.ComboBox12.Location = New System.Drawing.Point(664, 129)
+        Me.ComboBox12.Name = "ComboBox12"
+        Me.ComboBox12.Size = New System.Drawing.Size(161, 21)
+        Me.ComboBox12.TabIndex = 24
+        Me.ComboBox12.Text = "Users"
+        '
+        'ComboBox11
+        '
+        Me.ComboBox11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox11.Enabled = False
+        Me.ComboBox11.FormattingEnabled = True
+        Me.ComboBox11.Items.AddRange(New Object() {"Administrators", "Users"})
+        Me.ComboBox11.Location = New System.Drawing.Point(664, 104)
+        Me.ComboBox11.Name = "ComboBox11"
+        Me.ComboBox11.Size = New System.Drawing.Size(161, 21)
+        Me.ComboBox11.TabIndex = 23
+        Me.ComboBox11.Text = "Users"
+        '
+        'ComboBox10
+        '
+        Me.ComboBox10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox10.Enabled = False
+        Me.ComboBox10.FormattingEnabled = True
+        Me.ComboBox10.Items.AddRange(New Object() {"Administrators", "Users"})
+        Me.ComboBox10.Location = New System.Drawing.Point(664, 79)
+        Me.ComboBox10.Name = "ComboBox10"
+        Me.ComboBox10.Size = New System.Drawing.Size(161, 21)
+        Me.ComboBox10.TabIndex = 22
+        Me.ComboBox10.Text = "Users"
+        '
+        'ComboBox9
+        '
+        Me.ComboBox9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox9.Enabled = False
+        Me.ComboBox9.FormattingEnabled = True
+        Me.ComboBox9.Items.AddRange(New Object() {"Administrators", "Users"})
+        Me.ComboBox9.Location = New System.Drawing.Point(664, 54)
+        Me.ComboBox9.Name = "ComboBox9"
+        Me.ComboBox9.Size = New System.Drawing.Size(161, 21)
+        Me.ComboBox9.TabIndex = 21
+        Me.ComboBox9.Text = "Users"
+        '
+        'ComboBox7
+        '
+        Me.ComboBox7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox7.FormattingEnabled = True
+        Me.ComboBox7.Items.AddRange(New Object() {"Administrators", "Users"})
+        Me.ComboBox7.Location = New System.Drawing.Point(664, 29)
+        Me.ComboBox7.Name = "ComboBox7"
+        Me.ComboBox7.Size = New System.Drawing.Size(161, 21)
+        Me.ComboBox7.TabIndex = 19
+        Me.ComboBox7.Text = "Administrators"
+        '
+        'Label37
+        '
+        Me.Label37.AutoEllipsis = True
+        Me.Label37.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label37.Location = New System.Drawing.Point(664, 1)
+        Me.Label37.Name = "Label37"
+        Me.Label37.Size = New System.Drawing.Size(161, 24)
+        Me.Label37.TabIndex = 1
+        Me.Label37.Text = "Account group:"
+        Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label36
+        '
+        Me.Label36.AutoEllipsis = True
+        Me.Label36.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label36.Location = New System.Drawing.Point(499, 1)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(158, 24)
+        Me.Label36.TabIndex = 1
+        Me.Label36.Text = "Account password:"
+        Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TextBox6
+        '
+        Me.TextBox6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox6.Location = New System.Drawing.Point(499, 29)
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox6.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox6.TabIndex = 6
+        '
+        'TextBox9
+        '
+        Me.TextBox9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox9.Enabled = False
+        Me.TextBox9.Location = New System.Drawing.Point(499, 54)
+        Me.TextBox9.Name = "TextBox9"
+        Me.TextBox9.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox9.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox9.TabIndex = 9
+        '
+        'TextBox12
+        '
+        Me.TextBox12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox12.Enabled = False
+        Me.TextBox12.Location = New System.Drawing.Point(499, 79)
+        Me.TextBox12.Name = "TextBox12"
+        Me.TextBox12.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox12.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox12.TabIndex = 12
+        '
+        'TextBox15
+        '
+        Me.TextBox15.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox15.Enabled = False
+        Me.TextBox15.Location = New System.Drawing.Point(499, 104)
+        Me.TextBox15.Name = "TextBox15"
+        Me.TextBox15.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox15.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox15.TabIndex = 15
+        '
+        'TextBox18
+        '
+        Me.TextBox18.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox18.Enabled = False
+        Me.TextBox18.Location = New System.Drawing.Point(499, 129)
+        Me.TextBox18.Name = "TextBox18"
+        Me.TextBox18.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox18.Size = New System.Drawing.Size(158, 21)
+        Me.TextBox18.TabIndex = 18
+        '
+        'Label69
+        '
+        Me.Label69.AutoEllipsis = True
+        Me.Label69.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label69.Location = New System.Drawing.Point(334, 1)
+        Me.Label69.Name = "Label69"
+        Me.Label69.Size = New System.Drawing.Size(158, 24)
+        Me.Label69.TabIndex = 1
+        Me.Label69.Text = "Account display name:"
+        Me.Label69.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'DisplayNamePanel1
+        '
+        Me.DisplayNamePanel1.Controls.Add(Me.TextBox19)
+        Me.DisplayNamePanel1.Controls.Add(Me.CheckBox23)
+        Me.DisplayNamePanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DisplayNamePanel1.Location = New System.Drawing.Point(331, 26)
+        Me.DisplayNamePanel1.Margin = New System.Windows.Forms.Padding(0)
+        Me.DisplayNamePanel1.Name = "DisplayNamePanel1"
+        Me.DisplayNamePanel1.Size = New System.Drawing.Size(164, 24)
+        Me.DisplayNamePanel1.TabIndex = 26
+        '
+        'TextBox19
+        '
+        Me.TextBox19.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox19.Enabled = False
+        Me.TextBox19.Location = New System.Drawing.Point(23, 0)
+        Me.TextBox19.MaxLength = 256
+        Me.TextBox19.Name = "TextBox19"
+        Me.TextBox19.Size = New System.Drawing.Size(141, 21)
+        Me.TextBox19.TabIndex = 5
+        '
+        'CheckBox23
+        '
+        Me.CheckBox23.AutoSize = True
+        Me.CheckBox23.Dock = System.Windows.Forms.DockStyle.Left
+        Me.CheckBox23.Location = New System.Drawing.Point(0, 0)
+        Me.CheckBox23.Name = "CheckBox23"
+        Me.CheckBox23.Padding = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.CheckBox23.Size = New System.Drawing.Size(23, 24)
+        Me.CheckBox23.TabIndex = 0
+        Me.CheckBox23.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.AutoLogonSettingsPanel)
+        Me.GroupBox1.Controls.Add(Me.CheckBox12)
+        Me.GroupBox1.Location = New System.Drawing.Point(7, 168)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(829, 140)
+        Me.GroupBox1.TabIndex = 4
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "First log on"
+        '
+        'AutoLogonSettingsPanel
+        '
+        Me.AutoLogonSettingsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AutoLogonSettingsPanel.Controls.Add(Me.TextBox5)
+        Me.AutoLogonSettingsPanel.Controls.Add(Me.RadioButton16)
+        Me.AutoLogonSettingsPanel.Controls.Add(Me.RadioButton15)
+        Me.AutoLogonSettingsPanel.Enabled = False
+        Me.AutoLogonSettingsPanel.Location = New System.Drawing.Point(34, 43)
+        Me.AutoLogonSettingsPanel.Name = "AutoLogonSettingsPanel"
+        Me.AutoLogonSettingsPanel.Size = New System.Drawing.Size(782, 89)
+        Me.AutoLogonSettingsPanel.TabIndex = 1
+        '
+        'TextBox5
+        '
+        Me.TextBox5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox5.Enabled = False
+        Me.TextBox5.Location = New System.Drawing.Point(29, 55)
+        Me.TextBox5.Name = "TextBox5"
+        Me.TextBox5.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox5.Size = New System.Drawing.Size(732, 21)
+        Me.TextBox5.TabIndex = 7
+        '
+        'RadioButton16
+        '
+        Me.RadioButton16.AutoSize = True
+        Me.RadioButton16.Location = New System.Drawing.Point(10, 32)
+        Me.RadioButton16.Name = "RadioButton16"
+        Me.RadioButton16.Size = New System.Drawing.Size(311, 17)
+        Me.RadioButton16.TabIndex = 0
+        Me.RadioButton16.Text = "Log on to the built-in administrator account, with password:"
+        Me.RadioButton16.UseVisualStyleBackColor = True
+        '
+        'RadioButton15
+        '
+        Me.RadioButton15.AutoSize = True
+        Me.RadioButton15.Checked = True
+        Me.RadioButton15.Location = New System.Drawing.Point(10, 9)
+        Me.RadioButton15.Name = "RadioButton15"
+        Me.RadioButton15.Size = New System.Drawing.Size(258, 17)
+        Me.RadioButton15.TabIndex = 0
+        Me.RadioButton15.TabStop = True
+        Me.RadioButton15.Text = "Log on to the first administrator account created"
+        Me.RadioButton15.UseVisualStyleBackColor = True
+        '
+        'CheckBox12
+        '
+        Me.CheckBox12.AutoSize = True
+        Me.CheckBox12.Location = New System.Drawing.Point(17, 24)
+        Me.CheckBox12.Name = "CheckBox12"
+        Me.CheckBox12.Size = New System.Drawing.Size(260, 17)
+        Me.CheckBox12.TabIndex = 0
+        Me.CheckBox12.Text = "Log on automatically to an Administrator account"
+        Me.CheckBox12.UseVisualStyleBackColor = True
+        '
+        'CheckBox7
+        '
+        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.Checked = True
+        Me.CheckBox7.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox7.Location = New System.Drawing.Point(7, 314)
+        Me.CheckBox7.Name = "CheckBox7"
+        Me.CheckBox7.Size = New System.Drawing.Size(181, 17)
+        Me.CheckBox7.TabIndex = 3
+        Me.CheckBox7.Text = "Obscure passwords with Base64"
+        Me.CheckBox7.UseVisualStyleBackColor = True
+        '
+        'CheckBox18
+        '
+        Me.CheckBox18.AutoSize = True
+        Me.CheckBox18.Location = New System.Drawing.Point(7, 337)
+        Me.CheckBox18.Name = "CheckBox18"
+        Me.CheckBox18.Size = New System.Drawing.Size(219, 17)
+        Me.CheckBox18.TabIndex = 5
+        Me.CheckBox18.Text = "Ask for a Microsoft account interactively"
+        Me.CheckBox18.UseVisualStyleBackColor = True
+        '
+        'FillerLabel2
+        '
+        Me.FillerLabel2.AutoEllipsis = True
+        Me.FillerLabel2.Location = New System.Drawing.Point(73, 374)
+        Me.FillerLabel2.Name = "FillerLabel2"
+        Me.FillerLabel2.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.FillerLabel2.Size = New System.Drawing.Size(405, 6)
+        Me.FillerLabel2.TabIndex = 1
+        Me.FillerLabel2.UseMnemonic = False
+        '
+        'UserAccountHeader
+        '
+        Me.UserAccountHeader.AutoEllipsis = True
+        Me.UserAccountHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.UserAccountHeader.Location = New System.Drawing.Point(16, 17)
+        Me.UserAccountHeader.Name = "UserAccountHeader"
+        Me.UserAccountHeader.Size = New System.Drawing.Size(708, 51)
+        Me.UserAccountHeader.TabIndex = 6
+        Me.UserAccountHeader.Text = "Who will use the target installation?"
         '
         'FinishPanel
         '
@@ -2184,476 +2857,6 @@ Partial Class NewUnattendWiz
         Me.PWExpirationHeader.Size = New System.Drawing.Size(708, 51)
         Me.PWExpirationHeader.TabIndex = 7
         Me.PWExpirationHeader.Text = "Should passwords expire?"
-        '
-        'UserAccountPanel
-        '
-        Me.UserAccountPanel.Controls.Add(Me.Label34)
-        Me.UserAccountPanel.Controls.Add(Me.CheckBox6)
-        Me.UserAccountPanel.Controls.Add(Me.ManualAccountPanel)
-        Me.UserAccountPanel.Controls.Add(Me.FillerLabel2)
-        Me.UserAccountPanel.Controls.Add(Me.UserAccountHeader)
-        Me.UserAccountPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UserAccountPanel.Location = New System.Drawing.Point(0, 0)
-        Me.UserAccountPanel.Name = "UserAccountPanel"
-        Me.UserAccountPanel.Size = New System.Drawing.Size(1008, 569)
-        Me.UserAccountPanel.TabIndex = 6
-        '
-        'Label34
-        '
-        Me.Label34.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label34.AutoSize = True
-        Me.Label34.Location = New System.Drawing.Point(81, 534)
-        Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(286, 13)
-        Me.Label34.TabIndex = 11
-        Me.Label34.Text = "Uncheck this only if you want to set up local accounts now"
-        '
-        'CheckBox6
-        '
-        Me.CheckBox6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox6.AutoSize = True
-        Me.CheckBox6.Checked = True
-        Me.CheckBox6.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox6.Location = New System.Drawing.Point(65, 512)
-        Me.CheckBox6.Name = "CheckBox6"
-        Me.CheckBox6.Size = New System.Drawing.Size(276, 17)
-        Me.CheckBox6.TabIndex = 10
-        Me.CheckBox6.Text = "I want to configure these settings during installation"
-        Me.CheckBox6.UseVisualStyleBackColor = True
-        '
-        'ManualAccountPanel
-        '
-        Me.ManualAccountPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ManualAccountPanel.AutoScroll = True
-        Me.ManualAccountPanel.Controls.Add(Me.UserAccountListing)
-        Me.ManualAccountPanel.Controls.Add(Me.GroupBox1)
-        Me.ManualAccountPanel.Controls.Add(Me.CheckBox7)
-        Me.ManualAccountPanel.Controls.Add(Me.CheckBox18)
-        Me.ManualAccountPanel.Enabled = False
-        Me.ManualAccountPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.ManualAccountPanel.Location = New System.Drawing.Point(65, 71)
-        Me.ManualAccountPanel.Name = "ManualAccountPanel"
-        Me.ManualAccountPanel.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
-        Me.ManualAccountPanel.Size = New System.Drawing.Size(878, 425)
-        Me.ManualAccountPanel.TabIndex = 9
-        Me.ManualAccountPanel.WrapContents = False
-        '
-        'UserAccountListing
-        '
-        Me.UserAccountListing.Controls.Add(Me.AccountsPanel)
-        Me.UserAccountListing.Location = New System.Drawing.Point(7, 9)
-        Me.UserAccountListing.Name = "UserAccountListing"
-        Me.UserAccountListing.Size = New System.Drawing.Size(829, 153)
-        Me.UserAccountListing.TabIndex = 2
-        '
-        'AccountsPanel
-        '
-        Me.AccountsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AccountsPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
-        Me.AccountsPanel.ColumnCount = 4
-        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.AccountsPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.AccountsPanel.Controls.Add(Me.ComboBox12, 3, 5)
-        Me.AccountsPanel.Controls.Add(Me.ComboBox11, 3, 4)
-        Me.AccountsPanel.Controls.Add(Me.ComboBox10, 3, 3)
-        Me.AccountsPanel.Controls.Add(Me.ComboBox9, 3, 2)
-        Me.AccountsPanel.Controls.Add(Me.TextBox18, 2, 5)
-        Me.AccountsPanel.Controls.Add(Me.TextBox17, 1, 5)
-        Me.AccountsPanel.Controls.Add(Me.TextBox15, 2, 4)
-        Me.AccountsPanel.Controls.Add(Me.TextBox14, 1, 4)
-        Me.AccountsPanel.Controls.Add(Me.TextBox12, 2, 3)
-        Me.AccountsPanel.Controls.Add(Me.TextBox11, 1, 3)
-        Me.AccountsPanel.Controls.Add(Me.TextBox9, 2, 2)
-        Me.AccountsPanel.Controls.Add(Me.TextBox8, 1, 2)
-        Me.AccountsPanel.Controls.Add(Me.TextBox6, 2, 1)
-        Me.AccountsPanel.Controls.Add(Me.Label35, 1, 0)
-        Me.AccountsPanel.Controls.Add(Me.Label36, 2, 0)
-        Me.AccountsPanel.Controls.Add(Me.Label37, 3, 0)
-        Me.AccountsPanel.Controls.Add(Me.Label38, 0, 1)
-        Me.AccountsPanel.Controls.Add(Me.CheckBox8, 0, 2)
-        Me.AccountsPanel.Controls.Add(Me.CheckBox9, 0, 3)
-        Me.AccountsPanel.Controls.Add(Me.CheckBox10, 0, 4)
-        Me.AccountsPanel.Controls.Add(Me.CheckBox11, 0, 5)
-        Me.AccountsPanel.Controls.Add(Me.TextBox4, 1, 1)
-        Me.AccountsPanel.Controls.Add(Me.ComboBox7, 3, 1)
-        Me.AccountsPanel.Controls.Add(Me.UserListOverviewLabel, 0, 0)
-        Me.AccountsPanel.Location = New System.Drawing.Point(0, 0)
-        Me.AccountsPanel.Name = "AccountsPanel"
-        Me.AccountsPanel.RowCount = 6
-        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.AccountsPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.AccountsPanel.Size = New System.Drawing.Size(829, 153)
-        Me.AccountsPanel.TabIndex = 0
-        '
-        'ComboBox12
-        '
-        Me.ComboBox12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox12.Enabled = False
-        Me.ComboBox12.FormattingEnabled = True
-        Me.ComboBox12.Items.AddRange(New Object() {"Administrators", "Users"})
-        Me.ComboBox12.Location = New System.Drawing.Point(625, 129)
-        Me.ComboBox12.Name = "ComboBox12"
-        Me.ComboBox12.Size = New System.Drawing.Size(200, 21)
-        Me.ComboBox12.TabIndex = 24
-        Me.ComboBox12.Text = "Users"
-        '
-        'ComboBox11
-        '
-        Me.ComboBox11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox11.Enabled = False
-        Me.ComboBox11.FormattingEnabled = True
-        Me.ComboBox11.Items.AddRange(New Object() {"Administrators", "Users"})
-        Me.ComboBox11.Location = New System.Drawing.Point(625, 104)
-        Me.ComboBox11.Name = "ComboBox11"
-        Me.ComboBox11.Size = New System.Drawing.Size(200, 21)
-        Me.ComboBox11.TabIndex = 23
-        Me.ComboBox11.Text = "Users"
-        '
-        'ComboBox10
-        '
-        Me.ComboBox10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox10.Enabled = False
-        Me.ComboBox10.FormattingEnabled = True
-        Me.ComboBox10.Items.AddRange(New Object() {"Administrators", "Users"})
-        Me.ComboBox10.Location = New System.Drawing.Point(625, 79)
-        Me.ComboBox10.Name = "ComboBox10"
-        Me.ComboBox10.Size = New System.Drawing.Size(200, 21)
-        Me.ComboBox10.TabIndex = 22
-        Me.ComboBox10.Text = "Users"
-        '
-        'ComboBox9
-        '
-        Me.ComboBox9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox9.Enabled = False
-        Me.ComboBox9.FormattingEnabled = True
-        Me.ComboBox9.Items.AddRange(New Object() {"Administrators", "Users"})
-        Me.ComboBox9.Location = New System.Drawing.Point(625, 54)
-        Me.ComboBox9.Name = "ComboBox9"
-        Me.ComboBox9.Size = New System.Drawing.Size(200, 21)
-        Me.ComboBox9.TabIndex = 21
-        Me.ComboBox9.Text = "Users"
-        '
-        'TextBox18
-        '
-        Me.TextBox18.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox18.Enabled = False
-        Me.TextBox18.Location = New System.Drawing.Point(418, 129)
-        Me.TextBox18.Name = "TextBox18"
-        Me.TextBox18.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox18.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox18.TabIndex = 18
-        '
-        'TextBox17
-        '
-        Me.TextBox17.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox17.Enabled = False
-        Me.TextBox17.Location = New System.Drawing.Point(211, 129)
-        Me.TextBox17.MaxLength = 20
-        Me.TextBox17.Name = "TextBox17"
-        Me.TextBox17.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox17.TabIndex = 17
-        '
-        'TextBox15
-        '
-        Me.TextBox15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox15.Enabled = False
-        Me.TextBox15.Location = New System.Drawing.Point(418, 104)
-        Me.TextBox15.Name = "TextBox15"
-        Me.TextBox15.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox15.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox15.TabIndex = 15
-        '
-        'TextBox14
-        '
-        Me.TextBox14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox14.Enabled = False
-        Me.TextBox14.Location = New System.Drawing.Point(211, 104)
-        Me.TextBox14.MaxLength = 20
-        Me.TextBox14.Name = "TextBox14"
-        Me.TextBox14.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox14.TabIndex = 14
-        '
-        'TextBox12
-        '
-        Me.TextBox12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox12.Enabled = False
-        Me.TextBox12.Location = New System.Drawing.Point(418, 79)
-        Me.TextBox12.Name = "TextBox12"
-        Me.TextBox12.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox12.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox12.TabIndex = 12
-        '
-        'TextBox11
-        '
-        Me.TextBox11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox11.Enabled = False
-        Me.TextBox11.Location = New System.Drawing.Point(211, 79)
-        Me.TextBox11.MaxLength = 20
-        Me.TextBox11.Name = "TextBox11"
-        Me.TextBox11.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox11.TabIndex = 11
-        '
-        'TextBox9
-        '
-        Me.TextBox9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox9.Enabled = False
-        Me.TextBox9.Location = New System.Drawing.Point(418, 54)
-        Me.TextBox9.Name = "TextBox9"
-        Me.TextBox9.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox9.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox9.TabIndex = 9
-        '
-        'TextBox8
-        '
-        Me.TextBox8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox8.Enabled = False
-        Me.TextBox8.Location = New System.Drawing.Point(211, 54)
-        Me.TextBox8.MaxLength = 20
-        Me.TextBox8.Name = "TextBox8"
-        Me.TextBox8.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox8.TabIndex = 8
-        '
-        'TextBox6
-        '
-        Me.TextBox6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox6.Location = New System.Drawing.Point(418, 29)
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox6.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox6.TabIndex = 6
-        '
-        'Label35
-        '
-        Me.Label35.AutoEllipsis = True
-        Me.Label35.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label35.Location = New System.Drawing.Point(211, 1)
-        Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(200, 24)
-        Me.Label35.TabIndex = 0
-        Me.Label35.Text = "Account name:"
-        Me.Label35.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label36
-        '
-        Me.Label36.AutoEllipsis = True
-        Me.Label36.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label36.Location = New System.Drawing.Point(418, 1)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(200, 24)
-        Me.Label36.TabIndex = 1
-        Me.Label36.Text = "Account password:"
-        Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label37
-        '
-        Me.Label37.AutoEllipsis = True
-        Me.Label37.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label37.Location = New System.Drawing.Point(625, 1)
-        Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(200, 24)
-        Me.Label37.TabIndex = 1
-        Me.Label37.Text = "Account group:"
-        Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label38
-        '
-        Me.Label38.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label38.Location = New System.Drawing.Point(4, 26)
-        Me.Label38.Name = "Label38"
-        Me.Label38.Size = New System.Drawing.Size(200, 24)
-        Me.Label38.TabIndex = 2
-        Me.Label38.Text = "Account 1:"
-        Me.Label38.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'CheckBox8
-        '
-        Me.CheckBox8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox8.Location = New System.Drawing.Point(4, 54)
-        Me.CheckBox8.Name = "CheckBox8"
-        Me.CheckBox8.Size = New System.Drawing.Size(200, 18)
-        Me.CheckBox8.TabIndex = 3
-        Me.CheckBox8.Text = "Account 2:"
-        Me.CheckBox8.UseVisualStyleBackColor = True
-        '
-        'CheckBox9
-        '
-        Me.CheckBox9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox9.Location = New System.Drawing.Point(4, 79)
-        Me.CheckBox9.Name = "CheckBox9"
-        Me.CheckBox9.Size = New System.Drawing.Size(200, 18)
-        Me.CheckBox9.TabIndex = 3
-        Me.CheckBox9.Text = "Account 3:"
-        Me.CheckBox9.UseVisualStyleBackColor = True
-        '
-        'CheckBox10
-        '
-        Me.CheckBox10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox10.Location = New System.Drawing.Point(4, 104)
-        Me.CheckBox10.Name = "CheckBox10"
-        Me.CheckBox10.Size = New System.Drawing.Size(200, 18)
-        Me.CheckBox10.TabIndex = 3
-        Me.CheckBox10.Text = "Account 4:"
-        Me.CheckBox10.UseVisualStyleBackColor = True
-        '
-        'CheckBox11
-        '
-        Me.CheckBox11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox11.Location = New System.Drawing.Point(4, 129)
-        Me.CheckBox11.Name = "CheckBox11"
-        Me.CheckBox11.Size = New System.Drawing.Size(200, 20)
-        Me.CheckBox11.TabIndex = 3
-        Me.CheckBox11.Text = "Account 5:"
-        Me.CheckBox11.UseVisualStyleBackColor = True
-        '
-        'TextBox4
-        '
-        Me.TextBox4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox4.Location = New System.Drawing.Point(211, 29)
-        Me.TextBox4.MaxLength = 20
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(200, 21)
-        Me.TextBox4.TabIndex = 4
-        Me.TextBox4.Text = "Admin"
-        '
-        'ComboBox7
-        '
-        Me.ComboBox7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox7.FormattingEnabled = True
-        Me.ComboBox7.Items.AddRange(New Object() {"Administrators", "Users"})
-        Me.ComboBox7.Location = New System.Drawing.Point(625, 29)
-        Me.ComboBox7.Name = "ComboBox7"
-        Me.ComboBox7.Size = New System.Drawing.Size(200, 21)
-        Me.ComboBox7.TabIndex = 19
-        Me.ComboBox7.Text = "Administrators"
-        '
-        'UserListOverviewLabel
-        '
-        Me.UserListOverviewLabel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UserListOverviewLabel.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.UserListOverviewLabel.Location = New System.Drawing.Point(4, 1)
-        Me.UserListOverviewLabel.Name = "UserListOverviewLabel"
-        Me.UserListOverviewLabel.Size = New System.Drawing.Size(200, 24)
-        Me.UserListOverviewLabel.TabIndex = 25
-        Me.UserListOverviewLabel.Text = "User accounts:"
-        Me.UserListOverviewLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.AutoLogonSettingsPanel)
-        Me.GroupBox1.Controls.Add(Me.CheckBox12)
-        Me.GroupBox1.Location = New System.Drawing.Point(7, 168)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(829, 140)
-        Me.GroupBox1.TabIndex = 4
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "First log on"
-        '
-        'AutoLogonSettingsPanel
-        '
-        Me.AutoLogonSettingsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AutoLogonSettingsPanel.Controls.Add(Me.TextBox5)
-        Me.AutoLogonSettingsPanel.Controls.Add(Me.RadioButton16)
-        Me.AutoLogonSettingsPanel.Controls.Add(Me.RadioButton15)
-        Me.AutoLogonSettingsPanel.Enabled = False
-        Me.AutoLogonSettingsPanel.Location = New System.Drawing.Point(34, 43)
-        Me.AutoLogonSettingsPanel.Name = "AutoLogonSettingsPanel"
-        Me.AutoLogonSettingsPanel.Size = New System.Drawing.Size(782, 89)
-        Me.AutoLogonSettingsPanel.TabIndex = 1
-        '
-        'TextBox5
-        '
-        Me.TextBox5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox5.Enabled = False
-        Me.TextBox5.Location = New System.Drawing.Point(29, 55)
-        Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox5.Size = New System.Drawing.Size(732, 21)
-        Me.TextBox5.TabIndex = 7
-        '
-        'RadioButton16
-        '
-        Me.RadioButton16.AutoSize = True
-        Me.RadioButton16.Location = New System.Drawing.Point(10, 32)
-        Me.RadioButton16.Name = "RadioButton16"
-        Me.RadioButton16.Size = New System.Drawing.Size(311, 17)
-        Me.RadioButton16.TabIndex = 0
-        Me.RadioButton16.Text = "Log on to the built-in administrator account, with password:"
-        Me.RadioButton16.UseVisualStyleBackColor = True
-        '
-        'RadioButton15
-        '
-        Me.RadioButton15.AutoSize = True
-        Me.RadioButton15.Checked = True
-        Me.RadioButton15.Location = New System.Drawing.Point(10, 9)
-        Me.RadioButton15.Name = "RadioButton15"
-        Me.RadioButton15.Size = New System.Drawing.Size(258, 17)
-        Me.RadioButton15.TabIndex = 0
-        Me.RadioButton15.TabStop = True
-        Me.RadioButton15.Text = "Log on to the first administrator account created"
-        Me.RadioButton15.UseVisualStyleBackColor = True
-        '
-        'CheckBox12
-        '
-        Me.CheckBox12.AutoSize = True
-        Me.CheckBox12.Location = New System.Drawing.Point(17, 24)
-        Me.CheckBox12.Name = "CheckBox12"
-        Me.CheckBox12.Size = New System.Drawing.Size(260, 17)
-        Me.CheckBox12.TabIndex = 0
-        Me.CheckBox12.Text = "Log on automatically to an Administrator account"
-        Me.CheckBox12.UseVisualStyleBackColor = True
-        '
-        'CheckBox7
-        '
-        Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Checked = True
-        Me.CheckBox7.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox7.Location = New System.Drawing.Point(7, 314)
-        Me.CheckBox7.Name = "CheckBox7"
-        Me.CheckBox7.Size = New System.Drawing.Size(181, 17)
-        Me.CheckBox7.TabIndex = 3
-        Me.CheckBox7.Text = "Obscure passwords with Base64"
-        Me.CheckBox7.UseVisualStyleBackColor = True
-        '
-        'CheckBox18
-        '
-        Me.CheckBox18.AutoSize = True
-        Me.CheckBox18.Location = New System.Drawing.Point(7, 337)
-        Me.CheckBox18.Name = "CheckBox18"
-        Me.CheckBox18.Size = New System.Drawing.Size(219, 17)
-        Me.CheckBox18.TabIndex = 5
-        Me.CheckBox18.Text = "Ask for a Microsoft account interactively"
-        Me.CheckBox18.UseVisualStyleBackColor = True
-        '
-        'FillerLabel2
-        '
-        Me.FillerLabel2.AutoEllipsis = True
-        Me.FillerLabel2.Location = New System.Drawing.Point(73, 374)
-        Me.FillerLabel2.Name = "FillerLabel2"
-        Me.FillerLabel2.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.FillerLabel2.Size = New System.Drawing.Size(405, 6)
-        Me.FillerLabel2.TabIndex = 1
-        Me.FillerLabel2.UseMnemonic = False
-        '
-        'UserAccountHeader
-        '
-        Me.UserAccountHeader.AutoEllipsis = True
-        Me.UserAccountHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.UserAccountHeader.Location = New System.Drawing.Point(16, 17)
-        Me.UserAccountHeader.Name = "UserAccountHeader"
-        Me.UserAccountHeader.Size = New System.Drawing.Size(708, 51)
-        Me.UserAccountHeader.TabIndex = 6
-        Me.UserAccountHeader.Text = "Who will use the target installation?"
         '
         'ProductKeyPanel
         '
@@ -4310,6 +4513,27 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.UserAccountPanel.ResumeLayout(False)
+        Me.UserAccountPanel.PerformLayout()
+        Me.ManualAccountPanel.ResumeLayout(False)
+        Me.ManualAccountPanel.PerformLayout()
+        Me.UserAccountListing.ResumeLayout(False)
+        Me.AccountsPanel.ResumeLayout(False)
+        Me.AccountsPanel.PerformLayout()
+        Me.DisplayNamePanel5.ResumeLayout(False)
+        Me.DisplayNamePanel5.PerformLayout()
+        Me.DisplayNamePanel4.ResumeLayout(False)
+        Me.DisplayNamePanel4.PerformLayout()
+        Me.DisplayNamePanel3.ResumeLayout(False)
+        Me.DisplayNamePanel3.PerformLayout()
+        Me.DisplayNamePanel2.ResumeLayout(False)
+        Me.DisplayNamePanel2.PerformLayout()
+        Me.DisplayNamePanel1.ResumeLayout(False)
+        Me.DisplayNamePanel1.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        Me.AutoLogonSettingsPanel.ResumeLayout(False)
+        Me.AutoLogonSettingsPanel.PerformLayout()
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.UnattendProgressPanel.ResumeLayout(False)
@@ -4370,17 +4594,6 @@ Partial Class NewUnattendWiz
         Me.TimedExpirationPanel.ResumeLayout(False)
         Me.TimedExpirationPanel.PerformLayout()
         CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.UserAccountPanel.ResumeLayout(False)
-        Me.UserAccountPanel.PerformLayout()
-        Me.ManualAccountPanel.ResumeLayout(False)
-        Me.ManualAccountPanel.PerformLayout()
-        Me.UserAccountListing.ResumeLayout(False)
-        Me.AccountsPanel.ResumeLayout(False)
-        Me.AccountsPanel.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.AutoLogonSettingsPanel.ResumeLayout(False)
-        Me.AutoLogonSettingsPanel.PerformLayout()
         Me.ProductKeyPanel.ResumeLayout(False)
         Me.ProductKeyPanel.PerformLayout()
         Me.ManualProductKeyOptionsPanel.ResumeLayout(False)
@@ -4787,4 +5000,20 @@ Partial Class NewUnattendWiz
     Friend WithEvents Button21 As System.Windows.Forms.Button
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button22 As System.Windows.Forms.Button
+    Friend WithEvents DisplayNamePanel5 As System.Windows.Forms.Panel
+    Friend WithEvents TextBox23 As System.Windows.Forms.TextBox
+    Friend WithEvents CheckBox27 As System.Windows.Forms.CheckBox
+    Friend WithEvents DisplayNamePanel4 As System.Windows.Forms.Panel
+    Friend WithEvents TextBox22 As System.Windows.Forms.TextBox
+    Friend WithEvents CheckBox26 As System.Windows.Forms.CheckBox
+    Friend WithEvents DisplayNamePanel3 As System.Windows.Forms.Panel
+    Friend WithEvents TextBox21 As System.Windows.Forms.TextBox
+    Friend WithEvents CheckBox25 As System.Windows.Forms.CheckBox
+    Friend WithEvents DisplayNamePanel2 As System.Windows.Forms.Panel
+    Friend WithEvents TextBox20 As System.Windows.Forms.TextBox
+    Friend WithEvents CheckBox24 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label69 As System.Windows.Forms.Label
+    Friend WithEvents DisplayNamePanel1 As System.Windows.Forms.Panel
+    Friend WithEvents TextBox19 As System.Windows.Forms.TextBox
+    Friend WithEvents CheckBox23 As System.Windows.Forms.CheckBox
 End Class

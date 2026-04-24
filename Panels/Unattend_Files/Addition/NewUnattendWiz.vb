@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2631"
+    Const UnattendGenReleaseTag As String = "2651"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -754,6 +754,11 @@ Public Class NewUnattendWiz
         TextBox16.BackColor = BackColor
         TextBox17.BackColor = BackColor
         TextBox18.BackColor = BackColor
+        TextBox19.BackColor = BackColor
+        TextBox20.BackColor = BackColor
+        TextBox21.BackColor = BackColor
+        TextBox22.BackColor = BackColor
+        TextBox23.BackColor = BackColor
         NumericUpDown1.BackColor = BackColor
         NumericUpDown2.BackColor = BackColor
         NumericUpDown3.BackColor = BackColor
@@ -795,6 +800,11 @@ Public Class NewUnattendWiz
         TextBox16.ForeColor = ForeColor
         TextBox17.ForeColor = ForeColor
         TextBox18.ForeColor = ForeColor
+        TextBox19.ForeColor = ForeColor
+        TextBox20.ForeColor = ForeColor
+        TextBox21.ForeColor = ForeColor
+        TextBox22.ForeColor = ForeColor
+        TextBox23.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
         NumericUpDown3.ForeColor = ForeColor
@@ -1344,6 +1354,7 @@ Public Class NewUnattendWiz
                 TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
                 If UserAccount.Enabled Then
                     TextBox13.AppendText("    - Name: " & UserAccount.Name & CrLf &
+                                         "    - Display Name: " & UserAccount.DisplayName & CrLf &
                                          "    - Password: " & UserAccount.Password & CrLf &
                                          "    - Group: " & If(UserAccount.Group = UserGroup.Administrators, "Administrators", "Users") & CrLf)
                 End If
@@ -1716,10 +1727,11 @@ Public Class NewUnattendWiz
 
 #Region "User Account settings"
 
-    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, password As String, group As UserGroup)
+    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, displayName As String, password As String, group As UserGroup)
         If UserAccountsList Is Nothing OrElse UserAccountsList.Count = 0 Then Exit Sub
         UserAccountsList(index).Enabled = enabled
         UserAccountsList(index).Name = name
+        UserAccountsList(index).DisplayName = If(String.IsNullOrWhiteSpace(displayName), name, displayName)
         UserAccountsList(index).Password = password
         UserAccountsList(index).Group = group
     End Sub
@@ -1735,91 +1747,95 @@ Public Class NewUnattendWiz
     End Function
 
     Private Sub CheckBox8_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox8.CheckedChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
         TextBox8.Enabled = CheckBox8.Checked
         TextBox9.Enabled = CheckBox8.Checked
         ComboBox9.Enabled = CheckBox8.Checked
+        DisplayNamePanel2.Enabled = CheckBox8.Checked
     End Sub
 
     Private Sub CheckBox9_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox9.CheckedChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
         TextBox11.Enabled = CheckBox9.Checked
         TextBox12.Enabled = CheckBox9.Checked
         ComboBox10.Enabled = CheckBox9.Checked
+        DisplayNamePanel3.Enabled = CheckBox9.Checked
     End Sub
 
     Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
         TextBox14.Enabled = CheckBox10.Checked
         TextBox15.Enabled = CheckBox10.Checked
         ComboBox11.Enabled = CheckBox10.Checked
+        DisplayNamePanel4.Enabled = CheckBox10.Checked
     End Sub
 
     Private Sub CheckBox11_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox11.CheckedChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
         TextBox17.Enabled = CheckBox11.Checked
         TextBox18.Enabled = CheckBox11.Checked
         ComboBox12.Enabled = CheckBox11.Checked
+        DisplayNamePanel5.Enabled = CheckBox11.Checked
     End Sub
 
     Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
     End Sub
 
     Private Sub TextBox6_TextChanged(sender As Object, e As EventArgs) Handles TextBox6.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
     End Sub
 
     Private Sub TextBox8_TextChanged(sender As Object, e As EventArgs) Handles TextBox8.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
     End Sub
 
     Private Sub TextBox9_TextChanged(sender As Object, e As EventArgs) Handles TextBox9.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
     End Sub
 
     Private Sub TextBox11_TextChanged(sender As Object, e As EventArgs) Handles TextBox11.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
     End Sub
 
     Private Sub TextBox12_TextChanged(sender As Object, e As EventArgs) Handles TextBox12.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
     End Sub
 
     Private Sub TextBox14_TextChanged(sender As Object, e As EventArgs) Handles TextBox14.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
     End Sub
 
     Private Sub TextBox15_TextChanged(sender As Object, e As EventArgs) Handles TextBox15.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
     End Sub
 
     Private Sub TextBox17_TextChanged(sender As Object, e As EventArgs) Handles TextBox17.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 
     Private Sub TextBox18_TextChanged(sender As Object, e As EventArgs) Handles TextBox18.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 
     Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
-        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
     End Sub
 
     Private Sub ComboBox9_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox9.SelectedIndexChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
     End Sub
 
     Private Sub ComboBox10_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox10.SelectedIndexChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
     End Sub
 
     Private Sub ComboBox11_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox11.SelectedIndexChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
     End Sub
 
     Private Sub ComboBox12_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox12.SelectedIndexChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 
 #End Region
@@ -2129,7 +2145,7 @@ Public Class NewUnattendWiz
                 If UserAccountsList.Count > 0 Then
                     For Each account As User In UserAccountsList
                         DynaLog.LogMessage("Saving information of account " & Quote & account.Name & Quote & " to file...")
-                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
+                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " DisplayName=" & Quote & account.DisplayName.Replace("&", "&amp;") & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
                     Next
                     customUserContents &= "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
@@ -2296,6 +2312,7 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Generating unattended answer file...", 25)
             DynaLog.LogMessage("Starting UnattendGen...")
+            If Debugger.IsAttached Then UnattendGen.StartInfo.Arguments &= " --debug"
             UnattendGen.Start()
             UnattendGen.WaitForExit()
             DynaLog.LogMessage("UnattendGen finished with exit code " & Hex(UnattendGen.ExitCode))
@@ -3168,5 +3185,54 @@ Public Class NewUnattendWiz
         WindowHelper.DisplayToolTip(sender, "Choose this option to automatically configure the target location to one of the countries in the European Economic Area (EEA). This will let you" & CrLf &
                                     "configure settings in the target system that you would not be able to when using a region outside the EEA. After Setup is complete, you can reconfigure" & CrLf &
                                     "the region to your current location.")
+    End Sub
+
+    Private Sub CheckBox23_MouseHover(sender As Object, e As EventArgs) Handles CheckBox27.MouseHover, CheckBox26.MouseHover, CheckBox25.MouseHover, CheckBox24.MouseHover, CheckBox23.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Check this field to customize this user's display name")
+    End Sub
+
+    Private Sub CheckBox27_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox27.CheckedChanged
+        TextBox23.Enabled = CheckBox27.Checked
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox26_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox26.CheckedChanged
+        TextBox22.Enabled = CheckBox26.Checked
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox25_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox25.CheckedChanged
+        TextBox21.Enabled = CheckBox25.Checked
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox24_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox24.CheckedChanged
+        TextBox20.Enabled = CheckBox24.Checked
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox23_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox23.CheckedChanged
+        TextBox19.Enabled = CheckBox23.Checked
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox19_TextChanged(sender As Object, e As EventArgs) Handles TextBox19.TextChanged
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox20_TextChanged(sender As Object, e As EventArgs) Handles TextBox20.TextChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox21_TextChanged(sender As Object, e As EventArgs) Handles TextBox21.TextChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox22_TextChanged(sender As Object, e As EventArgs) Handles TextBox22.TextChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox23_TextChanged(sender As Object, e As EventArgs) Handles TextBox23.TextChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 End Class
