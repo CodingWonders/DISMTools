@@ -2583,92 +2583,82 @@ Public Class Options
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         If Button8.Text = "Stop" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
+                            MainForm.StopMountedImageDetector()
                         ElseIf Button8.Text = "Start" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                            MainForm.StartMountedImageDetector()
                         End If
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
                     Case "ESN"
                         If Button8.Text = "Detener" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
+                            MainForm.StopMountedImageDetector()
                         ElseIf Button8.Text = "Iniciar" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                            MainForm.StartMountedImageDetector()
                         End If
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
                     Case "FRA"
                         If Button8.Text = "Arrêter" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
+                            MainForm.StopMountedImageDetector()
                         ElseIf Button8.Text = "Démarrer" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                            MainForm.StartMountedImageDetector()
                         End If
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
                     Case "PTB", "PTG"
                         If Button8.Text = "Parar" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
+                            MainForm.StopMountedImageDetector()
                         ElseIf Button8.Text = "Iniciar" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                            MainForm.StartMountedImageDetector()
                         End If
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
                     Case "ITA"
                         If Button8.Text = "Arresto" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
+                            MainForm.StopMountedImageDetector()
                         ElseIf Button8.Text = "Avvio" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                            MainForm.StartMountedImageDetector()
                         End If
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
                 End Select
             Case 1
                 If Button8.Text = "Stop" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
+                    MainForm.StopMountedImageDetector()
                 ElseIf Button8.Text = "Start" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                    MainForm.StartMountedImageDetector()
                 End If
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
             Case 2
                 If Button8.Text = "Detener" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
+                    MainForm.StopMountedImageDetector()
                 ElseIf Button8.Text = "Iniciar" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                    MainForm.StartMountedImageDetector()
                 End If
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
             Case 3
                 If Button8.Text = "Arrêter" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
+                    MainForm.StopMountedImageDetector()
                 ElseIf Button8.Text = "Démarrer" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                    MainForm.StartMountedImageDetector()
                 End If
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
             Case 4
                 If Button8.Text = "Parar" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
+                    MainForm.StopMountedImageDetector()
                 ElseIf Button8.Text = "Iniciar" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                    MainForm.StartMountedImageDetector()
                 End If
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
             Case 5
                 If Button8.Text = "Arresto" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
+                    MainForm.StopMountedImageDetector()
                 ElseIf Button8.Text = "Avvio" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                    MainForm.StartMountedImageDetector()
                 End If
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
