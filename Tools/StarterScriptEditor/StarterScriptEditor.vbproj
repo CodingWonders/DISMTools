@@ -108,6 +108,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ScriptVersionChooser.Designer.vb">
+      <DependentUpon>ScriptVersionChooser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ScriptVersionChooser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
   </ItemGroup>
@@ -121,6 +127,10 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScriptVersionChooser.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ScriptVersionChooser.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\changefont.png" />
+    <None Include="Resources\targetversion.png" />
+    <None Include="Resources\writable.png" />
     <None Include="Resources\colormode.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />

@@ -77,6 +77,11 @@ Public Class FfuInfoDialog
             If partDetailsMOC IsNot Nothing AndAlso partDetailsMOC.Count > 0 Then
                 Dim partDetailsMO As ManagementObject = partDetailsMOC(0)
 
+                Dim PartitionDetailProperties As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(partDetailsMO,
+                                                                                                           "DiskIndex", "Index", "PrimaryPartition",
+                                                                                                           "BootPartition", "Bootable", "Size",
+                                                                                                           "StartingOffset", "NumberOfBlocks", "BlockSize")
+
                 RichTextBox1.Text = String.Format("Disk Index: {1}{0}" &
                                                   "Partition Index: {2}{0}" &
                                                   "Primary Partition? {3}{0}" &
@@ -85,17 +90,17 @@ Public Class FfuInfoDialog
                                                   "Size: {6} bytes (~{7}){0}" &
                                                   "Offset: {8}{0}" &
                                                   "Number of Blocks: {9}{0}" &
-                                                  "Block Size: {10}", Environment.NewLine,
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "DiskIndex"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "Index"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "PrimaryPartition"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "BootPartition"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "Bootable"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "Size"),
-                                                                      Converters.BytesToReadableSize(WMIHelper.GetObjectValue(partDetailsMO, "Size")),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "StartingOffset"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "NumberOfBlocks"),
-                                                                      WMIHelper.GetObjectValue(partDetailsMO, "BlockSize"))
+                                                  "Block Size: {10} bytes", Environment.NewLine,
+                                                                            PartitionDetailProperties("DiskIndex"),
+                                                                            PartitionDetailProperties("Index"),
+                                                                            PartitionDetailProperties("PrimaryPartition"),
+                                                                            PartitionDetailProperties("BootPartition"),
+                                                                            PartitionDetailProperties("Bootable"),
+                                                                            PartitionDetailProperties("Size"),
+                                                                            Converters.BytesToReadableSize(PartitionDetailProperties("Size")),
+                                                                            PartitionDetailProperties("StartingOffset"),
+                                                                            PartitionDetailProperties("NumberOfBlocks"),
+                                                                            PartitionDetailProperties("BlockSize"))
             End If
         End If
     End Sub

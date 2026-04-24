@@ -71,6 +71,14 @@ class DiskLayout {
     }
 }
 
+enum PartitionTableOverride {
+    NoOverride = 0
+    AlwaysMBR = 1
+    AlwaysGPT = 2
+}
+
+$global:override = [PartitionTableOverride]::NoOverride
+
 $pxeReplySettings = $null
 
 function Invoke-ServerAuthentication {
@@ -105,13 +113,15 @@ function Invoke-ServerAuthentication {
         }
     } until ($validAddress -eq $true)
     
+    $defaultPort = Get-PolicyValue -PolicyName "PXEServerPort" -DefaultPolicyValue 8080 -ValidOptions @(80..65535)
+    
     do {
-        $portStr = Read-Host -Prompt "Please enter the port to which the WDS Helper Server is listening, or press ENTER to use the default port [8080]"
+        $portStr = Read-Host -Prompt "Please enter the port to which the WDS Helper Server is listening, or press ENTER to use the default port [$($defaultPort)]"
         
         # if we haven't input anything here we'll make it 8080, if we don't do anything it will default to 0
         if ($portStr -eq "") {
             Write-Host "Using default port..."
-            $portStr = "8080"
+            $portStr = [string]$defaultPort
         }
         
         try {
@@ -177,6 +187,7 @@ function Get-Disks
         .SYNOPSIS
             Gets the available disks with DiskPart
     #>
+    Show-SectionMessage -sectionTitle "Perform disk configuration" -sectionDescription "Select the disk on which you want to perform the installation."
 
     # Show disk list with diskpart
     if (Test-Path "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -PathType Leaf)
@@ -251,12 +262,17 @@ function Get-Partitions
             Gets the partitions of a drive using DiskPart
         .PARAMETER driveNum
             The drive number
+        .PARAMETER override
+            The partition table override mode
         .EXAMPLE
             Get-Partitions 0
     #>
     param (
-        [Parameter(Mandatory = $true)] [int]$driveNum
+        [Parameter(Mandatory = $true, Position = 0)] [int]$driveNum,
+        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
     )
+    
+    Show-SectionMessage -sectionTitle "Perform disk configuration" -sectionDescription "These are the partitions in disk $($driveNum)."
 
     $partLister = @'
     sel dis <REPLACEME>
@@ -270,31 +286,104 @@ function Get-Partitions
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
     Write-Host "- To reload results, press R"
+    switch ($override) {
+        NoOverride {
+            Write-Host "`n    No partition table overrides have been set. The selected disk will use MBR on BIOS systems and GPT on UEFI systems.`n"
+        }
+        AlwaysMBR {
+            Write-Host "`n    On a clean drive, a MBR partition table will be used regardless of the platform.`n"
+        }
+        AlwaysGPT {
+            Write-Host "`n    On a clean drive, a GPT partition table will be used regardless of the platform.`n"
+        }
+    }
+    if ($override -eq [PartitionTableOverride]::NoOverride) {
+        Write-Host "- To specify a partition table override, press O"
+    } else {
+        Write-Host "- To specify or change a partition table override, press O"
+    }
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
-        return $part
+        return @{"partitionNumber" = $part; "selectedOverride" = $override}
     }
     elseif ($part -eq "B")
     {
-        return $part
+        return @{"partitionNumber" = $part; "selectedOverride" = $override}
+    }
+    elseif ($part -eq "O")
+    {
+        Show-SectionMessage -sectionTitle "Specify a partition table override setting" -sectionDescription "Configure a partition table override to use with the selected disk."
+        Write-Host ""
+        Write-Host "Partition table overrides let you configure a disk using a specific partition table regardless of your current"
+        Write-Host "platform. This is useful if you are deploying an operating system to another computer using this computer. Do"
+        Write-Host "not use partition table overrides if you want to install an operating system to a disk on this computer.`n"
+        Write-Host "Partition table overrides will not be used when you specify a partition number on the partition screen. In"
+        Write-Host "that case, the existing partition table will be kept."
+        Write-Host ""
+        Write-Host "Currently," -NoNewline
+        switch ($override) {
+            NoOverride {
+                if ($env:FIRMWARE_TYPE -eq "UEFI") {
+                    Write-Host " a GPT partition table scheme will be used because this computer uses UEFI."
+                } else {
+                    Write-Host " a MBR partition table scheme will be used because this computer uses BIOS."
+                }
+            }
+            AlwaysMBR {
+                Write-Host " a MBR partition table scheme will be used because of an override."
+            }
+            AlwaysGPT {
+                Write-Host " a GPT partition table scheme will be used because of an override."
+            }
+        }
+        Write-Host ""
+        if ($override -ne [PartitionTableOverride]::NoOverride) { Write-Host "- Press C to clear the overrides" }
+        if ($override -ne [PartitionTableOverride]::AlwaysMBR) { Write-Host "- Press M to set a MBR partition table override" }
+        if ($override -ne [PartitionTableOverride]::AlwaysGPT) { Write-Host "- Press G to set a GPT partition table override" }
+        Write-Host "- Press B to go back"
+        $overrideOption = Read-Host -Prompt "Select the option that you want to use and press ENTER"
+        switch ($overrideOption) {
+            "C" { $override = [PartitionTableOverride]::NoOverride }
+            "M" {
+                $override = [PartitionTableOverride]::AlwaysMBR
+                if ($env:FIRMWARE_TYPE -eq "Legacy") {
+                    Write-Host "You have chosen a MBR partition table override on a computer whose firmware type already"
+                    Write-Host "supports MBR. While you can keep using this override, it becomes redundant and, thus, we"
+                    Write-Host "recommend that you clear this partition table override."
+                    $option = Read-Host -Prompt "Do you want to clear the override? (Y/n)"
+                    if ($option -ne "N") { $override = [PartitionTableOverride]::NoOverride }
+                }
+            }
+            "G" {
+                $override = [PartitionTableOverride]::AlwaysGPT
+                if ($env:FIRMWARE_TYPE -eq "UEFI") {
+                    Write-Host "You have chosen a GPT partition table override on a computer whose firmware type already"
+                    Write-Host "supports GPT. While you can keep using this override, it becomes redundant and, thus, we"
+                    Write-Host "recommend that you clear this partition table override."
+                    $option = Read-Host -Prompt "Do you want to clear the override? (Y/n)"
+                    if ($option -ne "N") { $override = [PartitionTableOverride]::NoOverride }
+                }
+            }
+        }
+        Get-Partitions $driveNum $override
     }
     elseif ($part -eq "R")
     {
-        Get-Partitions $driveNum
+        Get-Partitions $driveNum $override
     }
     else
     {
         try
         {
             $partition = [int]$part
-            return $partition
+            return @{"partitionNumber" = $partition; "selectedOverride" = $override}
         }
         catch
         {
             Write-Host "Please specify a number and try again.`n"
-            Get-Partitions $driveNum
+            Get-Partitions $driveNum $override
         }
     }
 }
@@ -310,6 +399,8 @@ function Write-DiskConfiguration
             Determine whether to clean the entire drive. Useful for single-boot scenarios
         .PARAMETER partId
             The partition number
+        .PARAMETER override
+            The partition table override mode
         .NOTES
             The partition ID is 0 if the user decides to clean a drive
         .EXAMPLE
@@ -320,8 +411,11 @@ function Write-DiskConfiguration
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int]$diskid,
         [Parameter(Mandatory = $true, Position = 1)] [bool]$cleanDrive,
-        [Parameter(Mandatory = $true, Position = 2)] [int]$partId
+        [Parameter(Mandatory = $true, Position = 2)] [int]$partId,
+        [Parameter(Mandatory = $true, Position = 3)] [PartitionTableOverride]$override
     )
+    
+    Show-SectionMessage -sectionTitle "Performing disk configuration..." -sectionDescription "Please wait while changes made to disk configuration are saved to disk $($diskId)."
 
     Write-Host "Writing disk configuration. Please wait..."
     if ($cleanDrive)
@@ -440,15 +534,28 @@ function Write-DiskConfiguration
 "@
         $uefiMode = ($env:firmware_type -eq "UEFI")
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
-        if ($uefiMode)
-        {
-            $formatter = $formatter.Replace("#MBRPART#", "REM Unused Partition Block").Trim()
-            $formatter = $formatter.Replace("#GPTPART#", $formatter_gpt).Trim()
-        }
-        else
-        {
-            $formatter = $formatter.Replace("#MBRPART#", $formatter_mbr).Trim()
-            $formatter = $formatter.Replace("#GPTPART#", "REM Unused Partition Block").Trim()
+        switch ($override) {
+            NoOverride {
+                $uefiMode = ($env:firmware_type -eq "UEFI")
+                if ($uefiMode)
+                {
+                    $formatter = $formatter.Replace("#MBRPART#", "REM Unused Partition Block").Trim()
+                    $formatter = $formatter.Replace("#GPTPART#", $formatter_gpt).Trim()
+                }
+                else
+                {
+                    $formatter = $formatter.Replace("#MBRPART#", $formatter_mbr).Trim()
+                    $formatter = $formatter.Replace("#GPTPART#", "REM Unused Partition Block").Trim()
+                }
+            }
+            AlwaysMBR {
+                $formatter = $formatter.Replace("#MBRPART#", $formatter_mbr).Trim()
+                $formatter = $formatter.Replace("#GPTPART#", "REM Unused Partition Block").Trim()
+            }
+            AlwaysGPT {
+                $formatter = $formatter.Replace("#MBRPART#", "REM Unused Partition Block").Trim()
+                $formatter = $formatter.Replace("#GPTPART#", $formatter_gpt).Trim()
+            }
         }
         $formatter | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_format.dp" -Force -Encoding utf8
         $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"$env:SYSTEMDRIVE\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
@@ -545,13 +652,17 @@ function Get-WimIndexes
 }
 
 function Start-OSApplication {
-    Show-SectionMessage -sectionTitle "Perform disk configuration" -sectionDescription "Disk configuration will be performed according to the options you specify"
-
     $diskGetterOpScript = @'
     lis dis
     exit
 '@
     New-Item -Path "$env:SYSTEMDRIVE\files\diskpart" -ItemType Directory -Force | Out-Null
+    $overrideStr = Get-PolicyValue -PolicyName "PartTableOverridePreference" -DefaultPolicyValue "NoOverride" -ValidOptions @("NoOverride", "AlwaysMBR", "AlwaysGPT")
+    switch ($overrideStr) {
+        "NoOverride" { $global:override = [PartitionTableOverride]::NoOverride }
+        "AlwaysMBR" { $global:override = [PartitionTableOverride]::AlwaysMBR }
+        "AlwaysGPT" { $global:override = [PartitionTableOverride]::AlwaysGPT }
+    }
     $diskGetterOpScript | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
@@ -560,8 +671,8 @@ function Start-OSApplication {
         return
     }
     Write-Host "Selected disk: disk $($drive)"
-    $partition = Get-Partitions $drive
-    if ($partition -eq "B")
+    $partitionOptions = Get-Partitions $drive $override
+    if ($partitionOptions["partitionNumber"] -eq "B")
     {
         do {
             $drive = Get-Disks
@@ -571,16 +682,19 @@ function Start-OSApplication {
                 return
             }
             Write-Host "Selected disk: disk $($drive)"
-            $partition = Get-Partitions $drive
-        } until ($partition -ne "B")
+            $partitionOptions = Get-Partitions $drive $override
+        } until ($partitionOptions["partitionNumber"] -ne "B")
     }
-    if ($partition -eq 0)
+    if ($partitionOptions["partitionNumber"] -eq 0)
     {
         $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
     }
     else
     {
-        $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
+        $msg = "This will perform disk configuration changes on partition $($partitionOptions["partitionNumber"]). THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
+    }
+    if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+        $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
     }
     Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
     $choice = Read-Host "Are you sure you want to continue (Y/N)"
@@ -588,8 +702,8 @@ function Start-OSApplication {
     {
         do
         {
-            $partition = Get-Partitions $drive
-            if ($partition -eq "B")
+            $partitionOptions = Get-Partitions $drive $override
+            if ($partitionOptions["partitionNumber"] -eq "B")
             {
                 do {
                     $drive = Get-Disks
@@ -599,10 +713,10 @@ function Start-OSApplication {
                         return
                     }
                     Write-Host "Selected disk: disk $($drive)"
-                    $partition = Get-Partitions $drive
-                } until ($partition -ne "B")
+                    $partitionOptions = Get-Partitions $drive $override
+                } until ($partitionOptions["partitionNumber"] -ne "B")
             }
-            if ($partition -eq 0)
+            if ($partitionOptions["partitionNumber"] -eq 0)
             {
                 $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
             }
@@ -610,16 +724,24 @@ function Start-OSApplication {
             {
                 $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
             }
+            if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+                $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
+            }
             Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
             $choice = Read-Host "Are you sure you want to continue (Y/N)"
         } until ($choice -eq "Y")
     }
     $driveLetter = ""
     $bootLetter = ""
-    if ($partition -eq 0)
+
+    # Get-Partitions returns a hashtable. First item is the number, second item is the override.
+    $partNumber = $partitionOptions["partitionNumber"]
+    $global:override = $partitionOptions["selectedOverride"]
+    
+    if ($partNumber -eq 0)
     {
         # Proceed with default disk configuration
-        $diskLayout = Write-DiskConfiguration $drive $true $partition
+        $diskLayout = Write-DiskConfiguration $drive $true $partNumber $global:override
         if ($diskLayout -ne $null) {
             # Get the volume letter that was stored in the function
             $driveLetter = $diskLayout.bootVolume
@@ -633,7 +755,7 @@ function Start-OSApplication {
     else
     {
         # Proceed with custom disk configuration
-        Write-DiskConfiguration $drive $false $partition
+        Write-DiskConfiguration $drive $false $partNumber [PartitionTableOverride]::NoOverride
         $volLister = @'
         lis vol
         exit
@@ -699,7 +821,7 @@ function Start-OSApplication {
         "UseAlways" { $usebootex = $true }
     }
     $usebootex = $false
-    if (($bootexPolicyUsed -ne $true) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+    if (($bootexPolicyUsed -ne $true) -and ($global:override -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
         Show-SectionMessage -sectionTitle "Select UEFI boot binary" -sectionDescription "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions of the EFI boot binary that will later be used when creating boot files:"
         # Quick run-down: we only ask for EFI boot binary when we find Secure Boot on the system, AND
         # if the provided bcdboot supports bootex.
@@ -803,7 +925,7 @@ function Start-OSApplication {
         Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
     }
 
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter -bootEx $usebootex
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -bootEx $usebootex -override $global:override
 }
 
 function Start-DismCommand
@@ -1101,6 +1223,8 @@ function New-BootFiles
             Determine whether to run detections for specific boot scenarios
         .PARAMETER espLetter
             The letter of the EFI System Partition volume. By default, it's W if not specified
+        .PARAMETER override
+            The partition table override mode
         .PARAMETER bootEx
             Determine whether to use the Windows UEFI CA 2023 or the Microsoft Windows Production PCA 2011 boot binaries
         .EXAMPLE
@@ -1114,7 +1238,8 @@ function New-BootFiles
         [Parameter(Mandatory = $true, Position = 2)] [int]$diskId,
         [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive,
         [Parameter(Position = 4)] [string]$espLetter = "W",
-        [Parameter(Position = 5)] [bool]$bootEx = $false
+        [Parameter(Position = 5)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride,
+        [Parameter(Position = 6)] [bool]$bootEx = $false
     )
     
     # Old Windows images don't come with the required UEFI CA 2023 binaries, causing bcdboot
@@ -1125,109 +1250,194 @@ function New-BootFiles
         $bootEx = $false
     }
     
-    if ($env:firmware_type -eq "UEFI")
-    {
-        # Make boot files for both BIOS and UEFI firmwares
-        if ($bootpart -eq "auto")
-        {
-            if (-not $cleanDrive)
+    switch ($override) {
+        NoOverride {
+            if ($env:firmware_type -eq "UEFI")
             {
-                foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+                # Make boot files for both BIOS and UEFI firmwares
+                if ($bootpart -eq "auto")
                 {
-                    if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
+                    if (-not $cleanDrive)
                     {
-                        $MSRAssign = @"
-                        sel dis #DISKID#
-                        sel par #VOLNUM#
-                        ass letter $espLetter
-                        exit
+                        foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+                        {
+                            if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
+                            {
+                                $MSRAssign = @"
+                                sel dis #DISKID#
+                                sel par #VOLNUM#
+                                ass letter $espLetter
+                                exit
 "@
-                        $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
-                        $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
-                        $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
-                        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
-                    }
-                }
+                                $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                                $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                                $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                                diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
+                            }
+                        }
 
-                if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
-                    Write-Host "Deleting BCD entry..."
-                    $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
-                    if ($entryGuid -ne "") {
-                        bcdedit /delete $entryGuid | Out-Host
+                        if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
+                            Write-Host "Deleting BCD entry..."
+                            $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
+                            if ($entryGuid -ne "") {
+                                bcdedit /delete $entryGuid | Out-Host
+                            }
+                        }
+                    }
+                    if ($bootEx) {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+                    } else {
+                        # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                        # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                        # we said we didn't want to.
+                        if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        } else {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                        }
+                    }
+                }
+                else
+                {
+                    if ($bootEx) {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+                    } else {
+                        # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                        # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                        # we said we didn't want to.
+                        if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        } else {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                        }
                     }
                 }
             }
-            if ($bootEx) {
-                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
-            } else {
-                # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
-                # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
-                # we said we didn't want to.
-                if ((bcdboot /? | Select-String "/offline") -eq $null) {
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
-                } else {
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
-                }
-            }
-        }
-        else
-        {
-            if ($bootEx) {
-                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
-            } else {
-                # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
-                # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
-                # we said we didn't want to.
-                if ((bcdboot /? | Select-String "/offline") -eq $null) {
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
-                } else {
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
-                }
-            }
-        }
-    }
-    else
-    {
-        # Install boot sector and make boot files for BIOS
-        if ($bootpart -eq "auto")
-        {
-            if (-not $cleanDrive)
+            else
             {
-                foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+                # Install boot sector and make boot files for BIOS
+                if ($bootpart -eq "auto")
                 {
-                    if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
+                    if (-not $cleanDrive)
                     {
-                        $MSRAssign = @"
-                        sel dis #DISKID#
-                        sel par #VOLNUM#
-                        ass letter $espLetter
-                        exit
+                        foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+                        {
+                            if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
+                            {
+                                $MSRAssign = @"
+                                sel dis #DISKID#
+                                sel par #VOLNUM#
+                                ass letter $espLetter
+                                exit
 "@
-                        $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
-                        $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
-                        $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
-                        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
-                    }
-                }
+                                $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                                $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                                $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                                diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
+                            }
+                        }
 
-                if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
-                    Write-Host "Deleting BCD entry..."
-                    $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
-                    if ($entryGuid -ne "") {
-                        bcdedit /delete $entryGuid | Out-Host
+                        if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
+                            Write-Host "Deleting BCD entry..."
+                            $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
+                            if ($entryGuid -ne "") {
+                                bcdedit /delete $entryGuid | Out-Host
+                            }
+                        }
                     }
+                    # We have to do this stupid thing to coax bootsect to work for BIOS
+                    bootsect /nt60 "$espLetter`:"
+                    bootsect /nt60 "$espLetter`:" /mbr
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
+                }
+                else
+                {
+                    bootsect /nt60 "$espLetter`:"
+                    bootsect /nt60 "$espLetter`:" /mbr
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
                 }
             }
-            # We have to do this stupid thing to coax bootsect to work for BIOS
-            bootsect /nt60 "$espLetter`:"
-            bootsect /nt60 "$espLetter`:" /mbr
-            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
         }
-        else
-        {
-            bootsect /nt60 "$espLetter`:"
-            bootsect /nt60 "$espLetter`:" /mbr
-            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
+        AlwaysMBR {
+            # Install boot sector and make boot files for BIOS
+            if ($bootpart -eq "auto")
+            {
+                if (-not $cleanDrive)
+                {
+                    foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+                    {
+                        if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
+                        {
+                            $MSRAssign = @"
+                            sel dis #DISKID#
+                            sel par #VOLNUM#
+                            ass letter $espLetter
+                            exit
+"@
+                            $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                            $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                            $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                            diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
+                        }
+                    }
+
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
+                        Write-Host "Deleting BCD entry..."
+                        $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
+                        if ($entryGuid -ne "") {
+                            bcdedit /delete $entryGuid | Out-Host
+                        }
+                    }
+                }
+                # We have to do this stupid thing to coax bootsect to work for BIOS
+                bootsect /nt60 "$espLetter`:"
+                bootsect /nt60 "$espLetter`:" /mbr
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
+            }
+            else
+            {
+                bootsect /nt60 "$espLetter`:"
+                bootsect /nt60 "$espLetter`:" /mbr
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
+            }
+        }
+        AlwaysGPT {
+            # Make boot files for both BIOS and UEFI firmwares
+            if ($bootpart -eq "auto")
+            {
+                if (-not $cleanDrive)
+                {
+                    foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+                    {
+                        if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
+                        {
+                            $MSRAssign = @"
+                            sel dis #DISKID#
+                            sel par #VOLNUM#
+                            ass letter $espLetter
+                            exit
+"@
+                            $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                            $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                            $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                            diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
+                        }
+                    }
+
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
+                        Write-Host "Deleting BCD entry..."
+                        $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
+                        if ($entryGuid -ne "") {
+                            bcdedit /delete $entryGuid | Out-Host
+                        }
+                    }
+                }
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+            }
+            else
+            {
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+            }
         }
     }
 }
@@ -1242,14 +1452,23 @@ function Show-Timeout {
             Show-Timeout -seconds 15
     #>
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [int]$seconds
+        [Parameter(Mandatory = $true, Position = 0)] [int]$seconds,
+        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
     )
     for ($i = 0; $i -lt $seconds; $i++)
     {
-        Write-Progress -Activity "Restarting system..." -Status "Your system will restart in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        if ($override -eq [PartitionTableOverride]::NoOverride) {
+            Write-Progress -Activity "Restarting system..." -Status "Your system will restart in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        } else {
+            Write-Progress -Activity "Shutting down system..." -Status "Your system will shut down in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        }
         Start-Sleep -Seconds 1
     }
-    Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
+    if ($override -eq [PartitionTableOverride]::NoOverride) {
+        Write-Progress -Activity "Restarting system..." -Status "Restarting your system..." -PercentComplete 100
+    } else {
+        Write-Progress -Activity "Shutting down system..." -Status "Shutting down your system..." -PercentComplete 100
+    }
 }
 
 function Test-PxeBoot {
@@ -1570,8 +1789,16 @@ Invoke-RestMethod -Method Post -Uri "http://$($authInfo.serverIP):$($authInfo.se
 Start-Sleep -Milliseconds 250
 Clear-Host
 Write-Host "`n`n`n`n`n`n`n`n`n`n"
-Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
+if ($global:override -eq [PartitionTableOverride]::NoOverride) {
+    Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
+} else {
+    Write-Host "The first stage of Setup has completed, and your system will shut down automatically."
+}
 Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
-Write-Host "When your computer restarts, Setup will continue."
-Show-Timeout -Seconds 10
-wpeutil reboot
+if ($global:override -eq [PartitionTableOverride]::NoOverride) { Write-Host "When your computer restarts, Setup will continue." }
+Show-Timeout -Seconds 10 -override $global:override
+if ($global:override -eq [PartitionTableOverride]::NoOverride) {
+    wpeutil reboot
+} else {
+    wpeutil shutdown
+}

@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Close First Logon Animation Process
 Description: This script closes the First Logon Animation process and allows a system to reach the desktop sooner. This works on Windows 10 and Windows 11.
+Customizable: No
 
 @echo off
 REM This script forcefully closes the First Logon Animation process. This helps you reach the desktop

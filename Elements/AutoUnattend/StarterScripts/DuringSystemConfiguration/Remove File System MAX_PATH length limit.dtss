@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Remove File System MAX_PATH length limit
 Description: This script removes MAX_PATH length limits to allow paths longer than 260 characters 
+Customizable: No
 
 @echo off
 

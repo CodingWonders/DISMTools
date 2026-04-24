@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Enable Verbose Status Messages
 Description: This script enables the verbose status messages that are enabled by default on Windows Server. This can help report service start/stop status.
+Customizable: No
 
 @echo off
 REM This script enables verbose startup messages on client editions of Windows. It

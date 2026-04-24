@@ -225,6 +225,9 @@ Public Class FfuApply
         Try
             Dim SelectedDriveMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Description, Manufacturer, Model, PNPDeviceID, Size, Status, Partitions FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(TextBox2.Text)))
             If SelectedDriveMO IsNot Nothing Then
+                Dim SelectedDriveDetails As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(SelectedDriveMO(0), "Model", "Manufacturer",
+                                                                                                      "Description", "PNPDeviceId", "Partitions",
+                                                                                                      "Size", "Status")
                 RichTextBox1.Text = String.Format("  - Model: {1}{0}" &
                                                   "  - Manufacturer: {2}{0}" &
                                                   "  - Description: {3}{0}" &
@@ -232,14 +235,14 @@ Public Class FfuApply
                                                   "  - Partitions: {5}{0}" &
                                                   "  - Size: {6} bytes (~{7}){0}" &
                                                   "  - Status: {8}",
-                                                  Environment.NewLine, WMIHelper.GetObjectValue(SelectedDriveMO(0), "Model"),
-                                                                       WMIHelper.GetObjectValue(SelectedDriveMO(0), "Manufacturer"),
-                                                                       WMIHelper.GetObjectValue(SelectedDriveMO(0), "Description"),
-                                                                       WMIHelper.GetObjectValue(SelectedDriveMO(0), "PNPDeviceId"),
-                                                                       WMIHelper.GetObjectValue(SelectedDriveMO(0), "Partitions"),
-                                                                       WMIHelper.GetObjectValue(SelectedDriveMO(0), "Size"),
-                                                                       Converters.BytesToReadableSize(WMIHelper.GetObjectValue(SelectedDriveMO(0), "Size")),
-                                                                       WMIHelper.GetObjectValue(SelectedDriveMO(0), "Status"))
+                                                  Environment.NewLine, SelectedDriveDetails("Model"),
+                                                                       SelectedDriveDetails("Manufacturer"),
+                                                                       SelectedDriveDetails("Description"),
+                                                                       SelectedDriveDetails("PNPDeviceId"),
+                                                                       SelectedDriveDetails("Partitions"),
+                                                                       SelectedDriveDetails("Size"),
+                                                                       Converters.BytesToReadableSize(SelectedDriveDetails("Size")),
+                                                                       SelectedDriveDetails("Status"))
             End If
         Catch ex As Exception
 

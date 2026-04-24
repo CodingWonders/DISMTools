@@ -43,10 +43,11 @@ Public Class PECustomizerDialog
                                                   "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
-                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}",
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
+                                                  "{1}PXEServerPort{1}=dword:{9}{0}",
                                                   CrLf, Quote, If(CheckBox2.Checked, 1, 0), UEFICA23Preference, PartTableOverridePreference,
                                                   Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0),
-                                                  If(CheckBox5.Checked, 1, 0))
+                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant())
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg"), regContents)
         Catch ex As Exception
@@ -77,6 +78,7 @@ Public Class PECustomizerDialog
         ComboBox1.SelectedIndex = MainForm.PartTableOverridePreference
         ComboBox2.SelectedIndex = MainForm.UEFICA23Preference
         NumericUpDown1.Value = MainForm.WDSHCConnAttempts
+        NumericUpDown2.Value = MainForm.PXEServerPort
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -84,11 +86,13 @@ Public Class PECustomizerDialog
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox2.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown2.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         ComboBox2.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
+        NumericUpDown2.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub

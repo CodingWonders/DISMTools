@@ -55,11 +55,13 @@
 #
 #   Settings for the server are declared in the Server Options section.
 
-
+param (
+    [int] $sPort = 8080
+)
 
 # ----------------------- Server Options -----------------------
 $webHost = "*"
-$port = 8080
+$port = $sPort
 $tmpImageFolderPath = "$env:SystemDrive\NetInstallWDSTemp"
 $shareName = "NetInstallTemp"
 # --------------------------------------------------------------
@@ -331,6 +333,10 @@ try {
         $context = $listener.GetContext()
         $request = $context.Request
         $response = $context.Response
+
+        $response.Headers.Add("Access-Control-Allow-Origin", "*")
+        $response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        $response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
         $sendJson = {
             param($data, $status = 200)

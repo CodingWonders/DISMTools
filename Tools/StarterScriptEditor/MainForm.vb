@@ -16,7 +16,24 @@ Public Class MainForm
     Private SavedScriptPath As String
     Private NotWillingToSave As Boolean
 
+    Private roMode As Boolean
+
     Public CurrentColorMode As ColorThemeMode
+
+    Private Enum ScriptVersion As Integer
+        ''' <summary>
+        ''' Starter scripts for the DISMTools 0.7 Series (0.7.2, 0.7.3)
+        ''' </summary>
+        ''' <remarks></remarks>
+        Seven = 0
+        ''' <summary>
+        ''' Starter scripts for the DISMTools 0.8 Series
+        ''' </summary>
+        ''' <remarks></remarks>
+        Infinity = 1
+    End Enum
+
+    Private ScriptVer As ScriptVersion = ScriptVersion.Infinity
 
     Private Sub ChangeMenuItemColors(ByVal bgColor As Color, ByVal fgColor As Color, ByVal itemCollection As ToolStripItemCollection)
         For Each tsi As ToolStripItem In itemCollection
@@ -124,6 +141,7 @@ Public Class MainForm
             ComboBox1.SelectedItem = CurrentScript.Language
         End If
         TextBox3.Text = CurrentScript.Code
+        CheckBox2.Checked = CurrentScript.OptionsCustomizable
     End Sub
 
     Private Sub LoadScriptFile(ByVal ScriptFile As String)
@@ -132,31 +150,56 @@ Public Class MainForm
             Exit Sub
         End If
 
+        roMode = False
+        ToolStripButton5.Enabled = False
         Dim scriptFileContents As String() = File.ReadAllLines(ScriptFile)
+
+        ScriptVer = ScriptVersion.Seven
+        Dim CodeBlockStartingIndex As Integer = 3
+        If scriptFileContents(3).StartsWith("Customizable:", StringComparison.OrdinalIgnoreCase) Then
+            ScriptVer = ScriptVersion.Infinity
+            CodeBlockStartingIndex = 4
+        End If
 
         ' Script Format:
         ' <Language>
         ' <Name>
         ' <Description>
+        ' <Customizable> (0.8+)
         ' <code>
         Dim scriptLang As String = scriptFileContents(0).Replace("Language: ", "")
         Dim scriptName As String = scriptFileContents(1).Replace("Name: ", "")
         Dim scriptDescription As String = scriptFileContents(2).Replace("Description: ", "")
+        Dim scriptOptionsCustomizable As Boolean = scriptFileContents(3).Equals("Customizable: Yes", StringComparison.OrdinalIgnoreCase)
 #If VBC_VER >= 9.0 Then
-        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, New List(Of String)(scriptFileContents).Skip(3).ToArray()))
+        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, New List(Of String)(scriptFileContents).Skip(CodeBlockStartingIndex).ToArray()), scriptOptionsCustomizable)
 #Else
         ' NDPv2 and earlier do not support LINQ statements.
         Dim ScriptCodeLines As New List(Of String)
-        For x As Integer = 3 To scriptFileContents.Length - 1
+        For x As Integer = CodeBlockStartingIndex To scriptFileContents.Length - 1
             ScriptCodeLines.Add(scriptFileContents(x))
         Next
-        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, ScriptCodeLines.ToArray()))
+        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, ScriptCodeLines.ToArray()), scriptOptionsCustomizable)
 #End If
         SavedScriptPath = ScriptFile
         Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
+
+        If (File.GetAttributes(ScriptFile) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
+            MessageBox.Show("This script file has been loaded with read-only privileges. If you make changes to this script, you must save them to a new script file or enable write access for this script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            roMode = True
+            ToolStripButton5.Enabled = True
+        End If
     End Sub
 
-    Private Sub SaveScriptFile(ByVal ScriptFile As String)
+    Private Sub SaveScriptFile(ByVal ScriptFile As String, Optional ByVal DefaultScriptVersion As Boolean = True)
+        If DefaultScriptVersion AndAlso ScriptVer < ScriptVersion.Infinity Then
+            If MessageBox.Show("The starter script had been created with an earlier version of the Starter Script Editor and will be saved with properties that will make it compatible with the current format. After this is done, the starter script will no longer be compatible with earlier versions of DISMTools or the Starter Script Editor." & CrLf & CrLf & _
+                               "Do you want to save this file?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                NotWillingToSave = True
+                Exit Sub
+            End If
+        End If
+
         If File.Exists(ScriptFile) Then
             Try
                 File.Delete(ScriptFile)
@@ -166,16 +209,34 @@ Public Class MainForm
         End If
 
         Try
-            File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
-            "Name: {2}{1}" & _
-            "Description: {3} {1}" & _
-            "{4}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, CurrentScript.Code), UTF8)
+            Dim customizableStr As String
+            If CurrentScript.OptionsCustomizable Then
+                customizableStr = "Yes"
+            Else
+                customizableStr = "No"
+            End If
+
+            If Not DefaultScriptVersion AndAlso ScriptVer = ScriptVersion.Seven Then
+                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
+                "Name: {2}{1}" & _
+                "Description: {3}{1}" & _
+                "{4}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, CurrentScript.Code), UTF8)
+            Else
+                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
+                "Name: {2}{1}" & _
+                "Description: {3}{1}" & _
+                "Customizable: {4}{1}" & _
+                "{5}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, customizableStr, CurrentScript.Code), UTF8)
+            End If
 
             SavedScriptPath = ScriptFile
             Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
             Modified = False
+            roMode = False
+            ToolStripButton5.Enabled = False
         Catch ex As Exception
-
+            MessageBox.Show("Changes could not be saved to the script file. Make sure write access is present in the file. " & CrLf & CrLf & ex.Message & CrLf & CrLf & "To enable write access for this file, use the respective button in the toolbar.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            NotWillingToSave = True
         End Try
     End Sub
 
@@ -196,12 +257,12 @@ Public Class MainForm
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
         NotWillingToSave = False
-        If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) Then
+        If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) AndAlso Not roMode Then
             Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
                                             Environment.NewLine, Path.GetDirectoryName(SavedScriptPath)), _
                                             "Save Script", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 Case Windows.Forms.DialogResult.Yes
-                    SaveScriptFile(SavedScriptPath)
+                    SaveScriptFile(SavedScriptPath, ScriptVer = ScriptVersion.Infinity)
                     Exit Sub
                 Case Windows.Forms.DialogResult.Cancel
                     NotWillingToSave = True
@@ -217,6 +278,9 @@ Public Class MainForm
         SystemCM_TSMI.Enabled = Environment.OSVersion.Version.Major >= 10
 
         SetColorMode(ColorThemeMode.System)
+        If Environment.OSVersion.Version.Major > 5 OrElse (Environment.OSVersion.Version.Major = 5 AndAlso Environment.OSVersion.Version.Minor = 1) Then
+            CheckBox2.FlatStyle = FlatStyle.Standard
+        End If
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
 
@@ -243,6 +307,9 @@ Public Class MainForm
         CurrentScript = GetNewStarterScript()
         UpdateScriptProperties()
         Modified = False
+        roMode = False
+        ToolStripButton5.Enabled = False
+        ScriptVer = ScriptVersion.Infinity
         SavedScriptPath = ""
         Text = "Starter Script Editor"
     End Sub
@@ -255,7 +322,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
-        SaveScriptFile(SaveFileDialog1.FileName)
+        SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
     End Sub
 
     Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
@@ -270,6 +337,11 @@ Public Class MainForm
 
     Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         CurrentScript.Language = ComboBox1.SelectedItem
+        Modified = True
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
+        CurrentScript.OptionsCustomizable = CheckBox2.Checked
         Modified = True
     End Sub
 
@@ -415,4 +487,73 @@ Public Class MainForm
     Private Sub SystemCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SystemCM_TSMI.Click
         SetColorMode(ColorThemeMode.System)
     End Sub
+
+    Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
+        EnableWriteAccess()
+    End Sub
+
+    Private Sub EnableWriteAccess()
+        If SavedScriptPath = "" OrElse Not File.Exists(SavedScriptPath) Then Exit Sub
+        Try
+            File.SetAttributes(SavedScriptPath, (File.GetAttributes(SavedScriptPath) And Not FileAttributes.ReadOnly))
+            roMode = False
+            ToolStripButton5.Enabled = False
+        Catch ex As Exception
+            MessageBox.Show("Could not enable write access for this script file. Make sure that the script is not in read-only media.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub CheckBox2_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Check this option if this script contains settings that can be configured by the user" & CrLf & "after importing the starter script from the Starter Script Browser.")
+    End Sub
+
+    Private Sub ToolStripButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton6.Click
+        ScriptVersionChooser.RadioButton1.Checked = ScriptVer = ScriptVersion.Infinity
+        ScriptVersionChooser.RadioButton2.Checked = ScriptVer = ScriptVersion.Seven
+        If ScriptVersionChooser.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            If ScriptVersionChooser.IsInfinityScript Then
+                ScriptVer = ScriptVersion.Infinity
+            Else
+                ScriptVer = ScriptVersion.Seven
+            End If
+        End If
+    End Sub
+
+    Private Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
+        EditorFD.Font = TextBox3.Font
+        Dim fontConfigured As Boolean = False
+        Do Until fontConfigured
+            Try
+                If EditorFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                    If Not IsMonospacedFont(EditorFD.Font.Name) AndAlso MessageBox.Show("You have selected a non-monospaced font. Text may not look correctly. Do you want to continue?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                        Exit Sub
+                    End If
+                    TextBox3.Font = EditorFD.Font
+                End If
+                fontConfigured = True
+            Catch arEx As ArgumentException
+                ' The user may have selected a non-TrueType font
+                MessageBox.Show(arEx.Message, "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End Try
+        Loop
+    End Sub
+
+    Private Function IsMonospacedFont(ByVal ftName As String) As Boolean
+        Using testFont As Font = New Font(ftName, 10)
+            Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
+            Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            Return widthI = widthW
+        End Using
+        Return False
+    End Function
+
+    Private Function MeasureCharacterWidth(ByVal ft As Font, ByVal character As Char) As Decimal
+        Using bmp As Bitmap = New Bitmap(1, 1)
+            Using g As Graphics = Graphics.FromImage(bmp)
+                Dim size As SizeF = g.MeasureString(character.ToString(), ft)
+                Return size.Width
+            End Using
+        End Using
+        Return 0
+    End Function
 End Class

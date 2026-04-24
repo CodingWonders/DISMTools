@@ -2220,13 +2220,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where GraphoView would not display information about a selected Windows image if the WDS group it belongs to only has 1 image
-        '''- Fixed an issue where capture compression type options were not being used when performing FFU captures
-        '''- Fixed an issue where the program would throw an exception when performing multiple driver exports by class name
+        '''- Fixed an exception (#350)
+        '''- Registry hives that were unloaded externally no longer cause errors when unloading them from the image registry control panel
+        '''- Non-PowerShell-based endpoints no longer throw CORS issues when calling WDS Helper Server APIs
+        '''- Fixed an issue where App Installer download errors would not appear in the foreground
         '''
         '''New features:
         '''
-        '''- The PE Helper is no longer responsible for removing custom policies; that is now done by the ISO creator wizard w [resto de la cadena truncado]&quot;;.
+        '''- When uploading a Windows image to a WDS server you can now create image groups
+        '''- From the Autorun application you can now specify th [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

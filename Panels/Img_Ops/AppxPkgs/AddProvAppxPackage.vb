@@ -2377,9 +2377,11 @@ Public Class AddProvAppxPackage
                 AppInstallerDownloader.AppInstallerFile = PackageFile
                 If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then
                     AppInstallerDownloader.ShowDialog(Me)
-                    ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
+                    Dim obtainedExtension As String = GetDownloadedPackageExtensionFromAppInstaller(PackageFile)
+                    If obtainedExtension IsNot Nothing Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", obtainedExtension).Trim())
                 Else
-                    ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
+                    Dim obtainedExtension As String = GetDownloadedPackageExtensionFromAppInstaller(PackageFile)
+                    If obtainedExtension IsNot Nothing Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", obtainedExtension).Trim())
                     HasBeenScannedByAppInstaller = True
                 End If
             ElseIf (File.GetAttributes(PackageFile) And FileAttributes.Directory) = FileAttributes.Directory Then

@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Show extensions for known file types
 Description: This script shows file extensions.
+Customizable: No
 
 @echo off
 REM This script shows file extensions. This prevents cases where

@@ -5,7 +5,6 @@ Public Class MigrationForm
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         DynaLog.LogMessage("Beginning migration...")
-        Threading.Thread.Sleep(2000)
         DynaLog.LogMessage("Loading old settings file...")
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
@@ -21,7 +20,7 @@ Public Class MigrationForm
         End Select
         BackgroundWorker1.ReportProgress(33.299999999999997)
         MainForm.LoadDTSettings(1)
-        Threading.Thread.Sleep(250)
+        Threading.Thread.Sleep(72)
         DynaLog.LogMessage("Saving new settings...")
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
@@ -37,7 +36,7 @@ Public Class MigrationForm
         End Select
         BackgroundWorker1.ReportProgress(66.599999999999994)
         MainForm.SaveDTSettings()
-        Threading.Thread.Sleep(250)
+        Threading.Thread.Sleep(72)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
                 msg = "Done"
@@ -51,7 +50,7 @@ Public Class MigrationForm
                 msg = "Terminato"
         End Select
         BackgroundWorker1.ReportProgress(100)
-        Threading.Thread.Sleep(1000)
+        Threading.Thread.Sleep(250)
     End Sub
 
     Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged

@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Show and Hide System Desktop icons
 Description: This script shows and hides desktop icons. 
+Customizable: Yes
 
 @ECHO OFF
 

@@ -217,6 +217,7 @@ Public Class MainForm
     Public PartTableOverridePreference As Integer = 0
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
+    Public PXEServerPort As Integer = 8080
 
     Public ReinitializeCurImage As Boolean = True
 
@@ -1410,6 +1411,7 @@ Public Class MainForm
                 PartTableOverridePreference = (CInt(PEPolicyKey.GetValue("PartTableOverridePreference", 0)))
                 UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
                 AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
+                PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1520,6 +1522,8 @@ Public Class MainForm
                         PartTableOverridePreference = CInt(line.Replace("PartTableOverridePreference=", "").Trim())
                     ElseIf line.StartsWith("UEFICA23Preference=", StringComparison.OrdinalIgnoreCase) Then
                         UEFICA23Preference = CInt(line.Replace("UEFICA23Preference=", "").Trim())
+                    ElseIf line.StartsWith("PXEServerPort=", StringComparison.OrdinalIgnoreCase) Then
+                        PXEServerPort = CInt(line.Replace("PXEServerPort=", "").Trim())
                     End If
                 Next
                 ' Apply program colors immediately
@@ -1846,10 +1850,11 @@ Public Class MainForm
                                                   "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
-                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}",
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
+                                                  "{1}PXEServerPort{1}=dword:{9}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0))
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant())
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1924,7 +1929,8 @@ Public Class MainForm
                            "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
                            "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
                            "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
-                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep)
+                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep & CrLf &
+                           "PXEServerPort              =    " & PXEServerPort)
     End Sub
 
 #Region "Background Processes"
@@ -4149,6 +4155,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=8080")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4489,6 +4496,7 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=" & PartTableOverridePreference)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=" & UEFICA23Preference)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=" & AutoUnattendCopytoSysprep)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "PXEServerPort=" & PXEServerPort)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4608,6 +4616,7 @@ Public Class MainForm
                     PEPolicyKey.SetValue("PartTableOverridePreference", PartTableOverridePreference, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
                     PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
@@ -4644,7 +4653,6 @@ Public Class MainForm
                 DynaLog.LogMessage("Settings file was last modified at a date older than build date. Migrating settings...")
                 ' Perform setting file migration
                 MigrationForm.ShowDialog()
-                Thread.Sleep(1500)
             End If
         Else
             DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW)...")
@@ -16071,10 +16079,14 @@ Public Class MainForm
 
     Private Sub StartWdsHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartWdsHelperTSMI.Click
         Dim wdshsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "wds", "wdshelper_server.ps1")
+        Dim serverPort As Integer = PXEServerPort
         If File.Exists(wdshsPath) Then
             DynaLog.LogMessage("WDSHS Script exists. Launching...")
+            If ModifierKeys.HasFlag(Keys.Shift) AndAlso PxeServerPortSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                serverPort = PxeServerPortSpecifier.ServerPort
+            End If
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                       "-Executionpolicy Bypass -File " & Quote & wdshsPath & Quote)
+                       "-Executionpolicy Bypass -File " & Quote & wdshsPath & Quote & " -sPort " & serverPort)
         Else
             DynaLog.LogMessage("WDSHS Script does not exist.")
         End If
@@ -16082,10 +16094,14 @@ Public Class MainForm
 
     Private Sub StartFogHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartFogHelperTSMI.Click
         Dim foghsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "fog", "foghelper_server.ps1")
+        Dim serverPort As Integer = PXEServerPort
         If File.Exists(foghsPath) Then
             DynaLog.LogMessage("FOGHS Script exists. Launching...")
+            If ModifierKeys.HasFlag(Keys.Shift) AndAlso PxeServerPortSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                serverPort = PxeServerPortSpecifier.ServerPort
+            End If
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                       "-Executionpolicy Bypass -File " & Quote & foghsPath & Quote)
+                       "-Executionpolicy Bypass -File " & Quote & foghsPath & Quote & " -sPort " & serverPort)
         Else
             DynaLog.LogMessage("FOGHS Script does not exist.")
         End If

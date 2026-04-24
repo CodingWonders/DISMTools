@@ -24,10 +24,15 @@ Partial Class MainForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton
+        Me.EditorFD = New System.Windows.Forms.FontDialog
         Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
         Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
         Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
@@ -48,6 +53,7 @@ Partial Class MainForm
         Me.Label2 = New System.Windows.Forms.Label
         Me.TextBox1 = New System.Windows.Forms.TextBox
         Me.ComboBox1 = New System.Windows.Forms.ComboBox
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog
@@ -61,12 +67,17 @@ Partial Class MainForm
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB, Me.ToolStripSeparator1, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripButton7})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(1016, 25)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
         '
         'ToolStripButton1
         '
@@ -94,6 +105,8 @@ Partial Class MainForm
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton3.Text = "Save Starter Script File... (Ctrl + S)"
+        Me.ToolStripButton3.ToolTipText = "Save Starter Script File... (Ctrl + S)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hold down SHIFT while clicking the icon t" & _
+            "o specify the target version for the starter script while saving."
         '
         'ToolStripButton4
         '
@@ -135,22 +148,24 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 192.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Panel1, 1, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Panel1, 1, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.TextBox2, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.TextBox1, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.ComboBox1, 1, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox2, 1, 3)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(11, 63)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 4
+        Me.TableLayoutPanel2.RowCount = 5
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle)
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle)
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(994, 474)
         Me.TableLayoutPanel2.TabIndex = 1
         '
@@ -159,9 +174,9 @@ Partial Class MainForm
         Me.Panel1.Controls.Add(Me.TextBox3)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(195, 77)
+        Me.Panel1.Location = New System.Drawing.Point(195, 106)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(796, 394)
+        Me.Panel1.Size = New System.Drawing.Size(796, 365)
         Me.Panel1.TabIndex = 8
         '
         'TextBox3
@@ -172,7 +187,7 @@ Partial Class MainForm
         Me.TextBox3.Multiline = True
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox3.Size = New System.Drawing.Size(796, 358)
+        Me.TextBox3.Size = New System.Drawing.Size(796, 329)
         Me.TextBox3.TabIndex = 0
         Me.TextBox3.WordWrap = False
         '
@@ -182,7 +197,7 @@ Partial Class MainForm
         Me.Panel2.Controls.Add(Me.CheckBox1)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 358)
+        Me.Panel2.Location = New System.Drawing.Point(0, 329)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(796, 36)
         Me.Panel2.TabIndex = 1
@@ -225,10 +240,10 @@ Partial Class MainForm
         '
         Me.Label5.AutoSize = True
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(3, 74)
+        Me.Label5.Location = New System.Drawing.Point(3, 103)
         Me.Label5.Name = "Label5"
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label5.Size = New System.Drawing.Size(186, 400)
+        Me.Label5.Size = New System.Drawing.Size(186, 371)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "Script Code:"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -239,7 +254,7 @@ Partial Class MainForm
         Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label4.Location = New System.Drawing.Point(3, 54)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(186, 20)
+        Me.Label4.Size = New System.Drawing.Size(186, 26)
         Me.Label4.TabIndex = 4
         Me.Label4.Text = "Script Language:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -292,6 +307,17 @@ Partial Class MainForm
         Me.ComboBox1.Size = New System.Drawing.Size(796, 21)
         Me.ComboBox1.TabIndex = 5
         '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox2.Location = New System.Drawing.Point(195, 83)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(202, 17)
+        Me.CheckBox2.TabIndex = 9
+        Me.CheckBox2.Text = "Script contains configurable options"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Filter = "Starter Scripts|*.dtss"
@@ -334,6 +360,34 @@ Partial Class MainForm
         Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
         Me.SystemCM_TSMI.Size = New System.Drawing.Size(152, 22)
         Me.SystemCM_TSMI.Text = "System"
+        '
+        'ToolStripButton5
+        '
+        Me.ToolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton5.Enabled = False
+        Me.ToolStripButton5.Image = Global.StarterScriptEditor.My.Resources.Resources.writable
+        Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton5.Name = "ToolStripButton5"
+        Me.ToolStripButton5.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton5.Text = "Enable write access..."
+        '
+        'ToolStripButton6
+        '
+        Me.ToolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton6.Image = Global.StarterScriptEditor.My.Resources.Resources.targetversion
+        Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton6.Name = "ToolStripButton6"
+        Me.ToolStripButton6.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton6.Text = "Configure target script version..."
+        '
+        'ToolStripButton7
+        '
+        Me.ToolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton7.Image = Global.StarterScriptEditor.My.Resources.Resources.changefont
+        Me.ToolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton7.Name = "ToolStripButton7"
+        Me.ToolStripButton7.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton7.Text = "Change Editor Font..."
         '
         'MainForm
         '
@@ -391,5 +445,11 @@ Partial Class MainForm
     Friend WithEvents LightCM_TSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DarkCM_TSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SystemCM_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton7 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents EditorFD As System.Windows.Forms.FontDialog
 
 End Class
