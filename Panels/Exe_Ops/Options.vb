@@ -1804,14 +1804,6 @@ Public Class Options
         End Select
         TextBox2.Text = MainForm.LogFile
         TrackBar1.Value = If(MainForm.LogLevel = TrackBar1.Minimum, MainForm.LogLevel, MainForm.LogLevel - 1)
-        Select Case MainForm.ImgOperationMode
-            Case 0
-                'RadioButton1.Checked = True
-                'RadioButton2.Checked = False
-            Case 1
-                'RadioButton1.Checked = False
-                'RadioButton2.Checked = True
-        End Select
         If MainForm.QuietOperations Then
             CheckBox2.Checked = True
         Else

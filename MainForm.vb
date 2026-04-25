@@ -49,7 +49,6 @@ Public Class MainForm
     Public LogFont As String
     Public LogFile As String
     Public LogLevel As Integer = 3
-    Public ImgOperationMode As Integer
     Public QuietOperations As Boolean
     Public SysNoRestart As Boolean
     Public UseScratch As Boolean
@@ -678,11 +677,11 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             DynaLog.LogMessage("A settings file has been found. Loading settings...")
             PerformSettingFileValidation()
-            Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
-            If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
+            Dim SettingReader As String = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+            If SettingReader.Contains("SaveOnSettingsIni=1") Or SettingReader.Contains("SaveOnSettingsIni = 1") Then
                 DynaLog.LogMessage("Settings are stored in the settings file (INI). Looking at them...")
                 LoadDTSettings(1)
-            ElseIf SettingReader.Text.Contains("SaveOnSettingsIni=0") Then
+            ElseIf SettingReader.Contains("SaveOnSettingsIni=0") Or SettingReader.Contains("SaveOnSettingsIni = 0") Then
                 DynaLog.LogMessage("Settings are stored in the registry. Looking at them...")
                 LoadDTSettings(0)
             End If
@@ -1425,333 +1424,117 @@ Public Class MainForm
             End Try
         ElseIf LoadMode = 1 Then
             DynaLog.LogMessage("Load Mode is 1 -- Getting from INI File...")
-            If File.Exists(Application.StartupPath & "\" & "settings.ini") Then
+            If File.Exists(Path.Combine(Application.StartupPath, "settings.ini")) Then
                 DynaLog.LogMessage("Preparing to grab values...")
-                DTSettingForm.RichTextBox1.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                ' Perform the Volatile mode check before applying any settings
-                If DTSettingForm.RichTextBox1.Text.Contains("Volatile=0") Then
-                    VolatileMode = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Volatile=1") Then
-                    DynaLog.LogMessage("Volatile mode detected. Setting application has stopped")
-                    VolatileMode = True
-                    ' Cancel setting application
-                    Exit Sub
-                End If
-                DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
-                If DismExe.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then DismExe = DismExe.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
-                    If Not ForceINILoad Then
+                Try
+                    Dim parser As New IniDataParser(New SettingsParserConfiguration())
+                    Dim settingData As IniData = parser.Parse(File.ReadAllText(Path.Combine(Application.StartupPath, "settings.ini"), UTF8))
+                    VolatileMode = CInt(settingData("Program")("Volatile")) = 1
+                    If VolatileMode Then
+                        DynaLog.LogMessage("Volatile mode detected. Setting application has stopped")
+                        ' Cancel setting application
+                        Exit Sub
+                    End If
+                    DismExe = settingData("Program")("DismExe").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    SaveOnSettingsIni = CInt(settingData("Program")("SaveOnSettingsIni")) = 1
+                    If Not SaveOnSettingsIni AndAlso Not File.Exists(Path.Combine(Application.StartupPath, "portable")) Then
                         DynaLog.LogMessage("We are not forcing load with INI. Proceeding to load from registry...")
-                        SaveOnSettingsIni = False
                         LoadDTSettings(0)
                         Exit Sub
+                    End If
+                    ColorMode = CInt(settingData("Personalization")("ColorMode"))
+                    If ColorMode < 0 Then ColorMode = 0
+                    If ColorMode > 2 Then ColorMode = 2
+                    Language = CInt(settingData("Personalization")("Language"))
+                    If Language < 0 Then Language = 0
+                    If Language > 5 Then Language = 5
+                    ChangeLangs(Language)
+                    LightThemeIndex = CInt(settingData("Personalization")("ColorTheme_Light"))
+                    DarkThemeIndex = CInt(settingData("Personalization")("ColorTheme_Dark"))
+                    ChangePrgColors(ColorMode)
+                    LogFont = settingData("Personalization")("LogFont").Replace(Quote, "").Trim()
+                    LogFontSize = CInt(settingData("Personalization")("LogFontSi"))
+                    LogFontIsBold = CInt(settingData("Personalization")("LogFontBold")) = 1
+                    ProgressPanelStyle = CInt(settingData("Personalization")("SecondaryProgressPanelStyle"))
+                    If ProgressPanelStyle < 0 Then ProgressPanelStyle = 0
+                    If ProgressPanelStyle > 1 Then ProgressPanelStyle = 1
+                    AllCaps = CInt(settingData("Personalization")("AllCaps")) = 1
+                    If AllCaps Then
+                        FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
+                        ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
+                        CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
+                        ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
+                        HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
+                    End If
+                    ExpandedProgressPanel = CInt(settingData("Personalization")("ExpandedProgressPanel")) = 1
+                    ShowDateAndTime = CInt(settingData("Personalization")("ShowDateAndTime")) = 1
+                    LogFile = settingData("Logs")("LogFile").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    LogLevel = CInt(settingData("Logs")("LogLevel"))
+                    If LogLevel < 1 Then LogLevel = 1
+                    If LogLevel > 4 Then LogLevel = 4
+                    AutoLogs = CInt(settingData("Logs")("AutoLogs")) = 1
+                    SystemEditor = settingData("Logs")("SystemEditor").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    EnableDynaLog = CInt(settingData("Logs")("EnableDynaLog")) = 1
+                    QuietOperations = CInt(settingData("ImgOps")("Quiet")) = 1
+                    SysNoRestart = CInt(settingData("ImgOps")("NoRestart")) = 1
+                    NoNTSamMappings = CInt(settingData("ImgOps")("NoNTSamMappings")) = 1
+                    PEHelper_UnattendedFile = settingData("ImgOps")("PEHelper.UnattendedFile").Replace(Quote, "").Trim()
+                    PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
+                    PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
+                    AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
+                    If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
+                    If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
+                    UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
+                    AutoScrDir = CInt(settingData("ScratchDir")("AutoScratch")) = 1
+                    ScratchDir = settingData("ScratchDir")("ScratchDirLocation").Replace(Quote, "")
+                    EnglishOutput = CInt(settingData("Output")("EnglishOutput")) = 1
+                    ReportView = CInt(settingData("Output")("ReportView"))
+                    If ReportView < 0 Then ReportView = 0
+                    If ReportView > 1 Then ReportView = 1
+                    NotificationShow = CInt(settingData("BgProcesses")("ShowNotification")) = 1
+                    NotificationFrequency = CInt(settingData("BgProcesses")("NotifyFrequency"))
+                    If NotificationFrequency < 0 Then NotificationFrequency = 0
+                    If NotificationFrequency > 1 Then NotificationFrequency = 1
+                    ExtAppxGetter = CInt(settingData("AdvBgProcesses")("EnhancedAppxGetter")) = 1
+                    SkipNonRemovable = CInt(settingData("AdvBgProcesses")("SkipNonRemovable")) = 1
+                    AllDrivers = CInt(settingData("AdvBgProcesses")("DetectAllDrivers")) = 1
+                    SkipFrameworks = CInt(settingData("AdvBgProcesses")("SkipFrameworks")) = 1
+                    RunAllProcs = CInt(settingData("AdvBgProcesses")("RunAllProcs")) = 1
+                    StartupRemount = CInt(settingData("Startup")("RemountImages")) = 1
+                    StartupUpdateCheck = CInt(settingData("Startup")("CheckForUpdates")) = 1
+                    AutoCleanMounts = CInt(settingData("Shutdown")("AutoCleanMounts")) = 1
+                    Width = CInt(settingData("WndParams")("WndWidth"))
+                    Height = CInt(settingData("WndParams")("WndHeight"))
+                    StartPosition = If(CInt(settingData("WndParams")("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                    If StartPosition = FormStartPosition.CenterScreen Then
+                        Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
                     Else
-                        SaveOnSettingsIni = True
+                        Left = CInt(settingData("WndParams")("WndLeft"))
+                        Top = CInt(settingData("WndParams")("WndTop"))
                     End If
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=1") Then
-                    SaveOnSettingsIni = True
-                End If
-                ' Detect program color settings: 0 - Detect system settings
-                '                                1 - Light mode
-                '                                2 - Dark mode
-                If DTSettingForm.RichTextBox1.Text.Contains("ColorMode=0") Then
-                    ColorMode = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorMode=1") Then
-                    ColorMode = 1
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorMode=2") Then
-                    ColorMode = 2
-                End If
-                ' Detect language settings: 0 - Detect system language (using "ThreeLetterWindowsLanguageName")
-                '                         nnn - Apply specific language
-                If DTSettingForm.RichTextBox1.Text.Contains("Language=0") Then
-                    ' The note above also applies to the Automatic language setting
-                    Language = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=1") Then
-                    Language = 1
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=2") Then
-                    Language = 2
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=3") Then
-                    Language = 3
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=4") Then
-                    Language = 4
-                End If
-                ' Apply language settings immediately
-                ChangeLangs(Language)
-                ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
-                ' it will revert to "Consolas"
-                For Each line In DTSettingForm.RichTextBox1.Lines
-                    If line.StartsWith("ColorTheme_Light=", StringComparison.OrdinalIgnoreCase) Then
-                        LightThemeIndex = CInt(line.Replace("ColorTheme_Light=", "").Trim())
-                    ElseIf line.StartsWith("ColorTheme_Dark=", StringComparison.OrdinalIgnoreCase) Then
-                        DarkThemeIndex = CInt(line.Replace("ColorTheme_Dark=", "").Trim())
-                    ElseIf line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
-                        LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
-                    ElseIf line.StartsWith("LogFontSi=", StringComparison.OrdinalIgnoreCase) Then
-                        LogFontSize = CInt(line.Replace("LogFontSi=", "").Trim())
-                    ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
-                        ' Detect log file path. If file does not exist, create one
-                        LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
-                        If LogFile.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    ElseIf line.StartsWith("SystemEditor=", StringComparison.OrdinalIgnoreCase) Then
-                        SystemEditor = line.Replace("SystemEditor=", "").Trim().Replace(Quote, "").Trim()
-                        If SystemEditor.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then SystemEditor = SystemEditor.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
-                        ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
-                    ElseIf line.StartsWith("PEHelper.UnattendedFile=", StringComparison.OrdinalIgnoreCase) Then
-                        PEHelper_UnattendedFile = line.Replace("PEHelper.UnattendedFile=", "").Trim().Replace(Quote, "").Trim()
-                    ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
-                        Width = CInt(line.Replace("WndWidth=", "").Trim())
-                    ElseIf line.StartsWith("WndHeight=", StringComparison.OrdinalIgnoreCase) Then
-                        Height = CInt(line.Replace("WndHeight=", "").Trim())
-                    ElseIf line.StartsWith("WndCenter=", StringComparison.OrdinalIgnoreCase) Then
-                        StartPosition = If(CInt(line.Replace("WndCenter=", "").Trim()) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
-                        If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
-                    ElseIf line.StartsWith("WndLeft=", StringComparison.OrdinalIgnoreCase) Then
-                        If StartPosition <> FormStartPosition.CenterScreen Then Left = CInt(line.Replace("WndLeft=", "").Trim())
-                    ElseIf line.StartsWith("WndTop=", StringComparison.OrdinalIgnoreCase) Then
-                        If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
-                    ElseIf line.StartsWith("EngineName=", StringComparison.OrdinalIgnoreCase) Then
-                        SearchEngineName = line.Replace("EngineName=", "").Trim().Replace(Quote, "")
-                    ElseIf line.StartsWith("AppxRemovalDisplayNameFormat=", StringComparison.OrdinalIgnoreCase) Then
-                        AppxDisplayNameFormatOnRemoval = CInt(line.Replace("AppxRemovalDisplayNameFormat=", "").Trim())
-                    ElseIf line.StartsWith("AITolerance=", StringComparison.OrdinalIgnoreCase) Then
-                        SearchEngineAITolerance = CInt(line.Replace("AITolerance=", "").Trim())
-                    ElseIf line.StartsWith("WDSHCConnAttempts=", StringComparison.OrdinalIgnoreCase) Then
-                        WDSHCConnAttempts = CInt(line.Replace("WDSHCConnAttempts=", "").Trim())
-                    ElseIf line.StartsWith("PartTableOverridePreference=", StringComparison.OrdinalIgnoreCase) Then
-                        PartTableOverridePreference = CInt(line.Replace("PartTableOverridePreference=", "").Trim())
-                    ElseIf line.StartsWith("UEFICA23Preference=", StringComparison.OrdinalIgnoreCase) Then
-                        UEFICA23Preference = CInt(line.Replace("UEFICA23Preference=", "").Trim())
-                    ElseIf line.StartsWith("PXEServerPort=", StringComparison.OrdinalIgnoreCase) Then
-                        PXEServerPort = CInt(line.Replace("PXEServerPort=", "").Trim())
-                    End If
-                Next
-                ' Apply program colors immediately
-                ChangePrgColors(ColorMode)
-                If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
-                    LogFontIsBold = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
-                    LogFontIsBold = True
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=0") Then
-                    ProgressPanelStyle = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=1") Then
-                    ProgressPanelStyle = 1
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AllCaps=0") Then
-                    AllCaps = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AllCaps=1") Then
-                    AllCaps = True
-                    FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
-                    ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
-                    CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
-                    ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
-                    HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=0") Then
-                    ExpandedProgressPanel = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
-                    ExpandedProgressPanel = 1
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=0") Then
-                    ShowDateAndTime = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=1") Then
-                    ShowDateAndTime = True
-                End If
+                    WindowState = If(CInt(settingData("WndParams")("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
+                    SkipQuestions = CInt(settingData("InfoSaver")("SkipQuestions")) = 1
+                    AutoCompleteInfo(0) = CInt(settingData("InfoSaver")("Pkg_CompleteInfo")) = 1
+                    AutoCompleteInfo(1) = CInt(settingData("InfoSaver")("Feat_CompleteInfo")) = 1
+                    AutoCompleteInfo(2) = CInt(settingData("InfoSaver")("AppX_CompleteInfo")) = 1
+                    AutoCompleteInfo(3) = CInt(settingData("InfoSaver")("Cap_CompleteInfo")) = 1
+                    AutoCompleteInfo(4) = CInt(settingData("InfoSaver")("Drv_CompleteInfo")) = 1
+                    SearchEngineName = settingData("SearchSettings")("EngineName").Replace(Quote, "")
+                    SearchEngineAITolerance = CInt(settingData("SearchSettings")("AITolerance"))
+                    If SearchEngineAITolerance < 0 Then SearchEngineAITolerance = 0
+                    If SearchEngineAITolerance > 2 Then SearchEngineAITolerance = 2
+                    ShowWatermark = CInt(settingData("PEPolicy")("ShowWatermark")) = 1
+                    WDSHCGraphoView = CInt(settingData("PEPolicy")("WDSHCGraphoView")) = 1
+                    DTDimShowPnputilOut = CInt(settingData("PEPolicy")("DTDimShowPnputilOut")) = 1
+                    WDSHCConnAttempts = CInt(settingData("PEPolicy")("WDSHCConnAttempts"))
+                    PartTableOverridePreference = CInt(settingData("PEPolicy")("PartTableOverridePreference"))
+                    UEFICA23Preference = CInt(settingData("PEPolicy")("UEFICA23Preference"))
+                    AutoUnattendCopytoSysprep = CInt(settingData("PEPolicy")("AutoUnattendCopyToSysprep")) = 1
+                    PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
+                Catch ex As Exception
+                    DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
+                End Try
                 ProjectView.Visible = True
-                ' Detect log file level: 1 - Errors only
-                '                        2 - Errors and warnings
-                '                        3 - Errors, warnings and informations
-                '                        4 - Errors, warnings, informations and debug messages
-                If DTSettingForm.RichTextBox1.Text.Contains("LogLevel=1") Then
-                    LogLevel = 1
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=2") Then
-                    LogLevel = 2
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=3") Then
-                    LogLevel = 3
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=4") Then
-                    LogLevel = 4
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=0") Then
-                    AutoLogs = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=1") Then
-                    AutoLogs = True
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("EnableDynaLog=0") Then
-                    EnableDynaLog = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnableDynaLog=1") Then
-                    EnableDynaLog = True
-                End If
-                ' Detect image operation mode: 0 - Offline mode (mounted Windows image)
-                '                              1 - Online mode
-                ' Do note that online mode is not ready yet
-                If DTSettingForm.RichTextBox1.Text.Contains("ImgOperationMode=0") Then
-                    ImgOperationMode = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ImgOperationMode=1") Then
-                    ImgOperationMode = 1
-                End If
-                ' Detect whether operations are performed quietly
-                If DTSettingForm.RichTextBox1.Text.Contains("Quiet=0") Then
-                    QuietOperations = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Quiet=1") Then
-                    QuietOperations = True
-                End If
-                ' Detect whether system should be restarted automatically
-                If DTSettingForm.RichTextBox1.Text.Contains("NoRestart=0") Then
-                    SysNoRestart = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoRestart=1") Then
-                    SysNoRestart = True
-                End If
-                ' Detect whether to map NT account info with pckgdeps
-                If DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=0") Then
-                    NoNTSamMappings = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=1") Then
-                    NoNTSamMappings = True
-                End If
-                ' Detect whether to copy ISOs to Ventoy drives
-                If DTSettingForm.RichTextBox1.Text.Contains("PEHelper.CopyToVentoy=0") Then
-                    PEHelper_CopyToVentoy = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("PEHelper.CopyToVentoy=1") Then
-                    PEHelper_CopyToVentoy = True
-                End If
-                ' Detect whether to use new EFI boot binaries for new ISOs
-                If DTSettingForm.RichTextBox1.Text.Contains("PEHelper.Use2023EFI=0") Then
-                    PEHelper_Use2023EFI = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("PEHelper.Use2023EFI=1") Then
-                    PEHelper_Use2023EFI = True
-                End If
-                ' Detect whether to use scratch directory
-                If DTSettingForm.RichTextBox1.Text.Contains("UseScratch=0") Then
-                    UseScratch = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("UseScratch=1") Then
-                    UseScratch = True
-                End If
-                ' Detect scratch directory
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=1") Then
-                    AutoScrDir = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=0") Then
-                    AutoScrDir = False
-                End If
-                ' Detect whether output should be in English
-                If DTSettingForm.RichTextBox1.Text.Contains("EnglishOutput=0") Then
-                    EnglishOutput = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnglishOutput=1") Then
-                    EnglishOutput = True
-                End If
-                ' Detect report view: 0 - List
-                '                     1 - Table
-                If DTSettingForm.RichTextBox1.Text.Contains("ReportView=0") Then
-                    ReportView = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ReportView=1") Then
-                    ReportView = 1
-                End If
-                ' Show notification: 1 - True
-                '                    0 - False
-                If DTSettingForm.RichTextBox1.Text.Contains("ShowNotification=1") Then
-                    NotificationShow = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowNotification=0") Then
-                    NotificationShow = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=0") Then
-                    NotificationFrequency = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=1") Then
-                    NotificationFrequency = 1
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=1") Then
-                    ExtAppxGetter = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=0") Then
-                    ExtAppxGetter = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=1") Then
-                    SkipNonRemovable = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=0") Then
-                    SkipNonRemovable = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=1") Then
-                    AllDrivers = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=0") Then
-                    AllDrivers = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=1") Then
-                    SkipFrameworks = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=0") Then
-                    SkipFrameworks = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=1") Then
-                    RunAllProcs = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=0") Then
-                    RunAllProcs = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
-                    StartupRemount = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RemountImages=0") Then
-                    StartupRemount = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=1") Then
-                    StartupUpdateCheck = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
-                    StartupUpdateCheck = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=1") Then
-                    AutoCleanMounts = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=0") Then
-                    AutoCleanMounts = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=1") Then
-                    WindowState = FormWindowState.Maximized
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
-                    WindowState = FormWindowState.Normal
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=1") Then
-                    SkipQuestions = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=0") Then
-                    SkipQuestions = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=1") Then
-                    AutoCompleteInfo(0) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=0") Then
-                    AutoCompleteInfo(0) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=1") Then
-                    AutoCompleteInfo(1) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=0") Then
-                    AutoCompleteInfo(1) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=1") Then
-                    AutoCompleteInfo(2) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=0") Then
-                    AutoCompleteInfo(2) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=1") Then
-                    AutoCompleteInfo(3) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=0") Then
-                    AutoCompleteInfo(3) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=1") Then
-                    AutoCompleteInfo(4) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
-                    AutoCompleteInfo(4) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("ShowWatermark=1") Then
-                    ShowWatermark = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowWatermark=0") Then
-                    ShowWatermark = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("WDSHCGraphoView=1") Then
-                    WDSHCGraphoView = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WDSHCGraphoView=0") Then
-                    WDSHCGraphoView = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=1") Then
-                    DTDimShowPnputilOut = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DTDimShowPnputilOut=0") Then
-                    DTDimShowPnputilOut = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=1") Then
-                    AutoUnattendCopytoSysprep = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoUnattendCopytoSysprep=0") Then
-                    AutoUnattendCopytoSysprep = False
-                End If
             Else
                 DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW) and reloading settings...")
                 GenerateDTSettings()
@@ -1818,6 +1601,9 @@ Public Class MainForm
         End If
         If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then
             WDSHCConnAttempts = 5
+        End If
+        If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then
+            PXEServerPort = 8080
         End If
         WriteDefaultPEPolicy()
     End Sub
@@ -1886,7 +1672,6 @@ Public Class MainForm
                            "AutoLogs                   =    " & AutoLogs & CrLf &
                            "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf &
                            "EnableDynaLog              =    " & EnableDynaLog & CrLf &
-                           "ImgOperationMode           =    " & ImgOperationMode & CrLf &
                            "Quiet                      =    " & QuietOperations & CrLf &
                            "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
                            "WebSearchEngineName        =    " & SearchEngineName & CrLf &
@@ -4069,94 +3854,96 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DynaLog.LogMessage("Generating new settings file...")
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.8) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
+        Dim parser As New FileIniDataParser(),
+            settingsData As New IniData()
+        settingsData.Sections.AddSection("Program")
+        settingsData("Program").AddKey("DismExe", Quote & "{common:WinDir}\system32\dism.exe" & Quote)
+        settingsData("Program").AddKey("SaveOnSettingsIni", 1)
+        settingsData("Program").AddKey("Volatile", 0)
+        settingsData.Sections.AddSection("Personalization")
         Try
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
             Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
             ColorModeRk.Close()
             DynaLog.LogMessage("Auto Coloring from System is supported (Windows 10+). Enabling system color mode...")
-            DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
+            settingsData("Personalization").AddKey("ColorMode", 0)
         Catch ex As Exception
             ' Rollback to light theme
             DynaLog.LogMessage("Auto Coloring from System is not supported. Falling back to light mode (hopefully you're not using this at night)...")
-            DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
+            settingsData("Personalization").AddKey("ColorMode", 1)
         End Try
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Light=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Dark=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Consolas" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=11")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & "{common:WinDir}\system32\notepad.exe" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppxRemovalDisplayNameFormat=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & "" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("WndWidth=1280")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=720")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("SkipQuestions=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & "DuckDuckGo" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[PEPolicy]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("ShowWatermark=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCGraphoView=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "DTDimShowPnputilOut=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=5")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=8080")
-        File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        settingsData("Personalization").AddKey("ColorTheme_Light", 1)
+        settingsData("Personalization").AddKey("ColorTheme_Dark", 0)
+        settingsData("Personalization").AddKey("Language", 0)
+        settingsData("Personalization").AddKey("LogFont", Quote & "Consolas" & Quote)
+        settingsData("Personalization").AddKey("LogFontSi", 11)
+        settingsData("Personalization").AddKey("LogFontBold", 0)
+        settingsData("Personalization").AddKey("SecondaryProgressPanelStyle", 1)
+        settingsData("Personalization").AddKey("AllCaps", 0)
+        settingsData("Personalization").AddKey("ExpandedProgressPanel", 1)
+        settingsData("Personalization").AddKey("ShowDateAndTime", 1)
+        settingsData.Sections.AddSection("Logs")
+        settingsData("Logs").AddKey("LogFile", Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
+        settingsData("Logs").AddKey("LogLevel", 3)
+        settingsData("Logs").AddKey("AutoLogs", 1)
+        settingsData("Logs").AddKey("SystemEditor", Quote & "{common:WinDir}\system32\notepad.exe" & Quote)
+        settingsData("Logs").AddKey("EnableDynaLog", 1)
+        settingsData.Sections.AddSection("ImgOps")
+        settingsData("ImgOps").AddKey("Quiet", 0)
+        settingsData("ImgOps").AddKey("NoRestart", 0)
+        settingsData("ImgOps").AddKey("NoNTSamMappings", 0)
+        settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & Quote)
+        settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", 0)
+        settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", 0)
+        settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
+        settingsData.Sections.AddSection("ScratchDir")
+        settingsData("ScratchDir").AddKey("UseScratch", 0)
+        settingsData("ScratchDir").AddKey("AutoScratch", 1)
+        settingsData("ScratchDir").AddKey("ScratchDirLocation", Quote & Quote)
+        settingsData.Sections.AddSection("Output")
+        settingsData("Output").AddKey("EnglishOutput", 1)
+        settingsData("Output").AddKey("ReportView", 0)
+        settingsData.Sections.AddSection("BgProcesses")
+        settingsData("BgProcesses").AddKey("ShowNotification", 1)
+        settingsData("BgProcesses").AddKey("NotifyFrequency", 1)
+        settingsData.Sections.AddSection("AdvBgProcesses")
+        settingsData("AdvBgProcesses").AddKey("EnhancedAppxGetter", 1)
+        settingsData("AdvBgProcesses").AddKey("SkipNonRemovable", 1)
+        settingsData("AdvBgProcesses").AddKey("DetectAllDrivers", 0)
+        settingsData("AdvBgProcesses").AddKey("SkipFrameworks", 1)
+        settingsData("AdvBgProcesses").AddKey("RunAllProcs", 0)
+        settingsData.Sections.AddSection("Startup")
+        settingsData("Startup").AddKey("RemountImages", 1)
+        settingsData("Startup").AddKey("CheckForUpdates", 1)
+        settingsData.Sections.AddSection("Shutdown")
+        settingsData("Shutdown").AddKey("AutoCleanMounts", 0)
+        settingsData.Sections.AddSection("WndParams")
+        settingsData("WndParams").AddKey("WndWidth", 1280)
+        settingsData("WndParams").AddKey("WndHeight", 720)
+        settingsData("WndParams").AddKey("WndCenter", 1)
+        settingsData("WndParams").AddKey("WndLeft", 0)
+        settingsData("WndParams").AddKey("WndTop", 0)
+        settingsData("WndParams").AddKey("WndMaximized", 0)
+        settingsData.Sections.AddSection("InfoSaver")
+        settingsData("InfoSaver").AddKey("SkipQuestions", 1)
+        settingsData("InfoSaver").AddKey("Pkg_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("Feat_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("AppX_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("Cap_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("Drv_CompleteInfo", 1)
+        settingsData.Sections.AddSection("SearchSettings")
+        settingsData("SearchSettings").AddKey("EngineName", Quote & "DuckDuckGo" & Quote)
+        settingsData("SearchSettings").AddKey("AITolerance", 1)
+        settingsData.Sections.AddSection("PEPolicy")
+        settingsData("PEPolicy").AddKey("ShowWatermark", 0)
+        settingsData("PEPolicy").AddKey("WDSHCGraphoView", 1)
+        settingsData("PEPolicy").AddKey("DTDimShowPnputilOut", 1)
+        settingsData("PEPolicy").AddKey("WDSHCConnAttempts", 5)
+        settingsData("PEPolicy").AddKey("PartTableOverridePreference", 0)
+        settingsData("PEPolicy").AddKey("UEFICA23Preference", 0)
+        settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", 0)
+        settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
+        parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
@@ -4278,226 +4065,86 @@ Public Class MainForm
                     File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DynaLog.LogMessage("Writing to INI...")
-                DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.8) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
-                If SaveOnSettingsIni Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=0")
-                End If
-                If VolatileMode Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
-                Select Case ColorMode
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
-                    Case 2
-                        DTSettingForm.RichTextBox2.AppendText("ColorMode=2")
-                End Select
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Light=" & LightThemeIndex)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Dark=" & DarkThemeIndex)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=" & Language)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & LogFont & Quote)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=" & LogFontSize)
-                If LogFontIsBold Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
-                End If
-                Select Case ProgressPanelStyle
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
-                End Select
-                If AllCaps Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
-                End If
-                If ExpandedProgressPanel Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
-                End If
-                If ShowDateAndTime Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
-                Select Case LogLevel
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=1")
-                    Case 2
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=2")
-                    Case 3
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
-                    Case 4
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=4")
-                End Select
-                If AutoLogs Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & SystemEditor & Quote)
-                If EnableDynaLog Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
-                Select Case ImgOperationMode
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=1")
-                End Select
-                If QuietOperations Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
-                End If
-                If SysNoRestart Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
-                End If
-                If NoNTSamMappings Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & PEHelper_UnattendedFile & Quote)
-                If PEHelper_CopyToVentoy Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
-                End If
-                If PEHelper_Use2023EFI Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppxRemovalDisplayNameFormat=" & AppxDisplayNameFormatOnRemoval)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
-                If UseScratch Then
-                    DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
-                End If
-                If AutoScrDir Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & ScratchDir & Quote)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
-                If EnglishOutput Then
-                    DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("EnglishOutput=0")
-                End If
-                Select Case ReportView
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=1")
-                End Select
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
-                If NotificationShow Then
-                    DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("ShowNotification=0")
-                End If
-                Select Case NotificationFrequency
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
-                End Select
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
-                If ExtAppxGetter Then
-                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=0")
-                End If
-                If SkipNonRemovable Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=0")
-                End If
-                If AllDrivers Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
-                End If
-                If SkipFrameworks Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=0")
-                End If
-                If RunAllProcs Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
-                If StartupRemount Then
-                    DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("RemountImages=0")
-                End If
-                If StartupUpdateCheck Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Shutdown]" & CrLf)
-                If AutoCleanMounts Then
-                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
-                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("SkipQuestions=" & If(SkipQuestions, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=" & If(AutoCompleteInfo(0), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=" & If(AutoCompleteInfo(1), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=" & If(AutoCompleteInfo(2), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=" & If(AutoCompleteInfo(3), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & SearchEngineName & Quote)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=" & SearchEngineAITolerance)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[PEPolicy]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("ShowWatermark=" & If(ShowWatermark, 1, 0))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCGraphoView=" & If(WDSHCGraphoView, 1, 0))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "DTDimShowPnputilOut=" & If(DTDimShowPnputilOut, 1, 0))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WDSHCConnAttempts=" & WDSHCConnAttempts)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "PartTableOverridePreference=" & PartTableOverridePreference)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "UEFICA23Preference=" & UEFICA23Preference)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoUnattendCopytoSysprep=" & AutoUnattendCopytoSysprep)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "PXEServerPort=" & PXEServerPort)
-                File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+                Dim parser As New FileIniDataParser(),
+                    settingsData As New IniData()
+                settingsData.Sections.AddSection("Program")
+                settingsData("Program").AddKey("DismExe", Quote & DismExe & Quote)
+                settingsData("Program").AddKey("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0))
+                settingsData("Program").AddKey("Volatile", If(VolatileMode, 1, 0))
+                settingsData.Sections.AddSection("Personalization")
+                settingsData("Personalization").AddKey("ColorMode", ColorMode)
+                settingsData("Personalization").AddKey("ColorTheme_Light", LightThemeIndex)
+                settingsData("Personalization").AddKey("ColorTheme_Dark", DarkThemeIndex)
+                settingsData("Personalization").AddKey("Language", Language)
+                settingsData("Personalization").AddKey("LogFont", Quote & LogFont & Quote)
+                settingsData("Personalization").AddKey("LogFontSi", LogFontSize)
+                settingsData("Personalization").AddKey("LogFontBold", If(LogFontIsBold, 1, 0))
+                settingsData("Personalization").AddKey("SecondaryProgressPanelStyle", ProgressPanelStyle)
+                settingsData("Personalization").AddKey("AllCaps", If(AllCaps, 1, 0))
+                settingsData("Personalization").AddKey("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0))
+                settingsData("Personalization").AddKey("ShowDateAndTime", If(ShowDateAndTime, 1, 0))
+                settingsData.Sections.AddSection("Logs")
+                settingsData("Logs").AddKey("LogFile", Quote & LogFile & Quote)
+                settingsData("Logs").AddKey("LogLevel", LogLevel)
+                settingsData("Logs").AddKey("AutoLogs", If(AutoLogs, 1, 0))
+                settingsData("Logs").AddKey("SystemEditor", Quote & SystemEditor & Quote)
+                settingsData("Logs").AddKey("EnableDynaLog", If(EnableDynaLog, 1, 0))
+                settingsData.Sections.AddSection("ImgOps")
+                settingsData("ImgOps").AddKey("Quiet", If(QuietOperations, 1, 0))
+                settingsData("ImgOps").AddKey("NoRestart", If(SysNoRestart, 1, 0))
+                settingsData("ImgOps").AddKey("NoNTSamMappings", If(NoNTSamMappings, 1, 0))
+                settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & PEHelper_UnattendedFile & Quote)
+                settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
+                settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
+                settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
+                settingsData.Sections.AddSection("ScratchDir")
+                settingsData("ScratchDir").AddKey("UseScratch", If(UseScratch, 1, 0))
+                settingsData("ScratchDir").AddKey("AutoScratch", If(AutoScrDir, 1, 0))
+                settingsData("ScratchDir").AddKey("ScratchDirLocation", Quote & ScratchDir & Quote)
+                settingsData.Sections.AddSection("Output")
+                settingsData("Output").AddKey("EnglishOutput", If(EnglishOutput, 1, 0))
+                settingsData("Output").AddKey("ReportView", ReportView)
+                settingsData.Sections.AddSection("BgProcesses")
+                settingsData("BgProcesses").AddKey("ShowNotification", If(NotificationShow, 1, 0))
+                settingsData("BgProcesses").AddKey("NotifyFrequency", NotificationFrequency)
+                settingsData.Sections.AddSection("AdvBgProcesses")
+                settingsData("AdvBgProcesses").AddKey("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0))
+                settingsData("AdvBgProcesses").AddKey("SkipNonRemovable", If(SkipNonRemovable, 1, 0))
+                settingsData("AdvBgProcesses").AddKey("DetectAllDrivers", If(AllDrivers, 1, 0))
+                settingsData("AdvBgProcesses").AddKey("SkipFrameworks", If(SkipFrameworks, 1, 0))
+                settingsData("AdvBgProcesses").AddKey("RunAllProcs", If(RunAllProcs, 1, 0))
+                settingsData.Sections.AddSection("Startup")
+                settingsData("Startup").AddKey("RemountImages", If(StartupRemount, 1, 0))
+                settingsData("Startup").AddKey("CheckForUpdates", If(StartupUpdateCheck, 1, 0))
+                settingsData.Sections.AddSection("Shutdown")
+                settingsData("Shutdown").AddKey("AutoCleanMounts", If(AutoCleanMounts, 1, 0))
+                settingsData.Sections.AddSection("WndParams")
+                settingsData("WndParams").AddKey("WndWidth", WndWidth)
+                settingsData("WndParams").AddKey("WndHeight", WndHeight)
+                settingsData("WndParams").AddKey("WndCenter", If(Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2), 1, 0))
+                settingsData("WndParams").AddKey("WndLeft", WndLeft)
+                settingsData("WndParams").AddKey("WndTop", WndTop)
+                settingsData("WndParams").AddKey("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0))
+                settingsData.Sections.AddSection("InfoSaver")
+                settingsData("InfoSaver").AddKey("SkipQuestions", If(SkipQuestions, 1, 0))
+                settingsData("InfoSaver").AddKey("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0))
+                settingsData("InfoSaver").AddKey("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0))
+                settingsData("InfoSaver").AddKey("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0))
+                settingsData("InfoSaver").AddKey("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0))
+                settingsData("InfoSaver").AddKey("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0))
+                settingsData.Sections.AddSection("SearchSettings")
+                settingsData("SearchSettings").AddKey("EngineName", Quote & SearchEngineName & Quote)
+                settingsData("SearchSettings").AddKey("AITolerance", SearchEngineAITolerance)
+                settingsData.Sections.AddSection("PEPolicy")
+                settingsData("PEPolicy").AddKey("ShowWatermark", If(ShowWatermark, 1, 0))
+                settingsData("PEPolicy").AddKey("WDSHCGraphoView", If(WDSHCGraphoView, 1, 0))
+                settingsData("PEPolicy").AddKey("DTDimShowPnputilOut", If(DTDimShowPnputilOut, 1, 0))
+                settingsData("PEPolicy").AddKey("WDSHCConnAttempts", WDSHCConnAttempts)
+                settingsData("PEPolicy").AddKey("PartTableOverridePreference", PartTableOverridePreference)
+                settingsData("PEPolicy").AddKey("UEFICA23Preference", UEFICA23Preference)
+                settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", If(AutoUnattendCopytoSysprep, 1, 0))
+                settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
+                parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
                 Try
