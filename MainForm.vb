@@ -4153,7 +4153,7 @@ Public Class MainForm
                     Dim SettingRtb As New RichTextBox() With {
                         .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
                     }
-                    SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
+                    SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
                     File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
                     DynaLog.LogMessage("Setting key values...")
                     Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
