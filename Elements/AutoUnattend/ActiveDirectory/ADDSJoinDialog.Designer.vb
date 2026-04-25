@@ -27,6 +27,7 @@ Partial Class ADDSJoinDialog
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
         Me.DNSConfigPanel = New System.Windows.Forms.Panel()
+        Me.DnsNsLookupBtn = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
@@ -83,7 +84,6 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
-        Me.DnsNsLookupBtn = New System.Windows.Forms.Button()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -144,6 +144,16 @@ Partial Class ADDSJoinDialog
         Me.DNSConfigPanel.Size = New System.Drawing.Size(784, 449)
         Me.DNSConfigPanel.TabIndex = 0
         '
+        'DnsNsLookupBtn
+        '
+        Me.DnsNsLookupBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DnsNsLookupBtn.Location = New System.Drawing.Point(601, 53)
+        Me.DnsNsLookupBtn.Name = "DnsNsLookupBtn"
+        Me.DnsNsLookupBtn.Size = New System.Drawing.Size(140, 23)
+        Me.DnsNsLookupBtn.TabIndex = 3
+        Me.DnsNsLookupBtn.Text = "Test DNS resolution..."
+        Me.DnsNsLookupBtn.UseVisualStyleBackColor = True
+        '
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -164,7 +174,7 @@ Partial Class ADDSJoinDialog
         Me.GroupBox1.Location = New System.Drawing.Point(28, 116)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(716, 316)
-        Me.GroupBox1.TabIndex = 6
+        Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "NIC Settings"
         '
@@ -183,7 +193,7 @@ Partial Class ADDSJoinDialog
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
         Me.RichTextBox1.Size = New System.Drawing.Size(657, 66)
-        Me.RichTextBox1.TabIndex = 6
+        Me.RichTextBox1.TabIndex = 0
         Me.RichTextBox1.Text = ""
         '
         'DnsSyntaxCheckerBtn
@@ -193,7 +203,7 @@ Partial Class ADDSJoinDialog
         Me.DnsSyntaxCheckerBtn.Location = New System.Drawing.Point(492, 280)
         Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
         Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
-        Me.DnsSyntaxCheckerBtn.TabIndex = 7
+        Me.DnsSyntaxCheckerBtn.TabIndex = 10
         Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
         Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
         '
@@ -203,7 +213,7 @@ Partial Class ADDSJoinDialog
         Me.TextBox2.Location = New System.Drawing.Point(302, 91)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(382, 21)
-        Me.TextBox2.TabIndex = 3
+        Me.TextBox2.TabIndex = 4
         '
         'TextBox3
         '
@@ -214,7 +224,7 @@ Partial Class ADDSJoinDialog
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.ReadOnly = True
         Me.TextBox3.Size = New System.Drawing.Size(538, 21)
-        Me.TextBox3.TabIndex = 5
+        Me.TextBox3.TabIndex = 6
         '
         'Label5
         '
@@ -224,7 +234,7 @@ Partial Class ADDSJoinDialog
         Me.Label5.Location = New System.Drawing.Point(146, 156)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(538, 31)
-        Me.Label5.TabIndex = 4
+        Me.Label5.TabIndex = 7
         Me.Label5.Text = "By default, this adapter will use the same domain suffix you specified above. You" & _
     " can change it later"
         '
@@ -242,7 +252,7 @@ Partial Class ADDSJoinDialog
         Me.RadioButton2.Location = New System.Drawing.Point(64, 92)
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(201, 17)
-        Me.RadioButton2.TabIndex = 1
+        Me.RadioButton2.TabIndex = 3
         Me.RadioButton2.Text = "Specify a network adapter manually:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
@@ -254,7 +264,7 @@ Partial Class ADDSJoinDialog
         Me.Label7.Location = New System.Drawing.Point(24, 280)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(461, 33)
-        Me.Label7.TabIndex = 4
+        Me.Label7.TabIndex = 9
         Me.Label7.Text = "The address in the first line will be the primary DNS server address, and any oth" & _
     "er addresses will become alternative server addresses. You can put both IPv4 and" & _
     " IPv6 addresses."
@@ -265,7 +275,7 @@ Partial Class ADDSJoinDialog
         Me.Label6.Location = New System.Drawing.Point(24, 192)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(280, 13)
-        Me.Label6.TabIndex = 4
+        Me.Label6.TabIndex = 8
         Me.Label6.Text = "DNS Server Addresses (put each address in its own line):"
         '
         'Label4
@@ -274,7 +284,7 @@ Partial Class ADDSJoinDialog
         Me.Label4.Location = New System.Drawing.Point(24, 132)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(116, 13)
-        Me.Label4.TabIndex = 4
+        Me.Label4.TabIndex = 5
         Me.Label4.Text = "Primary Domain Suffix:"
         '
         'RadioButton1
@@ -305,7 +315,7 @@ Partial Class ADDSJoinDialog
         Me.TextBox1.Location = New System.Drawing.Point(150, 54)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(445, 21)
-        Me.TextBox1.TabIndex = 5
+        Me.TextBox1.TabIndex = 2
         '
         'Label2
         '
@@ -325,7 +335,7 @@ Partial Class ADDSJoinDialog
         Me.Label1.Location = New System.Drawing.Point(28, 57)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(116, 13)
-        Me.Label1.TabIndex = 4
+        Me.Label1.TabIndex = 1
         Me.Label1.Text = "Primary Domain Suffix:"
         '
         'DNSConfigHeader
@@ -337,7 +347,7 @@ Partial Class ADDSJoinDialog
         Me.DNSConfigHeader.Location = New System.Drawing.Point(24, 16)
         Me.DNSConfigHeader.Name = "DNSConfigHeader"
         Me.DNSConfigHeader.Size = New System.Drawing.Size(658, 23)
-        Me.DNSConfigHeader.TabIndex = 3
+        Me.DNSConfigHeader.TabIndex = 0
         Me.DNSConfigHeader.Text = "Configure DNS settings for network adapters"
         '
         'DSDomainConfigPanel
@@ -386,7 +396,7 @@ Partial Class ADDSJoinDialog
         Me.Label13.Location = New System.Drawing.Point(3, 0)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(289, 21)
-        Me.Label13.TabIndex = 8
+        Me.Label13.TabIndex = 0
         Me.Label13.Text = "User Principal Name (Windows 2000):"
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -397,7 +407,7 @@ Partial Class ADDSJoinDialog
         Me.Label14.Location = New System.Drawing.Point(3, 21)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(289, 21)
-        Me.Label14.TabIndex = 8
+        Me.Label14.TabIndex = 2
         Me.Label14.Text = "Logon Path (pre-Windows 2000):"
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -408,7 +418,7 @@ Partial Class ADDSJoinDialog
         Me.AddsUpnPathText.Location = New System.Drawing.Point(298, 0)
         Me.AddsUpnPathText.Name = "AddsUpnPathText"
         Me.AddsUpnPathText.Size = New System.Drawing.Size(290, 21)
-        Me.AddsUpnPathText.TabIndex = 8
+        Me.AddsUpnPathText.TabIndex = 1
         Me.AddsUpnPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'AddsNtLogonPathText
@@ -418,7 +428,7 @@ Partial Class ADDSJoinDialog
         Me.AddsNtLogonPathText.Location = New System.Drawing.Point(298, 21)
         Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
         Me.AddsNtLogonPathText.Size = New System.Drawing.Size(290, 21)
-        Me.AddsNtLogonPathText.TabIndex = 8
+        Me.AddsNtLogonPathText.TabIndex = 3
         Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'DomainAutoUserPanel
@@ -430,7 +440,7 @@ Partial Class ADDSJoinDialog
         Me.DomainAutoUserPanel.Location = New System.Drawing.Point(117, 132)
         Me.DomainAutoUserPanel.Name = "DomainAutoUserPanel"
         Me.DomainAutoUserPanel.Size = New System.Drawing.Size(565, 32)
-        Me.DomainAutoUserPanel.TabIndex = 11
+        Me.DomainAutoUserPanel.TabIndex = 5
         '
         'ComboBox3
         '
@@ -438,7 +448,7 @@ Partial Class ADDSJoinDialog
         Me.ComboBox3.Location = New System.Drawing.Point(348, 5)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(209, 21)
-        Me.ComboBox3.TabIndex = 10
+        Me.ComboBox3.TabIndex = 3
         '
         'ComboBox2
         '
@@ -446,7 +456,7 @@ Partial Class ADDSJoinDialog
         Me.ComboBox2.Location = New System.Drawing.Point(40, 5)
         Me.ComboBox2.Name = "ComboBox2"
         Me.ComboBox2.Size = New System.Drawing.Size(263, 21)
-        Me.ComboBox2.TabIndex = 10
+        Me.ComboBox2.TabIndex = 1
         '
         'Label16
         '
@@ -454,7 +464,7 @@ Partial Class ADDSJoinDialog
         Me.Label16.Location = New System.Drawing.Point(309, 8)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(33, 13)
-        Me.Label16.TabIndex = 5
+        Me.Label16.TabIndex = 2
         Me.Label16.Text = "User:"
         '
         'Label15
@@ -463,7 +473,7 @@ Partial Class ADDSJoinDialog
         Me.Label15.Location = New System.Drawing.Point(7, 8)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(26, 13)
-        Me.Label15.TabIndex = 5
+        Me.Label15.TabIndex = 0
         Me.Label15.Text = "OU:"
         '
         'RadioButton4
@@ -472,7 +482,7 @@ Partial Class ADDSJoinDialog
         Me.RadioButton4.Location = New System.Drawing.Point(103, 171)
         Me.RadioButton4.Name = "RadioButton4"
         Me.RadioButton4.Size = New System.Drawing.Size(142, 17)
-        Me.RadioButton4.TabIndex = 9
+        Me.RadioButton4.TabIndex = 6
         Me.RadioButton4.Text = "Specify a user manually:"
         Me.RadioButton4.UseVisualStyleBackColor = True
         '
@@ -483,7 +493,7 @@ Partial Class ADDSJoinDialog
         Me.RadioButton3.Location = New System.Drawing.Point(103, 109)
         Me.RadioButton3.Name = "RadioButton3"
         Me.RadioButton3.Size = New System.Drawing.Size(216, 17)
-        Me.RadioButton3.TabIndex = 9
+        Me.RadioButton3.TabIndex = 4
         Me.RadioButton3.TabStop = True
         Me.RadioButton3.Text = "Pick the following user from the domain:"
         Me.RadioButton3.UseVisualStyleBackColor = True
@@ -497,7 +507,7 @@ Partial Class ADDSJoinDialog
         Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 295)
         Me.DSNoDomainPanel.Name = "DSNoDomainPanel"
         Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 61)
-        Me.DSNoDomainPanel.TabIndex = 7
+        Me.DSNoDomainPanel.TabIndex = 10
         Me.DSNoDomainPanel.Visible = False
         '
         'PictureBox2
@@ -516,7 +526,7 @@ Partial Class ADDSJoinDialog
         Me.Label11.Location = New System.Drawing.Point(50, 12)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(517, 32)
-        Me.Label11.TabIndex = 5
+        Me.Label11.TabIndex = 0
         Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
     "long to a domain."
         '
@@ -526,7 +536,7 @@ Partial Class ADDSJoinDialog
         Me.TextBox6.Name = "TextBox6"
         Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox6.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox6.TabIndex = 6
+        Me.TextBox6.TabIndex = 9
         '
         'Label12
         '
@@ -537,7 +547,7 @@ Partial Class ADDSJoinDialog
         Me.Label12.Location = New System.Drawing.Point(88, 367)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(582, 65)
-        Me.Label12.TabIndex = 5
+        Me.Label12.TabIndex = 11
         Me.Label12.Text = resources.GetString("Label12.Text")
         '
         'Label10
@@ -546,7 +556,7 @@ Partial Class ADDSJoinDialog
         Me.Label10.Location = New System.Drawing.Point(88, 260)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(57, 13)
-        Me.Label10.TabIndex = 5
+        Me.Label10.TabIndex = 8
         Me.Label10.Text = "Password:"
         '
         'TextBox5
@@ -554,7 +564,7 @@ Partial Class ADDSJoinDialog
         Me.TextBox5.Location = New System.Drawing.Point(251, 170)
         Me.TextBox5.Name = "TextBox5"
         Me.TextBox5.Size = New System.Drawing.Size(419, 21)
-        Me.TextBox5.TabIndex = 6
+        Me.TextBox5.TabIndex = 7
         '
         'Label9
         '
@@ -562,7 +572,7 @@ Partial Class ADDSJoinDialog
         Me.Label9.Location = New System.Drawing.Point(88, 84)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(75, 13)
-        Me.Label9.TabIndex = 5
+        Me.Label9.TabIndex = 3
         Me.Label9.Text = "User Account:"
         '
         'TextBox4
@@ -570,7 +580,7 @@ Partial Class ADDSJoinDialog
         Me.TextBox4.Location = New System.Drawing.Point(211, 54)
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox4.TabIndex = 6
+        Me.TextBox4.TabIndex = 2
         '
         'Label8
         '
@@ -578,7 +588,7 @@ Partial Class ADDSJoinDialog
         Me.Label8.Location = New System.Drawing.Point(88, 57)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(76, 13)
-        Me.Label8.TabIndex = 5
+        Me.Label8.TabIndex = 1
         Me.Label8.Text = "Domain Name:"
         '
         'DSDomainConfigHeader
@@ -590,7 +600,7 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigHeader.Location = New System.Drawing.Point(24, 16)
         Me.DSDomainConfigHeader.Name = "DSDomainConfigHeader"
         Me.DSDomainConfigHeader.Size = New System.Drawing.Size(658, 23)
-        Me.DSDomainConfigHeader.TabIndex = 4
+        Me.DSDomainConfigHeader.TabIndex = 0
         Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
         '
         'HeaderPanel
@@ -602,7 +612,7 @@ Partial Class ADDSJoinDialog
         Me.HeaderPanel.Location = New System.Drawing.Point(0, 0)
         Me.HeaderPanel.Name = "HeaderPanel"
         Me.HeaderPanel.Size = New System.Drawing.Size(784, 72)
-        Me.HeaderPanel.TabIndex = 3
+        Me.HeaderPanel.TabIndex = 0
         '
         'DS7_Description
         '
@@ -612,7 +622,7 @@ Partial Class ADDSJoinDialog
         Me.DS7_Description.Location = New System.Drawing.Point(27, 34)
         Me.DS7_Description.Name = "DS7_Description"
         Me.DS7_Description.Size = New System.Drawing.Size(643, 28)
-        Me.DS7_Description.TabIndex = 5
+        Me.DS7_Description.TabIndex = 1
         Me.DS7_Description.Text = "This wizard helps you set up your unattended answer file to make a device join a " & _
     "domain powered by Active Directory Domain Services (AD DS)."
         '
@@ -636,7 +646,7 @@ Partial Class ADDSJoinDialog
         Me.DS7_Header.Location = New System.Drawing.Point(12, 9)
         Me.DS7_Header.Name = "DS7_Header"
         Me.DS7_Header.Size = New System.Drawing.Size(658, 23)
-        Me.DS7_Header.TabIndex = 3
+        Me.DS7_Header.TabIndex = 0
         Me.DS7_Header.Text = "Join an Active Directory domain"
         '
         'FooterContainer
@@ -666,7 +676,7 @@ Partial Class ADDSJoinDialog
         Me.DNS_Explanation_Link.Location = New System.Drawing.Point(12, 14)
         Me.DNS_Explanation_Link.Name = "DNS_Explanation_Link"
         Me.DNS_Explanation_Link.Size = New System.Drawing.Size(71, 13)
-        Me.DNS_Explanation_Link.TabIndex = 2
+        Me.DNS_Explanation_Link.TabIndex = 0
         Me.DNS_Explanation_Link.TabStop = True
         Me.DNS_Explanation_Link.Text = "What is DNS?"
         '
@@ -719,7 +729,7 @@ Partial Class ADDSJoinDialog
         Me.Cancel_Button.Location = New System.Drawing.Point(143, 3)
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(64, 23)
-        Me.Cancel_Button.TabIndex = 1
+        Me.Cancel_Button.TabIndex = 2
         Me.Cancel_Button.Text = "Cancel"
         '
         'Help_Button
@@ -730,7 +740,7 @@ Partial Class ADDSJoinDialog
         Me.Help_Button.Location = New System.Drawing.Point(214, 3)
         Me.Help_Button.Name = "Help_Button"
         Me.Help_Button.Size = New System.Drawing.Size(64, 23)
-        Me.Help_Button.TabIndex = 1
+        Me.Help_Button.TabIndex = 3
         Me.Help_Button.Text = "Help"
         '
         'ADDSInitBW
@@ -740,16 +750,6 @@ Partial Class ADDSJoinDialog
         'DnsValidatorBW
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
-        '
-        'DnsNsLookupBtn
-        '
-        Me.DnsNsLookupBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.DnsNsLookupBtn.Location = New System.Drawing.Point(601, 53)
-        Me.DnsNsLookupBtn.Name = "DnsNsLookupBtn"
-        Me.DnsNsLookupBtn.Size = New System.Drawing.Size(140, 23)
-        Me.DnsNsLookupBtn.TabIndex = 7
-        Me.DnsNsLookupBtn.Text = "Test DNS resolution..."
-        Me.DnsNsLookupBtn.UseVisualStyleBackColor = True
         '
         'ADDSJoinDialog
         '
