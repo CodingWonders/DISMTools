@@ -143,6 +143,12 @@ Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; Value
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{#pfDir}\{#MyAppExeName},0"; Flags: uninsdeletekey
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{#pfDir}\{#MyAppExeName}"" /load=""%1"""; Flags: uninsdeletekey
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".dtproj"; ValueData: ""; Flags: uninsdeletekey
+; Associations for Starter Script Editor
+Root: HKA; Subkey: "Software\Classes\.dtss\OpenWithProgids"; ValueType: string; ValueName: "DTSSEdit.StarterScript"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript"; ValueType: string; ValueName: ""; ValueData: "DISMTools Starter Script"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{#pfDir}\{#MyAppExeName},0"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{#pfDir}\tools\StarterScriptEditor\StarterScriptEditor.exe"" /dtss=""%1"""; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\Applications\StarterScriptEditor.exe\SupportedTypes"; ValueType: string; ValueName: ".dtss"; ValueData: ""; Flags: uninsdeletekey
 
 ; Program registry entries
 Root: HKCU; Subkey: "Software\DISMTools"; ValueType: none; Flags: uninsdeletekey createvalueifdoesntexist

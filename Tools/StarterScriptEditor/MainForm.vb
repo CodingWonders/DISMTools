@@ -20,6 +20,8 @@ Public Class MainForm
 
     Public CurrentColorMode As ColorThemeMode
 
+    Private Const SSECodeName As String = "Luffy"
+
     Private Enum ScriptVersion As Integer
         ''' <summary>
         ''' Starter scripts for the DISMTools 0.7 Series (0.7.2, 0.7.3)
@@ -71,10 +73,12 @@ Public Class MainForm
                 Try
                     Dim darkMode As Boolean
                     Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
-                    darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
-                    ColorModeRk.Close()
+                    If ColorModeRk IsNot Nothing Then
+                        darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+                        ColorModeRk.Close()
 
-                    If darkMode Then SetColorMode(ColorThemeMode.Dark) Else SetColorMode(ColorThemeMode.Light)
+                        If darkMode Then SetColorMode(ColorThemeMode.Dark) Else SetColorMode(ColorThemeMode.Light)
+                    End If
                 Catch ex As Exception
                     SetColorMode(ColorThemeMode.Light)
                 End Try
@@ -256,6 +260,14 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
+        If TextBox1.Text = "" Then
+            MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+        If TextBox2.Text = "" Then
+            MessageBox.Show("You must provide a description for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
         NotWillingToSave = False
         If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) AndAlso Not roMode Then
             Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
@@ -353,8 +365,9 @@ Public Class MainForm
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
 #If VBC_VER >= 9.0 Then
 #If DEBUG Then
-        MsgBox(String.Format("DISMTools Starter Script Editor version {0} (DEBUG)" & CrLf & CrLf & "{1}", _
+        MsgBox(String.Format("DISMTools Starter Script Editor version {0} ({1}_DEBUG)" & CrLf & CrLf & "{2}", _
                 My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
+                SSECodeName.ToUpper(), _
                 My.Application.Info.Copyright), _
             vbOKOnly + vbInformation, "About")
 #Else
@@ -365,8 +378,8 @@ Public Class MainForm
 #End If
 #Else
 #If DEBUG Then
-        MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL (DEBUG)" & CrLf & CrLf & "{1}", _
-                My.Application.Info.Version.ToString(), My.Application.Info.Copyright), _
+        MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL ({1}_DEBUG)" & CrLf & CrLf & "{2}", _
+                My.Application.Info.Version.ToString(), SSECodeName.ToUpper(), My.Application.Info.Copyright), _
             vbOKOnly + vbInformation, "About")
 #Else
         MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL" & CrLf & CrLf & "{1}", _
