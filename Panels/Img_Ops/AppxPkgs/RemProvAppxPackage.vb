@@ -200,11 +200,7 @@ Public Class RemProvAppxPackage
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove provisioned AppX packages"
-                        Label1.Text = Text
-                        Label3.Text = "If an application is registered to a user, you will need to run this PowerShell command in order to completely remove it:"
-                        Label4.Text = "Remove-AppxPackage -Package <package name>"
-                        Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
-                        LinkLabel1.Text = "How does the program determine whether an application is registered to a user?"
+                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                         ListView1.Columns(0).Text = "Package name"
@@ -215,11 +211,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Registered to any user?"
                     Case "ESN"
                         Text = "Eliminar paquetes aprovisionados AppX"
-                        Label1.Text = Text
-                        Label3.Text = "Si una aplicación está registrada a un usuario, debe ejecutar este comando de PowerShell para eliminarla completamente:"
-                        Label4.Text = "Remove-AppxPackage -Package <nombre de paquete>"
-                        Label5.Text = "Si no, la aplicación no será aprovisionada para nuevos usuarios. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
-                        LinkLabel1.Text = "¿Cómo determina el programa si una aplicación está registrada a un usuario?"
+                        
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                         ListView1.Columns(0).Text = "Nombre de paquete"
@@ -230,11 +222,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "¿Registrada a un usuario?"
                     Case "FRA"
                         Text = "Supprimer les paquets AppX provisionnés"
-                        Label1.Text = Text
-                        Label3.Text = "Si une application est enregistrée auprès d'un utilisateur, vous devrez exécuter cette commande PowerShell afin de la supprimer complètement :"
-                        Label4.Text = "Remove-AppxPackage -Package <nom du paquet>"
-                        Label5.Text = "Dans le cas contraire, l'application ne sera pas approvisionnée pour les nouveaux utilisateurs. Pour plus de détails, consultez la colonne " & Quote & "Enregistré auprès d'un utilisateur ?" & Quote
-                        LinkLabel1.Text = "Comment le programme détermine-t-il si une application est enregistrée auprès d'un utilisateur ?"
+                        
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
                         ListView1.Columns(0).Text = "Nom du paquet"
@@ -245,11 +233,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
                     Case "PTB", "PTG"
                         Text = "Remover pacotes AppX provisionados"
-                        Label1.Text = Text
-                        Label3.Text = "Se um aplicativo estiver registrado para um usuário, você precisará executar este comando do PowerShell para removê-lo completamente:"
-                        Label4.Text = "Remove-AppxPackage -Package <nome do pacote>"
-                        Label5.Text = "Caso contrário, a aplicação não será aprovisionada para novos utilizadores. Consulte a coluna " & Quote & "Registado em qualquer utilizador?" & Quote & " para obter mais detalhes"
-                        LinkLabel1.Text = "Como é que o programa determina se uma aplicação está registada para um utilizador?"
+                        
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                         ListView1.Columns(0).Text = "Nome do pacote"
@@ -260,11 +244,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Registado por algum utilizador?"
                     Case "ITA"
                         Text = "Rimuovi i pacchetti AppX in provisioning"
-                        Label1.Text = Text
-                        Label3.Text = "Se un'applicazione è registrata per un utente, è necessario eseguire questo comando PowerShell per rimuoverla completamente:"
-                        Label4.Text = "Remove-AppxPackage -Package <nome pacchetto>"
-                        Label5.Text = "Altrimenti, l'applicazione non potrà essere fornita ai nuovi utenti. Controllare la colonna " & Quote & "Registrato a qualche utente?" & Quote & " per maggiori dettagli"
-                        LinkLabel1.Text = "Come fa il programma a determinare se un'applicazione è registrata per un utente?"
+                        
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annullare"
                         ListView1.Columns(0).Text = "Nome del pacchetto"
@@ -276,11 +256,7 @@ Public Class RemProvAppxPackage
                 End Select
             Case 1
                 Text = "Remove provisioned AppX packages"
-                Label1.Text = Text
-                Label3.Text = "If an application is registered to a user, you will need to run this PowerShell command in order to completely remove it:"
-                Label4.Text = "Remove-AppxPackage -Package <package name>"
-                Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
-                LinkLabel1.Text = "How does the program determine whether an application is registered to a user?"
+                
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
                 ListView1.Columns(0).Text = "Package name"
@@ -291,11 +267,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Registered to any user?"
             Case 2
                 Text = "Eliminar paquetes aprovisionados AppX"
-                Label1.Text = Text
-                Label3.Text = "Si una aplicación está registrada a un usuario, debe ejecutar este comando de PowerShell para eliminarla completamente:"
-                Label4.Text = "Remove-AppxPackage -Package <nombre de paquete>"
-                Label5.Text = "Si no, la aplicación no será aprovisionada para nuevos usuarios. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
-                LinkLabel1.Text = "¿Cómo determina el programa si una aplicación está registrada a un usuario?"
+                
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
                 ListView1.Columns(0).Text = "Nombre de paquete"
@@ -306,11 +278,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "¿Registrada a un usuario?"
             Case 3
                 Text = "Supprimer les paquets AppX provisionnés"
-                Label1.Text = Text
-                Label3.Text = "Si une application est enregistrée auprès d'un utilisateur, vous devrez exécuter cette commande PowerShell afin de la supprimer complètement :"
-                Label4.Text = "Remove-AppxPackage -Package <nom du paquet>"
-                Label5.Text = "Dans le cas contraire, l'application ne sera pas approvisionnée pour les nouveaux utilisateurs. Pour plus de détails, consultez la colonne " & Quote & "Enregistré auprès d'un utilisateur ?" & Quote
-                LinkLabel1.Text = "Comment le programme détermine-t-il si une application est enregistrée auprès d'un utilisateur ?"
+                
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
                 ListView1.Columns(0).Text = "Nom du paquet"
@@ -321,11 +289,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
             Case 4
                 Text = "Remover pacotes AppX provisionados"
-                Label1.Text = Text
-                Label3.Text = "Se um aplicativo estiver registrado para um usuário, você precisará executar este comando do PowerShell para removê-lo completamente:"
-                Label4.Text = "Remove-AppxPackage -Package <nome do pacote>"
-                Label5.Text = "Caso contrário, a aplicação não será aprovisionada para novos utilizadores. Consulte a coluna " & Quote & "Registado em qualquer utilizador?" & Quote & " para obter mais detalhes"
-                LinkLabel1.Text = "Como é que o programa determina se uma aplicação está registada para um utilizador?"
+                
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
                 ListView1.Columns(0).Text = "Nome do pacote"
@@ -336,11 +300,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Registado por algum utilizador?"
             Case 5
                 Text = "Rimuovi i pacchetti AppX in provisioning"
-                Label1.Text = Text
-                Label3.Text = "Se un'applicazione è registrata per un utente, è necessario eseguire questo comando PowerShell per rimuoverla completamente:"
-                Label4.Text = "Remove-AppxPackage -Package <nome pacchetto>"
-                Label5.Text = "Altrimenti, l'applicazione non potrà essere fornita ai nuovi utenti. Controllare la colonna " & Quote & "Registrato a qualche utente?" & Quote & " per maggiori dettagli"
-                LinkLabel1.Text = "Come fa il programma a determinare se un'applicazione è registrata per un utente?"
+                
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
                 ListView1.Columns(0).Text = "Nome del pacchetto"
@@ -442,12 +402,5 @@ Public Class RemProvAppxPackage
                 MainForm.ResViewTSMI.Visible = False
             End Try
         End If
-    End Sub
-
-    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\remove_provisionedappxpackage.html#questions")
-        HelpBrowserForm.MinimizeBox = False
-        HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog(Me)
     End Sub
 End Class
