@@ -155,8 +155,9 @@ Public Class ADDSJoinDialog
         Else
             ComboBox4.SelectedIndex = 0
             If ComboBox4.Items.Count > 1 Then
+                ' We do this twice to get rid of both items
                 ComboBox4.Items.RemoveAt(1)
-                ComboBox4.Items.RemoveAt(2)
+                ComboBox4.Items.RemoveAt(1)
             End If
         End If
         DsAccountObjectPickerBtn.Enabled = dsIsInDomain
