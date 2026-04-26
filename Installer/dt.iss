@@ -99,6 +99,7 @@ Name: "autoreload"; Description: "Install automatic image reload service"; Group
 
 [Files]
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\ActiveDirectoryObjectPicker.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\IniFileParser.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion

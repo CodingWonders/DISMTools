@@ -1,0 +1,496 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ActiveDirectoryObjectPicker</name>
+    </assembly>
+    <members>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders">
+            <summary>
+            Indicates the ADsPaths provider type of the DirectoryObjectPickerDialog. This provider affects the contents of the ADPath returned
+            </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.Default">
+            <summary>Default provider.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.WinNT">
+             <summary>
+             The ADsPaths are converted to use the WinNT provider.
+            
+             The ADsPath string for the ADSI WinNT provider can be one of the following forms:
+             <code>
+            WinNT:
+            WinNT://&lt;domain name&gt;
+            WinNT://&lt;domain name&gt;/&lt;server&gt;
+            WinNT://&lt;domain name&gt;/&lt;path&gt;
+            WinNT://&lt;domain name&gt;/&lt;object name&gt;
+            WinNT://&lt;domain name&gt;/&lt;object name&gt;,&lt;object class&gt;
+            WinNT://&lt;server&gt;
+            WinNT://&lt;server&gt;/&lt;object name&gt;
+            WinNT://&lt;server&gt;/&lt;object name&gt;,&lt;object class&gt;
+             </code>
+             The domain name can be either a NETBIOS name or a DNS name. The server is the name of a specific server within the domain. The
+             path is the path of on object, such as "printserver1/printer2". The object name is the name of a specific object. The object
+             class is the class name of the named object. One example of this usage would be "WinNT://MyServer/JeffSmith,user". Specifying a
+             class name can improve the performance of the bind operation.
+             </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.LDAP">
+            <summary>
+            The ADsPaths are converted to use the LDAP provider.
+            <para>The Microsoft LDAP provider ADsPath requires the following format.</para>
+            <para>LDAP://HostName[:PortNumber][/DistinguishedName]</para>
+            <para>Further info, see <a href="http://msdn.microsoft.com/en-us/library/aa746384(v=VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa746384(v=VS.85).aspx</a>.</para>
+            </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.GC">
+            <summary>The ADsPaths for objects selected from this scope are converted to use the GC provider.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.SIDPath">
+             <summary>
+             The ADsPaths having an objectSid attribute are converted to the form
+             <code>
+            LDAP://&lt;SID=x&gt;
+             </code>
+             where x represents the hexadecimal digits of the objectSid attribute value.
+             </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.DownlevelBuiltinPath">
+            <summary>
+            The ADsPaths for down-level, well-known SID objects are an empty string unless this flag is specified (For example;
+            DSOP_DOWNLEVEL_FILTER_INTERACTIVE). If this flag is specified, the paths have the form:
+            <para><c>WinNT://NT AUTHORITY/Interactive</c> or <c>WinNT://Creator owner</c>.</para>
+            </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.DownlevelBuildinPath">
+            <summary>Use DownlevelBuiltinPath instead.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSObjectPicker">
+            <summary>The object picker dialog box.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.IDsObjectPicker">
+            <summary>The IDsObjectPicker interface is used by an application to initialize and display an object picker dialog box.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.IDataObject">
+            <summary>Interface to enable data transfers</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject">
+            <summary>Details of a directory object selected in the DirectoryObjectPickerDialog.</summary>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject.#ctor(System.String,System.String,System.String,System.String,System.Object[])">
+            <summary>Initializes a new instance of the <see cref="T:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject"/> class.</summary>
+            <param name="name">The directory object's relative distinguished name (RDN).</param>
+            <param name="path">The Active Directory path for this directory object.</param>
+            <param name="schemaClass">The name of the schema class for this directory object (objectClass attribute).</param>
+            <param name="upn">The objects user principal name (userPrincipalName attribute).</param>
+            <param name="fetchedAttributes">The attributes retrieved by the object picker as it makes the selection.</param>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject.FetchedAttributes">
+            <summary>Gets attributes retrieved by the object picker as it makes the selection.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject.Name">
+            <summary>Gets the directory object's relative distinguished name (RDN).</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject.Path">
+            <summary>Gets the Active Directory path for this directory object.</summary>
+            <remarks>
+            <para>
+            The format of this string depends on the options specified in the DirectoryObjectPickerDialog from which this object was selected.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject.SchemaClassName">
+            <summary>Gets the name of the schema class for this directory object (objectClass attribute).</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObject.Upn">
+            <summary>Gets the objects user principal name (userPrincipalName attribute).</summary>
+            <remarks>
+            <para>If the object does not have a userPrincipalName value, this property is an empty string.</para>
+            </remarks>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog">
+            <summary>Represents a common dialog that allows a user to select directory objects.</summary>
+            <remarks>
+            <para>
+            The directory object picker dialog box enables a user to select one or more objects from either the global catalog, a Microsoft
+            Windows 2000 domain or computer, a Microsoft Windows NT 4.0 domain or computer, or a workgroup. The object types from which a user
+            can select include user, contact, group, and computer objects.
+            </para>
+            <para>This managed class wraps the Directory Object Picker common dialog from the Active Directory UI.</para>
+            <para>
+            It simplifies the scope (Locations) and filter (ObjectTypes) selection by allowing a single filter to be specified which applies to
+            all scopes (translating to both up-level and down-level filter flags as necessary).
+            </para>
+            <para>
+            The object type filter is also simplified by combining different types of groups (local, global, etc) and not using individual well
+            known types in down-level scopes (only all well known types can be specified).
+            </para>
+            <para>
+            The scope location is also simplified by combining down-level and up-level variations into a single locations flag, e.g. external domains.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.#ctor">
+            <summary>Constructor. Sets all properties to their default values.</summary>
+            <remarks>
+            <para>The default values for the DirectoryObjectPickerDialog properties are:</para>
+            <para>
+            <list type="table">
+            <listheader>
+            <term>Property</term>
+            <description>Default value</description>
+            </listheader>
+            <item>
+            <term>AllowedLocations</term>
+            <description>All locations.</description>
+            </item>
+            <item>
+            <term>AllowedObjectTypes</term>
+            <description>All object types.</description>
+            </item>
+            <item>
+            <term>DefaultLocations</term>
+            <description>None. (Will default to first location.)</description>
+            </item>
+            <item>
+            <term>DefaultObjectTypes</term>
+            <description>All object types.</description>
+            </item>
+            <item>
+            <term>Providers</term>
+            <description><see cref="F:Tulpep.ActiveDirectoryObjectPicker.ADsPathsProviders.Default"/>.</description>
+            </item>
+            <item>
+            <term>MultiSelect</term>
+            <description>false.</description>
+            </item>
+            <item>
+            <term>SkipDomainControllerCheck</term>
+            <description>false.</description>
+            </item>
+            <item>
+            <term>AttributesToFetch</term>
+            <description>Empty list.</description>
+            </item>
+            <item>
+            <term>SelectedObject</term>
+            <description>null.</description>
+            </item>
+            <item>
+            <term>SelectedObjects</term>
+            <description>Empty array.</description>
+            </item>
+            <item>
+            <term>ShowAdvancedView</term>
+            <description>false.</description>
+            </item>
+            <item>
+            <term>TargetComputer</term>
+            <description>null.</description>
+            </item>
+            </list>
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.AllowedLocations">
+            <summary>Gets or sets the scopes the DirectoryObjectPickerDialog is allowed to search.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.AllowedObjectTypes">
+            <summary>Gets or sets the types of objects the DirectoryObjectPickerDialog is allowed to search for.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.AttributesToFetch">
+            <summary>A list of LDAP attribute names that will be retrieved for picked objects.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.DefaultLocations">
+            <summary>Gets or sets the initially selected scope in the DirectoryObjectPickerDialog.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.DefaultObjectTypes">
+            <summary>Gets or sets the initially seleted types of objects in the DirectoryObjectPickerDialog.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.MultiSelect">
+            <summary>Gets or sets whether the user can select multiple objects.</summary>
+            <remarks>
+            <para>If this flag is false, the user can select only one object.</para>
+            </remarks>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.Providers">
+            <summary>Gets or sets the providers affecting the ADPath returned in objects.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.SelectedObject">
+            <summary>Gets the directory object selected in the dialog, or null if no object was selected.</summary>
+            <remarks>
+            <para>
+            If MultiSelect is enabled, then this property returns only the first selected object. Use SelectedObjects to get an array of all
+            objects selected.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.SelectedObjects">
+            <summary>Gets an array of the directory objects selected in the dialog.</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.ShowAdvancedView">
+            <summary>Gets or sets whether objects flagged as show in advanced view only are displayed (up-level).</summary>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.SkipDomainControllerCheck">
+             <summary>Gets or sets the whether to check whether the target is a Domain Controller and hide the "Local Computer" scope</summary>
+             <remarks>
+             <para>
+             From MSDN:
+            
+             If this flag is NOT set, then the DSOP_SCOPE_TYPE_TARGET_COMPUTER flag will be ignored if the target computer is a DC. This flag
+             has no effect unless DSOP_SCOPE_TYPE_TARGET_COMPUTER is specified.
+             </para>
+             </remarks>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.TargetComputer">
+            <summary>Gets or sets the name of the target computer.</summary>
+            <remarks>
+            <para>
+            The dialog box operates as if it is running on the target computer, using the target computer to determine the joined domain and
+            enterprise. If this value is null or empty, the target computer is the local computer.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.Reset">
+            <summary>Resets all properties to their default values.</summary>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.SetCredentials(System.String,System.String)">
+            <summary>Use this method to override the user credentials, passing new credentials for the account profile to be used.</summary>
+            <param name="userName">Name of the user.</param>
+            <param name="password">The password for the user.</param>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.DirectoryObjectPickerDialog.RunDialog(System.IntPtr)">
+            <summary>Displays the Directory Object Picker (Active Directory) common dialog, when called by ShowDialog.</summary>
+            <param name="hwndOwner">Handle to the window that owns the dialog.</param>
+            <returns>
+            If the user clicks the OK button of the Directory Object Picker dialog that is displayed, true is returned; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.EnumExtensions.IsFlagSet``1(``0,``0)">
+            <summary>Determines whether the enumerated flag value has the specified flag set.</summary>
+            <typeparam name="T">The enumerated type.</typeparam>
+            <param name="flags">The enumerated flag value.</param>
+            <param name="flag">The flag value to check.</param>
+            <returns><c>true</c> if is flag set; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.EnumExtensions.CheckHasFlags``1">
+            <summary>Checks if <typeparamref name="T"/> represents an enumeration and throws an exception if not.</summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> to validate.</typeparam>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.EnumExtensions.IsFlags``1">
+            <summary>Determines whether this enumerations has the <see cref="T:System.FlagsAttribute"/> set.</summary>
+            <typeparam name="T">The enumerated type.</typeparam>
+            <returns><c>true</c> if this instance has the <see cref="T:System.FlagsAttribute"/> set; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.IntPtrExtensions.OffsetWith(System.IntPtr,System.Int64)">
+            <summary>Adds an offset to the value of a pointer.</summary>
+            <param name="pointer">The pointer to add the offset to.</param>
+            <param name="offset">The offset to add.</param>
+            <returns>A new pointer that reflects the addition of <paramref name="offset"/> to <paramref name="pointer"/>.</returns>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.Locations">
+            <summary>Indicates the scope the DirectoryObjectPickerDialog searches for objects.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.None">
+            <summary>No locations.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.LocalComputer">
+            <summary>The target computer (down-level).</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.JoinedDomain">
+            <summary>A domain to which the target computer is joined (down-level and up-level).</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.EnterpriseDomain">
+            <summary>All Windows 2000 domains in the enterprise to which the target computer belongs (up-level).</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.GlobalCatalog">
+            <summary>A scope containing objects from all domains in the enterprise (up-level).</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.ExternalDomain">
+            <summary>
+            All domains external to the enterprise, but trusted by the domain to which the target computer is joined (down-level and up-level).
+            </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.Workgroup">
+            <summary>The workgroup to which the target computer is joined (down-level).</summary>
+            <remarks>
+            <para>
+            Applies only if the target computer is not joined to a domain. The only type of object that can be selected from a workgroup is
+            a computer.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.UserEntered">
+            <summary>Enables the user to enter a scope (down-level and up-level).</summary>
+            <remarks>
+            <para>If not specified, the dialog box restricts the user to the scopes in the locations drop-down list.</para>
+            </remarks>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.Locations.All">
+            <summary>All locations.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.NameTranslator">
+            <summary>Active Directory name translation.</summary>
+            <remarks>
+            <para>
+            Translates names between Active Directory formats, e.g. from down-level NT4 style names ("ACME\alice") to User Principal Name ("alice@acme.com").
+            </para>
+            <para>This utility class encapsulates the ActiveDs.dll COM library.</para>
+            </remarks>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.NameTranslator.TranslateDownLevelToUpn(System.String)">
+            <summary>Convert from a down-level NT4 style name to an Active Directory User Principal Name (UPN).</summary>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.NameTranslator.TranslateUpnToDownLevel(System.String)">
+            <summary>Convert from an Active Directory User Principal Name (UPN) to a down-level NT4 style name.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes">
+            <summary>Indicates the type of objects the DirectoryObjectPickerDialog searches for.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.None">
+            <summary>No object types.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.Users">
+            <summary>Includes user objects.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.Groups">
+            <summary>Includes security groups with universal scope.</summary>
+            <remarks>
+            <para>In an up-level scope, this includes distribution and security groups, with universal, global and domain local scope.</para>
+            <para>In a down-level scope, this includes local and global groups.</para>
+            </remarks>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.Computers">
+            <summary>Includes computer objects.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.Contacts">
+            <summary>Includes contact objects.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.BuiltInGroups">
+            <summary>Includes built-in group objects.</summary>
+            <summary>
+            <para>In an up-level scope, this includes group objects with the built-in groupType flags.</para>
+            <para>In a down-level scope, not setting this object type excludes local built-in groups.</para>
+            </summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.WellKnownPrincipals">
+            <summary>Includes all well-known security principals.</summary>
+            <remarks>
+            <para>In an up-level scope, this includes the contents of the Well Known Security Principals container.</para>
+            <para>In a down-level scope, this includes all well-known SIDs.</para>
+            </remarks>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.ServiceAccounts">
+            <summary>Includes all service accounts and group managed service accounts.</summary>
+        </member>
+        <member name="F:Tulpep.ActiveDirectoryObjectPicker.ObjectTypes.All">
+            <summary>All object types.</summary>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.PInvoke.GlobalLock(System.IntPtr)">
+            <summary>
+            The GlobalLock function locks a global memory object and returns a pointer to the first byte of the object's memory block.
+            GlobalLock function increments the lock count by one. Needed for the clipboard functions when getting the data from IDataObject
+            </summary>
+            <param name="hMem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.PInvoke.GlobalUnlock(System.IntPtr)">
+            <summary>The GlobalUnlock function decrements the lock count associated with a memory object.</summary>
+            <param name="hMem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.PInvoke.ReleaseStgMedium(Tulpep.ActiveDirectoryObjectPicker.STGMEDIUM@)">
+            <summary>Frees the specified storage medium.</summary>
+            <param name="pmedium">Pointer to the storage medium that is to be freed.</param>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.ADS_NAME_TYPE_ENUM">
+            <summary>Directory name types for use with IADsNameTranslate</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DVASPECT">
+            <summary>The DVASPECT enumeration values specify the desired data or view aspect of the object when drawing or getting data.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.TYMED">
+            <summary>The TYMED enumeration values indicate the type of storage medium being used in a data transfer.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DS_SELECTION">
+            <summary>
+            The DS_SELECTION structure contains data about an object the user selected from an object picker dialog box. The DS_SELECTION_LIST
+            structure contains an array of DS_SELECTION structures.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DS_SELECTION_LIST">
+            <summary>
+            The DS_SELECTION_LIST structure contains data about the objects the user selected from an object picker dialog box. This structure
+            is supplied by the IDataObject interface supplied by the IDsObjectPicker::InvokeDialog method in the CFSTR_DSOP_DS_SELECTION_LIST
+            data format.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_FILTER_FLAGS">
+            <summary>
+            The DSOP_FILTER_FLAGS structure contains flags that indicate the types of objects presented to the user for a specified scope or scopes.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_INIT_INFO">
+            <summary>The DSOP_INIT_INFO structure contains data required to initialize an object picker dialog box.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_SCOPE_INIT_INFO">
+            <summary>
+            The DSOP_SCOPE_INIT_INFO structure describes one or more scope types that have the same attributes. A scope type is a type of
+            location, for example a domain, computer, or Global Catalog, from which the user can select objects.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_UPLEVEL_FILTER_FLAGS">
+            <summary>
+            The DSOP_UPLEVEL_FILTER_FLAGS structure contains flags that indicate the filters to use for an up-level scope. An up-level scope is
+            a scope that supports the ADSI LDAP provider.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.FORMATETC">
+            <summary>This structure is used as a parameter in OLE functions and methods that require data format information.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.STGMEDIUM">
+            <summary>The STGMEDIUM structure is a generalized global memory handle used for data transfer operations by the IDataObject</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.CLIPBOARD_FORMAT">
+            <summary>The CFSTR_DSOP_DS_SELECTION_LIST clipboard format is provided by the IDataObject obtained by calling IDsObjectPicker.InvokeDialog</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_DOWNLEVEL_FLAGS">
+            <summary>Contains the filter flags to use for down-level scopes</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_FILTER_FLAGS_FLAGS">
+            <summary>Filter flags to use for an up-level scope, regardless of whether it is a mixed or native mode domain.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_INIT_INFO_FLAGS">
+            <summary>Flags that determine the object picker options.</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_SCOPE_INIT_INFO_FLAGS">
+            <summary>
+            Flags that indicate the format used to return ADsPath for objects selected from this scope. The flScope member can also indicate the
+            initial scope displayed in the Look in drop-down list.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.DSOP_SCOPE_TYPE_FLAGS">
+            <summary>
+            Flags that indicate the scope types described by this structure. You can combine multiple scope types if all specified scopes use
+            the same settings.
+            </summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.HRESULT">
+            <summary>The IDsObjectPicker.InvokeDialog result</summary>
+        </member>
+        <member name="T:Tulpep.ActiveDirectoryObjectPicker.UnmanagedArrayOfStrings">
+            <summary>A packed array of strings.</summary>
+            <seealso cref="T:System.IDisposable"/>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.UnmanagedArrayOfStrings.#ctor(System.Collections.Generic.IList{System.String})">
+            <summary>Initializes a new instance of the <see cref="T:Tulpep.ActiveDirectoryObjectPicker.UnmanagedArrayOfStrings"/> class.</summary>
+            <param name="strings">The strings to pack.</param>
+        </member>
+        <member name="P:Tulpep.ActiveDirectoryObjectPicker.UnmanagedArrayOfStrings.ArrayPtr">
+            <summary>Gets the pointer to the packed array memory.</summary>
+        </member>
+        <member name="M:Tulpep.ActiveDirectoryObjectPicker.UnmanagedArrayOfStrings.Dispose">
+            <summary>Releases unmanaged and - optionally - managed resources.</summary>
+        </member>
+    </members>
+</doc>

@@ -74,6 +74,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ActiveDirectoryObjectPicker, Version=3.0.11.0, Culture=neutral, PublicKeyToken=515ab092c8839750, processorArchitecture=MSIL">
+      <HintPath>packages\Tulpep.ActiveDirectoryObjectPicker.3.0.11\lib\net48\ActiveDirectoryObjectPicker.dll</HintPath>
+    </Reference>
     <Reference Include="DarkUI, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>

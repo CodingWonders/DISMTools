@@ -52,13 +52,10 @@ Partial Class ADDSJoinDialog
         Me.Label14 = New System.Windows.Forms.Label()
         Me.AddsUpnPathText = New System.Windows.Forms.Label()
         Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
-        Me.DomainAutoUserPanel = New System.Windows.Forms.Panel()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -84,6 +81,16 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
+        Me.DsAccountObjectPickerBtn = New System.Windows.Forms.Button()
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.UserAccountModeSelectorContainerPanel = New System.Windows.Forms.Panel()
+        Me.ManualUserPickerPanel = New System.Windows.Forms.Panel()
+        Me.UserInDomainOuPickerPanel = New System.Windows.Forms.Panel()
+        Me.UserInDomainPickerPanel = New System.Windows.Forms.Panel()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.TextBox7 = New System.Windows.Forms.TextBox()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -92,7 +99,6 @@ Partial Class ADDSJoinDialog
         Me.Panel1.SuspendLayout()
         Me.DSDomainConfigPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
-        Me.DomainAutoUserPanel.SuspendLayout()
         Me.DSNoDomainPanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.HeaderPanel.SuspendLayout()
@@ -100,6 +106,10 @@ Partial Class ADDSJoinDialog
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.UserAccountModeSelectorContainerPanel.SuspendLayout()
+        Me.ManualUserPickerPanel.SuspendLayout()
+        Me.UserInDomainOuPickerPanel.SuspendLayout()
+        Me.UserInDomainPickerPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -122,8 +132,8 @@ Partial Class ADDSJoinDialog
         '
         'StepsContainer
         '
-        Me.StepsContainer.Controls.Add(Me.DNSConfigPanel)
         Me.StepsContainer.Controls.Add(Me.DSDomainConfigPanel)
+        Me.StepsContainer.Controls.Add(Me.DNSConfigPanel)
         Me.StepsContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StepsContainer.Location = New System.Drawing.Point(0, 0)
         Me.StepsContainer.Name = "StepsContainer"
@@ -352,15 +362,13 @@ Partial Class ADDSJoinDialog
         '
         'DSDomainConfigPanel
         '
+        Me.DSDomainConfigPanel.Controls.Add(Me.UserAccountModeSelectorContainerPanel)
+        Me.DSDomainConfigPanel.Controls.Add(Me.ComboBox4)
         Me.DSDomainConfigPanel.Controls.Add(Me.TableLayoutPanel2)
-        Me.DSDomainConfigPanel.Controls.Add(Me.DomainAutoUserPanel)
-        Me.DSDomainConfigPanel.Controls.Add(Me.RadioButton4)
-        Me.DSDomainConfigPanel.Controls.Add(Me.RadioButton3)
         Me.DSDomainConfigPanel.Controls.Add(Me.DSNoDomainPanel)
         Me.DSDomainConfigPanel.Controls.Add(Me.TextBox6)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label12)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label10)
-        Me.DSDomainConfigPanel.Controls.Add(Me.TextBox5)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label9)
         Me.DSDomainConfigPanel.Controls.Add(Me.TextBox4)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label8)
@@ -431,37 +439,26 @@ Partial Class ADDSJoinDialog
         Me.AddsNtLogonPathText.TabIndex = 3
         Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'DomainAutoUserPanel
-        '
-        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox3)
-        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox2)
-        Me.DomainAutoUserPanel.Controls.Add(Me.Label16)
-        Me.DomainAutoUserPanel.Controls.Add(Me.Label15)
-        Me.DomainAutoUserPanel.Location = New System.Drawing.Point(117, 132)
-        Me.DomainAutoUserPanel.Name = "DomainAutoUserPanel"
-        Me.DomainAutoUserPanel.Size = New System.Drawing.Size(565, 32)
-        Me.DomainAutoUserPanel.TabIndex = 5
-        '
         'ComboBox3
         '
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Location = New System.Drawing.Point(348, 5)
+        Me.ComboBox3.Location = New System.Drawing.Point(130, 45)
         Me.ComboBox3.Name = "ComboBox3"
-        Me.ComboBox3.Size = New System.Drawing.Size(209, 21)
+        Me.ComboBox3.Size = New System.Drawing.Size(436, 21)
         Me.ComboBox3.TabIndex = 3
         '
         'ComboBox2
         '
         Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(40, 5)
+        Me.ComboBox2.Location = New System.Drawing.Point(130, 18)
         Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(263, 21)
+        Me.ComboBox2.Size = New System.Drawing.Size(436, 21)
         Me.ComboBox2.TabIndex = 1
         '
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(309, 8)
+        Me.Label16.Location = New System.Drawing.Point(23, 48)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(33, 13)
         Me.Label16.TabIndex = 2
@@ -470,33 +467,11 @@ Partial Class ADDSJoinDialog
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(7, 8)
+        Me.Label15.Location = New System.Drawing.Point(23, 22)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(26, 13)
+        Me.Label15.Size = New System.Drawing.Size(101, 13)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = "OU:"
-        '
-        'RadioButton4
-        '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Location = New System.Drawing.Point(103, 171)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(142, 17)
-        Me.RadioButton4.TabIndex = 6
-        Me.RadioButton4.Text = "Specify a user manually:"
-        Me.RadioButton4.UseVisualStyleBackColor = True
-        '
-        'RadioButton3
-        '
-        Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Checked = True
-        Me.RadioButton3.Location = New System.Drawing.Point(103, 109)
-        Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(216, 17)
-        Me.RadioButton3.TabIndex = 4
-        Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = "Pick the following user from the domain:"
-        Me.RadioButton3.UseVisualStyleBackColor = True
+        Me.Label15.Text = "Organizational unit:"
         '
         'DSNoDomainPanel
         '
@@ -561,9 +536,9 @@ Partial Class ADDSJoinDialog
         '
         'TextBox5
         '
-        Me.TextBox5.Location = New System.Drawing.Point(251, 170)
+        Me.TextBox5.Location = New System.Drawing.Point(23, 41)
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(419, 21)
+        Me.TextBox5.Size = New System.Drawing.Size(543, 21)
         Me.TextBox5.TabIndex = 7
         '
         'Label9
@@ -751,6 +726,110 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
+        'DsAccountObjectPickerBtn
+        '
+        Me.DsAccountObjectPickerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DsAccountObjectPickerBtn.Location = New System.Drawing.Point(441, 14)
+        Me.DsAccountObjectPickerBtn.Name = "DsAccountObjectPickerBtn"
+        Me.DsAccountObjectPickerBtn.Size = New System.Drawing.Size(125, 23)
+        Me.DsAccountObjectPickerBtn.TabIndex = 13
+        Me.DsAccountObjectPickerBtn.Text = "Pick account object..."
+        Me.DsAccountObjectPickerBtn.UseVisualStyleBackColor = True
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Items.AddRange(New Object() {"Specify a user manually", "Pick the following user from organizational units in my domain", "Pick the following user object from anywhere in my domain"})
+        Me.ComboBox4.Location = New System.Drawing.Point(211, 81)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(459, 21)
+        Me.ComboBox4.TabIndex = 14
+        '
+        'UserAccountModeSelectorContainerPanel
+        '
+        Me.UserAccountModeSelectorContainerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.ManualUserPickerPanel)
+        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.UserInDomainOuPickerPanel)
+        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.UserInDomainPickerPanel)
+        Me.UserAccountModeSelectorContainerPanel.Location = New System.Drawing.Point(91, 109)
+        Me.UserAccountModeSelectorContainerPanel.Name = "UserAccountModeSelectorContainerPanel"
+        Me.UserAccountModeSelectorContainerPanel.Size = New System.Drawing.Size(590, 87)
+        Me.UserAccountModeSelectorContainerPanel.TabIndex = 15
+        '
+        'ManualUserPickerPanel
+        '
+        Me.ManualUserPickerPanel.Controls.Add(Me.Label17)
+        Me.ManualUserPickerPanel.Controls.Add(Me.TextBox5)
+        Me.ManualUserPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ManualUserPickerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ManualUserPickerPanel.Name = "ManualUserPickerPanel"
+        Me.ManualUserPickerPanel.Size = New System.Drawing.Size(588, 85)
+        Me.ManualUserPickerPanel.TabIndex = 0
+        '
+        'UserInDomainOuPickerPanel
+        '
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.ComboBox3)
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.Label15)
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.Label16)
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.ComboBox2)
+        Me.UserInDomainOuPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserInDomainOuPickerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.UserInDomainOuPickerPanel.Name = "UserInDomainOuPickerPanel"
+        Me.UserInDomainOuPickerPanel.Size = New System.Drawing.Size(588, 85)
+        Me.UserInDomainOuPickerPanel.TabIndex = 1
+        Me.UserInDomainOuPickerPanel.Visible = False
+        '
+        'UserInDomainPickerPanel
+        '
+        Me.UserInDomainPickerPanel.Controls.Add(Me.TextBox7)
+        Me.UserInDomainPickerPanel.Controls.Add(Me.Label19)
+        Me.UserInDomainPickerPanel.Controls.Add(Me.Label18)
+        Me.UserInDomainPickerPanel.Controls.Add(Me.DsAccountObjectPickerBtn)
+        Me.UserInDomainPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserInDomainPickerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.UserInDomainPickerPanel.Name = "UserInDomainPickerPanel"
+        Me.UserInDomainPickerPanel.Size = New System.Drawing.Size(588, 85)
+        Me.UserInDomainPickerPanel.TabIndex = 2
+        Me.UserInDomainPickerPanel.Visible = False
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(23, 22)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(408, 13)
+        Me.Label17.TabIndex = 8
+        Me.Label17.Text = "Type the Security Account Manager (SAM) name of the user account in the domain:"
+        '
+        'Label18
+        '
+        Me.Label18.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label18.AutoEllipsis = True
+        Me.Label18.Location = New System.Drawing.Point(23, 17)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(406, 28)
+        Me.Label18.TabIndex = 0
+        Me.Label18.Text = "If the desired account is not in any organizational unit, but rather in a contain" & _
+    "er, or somewhere else; click the following button to pick it:"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(23, 54)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(215, 13)
+        Me.Label19.TabIndex = 14
+        Me.Label19.Text = "SAM account name of selected user object:"
+        '
+        'TextBox7
+        '
+        Me.TextBox7.Location = New System.Drawing.Point(244, 51)
+        Me.TextBox7.Name = "TextBox7"
+        Me.TextBox7.ReadOnly = True
+        Me.TextBox7.Size = New System.Drawing.Size(322, 21)
+        Me.TextBox7.TabIndex = 15
+        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -779,8 +858,6 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigPanel.ResumeLayout(False)
         Me.DSDomainConfigPanel.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.DomainAutoUserPanel.ResumeLayout(False)
-        Me.DomainAutoUserPanel.PerformLayout()
         Me.DSNoDomainPanel.ResumeLayout(False)
         Me.DSNoDomainPanel.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -791,6 +868,13 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.UserAccountModeSelectorContainerPanel.ResumeLayout(False)
+        Me.ManualUserPickerPanel.ResumeLayout(False)
+        Me.ManualUserPickerPanel.PerformLayout()
+        Me.UserInDomainOuPickerPanel.ResumeLayout(False)
+        Me.UserInDomainOuPickerPanel.PerformLayout()
+        Me.UserInDomainPickerPanel.ResumeLayout(False)
+        Me.UserInDomainPickerPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -845,14 +929,21 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents AddsNtLogonPathText As System.Windows.Forms.Label
     Friend WithEvents AddsUpnPathText As System.Windows.Forms.Label
-    Friend WithEvents DomainAutoUserPanel As System.Windows.Forms.Panel
     Friend WithEvents ComboBox3 As System.Windows.Forms.ComboBox
     Friend WithEvents ComboBox2 As System.Windows.Forms.ComboBox
     Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents Label15 As System.Windows.Forms.Label
-    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents DnsNsLookupBtn As System.Windows.Forms.Button
+    Friend WithEvents DsAccountObjectPickerBtn As System.Windows.Forms.Button
+    Friend WithEvents UserAccountModeSelectorContainerPanel As System.Windows.Forms.Panel
+    Friend WithEvents UserInDomainPickerPanel As System.Windows.Forms.Panel
+    Friend WithEvents TextBox7 As System.Windows.Forms.TextBox
+    Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents ManualUserPickerPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents UserInDomainOuPickerPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox4 As System.Windows.Forms.ComboBox
 End Class
