@@ -204,6 +204,9 @@ Partial Class MainForm
         Me.CreateTestingEnvironmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator38 = New System.Windows.Forms.ToolStripSeparator()
         Me.WimScriptEditorCommand = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator49 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SSE_TSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ThemeDesigner_TSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -510,6 +513,8 @@ Partial Class MainForm
         Me.ImgCaptureModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CaptureWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1499,7 +1504,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1711,6 +1716,23 @@ Partial Class MainForm
         Me.WimScriptEditorCommand.Name = "WimScriptEditorCommand"
         Me.WimScriptEditorCommand.Size = New System.Drawing.Size(373, 22)
         Me.WimScriptEditorCommand.Text = "Configuration list editor"
+        '
+        'ToolStripSeparator49
+        '
+        Me.ToolStripSeparator49.Name = "ToolStripSeparator49"
+        Me.ToolStripSeparator49.Size = New System.Drawing.Size(370, 6)
+        '
+        'SSE_TSMI
+        '
+        Me.SSE_TSMI.Name = "SSE_TSMI"
+        Me.SSE_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.SSE_TSMI.Text = "Create a starter script"
+        '
+        'ThemeDesigner_TSMI
+        '
+        Me.ThemeDesigner_TSMI.Name = "ThemeDesigner_TSMI"
+        Me.ThemeDesigner_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.ThemeDesigner_TSMI.Text = "Design a theme"
         '
         'ToolStripSeparator9
         '
@@ -4680,6 +4702,12 @@ Partial Class MainForm
         Me.CaptureFfuTSMI.Size = New System.Drawing.Size(272, 22)
         Me.CaptureFfuTSMI.Text = "Capture installation drive to FFU file..."
         '
+        'SSETimer
+        '
+        '
+        'ThemeDesignerTimer
+        '
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -5279,4 +5307,9 @@ Partial Class MainForm
     Friend WithEvents CaptureWimTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CaptureFfuTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UploadThisImageToMyWDSServerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator49 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SSE_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ThemeDesigner_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SSETimer As System.Windows.Forms.Timer
+    Friend WithEvents ThemeDesignerTimer As System.Windows.Forms.Timer
 End Class

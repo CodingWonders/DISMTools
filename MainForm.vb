@@ -15891,4 +15891,34 @@ Public Class MainForm
             WDSInstallImageCopy.Show()
         End If
     End Sub
+
+    Private Sub SSE_TSMI_Click(sender As Object, e As EventArgs) Handles SSE_TSMI.Click
+        Dim SSEPath As String = Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")
+        If File.Exists(SSEPath) Then
+            Process.Start(SSEPath, String.Format("/userdata={0}", Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & Quote))
+            SSETimer.Enabled = True
+        End If
+    End Sub
+
+    Private Sub SSETimer_Tick(sender As Object, e As EventArgs) Handles SSETimer.Tick
+        If Not Process.GetProcessesByName("StarterScriptEditor").Any() Then
+            UserDataManagerModule.CopyUserDataToProgramFiles("starter_scripts")
+            SSETimer.Enabled = False
+        End If
+    End Sub
+
+    Private Sub ThemeDesigner_TSMI_Click(sender As Object, e As EventArgs) Handles ThemeDesigner_TSMI.Click
+        Dim TDPath As String = Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")
+        If File.Exists(TDPath) Then
+            Process.Start(TDPath, String.Format("/userdata={0}", Quote & Path.Combine(Application.StartupPath, "userdata", "themes") & Quote))
+            ThemeDesignerTimer.Enabled = True
+        End If
+    End Sub
+
+    Private Sub ThemeDesignerTimer_Tick(sender As Object, e As EventArgs) Handles ThemeDesignerTimer.Tick
+        If Not Process.GetProcessesByName("DT_ThemeDesigner").Any() Then
+            UserDataManagerModule.CopyUserDataToProgramFiles("themes")
+            ThemeDesignerTimer.Enabled = False
+        End If
+    End Sub
 End Class
