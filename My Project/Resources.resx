@@ -1120,4 +1120,19 @@ New features:
     &lt;/settings&gt;
 &lt;/unattend&gt;</value>
   </data>
+  <data name="rearrange_elements" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rearrange_elements.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="first_element_upward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\first_element_upward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="last_element_downward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\last_element_downward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="next_element_downward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\next_element_downward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="prev_element_upward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\prev_element_upward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

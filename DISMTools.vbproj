@@ -969,6 +969,12 @@
     <Compile Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.Designer.vb">
+      <DependentUpon>ScriptReorderDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </Compile>
@@ -1353,6 +1359,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.resx">
       <DependentUpon>SampleScriptBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.resx">
+      <DependentUpon>ScriptReorderDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
@@ -1768,12 +1777,17 @@
     <Content Include="Resources\assistant_dark.png" />
     <Content Include="Resources\assistant_light.png" />
     <None Include="Resources\copy_img_to_wds.png" />
+    <None Include="Resources\first_element_upward.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
     <None Include="Resources\menus\tour_glyph_dark.png" />
     <None Include="Resources\menus\tour_glyph_light.png" />
     <None Include="Resources\optimize_img.png" />
+    <None Include="Resources\rearrange_elements.png" />
+    <None Include="Resources\prev_element_upward.png" />
+    <None Include="Resources\last_element_downward.png" />
+    <None Include="Resources\next_element_downward.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

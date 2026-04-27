@@ -2672,6 +2672,7 @@ Public Class NewUnattendWiz
             Button15.Enabled = False
             Button17.Enabled = False
             Button18.Enabled = False
+            Button23.Enabled = False
         End If
         NoSpecifiedScriptsPanel.Visible = (CurrentlyConfiguredScripts.Count = 0)
         ScriptEditorPanel.Visible = (CurrentlyConfiguredScripts.Count > 0)
@@ -2691,6 +2692,7 @@ Public Class NewUnattendWiz
         Button15.Enabled = Not (NewIndex = 0)
         Button17.Enabled = Not (NewIndex = CurrentlyConfiguredScripts.Count - 1)
         Button18.Enabled = Not (NewIndex = CurrentlyConfiguredScripts.Count - 1)
+        Button23.Enabled = True
 
         ComboBox16.SelectedItem = ComboBox16.Items(CurrentlyConfiguredScripts(NewIndex).ScriptExtension)
     End Sub
@@ -3049,6 +3051,7 @@ Public Class NewUnattendWiz
             Button15.Enabled = False
             Button17.Enabled = False
             Button18.Enabled = False
+            Button23.Enabled = False
         Else
             If CurrentlyEditedScript > CurrentlyConfiguredScripts.Count - 1 Then
                 CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
@@ -3234,5 +3237,25 @@ Public Class NewUnattendWiz
 
     Private Sub TextBox23_TextChanged(sender As Object, e As EventArgs) Handles TextBox23.TextChanged
         ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub Button23_Click(sender As Object, e As EventArgs) Handles Button23.Click
+        SaveConfiguredScripts(CurrentlyEditedStage)
+        Select Case CurrentlyEditedStage
+            Case 0
+                ScriptReorderDialog.ScriptSet = ConfiguredScripts(PostInstallScript.Stage.Specialize)
+            Case 1
+                ScriptReorderDialog.ScriptSet = ConfiguredScripts(PostInstallScript.Stage.FirstRun)
+            Case 2
+                ScriptReorderDialog.ScriptSet = ConfiguredScripts(PostInstallScript.Stage.UserFirstLogon)
+        End Select
+        If ScriptReorderDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            CurrentlyConfiguredScripts = New List(Of PostInstallScript)(ScriptReorderDialog.ScriptSet)
+            ' Saving the script set here causes the currently edited script to change its contents
+            ' to the previous values; we'll force setting the new contents.
+            Scintilla3.Text = CurrentlyConfiguredScripts(CurrentlyEditedScript).ScriptContents
+            SaveConfiguredScripts(CurrentlyEditedStage)
+            SwitchScript(CurrentlyEditedScript)
+        End If
     End Sub
 End Class
