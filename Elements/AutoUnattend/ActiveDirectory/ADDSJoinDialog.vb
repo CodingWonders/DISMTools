@@ -201,7 +201,7 @@ Public Class ADDSJoinDialog
         Else
             NtLogonPathStart = "Primary DC NetBIOS"
         End If
-        If ComboBox3.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
+        If ComboBox3.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\<user>", NtLogonPathStart)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -516,12 +516,12 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
+        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
     End Sub
 
     Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
-        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox5.Text)
+        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text))
         initialUserName = TextBox5.Text
     End Sub
 
@@ -613,8 +613,8 @@ Public Class ADDSJoinDialog
         Try
             Select Case ComboBox4.SelectedIndex
                 Case 0
-                    AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
-                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox5.Text)
+                    AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
+                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text))
                     initialUserName = TextBox5.Text
                 Case 1
                     Dim referenceUserDispName As String = ComboBox3.SelectedItem
