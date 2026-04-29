@@ -270,19 +270,13 @@ Public Class MainForm
         End If
         NotWillingToSave = False
         If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) AndAlso Not roMode Then
-            Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
-                                            Environment.NewLine, Path.GetDirectoryName(SavedScriptPath)), _
-                                            "Save Script", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-                Case Windows.Forms.DialogResult.Yes
-                    SaveScriptFile(SavedScriptPath, ScriptVer = ScriptVersion.Infinity)
-                    Exit Sub
-                Case Windows.Forms.DialogResult.Cancel
-                    NotWillingToSave = True
-                    Exit Sub
-            End Select
+            SaveScriptFile(SavedScriptPath, ScriptVer = ScriptVersion.Infinity)
+            Exit Sub
         End If
         If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
             NotWillingToSave = True
+        Else
+            SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
         End If
     End Sub
 
@@ -569,4 +563,12 @@ Public Class MainForm
         End Using
         Return 0
     End Function
+
+    Private Sub ToolStripButton8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton8.Click
+        If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
+            NotWillingToSave = True
+        Else
+            SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
+        End If
+    End Sub
 End Class
