@@ -202,7 +202,7 @@ Public Class MainForm
     Public SearchEngineAITolerance As Integer = 1    ' The amount of tolerance of AI in search engines
 
     ' Tour server
-    Public ReadOnly tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+    Public ReadOnly tourServer As DTHttpServer = New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
 
     ' Contemporaneus Preview
     Public MountedImageList As New List(Of WindowsImage)
@@ -14646,21 +14646,18 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\videos\videoplay.html") Then File.Delete(Application.StartupPath & "\videos\videoplay.html")
         If File.Exists(Application.StartupPath & "\videos\videoplay_tmp.html") Then
             DynaLog.LogMessage("Reading HTML...")
-            Dim vidPlayRTB As New RichTextBox() With {
-                .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
-            }
+            Dim videoPlayerContents As String = File.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
             DynaLog.LogMessage("Modifying HTML according following values:")
             DynaLog.LogMessage("- Video ID: " & ID)
             DynaLog.LogMessage("- Video Name: " & Name)
             DynaLog.LogMessage("- Video Description: " & Description)
-            vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
+            videoPlayerContents = videoPlayerContents.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
             ' Set appropriate color mode in light theme
             DynaLog.LogMessage("Setting colors...")
             If Not CurrentTheme.IsDark Then
-                vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
+                videoPlayerContents = videoPlayerContents.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
             End If
-            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
-            HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
+            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", videoPlayerContents, UTF8)
             ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
             DynaLog.LogMessage("Checking Internet Explorer browser emulation settings (necessary step for you to watch videos on web browser controls)...")
             Try

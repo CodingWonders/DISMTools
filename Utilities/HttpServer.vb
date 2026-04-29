@@ -4,15 +4,15 @@ Imports System.Threading
 Imports System.Threading.Tasks
 
 ''' <summary>
-''' The tour server class provides means to start a tiny HTTP server for the DISMTools Tour
+''' The tour server class provides means to start a tiny HTTP server for pages hosted by DISMTools.
 ''' </summary>
 ''' <remarks>
 ''' A HTTP server like this one (or IIS, or Apache) is needed because YouTube videos no longer work
-''' in the DISMTools Tour when their respective pages are invoked directly (you can distinguish by
+''' in DISMTools-hosted pages when their respective pages are invoked directly (you can distinguish by
 ''' looking at "file:///" in the browser's address bar). This fixes any YouTube video player and
 ''' CORS issues that may arise.
 ''' </remarks>
-Public Class TourServer
+Public Class DTHttpServer
 
     Private ReadOnly _rootDir As String
     Private ReadOnly _tcpPort As Integer

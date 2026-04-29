@@ -1,5 +1,7 @@
 ﻿Public Class HelpVideoPlayer
 
+    Private VideoServer As New DTHttpServer(Path.Combine(Application.StartupPath, "videos"), 2026)
+
     Private Sub HelpVideoPlayer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -26,6 +28,11 @@
             Case 5
                 Text = "Lettore video DISMTools"
         End Select
+
+        VideoServer.StartServer()
+        If VideoServer.IsListenerAlive() Then
+            WebBrowser1.Navigate("http://localhost:2026/videoplay.html")
+        End If
     End Sub
 
     Private Sub HelpVideoPlayer_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
@@ -33,5 +40,9 @@
             Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
             WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
+    End Sub
+
+    Private Sub HelpVideoPlayer_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        VideoServer.StopServer()
     End Sub
 End Class
