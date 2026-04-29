@@ -203,6 +203,7 @@ Public Class MainForm
 
     ' Tour server
     Public ReadOnly tourServer As DTHttpServer = New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+    Private ReadOnly videoServer As New DTHttpServer(Path.Combine(Application.StartupPath, "videos"), 2026)
 
     ' Contemporaneus Preview
     Public MountedImageList As New List(Of WindowsImage)
@@ -14678,7 +14679,10 @@ Public Class MainForm
                 MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
-            HelpVideoPlayer.Show()
+            If Not videoServer.IsListenerAlive Then videoServer.StartServer()
+            If videoServer.IsListenerAlive() Then
+                Process.Start("http://localhost:2026/videoplay.html")
+            End If
         End If
     End Sub
 
