@@ -4650,8 +4650,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Options"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Help Topics"
-                        GlossaryToolStripMenuItem.Text = "Glossary"
-                        CommandHelpToolStripMenuItem.Text = "Command help..."
                         AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "More information"
@@ -4985,8 +4983,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Opciones"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
-                        GlossaryToolStripMenuItem.Text = "Glosario"
-                        CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                         AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Más información"
@@ -5320,8 +5316,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Paramètres"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
-                        GlossaryToolStripMenuItem.Text = "Glossaire"
-                        CommandHelpToolStripMenuItem.Text = "Aide à la commande..."
                         AboutDISMToolsToolStripMenuItem.Text = "À propos de DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Plus d'informations"
@@ -5654,8 +5648,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Opções"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
-                        GlossaryToolStripMenuItem.Text = "Glossário"
-                        CommandHelpToolStripMenuItem.Text = "Ajuda de comando..."
                         AboutDISMToolsToolStripMenuItem.Text = "Acerca do DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Mais informações"
@@ -5988,8 +5980,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Opzioni"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Argomenti guida in linea"
-                        GlossaryToolStripMenuItem.Text = "Glossario"
-                        CommandHelpToolStripMenuItem.Text = "Aiuto per i comandi..."
                         AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Altre informazioni"
@@ -6329,8 +6319,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Options"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Help Topics"
-                GlossaryToolStripMenuItem.Text = "Glossary"
-                CommandHelpToolStripMenuItem.Text = "Command help..."
                 AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "More information"
@@ -6665,8 +6653,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Opciones"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
-                GlossaryToolStripMenuItem.Text = "Glosario"
-                CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                 AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "Más información"
@@ -7000,8 +6986,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Paramètres"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
-                GlossaryToolStripMenuItem.Text = "Glossaire"
-                CommandHelpToolStripMenuItem.Text = "Aide à la commande..."
                 AboutDISMToolsToolStripMenuItem.Text = "À propos de DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "Plus d'informations"
@@ -7336,8 +7320,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Opções"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
-                GlossaryToolStripMenuItem.Text = "Glossário"
-                CommandHelpToolStripMenuItem.Text = "Ajuda de comando..."
                 AboutDISMToolsToolStripMenuItem.Text = "Acerca do DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "Mais informações"
@@ -7671,8 +7653,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Opzioni"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
-                GlossaryToolStripMenuItem.Text = "Glossario"
-                CommandHelpToolStripMenuItem.Text = "Aiuto per i comandi..."
                 AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
                 ' Menu - Tour Server
                 TourActionsTSMI.Text = "Azioni tour"
@@ -10042,7 +10022,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave, ImportDriver.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave, ImportDriver.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -10466,11 +10446,11 @@ Public Class MainForm
         ShowChildDescs(False, 20)
     End Sub
 
-    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
+    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(False, 21)
     End Sub
 
-    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
+    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(False, 22)
     End Sub
 

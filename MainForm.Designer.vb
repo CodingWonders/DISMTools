@@ -212,8 +212,6 @@ Partial Class MainForm
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DISMToolsTourToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GlossaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CommandHelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
@@ -1747,7 +1745,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1762,24 +1760,9 @@ Partial Class MainForm
         'DISMToolsTourToolStripMenuItem
         '
         Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
+        Me.DISMToolsTourToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
         Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
-        '
-        'GlossaryToolStripMenuItem
-        '
-        Me.GlossaryToolStripMenuItem.Name = "GlossaryToolStripMenuItem"
-        Me.GlossaryToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.GlossaryToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.GlossaryToolStripMenuItem.Text = "Glossary"
-        Me.GlossaryToolStripMenuItem.Visible = False
-        '
-        'CommandHelpToolStripMenuItem
-        '
-        Me.CommandHelpToolStripMenuItem.Name = "CommandHelpToolStripMenuItem"
-        Me.CommandHelpToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.CommandHelpToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.CommandHelpToolStripMenuItem.Text = "Command help..."
-        Me.CommandHelpToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator10
         '
@@ -4941,8 +4924,6 @@ Partial Class MainForm
     Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpTopicsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GlossaryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CommandHelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents AboutDISMToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HomePanel As System.Windows.Forms.Panel
