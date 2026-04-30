@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Public Class ExportDrivers
 
@@ -61,6 +62,8 @@ Public Class ExportDrivers
         {"WPD", "Includes WPD devices."}
     }
 
+    Private ProvidedImageClassNames As New List(Of String)
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -100,8 +103,8 @@ Public Class ExportDrivers
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If RadioButton2.Checked AndAlso Not DriverClassInfoDictionary.ContainsKey(SelectedClass) Then
-            MsgBox("You must specify a class name from the list below.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+        If RadioButton2.Checked AndAlso ComboBox1.SelectedItem = "-----------------" Then
+            MessageBox.Show("This class name is not valid.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
         End If
         ProgressPanel.drvExportAllDrvs = RadioButton1.Checked
@@ -219,6 +222,26 @@ Public Class ExportDrivers
         ComboBox1.Items.AddRange(DriverClassInfoDictionary.Keys.ToArray())
         ComboBox1.SelectedItem = SelectedClass
         ImageTaskHeader1.HideWindowTitle(handle)
+
+        Try
+            Dim ObtainedDrivers As Object = If(MainForm.CurrentImage.ImageDrivers_Backup.Count > MainForm.CurrentImage.ImageDrivers.Count, MainForm.CurrentImage.ImageDrivers_Backup, MainForm.CurrentImage.ImageDrivers)
+
+            If TypeOf ObtainedDrivers Is DismDriverPackageCollection Then
+                ProvidedImageClassNames = CType(ObtainedDrivers, DismDriverPackageCollection).Select(Function(driver) driver.ClassName).Distinct().ToList()
+            ElseIf TypeOf ObtainedDrivers Is List(Of ImageDriver) Then
+                ProvidedImageClassNames = CType(ObtainedDrivers, List(Of ImageDriver)).Select(Function(driver) driver.DriverClassName).Distinct().ToList()
+            End If
+
+            If ProvidedImageClassNames.Any() Then
+                Dim UniqueImageClassNames As IEnumerable(Of String) = ProvidedImageClassNames.Where(Function(cn) Not DriverClassInfoDictionary.ContainsKey(cn))
+                If UniqueImageClassNames.Any() Then
+                    ComboBox1.Items.Add("-----------------")
+                    ComboBox1.Items.AddRange(UniqueImageClassNames.Select(Function(cn) cn).ToArray())
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -233,10 +256,18 @@ Public Class ExportDrivers
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
-        If SelectedClassInfo.Value IsNot Nothing Then
-            Label5.Text = SelectedClassInfo.Value
-            SelectedClass = SelectedClassInfo.Key
+        If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
+            Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
+            If SelectedClassInfo.Value IsNot Nothing Then
+                Label5.Text = SelectedClassInfo.Value
+                SelectedClass = SelectedClassInfo.Key
+            End If
+        Else
+            ' We are using a class name that is not in the default set; accept it anyway,
+            ' but don't show any notes because we don't know where these are, or whether
+            ' they are localized.
+            Label5.Text = ""
+            SelectedClass = ComboBox1.SelectedItem
         End If
     End Sub
 End Class
