@@ -103,13 +103,13 @@ Partial Class MainForm
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 14.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel1.ForeColor = System.Drawing.Color.Black
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.White
         Me.LinkLabel1.Location = New System.Drawing.Point(82, 8)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(255, 25)
@@ -130,13 +130,13 @@ Partial Class MainForm
         '
         'LinkLabel2
         '
-        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel2.AutoSize = True
         Me.LinkLabel2.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel2.ForeColor = System.Drawing.Color.Black
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel2.LinkColor = System.Drawing.Color.White
         Me.LinkLabel2.Location = New System.Drawing.Point(82, 38)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(242, 25)
@@ -157,13 +157,13 @@ Partial Class MainForm
         '
         'LinkLabel3
         '
-        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel3.AutoSize = True
         Me.LinkLabel3.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel3.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel3.ForeColor = System.Drawing.Color.Black
         Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel3.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel3.LinkColor = System.Drawing.Color.White
         Me.LinkLabel3.Location = New System.Drawing.Point(82, 68)
         Me.LinkLabel3.Name = "LinkLabel3"
         Me.LinkLabel3.Size = New System.Drawing.Size(413, 25)
@@ -173,7 +173,7 @@ Partial Class MainForm
         '
         'ExitLink
         '
-        Me.ExitLink.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.ExitLink.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.ExitLink.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ExitLink.AutoEllipsis = True
@@ -210,13 +210,13 @@ Partial Class MainForm
         '
         'LinkLabel6
         '
-        Me.LinkLabel6.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel6.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel6.AutoSize = True
         Me.LinkLabel6.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel6.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel6.ForeColor = System.Drawing.Color.Black
         Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel6.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel6.LinkColor = System.Drawing.Color.White
         Me.LinkLabel6.Location = New System.Drawing.Point(82, 128)
         Me.LinkLabel6.Name = "LinkLabel6"
         Me.LinkLabel6.Size = New System.Drawing.Size(237, 25)
@@ -226,13 +226,13 @@ Partial Class MainForm
         '
         'LinkLabel4
         '
-        Me.LinkLabel4.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel4.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel4.AutoSize = True
         Me.LinkLabel4.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel4.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel4.ForeColor = System.Drawing.Color.Black
         Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel4.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel4.LinkColor = System.Drawing.Color.White
         Me.LinkLabel4.Location = New System.Drawing.Point(82, 98)
         Me.LinkLabel4.Name = "LinkLabel4"
         Me.LinkLabel4.Size = New System.Drawing.Size(290, 25)
@@ -270,7 +270,7 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoEllipsis = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.ForeColor = System.Drawing.Color.Black
+        Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Location = New System.Drawing.Point(12, 507)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(670, 45)
@@ -317,7 +317,7 @@ Partial Class MainForm
         Me.Label3.AutoSize = True
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 14.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Black
+        Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(9, 9)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(455, 25)
@@ -326,13 +326,13 @@ Partial Class MainForm
         '
         'LinkLabel5
         '
-        Me.LinkLabel5.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel5.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel5.AutoSize = True
         Me.LinkLabel5.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel5.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel5.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel5.ForeColor = System.Drawing.Color.White
         Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel5.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel5.LinkColor = System.Drawing.Color.White
         Me.LinkLabel5.Location = New System.Drawing.Point(82, 188)
         Me.LinkLabel5.Name = "LinkLabel5"
         Me.LinkLabel5.Size = New System.Drawing.Size(50, 25)
@@ -342,13 +342,13 @@ Partial Class MainForm
         '
         'LinkLabel10
         '
-        Me.LinkLabel10.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel10.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel10.AutoSize = True
         Me.LinkLabel10.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel10.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel10.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel10.ForeColor = System.Drawing.Color.White
         Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel10.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel10.LinkColor = System.Drawing.Color.White
         Me.LinkLabel10.Location = New System.Drawing.Point(82, 148)
         Me.LinkLabel10.Name = "LinkLabel10"
         Me.LinkLabel10.Size = New System.Drawing.Size(326, 25)
@@ -358,13 +358,13 @@ Partial Class MainForm
         '
         'LinkLabel9
         '
-        Me.LinkLabel9.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel9.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel9.AutoSize = True
         Me.LinkLabel9.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel9.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel9.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel9.ForeColor = System.Drawing.Color.White
         Me.LinkLabel9.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel9.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel9.LinkColor = System.Drawing.Color.White
         Me.LinkLabel9.Location = New System.Drawing.Point(82, 118)
         Me.LinkLabel9.Name = "LinkLabel9"
         Me.LinkLabel9.Size = New System.Drawing.Size(270, 25)
@@ -374,13 +374,13 @@ Partial Class MainForm
         '
         'LinkLabel7
         '
-        Me.LinkLabel7.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel7.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel7.AutoSize = True
         Me.LinkLabel7.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel7.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel7.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel7.ForeColor = System.Drawing.Color.White
         Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel7.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel7.LinkColor = System.Drawing.Color.White
         Me.LinkLabel7.Location = New System.Drawing.Point(82, 68)
         Me.LinkLabel7.Name = "LinkLabel7"
         Me.LinkLabel7.Size = New System.Drawing.Size(268, 25)
@@ -390,13 +390,13 @@ Partial Class MainForm
         '
         'LinkLabel8
         '
-        Me.LinkLabel8.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel8.ActiveLinkColor = System.Drawing.Color.LawnGreen
         Me.LinkLabel8.AutoSize = True
         Me.LinkLabel8.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel8.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel8.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel8.ForeColor = System.Drawing.Color.White
         Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
-        Me.LinkLabel8.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel8.LinkColor = System.Drawing.Color.White
         Me.LinkLabel8.Location = New System.Drawing.Point(82, 38)
         Me.LinkLabel8.Name = "LinkLabel8"
         Me.LinkLabel8.Size = New System.Drawing.Size(481, 25)
@@ -470,8 +470,8 @@ Partial Class MainForm
         Me.Controls.Add(Me.ExitLink)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.PxeHelpersMenu)
         Me.Controls.Add(Me.MainMenuPanel)
+        Me.Controls.Add(Me.PxeHelpersMenu)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ForeColor = System.Drawing.Color.White
