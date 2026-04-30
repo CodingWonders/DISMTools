@@ -1488,6 +1488,15 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub WizardBtn_Click(sender As Object, e As EventArgs) Handles WizardBtn.Click
+        Try
+            If InstalledDriverList_Backup.Count > InstalledDriverList.Count Then
+                DriverFilterAssistantDialog.ProvidedImageClassNames = InstalledDriverList_Backup.Select(Function(driver) driver.DriverClassName).Distinct().ToList()
+            Else
+                DriverFilterAssistantDialog.ProvidedImageClassNames = InstalledDriverList.Select(Function(driver) driver.ClassName).Distinct().ToList()
+            End If
+        Catch ex As Exception
+            ' ignore
+        End Try
         If DriverFilterAssistantDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             SearchBox1.Text = DriverFilterAssistantDialog.AppliedQuery
         End If

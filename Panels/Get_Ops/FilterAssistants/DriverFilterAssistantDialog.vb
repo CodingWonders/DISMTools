@@ -74,6 +74,8 @@ Public Class DriverFilterAssistantDialog
         {12, "December"}
     }
 
+    Public ProvidedImageClassNames As New List(Of String)
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If ComboBox1.SelectedIndex < 0 Then Exit Sub
 
@@ -89,6 +91,10 @@ Public Class DriverFilterAssistantDialog
                 AppliedQuery = String.Format("prov:{0}", TextBox3.Text)
             Case 3
                 ' Class Name
+                If ComboBox2.SelectedItem = "-----------------" Then
+                    MessageBox.Show("This class name is not valid.", Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    Exit Sub
+                End If
                 AppliedQuery = String.Format("cn:{0}", ComboBox2.SelectedItem)
             Case 4
                 ' Inbox Status
@@ -160,6 +166,14 @@ Public Class DriverFilterAssistantDialog
 
         If ComboBox3.SelectedIndex < 0 Then ComboBox3.SelectedIndex = 0
         If ComboBox4.SelectedIndex < 0 Then ComboBox4.SelectedIndex = 0
+
+        If ProvidedImageClassNames.Any() Then
+            Dim UniqueImageClassNames As IEnumerable(Of String) = ProvidedImageClassNames.Where(Function(cn) Not DriverClassInfoDictionary.ContainsKey(cn))
+            If UniqueImageClassNames.Any() Then
+                ComboBox2.Items.Add("-----------------")
+                ComboBox2.Items.AddRange(UniqueImageClassNames.Select(Function(cn) cn).ToArray())
+            End If
+        End If
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
