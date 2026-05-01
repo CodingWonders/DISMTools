@@ -16,7 +16,7 @@ Customizable: Yes
 # )
 
 $gitFolders = @(
-	"<your folders here>"
+    "<your folders here>"
 )
 
 # leave the rest as is
@@ -33,12 +33,12 @@ $SOURCECONTROL_REGISTEREDAPPID = "windows.immersivecontrolpanel_cw5n1h2txyewy!mi
 
 # go through all the user-specified folders to be tracked by VCS
 foreach ($gitFolder in $gitFolders) {
-	# for each entry we need to create a new GUID
-	$gitFolderGuid = (New-Guid).Guid.ToUpper()
+    # for each entry we need to create a new GUID
+    $gitFolderGuid = (New-Guid).Guid.ToUpper()
 
-	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F
-	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V FolderType /T REG_SZ /D "$SOURCECONTROL_FOLDERTYPEGUID"
-	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V Path /T REG_SZ /D "$gitFolder"
-	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V PropertyProvider /T REG_SZ /D "$SOURCECONTROL_PROPERTYPROVIDERGUID"
-	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V RegisteredAppID /T REG_SZ /D "$SOURCECONTROL_REGISTEREDAPPID"
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V FolderType /T REG_SZ /D "$SOURCECONTROL_FOLDERTYPEGUID"
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V Path /T REG_SZ /D "$gitFolder"
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V PropertyProvider /T REG_SZ /D "$SOURCECONTROL_PROPERTYPROVIDERGUID"
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V RegisteredAppID /T REG_SZ /D "$SOURCECONTROL_REGISTEREDAPPID"
 }
