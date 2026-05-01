@@ -33,6 +33,7 @@ Partial Class MainForm
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton
         Me.EditorFD = New System.Windows.Forms.FontDialog
+        Me.Button2 = New System.Windows.Forms.Button
         Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
         Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
         Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
@@ -196,6 +197,7 @@ Partial Class MainForm
         '
         Me.Panel2.Controls.Add(Me.Label6)
         Me.Panel2.Controls.Add(Me.CheckBox1)
+        Me.Panel2.Controls.Add(Me.Button2)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel2.Location = New System.Drawing.Point(0, 329)
@@ -399,6 +401,17 @@ Partial Class MainForm
         Me.ToolStripButton7.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton7.Text = "Change Editor Font..."
         '
+        'Button2
+        '
+        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(364, 6)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(128, 23)
+        Me.Button2.TabIndex = 2
+        Me.Button2.Text = "Normalize Spacing"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -462,5 +475,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripButton7 As System.Windows.Forms.ToolStripButton
     Friend WithEvents EditorFD As System.Windows.Forms.FontDialog
     Friend WithEvents ToolStripButton8 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

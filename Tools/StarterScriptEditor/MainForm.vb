@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports System.Text.RegularExpressions
 
 Public Class MainForm
 
@@ -588,5 +589,9 @@ Public Class MainForm
         Else
             SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
         End If
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        TextBox3.Text = Regex.Replace(TextBox3.Text, ControlChars.Tab, "    ")
     End Sub
 End Class
