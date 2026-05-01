@@ -262,10 +262,12 @@ Public Class MainForm
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
         If TextBox1.Text = "" Then
             MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            NotWillingToSave = True
             Exit Sub
         End If
         If TextBox2.Text = "" Then
             MessageBox.Show("You must provide a description for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            NotWillingToSave = True
             Exit Sub
         End If
         NotWillingToSave = False
@@ -572,12 +574,15 @@ Public Class MainForm
     Private Sub ToolStripButton8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton8.Click
         If TextBox1.Text = "" Then
             MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            NotWillingToSave = True
             Exit Sub
         End If
         If TextBox2.Text = "" Then
             MessageBox.Show("You must provide a description for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            NotWillingToSave = True
             Exit Sub
         End If
+        NotWillingToSave = False
         If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
             NotWillingToSave = True
         Else
