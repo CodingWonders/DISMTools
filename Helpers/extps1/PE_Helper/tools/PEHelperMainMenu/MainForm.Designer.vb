@@ -470,8 +470,8 @@ Partial Class MainForm
         Me.Controls.Add(Me.ExitLink)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.MainMenuPanel)
         Me.Controls.Add(Me.PxeHelpersMenu)
+        Me.Controls.Add(Me.MainMenuPanel)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ForeColor = System.Drawing.Color.White
