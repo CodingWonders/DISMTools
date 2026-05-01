@@ -477,8 +477,13 @@ Public Class MainForm
                     ' Open item
                     ToolStripButton2.PerformClick()
                 Case Keys.S
-                    ' Save item
-                    ToolStripButton3.PerformClick()
+                    If e.Shift Then
+                        ' Save item AS
+                        ToolStripButton8.PerformClick()
+                    Else
+                        ' Save item
+                        ToolStripButton3.PerformClick()
+                    End If
             End Select
         End If
     End Sub
@@ -565,6 +570,14 @@ Public Class MainForm
     End Function
 
     Private Sub ToolStripButton8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton8.Click
+        If TextBox1.Text = "" Then
+            MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+        If TextBox2.Text = "" Then
+            MessageBox.Show("You must provide a description for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
         If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
             NotWillingToSave = True
         Else
