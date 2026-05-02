@@ -2946,7 +2946,6 @@ Public Class MainForm
                                 MicrosoftEdgeToolStripMenuItem.Enabled = False
 
                                 ' Disable other stuff
-                                ExportDriver.Enabled = False
                                 ReservedStorageToolStripMenuItem.Enabled = False
                                 SetSysUILang.Enabled = False
                                 ProvisioningPackagesToolStripMenuItem.Enabled = False

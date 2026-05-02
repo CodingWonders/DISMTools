@@ -110,6 +110,8 @@ Public Class ExportDrivers
         ProgressPanel.drvExportAllDrvs = RadioButton1.Checked
         ProgressPanel.drvExportSpecificClassName = SelectedClass
         ProgressPanel.OperationNum = 77
+        ' Windows 7 behaves differently from Windows 8 and later when getting drivers.
+        ProgressPanel.drvExportWin7Mode = MainForm.CurrentImage.ImageVersion.Major = 6 AndAlso MainForm.CurrentImage.ImageVersion.Minor = 1
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Visible = False
         ProgressPanel.ShowDialog(MainForm)
