@@ -2,7 +2,8 @@
 
 Public Class ServiceManagementForm
 
-    Dim ServiceList As New List(Of WindowsService)
+    Dim ServiceList As New List(Of WindowsService),
+        ModifiedServiceList As New List(Of WindowsService)
     Dim ServiceStartTypes() As String = New String() {"Boot Loader", "I/O System", "Automatic", "Manual", "Disabled"}
 
     Public Event ServiceSaveReported(current As Integer, count As Integer)
@@ -156,6 +157,7 @@ Public Class ServiceManagementForm
         SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         ListView4.Size = New Size(WindowHelper.ScaleLogical(ListView4.Width), WindowHelper.ScaleLogical(ListView4.Height))
 
+        ModifiedServiceList.Clear()
         isModified = False
 
         DynaLog.DisableLogging()
@@ -216,7 +218,17 @@ Public Class ServiceManagementForm
                 End If
             End If
 
-            ServiceList(selectedIndex).StartType = ComboBox1.SelectedIndex
+            ' Hold a copy of the service so we can queue it for modification
+            Dim newService As WindowsService = ServiceList(selectedIndex)
+            newService.StartType = ComboBox1.SelectedIndex
+
+            ' Store it in the modification queue, or update it
+            If ModifiedServiceList.Any(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase)) Then
+                Dim svcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase))
+                ModifiedServiceList(svcIndex) = newService
+            Else
+                ModifiedServiceList.Add(newService)
+            End If
 
             ' We don't have to uncheck the box, we simply disable it, if it's not automatic
             CheckBox1.Enabled = (ComboBox1.SelectedIndex = WindowsService.ServiceStartType.Automatic)
@@ -235,9 +247,9 @@ Public Class ServiceManagementForm
         isBusy = True
         WindowHelper.DisableCloseCapability(Handle)
         If Await Task.Run(Function()
-                              Return WindowsServiceHelper.SaveServiceInformation(mntPath, ServiceList, Sub(current, count)
-                                                                                                           ReportServiceSave(current, count)
-                                                                                                       End Sub)
+                              Return WindowsServiceHelper.SaveServiceInformation(mntPath, ModifiedServiceList, Sub(current, count)
+                                                                                                                   ReportServiceSave(current, count)
+                                                                                                               End Sub)
                           End Function) Then
             MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
                    "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
@@ -282,6 +294,7 @@ Public Class ServiceManagementForm
         NoServiceSelectedPanel.Visible = True
         ListView1.Items.Clear()
 
+        ModifiedServiceList.Clear()
         isModified = False
 
         DynaLog.DisableLogging()
@@ -341,7 +354,19 @@ Public Class ServiceManagementForm
             If MessageBox.Show("Continuing with the removal of this service can cause the target system to become either unstable or unbootable. Do you want to continue?",
                                "Remove service", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
 
-            ServiceList(ListView1.FocusedItem.Index).MarkedForDeletion = True
+            Dim selectedIndex As Integer = ListView1.FocusedItem.Index
+
+            ' Hold a copy of the service so we can queue it for modification
+            Dim newService As WindowsService = ServiceList(selectedIndex)
+            newService.MarkedForDeletion = True
+
+            ' Store it in the modification queue, or update it
+            If ModifiedServiceList.Any(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase)) Then
+                Dim svcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase))
+                ModifiedServiceList(svcIndex) = newService
+            Else
+                ModifiedServiceList.Add(newService)
+            End If
 
             MessageBox.Show("The service has been successfully scheduled for deletion. The removal of this service will take place when you save the changes. " &
                             "Should you ever need this service back, please import the service information backup that will be made during the save process.",

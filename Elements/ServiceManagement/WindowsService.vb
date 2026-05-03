@@ -347,6 +347,11 @@
         Me.UserServiceFlags = userServiceFlags
     End Sub
 
+    Public Overrides Function Equals(obj As Object) As Boolean
+        If Not TypeOf obj Is WindowsService Then Return False
+        Return Name.Equals(CType(obj, WindowsService).Name, StringComparison.OrdinalIgnoreCase)
+    End Function
+
     ''' <summary>
     ''' Parses a start type enum value to a string
     ''' </summary>
