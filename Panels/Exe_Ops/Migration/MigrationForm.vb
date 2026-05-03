@@ -22,6 +22,8 @@ Public Class MigrationForm
         MainForm.LoadDTSettings(1)
         Threading.Thread.Sleep(72)
         DynaLog.LogMessage("Saving new settings...")
+        MainForm.Width = WindowHelper.ScaleLogical(1280)
+        MainForm.Height = WindowHelper.ScaleLogical(720)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
                 msg = "Saving new settings file..."
