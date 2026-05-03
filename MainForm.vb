@@ -1019,6 +1019,13 @@ Public Class MainForm
             MessageBox.Show("DISMTools has detected that it is running on a Windows Server Core system. Some functionality may not work as expected.",
                             "Windows Server Core detected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
+
+        ' If the window size is lower than 720p (1280x720), then we'll make it 1280x720, since,
+        ' even though we accept window sizes LOWER than 720p, we consider these either obscure
+        ' window sizes or unacceptable (such as 800x600).
+        If Width < WindowHelper.ScaleLogical(1280) And Height < WindowHelper.ScaleLogical(720) Then
+            Size = WindowHelper.ScaleSizeLogical(1280, 720)
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
