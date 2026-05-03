@@ -1381,8 +1381,8 @@ Public Class MainForm
                 AutoCleanMounts = (CInt(ShutdownKey.GetValue("AutoCleanMounts")) = 1)
                 ShutdownKey.Close()
                 Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
-                Width = CInt(WndKey.GetValue("WndWidth"))
-                Height = CInt(WndKey.GetValue("WndHeight"))
+                Width = WindowHelper.ScaleLogical(CInt(WndKey.GetValue("WndWidth")))
+                Height = WindowHelper.ScaleLogical(CInt(WndKey.GetValue("WndHeight")))
                 StartPosition = If(CInt(WndKey.GetValue("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
                 If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
                 If StartPosition <> FormStartPosition.CenterScreen Then
@@ -1504,8 +1504,8 @@ Public Class MainForm
                     StartupRemount = CInt(settingData("Startup")("RemountImages")) = 1
                     StartupUpdateCheck = CInt(settingData("Startup")("CheckForUpdates")) = 1
                     AutoCleanMounts = CInt(settingData("Shutdown")("AutoCleanMounts")) = 1
-                    Width = CInt(settingData("WndParams")("WndWidth"))
-                    Height = CInt(settingData("WndParams")("WndHeight"))
+                    Width = WindowHelper.ScaleLogical(CInt(settingData("WndParams")("WndWidth")))
+                    Height = WindowHelper.ScaleLogical(CInt(settingData("WndParams")("WndHeight")))
                     StartPosition = If(CInt(settingData("WndParams")("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
                     If StartPosition = FormStartPosition.CenterScreen Then
                         Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
@@ -4119,8 +4119,8 @@ Public Class MainForm
                 settingsData.Sections.AddSection("Shutdown")
                 settingsData("Shutdown").AddKey("AutoCleanMounts", If(AutoCleanMounts, 1, 0))
                 settingsData.Sections.AddSection("WndParams")
-                settingsData("WndParams").AddKey("WndWidth", WndWidth)
-                settingsData("WndParams").AddKey("WndHeight", WndHeight)
+                settingsData("WndParams").AddKey("WndWidth", Math.Round(WndWidth / (WindowHelper.GetSystemDpi() / 100), 0))
+                settingsData("WndParams").AddKey("WndHeight", Math.Round(WndHeight / (WindowHelper.GetSystemDpi() / 100), 0))
                 settingsData("WndParams").AddKey("WndCenter", If(Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2), 1, 0))
                 settingsData("WndParams").AddKey("WndLeft", WndLeft)
                 settingsData("WndParams").AddKey("WndTop", WndTop)
@@ -4231,8 +4231,8 @@ Public Class MainForm
                     ShutdownKey.Close()
                     DynaLog.LogMessage("Configuring window parameters...")
                     Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
-                    WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
-                    WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
+                    WndKey.SetValue("WndWidth", Math.Round(WndWidth / (WindowHelper.GetSystemDpi() / 100), 0), RegistryValueKind.DWord)
+                    WndKey.SetValue("WndHeight", Math.Round(WndHeight / (WindowHelper.GetSystemDpi() / 100), 0), RegistryValueKind.DWord)
                     If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
                         WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
                     Else
@@ -4387,6 +4387,7 @@ Public Class MainForm
         ToolStripButton3.Image = GetGlyphResource("prj_unload_glyph")
         ToolStripButton4.Image = GetGlyphResource("progress_window")
         RefreshViewTSB.Image = GetGlyphResource("refresh_glyph")
+        MenuToggle.Image = GetGlyphResource("menu")
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
                 ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
@@ -15116,6 +15117,9 @@ Public Class MainForm
                 End If
             End If
         End If
+        ' Toggle Menu button and side panel visibility
+        MenuToggle.Visible = Width <= WindowHelper.ScaleLogical(1024)
+        ProjectSidePanel.Visible = Width > WindowHelper.ScaleLogical(1024)
     End Sub
 
     Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
@@ -15900,5 +15904,9 @@ Public Class MainForm
             UserDataManagerModule.CopyUserDataToProgramFiles("themes")
             ThemeDesignerTimer.Enabled = False
         End If
+    End Sub
+
+    Private Sub MenuToggle_Click(sender As Object, e As EventArgs) Handles MenuToggle.Click
+        ProjectSidePanel.Visible = Not ProjectSidePanel.Visible
     End Sub
 End Class

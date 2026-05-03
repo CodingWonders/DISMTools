@@ -407,8 +407,10 @@ Partial Class MainForm
         Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel13 = New System.Windows.Forms.LinkLabel()
         Me.ProjectViewHeader = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TimeLabel = New System.Windows.Forms.Label()
         Me.GreetingLabel = New System.Windows.Forms.Label()
+        Me.MenuToggle = New System.Windows.Forms.Button()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
@@ -573,6 +575,7 @@ Partial Class MainForm
         Me.Panel10.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.ProjectViewHeader.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.ToolStrip2.SuspendLayout()
@@ -4012,8 +4015,7 @@ Partial Class MainForm
         'ProjectViewHeader
         '
         Me.ProjectViewHeader.BackColor = System.Drawing.Color.FromArgb(CType(CType(4, Byte), Integer), CType(CType(17, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.ProjectViewHeader.Controls.Add(Me.TimeLabel)
-        Me.ProjectViewHeader.Controls.Add(Me.GreetingLabel)
+        Me.ProjectViewHeader.Controls.Add(Me.TableLayoutPanel1)
         Me.ProjectViewHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.ProjectViewHeader.ForeColor = System.Drawing.Color.White
         Me.ProjectViewHeader.Location = New System.Drawing.Point(0, 0)
@@ -4021,14 +4023,32 @@ Partial Class MainForm
         Me.ProjectViewHeader.Size = New System.Drawing.Size(1008, 48)
         Me.ProjectViewHeader.TabIndex = 0
         '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 3
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.727272!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.2727299!))
+        Me.TableLayoutPanel1.Controls.Add(Me.TimeLabel, 2, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.GreetingLabel, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.MenuToggle, 0, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 1
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1008, 48)
+        Me.TableLayoutPanel1.TabIndex = 2
+        '
         'TimeLabel
         '
-        Me.TimeLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TimeLabel.AutoEllipsis = True
+        Me.TimeLabel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TimeLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TimeLabel.Location = New System.Drawing.Point(658, 11)
+        Me.TimeLabel.Location = New System.Drawing.Point(749, 0)
         Me.TimeLabel.Name = "TimeLabel"
-        Me.TimeLabel.Size = New System.Drawing.Size(340, 27)
+        Me.TimeLabel.Padding = New System.Windows.Forms.Padding(0, 12, 8, 0)
+        Me.TimeLabel.Size = New System.Drawing.Size(256, 48)
         Me.TimeLabel.TabIndex = 1
         Me.TimeLabel.Text = "Label40"
         Me.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -4036,12 +4056,28 @@ Partial Class MainForm
         'GreetingLabel
         '
         Me.GreetingLabel.AutoSize = True
+        Me.GreetingLabel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GreetingLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GreetingLabel.Location = New System.Drawing.Point(8, 8)
+        Me.GreetingLabel.Location = New System.Drawing.Point(51, 0)
         Me.GreetingLabel.Name = "GreetingLabel"
-        Me.GreetingLabel.Size = New System.Drawing.Size(323, 30)
+        Me.GreetingLabel.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
+        Me.GreetingLabel.Size = New System.Drawing.Size(692, 48)
         Me.GreetingLabel.TabIndex = 0
         Me.GreetingLabel.Text = "Welcome to this servicing session"
+        Me.GreetingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'MenuToggle
+        '
+        Me.MenuToggle.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MenuToggle.FlatAppearance.BorderSize = 0
+        Me.MenuToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.MenuToggle.Image = Global.DISMTools.My.Resources.Resources.menu_dark
+        Me.MenuToggle.Location = New System.Drawing.Point(3, 3)
+        Me.MenuToggle.Name = "MenuToggle"
+        Me.MenuToggle.Size = New System.Drawing.Size(42, 42)
+        Me.MenuToggle.TabIndex = 2
+        Me.MenuToggle.UseVisualStyleBackColor = True
+        Me.MenuToggle.Visible = False
         '
         'ToolStrip1
         '
@@ -4702,8 +4738,8 @@ Partial Class MainForm
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
-        Me.MaximumSize = New System.Drawing.Size(4096, 4096)
-        Me.MinimumSize = New System.Drawing.Size(1280, 718)
+        Me.MaximumSize = New System.Drawing.Size(8192, 8192)
+        Me.MinimumSize = New System.Drawing.Size(800, 600)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "DISMTools"
@@ -4780,7 +4816,8 @@ Partial Class MainForm
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
         Me.ProjectViewHeader.ResumeLayout(False)
-        Me.ProjectViewHeader.PerformLayout()
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
@@ -5293,4 +5330,6 @@ Partial Class MainForm
     Friend WithEvents ThemeDesigner_TSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SSETimer As System.Windows.Forms.Timer
     Friend WithEvents ThemeDesignerTimer As System.Windows.Forms.Timer
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents MenuToggle As System.Windows.Forms.Button
 End Class
