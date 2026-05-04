@@ -12474,32 +12474,36 @@ Public Class MainForm
     End Sub
 
     Private Sub AccessDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AccessDirectoryToolStripMenuItem.Click
-        DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
-        If prjTreeView.SelectedNode.Name = "parent" Then
-            Process.Start(projPath)
-        ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
-            Process.Start(projPath & "\dandi")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
-            Process.Start(projPath & "\dandi\x86")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
-            Process.Start(projPath & "\dandi\amd64")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
-            Process.Start(projPath & "\dandi\arm")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
-            Process.Start(projPath & "\dandi\arm64")
-        ElseIf prjTreeView.SelectedNode.Name = "mount" Then
-            If Not MountDir = (projPath & "\mount") Then
-                Process.Start(MountDir)
-            Else
-                Process.Start(projPath & "\mount")
+        Try
+            DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
+            If prjTreeView.SelectedNode.Name = "parent" Then
+                Process.Start(projPath)
+            ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
+                Process.Start(projPath & "\dandi")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+                Process.Start(projPath & "\dandi\x86")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+                Process.Start(projPath & "\dandi\amd64")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+                Process.Start(projPath & "\dandi\arm")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+                Process.Start(projPath & "\dandi\arm64")
+            ElseIf prjTreeView.SelectedNode.Name = "mount" Then
+                If Not MountDir = (projPath & "\mount") Then
+                    Process.Start(MountDir)
+                Else
+                    Process.Start(projPath & "\mount")
+                End If
+            ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
+                Process.Start(projPath & "\unattend_xml")
+            ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
+                Process.Start(projPath & "\scr_temp")
+            ElseIf prjTreeView.SelectedNode.Name = "reports" Then
+                Process.Start(projPath & "\reports")
             End If
-        ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
-            Process.Start(projPath & "\unattend_xml")
-        ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
-            Process.Start(projPath & "\scr_temp")
-        ElseIf prjTreeView.SelectedNode.Name = "reports" Then
-            Process.Start(projPath & "\reports")
-        End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub UnloadProjectToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem1.Click
