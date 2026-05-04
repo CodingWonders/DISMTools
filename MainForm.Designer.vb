@@ -4739,7 +4739,7 @@ Partial Class MainForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
         Me.MaximumSize = New System.Drawing.Size(8192, 8192)
-        Me.MinimumSize = New System.Drawing.Size(800, 600)
+        Me.MinimumSize = New System.Drawing.Size(1280, 720)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "DISMTools"
