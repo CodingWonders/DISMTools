@@ -907,9 +907,18 @@ Public Class ImgMount
     Private Sub IsoExtractorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles IsoExtractorBW.RunWorkerCompleted
         ProgressReporter.Hide()
         If e.Error Is Nothing Then
-            ' Then we've succeeded
-            MessageBox.Show("The Windows images in the specified ISO file have been successfully copied to your local disk under a folder called " &
-                            Quote & "IsoFileContents" & Quote & ". Now, specify one of the images there.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ' Try to find the install image
+            ImageFilePickerDialog.SourceImageFileRepoPath = Path.Combine(projPath, "IsoFileContents")
+            If ImageFilePickerDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                TextBox1.Text = ImageFilePickerDialog.SelectedImageFilePath
+            Else
+                MessageBox.Show("The copied installation image will be selected automatically for you, if found...", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Dim installImagePath_WIM As String = Path.Combine(projPath, "IsoFileContents", "install.wim")
+                Dim installImagePath_ESD As String = Path.Combine(projPath, "IsoFileContents", "install.esd")
+
+                If File.Exists(installImagePath_WIM) Then TextBox1.Text = installImagePath_WIM
+                If File.Exists(installImagePath_ESD) Then TextBox1.Text = installImagePath_ESD
+            End If
         Else
             ' Then we've failed
             MessageBox.Show("The Windows images in the specified ISO file were not copied to your local disk. Copy any WIM or ESD files from the sources folder of your ISO file.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
