@@ -2535,10 +2535,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click, ToolStripButton6.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create.html")
-        HelpBrowserForm.MinimizeBox = False
-        HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog(Me)
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\unattend\unatt_create.html")
     End Sub
 
     Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged

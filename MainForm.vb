@@ -10708,15 +10708,6 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
-        If HelpBrowserForm.Visible Then
-            DynaLog.LogMessage("The help browser is open. Attempting closure...")
-            HelpBrowserForm.Close()
-            If HelpBrowserForm.Visible Then
-                DynaLog.LogMessage("The help browser is still open. Cannot continue closure")
-                e.Cancel = True
-                Exit Sub
-            End If
-        End If
         If InfoSaveResults.Visible Then
             DynaLog.LogMessage("The info saver result viewer is open. Attempting closure...")
             InfoSaveResults.Close()
@@ -13875,20 +13866,7 @@ Public Class MainForm
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
-        If HelpBrowserForm.Visible Then
-            DynaLog.LogMessage("Showing Help docs window...")
-            If HelpBrowserForm.WindowState = FormWindowState.Minimized Then
-                HelpBrowserForm.WindowState = FormWindowState.Normal
-            Else
-                HelpBrowserForm.BringToFront()
-            End If
-        Else
-            DynaLog.LogMessage("Loading Help docs window...")
-            HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
-            HelpBrowserForm.MinimizeBox = True
-            HelpBrowserForm.MaximizeBox = True
-            HelpBrowserForm.Show()
-        End If
+        HelpDocsModule.DisplayHelpDocumentation("docs\index.html")
     End Sub
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
@@ -13986,45 +13964,27 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\new_to_servicing.html")
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html#first-steps")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html", "first-steps")
     End Sub
 
     Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html")
     End Sub
 
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html#best-practices")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html", "best-practices")
     End Sub
 
     Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\info\infodlgs.html")
     End Sub
 
     Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs.html#saving-image-information")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\info\infodlgs.html", "saving-image-information")
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
@@ -14033,17 +13993,11 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\online_inst_mgmt.html")
     End Sub
 
     Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\offline_inst_mgmt.html")
     End Sub
 
     Private Sub LinkLabel22_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel22.MouseEnter
@@ -14157,10 +14111,7 @@ Public Class MainForm
     End Sub
 
     Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\add_provisionedappxpackage.html#questions")
-        HelpBrowserForm.MinimizeBox = False
-        HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog(AddProvAppxPackage)
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\appx\add_provisionedappxpackage.html", "questions")
     End Sub
 
     Function CheckOSUninstallCapability() As Boolean

@@ -280,12 +280,7 @@
     <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsServiceHostGroup.vb" />
     <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
-    <Compile Include="Help\HelpBrowserForm.Designer.vb">
-      <DependentUpon>HelpBrowserForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Help\HelpBrowserForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Help\HelpDocsModule.vb" />
     <Compile Include="Help\QuickHelpModule.vb" />
     <Compile Include="MainForm.Events.vb">
       <SubType>Form</SubType>
@@ -1014,9 +1009,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Help\HelpBrowserForm.resx">
-      <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
