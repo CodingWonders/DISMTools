@@ -26,6 +26,37 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
+        Me.UserAccountModeSelectorContainerPanel = New System.Windows.Forms.Panel()
+        Me.ManualUserPickerPanel = New System.Windows.Forms.Panel()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.TextBox5 = New System.Windows.Forms.TextBox()
+        Me.UserInDomainOuPickerPanel = New System.Windows.Forms.Panel()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.UserInDomainPickerPanel = New System.Windows.Forms.Panel()
+        Me.TextBox7 = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.DsAccountObjectPickerBtn = New System.Windows.Forms.Button()
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.AddsUpnPathText = New System.Windows.Forms.Label()
+        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
+        Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.DSDomainConfigHeader = New System.Windows.Forms.Label()
         Me.DNSConfigPanel = New System.Windows.Forms.Panel()
         Me.DnsNsLookupBtn = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -46,27 +77,6 @@ Partial Class ADDSJoinDialog
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DNSConfigHeader = New System.Windows.Forms.Label()
-        Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.AddsUpnPathText = New System.Windows.Forms.Label()
-        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
-        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.TextBox5 = New System.Windows.Forms.TextBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.DSDomainConfigHeader = New System.Windows.Forms.Label()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.DS7_Description = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -81,35 +91,25 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
-        Me.DsAccountObjectPickerBtn = New System.Windows.Forms.Button()
-        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
-        Me.UserAccountModeSelectorContainerPanel = New System.Windows.Forms.Panel()
-        Me.ManualUserPickerPanel = New System.Windows.Forms.Panel()
-        Me.UserInDomainOuPickerPanel = New System.Windows.Forms.Panel()
-        Me.UserInDomainPickerPanel = New System.Windows.Forms.Panel()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.TextBox7 = New System.Windows.Forms.TextBox()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
-        Me.DNSConfigPanel.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.DSDomainConfigPanel.SuspendLayout()
+        Me.UserAccountModeSelectorContainerPanel.SuspendLayout()
+        Me.ManualUserPickerPanel.SuspendLayout()
+        Me.UserInDomainOuPickerPanel.SuspendLayout()
+        Me.UserInDomainPickerPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.DSNoDomainPanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.DNSConfigPanel.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.UserAccountModeSelectorContainerPanel.SuspendLayout()
-        Me.ManualUserPickerPanel.SuspendLayout()
-        Me.UserInDomainOuPickerPanel.SuspendLayout()
-        Me.UserInDomainPickerPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -139,6 +139,328 @@ Partial Class ADDSJoinDialog
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(784, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'DSDomainConfigPanel
+        '
+        Me.DSDomainConfigPanel.Controls.Add(Me.UserAccountModeSelectorContainerPanel)
+        Me.DSDomainConfigPanel.Controls.Add(Me.ComboBox4)
+        Me.DSDomainConfigPanel.Controls.Add(Me.TableLayoutPanel2)
+        Me.DSDomainConfigPanel.Controls.Add(Me.DSNoDomainPanel)
+        Me.DSDomainConfigPanel.Controls.Add(Me.TextBox6)
+        Me.DSDomainConfigPanel.Controls.Add(Me.Label12)
+        Me.DSDomainConfigPanel.Controls.Add(Me.Label10)
+        Me.DSDomainConfigPanel.Controls.Add(Me.Label9)
+        Me.DSDomainConfigPanel.Controls.Add(Me.TextBox4)
+        Me.DSDomainConfigPanel.Controls.Add(Me.Label8)
+        Me.DSDomainConfigPanel.Controls.Add(Me.DSDomainConfigHeader)
+        Me.DSDomainConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DSDomainConfigPanel.Location = New System.Drawing.Point(0, 0)
+        Me.DSDomainConfigPanel.Name = "DSDomainConfigPanel"
+        Me.DSDomainConfigPanel.Size = New System.Drawing.Size(784, 449)
+        Me.DSDomainConfigPanel.TabIndex = 1
+        Me.DSDomainConfigPanel.Visible = False
+        '
+        'UserAccountModeSelectorContainerPanel
+        '
+        Me.UserAccountModeSelectorContainerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.ManualUserPickerPanel)
+        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.UserInDomainOuPickerPanel)
+        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.UserInDomainPickerPanel)
+        Me.UserAccountModeSelectorContainerPanel.Location = New System.Drawing.Point(91, 109)
+        Me.UserAccountModeSelectorContainerPanel.Name = "UserAccountModeSelectorContainerPanel"
+        Me.UserAccountModeSelectorContainerPanel.Size = New System.Drawing.Size(590, 87)
+        Me.UserAccountModeSelectorContainerPanel.TabIndex = 15
+        '
+        'ManualUserPickerPanel
+        '
+        Me.ManualUserPickerPanel.Controls.Add(Me.Label17)
+        Me.ManualUserPickerPanel.Controls.Add(Me.TextBox5)
+        Me.ManualUserPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ManualUserPickerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ManualUserPickerPanel.Name = "ManualUserPickerPanel"
+        Me.ManualUserPickerPanel.Size = New System.Drawing.Size(588, 85)
+        Me.ManualUserPickerPanel.TabIndex = 0
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(23, 22)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(408, 13)
+        Me.Label17.TabIndex = 8
+        Me.Label17.Text = "Type the Security Account Manager (SAM) name of the user account in the domain:"
+        '
+        'TextBox5
+        '
+        Me.TextBox5.Location = New System.Drawing.Point(23, 41)
+        Me.TextBox5.Name = "TextBox5"
+        Me.TextBox5.Size = New System.Drawing.Size(543, 21)
+        Me.TextBox5.TabIndex = 7
+        '
+        'UserInDomainOuPickerPanel
+        '
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.ComboBox3)
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.Label15)
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.Label16)
+        Me.UserInDomainOuPickerPanel.Controls.Add(Me.ComboBox2)
+        Me.UserInDomainOuPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserInDomainOuPickerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.UserInDomainOuPickerPanel.Name = "UserInDomainOuPickerPanel"
+        Me.UserInDomainOuPickerPanel.Size = New System.Drawing.Size(588, 85)
+        Me.UserInDomainOuPickerPanel.TabIndex = 1
+        Me.UserInDomainOuPickerPanel.Visible = False
+        '
+        'ComboBox3
+        '
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Location = New System.Drawing.Point(130, 45)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(436, 21)
+        Me.ComboBox3.TabIndex = 3
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(23, 22)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(101, 13)
+        Me.Label15.TabIndex = 0
+        Me.Label15.Text = "Organizational unit:"
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(23, 48)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(33, 13)
+        Me.Label16.TabIndex = 2
+        Me.Label16.Text = "User:"
+        '
+        'ComboBox2
+        '
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Location = New System.Drawing.Point(130, 18)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(436, 21)
+        Me.ComboBox2.TabIndex = 1
+        '
+        'UserInDomainPickerPanel
+        '
+        Me.UserInDomainPickerPanel.Controls.Add(Me.TextBox7)
+        Me.UserInDomainPickerPanel.Controls.Add(Me.Label19)
+        Me.UserInDomainPickerPanel.Controls.Add(Me.Label18)
+        Me.UserInDomainPickerPanel.Controls.Add(Me.DsAccountObjectPickerBtn)
+        Me.UserInDomainPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UserInDomainPickerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.UserInDomainPickerPanel.Name = "UserInDomainPickerPanel"
+        Me.UserInDomainPickerPanel.Size = New System.Drawing.Size(588, 85)
+        Me.UserInDomainPickerPanel.TabIndex = 2
+        Me.UserInDomainPickerPanel.Visible = False
+        '
+        'TextBox7
+        '
+        Me.TextBox7.Location = New System.Drawing.Point(244, 51)
+        Me.TextBox7.Name = "TextBox7"
+        Me.TextBox7.ReadOnly = True
+        Me.TextBox7.Size = New System.Drawing.Size(322, 21)
+        Me.TextBox7.TabIndex = 15
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(23, 54)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(215, 13)
+        Me.Label19.TabIndex = 14
+        Me.Label19.Text = "SAM account name of selected user object:"
+        '
+        'Label18
+        '
+        Me.Label18.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label18.AutoEllipsis = True
+        Me.Label18.Location = New System.Drawing.Point(23, 17)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(406, 28)
+        Me.Label18.TabIndex = 0
+        Me.Label18.Text = "If the desired account is not in any organizational unit, but rather in a contain" & _
+    "er, or somewhere else; click the following button to pick it:"
+        '
+        'DsAccountObjectPickerBtn
+        '
+        Me.DsAccountObjectPickerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DsAccountObjectPickerBtn.Location = New System.Drawing.Point(441, 14)
+        Me.DsAccountObjectPickerBtn.Name = "DsAccountObjectPickerBtn"
+        Me.DsAccountObjectPickerBtn.Size = New System.Drawing.Size(125, 23)
+        Me.DsAccountObjectPickerBtn.TabIndex = 13
+        Me.DsAccountObjectPickerBtn.Text = "Pick account object..."
+        Me.DsAccountObjectPickerBtn.UseVisualStyleBackColor = True
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Items.AddRange(New Object() {"Specify a user manually", "Pick the following user from organizational units in my domain", "Pick the following user object from anywhere in my domain"})
+        Me.ComboBox4.Location = New System.Drawing.Point(211, 81)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(459, 21)
+        Me.ComboBox4.TabIndex = 14
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label14, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.AddsUpnPathText, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.AddsNtLogonPathText, 1, 1)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(91, 203)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(591, 42)
+        Me.TableLayoutPanel2.TabIndex = 12
+        '
+        'Label13
+        '
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label13.Location = New System.Drawing.Point(3, 0)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(289, 21)
+        Me.Label13.TabIndex = 0
+        Me.Label13.Text = "User Principal Name (Windows 2000):"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label14.Location = New System.Drawing.Point(3, 21)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(289, 21)
+        Me.Label14.TabIndex = 2
+        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'AddsUpnPathText
+        '
+        Me.AddsUpnPathText.AutoEllipsis = True
+        Me.AddsUpnPathText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AddsUpnPathText.Location = New System.Drawing.Point(298, 0)
+        Me.AddsUpnPathText.Name = "AddsUpnPathText"
+        Me.AddsUpnPathText.Size = New System.Drawing.Size(290, 21)
+        Me.AddsUpnPathText.TabIndex = 1
+        Me.AddsUpnPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'AddsNtLogonPathText
+        '
+        Me.AddsNtLogonPathText.AutoEllipsis = True
+        Me.AddsNtLogonPathText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(298, 21)
+        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
+        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(290, 21)
+        Me.AddsNtLogonPathText.TabIndex = 3
+        Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'DSNoDomainPanel
+        '
+        Me.DSNoDomainPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
+        Me.DSNoDomainPanel.Controls.Add(Me.Label11)
+        Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 295)
+        Me.DSNoDomainPanel.Name = "DSNoDomainPanel"
+        Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 61)
+        Me.DSNoDomainPanel.TabIndex = 10
+        Me.DSNoDomainPanel.Visible = False
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.caution
+        Me.PictureBox2.Location = New System.Drawing.Point(12, 12)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 0
+        Me.PictureBox2.TabStop = False
+        '
+        'Label11
+        '
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.Location = New System.Drawing.Point(50, 12)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(517, 32)
+        Me.Label11.TabIndex = 0
+        Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
+    "long to a domain."
+        '
+        'TextBox6
+        '
+        Me.TextBox6.Location = New System.Drawing.Point(211, 257)
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox6.Size = New System.Drawing.Size(459, 21)
+        Me.TextBox6.TabIndex = 9
+        '
+        'Label12
+        '
+        Me.Label12.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Location = New System.Drawing.Point(88, 367)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(582, 65)
+        Me.Label12.TabIndex = 11
+        Me.Label12.Text = resources.GetString("Label12.Text")
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(88, 260)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(57, 13)
+        Me.Label10.TabIndex = 8
+        Me.Label10.Text = "Password:"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(88, 84)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(75, 13)
+        Me.Label9.TabIndex = 3
+        Me.Label9.Text = "User Account:"
+        '
+        'TextBox4
+        '
+        Me.TextBox4.Location = New System.Drawing.Point(211, 54)
+        Me.TextBox4.Name = "TextBox4"
+        Me.TextBox4.Size = New System.Drawing.Size(459, 21)
+        Me.TextBox4.TabIndex = 2
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(88, 57)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(76, 13)
+        Me.Label8.TabIndex = 1
+        Me.Label8.Text = "Domain Name:"
+        '
+        'DSDomainConfigHeader
+        '
+        Me.DSDomainConfigHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DSDomainConfigHeader.AutoEllipsis = True
+        Me.DSDomainConfigHeader.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DSDomainConfigHeader.Location = New System.Drawing.Point(24, 16)
+        Me.DSDomainConfigHeader.Name = "DSDomainConfigHeader"
+        Me.DSDomainConfigHeader.Size = New System.Drawing.Size(658, 23)
+        Me.DSDomainConfigHeader.TabIndex = 0
+        Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
         '
         'DNSConfigPanel
         '
@@ -360,224 +682,6 @@ Partial Class ADDSJoinDialog
         Me.DNSConfigHeader.TabIndex = 0
         Me.DNSConfigHeader.Text = "Configure DNS settings for network adapters"
         '
-        'DSDomainConfigPanel
-        '
-        Me.DSDomainConfigPanel.Controls.Add(Me.UserAccountModeSelectorContainerPanel)
-        Me.DSDomainConfigPanel.Controls.Add(Me.ComboBox4)
-        Me.DSDomainConfigPanel.Controls.Add(Me.TableLayoutPanel2)
-        Me.DSDomainConfigPanel.Controls.Add(Me.DSNoDomainPanel)
-        Me.DSDomainConfigPanel.Controls.Add(Me.TextBox6)
-        Me.DSDomainConfigPanel.Controls.Add(Me.Label12)
-        Me.DSDomainConfigPanel.Controls.Add(Me.Label10)
-        Me.DSDomainConfigPanel.Controls.Add(Me.Label9)
-        Me.DSDomainConfigPanel.Controls.Add(Me.TextBox4)
-        Me.DSDomainConfigPanel.Controls.Add(Me.Label8)
-        Me.DSDomainConfigPanel.Controls.Add(Me.DSDomainConfigHeader)
-        Me.DSDomainConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DSDomainConfigPanel.Location = New System.Drawing.Point(0, 0)
-        Me.DSDomainConfigPanel.Name = "DSDomainConfigPanel"
-        Me.DSDomainConfigPanel.Size = New System.Drawing.Size(784, 449)
-        Me.DSDomainConfigPanel.TabIndex = 1
-        Me.DSDomainConfigPanel.Visible = False
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label14, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.AddsUpnPathText, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.AddsNtLogonPathText, 1, 1)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(91, 203)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(591, 42)
-        Me.TableLayoutPanel2.TabIndex = 12
-        '
-        'Label13
-        '
-        Me.Label13.AutoEllipsis = True
-        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label13.Location = New System.Drawing.Point(3, 0)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(289, 21)
-        Me.Label13.TabIndex = 0
-        Me.Label13.Text = "User Principal Name (Windows 2000):"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Label14
-        '
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label14.Location = New System.Drawing.Point(3, 21)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(289, 21)
-        Me.Label14.TabIndex = 2
-        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'AddsUpnPathText
-        '
-        Me.AddsUpnPathText.AutoEllipsis = True
-        Me.AddsUpnPathText.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AddsUpnPathText.Location = New System.Drawing.Point(298, 0)
-        Me.AddsUpnPathText.Name = "AddsUpnPathText"
-        Me.AddsUpnPathText.Size = New System.Drawing.Size(290, 21)
-        Me.AddsUpnPathText.TabIndex = 1
-        Me.AddsUpnPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'AddsNtLogonPathText
-        '
-        Me.AddsNtLogonPathText.AutoEllipsis = True
-        Me.AddsNtLogonPathText.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(298, 21)
-        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
-        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(290, 21)
-        Me.AddsNtLogonPathText.TabIndex = 3
-        Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'ComboBox3
-        '
-        Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Location = New System.Drawing.Point(130, 45)
-        Me.ComboBox3.Name = "ComboBox3"
-        Me.ComboBox3.Size = New System.Drawing.Size(436, 21)
-        Me.ComboBox3.TabIndex = 3
-        '
-        'ComboBox2
-        '
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(130, 18)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(436, 21)
-        Me.ComboBox2.TabIndex = 1
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(23, 48)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(33, 13)
-        Me.Label16.TabIndex = 2
-        Me.Label16.Text = "User:"
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(23, 22)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(101, 13)
-        Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Organizational unit:"
-        '
-        'DSNoDomainPanel
-        '
-        Me.DSNoDomainPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
-        Me.DSNoDomainPanel.Controls.Add(Me.Label11)
-        Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 295)
-        Me.DSNoDomainPanel.Name = "DSNoDomainPanel"
-        Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 61)
-        Me.DSNoDomainPanel.TabIndex = 10
-        Me.DSNoDomainPanel.Visible = False
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.caution
-        Me.PictureBox2.Location = New System.Drawing.Point(12, 12)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
-        '
-        'Label11
-        '
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.Location = New System.Drawing.Point(50, 12)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(517, 32)
-        Me.Label11.TabIndex = 0
-        Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
-    "long to a domain."
-        '
-        'TextBox6
-        '
-        Me.TextBox6.Location = New System.Drawing.Point(211, 257)
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox6.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox6.TabIndex = 9
-        '
-        'Label12
-        '
-        Me.Label12.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(88, 367)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(582, 65)
-        Me.Label12.TabIndex = 11
-        Me.Label12.Text = resources.GetString("Label12.Text")
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(88, 260)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(57, 13)
-        Me.Label10.TabIndex = 8
-        Me.Label10.Text = "Password:"
-        '
-        'TextBox5
-        '
-        Me.TextBox5.Location = New System.Drawing.Point(23, 41)
-        Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(543, 21)
-        Me.TextBox5.TabIndex = 7
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(88, 84)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(75, 13)
-        Me.Label9.TabIndex = 3
-        Me.Label9.Text = "User Account:"
-        '
-        'TextBox4
-        '
-        Me.TextBox4.Location = New System.Drawing.Point(211, 54)
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox4.TabIndex = 2
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(88, 57)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(76, 13)
-        Me.Label8.TabIndex = 1
-        Me.Label8.Text = "Domain Name:"
-        '
-        'DSDomainConfigHeader
-        '
-        Me.DSDomainConfigHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DSDomainConfigHeader.AutoEllipsis = True
-        Me.DSDomainConfigHeader.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DSDomainConfigHeader.Location = New System.Drawing.Point(24, 16)
-        Me.DSDomainConfigHeader.Name = "DSDomainConfigHeader"
-        Me.DSDomainConfigHeader.Size = New System.Drawing.Size(658, 23)
-        Me.DSDomainConfigHeader.TabIndex = 0
-        Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
-        '
         'HeaderPanel
         '
         Me.HeaderPanel.Controls.Add(Me.DS7_Description)
@@ -726,110 +830,6 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
-        'DsAccountObjectPickerBtn
-        '
-        Me.DsAccountObjectPickerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.DsAccountObjectPickerBtn.Location = New System.Drawing.Point(441, 14)
-        Me.DsAccountObjectPickerBtn.Name = "DsAccountObjectPickerBtn"
-        Me.DsAccountObjectPickerBtn.Size = New System.Drawing.Size(125, 23)
-        Me.DsAccountObjectPickerBtn.TabIndex = 13
-        Me.DsAccountObjectPickerBtn.Text = "Pick account object..."
-        Me.DsAccountObjectPickerBtn.UseVisualStyleBackColor = True
-        '
-        'ComboBox4
-        '
-        Me.ComboBox4.FormattingEnabled = True
-        Me.ComboBox4.Items.AddRange(New Object() {"Specify a user manually", "Pick the following user from organizational units in my domain", "Pick the following user object from anywhere in my domain"})
-        Me.ComboBox4.Location = New System.Drawing.Point(211, 81)
-        Me.ComboBox4.Name = "ComboBox4"
-        Me.ComboBox4.Size = New System.Drawing.Size(459, 21)
-        Me.ComboBox4.TabIndex = 14
-        '
-        'UserAccountModeSelectorContainerPanel
-        '
-        Me.UserAccountModeSelectorContainerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.ManualUserPickerPanel)
-        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.UserInDomainOuPickerPanel)
-        Me.UserAccountModeSelectorContainerPanel.Controls.Add(Me.UserInDomainPickerPanel)
-        Me.UserAccountModeSelectorContainerPanel.Location = New System.Drawing.Point(91, 109)
-        Me.UserAccountModeSelectorContainerPanel.Name = "UserAccountModeSelectorContainerPanel"
-        Me.UserAccountModeSelectorContainerPanel.Size = New System.Drawing.Size(590, 87)
-        Me.UserAccountModeSelectorContainerPanel.TabIndex = 15
-        '
-        'ManualUserPickerPanel
-        '
-        Me.ManualUserPickerPanel.Controls.Add(Me.Label17)
-        Me.ManualUserPickerPanel.Controls.Add(Me.TextBox5)
-        Me.ManualUserPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ManualUserPickerPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ManualUserPickerPanel.Name = "ManualUserPickerPanel"
-        Me.ManualUserPickerPanel.Size = New System.Drawing.Size(588, 85)
-        Me.ManualUserPickerPanel.TabIndex = 0
-        '
-        'UserInDomainOuPickerPanel
-        '
-        Me.UserInDomainOuPickerPanel.Controls.Add(Me.ComboBox3)
-        Me.UserInDomainOuPickerPanel.Controls.Add(Me.Label15)
-        Me.UserInDomainOuPickerPanel.Controls.Add(Me.Label16)
-        Me.UserInDomainOuPickerPanel.Controls.Add(Me.ComboBox2)
-        Me.UserInDomainOuPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UserInDomainOuPickerPanel.Location = New System.Drawing.Point(0, 0)
-        Me.UserInDomainOuPickerPanel.Name = "UserInDomainOuPickerPanel"
-        Me.UserInDomainOuPickerPanel.Size = New System.Drawing.Size(588, 85)
-        Me.UserInDomainOuPickerPanel.TabIndex = 1
-        Me.UserInDomainOuPickerPanel.Visible = False
-        '
-        'UserInDomainPickerPanel
-        '
-        Me.UserInDomainPickerPanel.Controls.Add(Me.TextBox7)
-        Me.UserInDomainPickerPanel.Controls.Add(Me.Label19)
-        Me.UserInDomainPickerPanel.Controls.Add(Me.Label18)
-        Me.UserInDomainPickerPanel.Controls.Add(Me.DsAccountObjectPickerBtn)
-        Me.UserInDomainPickerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UserInDomainPickerPanel.Location = New System.Drawing.Point(0, 0)
-        Me.UserInDomainPickerPanel.Name = "UserInDomainPickerPanel"
-        Me.UserInDomainPickerPanel.Size = New System.Drawing.Size(588, 85)
-        Me.UserInDomainPickerPanel.TabIndex = 2
-        Me.UserInDomainPickerPanel.Visible = False
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(23, 22)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(408, 13)
-        Me.Label17.TabIndex = 8
-        Me.Label17.Text = "Type the Security Account Manager (SAM) name of the user account in the domain:"
-        '
-        'Label18
-        '
-        Me.Label18.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label18.AutoEllipsis = True
-        Me.Label18.Location = New System.Drawing.Point(23, 17)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(406, 28)
-        Me.Label18.TabIndex = 0
-        Me.Label18.Text = "If the desired account is not in any organizational unit, but rather in a contain" & _
-    "er, or somewhere else; click the following button to pick it:"
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = True
-        Me.Label19.Location = New System.Drawing.Point(23, 54)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(215, 13)
-        Me.Label19.TabIndex = 14
-        Me.Label19.Text = "SAM account name of selected user object:"
-        '
-        'TextBox7
-        '
-        Me.TextBox7.Location = New System.Drawing.Point(244, 51)
-        Me.TextBox7.Name = "TextBox7"
-        Me.TextBox7.ReadOnly = True
-        Me.TextBox7.Size = New System.Drawing.Size(322, 21)
-        Me.TextBox7.TabIndex = 15
-        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -850,24 +850,8 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
-        Me.DNSConfigPanel.ResumeLayout(False)
-        Me.DNSConfigPanel.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
         Me.DSDomainConfigPanel.ResumeLayout(False)
         Me.DSDomainConfigPanel.PerformLayout()
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.DSNoDomainPanel.ResumeLayout(False)
-        Me.DSNoDomainPanel.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.HeaderPanel.ResumeLayout(False)
-        Me.HeaderPanel.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.FooterContainer.ResumeLayout(False)
-        Me.ExpressPanelFooter.ResumeLayout(False)
-        Me.ExpressPanelFooter.PerformLayout()
-        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.UserAccountModeSelectorContainerPanel.ResumeLayout(False)
         Me.ManualUserPickerPanel.ResumeLayout(False)
         Me.ManualUserPickerPanel.PerformLayout()
@@ -875,6 +859,22 @@ Partial Class ADDSJoinDialog
         Me.UserInDomainOuPickerPanel.PerformLayout()
         Me.UserInDomainPickerPanel.ResumeLayout(False)
         Me.UserInDomainPickerPanel.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.DSNoDomainPanel.ResumeLayout(False)
+        Me.DSNoDomainPanel.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.DNSConfigPanel.ResumeLayout(False)
+        Me.DNSConfigPanel.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.HeaderPanel.ResumeLayout(False)
+        Me.HeaderPanel.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.FooterContainer.ResumeLayout(False)
+        Me.ExpressPanelFooter.ResumeLayout(False)
+        Me.ExpressPanelFooter.PerformLayout()
+        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

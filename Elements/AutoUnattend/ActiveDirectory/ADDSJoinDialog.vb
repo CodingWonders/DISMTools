@@ -639,4 +639,9 @@ Public Class ADDSJoinDialog
         AddsUpnPathText.Text = DomainServicesModule.DSGetUserPrincipalNameFromSamAccountName(dsDomainName, initialUserName)
         AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox7.Text)
     End Sub
+
+    Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\unattend\unatt_create.html", "active-directory-domain-services-domain-join")
+        DialogResult = Windows.Forms.DialogResult.None
+    End Sub
 End Class
