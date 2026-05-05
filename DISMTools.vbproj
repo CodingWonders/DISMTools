@@ -234,6 +234,12 @@
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.Designer.vb">
+      <DependentUpon>DnsZoneChooserDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
@@ -1015,6 +1021,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.resx">
+      <DependentUpon>DnsZoneChooserDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>

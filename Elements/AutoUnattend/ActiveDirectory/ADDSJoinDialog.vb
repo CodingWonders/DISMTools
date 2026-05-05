@@ -60,6 +60,52 @@ Public Class ADDSJoinDialog
         End Function
     End Class
 
+    ''' <summary>
+    ''' Role of a computer in an assigned domain workgroup
+    ''' </summary>
+    Private Enum DomainRole As Integer
+        ''' <summary>
+        ''' Unknown domain role definition
+        ''' </summary>
+        Unknown = -1
+        ''' <summary>
+        ''' Standalone Workstation
+        ''' </summary>
+        StandaloneWorkstation = 0
+        ''' <summary>
+        ''' Member Workstation
+        ''' </summary>
+        MemberWorkstation = 1
+        ''' <summary>
+        ''' Standalone Server
+        ''' </summary>
+        StandaloneServer = 2
+        ''' <summary>
+        ''' Member Server
+        ''' </summary>
+        MemberServer = 3
+        ''' <summary>
+        ''' Backup Domain Controller
+        ''' </summary>
+        BackupDomainController = 4
+        ''' <summary>
+        ''' Primary Domain Controller
+        ''' </summary>
+        PrimaryDomainController = 5
+    End Enum
+
+    ''' <summary>
+    ''' Gets the current domain role of the system.
+    ''' </summary>
+    ''' <returns>The current domain role of the system</returns>
+    Private Function GetSystemDomainRole() As DomainRole
+        Dim domainRoleCollection As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT DomainRole FROM Win32_ComputerSystem")
+        If domainRoleCollection IsNot Nothing Then
+            Return GetObjectValue(domainRoleCollection(0), "DomainRole")
+        End If
+        Return DomainRole.Unknown
+    End Function
+
     Private dnsInfo As DnsInformation
     Private dsInfo As DomainInformation
 
@@ -104,6 +150,8 @@ Public Class ADDSJoinDialog
         TextBox7.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
+        DsJoinCMS.Renderer = GetProfessionalRenderer()
+        DsJoinCMS.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         VerifyInPages.AddRange(New WizardPage() {WizardPage.DnsConfigPage, WizardPage.DsConfigPage})
@@ -118,6 +166,9 @@ Public Class ADDSJoinDialog
             Application.DoEvents()
             Thread.Sleep(100)
         Loop
+
+        ' Let's leave the domain controller-exclusive stuff, well, exclusive to domain controllers ;)
+        DnsZoneTSMI.Enabled = GetSystemDomainRole() >= DomainRole.PrimaryDomainController
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -549,39 +600,8 @@ Public Class ADDSJoinDialog
         End If
     End Sub
 
-    Private Sub DnsNsLookupBtn_Click(sender As Object, e As EventArgs) Handles DnsNsLookupBtn.Click
-        If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
-            MsgBox("Please provide a domain for which to test domain name resolution.", vbOKOnly + vbExclamation, Text)
-            Exit Sub
-        End If
-
-        Cursor = Cursors.WaitCursor
-        Dim nslookupProc As New Process() With {
-            .StartInfo = New ProcessStartInfo() With {
-                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "nslookup.exe"),
-                .Arguments = TextBox1.Text,
-                .CreateNoWindow = True,
-                .WindowStyle = ProcessWindowStyle.Hidden,
-                .UseShellExecute = False,
-                .RedirectStandardOutput = True,
-                .RedirectStandardError = True
-            }
-        }
-
-        Try
-            nslookupProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
-            nslookupProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
-        Catch ex As Exception
-            nslookupProc.StartInfo.StandardOutputEncoding = Nothing
-            nslookupProc.StartInfo.StandardErrorEncoding = Nothing
-        End Try
-
-        Dim nslookupOut As String = ""
-        nslookupProc.Start()
-        nslookupOut = nslookupProc.StandardOutput.ReadToEnd() & nslookupProc.StandardError.ReadToEnd()
-        nslookupProc.WaitForExit()
-        Cursor = Cursors.Arrow
-        MsgBox(String.Format("NSLOOKUP output:{0}{0}{1}", Environment.NewLine, nslookupOut), vbOKOnly + vbInformation, "Domain name resolution results")
+    Private Sub DnsToolsBtn_Click(sender As Object, e As EventArgs) Handles DnsToolsBtn.Click
+        DsJoinCMS.Show(sender, New Point(8, 8))
     End Sub
 
     Private Sub DsAccountObjectPickerBtn_Click(sender As Object, e As EventArgs) Handles DsAccountObjectPickerBtn.Click
@@ -643,5 +663,46 @@ Public Class ADDSJoinDialog
     Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click
         HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\unattend\unatt_create.html", "active-directory-domain-services-domain-join")
         DialogResult = Windows.Forms.DialogResult.None
+    End Sub
+
+    Private Sub DnsResolutionTSMI_Click(sender As Object, e As EventArgs) Handles DnsResolutionTSMI.Click
+        If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
+            MsgBox("Please provide a domain for which to test domain name resolution.", vbOKOnly + vbExclamation, Text)
+            Exit Sub
+        End If
+
+        Cursor = Cursors.WaitCursor
+        Dim nslookupProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "nslookup.exe"),
+                .Arguments = TextBox1.Text,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+
+        Try
+            nslookupProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            nslookupProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        Catch ex As Exception
+            nslookupProc.StartInfo.StandardOutputEncoding = Nothing
+            nslookupProc.StartInfo.StandardErrorEncoding = Nothing
+        End Try
+
+        Dim nslookupOut As String = ""
+        nslookupProc.Start()
+        nslookupOut = nslookupProc.StandardOutput.ReadToEnd() & nslookupProc.StandardError.ReadToEnd()
+        nslookupProc.WaitForExit()
+        Cursor = Cursors.Arrow
+        MsgBox(String.Format("NSLOOKUP output:{0}{0}{1}", Environment.NewLine, nslookupOut), vbOKOnly + vbInformation, "Domain name resolution results")
+    End Sub
+
+    Private Sub DnsZoneTSMI_Click(sender As Object, e As EventArgs) Handles DnsZoneTSMI.Click
+        If DnsZoneChooserDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            TextBox1.Text = DnsZoneChooserDialog.SelectedDnsZone
+        End If
     End Sub
 End Class

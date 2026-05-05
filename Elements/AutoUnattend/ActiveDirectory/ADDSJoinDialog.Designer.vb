@@ -22,10 +22,31 @@ Partial Class ADDSJoinDialog
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ADDSJoinDialog))
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.DNSConfigPanel = New System.Windows.Forms.Panel()
+        Me.DnsToolsBtn = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.DnsSyntaxCheckerBtn = New System.Windows.Forms.Button()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.DNSConfigHeader = New System.Windows.Forms.Label()
         Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
         Me.UserAccountModeSelectorContainerPanel = New System.Windows.Forms.Panel()
         Me.ManualUserPickerPanel = New System.Windows.Forms.Panel()
@@ -57,26 +78,6 @@ Partial Class ADDSJoinDialog
         Me.TextBox4 = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.DSDomainConfigHeader = New System.Windows.Forms.Label()
-        Me.DNSConfigPanel = New System.Windows.Forms.Panel()
-        Me.DnsNsLookupBtn = New System.Windows.Forms.Button()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
-        Me.DnsSyntaxCheckerBtn = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.DNSConfigHeader = New System.Windows.Forms.Label()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.DS7_Description = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -91,9 +92,15 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
+        Me.DsJoinCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DnsResolutionTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DnsZoneTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.DNSConfigPanel.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.DSDomainConfigPanel.SuspendLayout()
         Me.UserAccountModeSelectorContainerPanel.SuspendLayout()
         Me.ManualUserPickerPanel.SuspendLayout()
@@ -102,14 +109,12 @@ Partial Class ADDSJoinDialog
         Me.TableLayoutPanel2.SuspendLayout()
         Me.DSNoDomainPanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.DNSConfigPanel.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.DsJoinCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -132,13 +137,234 @@ Partial Class ADDSJoinDialog
         '
         'StepsContainer
         '
-        Me.StepsContainer.Controls.Add(Me.DSDomainConfigPanel)
         Me.StepsContainer.Controls.Add(Me.DNSConfigPanel)
+        Me.StepsContainer.Controls.Add(Me.DSDomainConfigPanel)
         Me.StepsContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StepsContainer.Location = New System.Drawing.Point(0, 0)
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(784, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'DNSConfigPanel
+        '
+        Me.DNSConfigPanel.Controls.Add(Me.DnsToolsBtn)
+        Me.DNSConfigPanel.Controls.Add(Me.GroupBox1)
+        Me.DNSConfigPanel.Controls.Add(Me.TextBox1)
+        Me.DNSConfigPanel.Controls.Add(Me.Label2)
+        Me.DNSConfigPanel.Controls.Add(Me.Label1)
+        Me.DNSConfigPanel.Controls.Add(Me.DNSConfigHeader)
+        Me.DNSConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DNSConfigPanel.Location = New System.Drawing.Point(0, 0)
+        Me.DNSConfigPanel.Name = "DNSConfigPanel"
+        Me.DNSConfigPanel.Size = New System.Drawing.Size(784, 449)
+        Me.DNSConfigPanel.TabIndex = 0
+        '
+        'DnsToolsBtn
+        '
+        Me.DnsToolsBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DnsToolsBtn.Location = New System.Drawing.Point(704, 53)
+        Me.DnsToolsBtn.Name = "DnsToolsBtn"
+        Me.DnsToolsBtn.Size = New System.Drawing.Size(37, 23)
+        Me.DnsToolsBtn.TabIndex = 3
+        Me.DnsToolsBtn.Text = "..."
+        Me.DnsToolsBtn.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.DnsToolsBtn.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.Panel1)
+        Me.GroupBox1.Controls.Add(Me.DnsSyntaxCheckerBtn)
+        Me.GroupBox1.Controls.Add(Me.TextBox2)
+        Me.GroupBox1.Controls.Add(Me.TextBox3)
+        Me.GroupBox1.Controls.Add(Me.Label5)
+        Me.GroupBox1.Controls.Add(Me.ComboBox1)
+        Me.GroupBox1.Controls.Add(Me.RadioButton2)
+        Me.GroupBox1.Controls.Add(Me.Label7)
+        Me.GroupBox1.Controls.Add(Me.Label6)
+        Me.GroupBox1.Controls.Add(Me.Label4)
+        Me.GroupBox1.Controls.Add(Me.RadioButton1)
+        Me.GroupBox1.Controls.Add(Me.Label3)
+        Me.GroupBox1.Location = New System.Drawing.Point(28, 116)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(716, 316)
+        Me.GroupBox1.TabIndex = 5
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "NIC Settings"
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.RichTextBox1)
+        Me.Panel1.Location = New System.Drawing.Point(27, 208)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(657, 66)
+        Me.Panel1.TabIndex = 8
+        '
+        'RichTextBox1
+        '
+        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
+        Me.RichTextBox1.Size = New System.Drawing.Size(657, 66)
+        Me.RichTextBox1.TabIndex = 0
+        Me.RichTextBox1.Text = ""
+        '
+        'DnsSyntaxCheckerBtn
+        '
+        Me.DnsSyntaxCheckerBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DnsSyntaxCheckerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DnsSyntaxCheckerBtn.Location = New System.Drawing.Point(492, 280)
+        Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
+        Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
+        Me.DnsSyntaxCheckerBtn.TabIndex = 10
+        Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
+        Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Enabled = False
+        Me.TextBox2.Location = New System.Drawing.Point(302, 91)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(382, 21)
+        Me.TextBox2.TabIndex = 4
+        '
+        'TextBox3
+        '
+        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox3.Enabled = False
+        Me.TextBox3.Location = New System.Drawing.Point(146, 129)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.ReadOnly = True
+        Me.TextBox3.Size = New System.Drawing.Size(538, 21)
+        Me.TextBox3.TabIndex = 6
+        '
+        'Label5
+        '
+        Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.Location = New System.Drawing.Point(146, 156)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(538, 31)
+        Me.Label5.TabIndex = 7
+        Me.Label5.Text = "By default, this adapter will use the same domain suffix you specified above. You" & _
+    " can change it later"
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(302, 63)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(382, 21)
+        Me.ComboBox1.TabIndex = 2
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(64, 92)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(201, 17)
+        Me.RadioButton2.TabIndex = 3
+        Me.RadioButton2.Text = "Specify a network adapter manually:"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'Label7
+        '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Location = New System.Drawing.Point(24, 280)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(461, 33)
+        Me.Label7.TabIndex = 9
+        Me.Label7.Text = "The address in the first line will be the primary DNS server address, and any oth" & _
+    "er addresses will become alternative server addresses. You can put both IPv4 and" & _
+    " IPv6 addresses."
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(24, 192)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(280, 13)
+        Me.Label6.TabIndex = 8
+        Me.Label6.Text = "DNS Server Addresses (put each address in its own line):"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(24, 132)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(116, 13)
+        Me.Label4.TabIndex = 5
+        Me.Label4.Text = "Primary Domain Suffix:"
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(64, 64)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(232, 17)
+        Me.RadioButton1.TabIndex = 1
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Pick from a network adapter in this system:"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(24, 36)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(81, 13)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "Interface Alias:"
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox1.Location = New System.Drawing.Point(150, 54)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(548, 21)
+        Me.TextBox1.TabIndex = 2
+        '
+        'Label2
+        '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Location = New System.Drawing.Point(150, 82)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(591, 31)
+        Me.Label2.TabIndex = 4
+        Me.Label2.Text = "This domain suffix will be added to the list of DNS suffixes. You can add more to" & _
+    " the list of suffixes later."
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(28, 57)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(116, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Primary Domain Suffix:"
+        '
+        'DNSConfigHeader
+        '
+        Me.DNSConfigHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DNSConfigHeader.AutoEllipsis = True
+        Me.DNSConfigHeader.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DNSConfigHeader.Location = New System.Drawing.Point(24, 16)
+        Me.DNSConfigHeader.Name = "DNSConfigHeader"
+        Me.DNSConfigHeader.Size = New System.Drawing.Size(658, 23)
+        Me.DNSConfigHeader.TabIndex = 0
+        Me.DNSConfigHeader.Text = "Configure DNS settings for network adapters"
         '
         'DSDomainConfigPanel
         '
@@ -462,226 +688,6 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigHeader.TabIndex = 0
         Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
         '
-        'DNSConfigPanel
-        '
-        Me.DNSConfigPanel.Controls.Add(Me.DnsNsLookupBtn)
-        Me.DNSConfigPanel.Controls.Add(Me.GroupBox1)
-        Me.DNSConfigPanel.Controls.Add(Me.TextBox1)
-        Me.DNSConfigPanel.Controls.Add(Me.Label2)
-        Me.DNSConfigPanel.Controls.Add(Me.Label1)
-        Me.DNSConfigPanel.Controls.Add(Me.DNSConfigHeader)
-        Me.DNSConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DNSConfigPanel.Location = New System.Drawing.Point(0, 0)
-        Me.DNSConfigPanel.Name = "DNSConfigPanel"
-        Me.DNSConfigPanel.Size = New System.Drawing.Size(784, 449)
-        Me.DNSConfigPanel.TabIndex = 0
-        '
-        'DnsNsLookupBtn
-        '
-        Me.DnsNsLookupBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.DnsNsLookupBtn.Location = New System.Drawing.Point(601, 53)
-        Me.DnsNsLookupBtn.Name = "DnsNsLookupBtn"
-        Me.DnsNsLookupBtn.Size = New System.Drawing.Size(140, 23)
-        Me.DnsNsLookupBtn.TabIndex = 3
-        Me.DnsNsLookupBtn.Text = "Test DNS resolution..."
-        Me.DnsNsLookupBtn.UseVisualStyleBackColor = True
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox1.Controls.Add(Me.Panel1)
-        Me.GroupBox1.Controls.Add(Me.DnsSyntaxCheckerBtn)
-        Me.GroupBox1.Controls.Add(Me.TextBox2)
-        Me.GroupBox1.Controls.Add(Me.TextBox3)
-        Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.ComboBox1)
-        Me.GroupBox1.Controls.Add(Me.RadioButton2)
-        Me.GroupBox1.Controls.Add(Me.Label7)
-        Me.GroupBox1.Controls.Add(Me.Label6)
-        Me.GroupBox1.Controls.Add(Me.Label4)
-        Me.GroupBox1.Controls.Add(Me.RadioButton1)
-        Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Location = New System.Drawing.Point(28, 116)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(716, 316)
-        Me.GroupBox1.TabIndex = 5
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "NIC Settings"
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.RichTextBox1)
-        Me.Panel1.Location = New System.Drawing.Point(27, 208)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(657, 66)
-        Me.Panel1.TabIndex = 8
-        '
-        'RichTextBox1
-        '
-        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
-        Me.RichTextBox1.Size = New System.Drawing.Size(657, 66)
-        Me.RichTextBox1.TabIndex = 0
-        Me.RichTextBox1.Text = ""
-        '
-        'DnsSyntaxCheckerBtn
-        '
-        Me.DnsSyntaxCheckerBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DnsSyntaxCheckerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.DnsSyntaxCheckerBtn.Location = New System.Drawing.Point(492, 280)
-        Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
-        Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
-        Me.DnsSyntaxCheckerBtn.TabIndex = 10
-        Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
-        Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Enabled = False
-        Me.TextBox2.Location = New System.Drawing.Point(302, 91)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(382, 21)
-        Me.TextBox2.TabIndex = 4
-        '
-        'TextBox3
-        '
-        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox3.Enabled = False
-        Me.TextBox3.Location = New System.Drawing.Point(146, 129)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.ReadOnly = True
-        Me.TextBox3.Size = New System.Drawing.Size(538, 21)
-        Me.TextBox3.TabIndex = 6
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoEllipsis = True
-        Me.Label5.Location = New System.Drawing.Point(146, 156)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(538, 31)
-        Me.Label5.TabIndex = 7
-        Me.Label5.Text = "By default, this adapter will use the same domain suffix you specified above. You" & _
-    " can change it later"
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(302, 63)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(382, 21)
-        Me.ComboBox1.TabIndex = 2
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(64, 92)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(201, 17)
-        Me.RadioButton2.TabIndex = 3
-        Me.RadioButton2.Text = "Specify a network adapter manually:"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'Label7
-        '
-        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label7.AutoEllipsis = True
-        Me.Label7.Location = New System.Drawing.Point(24, 280)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(461, 33)
-        Me.Label7.TabIndex = 9
-        Me.Label7.Text = "The address in the first line will be the primary DNS server address, and any oth" & _
-    "er addresses will become alternative server addresses. You can put both IPv4 and" & _
-    " IPv6 addresses."
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(24, 192)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(280, 13)
-        Me.Label6.TabIndex = 8
-        Me.Label6.Text = "DNS Server Addresses (put each address in its own line):"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(24, 132)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(116, 13)
-        Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Primary Domain Suffix:"
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(64, 64)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(232, 17)
-        Me.RadioButton1.TabIndex = 1
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Pick from a network adapter in this system:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(24, 36)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(81, 13)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Interface Alias:"
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(150, 54)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(445, 21)
-        Me.TextBox1.TabIndex = 2
-        '
-        'Label2
-        '
-        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoEllipsis = True
-        Me.Label2.Location = New System.Drawing.Point(150, 82)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(591, 31)
-        Me.Label2.TabIndex = 4
-        Me.Label2.Text = "This domain suffix will be added to the list of DNS suffixes. You can add more to" & _
-    " the list of suffixes later."
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(28, 57)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(116, 13)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Primary Domain Suffix:"
-        '
-        'DNSConfigHeader
-        '
-        Me.DNSConfigHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DNSConfigHeader.AutoEllipsis = True
-        Me.DNSConfigHeader.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DNSConfigHeader.Location = New System.Drawing.Point(24, 16)
-        Me.DNSConfigHeader.Name = "DNSConfigHeader"
-        Me.DNSConfigHeader.Size = New System.Drawing.Size(658, 23)
-        Me.DNSConfigHeader.TabIndex = 0
-        Me.DNSConfigHeader.Text = "Configure DNS settings for network adapters"
-        '
         'HeaderPanel
         '
         Me.HeaderPanel.Controls.Add(Me.DS7_Description)
@@ -830,6 +836,24 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
+        'DsJoinCMS
+        '
+        Me.DsJoinCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DnsResolutionTSMI, Me.DnsZoneTSMI})
+        Me.DsJoinCMS.Name = "ContextMenuStrip1"
+        Me.DsJoinCMS.Size = New System.Drawing.Size(315, 48)
+        '
+        'DnsResolutionTSMI
+        '
+        Me.DnsResolutionTSMI.Name = "DnsResolutionTSMI"
+        Me.DnsResolutionTSMI.Size = New System.Drawing.Size(314, 22)
+        Me.DnsResolutionTSMI.Text = "Test DNS resolution"
+        '
+        'DnsZoneTSMI
+        '
+        Me.DnsZoneTSMI.Name = "DnsZoneTSMI"
+        Me.DnsZoneTSMI.Size = New System.Drawing.Size(314, 22)
+        Me.DnsZoneTSMI.Text = "Choose DNS zone... (domain controllers only)"
+        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -850,6 +874,11 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.DNSConfigPanel.ResumeLayout(False)
+        Me.DNSConfigPanel.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.DSDomainConfigPanel.ResumeLayout(False)
         Me.DSDomainConfigPanel.PerformLayout()
         Me.UserAccountModeSelectorContainerPanel.ResumeLayout(False)
@@ -863,11 +892,6 @@ Partial Class ADDSJoinDialog
         Me.DSNoDomainPanel.ResumeLayout(False)
         Me.DSNoDomainPanel.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.DNSConfigPanel.ResumeLayout(False)
-        Me.DNSConfigPanel.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
         Me.HeaderPanel.ResumeLayout(False)
         Me.HeaderPanel.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -875,6 +899,7 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.DsJoinCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -935,7 +960,7 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents DnsNsLookupBtn As System.Windows.Forms.Button
+    Friend WithEvents DnsToolsBtn As System.Windows.Forms.Button
     Friend WithEvents DsAccountObjectPickerBtn As System.Windows.Forms.Button
     Friend WithEvents UserAccountModeSelectorContainerPanel As System.Windows.Forms.Panel
     Friend WithEvents UserInDomainPickerPanel As System.Windows.Forms.Panel
@@ -946,4 +971,7 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents UserInDomainOuPickerPanel As System.Windows.Forms.Panel
     Friend WithEvents ComboBox4 As System.Windows.Forms.ComboBox
+    Friend WithEvents DsJoinCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents DnsResolutionTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DnsZoneTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class
