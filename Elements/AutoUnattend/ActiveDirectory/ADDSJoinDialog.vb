@@ -152,6 +152,7 @@ Public Class ADDSJoinDialog
         RichTextBox1.ForeColor = ForeColor
         DsJoinCMS.Renderer = GetProfessionalRenderer()
         DsJoinCMS.ForeColor = ForeColor
+        DnsResolutionTSMI.Image = GetGlyphResource("search")
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         VerifyInPages.AddRange(New WizardPage() {WizardPage.DnsConfigPage, WizardPage.DsConfigPage})

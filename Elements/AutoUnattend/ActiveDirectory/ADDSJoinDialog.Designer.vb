@@ -840,10 +840,11 @@ Partial Class ADDSJoinDialog
         '
         Me.DsJoinCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DnsResolutionTSMI, Me.DnsZoneTSMI})
         Me.DsJoinCMS.Name = "ContextMenuStrip1"
-        Me.DsJoinCMS.Size = New System.Drawing.Size(315, 48)
+        Me.DsJoinCMS.Size = New System.Drawing.Size(315, 70)
         '
         'DnsResolutionTSMI
         '
+        Me.DnsResolutionTSMI.Image = Global.DISMTools.My.Resources.Resources.search_light
         Me.DnsResolutionTSMI.Name = "DnsResolutionTSMI"
         Me.DnsResolutionTSMI.Size = New System.Drawing.Size(314, 22)
         Me.DnsResolutionTSMI.Text = "Test DNS resolution"
