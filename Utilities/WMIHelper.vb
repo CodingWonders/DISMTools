@@ -6,6 +6,7 @@ Module WMIHelper
     ''' Gets a collection of Windows Management Instrumentation (WMI) management objects using a provided query
     ''' </summary>
     ''' <param name="ManagementQuery">The management query to perform, in WQL</param>
+    ''' <param name="ManagementNamespace">The namespace to query</param>
     ''' <returns>A <see cref="ManagementObjectCollection"/> object that contains all the results of the provided management query.</returns>
     ''' <remarks>
     ''' To succeed, the WMI infrastructure must be in good state and the query must be written correctly. An exception will be thrown if the
@@ -16,12 +17,22 @@ Module WMIHelper
     ''' a query may be correctly written, but may either not return anything or return the wrong dataset. In such cases, it is best that you check
     ''' the query.
     ''' </remarks>
-    Public Function GetResultsFromManagementQuery(ManagementQuery As String) As ManagementObjectCollection
+    Public Function GetResultsFromManagementQuery(ManagementQuery As String, Optional ManagementNamespace As String = "root\cimv2") As ManagementObjectCollection
         DynaLog.LogMessage("Performing management query...")
         DynaLog.LogMessage("- Query: " & ManagementQuery)
+        DynaLog.LogMessage("- Namespace: " & ManagementNamespace)
         Try
-            Return New ManagementObjectSearcher(ManagementQuery).Get()
+            If ManagementNamespace = "root\cimv2" Then
+                ' We're fine with just using the query
+                Return New ManagementObjectSearcher(ManagementQuery).Get()
+            Else
+                ' Some extra work needs to be made
+                Return New ManagementObjectSearcher(New ManagementScope(ManagementNamespace), New ObjectQuery(ManagementQuery)).Get()
+            End If
         Catch ex As Exception
+            Dim wmiErrorStr As String = String.Format("An error occurred while executing the WMI query: {0}{1}{0}, on namespace {2} -- {3}", Quote, ManagementQuery, ManagementNamespace, ex.Message)
+            DynaLog.LogMessage(wmiErrorStr)
+            If Debugger.IsAttached Then MessageBox.Show(wmiErrorStr, "WMI Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return Nothing
         End Try
         Return Nothing
