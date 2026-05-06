@@ -64,6 +64,7 @@ Public Class SampleScriptBrowser
 
     Private Function LoadAllStarterScripts() As Boolean
         DynaLog.LogMessage("Preparing to load all scripts...")
+        If Not Debugger.IsAttached Then DynaLog.DisableLogging()
 
         ' First we check if we have a script collection
         If Not Directory.Exists(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")) Then
@@ -99,6 +100,8 @@ Public Class SampleScriptBrowser
 
             End Try
         End If
+
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
         Return True
     End Function
