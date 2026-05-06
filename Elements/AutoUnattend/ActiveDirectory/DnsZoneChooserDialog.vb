@@ -19,6 +19,12 @@ Public Class DnsZoneChooserDialog
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(168)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(192)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(180)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(96)
+
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
