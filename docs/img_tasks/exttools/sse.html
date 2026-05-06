@@ -13,7 +13,7 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
@@ -32,6 +32,8 @@
 
     
     
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
       
     
     
@@ -54,7 +56,7 @@
             html.glightbox-open { overflow: initial; height: 100%; }
             .gslide-title { margin-top: 0px; user-select: text; }
             .gslide-desc { color: #666; user-select: text; }
-            .gslide-image img { background: white; }
+            .gslide-image img { background: none; }
             .gscrollbar-fixer { padding-right: 15px; }
             .gdesc-inner { font-size: 0.75rem; }
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
@@ -70,7 +72,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -127,7 +129,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
@@ -137,7 +139,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
@@ -147,7 +149,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
     
       <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
@@ -161,6 +163,48 @@
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
     
     
   </nav>
@@ -3193,6 +3237,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#command-line-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command line usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-starter-script-format" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3293,6 +3348,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#command-line-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command line usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-starter-script-format" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3341,6 +3407,7 @@
 <p>The Starter Script Editor allows you to make and edit your own starter scripts that you can later use with DISMTools. It can be accessed from one of the following locations:</p>
 <ul>
 <li>By opening the starter script browser from the post-installation scripts section of the unattended answer file creation wizard, and clicking "Create your own starter scripts..."</li>
+<li>By going to Tools &gt; Create a starter script (versions 0.8 and newer)</li>
 <li>Independently, by opening <code>StarterScriptEditor.exe</code> located in <code>&lt;program directory&gt;\tools\StarterScriptEditor</code></li>
 </ul>
 <p>You should see the following window:</p>
@@ -3352,12 +3419,24 @@
 <p>When you launch the Starter Script Editor, you will be able to create a new starter script, or open an existing one by clicking "Open" from the toolbar.</p>
 <p>To create a new Starter Script you will need to input information regarding the name, the description, the underlying script language, and the script code itself. You can use the following languages in your starter script:</p>
 <ul>
-<li>Batch</li>
-<li>PowerShell</li>
+<li><a href="https://en.wikipedia.org/wiki/Batch_file">Batch</a></li>
+<li><a href="https://en.wikipedia.org/wiki/PowerShell">PowerShell</a></li>
+<li><a href="https://en.wikipedia.org/wiki/VBScript">Visual Basic Script</a></li>
+<li><a href="https://en.wikipedia.org/wiki/JScript">JScript</a></li>
 </ul>
 <p>When writing the script code, you can click "Import Existing Script..." to open a script that you may already have and that you want to use as the base for your starter script. Keep in mind, however, that, by using this option, you are replacing existing code in the starter script with the code of the script to import.</p>
 <p>Click the Save button and specify a name for the starter script file to save it.</p>
 <p>Opening the Starter Script Editor from DISMTools presents an improvement. After working on your starter scripts and closing the editor, DISMTools will reload all starter scripts to pull in the new ones. That means that you can use these the moment you close the Starter Script Editor, as opposed to having to close and reopen DISMTools.</p>
+<p>When working on starter scripts, you decide which versions of DISMTools you want them to be compatible with by choosing the appropriate format version by clicking <em>Configure target script version</em>:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_changever_btn.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_changever_btn.png"></a>
+</p>
+
+<p>Then, select the version of DISMTools you want the starter script to be compatible with:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_changever.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_changever.png"></a>
+</p>
+
 <h2 id="running-on-older-versions-of-windows">Running on older versions of Windows</h2>
 <p>DISMTools includes 2 versions of the Starter Script Editor that contain the same feature set but target different frameworks:</p>
 <ul>
@@ -3372,30 +3451,17 @@ A: Why not?
  -->
 </li>
 </ul>
-<!-- ## Command line usage
-
-The command line arguments of the Starter Script Editor are as follows:
-
-
-<pre><code>DynaViewer.exe &quot;file&quot; [options]
-</code></pre>
-
-
-### Options
-
-- `/selectfirst=<n>` - Selects the first *n* entries of the log file
-- `/selectlast=<n>` - Selects the last *n* entries of the log file. In the event of an internal error, DISMTools will use this option to select enough entries to include error information and the last entries before it 
-
-Not in 0.7.3, but in INFINITY 0.8
--->
-
+<h2 id="command-line-usage">Command line usage</h2>
+<p>The command line arguments of the Starter Script Editor are as follows:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>StarterScriptEditor.exe /dtss="file"
+</span></code></pre></div>
 <h2 id="the-starter-script-format">The Starter Script Format</h2>
 <p>Starter scripts (with the DTSS extension) are stored as simple text files that you can open in any text editor. The format is as follows:</p>
-<pre><code class="language-plaintext">Language: &lt;language&gt;
-Name: &lt;name&gt;
-Description: &lt;description&gt;
-&lt;script code&gt;
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Language: &lt;language&gt;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Name: &lt;name&gt;
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Description: &lt;description&gt;
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>&lt;script code&gt;
+</span></code></pre></div>
 <h3 id="format-version-history">Format Version History</h3>
 <table>
 <thead>
@@ -3407,8 +3473,13 @@ Description: &lt;description&gt;
 </thead>
 <tbody>
 <tr>
+<td style="text-align: center;">1.2</td>
+<td style="text-align: center;">0.8.0 Preview 4+</td>
+<td>Added a customizable field for better telling the user about customizable settings</td>
+</tr>
+<tr>
 <td style="text-align: center;">1.1</td>
-<td style="text-align: center;">0.7.2 Preview 3+</td>
+<td style="text-align: center;">0.7.2 Preview 3 - 0.8 Preview 3</td>
 <td>Added name and description fields to the starter scripts</td>
 </tr>
 <tr>
@@ -3437,12 +3508,6 @@ Description: &lt;description&gt;
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-        
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
-  Back to top
-</button>
         
       </main>
       
@@ -3473,7 +3538,7 @@ Description: &lt;description&gt;
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

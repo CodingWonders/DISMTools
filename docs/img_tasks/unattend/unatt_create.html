@@ -15,7 +15,7 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
@@ -34,6 +34,8 @@
 
     
     
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
       
     
     
@@ -56,7 +58,7 @@
             html.glightbox-open { overflow: initial; height: 100%; }
             .gslide-title { margin-top: 0px; user-select: text; }
             .gslide-desc { color: #666; user-select: text; }
-            .gslide-image img { background: white; }
+            .gslide-image img { background: none; }
             .gscrollbar-fixer { padding-right: 15px; }
             .gdesc-inner { font-size: 0.75rem; }
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
@@ -72,7 +74,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -129,7 +131,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
@@ -139,7 +141,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
@@ -149,7 +151,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
     
       <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden="">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
@@ -163,6 +165,48 @@
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
     
     
   </nav>
@@ -3359,7 +3403,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#change-history" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3367,11 +3416,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -3957,7 +4001,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#change-history" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3965,11 +4014,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -4020,7 +4064,7 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_regional_settings.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_regional_settings.png"></a>
 </p>
 
-<p>In the <strong>System Configuration</strong> page, you can set the computer name, the architectures that you wish to target with your answer file, and other settings:</p>
+<p>In the <strong>System Configuration</strong> page, you can set the computer name (either manually, by letting Windows set one for you, or by using a script), the architectures that you wish to target with your answer file, and other settings:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_system_configuration.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_system_configuration.png"></a>
 </p>
@@ -4099,21 +4143,39 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts.png"></a>
 </p>
 
-<p>You can either write the post-installation scripts from scratch, or import existing ones.</p>
-<p>Notes:</p>
+<p>You can work on post-installation scripts in the following ways:</p>
 <ul>
-<li>After scripts are done, you can restart Windows Explorer in case you have applied personalization changes, for example, via the Registry</li>
-<li>If you are new to the world of post-installation scripts, you can go with new Starter Scripts. Go to the starter script reference section (at the bottom of this page) for more information</li>
+<li>By writing them from scratch</li>
+<li>By importing existing scripts. You can import Batch, PowerShell, VBScript and JScript files. DISMTools will automatically detect the script language based on the file extension</li>
+<li>By using a starter script from anywhere in your file system or from the Starter Script Browser. Refer to the Starter Script Reference section for more information about available starter scripts and how to create your own</li>
 </ul>
-<p>In the <strong>Component Settings</strong> page, you can specify placeholders for additional components that you want to add to your answer file for specific passes. You will have to fill them in manually after the answer file is generated:</p>
+<p>You can add multiple post-installation scripts for each stage by using the plus and minus buttons. Navigate between scripts by using the respective buttons.</p>
+<p>Additionally, you can reorder the scripts. To do this, click the following button:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts_reorder_btn.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts_reorder_btn.png"></a>
+</p>
+
+<p>Then, select a script and use the controls to move the script to the desired position. Finally, click OK:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts_reorder.gif" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts_reorder.gif"></a>
+</p>
+
+<p>In the <strong>Component Settings</strong> page, you can specify additional components and settings to be added to your answer file. Use the buttons on the top of this page to add, remove, and navigate between components.</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components.png"></a>
 </p>
 
+<p>After you add a new entry, you have to specify both the component you want to customize, and its pass. Then, add the XML data that corresponds to the settings you want to configure for that component. Use the link at the bottom of this page to look up a component online.</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components_newcmp.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components_newcmp.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components_cmpsel.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components_cmpsel.png"></a>
+</p>
+
 <p>Notes:</p>
 <ul>
-<li>You can learn more about the components <a href="https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/components-b-unattend">here</a></li>
-<li>You can fill in the placeholders in the Editor mode, or in the Windows System Image Manager</li>
 <li>If you don't want to configure components, simply skip this step</li>
 </ul>
 <p>Finally, before creating the answer file, you can review the settings that you have configured in the wizard. If you want to change any settings, you can go back to the respective pages:</p>
@@ -4167,7 +4229,25 @@
 </ul>
 <p>When you pick the NIC from the list, every other field (PDS, DNS server addresses) will be filled in automatically given the current configuration of the NIC. However, you can still change these fields if you need to use different values.</p>
 <p>For DNS server addresses, you need to put one address per line. If you want to check if the syntax of the addresses is correct, click <strong>Verify DNS Address Syntax</strong>.</p>
-<p>From this wizard, you can also check if the target devices can reach the domain controller using the provided domain suffix by clicking <strong>Test DNS resolution...</strong>. If you see the IP address of the server, then the target devices should be able to reach the domain controller. Try this on a domain-joined machine so you can verify if its current network adapter settings can be used for other devices.</p>
+<p>You can also perform additional tasks with primary domain suffixes:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo_dnstools.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo_dnstools.png"></a>
+</p>
+
+<ul>
+<li>To check if the target devices can reach the domain controller using the provided domain suffix by clicking <strong>Test DNS resolution</strong>. If you see the IP address of the server, then the target devices should be able to reach the domain controller. Try this on a domain-joined machine so you can verify if its current network adapter settings can be used for other devices:</li>
+</ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo_testdns.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo_testdns.png"></a>
+</p>
+
+<ul>
+<li>To use a domain suffix from a list of DNS zones, click <strong>Choose DNS zone...</strong> and pick the domain suffix from the list. This option is only available on domain controllers:</li>
+</ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo_dnszone.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo_dnszone.png"></a>
+</p>
+
 <p>One example of filled-in information is shown below:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo.png"></a>
@@ -4431,11 +4511,14 @@
 <h3 id="configure-folders-for-git-integration">Configure folders for Git integration</h3>
 <p><strong>Script language</strong>: PowerShell</p>
 <p>To add new entries to the list of folders for which to show VCS information, add them to the following array, like this:</p>
-<pre><code class="language-powershell">$gitFolders = @(
-    "$env:SYSTEMDRIVE\dev\repo1",
-    "$env:SYSTEMDRIVE\dev\repo2"
-)
-</code></pre>
+<div class="language-powershell highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nv">$gitFolders</span> <span class="p">=</span> <span class="p">@(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="s2">"$env:SYSTEMDRIVE\dev\repo1"</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a>    <span class="s2">"$env:SYSTEMDRIVE\dev\repo2"</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></tbody></table></div>
 <p>Do note that, in order for the Git view to show, the system needs the <em>Windows Advanced Settings</em> application.</p>
 <h3 id="configure-start-menu-appearance">Configure Start menu appearance</h3>
 <p><strong>Script language</strong>: Batch</p>
@@ -4613,11 +4696,11 @@
 <li>Copilot (AppX package)</li>
 </ul>
 <p>These entries will be added to list of notification sources, in Settings -&gt; System -&gt; Notifications. To add more entries to the list, do the following:</p>
-<pre><code class="language-batch">FOR %%a IN (Windows.SystemToast.Suggested ... Windows.SystemToast.AccountHealth &lt;your source here&gt;) DO (
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a" /f
-    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a" /v Enabled /t REG_DWORD /d 0 /f
-)
-</code></pre>
+<div class="language-batch highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">FOR</span> <span class="se">%%</span>a <span class="k">IN</span> <span class="p">(</span>Windows.SystemToast.Suggested ... Windows.SystemToast.AccountHealth <span class="p">&lt;</span>your source here<span class="p">&gt;</span>) <span class="k">DO</span> <span class="p">(</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    reg add <span class="s2">"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\</span><span class="se">%%</span><span class="s2">a"</span> /f
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    reg add <span class="s2">"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\</span><span class="se">%%</span><span class="s2">a"</span> /v Enabled /t REG_DWORD /d 0 /f
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span>
+</span></code></pre></div>
 <p>Notes for your source:</p>
 <ul>
 <li>If your source contains spaces, surround it with quotes</li>
@@ -4646,7 +4729,7 @@
 <h3 id="show-file-extensions">Show File Extensions</h3>
 <p><strong>Script language</strong>: Batch</p>
 <p>No settings available.</p>
-<h3 id="change-history">Change History</h3>
+<h2 id="change-history">Change History</h2>
 <ul>
 <li>DISMTools 0.7.2 Preview 3:<ul>
 <li>Added:<ul>
@@ -4726,12 +4809,6 @@
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
-  Back to top
-</button>
-        
       </main>
       
         <footer class="md-footer">
@@ -4761,7 +4838,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
