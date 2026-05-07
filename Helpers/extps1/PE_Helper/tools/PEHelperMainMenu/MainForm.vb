@@ -12,6 +12,8 @@ Public Class MainForm
 
     Private serverPort As Integer = 8080
 
+    Private pxeServerPortSwitcherMessage As String = ""
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Since we need Windows Server to run PXE Helper Servers, we'll block access to that page
         ' on non-Server Windows.
@@ -36,8 +38,9 @@ Public Class MainForm
                 LinkLabel6.Text = "Explore contents of this disc"
                 LinkLabel7.Text = "Start PXE Helper Server for FOG"
                 LinkLabel8.Text = "Start PXE Helper Server for Windows Deployment Services"
-                LinkLabel9.Text = "Copy boot image to WDS server"
+                LinkLabel9.Text = "Copy boot image to WDS server..."
                 ExitLink.Text = "Exit"
+                pxeServerPortSwitcherMessage = "Hold down SHIFT to change the port to use for this PXE Helper Server"
             Case "ESN"
                 RestartMessage = "Esto reiniciará su equipo. Asegúrese de haber configurado el equipo para iniciar este medio de instalación. ¿Desea reiniciar?"
                 ProcessExitCodeMessage = "El proceso terminó con código 0x{0}:" & CrLf & CrLf & "{1}"
@@ -51,8 +54,9 @@ Public Class MainForm
                 LinkLabel6.Text = "Explorar los contenidos de este disco"
                 LinkLabel7.Text = "Iniciar el servidor de PXE Helpers para FOG"
                 LinkLabel8.Text = "Iniciar el servidor de PXE Helpers para WDS"
-                LinkLabel9.Text = "Copiar imagen de arranque al servidor WDS"
+                LinkLabel9.Text = "Copiar imagen de arranque al servidor WDS..."
                 ExitLink.Text = "Salir"
+                pxeServerPortSwitcherMessage = "Mantenga pulsado SHIFT para cambiar el puerto a usar para este servidor de PXE Helpers"
             Case "FRA"
                 RestartMessage = "Votre ordinateur va redémarrer. Assurez-vous qu’il est configuré pour démarrer sur le média d’installation. Voulez-vous redémarrer ?"
                 ProcessExitCodeMessage = "Processus terminé avec le code 0x{0} :" & CrLf & CrLf & "{1}"
@@ -66,8 +70,9 @@ Public Class MainForm
                 LinkLabel6.Text = "Explorer le contenu de ce disque"
                 LinkLabel7.Text = "Démarrer un serveur PXE Helper pour FOG"
                 LinkLabel8.Text = "Démarrer un serveur PXE Helper pour WDS"
-                LinkLabel9.Text = "Copier l'image de démarrage sur le serveur WDS"
+                LinkLabel9.Text = "Copier l'image de démarrage sur le serveur WDS..."
                 ExitLink.Text = "Sortie"
+                pxeServerPortSwitcherMessage = "Maintenez la touche MAJ enfoncée pour modifier le port à utiliser pour ce serveur PXE Helper"
             Case "PTB", "PTG"
                 RestartMessage = "O computador será reiniciado. Certifique-se de que está configurado para iniciar pelo meio de instalação. Deseja reiniciar?"
                 ProcessExitCodeMessage = "Processo terminou com o código 0x{0}:" & CrLf & CrLf & "{1}"
@@ -81,8 +86,9 @@ Public Class MainForm
                 LinkLabel6.Text = "Explore o conteúdo deste disco"
                 LinkLabel7.Text = "Iniciar servidor PXE Helper para FOG"
                 LinkLabel8.Text = "Iniciar servidor PXE Helper para WDS"
-                LinkLabel9.Text = "Copiar imagem de arranque para o servidor WDS"
+                LinkLabel9.Text = "Copiar imagem de arranque para o servidor WDS..."
                 ExitLink.Text = "Sair"
+                pxeServerPortSwitcherMessage = "Mantenha premida a tecla SHIFT para alterar a porta a utilizar neste servidor auxiliar PXE"
             Case "ITA"
                 RestartMessage = "Il computer verrà riavviato. Assicurati che sia configurato per avviarsi dal supporto di installazione. Vuoi riavviare?"
                 ProcessExitCodeMessage = "Processo completato con codice 0x{0}:" & CrLf & CrLf & "{1}"
@@ -96,8 +102,9 @@ Public Class MainForm
                 LinkLabel6.Text = "Esplora i contenuti di questo disco"
                 LinkLabel7.Text = "Avvia server PXE Helper per FOG"
                 LinkLabel8.Text = "Avvia server PXE Helper per WDS"
-                LinkLabel9.Text = "Copia l'immagine di avvio sul server WDS"
+                LinkLabel9.Text = "Copia l'immagine di avvio sul server WDS..."
                 ExitLink.Text = "Esci"
+                pxeServerPortSwitcherMessage = "Tenere premuto il tasto SHIFT per modificare la porta da utilizzare per questo server PXE Helper"
         End Select
     End Sub
 
@@ -189,8 +196,10 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
-        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                   "/c " & Quote & Path.Combine(Application.StartupPath, "boot_image_to_wds.bat") & Quote, Application.StartupPath, RunAsAdmin:=True)
+        If WDSBootImageArchitectureSelector.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
+                       "/c " & Quote & Path.Combine(Application.StartupPath, "boot_image_to_wds.bat") & Quote & " /arch=" & WDSBootImageArchitectureSelector.ComboBox1.SelectedItem, Application.StartupPath, RunAsAdmin:=True)
+        End If
     End Sub
 
     Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
@@ -202,5 +211,10 @@ Public Class MainForm
                        " -imageGroup " & Quote & selectedImageGroup & Quote & " -installImagePath " & Quote & Path.Combine(Application.StartupPath, "sources", "install.wim") & Quote,
                        RunAsAdmin:=True)
         End If
+    End Sub
+
+    Private Sub LinkLabel8_MouseHover(sender As Object, e As EventArgs) Handles LinkLabel8.MouseHover, LinkLabel7.MouseHover
+        Dim displayedToolTip As New ToolTip()
+        displayedToolTip.SetToolTip(sender, pxeServerPortSwitcherMessage)
     End Sub
 End Class

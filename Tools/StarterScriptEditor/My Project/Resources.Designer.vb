@@ -114,6 +114,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property savefileas() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("savefileas", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property targetversion() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("targetversion", resourceCulture)

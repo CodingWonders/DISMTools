@@ -113,6 +113,12 @@
     <Compile Include="SysprepPreparatorModeDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="WDSBootImageArchitectureSelector.Designer.vb">
+      <DependentUpon>WDSBootImageArchitectureSelector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WDSBootImageArchitectureSelector.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="WDSImageGroupSpecifier.Designer.vb">
       <DependentUpon>WDSImageGroupSpecifier.vb</DependentUpon>
     </Compile>
@@ -135,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SysprepPreparatorModeDialog.resx">
       <DependentUpon>SysprepPreparatorModeDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WdsBootImageArchitectureSelector.resx">
+      <DependentUpon>WDSBootImageArchitectureSelector.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WDSImageGroupSpecifier.resx">
       <DependentUpon>WDSImageGroupSpecifier.vb</DependentUpon>

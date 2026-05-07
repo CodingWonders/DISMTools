@@ -30,6 +30,12 @@ Partial Class DriverFilterAssistantDialog
         Me.FilterTypeContainerPanel = New System.Windows.Forms.Panel()
         Me.DateFilterPanel = New System.Windows.Forms.Panel()
         Me.DateFilterSuboperatorContainerPanel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.YearMonthPanel = New System.Windows.Forms.Panel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.DatePanel = New System.Windows.Forms.Panel()
+        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.ComboBox4 = New System.Windows.Forms.ComboBox()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -59,16 +65,14 @@ Partial Class DriverFilterAssistantDialog
         Me.Label3 = New System.Windows.Forms.Label()
         Me.NoFilterTypeSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.YearMonthPanel = New System.Windows.Forms.Panel()
-        Me.DatePanel = New System.Windows.Forms.Panel()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.FilterTypeContainerPanel.SuspendLayout()
         Me.DateFilterPanel.SuspendLayout()
         Me.DateFilterSuboperatorContainerPanel.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.YearMonthPanel.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.DatePanel.SuspendLayout()
         Me.SignatureStatusFilterPanel.SuspendLayout()
         Me.BootCriticalStatusFilterPanel.SuspendLayout()
         Me.InboxStatusFilterPanel.SuspendLayout()
@@ -78,10 +82,6 @@ Partial Class DriverFilterAssistantDialog
         Me.OriginalFileNameFilterPanel.SuspendLayout()
         Me.PublishedNameFilterPanel.SuspendLayout()
         Me.NoFilterTypeSelectedPanel.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
-        Me.YearMonthPanel.SuspendLayout()
-        Me.DatePanel.SuspendLayout()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -180,6 +180,67 @@ Partial Class DriverFilterAssistantDialog
         Me.DateFilterSuboperatorContainerPanel.Name = "DateFilterSuboperatorContainerPanel"
         Me.DateFilterSuboperatorContainerPanel.Size = New System.Drawing.Size(572, 100)
         Me.DateFilterSuboperatorContainerPanel.TabIndex = 3
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.YearMonthPanel, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.DatePanel, 1, 0)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(12, 40)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(546, 46)
+        Me.TableLayoutPanel2.TabIndex = 3
+        '
+        'YearMonthPanel
+        '
+        Me.YearMonthPanel.Controls.Add(Me.Label13)
+        Me.YearMonthPanel.Controls.Add(Me.NumericUpDown1)
+        Me.YearMonthPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.YearMonthPanel.Location = New System.Drawing.Point(3, 3)
+        Me.YearMonthPanel.Name = "YearMonthPanel"
+        Me.YearMonthPanel.Size = New System.Drawing.Size(267, 40)
+        Me.YearMonthPanel.TabIndex = 0
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(135, 13)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(67, 13)
+        Me.Label13.TabIndex = 1
+        Me.Label13.Text = "Month Name"
+        Me.Label13.Visible = False
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(13, 10)
+        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(115, 21)
+        Me.NumericUpDown1.TabIndex = 0
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'DatePanel
+        '
+        Me.DatePanel.Controls.Add(Me.DateTimePicker1)
+        Me.DatePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DatePanel.Location = New System.Drawing.Point(276, 3)
+        Me.DatePanel.Name = "DatePanel"
+        Me.DatePanel.Size = New System.Drawing.Size(267, 40)
+        Me.DatePanel.TabIndex = 1
+        '
+        'DateTimePicker1
+        '
+        Me.DateTimePicker1.Location = New System.Drawing.Point(12, 10)
+        Me.DateTimePicker1.Name = "DateTimePicker1"
+        Me.DateTimePicker1.Size = New System.Drawing.Size(241, 21)
+        Me.DateTimePicker1.TabIndex = 0
         '
         'ComboBox4
         '
@@ -475,67 +536,6 @@ Partial Class DriverFilterAssistantDialog
         Me.Label2.Text = "Choose a filter to use for driver searches."
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.YearMonthPanel, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.DatePanel, 1, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(12, 40)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(546, 46)
-        Me.TableLayoutPanel2.TabIndex = 3
-        '
-        'YearMonthPanel
-        '
-        Me.YearMonthPanel.Controls.Add(Me.Label13)
-        Me.YearMonthPanel.Controls.Add(Me.NumericUpDown1)
-        Me.YearMonthPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.YearMonthPanel.Location = New System.Drawing.Point(3, 3)
-        Me.YearMonthPanel.Name = "YearMonthPanel"
-        Me.YearMonthPanel.Size = New System.Drawing.Size(267, 40)
-        Me.YearMonthPanel.TabIndex = 0
-        '
-        'DatePanel
-        '
-        Me.DatePanel.Controls.Add(Me.DateTimePicker1)
-        Me.DatePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DatePanel.Location = New System.Drawing.Point(276, 3)
-        Me.DatePanel.Name = "DatePanel"
-        Me.DatePanel.Size = New System.Drawing.Size(267, 40)
-        Me.DatePanel.TabIndex = 1
-        '
-        'NumericUpDown1
-        '
-        Me.NumericUpDown1.Location = New System.Drawing.Point(13, 10)
-        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(115, 21)
-        Me.NumericUpDown1.TabIndex = 0
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(135, 13)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(67, 13)
-        Me.Label13.TabIndex = 1
-        Me.Label13.Text = "Month Name"
-        Me.Label13.Visible = False
-        '
-        'DateTimePicker1
-        '
-        Me.DateTimePicker1.Location = New System.Drawing.Point(12, 10)
-        Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(241, 21)
-        Me.DateTimePicker1.TabIndex = 0
-        '
         'DriverFilterAssistantDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -560,6 +560,11 @@ Partial Class DriverFilterAssistantDialog
         Me.DateFilterPanel.ResumeLayout(False)
         Me.DateFilterPanel.PerformLayout()
         Me.DateFilterSuboperatorContainerPanel.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.YearMonthPanel.ResumeLayout(False)
+        Me.YearMonthPanel.PerformLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.DatePanel.ResumeLayout(False)
         Me.SignatureStatusFilterPanel.ResumeLayout(False)
         Me.SignatureStatusFilterPanel.PerformLayout()
         Me.BootCriticalStatusFilterPanel.ResumeLayout(False)
@@ -575,11 +580,6 @@ Partial Class DriverFilterAssistantDialog
         Me.PublishedNameFilterPanel.ResumeLayout(False)
         Me.PublishedNameFilterPanel.PerformLayout()
         Me.NoFilterTypeSelectedPanel.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.YearMonthPanel.ResumeLayout(False)
-        Me.YearMonthPanel.PerformLayout()
-        Me.DatePanel.ResumeLayout(False)
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

@@ -30,6 +30,7 @@ Partial Class ServerPortSpecifier
         Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -82,7 +83,7 @@ Partial Class ServerPortSpecifier
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(198, 97)
+        Me.Label2.Location = New System.Drawing.Point(107, 97)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(228, 13)
         Me.Label2.TabIndex = 2
@@ -90,7 +91,7 @@ Partial Class ServerPortSpecifier
         '
         'NumericUpDown1
         '
-        Me.NumericUpDown1.Location = New System.Drawing.Point(201, 114)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(110, 114)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {80, 0, 0, 0})
         Me.NumericUpDown1.Name = "NumericUpDown1"
@@ -109,6 +110,16 @@ Partial Class ServerPortSpecifier
         Me.Button1.Text = "Default"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'Button2
+        '
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(341, 113)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(176, 23)
+        Me.Button2.TabIndex = 5
+        Me.Button2.Text = "Check if this port is in use"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'ServerPortSpecifier
         '
         Me.AcceptButton = Me.OK_Button
@@ -116,6 +127,7 @@ Partial Class ServerPortSpecifier
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(624, 185)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.Label2)
@@ -142,5 +154,6 @@ Partial Class ServerPortSpecifier
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

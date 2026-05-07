@@ -511,6 +511,7 @@ Public Class ProgressPanel
     Public drvExportTarget As String                        ' Path the drivers will be exported to
     Public drvExportAllDrvs As Boolean                      ' Determines whether to export all drivers, or drivers based on the class name
     Public drvExportSpecificClassName As String             ' The class name that the drivers to export have set
+    Public drvExportWin7Mode As Boolean                     ' Run driver exports in Windows 7 mode
 
     ' OperationNum: 78
     Public ImportSourceInt As Integer                       ' The import source
@@ -6008,53 +6009,240 @@ Public Class ProgressPanel
                            "- Export all drivers, or just those with matching class names? " & If(drvExportAllDrvs, "All Drivers", "Drivers with matching class name") & CrLf &
                            "- If not all drivers are exported, which class name is used for drivers that will be exported? " & drvExportSpecificClassName & CrLf)
         If drvExportAllDrvs Then
-            ' Check the DISM version, as the Windows 7 version doesn't allow this action
-            Select Case DismVersionChecker.ProductMajorPart
-                Case 6
-                    Select Case DismVersionChecker.ProductMinorPart
-                        Case 1
-                            ' Not supported
-                        Case Is >= 2
-                            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
-                    End Select
-                Case 10
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
-            End Select
-            RunProcess(DismProgram, CommandArgs)
-        Else
-            ' Selective driver exports, based on class name, cannot be done with DISM as DISM will export all drivers no matter what.
-            ' We have to get the drivers from the image, which will let us filter by class name, then we copy them manually to the destination.
-            Try
-                LogView.AppendText(CrLf & "Getting image drivers...")
-                DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
-                    DynaLog.LogMessage("Getting drivers with DISMAPI...")
-                    Dim driverPackages As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
-                    If driverPackages Is Nothing Then Exit Try
-                    DynaLog.LogMessage("Filtering driver collection based on class name...")
-                    Dim driversToExport As IEnumerable(Of DismDriverPackage) = driverPackages.Where(Function(driver) driver.ClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+            If drvExportWin7Mode Then
+                Try
+                    Dim ImageDrivers As New List(Of ImageDriver)
+
+                    ' Run DISM and parse the output in one go.
+                    Using DriverEnumerationProc As New Process() With {
+                        .StartInfo = New ProcessStartInfo() With {
+                            .FileName = DismProgram,
+                            .Arguments = String.Format("/English /image={0} /get-drivers{1}", Quote & MountDir & Quote, If(AllDrivers, " /all", "")),
+                            .CreateNoWindow = True,
+                            .WindowStyle = ProcessWindowStyle.Hidden,
+                            .UseShellExecute = False,
+                            .RedirectStandardOutput = True
+                        }
+                    }
+                        Dim output As String = ""
+                        DriverEnumerationProc.Start()
+                        output = DriverEnumerationProc.StandardOutput.ReadToEnd()
+                        DriverEnumerationProc.WaitForExit()
+                        If DriverEnumerationProc.ExitCode = 0 Then
+                            ' Parse the output.
+                            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Published Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+                            Dim drvPublishedNameString As String = "",
+                                drvOriginalFileNameString As String = "",
+                                drvInboxString As String = "",
+                                drvClassNameString As String = "",
+                                drvProviderNameString As String = "",
+                                drvDateString As String = "",
+                                drvVersionString As String = ""
+                            For Each outputLine In outputLines
+                                If outputLine.StartsWith("Published Name : ") Then
+                                    drvPublishedNameString = outputLine.Replace("Published Name : ", "")
+                                ElseIf outputLine.StartsWith("Original File Name : ") Then
+                                    drvOriginalFileNameString = outputLine.Replace("Original File Name : ", "")
+                                ElseIf outputLine.StartsWith("Inbox : ") Then
+                                    drvInboxString = outputLine.Replace("Inbox : ", "")
+                                ElseIf outputLine.StartsWith("Class Name : ") Then
+                                    drvClassNameString = outputLine.Replace("Class Name : ", "")
+                                ElseIf outputLine.StartsWith("Provider Name : ") Then
+                                    drvProviderNameString = outputLine.Replace("Provider Name : ", "")
+                                ElseIf outputLine.StartsWith("Date : ") Then
+                                    drvDateString = outputLine.Replace("Date : ", "")
+                                ElseIf outputLine.StartsWith("Version : ") Then
+                                    drvVersionString = outputLine.Replace("Version : ", "")
+                                End If
+
+                                ' If we've grabbed everything at this point, we add it to our list,
+                                ' then clear everything and move on.
+                                If drvPublishedNameString <> "" AndAlso
+                                    drvOriginalFileNameString <> "" AndAlso
+                                    drvInboxString <> "" AndAlso
+                                    drvClassNameString <> "" AndAlso
+                                    drvProviderNameString <> "" AndAlso
+                                    drvDateString <> "" AndAlso
+                                    drvVersionString <> "" Then
+                                    ImageDrivers.Add(New ImageDriver(drvPublishedNameString,
+                                                                     drvOriginalFileNameString,
+                                                                     drvInboxString.Equals("Yes", StringComparison.InvariantCultureIgnoreCase),
+                                                                     drvClassNameString,
+                                                                     drvProviderNameString,
+                                                                     drvDateString,
+                                                                     New Version(drvVersionString)))
+                                    drvPublishedNameString = ""
+                                    drvOriginalFileNameString = ""
+                                    drvInboxString = ""
+                                    drvClassNameString = ""
+                                    drvProviderNameString = ""
+                                    drvDateString = ""
+                                    drvVersionString = ""
+                                End If
+                            Next
+                        Else
+                            Throw New Exception(DISMProc.ExitCode)
+                        End If
+                    End Using
+
+                    Dim driversToExport As IEnumerable(Of ImageDriver) = ImageDrivers
                     If driversToExport Is Nothing Then Exit Try
 
                     DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
                     LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
                     For Each driverToExport In driversToExport
-                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.OriginalFileName) & "...")
-                        Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
+                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
                         Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
-                        CopyRecursive(Path.GetDirectoryName(driverToExport.OriginalFileName), destinationDriverPath)
+                        CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
                     Next
-                End Using
-                DismExitCode = 0
-            Catch ex As Exception
-                DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
-                DismExitCode = ex.HResult
-            Finally
-                Try
-                    DismApi.Shutdown()
                 Catch ex As Exception
-
+                    DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                    DismExitCode = ex.HResult
                 End Try
-            End Try
+            Else
+                ' Check the DISM version, as the Windows 7 version doesn't allow this action
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                ' Not supported
+                            Case Is >= 2
+                                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                        End Select
+                    Case 10
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                End Select
+                RunProcess(DismProgram, CommandArgs)
+            End If
+        Else
+            ' Selective driver exports, based on class name, cannot be done with DISM as DISM will export all drivers no matter what.
+            ' We have to get the drivers from the image, which will let us filter by class name, then we copy them manually to the destination.
+            If drvExportWin7Mode Then
+                Try
+                    Dim ImageDrivers As New List(Of ImageDriver)
+
+                    ' Run DISM and parse the output in one go.
+                    Using DriverEnumerationProc As New Process() With {
+                        .StartInfo = New ProcessStartInfo() With {
+                            .FileName = DismProgram,
+                            .Arguments = String.Format("/English /image={0} /get-drivers{1}", Quote & MountDir & Quote, If(AllDrivers, " /all", "")),
+                            .CreateNoWindow = True,
+                            .WindowStyle = ProcessWindowStyle.Hidden,
+                            .UseShellExecute = False,
+                            .RedirectStandardOutput = True
+                        }
+                    }
+                        Dim output As String = ""
+                        DriverEnumerationProc.Start()
+                        output = DriverEnumerationProc.StandardOutput.ReadToEnd()
+                        DriverEnumerationProc.WaitForExit()
+                        If DriverEnumerationProc.ExitCode = 0 Then
+                            ' Parse the output.
+                            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Published Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+                            Dim drvPublishedNameString As String = "",
+                                drvOriginalFileNameString As String = "",
+                                drvInboxString As String = "",
+                                drvClassNameString As String = "",
+                                drvProviderNameString As String = "",
+                                drvDateString As String = "",
+                                drvVersionString As String = ""
+                            For Each outputLine In outputLines
+                                If outputLine.StartsWith("Published Name : ") Then
+                                    drvPublishedNameString = outputLine.Replace("Published Name : ", "")
+                                ElseIf outputLine.StartsWith("Original File Name : ") Then
+                                    drvOriginalFileNameString = outputLine.Replace("Original File Name : ", "")
+                                ElseIf outputLine.StartsWith("Inbox : ") Then
+                                    drvInboxString = outputLine.Replace("Inbox : ", "")
+                                ElseIf outputLine.StartsWith("Class Name : ") Then
+                                    drvClassNameString = outputLine.Replace("Class Name : ", "")
+                                ElseIf outputLine.StartsWith("Provider Name : ") Then
+                                    drvProviderNameString = outputLine.Replace("Provider Name : ", "")
+                                ElseIf outputLine.StartsWith("Date : ") Then
+                                    drvDateString = outputLine.Replace("Date : ", "")
+                                ElseIf outputLine.StartsWith("Version : ") Then
+                                    drvVersionString = outputLine.Replace("Version : ", "")
+                                End If
+
+                                ' If we've grabbed everything at this point, we add it to our list,
+                                ' then clear everything and move on.
+                                If drvPublishedNameString <> "" AndAlso
+                                    drvOriginalFileNameString <> "" AndAlso
+                                    drvInboxString <> "" AndAlso
+                                    drvClassNameString <> "" AndAlso
+                                    drvProviderNameString <> "" AndAlso
+                                    drvDateString <> "" AndAlso
+                                    drvVersionString <> "" Then
+                                    ImageDrivers.Add(New ImageDriver(drvPublishedNameString,
+                                                                     drvOriginalFileNameString,
+                                                                     drvInboxString.Equals("Yes", StringComparison.InvariantCultureIgnoreCase),
+                                                                     drvClassNameString,
+                                                                     drvProviderNameString,
+                                                                     drvDateString,
+                                                                     New Version(drvVersionString)))
+                                    drvPublishedNameString = ""
+                                    drvOriginalFileNameString = ""
+                                    drvInboxString = ""
+                                    drvClassNameString = ""
+                                    drvProviderNameString = ""
+                                    drvDateString = ""
+                                    drvVersionString = ""
+                                End If
+                            Next
+                        Else
+                            Throw New Exception(DISMProc.ExitCode)
+                        End If
+                    End Using
+
+                    DynaLog.LogMessage("Filtering driver collection based on class name...")
+                    Dim driversToExport As IEnumerable(Of ImageDriver) = ImageDrivers.Where(Function(driver) driver.DriverClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                    If driversToExport Is Nothing Then Exit Try
+
+                    DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
+                    LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                    For Each driverToExport In driversToExport
+                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
+                        Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+                        CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
+                    Next
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                Try
+                    LogView.AppendText(CrLf & "Getting image drivers...")
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using session As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
+                        DynaLog.LogMessage("Getting drivers with DISMAPI...")
+                        Dim driverPackages As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
+                        If driverPackages Is Nothing Then Exit Try
+                        DynaLog.LogMessage("Filtering driver collection based on class name...")
+                        Dim driversToExport As IEnumerable(Of DismDriverPackage) = driverPackages.Where(Function(driver) driver.ClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                        If driversToExport Is Nothing Then Exit Try
+
+                        DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
+                        LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                        For Each driverToExport In driversToExport
+                            LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.OriginalFileName) & "...")
+                            Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
+                            Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+                            CopyRecursive(Path.GetDirectoryName(driverToExport.OriginalFileName), destinationDriverPath)
+                        Next
+                    End Using
+                    DismExitCode = 0
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                    DismExitCode = ex.HResult
+                Finally
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
+                End Try
+            End If
         End If
         LogView.AppendText(CrLf & "Getting error level...")
         If Hex(DismExitCode).Length < 8 Then

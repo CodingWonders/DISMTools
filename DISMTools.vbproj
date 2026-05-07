@@ -74,6 +74,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ActiveDirectoryObjectPicker, Version=3.0.11.0, Culture=neutral, PublicKeyToken=515ab092c8839750, processorArchitecture=MSIL">
+      <HintPath>packages\Tulpep.ActiveDirectoryObjectPicker.3.0.11\lib\net48\ActiveDirectoryObjectPicker.dll</HintPath>
+    </Reference>
     <Reference Include="DarkUI, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>
@@ -231,6 +234,12 @@
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.Designer.vb">
+      <DependentUpon>DnsZoneChooserDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
@@ -266,6 +275,7 @@
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
     <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
+    <Compile Include="Elements\IniParserConfigurators\SettingsParserConfiguration.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -276,18 +286,7 @@
     <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsServiceHostGroup.vb" />
     <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
-    <Compile Include="Help\HelpBrowserForm.Designer.vb">
-      <DependentUpon>HelpBrowserForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Help\HelpBrowserForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Help\HelpVideoPlayer.Designer.vb">
-      <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Help\HelpVideoPlayer.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Help\HelpDocsModule.vb" />
     <Compile Include="Help\QuickHelpModule.vb" />
     <Compile Include="MainForm.Events.vb">
       <SubType>Form</SubType>
@@ -355,12 +354,6 @@
       <DependentUpon>DismComponents.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Exe_Ops\DismComponents.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Panels\Exe_Ops\DTSettingForm.Designer.vb">
-      <DependentUpon>DTSettingForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Exe_Ops\DTSettingForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Exe_Ops\InvalidSettings\InvalidSettingsDialog.Designer.vb">
@@ -656,6 +649,12 @@
       <DependentUpon>FfuSplit.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\FFU\FfuSplit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImageFilePickerDialog.Designer.vb">
+      <DependentUpon>ImageFilePickerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImageFilePickerDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
@@ -971,6 +970,12 @@
     <Compile Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.Designer.vb">
+      <DependentUpon>ScriptReorderDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </Compile>
@@ -1005,7 +1010,7 @@
     <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
-    <Compile Include="Utilities\TourServer.vb" />
+    <Compile Include="Utilities\HttpServer.vb" />
     <Compile Include="Utilities\UserDataManagerModule.vb" />
     <Compile Include="Utilities\WebSearchUtilities\SearchEngine.vb" />
     <Compile Include="Utilities\WebSearchUtilities\SearchEngineHelper.vb" />
@@ -1017,11 +1022,8 @@
     <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Help\HelpBrowserForm.resx">
-      <DependentUpon>HelpBrowserForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Help\HelpVideoPlayer.resx">
-      <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.resx">
+      <DependentUpon>DnsZoneChooserDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -1052,9 +1054,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\DismComponents.resx">
       <DependentUpon>DismComponents.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Exe_Ops\DTSettingForm.resx">
-      <DependentUpon>DTSettingForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\InvalidSettings\InvalidSettingsDialog.resx">
       <DependentUpon>InvalidSettingsDialog.vb</DependentUpon>
@@ -1202,6 +1201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\FFU\FfuSplit.resx">
       <DependentUpon>FfuSplit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImageFilePickerDialog.resx">
+      <DependentUpon>ImageFilePickerDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>
@@ -1358,6 +1360,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.resx">
       <DependentUpon>SampleScriptBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.resx">
+      <DependentUpon>ScriptReorderDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
@@ -1773,12 +1778,17 @@
     <Content Include="Resources\assistant_dark.png" />
     <Content Include="Resources\assistant_light.png" />
     <None Include="Resources\copy_img_to_wds.png" />
+    <None Include="Resources\first_element_upward.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
     <None Include="Resources\menus\tour_glyph_dark.png" />
     <None Include="Resources\menus\tour_glyph_light.png" />
     <None Include="Resources\optimize_img.png" />
+    <None Include="Resources\rearrange_elements.png" />
+    <None Include="Resources\prev_element_upward.png" />
+    <None Include="Resources\last_element_downward.png" />
+    <None Include="Resources\next_element_downward.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

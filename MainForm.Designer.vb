@@ -204,13 +204,14 @@ Partial Class MainForm
         Me.CreateTestingEnvironmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator38 = New System.Windows.Forms.ToolStripSeparator()
         Me.WimScriptEditorCommand = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator49 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SSE_TSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ThemeDesigner_TSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DISMToolsTourToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GlossaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CommandHelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
@@ -406,8 +407,10 @@ Partial Class MainForm
         Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel13 = New System.Windows.Forms.LinkLabel()
         Me.ProjectViewHeader = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TimeLabel = New System.Windows.Forms.Label()
         Me.GreetingLabel = New System.Windows.Forms.Label()
+        Me.MenuToggle = New System.Windows.Forms.Button()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
@@ -510,6 +513,8 @@ Partial Class MainForm
         Me.ImgCaptureModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CaptureWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -570,6 +575,7 @@ Partial Class MainForm
         Me.Panel10.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.ProjectViewHeader.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.ToolStrip2.SuspendLayout()
@@ -1499,7 +1505,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1712,6 +1718,23 @@ Partial Class MainForm
         Me.WimScriptEditorCommand.Size = New System.Drawing.Size(373, 22)
         Me.WimScriptEditorCommand.Text = "Configuration list editor"
         '
+        'ToolStripSeparator49
+        '
+        Me.ToolStripSeparator49.Name = "ToolStripSeparator49"
+        Me.ToolStripSeparator49.Size = New System.Drawing.Size(370, 6)
+        '
+        'SSE_TSMI
+        '
+        Me.SSE_TSMI.Name = "SSE_TSMI"
+        Me.SSE_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.SSE_TSMI.Text = "Create a starter script"
+        '
+        'ThemeDesigner_TSMI
+        '
+        Me.ThemeDesigner_TSMI.Name = "ThemeDesigner_TSMI"
+        Me.ThemeDesigner_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.ThemeDesigner_TSMI.Text = "Design a theme"
+        '
         'ToolStripSeparator9
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
@@ -1725,7 +1748,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1740,24 +1763,9 @@ Partial Class MainForm
         'DISMToolsTourToolStripMenuItem
         '
         Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
+        Me.DISMToolsTourToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
         Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
-        '
-        'GlossaryToolStripMenuItem
-        '
-        Me.GlossaryToolStripMenuItem.Name = "GlossaryToolStripMenuItem"
-        Me.GlossaryToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.GlossaryToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.GlossaryToolStripMenuItem.Text = "Glossary"
-        Me.GlossaryToolStripMenuItem.Visible = False
-        '
-        'CommandHelpToolStripMenuItem
-        '
-        Me.CommandHelpToolStripMenuItem.Name = "CommandHelpToolStripMenuItem"
-        Me.CommandHelpToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.CommandHelpToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.CommandHelpToolStripMenuItem.Text = "Command help..."
-        Me.CommandHelpToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator10
         '
@@ -4007,8 +4015,7 @@ Partial Class MainForm
         'ProjectViewHeader
         '
         Me.ProjectViewHeader.BackColor = System.Drawing.Color.FromArgb(CType(CType(4, Byte), Integer), CType(CType(17, Byte), Integer), CType(CType(51, Byte), Integer))
-        Me.ProjectViewHeader.Controls.Add(Me.TimeLabel)
-        Me.ProjectViewHeader.Controls.Add(Me.GreetingLabel)
+        Me.ProjectViewHeader.Controls.Add(Me.TableLayoutPanel1)
         Me.ProjectViewHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.ProjectViewHeader.ForeColor = System.Drawing.Color.White
         Me.ProjectViewHeader.Location = New System.Drawing.Point(0, 0)
@@ -4016,14 +4023,32 @@ Partial Class MainForm
         Me.ProjectViewHeader.Size = New System.Drawing.Size(1008, 48)
         Me.ProjectViewHeader.TabIndex = 0
         '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 3
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.727272!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.2727299!))
+        Me.TableLayoutPanel1.Controls.Add(Me.TimeLabel, 2, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.GreetingLabel, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.MenuToggle, 0, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 1
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1008, 48)
+        Me.TableLayoutPanel1.TabIndex = 2
+        '
         'TimeLabel
         '
-        Me.TimeLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TimeLabel.AutoEllipsis = True
+        Me.TimeLabel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TimeLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TimeLabel.Location = New System.Drawing.Point(658, 11)
+        Me.TimeLabel.Location = New System.Drawing.Point(749, 0)
         Me.TimeLabel.Name = "TimeLabel"
-        Me.TimeLabel.Size = New System.Drawing.Size(340, 27)
+        Me.TimeLabel.Padding = New System.Windows.Forms.Padding(0, 12, 8, 0)
+        Me.TimeLabel.Size = New System.Drawing.Size(256, 48)
         Me.TimeLabel.TabIndex = 1
         Me.TimeLabel.Text = "Label40"
         Me.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -4031,12 +4056,28 @@ Partial Class MainForm
         'GreetingLabel
         '
         Me.GreetingLabel.AutoSize = True
+        Me.GreetingLabel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GreetingLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GreetingLabel.Location = New System.Drawing.Point(8, 8)
+        Me.GreetingLabel.Location = New System.Drawing.Point(51, 0)
         Me.GreetingLabel.Name = "GreetingLabel"
-        Me.GreetingLabel.Size = New System.Drawing.Size(323, 30)
+        Me.GreetingLabel.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
+        Me.GreetingLabel.Size = New System.Drawing.Size(692, 48)
         Me.GreetingLabel.TabIndex = 0
         Me.GreetingLabel.Text = "Welcome to this servicing session"
+        Me.GreetingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'MenuToggle
+        '
+        Me.MenuToggle.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MenuToggle.FlatAppearance.BorderSize = 0
+        Me.MenuToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.MenuToggle.Image = Global.DISMTools.My.Resources.Resources.menu_dark
+        Me.MenuToggle.Location = New System.Drawing.Point(3, 3)
+        Me.MenuToggle.Name = "MenuToggle"
+        Me.MenuToggle.Size = New System.Drawing.Size(42, 42)
+        Me.MenuToggle.TabIndex = 2
+        Me.MenuToggle.UseVisualStyleBackColor = True
+        Me.MenuToggle.Visible = False
         '
         'ToolStrip1
         '
@@ -4680,6 +4721,12 @@ Partial Class MainForm
         Me.CaptureFfuTSMI.Size = New System.Drawing.Size(272, 22)
         Me.CaptureFfuTSMI.Text = "Capture installation drive to FFU file..."
         '
+        'SSETimer
+        '
+        '
+        'ThemeDesignerTimer
+        '
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -4691,8 +4738,8 @@ Partial Class MainForm
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
-        Me.MaximumSize = New System.Drawing.Size(4096, 4096)
-        Me.MinimumSize = New System.Drawing.Size(1280, 718)
+        Me.MaximumSize = New System.Drawing.Size(8192, 8192)
+        Me.MinimumSize = New System.Drawing.Size(1280, 720)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "DISMTools"
@@ -4769,7 +4816,8 @@ Partial Class MainForm
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
         Me.ProjectViewHeader.ResumeLayout(False)
-        Me.ProjectViewHeader.PerformLayout()
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
@@ -4913,8 +4961,6 @@ Partial Class MainForm
     Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpTopicsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GlossaryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CommandHelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents AboutDISMToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HomePanel As System.Windows.Forms.Panel
@@ -5279,4 +5325,11 @@ Partial Class MainForm
     Friend WithEvents CaptureWimTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CaptureFfuTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UploadThisImageToMyWDSServerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator49 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SSE_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ThemeDesigner_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SSETimer As System.Windows.Forms.Timer
+    Friend WithEvents ThemeDesignerTimer As System.Windows.Forms.Timer
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents MenuToggle As System.Windows.Forms.Button
 End Class

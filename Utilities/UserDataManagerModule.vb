@@ -101,4 +101,51 @@ Module UserDataManagerModule
         Return success
     End Function
 
+    Public Function CopyUserDataToProgramFiles(UserDataItem As String) As Boolean
+        Dim success As Boolean = False
+        DynaLog.LogMessage("Checking if user data folder exists...")
+        If Not Directory.Exists(UserDataPath) AndAlso Not CreateUserDataContents() Then
+            DynaLog.LogMessage("User data folder does not exist and creation has failed. Stopping...")
+            Return False
+        End If
+
+        If Not UserDataMapping.ContainsKey(UserDataItem) Then
+            Return False
+        End If
+
+        Try
+            DynaLog.LogMessage("Proceeding to copy user data files to program files...")
+            Dim UserDataDestinationPath As String = Path.Combine(Application.StartupPath, UserDataMapping(UserDataItem))
+
+            DynaLog.LogMessage("Checking if " & UserDataDestinationPath & " exists...")
+            If Not Directory.Exists(UserDataDestinationPath) Then
+                DynaLog.LogMessage("Content destination folder does not exist. Creating...")
+                Try
+                    Directory.CreateDirectory(UserDataDestinationPath)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Content destination folder creation failed. Skipping user data file collection...")
+                    Return False
+                End Try
+            End If
+
+            DynaLog.LogMessage("Copying all user data files to destination...")
+            Dim filesInUserDataSource As String() = Directory.GetFiles(Path.Combine(UserDataPath, UserDataItem))
+            For Each fileInUserDataSource In filesInUserDataSource
+                Try
+                    DynaLog.LogMessage("Copying " & ControlChars.Quote & fileInUserDataSource & ControlChars.Quote & " to destination folder...")
+                    File.Copy(fileInUserDataSource, Path.Combine(UserDataDestinationPath, Path.GetFileName(fileInUserDataSource)), True)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Copy operation for this file has failed. Error message: " & ex.Message)
+                    Continue For
+                End Try
+            Next
+
+            success = True
+        Catch ex As Exception
+            DynaLog.LogMessage("The copy operation has failed. Error message: " & ex.Message)
+        End Try
+
+        Return success
+    End Function
+
 End Module

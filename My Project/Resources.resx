@@ -664,7 +664,32 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</value>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- Active Directory Object Picker
+
+Microsoft Public License (MS-PL)
+
+The initial project was originally created by Armand du Plessis &lt;armand@dotnet.org.za&gt; in 2004 and now is extended and maintained by Tulpep.
+
+This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
+
+1. Definitions
+The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law.
+A "contribution" is the original software, or any additions or changes to the software.
+A "contributor" is any person that distributes its contribution under this license.
+"Licensed patents" are a contributor's patent claims that read directly on its contribution.
+
+2. Grant of Rights
+(A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
+(B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.
+
+3. Conditions and Limitations
+(A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.
+(B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically.
+(C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software.
+(D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license.
+(E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.</value>
   </data>
   <data name="help_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\help_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -983,30 +1008,27 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an exception (#350)
-- Registry hives that were unloaded externally no longer cause errors when unloading them from the image registry control panel
-- Non-PowerShell-based endpoints no longer throw CORS issues when calling WDS Helper Server APIs
-- Fixed an issue where App Installer download errors would not appear in the foreground
+- Fixed an issue where tutorial videos would not be playable
+- The WDS Helper client message for downloading unattended answer files no longer shows at all times
 
 New features:
 
-- When uploading a Windows image to a WDS server you can now create image groups
-- From the Autorun application you can now specify the WDS image group to upload the image to
-- The Autorun application and HotInstall have seen HiDPI improvements
-- Partition table overrides can now be used when deploying images with the WDS Helper
-- PXE Helper Servers can now be started using a different port by holding down SHIFT and performing an action in the following places:
-  - From the Autorun application
-  - From the Tools &gt; Start PXE Helper Server for... menu in the main program
-- A new policy has been added to change the default port to use when connecting to a PXE Helper server
-- If a starter script offers customizable options you will now be notified
-- The Starter Script Editor now detects read-only starter scripts and removes such attribute when saving them
-- The "Refresh Windows Explorer" starter script has been introduced
-- The "Configure Start Menu Appearance" starter script has been introduced
-- The "Disable warnings for unsigned RDP files" starter script has been introduced
-- When downloading packages from App Installer files you can now copy the URLs to the main application package
-- Markdig has been updated to version 1.1.3
-- The managed DISM API has been updated to version 6.0.0
-- The Windows API Code Pack has been updated to version 8.0.15.1</value>
+- When configuring ports for PXE Helper Servers you can now check if they are in use
+- The architecture for the WDS boot image is now picked graphically
+- The default set of DISMTools Preinstallation Environment backgrounds has been overhauled
+- You can now configure account *display names* independently from account names
+- Post-installation scripts can now be reordered
+- The Starter Script editor has seen some improvements, such as script code normalization
+- You can now pick account objects from anywhere in your domain
+- You can now choose a domain suffix from available DNS zones
+- When exporting drivers by class name or when filtering installed drivers by class name, you can now choose from third-party classes provided by third-party drivers in your Windows image or installation
+- You can now export drivers from Windows 7 images and installations
+- Saving service changes is much faster now
+- Help documentation is seeing a major visual refresh
+- File associations are now set for the Starter Script Editor
+- 7-Zip has been updated to version 26.01
+- CODE: setting load and save functionality has been revamped
+- The Starter Script Editor and the theme designer can now be invoked from the Tools menu</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1094,5 +1116,20 @@ New features:
         &lt;/component&gt;
     &lt;/settings&gt;
 &lt;/unattend&gt;</value>
+  </data>
+  <data name="rearrange_elements" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rearrange_elements.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="first_element_upward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\first_element_upward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="last_element_downward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\last_element_downward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="next_element_downward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\next_element_downward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="prev_element_upward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\prev_element_upward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
