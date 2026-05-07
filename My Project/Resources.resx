@@ -1008,30 +1008,27 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an exception (#350)
-- Registry hives that were unloaded externally no longer cause errors when unloading them from the image registry control panel
-- Non-PowerShell-based endpoints no longer throw CORS issues when calling WDS Helper Server APIs
-- Fixed an issue where App Installer download errors would not appear in the foreground
+- Fixed an issue where tutorial videos would not be playable
+- The WDS Helper client message for downloading unattended answer files no longer shows at all times
 
 New features:
 
-- When uploading a Windows image to a WDS server you can now create image groups
-- From the Autorun application you can now specify the WDS image group to upload the image to
-- The Autorun application and HotInstall have seen HiDPI improvements
-- Partition table overrides can now be used when deploying images with the WDS Helper
-- PXE Helper Servers can now be started using a different port by holding down SHIFT and performing an action in the following places:
-  - From the Autorun application
-  - From the Tools &gt; Start PXE Helper Server for... menu in the main program
-- A new policy has been added to change the default port to use when connecting to a PXE Helper server
-- If a starter script offers customizable options you will now be notified
-- The Starter Script Editor now detects read-only starter scripts and removes such attribute when saving them
-- The "Refresh Windows Explorer" starter script has been introduced
-- The "Configure Start Menu Appearance" starter script has been introduced
-- The "Disable warnings for unsigned RDP files" starter script has been introduced
-- When downloading packages from App Installer files you can now copy the URLs to the main application package
-- Markdig has been updated to version 1.1.3
-- The managed DISM API has been updated to version 6.0.0
-- The Windows API Code Pack has been updated to version 8.0.15.1</value>
+- When configuring ports for PXE Helper Servers you can now check if they are in use
+- The architecture for the WDS boot image is now picked graphically
+- The default set of DISMTools Preinstallation Environment backgrounds has been overhauled
+- You can now configure account *display names* independently from account names
+- Post-installation scripts can now be reordered
+- The Starter Script editor has seen some improvements, such as script code normalization
+- You can now pick account objects from anywhere in your domain
+- You can now choose a domain suffix from available DNS zones
+- When exporting drivers by class name or when filtering installed drivers by class name, you can now choose from third-party classes provided by third-party drivers in your Windows image or installation
+- You can now export drivers from Windows 7 images and installations
+- Saving service changes is much faster now
+- Help documentation is seeing a major visual refresh
+- File associations are now set for the Starter Script Editor
+- 7-Zip has been updated to version 26.01
+- CODE: setting load and save functionality has been revamped
+- The Starter Script Editor and the theme designer can now be invoked from the Tools menu</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -2270,15 +2270,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an exception (#350)
-        '''- Registry hives that were unloaded externally no longer cause errors when unloading them from the image registry control panel
-        '''- Non-PowerShell-based endpoints no longer throw CORS issues when calling WDS Helper Server APIs
-        '''- Fixed an issue where App Installer download errors would not appear in the foreground
+        '''- Fixed an issue where tutorial videos would not be playable
+        '''- The WDS Helper client message for downloading unattended answer files no longer shows at all times
         '''
         '''New features:
         '''
-        '''- When uploading a Windows image to a WDS server you can now create image groups
-        '''- From the Autorun application you can now specify th [resto de la cadena truncado]&quot;;.
+        '''- When configuring ports for PXE Helper Servers you can now check if they are in use
+        '''- The architecture for the WDS boot image is now picked graphically
+        '''- The default set of DISMTools Preinstallation Environment backgrounds has been overhauled
+        '''- You can now configure account *display names* independently from ac [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
