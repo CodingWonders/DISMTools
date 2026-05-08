@@ -658,7 +658,7 @@ function Start-OSApplication {
 
     if (Test-Path -Path "$($global:destShareLetter)\$($connectionResult.output.shareFolderGuid)\unattend.xml" -PathType Leaf) {
         Show-CenteredTextBox -Text "Downloading unattended answer file. This can take some time, depending on the speed of the network connection..." -MaxWidth 100 -CenterOfAll
-        if ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false) {
+        if ((Copy-Item -Path "$($global:destShareLetter)\$($connectionResult.output.shareFolderGuid)\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false) {
             Show-CenteredTextBox -Text "An unattended answer file was detected, but could not be downloaded. The target installation will not be unattended." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
             Write-Host "`n`nPress ENTER to continue..."
             Read-Host | Out-Null
