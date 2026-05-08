@@ -4483,7 +4483,7 @@ Partial Class NewUnattendWiz
         '
         'ScriptEditorOFD
         '
-        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt|Visual Basic Scrip" & _
+        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd|Visual Basic Scrip" & _
     "ts|*.vbs;*.vbe;*.wsf;*.wsc|JScript files|*.js;*.jse"
         Me.ScriptEditorOFD.Title = "Open script"
         '

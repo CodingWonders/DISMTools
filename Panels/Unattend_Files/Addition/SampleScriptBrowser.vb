@@ -240,7 +240,7 @@ Public Class SampleScriptBrowser
         If targetSS IsNot Nothing Then
             Select Case targetSS.Language.ToLower()
                 Case "batch"
-                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd;*.nt"
+                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd"
                 Case "powershell"
                     ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
                 Case Else

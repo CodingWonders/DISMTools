@@ -2727,7 +2727,7 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("File exists. Attempting to read...")
             Try
                 DynaLog.LogMessage("Checking file extension for special files...")
-                If {".bat", ".cmd", ".nt"}.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
+                If {".bat", ".cmd"}.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
                     ' We'll set it to Batch
                     ComboBox16.SelectedIndex = 1
                 End If
