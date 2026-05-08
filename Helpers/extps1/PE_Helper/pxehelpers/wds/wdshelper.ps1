@@ -81,6 +81,8 @@ $global:override = [PartitionTableOverride]::NoOverride
 
 $pxeReplySettings = $null
 
+$global:destShareLetter = ""
+
 function Invoke-ServerAuthentication {
     if ($pxeReplySettings -ne $null) {
         Write-Host "    We have detected the IP address of the WDS server you started this environment from ($($pxeReplySettings['serverAddr'])). If you started the WDS Helper Server on this server, you can use this address here."
@@ -779,13 +781,13 @@ function Start-OSApplication {
 
     New-Item -Path "$($driveLetter):\NetInstall" -ItemType Directory | Out-Null
 
-    if ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\install.wim" -Destination "$($driveLetter):\NetInstall\install.wim" -Force) -eq $false) {
+    if ((Copy-Item -Path "$($global:destShareLetter)\$($connectionResult.output.shareFolderGuid)\install.wim" -Destination "$($driveLetter):\NetInstall\install.wim" -Force) -eq $false) {
         Show-CenteredTextBox -Text "Could not prepare the deployment of this image file." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
         Start-Sleep -Seconds 5
         wpeutil reboot
     }
 
-    if (Test-Path -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -PathType Leaf) {
+    if (Test-Path -Path "$($global:destShareLetter)\$($connectionResult.output.shareFolderGuid)\unattend.xml" -PathType Leaf) {
         Show-CenteredTextBox -Text "Downloading unattended answer file. This can take some time, depending on the speed of the network connection..." -MaxWidth 100 -CenterOfAll
         if ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false) {
             Show-CenteredTextBox -Text "An unattended answer file was detected, but could not be downloaded. The target installation will not be unattended." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
@@ -1762,7 +1764,25 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
     $shareResults = Invoke-RestMethod -Method Post -Body $shareBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/deploy"
     if ($shareResults.success) {
         Show-CenteredTextBox -Text "Mounting network share to this system . . ." -MaxWidth 100 -CenterOfAll
-        net use * $($shareResults.output.mountPath) $($authInfo.serverPassword) /user:$($shareResults.output.username)
+        net use * $($shareResults.output.mountPath) $($authInfo.serverPassword) /user:$($shareResults.output.username) /P:Yes
+        # Start querying mapped network share information to get the drive letter, otherwise
+        # default to Z:
+        try {
+            $shareSet = $false
+            Get-ChildItem -Path "HKCU:\Network" | Foreach-Object {
+                $shareProps = Get-ItemProperty -Path $_.PSPath
+                if (($shareSet -eq $false) -and ($shareProps.RemotePath -eq "$($shareResults.output.mountPath)")) {
+                    # Get actual drive letter and not the full path, like HKEY_CURRENT_USER\Network\
+                    $global:destShareLetter = "$($_.Name.Replace('HKEY_CURRENT_USER\Network\', '')):"
+                    $shareSet = $true
+                }
+            }
+            if (-not $shareSet) {
+                $global:destShareLetter = "Z:"
+            }
+        } catch {
+            $global:destShareLetter = "Z:"
+        }
     } else {
         Show-CenteredTextBox -Text "Could not prepare the deployment of this image file. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
         Start-Sleep -Seconds 5
