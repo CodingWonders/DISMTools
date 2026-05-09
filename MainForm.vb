@@ -15489,7 +15489,7 @@ Public Class MainForm
             If Environment.OSVersion.Version.Major = 10 Then
                 Process.Start("ms-settings:personalization-background")
             Else
-                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "ncpa.cpl"))
+                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "desk.cpl"))
             End If
         Catch ex As Exception
             ' Ignored
