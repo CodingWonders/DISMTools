@@ -240,6 +240,7 @@
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainRole.vb" />
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
@@ -1790,6 +1791,8 @@
     <None Include="Resources\prev_element_upward.png" />
     <None Include="Resources\last_element_downward.png" />
     <None Include="Resources\next_element_downward.png" />
+    <None Include="Resources\infinityhome_admin_tools.png" />
+    <None Include="Resources\infinityhome_change_network_config.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

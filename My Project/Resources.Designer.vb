@@ -1155,6 +1155,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property infinityhome_admin_tools() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("infinityhome_admin_tools", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property infinityhome_change_network_config() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("infinityhome_change_network_config", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property info_16px() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("info_16px", resourceCulture)
