@@ -15594,4 +15594,8 @@ Public Class MainForm
     Private Sub LinkLabel34_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel34.LinkClicked
         MessageBox.Show(FeedEx.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Sub
+
+    Private Sub ComputerNameLabel_MouseHover(sender As Object, e As EventArgs) Handles ComputerNameLabel.MouseHover
+        WindowHelper.DisplayToolTip(sender, String.Format("NetBIOS name: {0}", My.Computer.Name))
+    End Sub
 End Class

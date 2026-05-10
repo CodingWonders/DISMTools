@@ -263,6 +263,7 @@ Partial Class MainForm
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.ComputerInfoPanel = New System.Windows.Forms.Panel()
+        Me.ComputerOSLabel = New System.Windows.Forms.Label()
         Me.AdminToolsBtn = New System.Windows.Forms.Button()
         Me.ChangeNetworkConfigBtn = New System.Windows.Forms.Button()
         Me.RefreshComputerInfoBtn = New System.Windows.Forms.Button()
@@ -508,7 +509,6 @@ Partial Class MainForm
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ComputerOSLabel = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -2239,6 +2239,17 @@ Partial Class MainForm
         Me.ComputerInfoPanel.Size = New System.Drawing.Size(1008, 160)
         Me.ComputerInfoPanel.TabIndex = 0
         '
+        'ComputerOSLabel
+        '
+        Me.ComputerOSLabel.AutoEllipsis = True
+        Me.ComputerOSLabel.AutoSize = True
+        Me.ComputerOSLabel.Location = New System.Drawing.Point(182, 96)
+        Me.ComputerOSLabel.Name = "ComputerOSLabel"
+        Me.ComputerOSLabel.Size = New System.Drawing.Size(22, 15)
+        Me.ComputerOSLabel.TabIndex = 7
+        Me.ComputerOSLabel.Text = "OS"
+        Me.ComputerOSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'AdminToolsBtn
         '
         Me.AdminToolsBtn.Image = Global.DISMTools.My.Resources.Resources.infinityhome_admin_tools
@@ -2429,10 +2440,10 @@ Partial Class MainForm
         Me.ChangeComputerNameLink.LinkColor = System.Drawing.Color.DodgerBlue
         Me.ChangeComputerNameLink.Location = New System.Drawing.Point(182, 74)
         Me.ChangeComputerNameLink.Name = "ChangeComputerNameLink"
-        Me.ChangeComputerNameLink.Size = New System.Drawing.Size(81, 15)
+        Me.ChangeComputerNameLink.Size = New System.Drawing.Size(50, 15)
         Me.ChangeComputerNameLink.TabIndex = 5
         Me.ChangeComputerNameLink.TabStop = True
-        Me.ChangeComputerNameLink.Text = "Change name"
+        Me.ChangeComputerNameLink.Text = "Rename"
         Me.ChangeComputerNameLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'SidePanel
@@ -4652,17 +4663,6 @@ Partial Class MainForm
         '
         'ThemeDesignerTimer
         '
-        '
-        'ComputerOSLabel
-        '
-        Me.ComputerOSLabel.AutoEllipsis = True
-        Me.ComputerOSLabel.AutoSize = True
-        Me.ComputerOSLabel.Location = New System.Drawing.Point(182, 96)
-        Me.ComputerOSLabel.Name = "ComputerOSLabel"
-        Me.ComputerOSLabel.Size = New System.Drawing.Size(22, 15)
-        Me.ComputerOSLabel.TabIndex = 7
-        Me.ComputerOSLabel.Text = "OS"
-        Me.ComputerOSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'MainForm
         '
