@@ -7784,7 +7784,7 @@ Public Class MainForm
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
                 DynaLog.LogMessage("We are dealing with a SQL Server Data Tools project. Cancelling project load...")
-                SqlServerProjectErrorDlg.ShowDialog(Me)
+                MessageBox.Show("The specified project is not a DISMTools project.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
             SaveProjectToolStripMenuItem.Enabled = True

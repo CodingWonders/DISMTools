@@ -893,12 +893,6 @@
     <Compile Include="Panels\Exe_Ops\Options.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.Designer.vb">
-      <DependentUpon>SqlServerProjectErrorDlg.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Panels\Questions\ImgConversionSuccessDialog.Designer.vb">
       <DependentUpon>ImgConversionSuccessDialog.vb</DependentUpon>
     </Compile>
@@ -1322,9 +1316,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\Options.resx">
       <DependentUpon>Options.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.resx">
-      <DependentUpon>SqlServerProjectErrorDlg.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\ImgConversionSuccessDialog.resx">
       <DependentUpon>ImgConversionSuccessDialog.vb</DependentUpon>
