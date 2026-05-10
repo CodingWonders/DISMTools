@@ -801,7 +801,7 @@ Public Class ISOCreator
             Case 5
                 msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
         End Select
-        MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
+        WindowHelper.DisplayNotificationBalloon(If(success, ToolTipIcon.Info, ToolTipIcon.Warning), ImageTaskHeader1.ItemText, msg)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
         GroupBox1.Enabled = True

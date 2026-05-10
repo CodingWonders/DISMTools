@@ -132,6 +132,21 @@ Public Class WindowHelper
         End If
     End Sub
 
+    Private Shared notificationBalloon As NotifyIcon
+
+    Public Shared Sub DisplayNotificationBalloon(balloonIcon As ToolTipIcon, balloonCaption As String, balloonMessage As String)
+        notificationBalloon = New NotifyIcon() With {
+            .BalloonTipIcon = balloonIcon,
+            .Icon = CType(New System.ComponentModel.ComponentResourceManager(GetType(MainForm)).GetObject("$this.Icon"), System.Drawing.Icon),
+            .Text = "DISMTools",
+            .BalloonTipTitle = balloonCaption,
+            .BalloonTipText = balloonMessage,
+            .Visible = True
+        }
+        notificationBalloon.ShowBalloonTip(5000)
+        notificationBalloon.Visible = False
+    End Sub
+
     Public Shared Sub CheckAllItems(lv As ListView)
         SetLVItemState(lv, -1, LVIS_STATEIMAGEMASK, LVIS_CHECKED)
     End Sub
