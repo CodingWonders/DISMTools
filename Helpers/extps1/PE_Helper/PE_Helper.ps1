@@ -746,7 +746,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout*.ps1" -Destination "$imagePath" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE.PolicyHelper.ps1" -Destination "$imagePath\DTPE.PolicyHelper.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
