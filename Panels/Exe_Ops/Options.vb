@@ -430,7 +430,6 @@ Public Class Options
                         Label53.Text = "Scratch directory"
                         Label54.Text = "Program output"
                         Label55.Text = "Background processes"
-                        Label56.Text = "Image detection"
                         Label57.Text = "File associations"
                         Label58.Text = "Startup options"
                         Label34.Text = "Shutdown options"
@@ -456,9 +455,6 @@ Public Class Options
                         Label27.Text = "Some reports do not allow being shown as a table."
                         Label28.Text = "When should the program notify you about background processes being started?"
                         Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                        Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
-                        Label36.Text = "Review the status of this background process:"
-                        Label37.Text = "Status:"
                         Label40.Text = "File associations let you access project files directly, without having to load the program first"
                         Label41.Text = "Association status:"
                         Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
@@ -474,7 +470,6 @@ Public Class Options
                         Button4.Text = "Browse..."
                         Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
                         Button10.Text = "Advanced settings"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Reset preferences"
@@ -485,7 +480,6 @@ Public Class Options
                         CheckBox5.Text = "Show command output in English"
                         CheckBox6.Text = "Notify me when background processes have started"
                         CheckBox7.Text = "Show log view on the progress panel by default"
-                        CheckBox8.Text = "Detect mounted images at all times"
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
                         CheckBox11.Text = "Set custom file icons for DISMTools projects"
@@ -533,7 +527,6 @@ Public Class Options
                         Label53.Text = "Directorio temporal"
                         Label54.Text = "Salida del programa"
                         Label55.Text = "Procesos en segundo plano"
-                        Label56.Text = "Detección de imágenes"
                         Label57.Text = "Asociaciones de archivos"
                         Label58.Text = "Opciones de inicio"
                         Label34.Text = "Opciones de cierre"
@@ -558,9 +551,6 @@ Public Class Options
                         Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                         Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                         Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                        Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
-                        Label36.Text = "Consulte el estado de este proceso en segundo plano:"
-                        Label37.Text = "Estado:"
                         Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
                         Label41.Text = "Estado de asociaciones:"
                         Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
@@ -576,7 +566,6 @@ Public Class Options
                         Button4.Text = "Examinar..."
                         Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
                         Button10.Text = "Opciones avanzadas"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         PrefReset.Text = "Restablecer preferencias"
@@ -587,7 +576,6 @@ Public Class Options
                         CheckBox5.Text = "Mostrar salida del programa en inglés"
                         CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
                         CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
-                        CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                         CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
@@ -635,7 +623,6 @@ Public Class Options
                         Label53.Text = "Répertoire temporaire"
                         Label54.Text = "Sortie du programme"
                         Label55.Text = "Processus en arrière plan"
-                        Label56.Text = "Détection des images"
                         Label57.Text = "Associations de fichiers"
                         Label58.Text = "Paramètres de démarrage"
                         Label34.Text = "Paramètres de fermeture"
@@ -661,9 +648,6 @@ Public Class Options
                         Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                         Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                         Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                        Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
-                        Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
-                        Label37.Text = "État :"
                         Label40.Text = "Les associations de fichiers vous permettent d'accéder directement aux fichiers du projet, sans avoir à charger le programme au préalable."
                         Label41.Text = "État de l'association :"
                         Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
@@ -679,7 +663,6 @@ Public Class Options
                         Button4.Text = "Parcourir..."
                         Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
                         Button10.Text = "Paramètres avancés"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arrêter" Else Button8.Text = "Démarrer"
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Réinitialiser les préférences"
@@ -690,7 +673,6 @@ Public Class Options
                         CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                         CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
                         CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
-                        CheckBox8.Text = "Détecter les images montées à tout moment"
                         CheckBox9.Text = "Utiliser des menus en majuscules"
                         CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
                         CheckBox11.Text = "Définir des icônes de fichiers personnalisés pour les projets DISMTools"
@@ -738,7 +720,6 @@ Public Class Options
                         Label53.Text = "Diretório temporário"
                         Label54.Text = "Saída do programa"
                         Label55.Text = "Processos em segundo plano"
-                        Label56.Text = "Deteção de imagens"
                         Label57.Text = "Associações de ficheiros"
                         Label58.Text = "Opções de arranque"
                         Label34.Text = "Opções de encerramento"
@@ -764,9 +745,6 @@ Public Class Options
                         Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                         Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                         Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                        Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
-                        Label36.Text = "Rever o estado deste processo em segundo plano:"
-                        Label37.Text = "Estado:"
                         Label40.Text = "As associações de ficheiros permitem-lhe aceder diretamente aos ficheiros do projeto, sem ter de carregar primeiro o programa"
                         Label41.Text = "Estado da associação:"
                         Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
@@ -782,7 +760,6 @@ Public Class Options
                         Button4.Text = "Navegar..."
                         Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Configurar associações de ficheiros")
                         Button10.Text = "Configurações avançadas"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = " Parar" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Repor preferências"
@@ -793,7 +770,6 @@ Public Class Options
                         CheckBox5.Text = "Mostrar a saída do comando em inglês"
                         CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
                         CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
-                        CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                         CheckBox9.Text = "Utilizar menus em maiúsculas"
                         CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
                         CheckBox11.Text = "Configurar ícones de ficheiros personalizados para projectos DISMTools"
@@ -841,7 +817,6 @@ Public Class Options
                         Label53.Text = "Cartella temporanea"
                         Label54.Text = "Output programma"
                         Label55.Text = "Processi in background"
-                        Label56.Text = "Rilevamento immagini"
                         Label57.Text = "Associazioni file"
                         Label58.Text = "Opzioni avvio"
                         Label34.Text = "Opzioni spegnimento"
@@ -867,9 +842,6 @@ Public Class Options
                         Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                         Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                         Label29.Text = "Il programma usa i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzionalità presenti e altro ancora"
-                        Label35.Text = "Modifica queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato uso della CPU"
-                        Label36.Text = "Esaminare lo stato di questo processo in background:"
-                        Label37.Text = "Stato:"
                         Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
                         Label41.Text = "Stato associazione:"
                         Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
@@ -885,7 +857,6 @@ Public Class Options
                         Button4.Text = "Sfoglia..."
                         Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
                         Button10.Text = "Impostazioni avanzate"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arresto" Else Button8.Text = "Avvio"
                         Cancel_Button.Text = "Annulla"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Ripristina preferenze"
@@ -896,7 +867,6 @@ Public Class Options
                         CheckBox5.Text = "Visualizza l'output del comando in inglese"
                         CheckBox6.Text = "Notifica l'avvio dei processi in background"
                         CheckBox7.Text = "Visualizza il registro nel pannello di avanzamento per impostazione predefinita"
-                        CheckBox8.Text = "Rileva sempre le immagini montate"
                         CheckBox9.Text = "Usa i menu in maiuscolo"
                         CheckBox10.Text = "Crea automaticamente i registri per ogni operazione eseguita"
                         CheckBox11.Text = "Imposta icone file personalizzate per i progetti DISMTools"
@@ -945,7 +915,6 @@ Public Class Options
                 Label53.Text = "Scratch directory"
                 Label54.Text = "Program output"
                 Label55.Text = "Background processes"
-                Label56.Text = "Image detection"
                 Label57.Text = "File associations"
                 Label58.Text = "Startup options"
                 Label34.Text = "Shutdown options"
@@ -971,9 +940,6 @@ Public Class Options
                 Label27.Text = "Some reports do not allow being shown as a table."
                 Label28.Text = "When should the program notify you about background processes being started?"
                 Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
-                Label36.Text = "Review the status of this background process:"
-                Label37.Text = "Status:"
                 Label40.Text = "File associations let you access project files directly, without having to load the program first"
                 Label41.Text = "Association status:"
                 Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
@@ -989,7 +955,6 @@ Public Class Options
                 Button4.Text = "Browse..."
                 Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
                 Button10.Text = "Advanced settings"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Reset preferences"
@@ -1000,7 +965,6 @@ Public Class Options
                 CheckBox5.Text = "Show command output in English"
                 CheckBox6.Text = "Notify me when background processes have started"
                 CheckBox7.Text = "Show log view on the progress panel by default"
-                CheckBox8.Text = "Detect mounted images at all times"
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
                 CheckBox11.Text = "Set custom file icons for DISMTools projects"
@@ -1048,7 +1012,6 @@ Public Class Options
                 Label53.Text = "Directorio temporal"
                 Label54.Text = "Salida del programa"
                 Label55.Text = "Procesos en segundo plano"
-                Label56.Text = "Detección de imágenes"
                 Label57.Text = "Asociaciones de archivos"
                 Label58.Text = "Opciones de inicio"
                 Label34.Text = "Opciones de cierre"
@@ -1074,9 +1037,6 @@ Public Class Options
                 Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                 Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                 Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
-                Label36.Text = "Consulte el estado de este proceso en segundo plano:"
-                Label37.Text = "Estado:"
                 Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
                 Label41.Text = "Estado de asociaciones:"
                 Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
@@ -1092,7 +1052,6 @@ Public Class Options
                 Button4.Text = "Examinar..."
                 Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
                 Button10.Text = "Opciones avanzadas"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 PrefReset.Text = "Restablecer preferencias"
@@ -1103,7 +1062,6 @@ Public Class Options
                 CheckBox5.Text = "Mostrar salida del programa en inglés"
                 CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
                 CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
-                CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                 CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
@@ -1151,7 +1109,6 @@ Public Class Options
                 Label53.Text = "Répertoire temporaire"
                 Label54.Text = "Sortie du programme"
                 Label55.Text = "Processus en arrière plan"
-                Label56.Text = "Détection des images"
                 Label57.Text = "Associations de fichiers"
                 Label58.Text = "Paramètres de démarrage"
                 Label34.Text = "Paramètres de fermeture"
@@ -1177,9 +1134,6 @@ Public Class Options
                 Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                 Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                 Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
-                Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
-                Label37.Text = "État :"
                 Label40.Text = "Les associations de fichiers vous permettent d'accéder directement aux fichiers du projet, sans avoir à charger le programme au préalable."
                 Label41.Text = "État de l'association :"
                 Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
@@ -1195,7 +1149,6 @@ Public Class Options
                 Button4.Text = "Parcourir..."
                 Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
                 Button10.Text = "Paramètres avancés"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arrêter" Else Button8.Text = "Démarrer"
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Réinitialiser les préférences"
@@ -1206,7 +1159,6 @@ Public Class Options
                 CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                 CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
                 CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
-                CheckBox8.Text = "Détecter les images montées à tout moment"
                 CheckBox9.Text = "Utiliser des menus en majuscules"
                 CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
                 CheckBox11.Text = "Définir des icônes de fichiers personnalisés pour les projets DISMTools"
@@ -1254,7 +1206,6 @@ Public Class Options
                 Label53.Text = "Diretório temporário"
                 Label54.Text = "Saída do programa"
                 Label55.Text = "Processos em segundo plano"
-                Label56.Text = "Deteção de imagens"
                 Label57.Text = "Associações de ficheiros"
                 Label58.Text = "Opções de arranque"
                 Label34.Text = "Opções de encerramento"
@@ -1280,9 +1231,6 @@ Public Class Options
                 Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                 Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                 Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
-                Label36.Text = "Rever o estado deste processo em segundo plano:"
-                Label37.Text = "Estado:"
                 Label40.Text = "As associações de ficheiros permitem-lhe aceder diretamente aos ficheiros do projeto, sem ter de carregar primeiro o programa"
                 Label41.Text = "Estado da associação:"
                 Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
@@ -1298,7 +1246,6 @@ Public Class Options
                 Button4.Text = "Navegar..."
                 Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Configurar associações de ficheiros")
                 Button10.Text = "Configurações avançadas"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = " Parar" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Repor preferências"
@@ -1309,7 +1256,6 @@ Public Class Options
                 CheckBox5.Text = "Mostrar a saída do comando em inglês"
                 CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
                 CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
-                CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                 CheckBox9.Text = "Utilizar menus em maiúsculas"
                 CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
                 CheckBox11.Text = "Configurar ícones de ficheiros personalizados para projectos DISMTools"
@@ -1357,7 +1303,6 @@ Public Class Options
                 Label53.Text = "Cartella temporanea"
                 Label54.Text = "Output del programma"
                 Label55.Text = "Processi in secondo piano"
-                Label56.Text = "Rilevamento immagini"
                 Label57.Text = "Associazioni di file"
                 Label58.Text = "Opzioni di avvio"
                 Label34.Text = "Opzioni di spegnimento"
@@ -1383,9 +1328,6 @@ Public Class Options
                 Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                 Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                 Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
-                Label35.Text = "Modificare queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato utilizzo della CPU"
-                Label36.Text = "Esaminare lo stato di questo processo in background:"
-                Label37.Text = "Stato:"
                 Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
                 Label41.Text = "Stato dell'associazione:"
                 Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
@@ -1401,7 +1343,6 @@ Public Class Options
                 Button4.Text = "Sfoglia..."
                 Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
                 Button10.Text = "Impostazioni avanzate"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arresto" Else Button8.Text = "Avvio"
                 Cancel_Button.Text = "Annulla"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Reimpostare le preferenze"
@@ -1412,7 +1353,6 @@ Public Class Options
                 CheckBox5.Text = "Visualizza l'output del comando in inglese"
                 CheckBox6.Text = "Notifica l'avvio di processi in background"
                 CheckBox7.Text = "Abilita la visualizzazione del registro nel pannello di avanzamento per impostazione predefinita"
-                CheckBox8.Text = "Rileva sempre le immagini montate"
                 CheckBox9.Text = "Utilizza i menu in maiuscolo"
                 CheckBox10.Text = "Crea automaticamente i registri per ogni operazione eseguita"
                 CheckBox11.Text = "Imposta icone di file personalizzate per i progetti DISMTools"
@@ -1685,42 +1625,6 @@ Public Class Options
         PictureBox14.Image = GetGlyphResource("options_scratch")
         PictureBox15.Image = GetGlyphResource("options_output")
         PictureBox16.Image = GetGlyphResource("options_bgprocs")
-        PictureBox17.Image = GetGlyphResource("options_imgdetect")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
         DarkThemesCB.Items.Clear()
         LightThemesCB.Items.Clear()
         For Each LoadedTheme In ThemeHelper.GetThemes()
@@ -2609,95 +2513,6 @@ Public Class Options
         End If
     End Sub
 
-    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        DynaLog.LogMessage("Toggling state of mounted image detector...")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        If Button8.Text = "Stop" Then
-                            MainForm.StopMountedImageDetector()
-                        ElseIf Button8.Text = "Start" Then
-                            MainForm.StartMountedImageDetector()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        If Button8.Text = "Detener" Then
-                            MainForm.StopMountedImageDetector()
-                        ElseIf Button8.Text = "Iniciar" Then
-                            MainForm.StartMountedImageDetector()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        If Button8.Text = "Arrêter" Then
-                            MainForm.StopMountedImageDetector()
-                        ElseIf Button8.Text = "Démarrer" Then
-                            MainForm.StartMountedImageDetector()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        If Button8.Text = "Parar" Then
-                            MainForm.StopMountedImageDetector()
-                        ElseIf Button8.Text = "Iniciar" Then
-                            MainForm.StartMountedImageDetector()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        If Button8.Text = "Arresto" Then
-                            MainForm.StopMountedImageDetector()
-                        ElseIf Button8.Text = "Avvio" Then
-                            MainForm.StartMountedImageDetector()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                If Button8.Text = "Stop" Then
-                    MainForm.StopMountedImageDetector()
-                ElseIf Button8.Text = "Start" Then
-                    MainForm.StartMountedImageDetector()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                If Button8.Text = "Detener" Then
-                    MainForm.StopMountedImageDetector()
-                ElseIf Button8.Text = "Iniciar" Then
-                    MainForm.StartMountedImageDetector()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                If Button8.Text = "Arrêter" Then
-                    MainForm.StopMountedImageDetector()
-                ElseIf Button8.Text = "Démarrer" Then
-                    MainForm.StartMountedImageDetector()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                If Button8.Text = "Parar" Then
-                    MainForm.StopMountedImageDetector()
-                ElseIf Button8.Text = "Iniciar" Then
-                    MainForm.StartMountedImageDetector()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                If Button8.Text = "Arresto" Then
-                    MainForm.StopMountedImageDetector()
-                ElseIf Button8.Text = "Avvio" Then
-                    MainForm.StartMountedImageDetector()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
-    End Sub
-
     Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
         If CheckBox10.Checked Then
             Label12.Enabled = False
@@ -2789,382 +2604,36 @@ Public Class Options
 
     Sub ChangeSections(Number As Integer)
         DynaLog.LogMessage("Changing visible section in the settings. Section number index: " & Number)
-        Select Case Number
-            Case 0
-                Options_Program.Visible = True
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 1
-                Options_Program.Visible = False
-                Options_Personalization.Visible = True
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 2
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = True
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 3
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = True
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 4
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = True
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 5
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = True
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 6
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = True
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 7
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = True
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 8
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = True
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 9
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = True
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = BackColor
-                ShutdownSectionBtn.BackColor = ImageTaskHeader1.BackColor
-            Case 10
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = True
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                ProgramSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                PersonalizationSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                LogSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgOpsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ScDirSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                OutputSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                BgProcsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ImgDetectSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                AssocsSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                StartupSectionBtn.BackColor = ImageTaskHeader1.BackColor
-                ShutdownSectionBtn.BackColor = BackColor
-        End Select
+        Options_Program.Visible = Number = 0
+        Options_Personalization.Visible = Number = 1
+        Options_Logs.Visible = Number = 2
+        Options_ImgOps.Visible = Number = 3
+        Options_Scratch.Visible = Number = 4
+        Options_Output.Visible = Number = 5
+        Options_BgProcs.Visible = Number = 6
+        Options_FileAssocs.Visible = Number = 7
+        Options_Startup.Visible = Number = 8
+        Options_Shutdown.Visible = Number = 9
+        Label49.Font = New Font("Segoe UI", 9, If(Number = 0, FontStyle.Bold, FontStyle.Regular))
+        Label50.Font = New Font("Segoe UI", 9, If(Number = 1, FontStyle.Bold, FontStyle.Regular))
+        Label51.Font = New Font("Segoe UI", 9, If(Number = 2, FontStyle.Bold, FontStyle.Regular))
+        Label52.Font = New Font("Segoe UI", 9, If(Number = 3, FontStyle.Bold, FontStyle.Regular))
+        Label53.Font = New Font("Segoe UI", 9, If(Number = 4, FontStyle.Bold, FontStyle.Regular))
+        Label54.Font = New Font("Segoe UI", 9, If(Number = 5, FontStyle.Bold, FontStyle.Regular))
+        Label55.Font = New Font("Segoe UI", 9, If(Number = 6, FontStyle.Bold, FontStyle.Regular))
+        Label57.Font = New Font("Segoe UI", 9, If(Number = 7, FontStyle.Bold, FontStyle.Regular))
+        Label58.Font = New Font("Segoe UI", 9, If(Number = 8, FontStyle.Bold, FontStyle.Regular))
+        Label34.Font = New Font("Segoe UI", 9, If(Number = 9, FontStyle.Bold, FontStyle.Regular))
+        ProgramSectionBtn.BackColor = If(Number = 0, BackColor, ImageTaskHeader1.BackColor)
+        PersonalizationSectionBtn.BackColor = If(Number = 1, BackColor, ImageTaskHeader1.BackColor)
+        LogSectionBtn.BackColor = If(Number = 2, BackColor, ImageTaskHeader1.BackColor)
+        ImgOpsSectionBtn.BackColor = If(Number = 3, BackColor, ImageTaskHeader1.BackColor)
+        ScDirSectionBtn.BackColor = If(Number = 4, BackColor, ImageTaskHeader1.BackColor)
+        OutputSectionBtn.BackColor = If(Number = 5, BackColor, ImageTaskHeader1.BackColor)
+        BgProcsSectionBtn.BackColor = If(Number = 6, BackColor, ImageTaskHeader1.BackColor)
+        AssocsSectionBtn.BackColor = If(Number = 7, BackColor, ImageTaskHeader1.BackColor)
+        StartupSectionBtn.BackColor = If(Number = 8, BackColor, ImageTaskHeader1.BackColor)
+        ShutdownSectionBtn.BackColor = If(Number = 9, BackColor, ImageTaskHeader1.BackColor)
         SectionNum = Number
     End Sub
 
@@ -3196,20 +2665,16 @@ Public Class Options
         ChangeSections(6)
     End Sub
 
-    Private Sub ImgDetectSectionBtn_Click(sender As Object, e As EventArgs) Handles ImgDetectSectionBtn.Click, Label56.Click, PictureBox17.Click
+    Private Sub AssocsSectionBtn_Click(sender As Object, e As EventArgs) Handles AssocsSectionBtn.Click, Label57.Click, PictureBox18.Click
         ChangeSections(7)
     End Sub
 
-    Private Sub AssocsSectionBtn_Click(sender As Object, e As EventArgs) Handles AssocsSectionBtn.Click, Label57.Click, PictureBox18.Click
+    Private Sub StartupSectionBtn_Click(sender As Object, e As EventArgs) Handles StartupSectionBtn.Click, Label58.Click, PictureBox19.Click
         ChangeSections(8)
     End Sub
 
-    Private Sub StartupSectionBtn_Click(sender As Object, e As EventArgs) Handles StartupSectionBtn.Click, Label58.Click, PictureBox19.Click
-        ChangeSections(9)
-    End Sub
-
     Private Sub ShutdownSectionBtn_Click(sender As Object, e As EventArgs) Handles ShutdownSectionBtn.Click, Label34.Click, PictureBox20.Click
-        ChangeSections(10)
+        ChangeSections(9)
     End Sub
 
 #End Region

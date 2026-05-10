@@ -11179,41 +11179,6 @@ Public Class MainForm
 
     Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
         DynaLog.LogMessage("The mounted image detector is no longer busy.")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
