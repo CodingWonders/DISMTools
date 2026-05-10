@@ -4431,7 +4431,7 @@ Public Class MainForm
         MenuStrip1.BackColor = CurrentTheme.SectionBackgroundColor
         MenuStrip1.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, MenuStrip1.Items)
-        PictureBox5.Image = GetGlyphResource("logo_mainscr")
+        PictureBox5.Image = GetGlyphResource("logo_aboutdlg")
         ToolStrip1.BackColor = CurrentTheme.SectionBackgroundColor
         ToolStrip1.ForeColor = CurrentTheme.ForegroundColor
         ToolStrip2.BackColor = CurrentTheme.SectionBackgroundColor

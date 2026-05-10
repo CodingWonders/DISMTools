@@ -2609,11 +2609,11 @@ Partial Class MainForm
         '
         'PictureBox5
         '
-        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(32, 14)
+        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.logo_aboutdlg_light
+        Me.PictureBox5.Location = New System.Drawing.Point(18, 0)
         Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(192, 36)
-        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox5.Size = New System.Drawing.Size(220, 64)
+        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox5.TabIndex = 7
         Me.PictureBox5.TabStop = False
         '
@@ -4709,7 +4709,6 @@ Partial Class MainForm
         Me.SidePanel.PerformLayout()
         Me.UpdatePanel.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PrjPanel.ResumeLayout(False)
         Me.PrjPanel.PerformLayout()
