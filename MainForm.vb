@@ -1046,9 +1046,9 @@ Public Class MainForm
         End Try
         ' Computer Information
         ComputerOSLabel.Text = My.Computer.Info.OSFullName
-        Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT * FROM Win32_ComputerSystem")
-        Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT * FROM Win32_Processor")
-        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT * FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
+        Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
+        Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
+        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
         Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
         ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
         ComputerModelLabel.Text = ComputerSystemProps("Model")
@@ -1067,9 +1067,9 @@ Public Class MainForm
         End Select
         ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
         Try
-            Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT * FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
+            Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
             Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
-            Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT * FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
+            Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
             Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
             ComputerDhcpStatusLabel.Text = If(DhcpEnabled, "Automatic (assigned by DHCP)", "Manual")
         Catch ex As Exception
