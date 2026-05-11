@@ -5,6 +5,9 @@ Imports Microsoft.VisualBasic.ControlChars
 
 Public Class PECustomizerDialog
 
+    Private KeyboardLayoutDictionary As New Dictionary(Of String, String)
+    Private SelectedKeyboardLayoutCode As String
+
     Private Function SavePolicies() As Boolean
         ' First let's get the wallpaper out of the way
         Try
@@ -35,6 +38,11 @@ Public Class PECustomizerDialog
                 UEFICA23Preference = "UseAlways"
         End Select
 
+        ' Control the selected layout; if it is invalid then fall back to US
+        If SelectedKeyboardLayoutCode = "" OrElse Not KeyboardLayoutDictionary.ContainsKey(SelectedKeyboardLayoutCode) Then
+            SelectedKeyboardLayoutCode = "00000409"
+        End If
+
         Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
                                                   "[HKEY_LOCAL_MACHINE\WINPESOFT\DISMTools\Preinstallation Environment\Policies]{0}" &
                                                   "{1}ShowWatermark{1}=dword:0000000{2}{0}" &
@@ -44,10 +52,11 @@ Public Class PECustomizerDialog
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
-                                                  "{1}PXEServerPort{1}=dword:{9}{0}",
+                                                  "{1}PXEServerPort{1}=dword:{9}{0}" &
+                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}",
                                                   CrLf, Quote, If(CheckBox2.Checked, 1, 0), UEFICA23Preference, PartTableOverridePreference,
                                                   Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0),
-                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant())
+                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant(), SelectedKeyboardLayoutCode)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg"), regContents)
         Catch ex As Exception
@@ -83,18 +92,56 @@ Public Class PECustomizerDialog
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox2.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown2.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         ComboBox2.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
+        ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(96)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(384)
+
+        ListView1.Items.Clear()
+
+        ' Get the keyboard layouts
+        Dim LayoutRk As RegistryKey = Nothing
+        Try
+            LayoutRk = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
+            For Each LayoutCode In LayoutRk.GetSubKeyNames()
+                Dim LayoutNameRk As RegistryKey = LayoutRk.OpenSubKey(LayoutCode, False)
+                Dim LayoutName As String = LayoutNameRk.GetValue("Layout Text", "")
+                LayoutNameRk.Close()
+
+                If Not KeyboardLayoutDictionary.ContainsKey(LayoutCode) Then
+                    KeyboardLayoutDictionary.Add(LayoutCode, LayoutName)
+                Else
+                    KeyboardLayoutDictionary(LayoutCode) = LayoutName
+                End If
+            Next
+            ListView1.Items.AddRange(KeyboardLayoutDictionary.ToList().Select(Function(kvp) New ListViewItem(New String() {kvp.Key, kvp.Value})).ToArray())
+
+            Dim DefaultLayoutIndex As Integer = KeyboardLayoutDictionary.Keys.ToList().IndexOf(MainForm.KeyboardLayoutCode)
+            If DefaultLayoutIndex > -1 Then
+                ListView1.Items(DefaultLayoutIndex).Selected = True
+                ListView1.Select()
+            End If
+            TextBox2.Text = MainForm.KeyboardLayoutCode
+        Catch ex As Exception
+
+        Finally
+            If LayoutRk IsNot Nothing Then LayoutRk.Close()
+        End Try
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -133,5 +180,17 @@ Public Class PECustomizerDialog
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         TextBox1.Text = OpenFileDialog1.FileName
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        Try
+            TextBox2.Text = If(ListView1.SelectedItems.Count = 1, ListView1.FocusedItem.Text, "")
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
+        SelectedKeyboardLayoutCode = TextBox2.Text
     End Sub
 End Class

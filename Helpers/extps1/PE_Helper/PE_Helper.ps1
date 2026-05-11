@@ -806,7 +806,7 @@ function Start-PECustomization
         }
         try
         {
-            $policyVersion = "0.8.0.26042"
+            $policyVersion = "0.8.0.26052"
 
             Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
             Write-Host "Initializing default Preinstallation Environment policy..."
@@ -821,6 +821,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AutoUnattendCopytoSysprep /t REG_DWORD /d 0
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PXEServerPort /t REG_DWORD /d 8080
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "00000409"
             if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
                 reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
             }

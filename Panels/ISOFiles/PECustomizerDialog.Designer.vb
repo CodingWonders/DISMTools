@@ -46,6 +46,12 @@ Partial Class PECustomizerDialog
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -60,7 +66,7 @@ Partial Class PECustomizerDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 460)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 640)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -300,16 +306,68 @@ Partial Class PECustomizerDialog
         Me.NumericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericUpDown2.Value = New Decimal(New Integer() {8080, 0, 0, 0})
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(34, 454)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(453, 13)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "Pick the default keyboard layout to use in the Preinstallation Environment from t" & _
+    "he list below:"
+        '
+        'ListView1
+        '
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.Location = New System.Drawing.Point(34, 478)
+        Me.ListView1.MultiSelect = False
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(556, 128)
+        Me.ListView1.TabIndex = 7
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Layout Code"
+        Me.ColumnHeader1.Width = 96
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Layout Name"
+        Me.ColumnHeader2.Width = 384
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(34, 616)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(207, 13)
+        Me.Label10.TabIndex = 1
+        Me.Label10.Text = "Layout code of selected keyboard layout:"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(247, 613)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ReadOnly = True
+        Me.TextBox2.Size = New System.Drawing.Size(343, 21)
+        Me.TextBox2.TabIndex = 8
+        '
         'PECustomizerDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(624, 501)
+        Me.ClientSize = New System.Drawing.Size(624, 681)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.NumericUpDown2)
         Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.ComboBox2)
@@ -322,6 +380,7 @@ Partial Class PECustomizerDialog
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -365,5 +424,11 @@ Partial Class PECustomizerDialog
     Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents NumericUpDown2 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
 
 End Class

@@ -24,6 +24,36 @@ if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
 	)
 )
+
+:: Detect the keyboard layout to use via policy. Because we don't have findstr here on winpe we have to use a
+:: different method.
+SET "DefaultKeyboardLayoutCode=00000409"
+
+FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /v KeyboardLayoutCode /t REG_SZ 2^>NUL ^| find "REG_"') DO (
+	SET "DefaultKeyboardLayoutCode=%%A"
+)
+
+SET KeyboardLayoutConfigured=0
+:: If we have a substitute then we have configured the keyboard layout... but first we'll query the preloads
+SET "DefaultPreload=00000409"
+FOR /F "tokens=3" %%A IN ('reg query "HKCU\Keyboard Layout\Preload" /v 1 /t REG_SZ 2^>nul ^| find "REG_"') DO (
+	SET "DefaultPreload=%%A"
+)
+REG QUERY "HKCU\Keyboard Layout\Substitutes" /v "%DefaultPreload%" /t REG_SZ >nul 2>&1
+IF %ERRORLEVEL% EQU 0 SET KeyboardLayoutConfigured=1
+
+IF %KeyboardLayoutConfigured% NEQ 1 (
+	FOR /F "tokens=3" %%A IN ('reg query "HKCU\Control Panel\International" /v Locale /t REG_SZ 2^>nul ^| find "REG_"') DO (
+		IF /I NOT "%DefaultKeyboardLayoutCode%" == "%%A" (
+			echo Configuring keyboard layout to %DefaultKeyboardLayoutCode%...
+			wpeutil setkeyboardlayout 0409:%DefaultKeyboardLayoutCode%
+			REM we need to open a new session; we can no longer use this one as it will still use the older
+			REM keyboard layout
+			IF !ERRORLEVEL! EQU 0 start /wait cmd.exe /k "%SYSTEMROOT%\system32\startnet.cmd"
+		)
+	)
+)
+
 :: Determine if we have set the policy to show a watermark
 SET ShowWatermark=0
 FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /v ShowWatermark 2^>NUL') DO (

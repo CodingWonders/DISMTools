@@ -220,6 +220,7 @@ Public Class MainForm
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
     Public PXEServerPort As Integer = 8080
+    Public KeyboardLayoutCode As String = "00000409"
 
     Public ReinitializeCurImage As Boolean = True
 
@@ -1467,6 +1468,7 @@ Public Class MainForm
                 UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
                 AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
                 PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
+                KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1587,6 +1589,7 @@ Public Class MainForm
                     UEFICA23Preference = CInt(settingData("PEPolicy")("UEFICA23Preference"))
                     AutoUnattendCopytoSysprep = CInt(settingData("PEPolicy")("AutoUnattendCopyToSysprep")) = 1
                     PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
+                    KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1661,6 +1664,14 @@ Public Class MainForm
         If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then
             PXEServerPort = 8080
         End If
+        Try
+            Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
+            Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
+            KeyboardLayoutRk.Close()
+            If Not KeyboardLayoutCodes.Contains(KeyboardLayoutCode) Then KeyboardLayoutCode = "00000409"
+        Catch ex As Exception
+
+        End Try
         WriteDefaultPEPolicy()
     End Sub
 
@@ -1693,10 +1704,11 @@ Public Class MainForm
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
-                                                  "{1}PXEServerPort{1}=dword:{9}{0}",
+                                                  "{1}PXEServerPort{1}=dword:{9}{0}" &
+                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant())
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1771,7 +1783,8 @@ Public Class MainForm
                            "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
                            "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
                            "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep & CrLf &
-                           "PXEServerPort              =    " & PXEServerPort)
+                           "PXEServerPort              =    " & PXEServerPort & CrLf &
+                           "KeyboardLayoutCode         =    " & KeyboardLayoutCode)
     End Sub
 
 #Region "Background Processes"
@@ -3998,6 +4011,7 @@ Public Class MainForm
         settingsData("PEPolicy").AddKey("UEFICA23Preference", 0)
         settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", 0)
         settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
+        settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
         parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4101,6 +4115,7 @@ Public Class MainForm
         PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4199,6 +4214,7 @@ Public Class MainForm
                 settingsData("PEPolicy").AddKey("UEFICA23Preference", UEFICA23Preference)
                 settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", If(AutoUnattendCopytoSysprep, 1, 0))
                 settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
+                settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
                 parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4319,6 +4335,7 @@ Public Class MainForm
                     PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
                     PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
