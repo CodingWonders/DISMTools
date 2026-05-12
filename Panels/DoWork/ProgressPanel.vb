@@ -577,6 +577,8 @@ Public Class ProgressPanel
     Private Event CurrTaskLogReported(CurrTaskMessage As String)
     Private Event LogActivityReported(LogMessage As String)
 
+    Private ReferenceImage As WindowsImage
+
     Private Sub OnAllTasksLogReported(AllTasksMessage As String) Handles Me.AllTasksLogReported
         allTasks.Text = AllTasksMessage
     End Sub
@@ -1898,6 +1900,42 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub CommitFfu()
+        Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+        ' Options for capture task
+        FFUCaptureSourceDrive = ReferenceImage.FFUInfo.MountDiskPath
+        FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+        FFUCaptureName = ReferenceImage.ImageName
+        FFUCaptureDescription = ReferenceImage.ImageDescription
+        FFUCaptureCompressType = 1
+
+        ' Options for unmount task
+        MountDir = MountDir
+        UMountOp = 1
+        UMountLocalDir = True
+        RandomMountDir = ""
+        CheckImgIntegrity = False
+        SaveToNewIndex = False
+        UMountImgIndex = 1
+
+        ' Options for replace task
+        FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+        FFUReplaceDestinationFFU = ReferenceImage.ImageFile
+
+        ' Options for mount task
+        SourceImg = ReferenceImage.ImageFile
+        ImgIndex = 1
+        isReadOnly = False
+        isOptimized = False
+        isIntegrityTested = False
+
+        CaptureFfuImage()
+        UnmountImage()
+        ReplaceFfuFile()
+        MountImage()
+    End Sub
+
     Private Sub CommitImage()
         DynaLog.LogMessage("Saving changes to the Windows image...")
         Select Case Language
@@ -1935,6 +1973,12 @@ Public Class ProgressPanel
                 allTasks.Text = "Modifica immagine..."
                 currentTask.Text = "Salvataggio modifiche nell'immagine..."
         End Select
+        If ReferenceImage IsNot Nothing Then
+            If Path.GetExtension(ReferenceImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                CommitFfu()
+                Exit Sub
+            End If
+        End If
         LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                            "- Mount directory: " & MountDir)
         Select Case DismVersionChecker.ProductMajorPart
@@ -8055,6 +8099,7 @@ Public Class ProgressPanel
         AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
         If MainForm.CurrentImage IsNot Nothing Then
+            ReferenceImage = MainForm.CurrentImage
             ImgVersion = MainForm.CurrentImage.ImageVersion
         End If
         ' Determine program colors
