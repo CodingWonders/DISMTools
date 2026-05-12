@@ -52,6 +52,7 @@ Partial Class PECustomizerDialog
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label10 = New System.Windows.Forms.Label()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.DefaultPolicySaveButton = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -355,6 +356,16 @@ Partial Class PECustomizerDialog
         Me.TextBox2.Size = New System.Drawing.Size(343, 21)
         Me.TextBox2.TabIndex = 8
         '
+        'DefaultPolicySaveButton
+        '
+        Me.DefaultPolicySaveButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DefaultPolicySaveButton.Location = New System.Drawing.Point(12, 643)
+        Me.DefaultPolicySaveButton.Name = "DefaultPolicySaveButton"
+        Me.DefaultPolicySaveButton.Size = New System.Drawing.Size(160, 23)
+        Me.DefaultPolicySaveButton.TabIndex = 9
+        Me.DefaultPolicySaveButton.Text = "Save to default policies"
+        Me.DefaultPolicySaveButton.UseVisualStyleBackColor = True
+        '
         'PECustomizerDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -362,6 +373,7 @@ Partial Class PECustomizerDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(624, 681)
+        Me.Controls.Add(Me.DefaultPolicySaveButton)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.NumericUpDown2)
@@ -430,5 +442,6 @@ Partial Class PECustomizerDialog
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents DefaultPolicySaveButton As System.Windows.Forms.Button
 
 End Class

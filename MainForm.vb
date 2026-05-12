@@ -1675,7 +1675,7 @@ Public Class MainForm
         WriteDefaultPEPolicy()
     End Sub
 
-    Private Sub WriteDefaultPEPolicy()
+    Public Sub WriteDefaultPEPolicy()
         Dim PartTableOverridePreferenceStr As String = ""
         Select Case PartTableOverridePreference
             Case 0

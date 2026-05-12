@@ -65,6 +65,58 @@ Public Class PECustomizerDialog
         Return True
     End Function
 
+    Private Function SaveDefaultPolicies() As Boolean
+        Try
+            ' First let's get the wallpaper out of the way
+            Try
+                If TextBox1.Text <> "" AndAlso File.Exists(TextBox1.Text) Then
+                    File.Copy(TextBox1.Text, Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "backgrounds", "wallpaper.jpg"), True)
+                    File.Copy(TextBox1.Text, Path.Combine(Application.StartupPath, "userdata", "dtpe_backgrounds", "wallpaper.jpg"), True)
+                End If
+            Catch ex As Exception
+
+            End Try
+
+            ' Now let's deal with the policies
+            Dim PartTableOverridePreference As String = ""
+            Select Case ComboBox1.SelectedIndex
+                Case 0
+                    PartTableOverridePreference = "NoOverride"
+                Case 1
+                    PartTableOverridePreference = "AlwaysMBR"
+                Case 2
+                    PartTableOverridePreference = "AlwaysGPT"
+            End Select
+            Dim UEFICA23Preference As String = ""
+            Select Case ComboBox2.SelectedIndex
+                Case 0
+                    UEFICA23Preference = "AskUser"
+                Case 1
+                    UEFICA23Preference = "UseNever"
+                Case 2
+                    UEFICA23Preference = "UseAlways"
+            End Select
+
+            ' Control the selected layout; if it is invalid then fall back to US
+            If SelectedKeyboardLayoutCode = "" OrElse Not KeyboardLayoutDictionary.ContainsKey(SelectedKeyboardLayoutCode) Then
+                SelectedKeyboardLayoutCode = "00000409"
+            End If
+
+            MainForm.ShowWatermark = CheckBox2.Checked
+            MainForm.UEFICA23Preference = ComboBox2.SelectedIndex
+            MainForm.PartTableOverridePreference = ComboBox1.SelectedIndex
+            MainForm.WDSHCConnAttempts = NumericUpDown1.Value
+            MainForm.WDSHCGraphoView = CheckBox3.Checked
+            MainForm.DTDimShowPnputilOut = CheckBox4.Checked
+            MainForm.AutoUnattendCopytoSysprep = CheckBox5.Checked
+            MainForm.PXEServerPort = NumericUpDown2.Value
+            MainForm.KeyboardLayoutCode = SelectedKeyboardLayoutCode
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not SavePolicies() Then
             MessageBox.Show(Me, "Policies could not be saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -192,5 +244,19 @@ Public Class PECustomizerDialog
 
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
         SelectedKeyboardLayoutCode = TextBox2.Text
+    End Sub
+
+    Private Sub DefaultPolicySaveButton_MouseHover(sender As Object, e As EventArgs) Handles DefaultPolicySaveButton.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Default policies allow you to make the settings you specify here permanent." & Environment.NewLine &
+                                    "This also includes any wallpapers you specify here.")
+    End Sub
+
+    Private Sub DefaultPolicySaveButton_Click(sender As Object, e As EventArgs) Handles DefaultPolicySaveButton.Click
+        If SaveDefaultPolicies() Then
+            MainForm.WriteDefaultPEPolicy()
+            MessageBox.Show("Default policies have been saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            MessageBox.Show("Default policies could not be saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
     End Sub
 End Class
