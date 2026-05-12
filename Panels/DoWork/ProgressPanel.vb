@@ -7415,7 +7415,7 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
         allTasks.Text = "Replacing FFU files..."
         currentTask.Text = "Replacing original FFU file with modified FFU file..."
-        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceSourceFFU & Quote & " with " & Quote & FFUReplaceDestinationFFU & Quote & "...")
+        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceDestinationFFU & Quote & " with " & Quote & FFUReplaceSourceFFU & Quote & "...")
         Try
             If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
             File.Delete(FFUReplaceDestinationFFU)
