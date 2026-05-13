@@ -628,11 +628,9 @@ Public Class ProjProperties
         Label10.Text = MainForm.projPath
         Label11.Text = File.GetCreationTime(MainForm.projPath)
         DynaLog.LogMessage("Getting project information...")
-        Dim rtb As New RichTextBox With {
-            .Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\" & MainForm.Label49.Text & ".dtproj")
-        }
-        If rtb.Lines(6).StartsWith("ProjGuid") Then
-            Label12.Text = rtb.Lines(6).Replace("ProjGuid=", "").Trim()
+        Dim ProjectFileLines As String() = File.ReadAllLines(MainForm.projPath & "\" & MainForm.Label49.Text & ".dtproj")
+        If ProjectFileLines(6).StartsWith("ProjGuid") Then
+            Label12.Text = ProjectFileLines(6).Replace("ProjGuid=", "").Trim()
         End If
         If MainForm.IsImageMounted Then
             DynaLog.LogMessage("An image is mounted.")

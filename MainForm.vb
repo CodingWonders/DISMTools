@@ -1225,10 +1225,8 @@ Public Class MainForm
             End Try
             DynaLog.LogMessage("Reading update information...")
             If File.Exists(Application.StartupPath & "\info.ini") Then
-                Dim infoRTB As New RichTextBox With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\info.ini")
-                }
-                For Each Line In infoRTB.Lines
+                Dim UpdateInfoFileLines As String() = File.ReadAllLines(Application.StartupPath & "\info.ini")
+                For Each Line In UpdateInfoFileLines
                     If Line.StartsWith("LatestVer") Then
                         DynaLog.LogMessage("Getting latest version...")
                         latestVer = Line.Replace("LatestVer = ", "").Trim()
