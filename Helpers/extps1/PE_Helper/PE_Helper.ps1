@@ -594,7 +594,7 @@ function Start-PECustomization
             The path of the mounted Windows PE image
         .PARAMETER arch
             The architecture of the target Windows PE image, which is used to customize the wallpaper
-        .PARAMETE testStartNet
+        .PARAMETER testStartNet
             Customizes the "startnet.cmd" file for WinPE testing
         .EXAMPLE
             Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
