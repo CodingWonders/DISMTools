@@ -995,6 +995,7 @@
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
+    <Compile Include="Utilities\PowerManagement\PowerManagementHelper.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\RegistryHelper.vb" />
     <Compile Include="Utilities\SamHelper.vb" />

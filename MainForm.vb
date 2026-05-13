@@ -222,6 +222,9 @@ Public Class MainForm
     Public PXEServerPort As Integer = 8080
     Public KeyboardLayoutCode As String = "00000409"
 
+    ' INFINITY settings
+    Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
+
     Public ReinitializeCurImage As Boolean = True
 
 
@@ -1408,6 +1411,7 @@ Public Class MainForm
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
+                PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1540,6 +1544,7 @@ Public Class MainForm
                     PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
                     PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
+                    PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
                     If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
                     UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
@@ -1749,6 +1754,7 @@ Public Class MainForm
                            "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
                            "NoRestart                  =    " & SysNoRestart & CrLf &
                            "AppxRemovalDisplayNameFrmt =    " & AppxDisplayNameFormatOnRemoval & CrLf &
+                           "PreventSystemFromSleeping  =    " & PreventSystemFromSleeping & CrLf &
                            "UseScratch                 =    " & UseScratch & CrLf &
                            "AutoScratch                =    " & AutoScrDir & CrLf &
                            "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf &
@@ -3964,6 +3970,7 @@ Public Class MainForm
         settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", 0)
         settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", 0)
         settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
+        settingsData("ImgOps").AddKey("PreventSystemFromSleeping", 1)
         settingsData.Sections.AddSection("ScratchDir")
         settingsData("ScratchDir").AddKey("UseScratch", 0)
         settingsData("ScratchDir").AddKey("AutoScratch", 1)
@@ -4059,6 +4066,7 @@ Public Class MainForm
         ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PreventSystemFromSleeping", 1, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4167,6 +4175,7 @@ Public Class MainForm
                 settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
                 settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
                 settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
+                settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
                 settingsData.Sections.AddSection("ScratchDir")
                 settingsData("ScratchDir").AddKey("UseScratch", If(UseScratch, 1, 0))
                 settingsData("ScratchDir").AddKey("AutoScratch", If(AutoScrDir, 1, 0))
@@ -4267,6 +4276,7 @@ Public Class MainForm
                     ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                     ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
                     ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                     ImgOpKey.Close()
                     DynaLog.LogMessage("Configuring scratch directory settings...")
                     Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")

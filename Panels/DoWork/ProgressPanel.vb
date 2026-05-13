@@ -212,6 +212,8 @@ Public Class ProgressPanel
 
     Dim ImgVersion As Version
 
+    Private PreventSystemFromSleeping As Boolean
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -7535,6 +7537,11 @@ Public Class ProgressPanel
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
         TaskList.Clear()
+        If PreventSystemFromSleeping Then
+            ' Restore sleep mode
+            DynaLog.LogMessage("Restoring system sleep mode...")
+            PowerManagementHelper.EnableSystemSleepMode()
+        End If
         If IsSuccessful Then
             DynaLog.LogMessage("Tasks have been successful.")
             If OperationNum = 9 Then LogView.AppendText(CrLf &
@@ -8090,6 +8097,12 @@ Public Class ProgressPanel
         PrepareAllReporters()
         If MainForm.ExpandedProgressPanel AndAlso Not IsExpanded Then
             LogButton.PerformClick()
+        End If
+        PreventSystemFromSleeping = MainForm.PreventSystemFromSleeping
+        If PreventSystemFromSleeping Then
+            ' Disable sleep mode now
+            DynaLog.LogMessage("Preventing the system from sleeping...")
+            PowerManagementHelper.DisableSystemSleepMode()
         End If
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
