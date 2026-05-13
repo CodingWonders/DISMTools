@@ -711,9 +711,7 @@ Public Class MainForm
             Language = 1
             ChangeLangs(Language)
         End If
-        Await Task.Run(Sub()
-                           UnblockPSHelpers()
-                       End Sub)
+        UnblockPSHelpers()
         If StartupRemount Then RemountOrphanedImages() Else HasRemounted = True
         While Not HasRemounted
             Application.DoEvents()
@@ -1283,17 +1281,14 @@ Public Class MainForm
         End Using
     End Sub
 
-    Private Async Sub UnblockPSHelpers()
-        Await Task.Run(Sub()
-                           DynaLog.LogMessage("Unblocking PowerShell scripts for them to run freely (for those who want technical terms, removing Intenet zone alternate data streams from NTFS)...")
-                           Dim PSUnblocker As New Process()
-                           PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
-                           PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\*.*" & Quote
-                           PSUnblocker.StartInfo.CreateNoWindow = True
-                           PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                           PSUnblocker.Start()
-                           PSUnblocker.WaitForExit()
-                       End Sub)
+    Private Sub UnblockPSHelpers()
+        DynaLog.LogMessage("Unblocking PowerShell scripts for them to run freely (for those who want technical terms, removing Intenet zone alternate data streams from NTFS)...")
+        Dim PSUnblocker As New Process()
+        PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
+        PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\*.*" & Quote
+        PSUnblocker.StartInfo.CreateNoWindow = True
+        PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        PSUnblocker.Start()
     End Sub
 
     Sub ChangeImgStatus()
