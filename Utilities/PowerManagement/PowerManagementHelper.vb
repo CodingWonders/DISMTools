@@ -22,7 +22,7 @@ Module PowerManagementHelper
     End Sub
 
     Public Sub EnableSystemSleepMode()
-        NativeMethods.SetThreadExecutionState(0)
+        NativeMethods.SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS)
     End Sub
 
 End Module
