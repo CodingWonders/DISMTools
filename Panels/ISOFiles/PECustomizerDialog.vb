@@ -199,13 +199,21 @@ Public Class PECustomizerDialog
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         Button1.Enabled = Not CheckBox1.Checked
         If Not CheckBox1.Checked Then Exit Sub
-        Try
-            Dim wallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
-            TextBox1.Text = wallpaperRk.GetValue("WallPaper", "")
-            wallpaperRk.Close()
-        Catch ex As Exception
 
+        Dim WallpaperPath As String = ""
+        ' Wallpaper may be defined by group policy; check there first
+        Try
+            Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
+            WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
+            WallpaperPolicyRk.Close()
+            If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+        Catch ex As Exception
+            ' Ignore and use general wallpaper
+            Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
+            WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
+            WallpaperRk.Close()
         End Try
+        TextBox1.Text = WallpaperPath
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
