@@ -390,7 +390,7 @@ Partial Class PECustomizerDialog
         'DefaultPolicySaveButton
         '
         Me.DefaultPolicySaveButton.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.DefaultPolicySaveButton.Location = New System.Drawing.Point(12, 643)
+        Me.DefaultPolicySaveButton.Location = New System.Drawing.Point(12, 435)
         Me.DefaultPolicySaveButton.Name = "DefaultPolicySaveButton"
         Me.DefaultPolicySaveButton.Size = New System.Drawing.Size(160, 23)
         Me.DefaultPolicySaveButton.TabIndex = 9
