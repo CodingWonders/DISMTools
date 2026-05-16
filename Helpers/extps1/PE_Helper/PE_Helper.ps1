@@ -1210,7 +1210,7 @@ function Start-OSApplication
     {
         Write-Host "Adding drivers to the target image..."
         # Add drivers that were previously added to the Windows PE using the DIM
-        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" } | Select-Object -Unique)
         $drvCount = $drivers.Count
         $successfulInstallations = 0
         $failedInstallations = 0
