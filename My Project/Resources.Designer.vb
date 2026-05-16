@@ -571,29 +571,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a REM EXAMPLE SCRIPT. PLEASE MODIFY
-        '''REM -----------------------------------------
-        '''SELECT DISK=0
-        '''CLEAN
-        '''CONVERT GPT
-        '''CREATE PARTITION EFI SIZE=300
-        '''FORMAT QUICK FS=FAT32 LABEL=&quot;System&quot;
-        '''CREATE PARTITION MSR SIZE=16
-        '''CREATE PARTITION PRIMARY
-        '''SHRINK MINIMUM=1000
-        '''FORMAT QUICK FS=NTFS LABEL=&quot;Windows&quot;
-        '''CREATE PARTITION PRIMARY
-        '''FORMAT QUICK FS=NTFS LABEL=&quot;Recovery&quot;
-        '''SET ID=&quot;de94bba4-06d1-4d40-a16a-bfd50179d6ac&quot;
-        '''GPT ATTRIBUTES=0x8000000000000001.
-        '''</summary>
-        Friend ReadOnly Property DefaultDiskPartConfig() As String
-            Get
-                Return ResourceManager.GetString("DefaultDiskPartConfig", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Busca una cadena traducida similar a # Write your code here, or use one of the following buttons at the bottom of this window:
         '''# - Use the Open Script button to load the contents of an existing script file.
         '''# - To get started with our curated set of Starter Scripts, use the &quot;Import a predefined Starter Script&quot; button

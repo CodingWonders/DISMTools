@@ -988,23 +988,6 @@ A "contributor" is any person that distributes its contribution under this licen
   <data name="set_layeredkeyboarddriver" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\set_layeredkeyboarddriver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DefaultDiskPartConfig" xml:space="preserve">
-    <value>REM EXAMPLE SCRIPT. PLEASE MODIFY
-REM -----------------------------------------
-SELECT DISK=0
-CLEAN
-CONVERT GPT
-CREATE PARTITION EFI SIZE=300
-FORMAT QUICK FS=FAT32 LABEL="System"
-CREATE PARTITION MSR SIZE=16
-CREATE PARTITION PRIMARY
-SHRINK MINIMUM=1000
-FORMAT QUICK FS=NTFS LABEL="Windows"
-CREATE PARTITION PRIMARY
-FORMAT QUICK FS=NTFS LABEL="Recovery"
-SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
-GPT ATTRIBUTES=0x8000000000000001</value>
-  </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 

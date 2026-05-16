@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2651"
+    Const UnattendGenReleaseTag As String = "2652"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -145,26 +145,21 @@ Public Class NewUnattendWiz
         ' Initialize Scintilla editor
         DynaLog.LogMessage("Resetting styles...")
         Scintilla1.StyleResetDefault()
-        Scintilla2.StyleResetDefault()
         Scintilla3.StyleResetDefault()
         Scintilla4.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         DynaLog.LogMessage("Setting colors for selection...")
         If CurrentTheme.IsDark Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
-            Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla3.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla4.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
-            Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla3.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla4.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
-        Scintilla2.Styles(Style.Default).Font = fntName
-        Scintilla2.Styles(Style.Default).Size = fntSize
         Scintilla3.Styles(Style.Default).Font = fntName
         Scintilla3.Styles(Style.Default).Size = fntSize
         Scintilla4.Styles(Style.Default).Font = fntName
@@ -175,9 +170,6 @@ Public Class NewUnattendWiz
         Scintilla1.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
-        Scintilla2.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
-        Scintilla2.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
-        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
@@ -185,7 +177,6 @@ Public Class NewUnattendWiz
         Scintilla4.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.StyleClearAll()
-        Scintilla2.StyleClearAll()
         Scintilla3.StyleClearAll()
         Scintilla4.StyleClearAll()
 
@@ -344,19 +335,12 @@ Public Class NewUnattendWiz
         ' Set line number margin properties
         DynaLog.LogMessage("Setting colors for line margin...")
         Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
-        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
-        Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla3.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla4.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
-        Margin.Width = 48
-        Margin.Type = MarginType.Number
-        Margin.Sensitive = True
-        Margin.Mask = 0
-        Margin = Scintilla2.Margins(1)
         Margin.Width = 48
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
@@ -378,10 +362,6 @@ Public Class NewUnattendWiz
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
         Scintilla1.SetProperty("fold.compact", "1")
-        Scintilla2.SetFoldMarginColor(True, Scintilla2.Styles(Style.Default).BackColor)
-        Scintilla2.SetFoldMarginColor(True, Scintilla2.Styles(Style.Default).BackColor)
-        Scintilla2.SetProperty("fold", "1")
-        Scintilla2.SetProperty("fold.compact", "1")
         Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
         Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
         Scintilla3.SetProperty("fold", "1")
@@ -399,16 +379,6 @@ Public Class NewUnattendWiz
         Bookmarks.Type = MarginType.Symbol
         Bookmarks.Mask = (1 << 2)
         Dim Marker = Scintilla1.Markers(2)
-        Marker.Symbol = MarkerSymbol.Circle
-        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
-        Marker.SetForeColor(Color.Black)
-        Marker.SetAlpha(100)
-        Bookmarks = Scintilla2.Margins(2)
-        Bookmarks.Width = 20
-        Bookmarks.Sensitive = True
-        Bookmarks.Type = MarginType.Symbol
-        Bookmarks.Mask = (1 << 2)
-        Marker = Scintilla2.Markers(2)
         Marker.Symbol = MarkerSymbol.Circle
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
@@ -437,7 +407,6 @@ Public Class NewUnattendWiz
         ' Set editor caret settings
         DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
-        Scintilla2.CaretForeColor = ForeColor
         Scintilla3.CaretForeColor = ForeColor
         Scintilla4.CaretForeColor = ForeColor
 
@@ -448,10 +417,6 @@ Public Class NewUnattendWiz
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
         Scintilla1.Margins(3).Width = 1
-        Scintilla2.Margins(3).Type = MarginType.Symbol
-        Scintilla2.Margins(3).Mask = Marker.MaskFolders
-        Scintilla2.Margins(3).Sensitive = True
-        Scintilla2.Margins(3).Width = 1
         Scintilla3.Margins(3).Type = MarginType.Symbol
         Scintilla3.Margins(3).Mask = Marker.MaskFolders
         Scintilla3.Margins(3).Sensitive = True
@@ -466,8 +431,6 @@ Public Class NewUnattendWiz
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
-            Scintilla2.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
-            Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla3.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla3.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla4.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
@@ -483,13 +446,6 @@ Public Class NewUnattendWiz
         Scintilla1.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla1.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla1.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
-        Scintilla2.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
-        Scintilla2.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
-        Scintilla2.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
-        Scintilla2.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
-        Scintilla2.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
-        Scintilla2.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
-        Scintilla2.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
         Scintilla3.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
         Scintilla3.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
         Scintilla3.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
@@ -508,7 +464,6 @@ Public Class NewUnattendWiz
         ' Enable folding
         DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
-        Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla3.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla4.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
 
@@ -761,8 +716,6 @@ Public Class NewUnattendWiz
         TextBox23.BackColor = BackColor
         NumericUpDown1.BackColor = BackColor
         NumericUpDown2.BackColor = BackColor
-        NumericUpDown3.BackColor = BackColor
-        NumericUpDown4.BackColor = BackColor
         NumericUpDown5.BackColor = BackColor
         NumericUpDown6.BackColor = BackColor
         NumericUpDown7.BackColor = BackColor
@@ -807,8 +760,6 @@ Public Class NewUnattendWiz
         TextBox23.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
-        NumericUpDown3.ForeColor = ForeColor
-        NumericUpDown4.ForeColor = ForeColor
         NumericUpDown5.ForeColor = ForeColor
         NumericUpDown6.ForeColor = ForeColor
         NumericUpDown7.ForeColor = ForeColor
@@ -910,8 +861,6 @@ Public Class NewUnattendWiz
         ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
         TimeZonePageTimer.Enabled = True
-        ' Modify script contents of disk config for sample DP Script
-        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
         ' Set PRO edition
         If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
         ' Set default auth tech to WPA2
@@ -988,16 +937,10 @@ Public Class NewUnattendWiz
         RadioButton1.Checked = True
         ' Restore disk configuration
         CheckBox4.Checked = True
-        RadioButton5.Checked = True
         RadioButton7.Checked = True
         NumericUpDown1.Value = 300
         CheckBox5.Checked = True
-        RadioButton9.Checked = True
         NumericUpDown2.Value = 1000
-        Scintilla2.Text = My.Resources.DefaultDiskPartConfig
-        RadioButton11.Checked = True
-        NumericUpDown3.Value = 0
-        NumericUpDown4.Value = 3
         SelectedDiskConfiguration = DefaultDiskConfiguration
         ' Restore product key
         RadioButton13.Checked = True
@@ -1151,8 +1094,7 @@ Public Class NewUnattendWiz
         End Select
 
         ' Change sizes of controls if the normal resize event does not work
-        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
-        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
         AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
@@ -1208,13 +1150,6 @@ Public Class NewUnattendWiz
                         MessageBox.Show("No script has been passed for the computer name", "Computer name error")
                         Return False
                     End If
-                End If
-            Case UnattendedWizardPage.Page.DiskConfigPage
-                DynaLog.LogMessage("Checking DiskPart script configuration (if the answer file will use it)...")
-                If Not DiskConfigurationInteractive AndAlso SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart AndAlso Scintilla2.Text = "" Then
-                    DynaLog.LogMessage("No script has been specified.")
-                    MessageBox.Show("Please enter the contents of the DiskPart script and try again. You can also use a script file", "DiskPart Script error")
-                    Return False
                 End If
             Case UnattendedWizardPage.Page.ProductKeyPage
                 If Not GenericChosen Then
@@ -1323,26 +1258,18 @@ Public Class NewUnattendWiz
         ' 4. -- DISK CONFIGURATION
         TextBox13.AppendText("Disk configuration: " & If(DiskConfigurationInteractive, "configured during setup" & CrLf, CrLf))
         If Not DiskConfigurationInteractive Then
-            TextBox13.AppendText("- Disk configuration mode: " & If(SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0, "automatically configure Disk 0", "configure disks with a DiskPart script") & CrLf)
-            Select Case SelectedDiskConfiguration.DiskConfigMode
-                Case DiskConfigurationMode.AutoDisk0
-                    TextBox13.AppendText("    - Partition table: " & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT (UEFI)", "MBR (BIOS/CSM)") & CrLf)
-                    If SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT Then
-                        TextBox13.AppendText("      - EFI System Partition Size: " & SelectedDiskConfiguration.ESPSize & " MB" & CrLf)
-                    End If
-                    TextBox13.AppendText("    - Install a Recovery Environment? " & If(SelectedDiskConfiguration.InstallRecEnv, "Yes", "No") & CrLf)
-                    If SelectedDiskConfiguration.InstallRecEnv Then
-                        TextBox13.AppendText("      - Location of the Recovery Environment: " & If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "Recovery partition", "Windows partition") & CrLf)
-                        If SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition Then
-                            TextBox13.AppendText("        - Recovery Partition Size: " & SelectedDiskConfiguration.RecEnvSize & " MB" & CrLf)
-                        End If
-                    End If
-                Case DiskConfigurationMode.DiskPart
-                    TextBox13.AppendText("    - Action to be performed after disk configuration: " & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "install to first available partition with enough space and no installations", "install to specific disk") & CrLf)
-                    If Not SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall Then
-                        TextBox13.AppendText("      - Target disk/partition: disk " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & ", partition " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & CrLf)
-                    End If
-            End Select
+            TextBox13.AppendText("- Disk configuration mode: automatically configure Disk 0" & CrLf)
+            TextBox13.AppendText("    - Partition table: " & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT (UEFI)", "MBR (BIOS/CSM)") & CrLf)
+            If SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT Then
+                TextBox13.AppendText("      - EFI System Partition Size: " & SelectedDiskConfiguration.ESPSize & " MB" & CrLf)
+            End If
+            TextBox13.AppendText("    - Install a Recovery Environment? " & If(SelectedDiskConfiguration.InstallRecEnv, "Yes", "No") & CrLf)
+            If SelectedDiskConfiguration.InstallRecEnv Then
+                TextBox13.AppendText("      - Location of the Recovery Environment: " & If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "Recovery partition", "Windows partition") & CrLf)
+                If SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition Then
+                    TextBox13.AppendText("        - Recovery Partition Size: " & SelectedDiskConfiguration.RecEnvSize & " MB" & CrLf)
+                End If
+            End If
         End If
         ' 5. -- PRODUCT KEY
         TextBox13.AppendText("Product key: " & If(CheckBox21.Checked, "get from firmware" & CrLf, If(GenericChosen, "generic" & CrLf, "custom" & CrLf)) &
@@ -1645,14 +1572,8 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
-        ManualPartPanel.Enabled = Not CheckBox4.Checked
         DiskConfigurationInteractive = CheckBox4.Checked
-    End Sub
-
-    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
-        AutoDiskConfigPanel.Enabled = RadioButton5.Checked
-        DiskPartPanel.Enabled = Not RadioButton5.Checked
-        SelectedDiskConfiguration.DiskConfigMode = If(RadioButton5.Checked, DiskConfigurationMode.AutoDisk0, DiskConfigurationMode.DiskPart)
+        AutoDiskConfigPanel.Enabled = Not DiskConfigurationInteractive
     End Sub
 
     Private Sub RadioButton7_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton7.CheckedChanged
@@ -1661,18 +1582,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox5.CheckedChanged
-        WindowsREPanel.Enabled = CheckBox5.Checked
         SelectedDiskConfiguration.InstallRecEnv = CheckBox5.Checked
-    End Sub
-
-    Private Sub RadioButton9_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton9.CheckedChanged
-        RESizePanel.Enabled = RadioButton9.Checked
-        SelectedDiskConfiguration.RecEnvPartition = If(RadioButton9.Checked, RecoveryEnvironmentLocation.WinREPartition, RecoveryEnvironmentLocation.WindowsPartition)
-    End Sub
-
-    Private Sub RadioButton11_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton11.CheckedChanged
-        ManualInstallPanel.Enabled = Not RadioButton11.Checked
-        SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall = RadioButton11.Checked
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
@@ -1681,26 +1591,6 @@ Public Class NewUnattendWiz
 
     Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
         SelectedDiskConfiguration.RecEnvSize = NumericUpDown2.Value
-    End Sub
-
-    Private Sub NumericUpDown3_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown3.ValueChanged
-        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = NumericUpDown3.Value
-    End Sub
-
-    Private Sub NumericUpDown4_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown4.ValueChanged
-        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = NumericUpDown4.Value
-    End Sub
-
-    Private Sub Scintilla2_TextChanged(sender As Object, e As EventArgs) Handles Scintilla2.TextChanged
-        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        OpenFileDialog1.ShowDialog(Me)
-    End Sub
-
-    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        Scintilla2.Text = File.ReadAllText(OpenFileDialog1.FileName)
     End Sub
 
     Private Sub RadioButton13_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton13.CheckedChanged
@@ -2100,24 +1990,13 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --partmode=interactive"
             Else
                 DynaLog.LogMessage("Disks will be configured in an unattended manner.")
-                If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
-                    DynaLog.LogMessage("Disk 0 will be configured automatically.")
-                    UnattendGen.StartInfo.Arguments &= " --partmode=unattended"
-                    Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                        "<root>" & CrLf &
-                        "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
-                        "</root>"
-                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
-                ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
-                    DynaLog.LogMessage("Disks will be configured with a DiskPart script.")
-                    UnattendGen.StartInfo.Arguments &= " --partmode=custom"
-                    Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                        "<root>" & CrLf &
-                        "   <DiskPart ScriptFile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp") & Quote & " AutoInst=" & Quote & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "1", "0") & Quote & " Disk=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & Quote & " Partition=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & Quote & " />" & CrLf &
-                        "</root>"
-                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"), SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents, UTF8)
-                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskPartSettings.xml"), diskPartContents, UTF8)
-                End If
+                DynaLog.LogMessage("Disk 0 will be configured automatically.")
+                UnattendGen.StartInfo.Arguments &= " --partmode=unattended"
+                Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf &
+                    "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
+                    "</root>"
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
             End If
             ReportMessage("Saving user settings...", 14)
             DynaLog.LogMessage("Saving edition settings...")
@@ -2539,8 +2418,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
-        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
-        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
         AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
