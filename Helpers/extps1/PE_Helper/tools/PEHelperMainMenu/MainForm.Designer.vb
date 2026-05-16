@@ -71,9 +71,9 @@ Partial Class MainForm
         Me.PictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = Global.PEHelperMainMenu.My.Resources.Resources.DT_PE_Helper_Logo
-        Me.PictureBox1.Location = New System.Drawing.Point(8, 29)
+        Me.PictureBox1.Location = New System.Drawing.Point(8, 64)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(768, 128)
+        Me.PictureBox1.Size = New System.Drawing.Size(768, 64)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
@@ -480,7 +480,7 @@ Partial Class MainForm
         Me.MaximizeBox = False
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools - Preinstallation Environment Helper"
+        Me.Text = "DISMTools Preinstallation Environment"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
