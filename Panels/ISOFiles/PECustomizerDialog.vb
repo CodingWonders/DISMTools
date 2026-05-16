@@ -53,10 +53,11 @@ Public Class PECustomizerDialog
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
-                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}",
+                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
+                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}",
                                                   CrLf, Quote, If(CheckBox2.Checked, 1, 0), UEFICA23Preference, PartTableOverridePreference,
                                                   Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0),
-                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant(), SelectedKeyboardLayoutCode)
+                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant(), SelectedKeyboardLayoutCode, If(CheckBox6.Checked, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg"), regContents)
         Catch ex As Exception
@@ -111,6 +112,7 @@ Public Class PECustomizerDialog
             MainForm.AutoUnattendCopytoSysprep = CheckBox5.Checked
             MainForm.PXEServerPort = NumericUpDown2.Value
             MainForm.KeyboardLayoutCode = SelectedKeyboardLayoutCode
+            MainForm.KeyboardLayoutOverrideExistingLayout = CheckBox6.Checked
             Return True
         Catch ex As Exception
             Return False
@@ -136,6 +138,8 @@ Public Class PECustomizerDialog
         CheckBox2.Checked = MainForm.ShowWatermark
         CheckBox3.Checked = MainForm.WDSHCGraphoView
         CheckBox4.Checked = MainForm.DTDimShowPnputilOut
+        CheckBox5.Checked = MainForm.AutoUnattendCopytoSysprep
+        CheckBox6.Checked = MainForm.KeyboardLayoutOverrideExistingLayout
         ComboBox1.SelectedIndex = MainForm.PartTableOverridePreference
         ComboBox2.SelectedIndex = MainForm.UEFICA23Preference
         NumericUpDown1.Value = MainForm.WDSHCConnAttempts
@@ -150,6 +154,9 @@ Public Class PECustomizerDialog
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown2.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        TabPage1.BackColor = CurrentTheme.SectionBackgroundColor
+        TabPage2.BackColor = CurrentTheme.SectionBackgroundColor
+        TabPage3.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
@@ -158,6 +165,9 @@ Public Class PECustomizerDialog
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        TabPage1.ForeColor = ForeColor
+        TabPage2.ForeColor = ForeColor
+        TabPage3.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 

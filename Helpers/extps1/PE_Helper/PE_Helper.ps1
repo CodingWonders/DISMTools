@@ -822,6 +822,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AutoUnattendCopytoSysprep /t REG_DWORD /d 0
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PXEServerPort /t REG_DWORD /d 8080
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "00000409"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutOverrideExistingLayout /t REG_DWORD /d 0
             if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
                 reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
             }
@@ -1257,6 +1258,12 @@ function Start-OSApplication
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride -bootEx $usebootex
+    if ((Get-PolicyValue -PolicyName "KeyboardLayoutOverrideExistingLayout" -DefaultPolicyValue 0 -ValidOptions @(0, 1)) -eq 1) {
+        Write-Host "Configuring target system keyboard layout..."
+        # Get specified keyboard layout
+        $keybLayoutCode = Get-PolicyValue -PolicyName "KeyboardLayoutCode" -DefaultPolicyValue "00000409"
+        dism /image=$($driveLetter):\ /set-inputlocale:0409:$keybLayoutCode
+    }
     Start-Sleep -Milliseconds 250
     Clear-Host
     Write-Host "`n`n`n`n`n`n`n`n`n`n"

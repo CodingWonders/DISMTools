@@ -221,6 +221,7 @@ Public Class MainForm
     Public WDSHCConnAttempts As Integer = 5
     Public PXEServerPort As Integer = 8080
     Public KeyboardLayoutCode As String = "00000409"
+    Public KeyboardLayoutOverrideExistingLayout As Boolean = False
 
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
@@ -1471,6 +1472,7 @@ Public Class MainForm
                 AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
                 PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
                 KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
+                KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1593,6 +1595,7 @@ Public Class MainForm
                     AutoUnattendCopytoSysprep = CInt(settingData("PEPolicy")("AutoUnattendCopyToSysprep")) = 1
                     PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
                     KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
+                    KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1708,10 +1711,11 @@ Public Class MainForm
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
-                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}",
+                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
+                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode)
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1725,70 +1729,71 @@ Public Class MainForm
     ''' <remarks></remarks>
     Sub ShowDTSettings()
         DynaLog.LogMessage("Program Settings:" & CrLf &
-                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf &
-                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf &
-                           "ColorMode                  =    " & ColorMode & CrLf &
-                           "ColorTheme_Light           =    " & LightThemeIndex & CrLf &
-                           "ColorTheme_Dark            =    " & DarkThemeIndex & CrLf &
-                           "Language                   =    " & Language & CrLf &
-                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf &
-                           "LogFontSi                  =    " & LogFontSize & CrLf &
-                           "LogFontBold                =    " & LogFontIsBold & CrLf &
-                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf &
-                           "AllCaps                    =    " & AllCaps & CrLf &
-                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf &
-                           "ShowDateAndTime            =    " & ShowDateAndTime & CrLf &
-                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf &
-                           "LogLevel                   =    " & LogLevel & CrLf &
-                           "AutoLogs                   =    " & AutoLogs & CrLf &
-                           "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf &
-                           "EnableDynaLog              =    " & EnableDynaLog & CrLf &
-                           "Quiet                      =    " & QuietOperations & CrLf &
-                           "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
-                           "WebSearchEngineName        =    " & SearchEngineName & CrLf &
-                           "WebSearchAITolerance       =    " & SearchEngineAITolerance & CrLf &
-                           "PEHelper_UnattendedFile    =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
-                           "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
-                           "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
-                           "NoRestart                  =    " & SysNoRestart & CrLf &
-                           "AppxRemovalDisplayNameFrmt =    " & AppxDisplayNameFormatOnRemoval & CrLf &
-                           "PreventSystemFromSleeping  =    " & PreventSystemFromSleeping & CrLf &
-                           "UseScratch                 =    " & UseScratch & CrLf &
-                           "AutoScratch                =    " & AutoScrDir & CrLf &
-                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf &
-                           "EnglishOutput              =    " & EnglishOutput & CrLf &
-                           "ReportView                 =    " & ReportView & CrLf &
-                           "ShowNotification           =    " & NotificationShow & CrLf &
-                           "NotifyFrequency            =    " & NotificationFrequency & CrLf &
-                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf &
-                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf &
-                           "DetectAllDrivers           =    " & AllDrivers & CrLf &
-                           "SkipFrameworks             =    " & SkipFrameworks & CrLf &
-                           "RunAllProcs                =    " & RunAllProcs & CrLf &
-                           "RemountImages              =    " & StartupRemount & CrLf &
-                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf &
-                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf &
-                           "WndWidth                   =    " & WndWidth & CrLf &
-                           "WndHeight                  =    " & WndHeight & CrLf &
-                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
-                           "WndLeft                    =    " & WndLeft & CrLf &
-                           "WndTop                     =    " & WndTop & CrLf &
-                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf &
-                           "SkipQuestions              =    " & SkipQuestions & CrLf &
-                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf &
-                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf &
-                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf &
-                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf &
-                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4) & CrLf &
-                           "ShowWatermark              =    " & ShowWatermark & CrLf &
-                           "WDSHCGraphoView            =    " & WDSHCGraphoView & CrLf &
-                           "DTDimShowPnputilOut        =    " & DTDimShowPnputilOut & CrLf &
-                           "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
-                           "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
-                           "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
-                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep & CrLf &
-                           "PXEServerPort              =    " & PXEServerPort & CrLf &
-                           "KeyboardLayoutCode         =    " & KeyboardLayoutCode)
+                           "DISMExe                             =    " & Quote & DismExe & Quote & CrLf &
+                           "SaveOnSettingsIni                   =    " & SaveOnSettingsIni & CrLf &
+                           "ColorMode                           =    " & ColorMode & CrLf &
+                           "ColorTheme_Light                    =    " & LightThemeIndex & CrLf &
+                           "ColorTheme_Dark                     =    " & DarkThemeIndex & CrLf &
+                           "Language                            =    " & Language & CrLf &
+                           "LogFont                             =    " & Quote & LogFont & Quote & CrLf &
+                           "LogFontSi                           =    " & LogFontSize & CrLf &
+                           "LogFontBold                         =    " & LogFontIsBold & CrLf &
+                           "SecondaryProgressPanelStyle         =    " & ProgressPanelStyle & CrLf &
+                           "AllCaps                             =    " & AllCaps & CrLf &
+                           "ExpandedProgressPanel               =    " & ExpandedProgressPanel & CrLf &
+                           "ShowDateAndTime                     =    " & ShowDateAndTime & CrLf &
+                           "LogFile                             =    " & Quote & LogFile & Quote & CrLf &
+                           "LogLevel                            =    " & LogLevel & CrLf &
+                           "AutoLogs                            =    " & AutoLogs & CrLf &
+                           "SystemEditor                        =    " & Quote & SystemEditor & Quote & CrLf &
+                           "EnableDynaLog                       =    " & EnableDynaLog & CrLf &
+                           "Quiet                               =    " & QuietOperations & CrLf &
+                           "NoNTSamMappings                     =    " & NoNTSamMappings & CrLf &
+                           "WebSearchEngineName                 =    " & SearchEngineName & CrLf &
+                           "WebSearchAITolerance                =    " & SearchEngineAITolerance & CrLf &
+                           "PEHelper_UnattendedFile             =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
+                           "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
+                           "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
+                           "NoRestart                           =    " & SysNoRestart & CrLf &
+                           "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
+                           "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
+                           "UseScratch                          =    " & UseScratch & CrLf &
+                           "AutoScratch                         =    " & AutoScrDir & CrLf &
+                           "ScratchDirLocation                  =    " & Quote & ScratchDir & Quote & CrLf &
+                           "EnglishOutput                       =    " & EnglishOutput & CrLf &
+                           "ReportView                          =    " & ReportView & CrLf &
+                           "ShowNotification                    =    " & NotificationShow & CrLf &
+                           "NotifyFrequency                     =    " & NotificationFrequency & CrLf &
+                           "EnhancedAppxGetter                  =    " & ExtAppxGetter & CrLf &
+                           "SkipNonRemovable                    =    " & SkipNonRemovable & CrLf &
+                           "DetectAllDrivers                    =    " & AllDrivers & CrLf &
+                           "SkipFrameworks                      =    " & SkipFrameworks & CrLf &
+                           "RunAllProcs                         =    " & RunAllProcs & CrLf &
+                           "RemountImages                       =    " & StartupRemount & CrLf &
+                           "CheckForUpdates                     =    " & StartupUpdateCheck & CrLf &
+                           "AutoCleanMounts                     =    " & AutoCleanMounts & CrLf &
+                           "WndWidth                            =    " & WndWidth & CrLf &
+                           "WndHeight                           =    " & WndHeight & CrLf &
+                           "WndCenter                           =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
+                           "WndLeft                             =    " & WndLeft & CrLf &
+                           "WndTop                              =    " & WndTop & CrLf &
+                           "WndMaximized                        =    " & (WindowState = FormWindowState.Maximized) & CrLf &
+                           "SkipQuestions                       =    " & SkipQuestions & CrLf &
+                           "Pkg_CompleteInfo                    =    " & AutoCompleteInfo(0) & CrLf &
+                           "Feat_CompleteInfo                   =    " & AutoCompleteInfo(1) & CrLf &
+                           "AppX_CompleteInfo                   =    " & AutoCompleteInfo(2) & CrLf &
+                           "Cap_CompleteInfo                    =    " & AutoCompleteInfo(3) & CrLf &
+                           "Drv_CompleteInfo                    =    " & AutoCompleteInfo(4) & CrLf &
+                           "ShowWatermark                       =    " & ShowWatermark & CrLf &
+                           "WDSHCGraphoView                     =    " & WDSHCGraphoView & CrLf &
+                           "DTDimShowPnputilOut                 =    " & DTDimShowPnputilOut & CrLf &
+                           "WDSHCConnAttempts                   =    " & WDSHCConnAttempts & CrLf &
+                           "PartTableOverridePreference         =    " & PartTableOverridePreference & CrLf &
+                           "UEFICA23Preference                  =    " & UEFICA23Preference & CrLf &
+                           "AutoUnattendCopytoSysprep           =    " & AutoUnattendCopytoSysprep & CrLf &
+                           "PXEServerPort                       =    " & PXEServerPort & CrLf &
+                           "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
+                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout)
     End Sub
 
 #Region "Background Processes"
@@ -4017,6 +4022,7 @@ Public Class MainForm
         settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", 0)
         settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
         settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
+        settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", 0)
         parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4122,6 +4128,7 @@ Public Class MainForm
         PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
+        PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4222,6 +4229,7 @@ Public Class MainForm
                 settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", If(AutoUnattendCopytoSysprep, 1, 0))
                 settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
                 settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
+                settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
                 parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4344,6 +4352,7 @@ Public Class MainForm
                     PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
+                    PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
                     PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
