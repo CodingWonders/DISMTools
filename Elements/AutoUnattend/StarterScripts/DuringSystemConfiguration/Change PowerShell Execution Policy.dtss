@@ -1,7 +1,6 @@
 ﻿Language: Batch
 Name: Change Windows PowerShell Execution Policies
 Description: This script configures Windows PowerShell to consider a different execution policy. Use this script if you plan on running PowerShell scripts on target devices at any given time.
-Customizable: Yes
 @ECHO OFF
 
 REM Change the Windows PowerShell execution policy to one of the following values:
