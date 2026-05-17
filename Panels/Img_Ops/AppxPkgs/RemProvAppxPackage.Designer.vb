@@ -154,7 +154,7 @@ Partial Class RemProvAppxPackage
         '
         Me.ColumnHeader6.Text = "Registered to any user?"
         Me.ColumnHeader6.Width = 130
-        
+
         '
         'RemProvAppxPackage
         '
@@ -163,7 +163,7 @@ Partial Class RemProvAppxPackage
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(944, 561)
-        
+
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -195,6 +195,6 @@ Partial Class RemProvAppxPackage
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
-    
+
 
 End Class

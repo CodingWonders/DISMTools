@@ -200,7 +200,6 @@ Public Class RemProvAppxPackage
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove provisioned AppX packages"
-                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                         ListView1.Columns(0).Text = "Package name"
@@ -211,7 +210,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Registered to any user?"
                     Case "ESN"
                         Text = "Eliminar paquetes aprovisionados AppX"
-                        
+
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                         ListView1.Columns(0).Text = "Nombre de paquete"
@@ -222,7 +221,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "¿Registrada a un usuario?"
                     Case "FRA"
                         Text = "Supprimer les paquets AppX provisionnés"
-                        
+
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
                         ListView1.Columns(0).Text = "Nom du paquet"
@@ -233,7 +232,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
                     Case "PTB", "PTG"
                         Text = "Remover pacotes AppX provisionados"
-                        
+
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                         ListView1.Columns(0).Text = "Nome do pacote"
@@ -244,7 +243,7 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(5).Text = "Registado por algum utilizador?"
                     Case "ITA"
                         Text = "Rimuovi i pacchetti AppX in provisioning"
-                        
+
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annullare"
                         ListView1.Columns(0).Text = "Nome del pacchetto"
@@ -256,7 +255,7 @@ Public Class RemProvAppxPackage
                 End Select
             Case 1
                 Text = "Remove provisioned AppX packages"
-                
+
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
                 ListView1.Columns(0).Text = "Package name"
@@ -267,7 +266,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Registered to any user?"
             Case 2
                 Text = "Eliminar paquetes aprovisionados AppX"
-                
+
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
                 ListView1.Columns(0).Text = "Nombre de paquete"
@@ -278,7 +277,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "¿Registrada a un usuario?"
             Case 3
                 Text = "Supprimer les paquets AppX provisionnés"
-                
+
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
                 ListView1.Columns(0).Text = "Nom du paquet"
@@ -289,7 +288,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
             Case 4
                 Text = "Remover pacotes AppX provisionados"
-                
+
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
                 ListView1.Columns(0).Text = "Nome do pacote"
@@ -300,7 +299,7 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(5).Text = "Registado por algum utilizador?"
             Case 5
                 Text = "Rimuovi i pacchetti AppX in provisioning"
-                
+
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
                 ListView1.Columns(0).Text = "Nome del pacchetto"
