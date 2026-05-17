@@ -20,6 +20,7 @@ Public Class RegisteredServiceHostGroupsDialog
         ServiceDetailsLv.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
 
         ' Order group information based on service count
         GroupInformation = GroupInformation.OrderByDescending(Function(serviceGroup) serviceGroup.Services.Count).ThenBy(Function(serviceGroup) serviceGroup.Name).ToList()

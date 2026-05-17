@@ -219,6 +219,7 @@ Public Class OneDriveExclusionDlg
         TextBox1.ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         ExcludedFolders.Clear()
         successfulExclusion = False
     End Sub

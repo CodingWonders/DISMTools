@@ -481,6 +481,7 @@ Public Class ImgExport
         End Select
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         Try
             ' WIMBoot is only compatible with Windows 8.1
             DynaLog.LogMessage("Detecting if the Windows image that is being serviced supports WIMBoot...")

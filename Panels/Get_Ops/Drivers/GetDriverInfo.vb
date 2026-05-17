@@ -503,6 +503,7 @@ Public Class GetDriverInfo
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         DynaLog.LogMessage("Updating items in list...")
         InstalledDriverList.Clear()
         InstalledDriverList_Backup.Clear()

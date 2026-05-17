@@ -37,6 +37,7 @@ Public Class CapabilityFilterAssistantDialog
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         If ComboBox1.SelectedIndex < 0 Then ComboBox1.SelectedIndex = 0
     End Sub
 End Class

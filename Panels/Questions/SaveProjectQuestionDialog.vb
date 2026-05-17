@@ -90,5 +90,6 @@ Public Class SaveProjectQuestionDialog
         Label2.Visible = MainForm.IsImageMounted
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
     End Sub
 End Class

@@ -22,6 +22,7 @@ Public Class BGProcFailureDialog
         TextBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
 
         ListBox1.Items.Clear()
         ListBox1.Items.AddRange(FailedTasks.Keys.ToArray())

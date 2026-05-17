@@ -596,6 +596,7 @@ Public Class ProjProperties
         LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""

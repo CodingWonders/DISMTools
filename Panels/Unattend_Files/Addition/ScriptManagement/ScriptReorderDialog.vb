@@ -24,6 +24,7 @@ Public Class ScriptReorderDialog
         RichTextBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
 
         RichTextBox1.Text = ""
         ShowScriptSet()

@@ -4539,15 +4539,6 @@ Public Class MainForm
         PictureBox15.Image = GetGlyphResource("openfile")
         ProjectViewHeader.ForeColor = ForeColor
         ProjectSidePanel.ForeColor = ForeColor
-        For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In PrjTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
         StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         StatusStrip.ForeColor = CurrentTheme.ForegroundColor
         If ImgBW.IsBusy Then
@@ -4557,6 +4548,12 @@ Public Class MainForm
         End If
         ' Infinity Home
         ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
+
+        ' Set link label link controls
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(ImgTasks, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(PrjTasks, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel7, ForeColor, CurrentTheme.AccentColors(1))
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)

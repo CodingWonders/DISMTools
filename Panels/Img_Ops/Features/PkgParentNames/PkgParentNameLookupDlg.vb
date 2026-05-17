@@ -183,6 +183,7 @@ Public Class PkgParentNameLookupDlg
         Cancel_Button.Enabled = True
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
     End Sub
 
     Private Sub PackageListerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles PackageListerBW.DoWork

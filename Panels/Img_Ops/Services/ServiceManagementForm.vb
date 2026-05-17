@@ -153,6 +153,7 @@ Public Class ServiceManagementForm
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
 
         SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         ListView4.Size = New Size(WindowHelper.ScaleLogical(ListView4.Width), WindowHelper.ScaleLogical(ListView4.Height))

@@ -74,6 +74,7 @@ Public Class DismComponents
         ListView1.Items.Clear()
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         Visible = True
         DynaLog.LogMessage("Getting DISM components...")
         For Each DismComponent In My.Computer.FileSystem.GetFiles(Path.GetDirectoryName(Options.TextBox1.Text) & "\dism", FileIO.SearchOption.SearchTopLevelOnly)

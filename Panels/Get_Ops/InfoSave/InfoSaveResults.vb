@@ -81,6 +81,7 @@ Public Class InfoSaveResults
         TextBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
         LogFont = MainForm.LogFont
         LogFontSize = MainForm.LogFontSize
         Await Task.Run(Sub()

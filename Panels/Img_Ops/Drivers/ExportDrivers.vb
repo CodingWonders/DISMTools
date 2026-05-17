@@ -219,6 +219,7 @@ Public Class ExportDrivers
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
 
         ComboBox1.Items.Clear()
         ComboBox1.Items.AddRange(DriverClassInfoDictionary.Keys.ToArray())
