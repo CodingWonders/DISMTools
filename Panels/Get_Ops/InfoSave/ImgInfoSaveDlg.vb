@@ -2144,7 +2144,7 @@ Public Class ImgInfoSaveDlg
         Contents &= GetHeader("Service Information", HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         ReportChanges("Getting service information...", 0.0)
-        Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImageToGetInfoFrom.ImageMountDirectory, OnlineMode)
+        Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImgMountDir, OnlineMode)
         If serviceList.Any() Then
             Contents &= GetParagraph("Information summary for " & serviceList.Count & " service(s) in default control set:", ParagraphStyle.Bold) & CrLf &
                 GetTableHeader({"Service Name", "Display Name", "Description", "Start Type", "Service Type", "On The Web"}.ToList())
