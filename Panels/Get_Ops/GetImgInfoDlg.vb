@@ -355,7 +355,7 @@ Public Class GetImgInfoDlg
 
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         If Not MainForm.IsImageMounted Or MainForm.OnlineManagement Then
             RadioButton1.Enabled = False

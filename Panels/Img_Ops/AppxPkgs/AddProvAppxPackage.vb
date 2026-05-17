@@ -723,7 +723,7 @@ Public Class AddProvAppxPackage
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")

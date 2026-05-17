@@ -199,7 +199,7 @@ Public Class RemCapabilities
         ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ColumnHeader1.Width = WindowHelper.ScaleLogical(524)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(199)
         ImageTaskHeader1.HideWindowTitle(handle)

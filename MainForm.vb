@@ -4550,7 +4550,7 @@ Public Class MainForm
         ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
 
         ' Set link label link controls
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ThemeHelper.UpdateLinkLabelColors(ImgTasks, ForeColor, CurrentTheme.AccentColors(1))
         ThemeHelper.UpdateLinkLabelColors(PrjTasks, ForeColor, CurrentTheme.AccentColors(1))
         ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel7, ForeColor, CurrentTheme.AccentColors(1))

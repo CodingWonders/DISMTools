@@ -2220,7 +2220,7 @@ Public Class ImgInfoSaveDlg
         ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Height = WindowHelper.ScaleLogical(200)     ' tweak the height manually because Windows ain't doin' it!
         ProgressBar1.Width = WindowHelper.ScaleLogical(637)
         Visible = True

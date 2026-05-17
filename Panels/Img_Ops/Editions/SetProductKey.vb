@@ -195,7 +195,7 @@ Public Class SetImageKey
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = CurrentTheme.ForegroundColor
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ImageTaskHeader1.HideWindowTitle(Handle)
     End Sub
 End Class

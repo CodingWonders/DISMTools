@@ -457,7 +457,7 @@ Public Class AddCapabilities
         CheckBox3.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ColumnHeader1.Width = WindowHelper.ScaleLogical(520)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(204)
         ImageTaskHeader1.HideWindowTitle(handle)

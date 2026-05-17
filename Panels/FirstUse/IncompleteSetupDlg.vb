@@ -37,7 +37,7 @@ Public Class IncompleteSetupDlg
                 Cancel_Button.Text = "No"
         End Select
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Beep()

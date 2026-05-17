@@ -1641,7 +1641,7 @@ Public Class Options
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         If Not File.Exists(Application.StartupPath & "\portable") Then
             Panel2.Enabled = False
             Panel3.Visible = True
