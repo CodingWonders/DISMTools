@@ -2061,11 +2061,11 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
             Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
             ReportChanges(msg, 0)
-            Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
+            Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(ImgMountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
             If regExitCode <> 0 Then
                 Contents &= GetListItems(New String() {"Target path: could not get value"}.ToList()) & CrLf
             End If
-            regExitCode = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SYSTEM"), "HKLM\PE_SYS")
+            regExitCode = RegistryHelper.LoadRegistryHive(Path.Combine(ImgMountDir, "Windows", "system32", "config", "SYSTEM"), "HKLM\PE_SYS")
             If regExitCode <> 0 Then
                 Contents &= GetListItems(New String() {"Scratch space: could not get value"}.ToList()) & CrLf & CrLf
                 Exit Sub
