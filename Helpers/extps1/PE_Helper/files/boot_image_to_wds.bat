@@ -2,6 +2,16 @@
 SET "ImageName=DISMTools Preinstallation Environment"
 SET "ImageDescription=Microsoft Windows Preinstallation Environment"
 
+TITLE Upload boot image to WDS server
+
+REM query service information to detect if we have WDSServer
+sc queryex WDSServer >nul 2>&1
+IF %ERRORLEVEL% EQU 1060 (
+	ECHO The WDS Service is not installed on this machine. This is not a WDS server.
+	PAUSE > nul
+	EXIT /B 1
+)
+
 REM Calculate the number of arguments that were passed to the script.
 SET ARGUMENTCOUNT=0
 FOR %%X IN (%*) DO SET /A ARGUMENTCOUNT+=1
@@ -19,6 +29,9 @@ IF %ARGUMENTCOUNT% EQU 2 (
 	IF %ERRORLEVEL% EQU 2 SET Architecture=x64
 	IF %ERRORLEVEL% EQU 3 SET Architecture=arm64
 )
+
+echo Starting WDS Server service (if not already started)...
+net start WDSServer >nul 2>&1
 
 CD %~dp0
 wdsutil /get-image /image:"%ImageName%" /imagetype:boot /architecture:%Architecture% /filename:boot_dtpe_iso.wim >nul 2>&1
