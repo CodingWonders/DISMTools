@@ -69,6 +69,10 @@ if ($MainForm.ShowDialog() -eq 'OK') {
 			$setupScript[5] = "set debug=0"
 			Set-Content -Path "$env:SYSTEMDRIVE\Windows\system32\startnet.cmd" -Value $setupScript -Force
 			
+			# Let's lie to startnet and claim we have already configured the keyboard layout, since it likes
+			# to reconfigure it.
+			reg add "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "$newLayout"
+			
 			Write-Host "Reloading startup sequence..."
 			Remove-Item -Path "$env:SYSTEMDRIVE\changekeyb" -Force -ErrorAction SilentlyContinue
 		} else {
