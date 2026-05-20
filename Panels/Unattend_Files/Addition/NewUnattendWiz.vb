@@ -3134,4 +3134,8 @@ Public Class NewUnattendWiz
             SwitchScript(CurrentlyEditedScript)
         End If
     End Sub
+
+    Private Sub Button23_MouseHover(sender As Object, e As EventArgs) Handles Button23.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Rearrange post-installation scripts...")
+    End Sub
 End Class

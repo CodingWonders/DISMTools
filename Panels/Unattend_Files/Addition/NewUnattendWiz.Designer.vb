@@ -49,22 +49,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
-        Me.DiskConfigurationPanel = New System.Windows.Forms.Panel()
-        Me.AutoDiskConfigPanel = New System.Windows.Forms.Panel()
-        Me.RESizePanel = New System.Windows.Forms.Panel()
-        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
-        Me.Label23 = New System.Windows.Forms.Label()
-        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
-        Me.PartTablePanel = New System.Windows.Forms.Panel()
-        Me.ESPPanel = New System.Windows.Forms.Panel()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
-        Me.Label22 = New System.Windows.Forms.Label()
-        Me.RadioButton8 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton7 = New System.Windows.Forms.RadioButton()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
-        Me.DiskConfigurationHeader = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
@@ -279,6 +263,22 @@ Partial Class NewUnattendWiz
         Me.RadioButton14 = New System.Windows.Forms.RadioButton()
         Me.RadioButton13 = New System.Windows.Forms.RadioButton()
         Me.ProductKeyHeader = New System.Windows.Forms.Label()
+        Me.DiskConfigurationPanel = New System.Windows.Forms.Panel()
+        Me.AutoDiskConfigPanel = New System.Windows.Forms.Panel()
+        Me.RESizePanel = New System.Windows.Forms.Panel()
+        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.PartTablePanel = New System.Windows.Forms.Panel()
+        Me.ESPPanel = New System.Windows.Forms.Panel()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.RadioButton8 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton7 = New System.Windows.Forms.RadioButton()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.DiskConfigurationHeader = New System.Windows.Forms.Label()
         Me.TimeZonePanel = New System.Windows.Forms.Panel()
         Me.TimeZoneSettings = New System.Windows.Forms.Panel()
         Me.CurrentTimeSelTZ = New System.Windows.Forms.Label()
@@ -382,13 +382,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
-        Me.DiskConfigurationPanel.SuspendLayout()
-        Me.AutoDiskConfigPanel.SuspendLayout()
-        Me.RESizePanel.SuspendLayout()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PartTablePanel.SuspendLayout()
-        Me.ESPPanel.SuspendLayout()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FinishPanel.SuspendLayout()
         Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
@@ -445,6 +438,13 @@ Partial Class NewUnattendWiz
         Me.ManualKeyPanel.SuspendLayout()
         Me.KeyVerifyWarningPanel.SuspendLayout()
         Me.GenericKeyPanel.SuspendLayout()
+        Me.DiskConfigurationPanel.SuspendLayout()
+        Me.AutoDiskConfigPanel.SuspendLayout()
+        Me.RESizePanel.SuspendLayout()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PartTablePanel.SuspendLayout()
+        Me.ESPPanel.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TimeZonePanel.SuspendLayout()
         Me.TimeZoneSettings.SuspendLayout()
         Me.SysConfigPanel.SuspendLayout()
@@ -636,186 +636,6 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(1008, 569)
         Me.StepsContainer.TabIndex = 1
-        '
-        'DiskConfigurationPanel
-        '
-        Me.DiskConfigurationPanel.Controls.Add(Me.AutoDiskConfigPanel)
-        Me.DiskConfigurationPanel.Controls.Add(Me.Label20)
-        Me.DiskConfigurationPanel.Controls.Add(Me.CheckBox4)
-        Me.DiskConfigurationPanel.Controls.Add(Me.DiskConfigurationHeader)
-        Me.DiskConfigurationPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DiskConfigurationPanel.Location = New System.Drawing.Point(0, 0)
-        Me.DiskConfigurationPanel.Name = "DiskConfigurationPanel"
-        Me.DiskConfigurationPanel.Size = New System.Drawing.Size(1008, 569)
-        Me.DiskConfigurationPanel.TabIndex = 4
-        '
-        'AutoDiskConfigPanel
-        '
-        Me.AutoDiskConfigPanel.Controls.Add(Me.RESizePanel)
-        Me.AutoDiskConfigPanel.Controls.Add(Me.CheckBox5)
-        Me.AutoDiskConfigPanel.Controls.Add(Me.PartTablePanel)
-        Me.AutoDiskConfigPanel.Controls.Add(Me.Label21)
-        Me.AutoDiskConfigPanel.Enabled = False
-        Me.AutoDiskConfigPanel.Location = New System.Drawing.Point(65, 84)
-        Me.AutoDiskConfigPanel.Margin = New System.Windows.Forms.Padding(20, 3, 3, 3)
-        Me.AutoDiskConfigPanel.Name = "AutoDiskConfigPanel"
-        Me.AutoDiskConfigPanel.Size = New System.Drawing.Size(875, 407)
-        Me.AutoDiskConfigPanel.TabIndex = 5
-        '
-        'RESizePanel
-        '
-        Me.RESizePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RESizePanel.Controls.Add(Me.NumericUpDown2)
-        Me.RESizePanel.Controls.Add(Me.Label23)
-        Me.RESizePanel.Location = New System.Drawing.Point(37, 127)
-        Me.RESizePanel.Name = "RESizePanel"
-        Me.RESizePanel.Size = New System.Drawing.Size(810, 32)
-        Me.RESizePanel.TabIndex = 1
-        '
-        'NumericUpDown2
-        '
-        Me.NumericUpDown2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown2.Location = New System.Drawing.Point(338, 7)
-        Me.NumericUpDown2.Maximum = New Decimal(New Integer() {10240, 0, 0, 0})
-        Me.NumericUpDown2.Minimum = New Decimal(New Integer() {300, 0, 0, 0})
-        Me.NumericUpDown2.Name = "NumericUpDown2"
-        Me.NumericUpDown2.Size = New System.Drawing.Size(462, 21)
-        Me.NumericUpDown2.TabIndex = 1
-        Me.NumericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.NumericUpDown2.Value = New Decimal(New Integer() {1000, 0, 0, 0})
-        '
-        'Label23
-        '
-        Me.Label23.AutoEllipsis = True
-        Me.Label23.Location = New System.Drawing.Point(8, 9)
-        Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(323, 13)
-        Me.Label23.TabIndex = 0
-        Me.Label23.Text = "Windows Recovery Environment partition size (in MB):"
-        '
-        'CheckBox5
-        '
-        Me.CheckBox5.AutoSize = True
-        Me.CheckBox5.Checked = True
-        Me.CheckBox5.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox5.Location = New System.Drawing.Point(18, 104)
-        Me.CheckBox5.Name = "CheckBox5"
-        Me.CheckBox5.Size = New System.Drawing.Size(176, 17)
-        Me.CheckBox5.TabIndex = 2
-        Me.CheckBox5.Text = "Install a Recovery Environment"
-        Me.CheckBox5.UseVisualStyleBackColor = True
-        '
-        'PartTablePanel
-        '
-        Me.PartTablePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PartTablePanel.Controls.Add(Me.ESPPanel)
-        Me.PartTablePanel.Controls.Add(Me.RadioButton8)
-        Me.PartTablePanel.Controls.Add(Me.RadioButton7)
-        Me.PartTablePanel.Location = New System.Drawing.Point(109, 3)
-        Me.PartTablePanel.Name = "PartTablePanel"
-        Me.PartTablePanel.Size = New System.Drawing.Size(738, 95)
-        Me.PartTablePanel.TabIndex = 1
-        '
-        'ESPPanel
-        '
-        Me.ESPPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ESPPanel.Controls.Add(Me.NumericUpDown1)
-        Me.ESPPanel.Controls.Add(Me.Label22)
-        Me.ESPPanel.Location = New System.Drawing.Point(35, 29)
-        Me.ESPPanel.Name = "ESPPanel"
-        Me.ESPPanel.Size = New System.Drawing.Size(689, 32)
-        Me.ESPPanel.TabIndex = 1
-        '
-        'NumericUpDown1
-        '
-        Me.NumericUpDown1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown1.Location = New System.Drawing.Point(261, 6)
-        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {10240, 0, 0, 0})
-        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {100, 0, 0, 0})
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(414, 21)
-        Me.NumericUpDown1.TabIndex = 1
-        Me.NumericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {300, 0, 0, 0})
-        '
-        'Label22
-        '
-        Me.Label22.AutoEllipsis = True
-        Me.Label22.Location = New System.Drawing.Point(8, 9)
-        Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(247, 13)
-        Me.Label22.TabIndex = 0
-        Me.Label22.Text = "EFI System Partition (ESP) size (in MB):"
-        '
-        'RadioButton8
-        '
-        Me.RadioButton8.AutoSize = True
-        Me.RadioButton8.Location = New System.Drawing.Point(15, 63)
-        Me.RadioButton8.Name = "RadioButton8"
-        Me.RadioButton8.Size = New System.Drawing.Size(46, 17)
-        Me.RadioButton8.TabIndex = 0
-        Me.RadioButton8.Text = "MBR"
-        Me.RadioButton8.UseVisualStyleBackColor = True
-        '
-        'RadioButton7
-        '
-        Me.RadioButton7.AutoSize = True
-        Me.RadioButton7.Checked = True
-        Me.RadioButton7.Location = New System.Drawing.Point(15, 10)
-        Me.RadioButton7.Name = "RadioButton7"
-        Me.RadioButton7.Size = New System.Drawing.Size(44, 17)
-        Me.RadioButton7.TabIndex = 0
-        Me.RadioButton7.TabStop = True
-        Me.RadioButton7.Text = "GPT"
-        Me.RadioButton7.UseVisualStyleBackColor = True
-        '
-        'Label21
-        '
-        Me.Label21.AutoSize = True
-        Me.Label21.Location = New System.Drawing.Point(18, 15)
-        Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(78, 13)
-        Me.Label21.TabIndex = 0
-        Me.Label21.Text = "Partition table:"
-        '
-        'Label20
-        '
-        Me.Label20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(81, 519)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(307, 13)
-        Me.Label20.TabIndex = 7
-        Me.Label20.Text = "Uncheck this only if you want to set up disk configuration now."
-        '
-        'CheckBox4
-        '
-        Me.CheckBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.Checked = True
-        Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox4.Location = New System.Drawing.Point(65, 497)
-        Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(276, 17)
-        Me.CheckBox4.TabIndex = 5
-        Me.CheckBox4.Text = "I want to configure these settings during installation"
-        Me.CheckBox4.UseVisualStyleBackColor = True
-        '
-        'DiskConfigurationHeader
-        '
-        Me.DiskConfigurationHeader.AutoEllipsis = True
-        Me.DiskConfigurationHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.DiskConfigurationHeader.Location = New System.Drawing.Point(16, 17)
-        Me.DiskConfigurationHeader.Name = "DiskConfigurationHeader"
-        Me.DiskConfigurationHeader.Size = New System.Drawing.Size(708, 51)
-        Me.DiskConfigurationHeader.TabIndex = 4
-        Me.DiskConfigurationHeader.Text = "Configure the disk and partition layout of the target system"
         '
         'FinishPanel
         '
@@ -3245,6 +3065,186 @@ Partial Class NewUnattendWiz
         Me.ProductKeyHeader.TabIndex = 5
         Me.ProductKeyHeader.Text = "Type your product key for operating system installation"
         '
+        'DiskConfigurationPanel
+        '
+        Me.DiskConfigurationPanel.Controls.Add(Me.AutoDiskConfigPanel)
+        Me.DiskConfigurationPanel.Controls.Add(Me.Label20)
+        Me.DiskConfigurationPanel.Controls.Add(Me.CheckBox4)
+        Me.DiskConfigurationPanel.Controls.Add(Me.DiskConfigurationHeader)
+        Me.DiskConfigurationPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DiskConfigurationPanel.Location = New System.Drawing.Point(0, 0)
+        Me.DiskConfigurationPanel.Name = "DiskConfigurationPanel"
+        Me.DiskConfigurationPanel.Size = New System.Drawing.Size(1008, 569)
+        Me.DiskConfigurationPanel.TabIndex = 4
+        '
+        'AutoDiskConfigPanel
+        '
+        Me.AutoDiskConfigPanel.Controls.Add(Me.RESizePanel)
+        Me.AutoDiskConfigPanel.Controls.Add(Me.CheckBox5)
+        Me.AutoDiskConfigPanel.Controls.Add(Me.PartTablePanel)
+        Me.AutoDiskConfigPanel.Controls.Add(Me.Label21)
+        Me.AutoDiskConfigPanel.Enabled = False
+        Me.AutoDiskConfigPanel.Location = New System.Drawing.Point(65, 84)
+        Me.AutoDiskConfigPanel.Margin = New System.Windows.Forms.Padding(20, 3, 3, 3)
+        Me.AutoDiskConfigPanel.Name = "AutoDiskConfigPanel"
+        Me.AutoDiskConfigPanel.Size = New System.Drawing.Size(875, 407)
+        Me.AutoDiskConfigPanel.TabIndex = 5
+        '
+        'RESizePanel
+        '
+        Me.RESizePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RESizePanel.Controls.Add(Me.NumericUpDown2)
+        Me.RESizePanel.Controls.Add(Me.Label23)
+        Me.RESizePanel.Location = New System.Drawing.Point(37, 127)
+        Me.RESizePanel.Name = "RESizePanel"
+        Me.RESizePanel.Size = New System.Drawing.Size(810, 32)
+        Me.RESizePanel.TabIndex = 1
+        '
+        'NumericUpDown2
+        '
+        Me.NumericUpDown2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.NumericUpDown2.Location = New System.Drawing.Point(338, 7)
+        Me.NumericUpDown2.Maximum = New Decimal(New Integer() {10240, 0, 0, 0})
+        Me.NumericUpDown2.Minimum = New Decimal(New Integer() {300, 0, 0, 0})
+        Me.NumericUpDown2.Name = "NumericUpDown2"
+        Me.NumericUpDown2.Size = New System.Drawing.Size(462, 21)
+        Me.NumericUpDown2.TabIndex = 1
+        Me.NumericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.NumericUpDown2.Value = New Decimal(New Integer() {1000, 0, 0, 0})
+        '
+        'Label23
+        '
+        Me.Label23.AutoEllipsis = True
+        Me.Label23.Location = New System.Drawing.Point(8, 9)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(323, 13)
+        Me.Label23.TabIndex = 0
+        Me.Label23.Text = "Windows Recovery Environment partition size (in MB):"
+        '
+        'CheckBox5
+        '
+        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.Checked = True
+        Me.CheckBox5.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox5.Location = New System.Drawing.Point(18, 104)
+        Me.CheckBox5.Name = "CheckBox5"
+        Me.CheckBox5.Size = New System.Drawing.Size(176, 17)
+        Me.CheckBox5.TabIndex = 2
+        Me.CheckBox5.Text = "Install a Recovery Environment"
+        Me.CheckBox5.UseVisualStyleBackColor = True
+        '
+        'PartTablePanel
+        '
+        Me.PartTablePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PartTablePanel.Controls.Add(Me.ESPPanel)
+        Me.PartTablePanel.Controls.Add(Me.RadioButton8)
+        Me.PartTablePanel.Controls.Add(Me.RadioButton7)
+        Me.PartTablePanel.Location = New System.Drawing.Point(109, 3)
+        Me.PartTablePanel.Name = "PartTablePanel"
+        Me.PartTablePanel.Size = New System.Drawing.Size(738, 95)
+        Me.PartTablePanel.TabIndex = 1
+        '
+        'ESPPanel
+        '
+        Me.ESPPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ESPPanel.Controls.Add(Me.NumericUpDown1)
+        Me.ESPPanel.Controls.Add(Me.Label22)
+        Me.ESPPanel.Location = New System.Drawing.Point(35, 29)
+        Me.ESPPanel.Name = "ESPPanel"
+        Me.ESPPanel.Size = New System.Drawing.Size(689, 32)
+        Me.ESPPanel.TabIndex = 1
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(261, 6)
+        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {10240, 0, 0, 0})
+        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {100, 0, 0, 0})
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(414, 21)
+        Me.NumericUpDown1.TabIndex = 1
+        Me.NumericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {300, 0, 0, 0})
+        '
+        'Label22
+        '
+        Me.Label22.AutoEllipsis = True
+        Me.Label22.Location = New System.Drawing.Point(8, 9)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(247, 13)
+        Me.Label22.TabIndex = 0
+        Me.Label22.Text = "EFI System Partition (ESP) size (in MB):"
+        '
+        'RadioButton8
+        '
+        Me.RadioButton8.AutoSize = True
+        Me.RadioButton8.Location = New System.Drawing.Point(15, 63)
+        Me.RadioButton8.Name = "RadioButton8"
+        Me.RadioButton8.Size = New System.Drawing.Size(46, 17)
+        Me.RadioButton8.TabIndex = 0
+        Me.RadioButton8.Text = "MBR"
+        Me.RadioButton8.UseVisualStyleBackColor = True
+        '
+        'RadioButton7
+        '
+        Me.RadioButton7.AutoSize = True
+        Me.RadioButton7.Checked = True
+        Me.RadioButton7.Location = New System.Drawing.Point(15, 10)
+        Me.RadioButton7.Name = "RadioButton7"
+        Me.RadioButton7.Size = New System.Drawing.Size(44, 17)
+        Me.RadioButton7.TabIndex = 0
+        Me.RadioButton7.TabStop = True
+        Me.RadioButton7.Text = "GPT"
+        Me.RadioButton7.UseVisualStyleBackColor = True
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(18, 15)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(78, 13)
+        Me.Label21.TabIndex = 0
+        Me.Label21.Text = "Partition table:"
+        '
+        'Label20
+        '
+        Me.Label20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(81, 519)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(307, 13)
+        Me.Label20.TabIndex = 7
+        Me.Label20.Text = "Uncheck this only if you want to set up disk configuration now."
+        '
+        'CheckBox4
+        '
+        Me.CheckBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Checked = True
+        Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox4.Location = New System.Drawing.Point(65, 497)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(276, 17)
+        Me.CheckBox4.TabIndex = 5
+        Me.CheckBox4.Text = "I want to configure these settings during installation"
+        Me.CheckBox4.UseVisualStyleBackColor = True
+        '
+        'DiskConfigurationHeader
+        '
+        Me.DiskConfigurationHeader.AutoEllipsis = True
+        Me.DiskConfigurationHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.DiskConfigurationHeader.Location = New System.Drawing.Point(16, 17)
+        Me.DiskConfigurationHeader.Name = "DiskConfigurationHeader"
+        Me.DiskConfigurationHeader.Size = New System.Drawing.Size(708, 51)
+        Me.DiskConfigurationHeader.TabIndex = 4
+        Me.DiskConfigurationHeader.Text = "Configure the disk and partition layout of the target system"
+        '
         'TimeZonePanel
         '
         Me.TimeZonePanel.Controls.Add(Me.TimeZoneSettings)
@@ -4261,16 +4261,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
-        Me.DiskConfigurationPanel.ResumeLayout(False)
-        Me.DiskConfigurationPanel.PerformLayout()
-        Me.AutoDiskConfigPanel.ResumeLayout(False)
-        Me.AutoDiskConfigPanel.PerformLayout()
-        Me.RESizePanel.ResumeLayout(False)
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PartTablePanel.ResumeLayout(False)
-        Me.PartTablePanel.PerformLayout()
-        Me.ESPPanel.ResumeLayout(False)
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.UnattendProgressPanel.ResumeLayout(False)
@@ -4362,6 +4352,16 @@ Partial Class NewUnattendWiz
         Me.KeyVerifyWarningPanel.PerformLayout()
         Me.GenericKeyPanel.ResumeLayout(False)
         Me.GenericKeyPanel.PerformLayout()
+        Me.DiskConfigurationPanel.ResumeLayout(False)
+        Me.DiskConfigurationPanel.PerformLayout()
+        Me.AutoDiskConfigPanel.ResumeLayout(False)
+        Me.AutoDiskConfigPanel.PerformLayout()
+        Me.RESizePanel.ResumeLayout(False)
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PartTablePanel.ResumeLayout(False)
+        Me.PartTablePanel.PerformLayout()
+        Me.ESPPanel.ResumeLayout(False)
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TimeZonePanel.ResumeLayout(False)
         Me.TimeZonePanel.PerformLayout()
         Me.TimeZoneSettings.ResumeLayout(False)
