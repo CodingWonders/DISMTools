@@ -991,27 +991,25 @@ A "contributor" is any person that distributes its contribution under this licen
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where tutorial videos would not be playable
-- The WDS Helper client message for downloading unattended answer files no longer shows at all times
+- Fixed an issue where the program would throw an exception when saving Windows PE configuration of an offline Windows PE installation
 
 New features:
 
-- When configuring ports for PXE Helper Servers you can now check if they are in use
-- The architecture for the WDS boot image is now picked graphically
-- The default set of DISMTools Preinstallation Environment backgrounds has been overhauled
-- You can now configure account *display names* independently from account names
-- Post-installation scripts can now be reordered
-- The Starter Script editor has seen some improvements, such as script code normalization
-- You can now pick account objects from anywhere in your domain
-- You can now choose a domain suffix from available DNS zones
-- When exporting drivers by class name or when filtering installed drivers by class name, you can now choose from third-party classes provided by third-party drivers in your Windows image or installation
-- You can now export drivers from Windows 7 images and installations
-- Saving service changes is much faster now
-- Help documentation is seeing a major visual refresh
-- File associations are now set for the Starter Script Editor
-- 7-Zip has been updated to version 26.01
-- CODE: setting load and save functionality has been revamped
-- The Starter Script Editor and the theme designer can now be invoked from the Tools menu</value>
+- The WDS Helper Client now detects the assigned volume letter for the image share more reliably
+- ISO file creation results are now displayed in a notification
+- You can now configure the keyboard layout in the Preinstallation Environment graphically
+- A keyboard layout override policy has been added
+- You can now save Preinstallation Environment policies for future sessions
+- When configuring a custom wallpaper for the Preinstallation Environment, it will pull backgrounds imposed by group policy, if defined
+- The Sysprep Preparation Tool has been updated to allow you to remove AppX packages that can cause Sysprep to fail
+- Batch scripts with NT extensions are no longer supported
+- The Configure PowerShell execution policy starter script has been introduced
+- The Configure Power Plan Values starter script has been introduced
+- Questions asked by the image information saver are no longer asked in the background
+- FFU file commit operations are now carried out when saving changes to mounted FFU files after performing image tasks such as adding packages or enabling features
+- An option has been added to prevent the machine from sleeping while performing image operations. Configure this setting by going to Options &gt; Image operations
+- The home panel has seen a visual overhaul
+- Markdig has been updated to version 1.2.0</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
