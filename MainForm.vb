@@ -4637,7 +4637,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Image management"
                         OSPackagesToolStripMenuItem.Text = "OS packages"
                         ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                        AppPackagesToolStripMenuItem.Text = "App packages"
+                        AppPackagesToolStripMenuItem.Text = "AppX packages"
                         AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
@@ -4685,11 +4685,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Get provisioning package information..."
                         ApplyCustomDataImage.Text = "Apply custom data image..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Get app package information..."
-                        AddProvisionedAppxPackage.Text = "Add provisioned app package..."
-                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
+                        GetProvisionedAppxPackages.Text = "Get AppX package information..."
+                        AddProvisionedAppxPackage.Text = "Add provisioned AppX package..."
+                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for AppX package..."
                         OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
-                        SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
+                        SetProvisionedAppxDataFile.Text = "Add custom data file into AppX package..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Get application patch information..."
                         GetAppPatchInfo.Text = "Get detailed application patch information..."
@@ -4972,7 +4972,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
                         OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
                         ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                        AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                        AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
                         AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
@@ -5020,11 +5020,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
                         ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
-                        AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
-                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                        GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
+                        AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionado..."
+                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Obtener información de parche de aplicación..."
                         GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
@@ -5307,7 +5307,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestion des images"
                         OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
                         ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                        AppPackagesToolStripMenuItem.Text = "Paquets d'applications"
+                        AppPackagesToolStripMenuItem.Text = "Paquets AppX"
                         AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
@@ -5357,7 +5357,7 @@ Public Class MainForm
                         ' Menu - Commands - App packages
                         GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
                         AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets d'applications..."
+                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
                         SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
                         ' Menu - Commands - App (MSP) servicing
@@ -5641,7 +5641,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
                         OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
                         ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                        AppPackagesToolStripMenuItem.Text = "Pacotes de aplicações"
+                        AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
                         AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
@@ -5689,11 +5689,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
                         ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote de aplicações..."
-                        AddProvisionedAppxPackage.Text = "Adicionar pacote de aplicações provisionado..."
-                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote de aplicações..."
+                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
+                        AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
+                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote da aplicação..."
+                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
                         GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
@@ -5975,7 +5975,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestisci immagini"
                         OSPackagesToolStripMenuItem.Text = "Pacchetti SO"
                         ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti provisioning"
-                        AppPackagesToolStripMenuItem.Text = "Pacchetti app"
+                        AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
                         AppPatchesToolStripMenuItem.Text = "Assistenza app (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue ed impostazioni regionali"
@@ -6023,11 +6023,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
                         ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
-                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
-                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto app..."
+                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
+                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
+                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Ottimizza pacchetti in provisioning..."
-                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto app..."
+                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Verifica informazioni sulle patch applicazione..."
                         GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
@@ -6316,7 +6316,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Image management"
                 OSPackagesToolStripMenuItem.Text = "OS packages"
                 ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                AppPackagesToolStripMenuItem.Text = "App packages"
+                AppPackagesToolStripMenuItem.Text = "AppX packages"
                 AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
@@ -6652,7 +6652,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
                 OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
                 ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
                 AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
@@ -6700,11 +6700,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
                 ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
-                AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
-                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
+                AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionada..."
+                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obtener información de parche de aplicación..."
                 GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
@@ -6987,7 +6987,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestion des images"
                 OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
                 ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                AppPackagesToolStripMenuItem.Text = "Paquets d'applications"
+                AppPackagesToolStripMenuItem.Text = "Paquets AppX"
                 AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
@@ -7035,11 +7035,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obtenir des informations sur le paquet de provisionnement..."
                 ApplyCustomDataImage.Text = "Appliquer une image de données personnalisée..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
-                AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets d'applications..."
+                GetProvisionedAppxPackages.Text = "Obtenir des informations sur les paquets AppX..."
+                AddProvisionedAppxPackage.Text = "Ajouter les paquets AppX provisionnées..."
+                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
-                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
+                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans les paquets AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obtenir des informations sur les correctifs de l'application..."
                 GetAppPatchInfo.Text = "Obtenir des informations détaillées sur les correctifs des applications..."
@@ -7323,7 +7323,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
                 OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
                 ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                AppPackagesToolStripMenuItem.Text = "Pacotes de aplicações"
+                AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
                 AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
@@ -7371,11 +7371,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
                 ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote de aplicações..."
-                AddProvisionedAppxPackage.Text = "Adicionar pacote de aplicações provisionado..."
-                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote de aplicações..."
+                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
+                AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
+                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote da aplicação..."
+                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
                 GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
@@ -7658,7 +7658,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestione delle immagini"
                 OSPackagesToolStripMenuItem.Text = "Pacchetti OS"
                 ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti di provisioning"
-                AppPackagesToolStripMenuItem.Text = "Pacchetti app"
+                AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
                 AppPatchesToolStripMenuItem.Text = "Assistenza per le app (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue e impostazioni regionali"
@@ -7706,11 +7706,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
                 ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
-                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
-                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto app..."
+                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
+                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
+                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Ottimizzare i pacchetti in provisioning..."
-                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto app..."
+                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Verifica informazioni patch applicazione..."
                 GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
@@ -12626,32 +12626,36 @@ Public Class MainForm
     End Sub
 
     Private Sub AccessDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AccessDirectoryToolStripMenuItem.Click
-        DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
-        If prjTreeView.SelectedNode.Name = "parent" Then
-            Process.Start(projPath)
-        ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
-            Process.Start(projPath & "\dandi")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
-            Process.Start(projPath & "\dandi\x86")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
-            Process.Start(projPath & "\dandi\amd64")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
-            Process.Start(projPath & "\dandi\arm")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
-            Process.Start(projPath & "\dandi\arm64")
-        ElseIf prjTreeView.SelectedNode.Name = "mount" Then
-            If Not MountDir = (projPath & "\mount") Then
-                Process.Start(MountDir)
-            Else
-                Process.Start(projPath & "\mount")
+        Try
+            DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
+            If prjTreeView.SelectedNode.Name = "parent" Then
+                Process.Start(projPath)
+            ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
+                Process.Start(projPath & "\dandi")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+                Process.Start(projPath & "\dandi\x86")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+                Process.Start(projPath & "\dandi\amd64")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+                Process.Start(projPath & "\dandi\arm")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+                Process.Start(projPath & "\dandi\arm64")
+            ElseIf prjTreeView.SelectedNode.Name = "mount" Then
+                If Not MountDir = (projPath & "\mount") Then
+                    Process.Start(MountDir)
+                Else
+                    Process.Start(projPath & "\mount")
+                End If
+            ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
+                Process.Start(projPath & "\unattend_xml")
+            ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
+                Process.Start(projPath & "\scr_temp")
+            ElseIf prjTreeView.SelectedNode.Name = "reports" Then
+                Process.Start(projPath & "\reports")
             End If
-        ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
-            Process.Start(projPath & "\unattend_xml")
-        ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
-            Process.Start(projPath & "\scr_temp")
-        ElseIf prjTreeView.SelectedNode.Name = "reports" Then
-            Process.Start(projPath & "\reports")
-        End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub UnloadProjectToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem1.Click

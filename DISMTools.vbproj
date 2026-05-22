@@ -80,8 +80,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.1.3\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.1.2.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.6.0.0\lib\net472\Microsoft.Dism.dll</HintPath>
@@ -214,6 +214,7 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
@@ -602,6 +603,12 @@
       <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImageFilePickerDialog.Designer.vb">
+      <DependentUpon>ImageFilePickerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImageFilePickerDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
@@ -1094,6 +1101,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.resx">
       <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImageFilePickerDialog.resx">
+      <DependentUpon>ImageFilePickerDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </EmbeddedResource>
@@ -1263,7 +1273,12 @@
     <None Include="docs\css\fonts\Roboto-Slab-Regular.woff2" />
     <None Include="docs\search\search_index.json" />
     <None Include="docs\sitemap.xml.gz" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Change PowerShell Execution Policy.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Current Power Plan Timeout Values.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Shutdown Event Tracker.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Unsigned RDP Warnings.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Windows Admin Center banner.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Display Bugcheck Parameters.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
@@ -1323,7 +1338,13 @@
     <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\changekeyboardlayout.designer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\ChangeKeyboardLayout.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\changekeyboardlayout.resources.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE_Inventory.ps1">

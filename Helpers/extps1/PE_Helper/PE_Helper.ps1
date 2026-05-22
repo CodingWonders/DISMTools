@@ -594,7 +594,7 @@ function Start-PECustomization
             The path of the mounted Windows PE image
         .PARAMETER arch
             The architecture of the target Windows PE image, which is used to customize the wallpaper
-        .PARAMETE testStartNet
+        .PARAMETER testStartNet
             Customizes the "startnet.cmd" file for WinPE testing
         .EXAMPLE
             Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
@@ -745,7 +745,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout*.ps1" -Destination "$imagePath" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
             if (Test-Path -Path "$((Get-Location).Path)\let_it_rain" -PathType Leaf) {
                 Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
@@ -1163,7 +1163,7 @@ function Start-OSApplication
     {
         Write-Host "Adding drivers to the target image..."
         # Add drivers that were previously added to the Windows PE using the DIM
-        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" } | Select-Object -Unique)
         $drvCount = $drivers.Count
         $successfulInstallations = 0
         $failedInstallations = 0
