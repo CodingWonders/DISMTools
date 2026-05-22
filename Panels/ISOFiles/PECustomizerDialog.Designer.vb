@@ -46,10 +46,27 @@ Partial Class PECustomizerDialog
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.DefaultPolicySaveButton = New System.Windows.Forms.Button()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabControl1.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -60,7 +77,7 @@ Partial Class PECustomizerDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 460)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 432)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -152,10 +169,12 @@ Partial Class PECustomizerDialog
         '
         'CheckBox2
         '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(34, 145)
+        Me.CheckBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox2.AutoEllipsis = True
+        Me.CheckBox2.Location = New System.Drawing.Point(12, 12)
         Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(360, 17)
+        Me.CheckBox2.Size = New System.Drawing.Size(508, 17)
         Me.CheckBox2.TabIndex = 3
         Me.CheckBox2.Text = "Show version information on the top-left corner of the primary screen"
         Me.CheckBox2.UseVisualStyleBackColor = True
@@ -165,7 +184,7 @@ Partial Class PECustomizerDialog
         Me.CheckBox3.AutoSize = True
         Me.CheckBox3.Checked = True
         Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox3.Location = New System.Drawing.Point(34, 168)
+        Me.CheckBox3.Location = New System.Drawing.Point(12, 12)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(324, 17)
         Me.CheckBox3.TabIndex = 3
@@ -174,71 +193,85 @@ Partial Class PECustomizerDialog
         '
         'CheckBox4
         '
-        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox4.AutoEllipsis = True
+        Me.CheckBox4.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox4.Checked = True
         Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox4.Location = New System.Drawing.Point(34, 191)
+        Me.CheckBox4.Location = New System.Drawing.Point(12, 35)
         Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(504, 17)
+        Me.CheckBox4.Size = New System.Drawing.Size(502, 32)
         Me.CheckBox4.TabIndex = 3
         Me.CheckBox4.Text = "Show a report with hardware IDs of unknown devices when launching the Driver Inst" & _
     "allation Module"
+        Me.CheckBox4.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(34, 239)
+        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label3.AutoEllipsis = True
+        Me.Label3.Location = New System.Drawing.Point(9, 108)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(159, 13)
+        Me.Label3.Size = New System.Drawing.Size(508, 13)
         Me.Label3.TabIndex = 1
         Me.Label3.Text = "Default partition table override:"
         '
         'ComboBox1
         '
+        Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"Do not use a partition table override", "Default to using a MBR partition table regardless of the firmware type", "Default to using a GPT partition table regardless of the firmware type"})
-        Me.ComboBox1.Location = New System.Drawing.Point(34, 256)
+        Me.ComboBox1.Location = New System.Drawing.Point(9, 125)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(556, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(511, 21)
         Me.ComboBox1.TabIndex = 4
         Me.ComboBox1.Text = "Do not use a partition table override"
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(53, 284)
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoEllipsis = True
+        Me.Label4.Location = New System.Drawing.Point(28, 153)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(462, 13)
+        Me.Label4.Size = New System.Drawing.Size(489, 13)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Partition table overrides affect both disk configuration and boot file creation p" & _
     "rocedures taken."
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(34, 309)
+        Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.Location = New System.Drawing.Point(9, 176)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(422, 13)
+        Me.Label5.Size = New System.Drawing.Size(508, 13)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "On supported UEFI systems with Secure Boot and Windows UEFI CA 2023 certificates:" & _
     ""
         '
         'ComboBox2
         '
+        Me.ComboBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox2.FormattingEnabled = True
         Me.ComboBox2.Items.AddRange(New Object() {"Ask me which version of the boot binary to use", "Default to boot binaries signed with Microsoft Windows Production PCA 2011", "Default to boot binaries signed with Windows UEFI CA 2023, if available on my tar" & _
                 "get image"})
-        Me.ComboBox2.Location = New System.Drawing.Point(34, 326)
+        Me.ComboBox2.Location = New System.Drawing.Point(9, 192)
         Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(556, 21)
+        Me.ComboBox2.Size = New System.Drawing.Size(511, 21)
         Me.ComboBox2.TabIndex = 4
         Me.ComboBox2.Text = "Ask me which version of the boot binary to use"
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(34, 358)
+        Me.Label6.Location = New System.Drawing.Point(9, 40)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(455, 13)
         Me.Label6.TabIndex = 5
@@ -247,7 +280,7 @@ Partial Class PECustomizerDialog
         '
         'NumericUpDown1
         '
-        Me.NumericUpDown1.Location = New System.Drawing.Point(224, 378)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(199, 60)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {16, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {2, 0, 0, 0})
         Me.NumericUpDown1.Name = "NumericUpDown1"
@@ -259,7 +292,7 @@ Partial Class PECustomizerDialog
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(288, 380)
+        Me.Label7.Location = New System.Drawing.Point(263, 62)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(113, 13)
         Me.Label7.TabIndex = 5
@@ -271,10 +304,13 @@ Partial Class PECustomizerDialog
         '
         'CheckBox5
         '
-        Me.CheckBox5.AutoSize = True
-        Me.CheckBox5.Location = New System.Drawing.Point(34, 214)
+        Me.CheckBox5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox5.AutoEllipsis = True
+        Me.CheckBox5.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.CheckBox5.Location = New System.Drawing.Point(12, 73)
         Me.CheckBox5.Name = "CheckBox5"
-        Me.CheckBox5.Size = New System.Drawing.Size(526, 17)
+        Me.CheckBox5.Size = New System.Drawing.Size(508, 32)
         Me.CheckBox5.TabIndex = 3
         Me.CheckBox5.Text = "Copy unattended answer files specified in the ISO creator to the Sysprep director" & _
     "y of the target system"
@@ -283,7 +319,7 @@ Partial Class PECustomizerDialog
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(34, 406)
+        Me.Label8.Location = New System.Drawing.Point(9, 90)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(324, 13)
         Me.Label8.TabIndex = 5
@@ -291,7 +327,7 @@ Partial Class PECustomizerDialog
         '
         'NumericUpDown2
         '
-        Me.NumericUpDown2.Location = New System.Drawing.Point(224, 426)
+        Me.NumericUpDown2.Location = New System.Drawing.Point(199, 110)
         Me.NumericUpDown2.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
         Me.NumericUpDown2.Minimum = New Decimal(New Integer() {80, 0, 0, 0})
         Me.NumericUpDown2.Name = "NumericUpDown2"
@@ -300,27 +336,166 @@ Partial Class PECustomizerDialog
         Me.NumericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericUpDown2.Value = New Decimal(New Integer() {8080, 0, 0, 0})
         '
+        'Label9
+        '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Location = New System.Drawing.Point(12, 12)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(508, 13)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "Pick the default keyboard layout to use in the Preinstallation Environment from t" & _
+    "he list below:"
+        '
+        'ListView1
+        '
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.Location = New System.Drawing.Point(12, 36)
+        Me.ListView1.MultiSelect = False
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(508, 128)
+        Me.ListView1.TabIndex = 7
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Layout Code"
+        Me.ColumnHeader1.Width = 96
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Layout Name"
+        Me.ColumnHeader2.Width = 384
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(12, 174)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(207, 13)
+        Me.Label10.TabIndex = 1
+        Me.Label10.Text = "Layout code of selected keyboard layout:"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(225, 171)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ReadOnly = True
+        Me.TextBox2.Size = New System.Drawing.Size(295, 21)
+        Me.TextBox2.TabIndex = 8
+        '
+        'DefaultPolicySaveButton
+        '
+        Me.DefaultPolicySaveButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DefaultPolicySaveButton.Location = New System.Drawing.Point(12, 435)
+        Me.DefaultPolicySaveButton.Name = "DefaultPolicySaveButton"
+        Me.DefaultPolicySaveButton.Size = New System.Drawing.Size(160, 23)
+        Me.DefaultPolicySaveButton.TabIndex = 9
+        Me.DefaultPolicySaveButton.Text = "Save to default policies"
+        Me.DefaultPolicySaveButton.UseVisualStyleBackColor = True
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TabControl1.Controls.Add(Me.TabPage1)
+        Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.Controls.Add(Me.TabPage3)
+        Me.TabControl1.Location = New System.Drawing.Point(34, 144)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(556, 282)
+        Me.TabControl1.TabIndex = 10
+        '
+        'TabPage1
+        '
+        Me.TabPage1.AutoScroll = True
+        Me.TabPage1.Controls.Add(Me.CheckBox2)
+        Me.TabPage1.Controls.Add(Me.CheckBox4)
+        Me.TabPage1.Controls.Add(Me.Label3)
+        Me.TabPage1.Controls.Add(Me.Label4)
+        Me.TabPage1.Controls.Add(Me.ComboBox1)
+        Me.TabPage1.Controls.Add(Me.Label5)
+        Me.TabPage1.Controls.Add(Me.ComboBox2)
+        Me.TabPage1.Controls.Add(Me.CheckBox5)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(548, 256)
+        Me.TabPage1.TabIndex = 0
+        Me.TabPage1.Text = "General"
+        Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'TabPage2
+        '
+        Me.TabPage2.AutoScroll = True
+        Me.TabPage2.Controls.Add(Me.CheckBox3)
+        Me.TabPage2.Controls.Add(Me.Label6)
+        Me.TabPage2.Controls.Add(Me.Label7)
+        Me.TabPage2.Controls.Add(Me.NumericUpDown1)
+        Me.TabPage2.Controls.Add(Me.NumericUpDown2)
+        Me.TabPage2.Controls.Add(Me.Label8)
+        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage2.Size = New System.Drawing.Size(548, 256)
+        Me.TabPage2.TabIndex = 1
+        Me.TabPage2.Text = "PXE Helpers"
+        Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'TabPage3
+        '
+        Me.TabPage3.AutoScroll = True
+        Me.TabPage3.Controls.Add(Me.Label11)
+        Me.TabPage3.Controls.Add(Me.CheckBox6)
+        Me.TabPage3.Controls.Add(Me.Label9)
+        Me.TabPage3.Controls.Add(Me.Label10)
+        Me.TabPage3.Controls.Add(Me.TextBox2)
+        Me.TabPage3.Controls.Add(Me.ListView1)
+        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.Size = New System.Drawing.Size(548, 256)
+        Me.TabPage3.TabIndex = 2
+        Me.TabPage3.Text = "Keyboard Layouts"
+        Me.TabPage3.UseVisualStyleBackColor = True
+        '
+        'CheckBox6
+        '
+        Me.CheckBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox6.AutoEllipsis = True
+        Me.CheckBox6.Location = New System.Drawing.Point(12, 198)
+        Me.CheckBox6.Name = "CheckBox6"
+        Me.CheckBox6.Size = New System.Drawing.Size(508, 17)
+        Me.CheckBox6.TabIndex = 9
+        Me.CheckBox6.Text = "Override keyboard layouts used by target images with the one I select here"
+        Me.CheckBox6.UseVisualStyleBackColor = True
+        '
+        'Label11
+        '
+        Me.Label11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.Location = New System.Drawing.Point(28, 222)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(492, 13)
+        Me.Label11.TabIndex = 10
+        Me.Label11.Text = "This option will only take effect on images that don't have any answer files appl" & _
+    "ied."
+        '
         'PECustomizerDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(624, 501)
-        Me.Controls.Add(Me.NumericUpDown2)
-        Me.Controls.Add(Me.NumericUpDown1)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.ComboBox2)
-        Me.Controls.Add(Me.ComboBox1)
-        Me.Controls.Add(Me.CheckBox5)
-        Me.Controls.Add(Me.CheckBox4)
-        Me.Controls.Add(Me.CheckBox3)
-        Me.Controls.Add(Me.CheckBox2)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label3)
+        Me.ClientSize = New System.Drawing.Size(624, 473)
+        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.DefaultPolicySaveButton)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -337,6 +512,12 @@ Partial Class PECustomizerDialog
         Me.GroupBox1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabControl1.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
+        Me.TabPage2.ResumeLayout(False)
+        Me.TabPage2.PerformLayout()
+        Me.TabPage3.ResumeLayout(False)
+        Me.TabPage3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -365,5 +546,18 @@ Partial Class PECustomizerDialog
     Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents NumericUpDown2 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents DefaultPolicySaveButton As System.Windows.Forms.Button
+    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
+    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
+    Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox6 As System.Windows.Forms.CheckBox
 
 End Class

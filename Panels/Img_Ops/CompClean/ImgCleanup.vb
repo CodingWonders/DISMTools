@@ -404,6 +404,7 @@ Public Class ImgCleanup
         PictureBox2.Image = GetGlyphResource("image_glyph")
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ' Determine when the last base reset was run
         DynaLog.LogMessage("Getting status of last base reset...")
         If MainForm.OnlineManagement Then

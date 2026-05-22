@@ -265,6 +265,7 @@ Public Class SetImageEdition
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         DynaLog.LogMessage("Determining EULA option compatibility...")
         DynaLog.LogMessage("- Image Installation Type: " & MainForm.CurrentImage.ImageProductType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))

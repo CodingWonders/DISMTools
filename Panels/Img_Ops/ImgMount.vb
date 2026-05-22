@@ -413,6 +413,7 @@ Public Class ImgMount
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         If TextBox1.Text <> "" AndAlso File.Exists(TextBox1.Text) AndAlso MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageFile = TextBox1.Text) IsNot Nothing Then
             IsReqField1Valid = False
             OK_Button.Enabled = False

@@ -160,6 +160,7 @@ Public Class MountedImgMgr
         ListView1.Items.Clear()
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ' Subscribe to MainForm event to get updates
         AddHandler MainForm.MountedImagesUpdated, AddressOf OnMountedImagesUpdated

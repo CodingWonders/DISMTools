@@ -258,4 +258,18 @@ Module ThemeHelper
         Return _themes
     End Function
 
+    Public Sub UpdateLinkLabelColors(parentControl As Control, linkColor As Color, activeLinkColor As Color)
+        For Each ctrl As Control In parentControl.Controls
+            If TypeOf ctrl Is LinkLabel Then
+                Dim linkLbl As LinkLabel = DirectCast(ctrl, LinkLabel)
+                linkLbl.LinkColor = linkColor
+                linkLbl.ActiveLinkColor = activeLinkColor
+            End If
+
+            If ctrl.HasChildren Then
+                UpdateLinkLabelColors(ctrl, linkColor, activeLinkColor)
+            End If
+        Next
+    End Sub
+
 End Module

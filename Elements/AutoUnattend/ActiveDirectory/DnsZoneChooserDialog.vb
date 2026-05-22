@@ -5,6 +5,14 @@ Public Class DnsZoneChooserDialog
     Public SelectedDnsZone As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If SelectedDnsZone = "" Then
+            MessageBox.Show("Please select a DNS zone and try again.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+        If IsDnsZoneShutdown(SelectedDnsZone) Then
+            MessageBox.Show("The selected DNS zone is no longer active because of either an expiration or a shut down. Choose another zone and try again.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -13,6 +21,16 @@ Public Class DnsZoneChooserDialog
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
+
+    Private Function IsDnsZoneShutdown(DnsZoneName As String) As Boolean
+        Dim DnsZoneStateMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Shutdown FROM MicrosoftDNS_Zone WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(DnsZoneName)), "\\.\root\MicrosoftDNS")
+
+        If DnsZoneName IsNot Nothing Then
+            Return WMIHelper.GetObjectValue(DnsZoneStateMOC(0), "Shutdown")
+        Else
+            Return False
+        End If
+    End Function
 
     Private Sub DnsZoneChooserDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         BackColor = CurrentTheme.SectionBackgroundColor
@@ -23,10 +41,11 @@ Public Class DnsZoneChooserDialog
         ColumnHeader1.Width = WindowHelper.ScaleLogical(168)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(192)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(180)
-        ColumnHeader4.Width = WindowHelper.ScaleLogical(96)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(192)
 
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         GetDnsZones()
     End Sub
@@ -49,11 +68,11 @@ Public Class DnsZoneChooserDialog
 
         If DnsZoneMOC IsNot Nothing Then
             For Each DnsZoneMO As ManagementObject In DnsZoneMOC
-                Dim DnsZoneProperties As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(DnsZoneMO, "Name", "DnsServerName", "DsIntegrated", "ZoneType")
+                Dim DnsZoneProperties As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(DnsZoneMO, "Name", "DnsServerName", "DsIntegrated", "ZoneType", "Reverse")
                 ListView1.Items.Add(New ListViewItem(New String() {DnsZoneProperties("Name"),
                                                                    DnsZoneProperties("DnsServerName"),
                                                                    If(DnsZoneProperties("DsIntegrated"), "Yes", "No"),
-                                                                   GetDnsZoneTypeString(DnsZoneProperties("ZoneType"))}))
+                                                                   String.Format("{0} ({1} Lookup)", GetDnsZoneTypeString(DnsZoneProperties("ZoneType")), If(DnsZoneProperties("Reverse"), "Reverse", "Forward"))}))
             Next
         Else
             MessageBox.Show("DNS zones could not be obtained.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -68,5 +87,11 @@ Public Class DnsZoneChooserDialog
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub Refresh_Button_Click(sender As Object, e As EventArgs) Handles Refresh_Button.Click
+        OK_Button.Enabled = False
+        SelectedDnsZone = ""
+        GetDnsZones()
     End Sub
 End Class

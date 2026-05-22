@@ -20,7 +20,7 @@
     
     
       
-        <title>SysPrep Preparation Tool - DISMTools Help Documentation</title>
+        <title>Sysprep Preparation Tool - DISMTools Help Documentation</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              SysPrep Preparation Tool
+              Sysprep Preparation Tool
             
           </span>
         </div>
@@ -2660,7 +2660,7 @@
   <span class="md-ellipsis">
     
   
-    SysPrep Preparation Tool
+    Sysprep Preparation Tool
   
 
     
@@ -2678,7 +2678,7 @@
   <span class="md-ellipsis">
     
   
-    SysPrep Preparation Tool
+    Sysprep Preparation Tool
   
 
     
@@ -3392,7 +3392,14 @@
 <h2 id="usage">Usage</h2>
 <h3 id="preparing-a-reference-computer-for-sysprep">Preparing a reference computer for Sysprep</h3>
 <p>To use the Sysprep Preparation Tool, the computer must be in <strong>audit mode</strong>. To enter audit mode at the OOBE, press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F3</kbd>. The computer will restart and boot into audit mode automatically.</p>
-<p><em>Do note that the installation must not be unattended. If it is, you will not be able to enter audit mode. If you had added an answer file, you'll need to remove it before installing the system. To remove answer files, go to Commands -&gt; Unattended answer files -&gt; Remove applied answer file.</em></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The installation must not be unattended. If it is, you will not be able to enter audit mode. If you had added an answer file, you'll need to remove it before installing the system. To remove answer files, go to <em>Commands -&gt; Unattended answer files -&gt; Remove applied answer file</em>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can make your Windows image boot directly into audit mode by going to <em>Commands &gt; Unattended answer files &gt; Make system enter audit mode</em>. Then, commit the image.</p>
+</div>
 <p>You can determine if the OOBE is unattended in the reference computer by determining if you need to interact with it. For example, here:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_InteractiveOOBE.png" data-desc-position="bottom"><img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_InteractiveOOBE.png"></a>
@@ -3422,19 +3429,23 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AutorunEntry.png" data-desc-position="bottom"><img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AutorunEntry.png"></a>
 </p>
 
-<p>In DISMTools 0.7.2 and later, you can pick from 2 modes in which the tool can run:</p>
+<p>When you select this option, you will be presented with additional options:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AutorunEntry_AdvOpts.png" data-desc-position="bottom"><img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AutorunEntry_AdvOpts.png"></a>
+</p>
+
+<p>The guide will continue with the following options:</p>
 <ul>
-<li><strong>Automatic mode</strong> will run the tool with minimal user interaction and default settings. If a check fails or returns a warning, the tool will let you pause and review the results before proceeding</li>
-<li><strong>Manual mode</strong> will run the tool with full user interaction</li>
+<li>Manual mode</li>
+<li>Capture after preparation</li>
+<li>Copy registry changes and other current preferences for new user profiles</li>
 </ul>
-<p>Whichever mode you choose, you can also prepare the boot image of the installation media for image capture after Sysprep completes by checking <em>Capture image after preparing the system</em>. You can learn more about image capture in the <a href="../cmdline/scriptref.html">administration script reference</a>.</p>
-<p>The guide will continue in manual mode.</p>
 <p>You will arrive at the wizard.</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Home.png" data-desc-position="bottom"><img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Home.png"></a>
 </p>
 
-<p>The tool will perform checks on your computer before proceeding. These range from setup states, to third-party drivers, to domain join; and more. You will see the results of these checks after they complete:</p>
+<p>The tool will perform checks on your computer before proceeding. These range from setup states, to third-party drivers, domain join; and more. You will see the results of these checks after they complete:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_CheckScreen.png" data-desc-position="bottom"><img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_CheckScreen.png"></a>
 </p>
@@ -3462,6 +3473,19 @@
 </p>
 
 <p>Normally, you don't need to configure anything here. The default options are suitable for most use cases. However, if you need to customize Sysprep's behavior, you can do so here.</p>
+<p>You may want to check <em>Copy registry changes and other current preferences for new user profiles</em> if you want changes made to the Administrator session to be carried over to the default user profile, using <code>CopyProfile</code>. Examples of such preferences include:</p>
+<ul>
+<li>The desktop background</li>
+<li>File Explorer settings</li>
+<li>Taskbar auxiliary pins (like Microsoft 365 Copilot)</li>
+<li>And more</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To make the desktop background be used by new user profiles you will need to change permissions to allow the <code>Everyone</code> built-in to read the file, and you will need to put the file in a common location like the root of the drive.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AuditMode_WallpaperACL.png" data-desc-position="bottom"><img alt="" src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AuditMode_WallpaperACL.png"></a></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AuditMode_WallpaperACL_Result.png" data-desc-position="bottom"><img alt="" src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AuditMode_WallpaperACL_Result.png"></a></p>
+</div>
 <p>Finally, wait for the tool to complete its work:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Preparation.png" data-desc-position="bottom"><img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Preparation.png"></a>

@@ -87,6 +87,7 @@ Public Class SingleImageIndexError
         Label1.ForeColor = Color.FromArgb(0, 122, 204)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Beep()
     End Sub
 

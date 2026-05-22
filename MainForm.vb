@@ -18,6 +18,7 @@ Imports IniParser
 Imports IniParser.Parser
 Imports IniParser.Model
 Imports System.Management
+Imports System.Threading.Tasks
 
 Public Class MainForm
 
@@ -176,6 +177,7 @@ Public Class MainForm
     Public RecentList As New List(Of Recents)
     Public VideoList As New List(Of Video)
     Dim thumbnailList As ImageList = New ImageList()
+    Dim VideoEx As Exception
 
     Dim AdkCopyEx As Exception
 
@@ -218,6 +220,11 @@ Public Class MainForm
     Public UEFICA23Preference As Integer = 0
     Public WDSHCConnAttempts As Integer = 5
     Public PXEServerPort As Integer = 8080
+    Public KeyboardLayoutCode As String = "00000409"
+    Public KeyboardLayoutOverrideExistingLayout As Boolean = False
+
+    ' INFINITY settings
+    Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
 
     Public ReinitializeCurImage As Boolean = True
 
@@ -594,11 +601,12 @@ Public Class MainForm
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
+        DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
         DynaLog.BeginLogging()
         DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
     End Sub
 
-    Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
 
         ' Prepare all user data
@@ -755,23 +763,12 @@ Public Class MainForm
         Timer1.Enabled = True
         LinkLabel12.LinkColor = CurrentTheme.ForegroundColor
         LinkLabel13.LinkColor = CurrentTheme.DisabledForegroundColor
+
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(InfinityStartPanel.Width / 2)
+
         DynaLog.LogMessage("Getting official news...")
         FeedWorker.RunWorkerAsync()
         Timer2.Enabled = True
-        LinkLabel22.LinkColor = ForeColor
-        If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf LatestNewsPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf TutorialVideoPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
-        End If
         If Not File.Exists(Application.StartupPath & "\recents.xml") Then
             DynaLog.LogMessage("The recents list file does not exist. Creating...")
             File.Create(Application.StartupPath & "\recents.xml")
@@ -825,9 +822,14 @@ Public Class MainForm
             End If
         End If
 
+        ' Fill in INFINITY HOME information
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(428)
+        Await Task.Run(Sub()
+                           DisplayInfinityComputerInformation()
+                       End Sub)
+
         ' Get videos
         ListView2.Items.Clear()
-        ListView2.View = View.LargeIcon
 
         DynaLog.LogMessage("Getting videos...")
 
@@ -1013,7 +1015,6 @@ Public Class MainForm
         ColumnHeader2.Width = WindowHelper.ScaleLogical(320)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
-        ColumnHeader5.Width = WindowHelper.ScaleLogical(592)
 
         If InstallationType.Equals("Server Core", StringComparison.InvariantCultureIgnoreCase) Then
             MessageBox.Show("DISMTools has detected that it is running on a Windows Server Core system. Some functionality may not work as expected.",
@@ -1026,6 +1027,59 @@ Public Class MainForm
         If Width < WindowHelper.ScaleLogical(1280) And Height < WindowHelper.ScaleLogical(720) Then
             Size = WindowHelper.ScaleSizeLogical(1280, 720)
         End If
+    End Sub
+
+    Private Sub DisplayInfinityComputerInformation()
+        ' Wallpaper
+        Try
+            Dim WallpaperPath As String = ""
+            ' Wallpaper may be defined by group policy; check there first
+            Try
+                Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
+                WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
+                WallpaperPolicyRk.Close()
+                If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+            Catch ex As Exception
+                ' Ignore and use general wallpaper
+                Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
+                WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
+                WallpaperRk.Close()
+            End Try
+            ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
+        Catch ex As Exception
+
+        End Try
+        ' Computer Information
+        ComputerOSLabel.Text = My.Computer.Info.OSFullName
+        Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
+        Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
+        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
+        Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
+        ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
+        ComputerModelLabel.Text = ComputerSystemProps("Model")
+        ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
+        ComputerMemoryLabel.Text = String.Format("{0} of system memory", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory")))
+        ComputerStorageLabel.Text = String.Format("{0} of total capacity in system volume", Converters.BytesToReadableSize(WMIHelper.GetObjectValue(ComputerCurrentVolMOC(0), "Capacity")))
+        Select Case ComputerSystemProps("DomainRole")
+            Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
+                ComputerDomainStatusLabel.Text = "Not part of a domain"
+            Case DomainRole.MemberWorkstation, DomainRole.MemberServer
+                ComputerDomainStatusLabel.Text = "Part of a domain"
+            Case DomainRole.BackupDomainController
+                ComputerDomainStatusLabel.Text = "Backup domain controller"
+            Case DomainRole.PrimaryDomainController
+                ComputerDomainStatusLabel.Text = "Primary domain controller"
+        End Select
+        ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
+        Try
+            Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
+            Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
+            Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
+            Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
+            ComputerDhcpStatusLabel.Text = If(DhcpEnabled, "Automatic (assigned by DHCP)", "Manual")
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -1173,10 +1227,8 @@ Public Class MainForm
             End Try
             DynaLog.LogMessage("Reading update information...")
             If File.Exists(Application.StartupPath & "\info.ini") Then
-                Dim infoRTB As New RichTextBox With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\info.ini")
-                }
-                For Each Line In infoRTB.Lines
+                Dim UpdateInfoFileLines As String() = File.ReadAllLines(Application.StartupPath & "\info.ini")
+                For Each Line In UpdateInfoFileLines
                     If Line.StartsWith("LatestVer") Then
                         DynaLog.LogMessage("Getting latest version...")
                         latestVer = Line.Replace("LatestVer = ", "").Trim()
@@ -1231,7 +1283,7 @@ Public Class MainForm
         End Using
     End Sub
 
-    Sub UnblockPSHelpers()
+    Private Sub UnblockPSHelpers()
         DynaLog.LogMessage("Unblocking PowerShell scripts for them to run freely (for those who want technical terms, removing Intenet zone alternate data streams from NTFS)...")
         Dim PSUnblocker As New Process()
         PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
@@ -1239,7 +1291,6 @@ Public Class MainForm
         PSUnblocker.StartInfo.CreateNoWindow = True
         PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         PSUnblocker.Start()
-        PSUnblocker.WaitForExit()
     End Sub
 
     Sub ChangeImgStatus()
@@ -1359,6 +1410,7 @@ Public Class MainForm
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
+                PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1419,6 +1471,8 @@ Public Class MainForm
                 UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
                 AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
                 PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
+                KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
+                KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1490,6 +1544,7 @@ Public Class MainForm
                     PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
                     PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
+                    PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
                     If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
                     UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
@@ -1539,6 +1594,8 @@ Public Class MainForm
                     UEFICA23Preference = CInt(settingData("PEPolicy")("UEFICA23Preference"))
                     AutoUnattendCopytoSysprep = CInt(settingData("PEPolicy")("AutoUnattendCopyToSysprep")) = 1
                     PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
+                    KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
+                    KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1613,10 +1670,18 @@ Public Class MainForm
         If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then
             PXEServerPort = 8080
         End If
+        Try
+            Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
+            Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
+            KeyboardLayoutRk.Close()
+            If Not KeyboardLayoutCodes.Contains(KeyboardLayoutCode) Then KeyboardLayoutCode = "00000409"
+        Catch ex As Exception
+
+        End Try
         WriteDefaultPEPolicy()
     End Sub
 
-    Private Sub WriteDefaultPEPolicy()
+    Public Sub WriteDefaultPEPolicy()
         Dim PartTableOverridePreferenceStr As String = ""
         Select Case PartTableOverridePreference
             Case 0
@@ -1645,10 +1710,12 @@ Public Class MainForm
                                                   "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
                                                   "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
-                                                  "{1}PXEServerPort{1}=dword:{9}{0}",
+                                                  "{1}PXEServerPort{1}=dword:{9}{0}" &
+                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
+                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant())
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1662,68 +1729,71 @@ Public Class MainForm
     ''' <remarks></remarks>
     Sub ShowDTSettings()
         DynaLog.LogMessage("Program Settings:" & CrLf &
-                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf &
-                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf &
-                           "ColorMode                  =    " & ColorMode & CrLf &
-                           "ColorTheme_Light           =    " & LightThemeIndex & CrLf &
-                           "ColorTheme_Dark            =    " & DarkThemeIndex & CrLf &
-                           "Language                   =    " & Language & CrLf &
-                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf &
-                           "LogFontSi                  =    " & LogFontSize & CrLf &
-                           "LogFontBold                =    " & LogFontIsBold & CrLf &
-                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf &
-                           "AllCaps                    =    " & AllCaps & CrLf &
-                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf &
-                           "ShowDateAndTime            =    " & ShowDateAndTime & CrLf &
-                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf &
-                           "LogLevel                   =    " & LogLevel & CrLf &
-                           "AutoLogs                   =    " & AutoLogs & CrLf &
-                           "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf &
-                           "EnableDynaLog              =    " & EnableDynaLog & CrLf &
-                           "Quiet                      =    " & QuietOperations & CrLf &
-                           "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
-                           "WebSearchEngineName        =    " & SearchEngineName & CrLf &
-                           "WebSearchAITolerance       =    " & SearchEngineAITolerance & CrLf &
-                           "PEHelper_UnattendedFile    =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
-                           "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
-                           "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
-                           "NoRestart                  =    " & SysNoRestart & CrLf &
-                           "AppxRemovalDisplayNameFrmt =    " & AppxDisplayNameFormatOnRemoval & CrLf &
-                           "UseScratch                 =    " & UseScratch & CrLf &
-                           "AutoScratch                =    " & AutoScrDir & CrLf &
-                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf &
-                           "EnglishOutput              =    " & EnglishOutput & CrLf &
-                           "ReportView                 =    " & ReportView & CrLf &
-                           "ShowNotification           =    " & NotificationShow & CrLf &
-                           "NotifyFrequency            =    " & NotificationFrequency & CrLf &
-                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf &
-                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf &
-                           "DetectAllDrivers           =    " & AllDrivers & CrLf &
-                           "SkipFrameworks             =    " & SkipFrameworks & CrLf &
-                           "RunAllProcs                =    " & RunAllProcs & CrLf &
-                           "RemountImages              =    " & StartupRemount & CrLf &
-                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf &
-                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf &
-                           "WndWidth                   =    " & WndWidth & CrLf &
-                           "WndHeight                  =    " & WndHeight & CrLf &
-                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
-                           "WndLeft                    =    " & WndLeft & CrLf &
-                           "WndTop                     =    " & WndTop & CrLf &
-                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf &
-                           "SkipQuestions              =    " & SkipQuestions & CrLf &
-                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf &
-                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf &
-                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf &
-                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf &
-                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4) & CrLf &
-                           "ShowWatermark              =    " & ShowWatermark & CrLf &
-                           "WDSHCGraphoView            =    " & WDSHCGraphoView & CrLf &
-                           "DTDimShowPnputilOut        =    " & DTDimShowPnputilOut & CrLf &
-                           "WDSHCConnAttempts          =    " & WDSHCConnAttempts & CrLf &
-                           "PartTableOverridePreference=    " & PartTableOverridePreference & CrLf &
-                           "UEFICA23Preference         =    " & UEFICA23Preference & CrLf &
-                           "AutoUnattendCopytoSysprep  =    " & AutoUnattendCopytoSysprep & CrLf &
-                           "PXEServerPort              =    " & PXEServerPort)
+                           "DISMExe                             =    " & Quote & DismExe & Quote & CrLf &
+                           "SaveOnSettingsIni                   =    " & SaveOnSettingsIni & CrLf &
+                           "ColorMode                           =    " & ColorMode & CrLf &
+                           "ColorTheme_Light                    =    " & LightThemeIndex & CrLf &
+                           "ColorTheme_Dark                     =    " & DarkThemeIndex & CrLf &
+                           "Language                            =    " & Language & CrLf &
+                           "LogFont                             =    " & Quote & LogFont & Quote & CrLf &
+                           "LogFontSi                           =    " & LogFontSize & CrLf &
+                           "LogFontBold                         =    " & LogFontIsBold & CrLf &
+                           "SecondaryProgressPanelStyle         =    " & ProgressPanelStyle & CrLf &
+                           "AllCaps                             =    " & AllCaps & CrLf &
+                           "ExpandedProgressPanel               =    " & ExpandedProgressPanel & CrLf &
+                           "ShowDateAndTime                     =    " & ShowDateAndTime & CrLf &
+                           "LogFile                             =    " & Quote & LogFile & Quote & CrLf &
+                           "LogLevel                            =    " & LogLevel & CrLf &
+                           "AutoLogs                            =    " & AutoLogs & CrLf &
+                           "SystemEditor                        =    " & Quote & SystemEditor & Quote & CrLf &
+                           "EnableDynaLog                       =    " & EnableDynaLog & CrLf &
+                           "Quiet                               =    " & QuietOperations & CrLf &
+                           "NoNTSamMappings                     =    " & NoNTSamMappings & CrLf &
+                           "WebSearchEngineName                 =    " & SearchEngineName & CrLf &
+                           "WebSearchAITolerance                =    " & SearchEngineAITolerance & CrLf &
+                           "PEHelper_UnattendedFile             =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
+                           "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
+                           "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
+                           "NoRestart                           =    " & SysNoRestart & CrLf &
+                           "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
+                           "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
+                           "UseScratch                          =    " & UseScratch & CrLf &
+                           "AutoScratch                         =    " & AutoScrDir & CrLf &
+                           "ScratchDirLocation                  =    " & Quote & ScratchDir & Quote & CrLf &
+                           "EnglishOutput                       =    " & EnglishOutput & CrLf &
+                           "ReportView                          =    " & ReportView & CrLf &
+                           "ShowNotification                    =    " & NotificationShow & CrLf &
+                           "NotifyFrequency                     =    " & NotificationFrequency & CrLf &
+                           "EnhancedAppxGetter                  =    " & ExtAppxGetter & CrLf &
+                           "SkipNonRemovable                    =    " & SkipNonRemovable & CrLf &
+                           "DetectAllDrivers                    =    " & AllDrivers & CrLf &
+                           "SkipFrameworks                      =    " & SkipFrameworks & CrLf &
+                           "RunAllProcs                         =    " & RunAllProcs & CrLf &
+                           "RemountImages                       =    " & StartupRemount & CrLf &
+                           "CheckForUpdates                     =    " & StartupUpdateCheck & CrLf &
+                           "AutoCleanMounts                     =    " & AutoCleanMounts & CrLf &
+                           "WndWidth                            =    " & WndWidth & CrLf &
+                           "WndHeight                           =    " & WndHeight & CrLf &
+                           "WndCenter                           =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
+                           "WndLeft                             =    " & WndLeft & CrLf &
+                           "WndTop                              =    " & WndTop & CrLf &
+                           "WndMaximized                        =    " & (WindowState = FormWindowState.Maximized) & CrLf &
+                           "SkipQuestions                       =    " & SkipQuestions & CrLf &
+                           "Pkg_CompleteInfo                    =    " & AutoCompleteInfo(0) & CrLf &
+                           "Feat_CompleteInfo                   =    " & AutoCompleteInfo(1) & CrLf &
+                           "AppX_CompleteInfo                   =    " & AutoCompleteInfo(2) & CrLf &
+                           "Cap_CompleteInfo                    =    " & AutoCompleteInfo(3) & CrLf &
+                           "Drv_CompleteInfo                    =    " & AutoCompleteInfo(4) & CrLf &
+                           "ShowWatermark                       =    " & ShowWatermark & CrLf &
+                           "WDSHCGraphoView                     =    " & WDSHCGraphoView & CrLf &
+                           "DTDimShowPnputilOut                 =    " & DTDimShowPnputilOut & CrLf &
+                           "WDSHCConnAttempts                   =    " & WDSHCConnAttempts & CrLf &
+                           "PartTableOverridePreference         =    " & PartTableOverridePreference & CrLf &
+                           "UEFICA23Preference                  =    " & UEFICA23Preference & CrLf &
+                           "AutoUnattendCopytoSysprep           =    " & AutoUnattendCopytoSysprep & CrLf &
+                           "PXEServerPort                       =    " & PXEServerPort & CrLf &
+                           "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
+                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout)
     End Sub
 
 #Region "Background Processes"
@@ -3903,6 +3973,7 @@ Public Class MainForm
         settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", 0)
         settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", 0)
         settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
+        settingsData("ImgOps").AddKey("PreventSystemFromSleeping", 1)
         settingsData.Sections.AddSection("ScratchDir")
         settingsData("ScratchDir").AddKey("UseScratch", 0)
         settingsData("ScratchDir").AddKey("AutoScratch", 1)
@@ -3950,6 +4021,8 @@ Public Class MainForm
         settingsData("PEPolicy").AddKey("UEFICA23Preference", 0)
         settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", 0)
         settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
+        settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
+        settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", 0)
         parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -3997,6 +4070,7 @@ Public Class MainForm
         ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PreventSystemFromSleeping", 1, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4053,6 +4127,8 @@ Public Class MainForm
         PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
+        PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4104,6 +4180,7 @@ Public Class MainForm
                 settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
                 settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
                 settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
+                settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
                 settingsData.Sections.AddSection("ScratchDir")
                 settingsData("ScratchDir").AddKey("UseScratch", If(UseScratch, 1, 0))
                 settingsData("ScratchDir").AddKey("AutoScratch", If(AutoScrDir, 1, 0))
@@ -4151,6 +4228,8 @@ Public Class MainForm
                 settingsData("PEPolicy").AddKey("UEFICA23Preference", UEFICA23Preference)
                 settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", If(AutoUnattendCopytoSysprep, 1, 0))
                 settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
+                settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
+                settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
                 parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4203,6 +4282,7 @@ Public Class MainForm
                     ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                     ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
                     ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                     ImgOpKey.Close()
                     DynaLog.LogMessage("Configuring scratch directory settings...")
                     Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
@@ -4271,6 +4351,8 @@ Public Class MainForm
                     PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
                     PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
+                    PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
+                    PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
                     PEPolicyKey.Close()
                     Key.Close()
                 Catch ex As Exception
@@ -4383,7 +4465,7 @@ Public Class MainForm
         MenuStrip1.BackColor = CurrentTheme.SectionBackgroundColor
         MenuStrip1.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, MenuStrip1.Items)
-        PictureBox5.Image = GetGlyphResource("logo_mainscr")
+        PictureBox5.Image = GetGlyphResource("logo_aboutdlg")
         ToolStrip1.BackColor = CurrentTheme.SectionBackgroundColor
         ToolStrip1.ForeColor = CurrentTheme.ForegroundColor
         ToolStrip2.BackColor = CurrentTheme.SectionBackgroundColor
@@ -4440,28 +4522,11 @@ Public Class MainForm
         GroupBox8.ForeColor = CurrentTheme.ForegroundColor
         GroupBox9.ForeColor = CurrentTheme.ForegroundColor
         GroupBox10.ForeColor = CurrentTheme.ForegroundColor
-        If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf LatestNewsPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf TutorialVideoPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
-        End If
-        ListView1.BackColor = LatestNewsPanel.BackColor
-        ListView1.ForeColor = LatestNewsPanel.ForeColor
-        ListView2.BackColor = TutorialVideoPanel.BackColor
-        ListView2.ForeColor = TutorialVideoPanel.ForeColor
+        ListView1.BackColor = CurrentTheme.BackgroundColor
+        ListView1.ForeColor = CurrentTheme.ForegroundColor
+        ListView2.BackColor = CurrentTheme.BackgroundColor
+        ListView2.ForeColor = CurrentTheme.ForegroundColor
         RecentsLV.BackColor = SidePanel.BackColor
-        TextBox1.BackColor = BackColor
-        TextBox1.ForeColor = ForeColor
-        TextBox2.BackColor = BackColor
-        TextBox2.ForeColor = ForeColor
         ' New project view header and side panel tints
         ProjectViewHeader.BackColor = CurrentTheme.AccentColors(0)
         ProjectSidePanel.BackColor = CurrentTheme.AccentColors(0)
@@ -4474,15 +4539,6 @@ Public Class MainForm
         PictureBox15.Image = GetGlyphResource("openfile")
         ProjectViewHeader.ForeColor = ForeColor
         ProjectSidePanel.ForeColor = ForeColor
-        For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In PrjTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
         StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         StatusStrip.ForeColor = CurrentTheme.ForegroundColor
         If ImgBW.IsBusy Then
@@ -4490,6 +4546,15 @@ Public Class MainForm
         Else
             BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
         End If
+        ' Infinity Home
+        ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
+
+        ' Set link label link controls
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ThemeHelper.UpdateLinkLabelColors(ImgTasks, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(PrjTasks, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel7, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel4, ForeColor, CurrentTheme.AccentColors(1))
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -4527,7 +4592,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Image management"
                         OSPackagesToolStripMenuItem.Text = "OS packages"
                         ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                        AppPackagesToolStripMenuItem.Text = "App packages"
+                        AppPackagesToolStripMenuItem.Text = "AppX packages"
                         AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
@@ -4575,11 +4640,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Get provisioning package information..."
                         ApplyCustomDataImage.Text = "Apply custom data image..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Get app package information..."
-                        AddProvisionedAppxPackage.Text = "Add provisioned app package..."
-                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
+                        GetProvisionedAppxPackages.Text = "Get AppX package information..."
+                        AddProvisionedAppxPackage.Text = "Add provisioned AppX package..."
+                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for AppX package..."
                         OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
-                        SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
+                        SetProvisionedAppxDataFile.Text = "Add custom data file into AppX package..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Get application patch information..."
                         GetAppPatchInfo.Text = "Get detailed application patch information..."
@@ -4803,35 +4868,6 @@ Public Class MainForm
                         Button56.Text = "Save configuration..."
                         Button57.Text = "Set target path..."
                         Button58.Text = "Set scratch space..."
-                        ' New home panel design
-                        LinkLabel22.Text = "WELCOME"
-                        LinkLabel23.Text = "LATEST NEWS"
-                        LinkLabel24.Text = "TUTORIAL VIDEOS"
-                        ' - Welcome panel
-                        Label36.Text = "This is beta software"
-                        Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
-                        Label37.Text = "Getting started"
-                        LinkLabel6.Text = "Getting started with image servicing"
-                        LinkLabel7.Text = "Getting started with DISMTools"
-                        LinkLabel8.Text = "Coming from other utilities?"
-                        Label38.Text = "Performing operations"
-                        LinkLabel9.Text = "Tips for performing great servicing"
-                        LinkLabel10.Text = "Getting image information"
-                        LinkLabel11.Text = "Saving image information"
-                        LinkLabel4.Text = "Managing your active installation"
-                        LinkLabel5.Text = "Managing installations on any drive"
-                        ' - Latest news panel
-                        Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
-                        LinkLabel25.Text = "Visit"
-                        Label22.Text = "We couldn't get the latest news"
-                        Label34.Text = "Error information:"
-                        Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                        Button59.Text = "Try again"
-                        ' - Tutorial videos panel
-                        Label11.Text = "We couldn't get the latest videos"
-                        Label7.Text = "Error information:"
-                        Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                        Button17.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4860,7 +4896,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
                         OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
                         ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                        AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                        AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
                         AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
@@ -4908,11 +4944,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
                         ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
-                        AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
-                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                        GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
+                        AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionado..."
+                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Obtener información de parche de aplicación..."
                         GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
@@ -5136,35 +5172,6 @@ Public Class MainForm
                         Button56.Text = "Guardar configuración..."
                         Button57.Text = "Establecer ruta de destino..."
                         Button58.Text = "Establecer espacio temporal..."
-                        ' New home panel design
-                        LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
-                        LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
-                        LinkLabel24.Text = "VÍDEOS"
-                        ' - Welcome panel
-                        Label36.Text = "Este es un software en beta"
-                        Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
-                        Label37.Text = "Introducciones"
-                        LinkLabel6.Text = "Introducción al servicio de imágenes"
-                        LinkLabel7.Text = "Introducción a DISMTools"
-                        LinkLabel8.Text = "¿Viniendo de otras herramientas?"
-                        Label38.Text = "Realizando operaciones"
-                        LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
-                        LinkLabel10.Text = "Obteniendo información de imagen"
-                        LinkLabel11.Text = "Guardando información de imagen"
-                        LinkLabel4.Text = "Administrando su instalación activa"
-                        LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
-                        ' - Latest news panel
-                        Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
-                        LinkLabel25.Text = "Visitar"
-                        Label22.Text = "No pudimos obtener las últimas noticias"
-                        Label34.Text = "Información del error:"
-                        Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                        Button59.Text = "Intentar de nuevo"
-                        ' - Tutorial videos panel
-                        Label11.Text = "No pudimos obtener los últimos vídeos"
-                        Label7.Text = "Información del error:"
-                        Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                        Button17.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -5193,7 +5200,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestion des images"
                         OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
                         ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                        AppPackagesToolStripMenuItem.Text = "Paquets d'applications"
+                        AppPackagesToolStripMenuItem.Text = "Paquets AppX"
                         AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
@@ -5243,7 +5250,7 @@ Public Class MainForm
                         ' Menu - Commands - App packages
                         GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
                         AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets d'applications..."
+                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
                         SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
                         ' Menu - Commands - App (MSP) servicing
@@ -5468,35 +5475,6 @@ Public Class MainForm
                         Button56.Text = "Sauvegarder les paramètres..."
                         Button57.Text = "Configurer le chemin d'accès..."
                         Button58.Text = "Configurer l'espace temporaire..."
-                        ' New home panel design
-                        LinkLabel22.Text = "BIENVENUE"
-                        LinkLabel23.Text = "DERNIÈRES NOUVELLES"
-                        LinkLabel24.Text = "VIDÉOS TUTORIELLES"
-                        ' - Welcome panel
-                        Label36.Text = "Il s'agit d'une version bêta du logiciel"
-                        Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
-                        Label37.Text = "Pour commencer"
-                        LinkLabel6.Text = "Commencer avec le service des images"
-                        LinkLabel7.Text = "Commencer avec DISMTools"
-                        LinkLabel8.Text = "Venant d'autres utilités ?"
-                        Label38.Text = "Réalisation des opérations"
-                        LinkLabel9.Text = "Conseils pour un bon service"
-                        LinkLabel10.Text = "Obtenir des informations sur l'image"
-                        LinkLabel11.Text = "Sauvegarder les informations sur l'image"
-                        LinkLabel4.Text = "Gérer votre installation active"
-                        LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
-                        ' - Latest news panel
-                        Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
-                        LinkLabel25.Text = "Visiter"
-                        Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
-                        Label34.Text = "Information d'erreur :"
-                        Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
-                        Button59.Text = "Réessayer"
-                        ' - Tutorial videos panel
-                        Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
-                        Label7.Text = "Informations sur l'erreur :"
-                        Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
-                        Button17.Text = "Essayez à nouveau"
                     Case "PTB", "PTG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -5525,7 +5503,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
                         OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
                         ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                        AppPackagesToolStripMenuItem.Text = "Pacotes de aplicações"
+                        AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
                         AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
@@ -5573,11 +5551,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
                         ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote de aplicações..."
-                        AddProvisionedAppxPackage.Text = "Adicionar pacote de aplicações provisionado..."
-                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote de aplicações..."
+                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
+                        AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
+                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote da aplicação..."
+                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
                         GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
@@ -5800,35 +5778,6 @@ Public Class MainForm
                         Button56.Text = "Guardar configuração..."
                         Button57.Text = "Definir caminho de destino..."
                         Button58.Text = "Definir espaço temporário..."
-                        ' New home panel design
-                        LinkLabel22.Text = "BEM-VINDO"
-                        LinkLabel23.Text = "ÚLTIMAS NOTÍCIAS"
-                        LinkLabel24.Text = "VÍDEOS TUTORIAIS"
-                        ' - Welcome panel
-                        Label36.Text = "Este é um software beta"
-                        Label8.Text = "Este programa não está completo e poderá ter problemas. Se isso acontecer, não hesite em enviar-nos os seus comentários"
-                        Label37.Text = "Aprender o programa"
-                        LinkLabel6.Text = "Como começar a utilizar a manutenção de imagens"
-                        LinkLabel7.Text = "Introdução ao DISMTools"
-                        LinkLabel8.Text = "Vindo de outros utilitários?"
-                        Label38.Text = "Efetuar operações"
-                        LinkLabel9.Text = "Dicas para realizar um ótimo serviço"
-                        LinkLabel10.Text = "Obter informações de imagem"
-                        LinkLabel11.Text = "Guardar informação de imagem"
-                        LinkLabel4.Text = "Gerir a sua instalação ativa"
-                        LinkLabel5.Text = "Gerir instalações em qualquer unidade"
-                        ' - Latest news panel
-                        Label9.Text = "Para obter as últimas notícias sobre o desenvolvimento do DISMTools, consulte a discussão nos fóruns do My Digital Life. É necessário ter uma conta para ver a maior parte do conteúdo."
-                        LinkLabel25.Text = "Visitar"
-                        Label22.Text = "Não foi possível obter as últimas notícias"
-                        Label34.Text = "Informação de erro:"
-                        Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                        Button59.Text = "Tentar novamente"
-                        ' - Tutorial videos panel
-                        Label11.Text = "Não foi possível obter os vídeos mais recentes"
-                        Label7.Text = "Informação de erro:"
-                        Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                        Button17.Text = "Tentar novamente"
                     Case "ITA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
@@ -5857,7 +5806,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestisci immagini"
                         OSPackagesToolStripMenuItem.Text = "Pacchetti SO"
                         ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti provisioning"
-                        AppPackagesToolStripMenuItem.Text = "Pacchetti app"
+                        AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
                         AppPatchesToolStripMenuItem.Text = "Assistenza app (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue ed impostazioni regionali"
@@ -5905,11 +5854,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
                         ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
-                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
-                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto app..."
+                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
+                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
+                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Ottimizza pacchetti in provisioning..."
-                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto app..."
+                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Verifica informazioni sulle patch applicazione..."
                         GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
@@ -6133,35 +6082,6 @@ Public Class MainForm
                         Button56.Text = "Salva configurazione..."
                         Button57.Text = "Imposta percorso destinazione..."
                         Button58.Text = "Imposta spazio temporaneo..."
-                        ' New home panel design
-                        LinkLabel22.Text = "BENVENUTO"
-                        LinkLabel23.Text = "ULTIME NOTIZIE"
-                        LinkLabel24.Text = "TUTORIAL VIDEO"
-                        ' - Welcome panel
-                        Label36.Text = "Questo è un software beta"
-                        Label8.Text = "Questo programma non è completo e potresti incontrare dei problemi. Se ciò dovesse accadere, non esitare ad inviarci un feedback"
-                        Label37.Text = "Per iniziare"
-                        LinkLabel6.Text = "Per iniziare a lavorare con le immagini"
-                        LinkLabel7.Text = "Per iniziare con DISMTools"
-                        LinkLabel8.Text = "Provieni da altri programmi di utilità?"
-                        Label38.Text = "Esecuzione operazioni"
-                        LinkLabel9.Text = "Suggerimenti per eseguire un'ottima manutenzione"
-                        LinkLabel10.Text = "Verifica informazioni immagine"
-                        LinkLabel11.Text = "Salvata informazioni immagine"
-                        LinkLabel4.Text = "Gestisci installazione online"
-                        LinkLabel5.Text = "Gestisci installazioni in qualsiasi unità"
-                        ' - Latest news panel
-                        Label9.Text = "Per conoscere le ultime novità sullo sviluppo di DISMTools, consulta la discussione nei forum di My Digital Life. Per visualizzare la maggior parte dei contenuti è necessario un account."
-                        LinkLabel25.Text = "Visita"
-                        Label22.Text = "Non è stato possibile ottenere le ultime novità"
-                        Label34.Text = "Informazioni errore:"
-                        Label35.Text = "Prova a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verifica se è possibile accedere ai siti web."
-                        Button59.Text = "Riprova"
-                        ' - Tutorial videos panel
-                        Label11.Text = "Non è stato possibile ottenere gli ultimi video"
-                        Label7.Text = "Informazioni sull'errore:"
-                        Label6.Text = "Prova a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verifica se è possibile accedere ai siti web."
-                        Button17.Text = "Riprova"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -6196,7 +6116,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Image management"
                 OSPackagesToolStripMenuItem.Text = "OS packages"
                 ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                AppPackagesToolStripMenuItem.Text = "App packages"
+                AppPackagesToolStripMenuItem.Text = "AppX packages"
                 AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
@@ -6472,35 +6392,6 @@ Public Class MainForm
                 Button56.Text = "Save configuration..."
                 Button57.Text = "Set target path..."
                 Button58.Text = "Set scratch space..."
-                ' New home panel design
-                LinkLabel22.Text = "WELCOME"
-                LinkLabel23.Text = "LATEST NEWS"
-                LinkLabel24.Text = "TUTORIAL VIDEOS"
-                ' - Welcome panel
-                Label36.Text = "This is beta software"
-                Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
-                Label37.Text = "Getting started"
-                LinkLabel6.Text = "Getting started with image servicing"
-                LinkLabel7.Text = "Getting started with DISMTools"
-                LinkLabel8.Text = "Coming from other utilities?"
-                Label38.Text = "Performing operations"
-                LinkLabel9.Text = "Tips for performing great servicing"
-                LinkLabel10.Text = "Getting image information"
-                LinkLabel11.Text = "Saving image information"
-                LinkLabel4.Text = "Managing your active installation"
-                LinkLabel5.Text = "Managing installations on any drive"
-                ' - Latest news panel
-                Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
-                LinkLabel25.Text = "Visit"
-                Label22.Text = "We couldn't get the latest news"
-                Label34.Text = "Error information:"
-                Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                Button59.Text = "Try again"
-                ' - Tutorial videos panel
-                Label11.Text = "We couldn't get the latest videos"
-                Label7.Text = "Error information:"
-                Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                Button17.Text = "Try again"
             Case 2
                 DynaLog.LogMessage("Language code is 2. Switching to Spanish...")
                 ' Top-level menu items
@@ -6530,7 +6421,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
                 OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
                 ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
                 AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
@@ -6578,11 +6469,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
                 ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
-                AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
-                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
+                AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionada..."
+                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obtener información de parche de aplicación..."
                 GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
@@ -6805,35 +6696,6 @@ Public Class MainForm
                 Button56.Text = "Guardar configuración..."
                 Button57.Text = "Establecer ruta de destino..."
                 Button58.Text = "Establecer espacio temporal..."
-                ' New home panel design
-                LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
-                LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
-                LinkLabel24.Text = "VÍDEOS"
-                ' - Welcome panel
-                Label36.Text = "Este es un software en beta"
-                Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
-                Label37.Text = "Introducciones"
-                LinkLabel6.Text = "Introducción al servicio de imágenes"
-                LinkLabel7.Text = "Introducción a DISMTools"
-                LinkLabel8.Text = "¿Viniendo de otras herramientas?"
-                Label38.Text = "Realizando operaciones"
-                LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
-                LinkLabel10.Text = "Obteniendo información de imagen"
-                LinkLabel11.Text = "Guardando información de imagen"
-                LinkLabel4.Text = "Administrando su instalación activa"
-                LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
-                ' - Latest news panel
-                Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
-                LinkLabel25.Text = "Visitar"
-                Label22.Text = "No pudimos obtener las últimas noticias"
-                Label34.Text = "Información del error:"
-                Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                Button59.Text = "Intentar de nuevo"
-                ' - Tutorial videos panel
-                Label11.Text = "No pudimos obtener los últimos vídeos"
-                Label7.Text = "Información del error:"
-                Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                Button17.Text = "Intentar de nuevo"
             Case 3
                 DynaLog.LogMessage("Language code is 3. Switching to French...")
                 ' Top-level menu items
@@ -6863,7 +6725,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestion des images"
                 OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
                 ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                AppPackagesToolStripMenuItem.Text = "Paquets d'applications"
+                AppPackagesToolStripMenuItem.Text = "Paquets AppX"
                 AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
@@ -6911,11 +6773,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obtenir des informations sur le paquet de provisionnement..."
                 ApplyCustomDataImage.Text = "Appliquer une image de données personnalisée..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
-                AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets d'applications..."
+                GetProvisionedAppxPackages.Text = "Obtenir des informations sur les paquets AppX..."
+                AddProvisionedAppxPackage.Text = "Ajouter les paquets AppX provisionnées..."
+                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
-                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
+                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans les paquets AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obtenir des informations sur les correctifs de l'application..."
                 GetAppPatchInfo.Text = "Obtenir des informations détaillées sur les correctifs des applications..."
@@ -7139,35 +7001,6 @@ Public Class MainForm
                 Button56.Text = "Sauvegarder les paramètres..."
                 Button57.Text = "Configurer le chemin d'accès..."
                 Button58.Text = "Configurer l'espace temporaire..."
-                ' New home panel design
-                LinkLabel22.Text = "BIENVENUE"
-                LinkLabel23.Text = "DERNIÈRES NOUVELLES"
-                LinkLabel24.Text = "VIDÉOS TUTORIELLES"
-                ' - Welcome panel
-                Label36.Text = "Il s'agit d'une version bêta du logiciel"
-                Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
-                Label37.Text = "Pour commencer"
-                LinkLabel6.Text = "Commencer avec le service des images"
-                LinkLabel7.Text = "Commencer avec DISMTools"
-                LinkLabel8.Text = "Venant d'autres utilités ?"
-                Label38.Text = "Réalisation des opérations"
-                LinkLabel9.Text = "Conseils pour un bon service"
-                LinkLabel10.Text = "Obtenir des informations sur l'image"
-                LinkLabel11.Text = "Sauvegarder les informations sur l'image"
-                LinkLabel4.Text = "Gérer votre installation active"
-                LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
-                ' - Latest news panel
-                Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
-                LinkLabel25.Text = "Visiter"
-                Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
-                Label34.Text = "Information d'erreur :"
-                Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
-                Button59.Text = "Réessayer"
-                ' - Tutorial videos panel
-                Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
-                Label7.Text = "Informations sur l'erreur :"
-                Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
-                Button17.Text = "Essayez à nouveau"
             Case 4
                 DynaLog.LogMessage("Language code is 4. Switching to Portuguese...")
                 ' Top-level menu items
@@ -7197,7 +7030,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
                 OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
                 ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                AppPackagesToolStripMenuItem.Text = "Pacotes de aplicações"
+                AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
                 AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
@@ -7245,11 +7078,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
                 ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote de aplicações..."
-                AddProvisionedAppxPackage.Text = "Adicionar pacote de aplicações provisionado..."
-                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote de aplicações..."
+                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
+                AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
+                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote da aplicação..."
+                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
                 GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
@@ -7472,35 +7305,6 @@ Public Class MainForm
                 Button56.Text = "Guardar configuração..."
                 Button57.Text = "Definir caminho de destino..."
                 Button58.Text = "Definir espaço temporário..."
-                ' New home panel design
-                LinkLabel22.Text = "BEM-VINDO"
-                LinkLabel23.Text = "ÚLTIMAS NOTÍCIAS"
-                LinkLabel24.Text = "VÍDEOS TUTORIAIS"
-                ' - Welcome panel
-                Label36.Text = "Este é um software beta"
-                Label8.Text = "Este programa não está completo e poderá ter problemas. Se isso acontecer, não hesite em enviar-nos os seus comentários"
-                Label37.Text = "Aprender o programa"
-                LinkLabel6.Text = "Como começar a utilizar a manutenção de imagens"
-                LinkLabel7.Text = "Introdução ao DISMTools"
-                LinkLabel8.Text = "Vindo de outros utilitários?"
-                Label38.Text = "Efetuar operações"
-                LinkLabel9.Text = "Dicas para realizar um ótimo serviço"
-                LinkLabel10.Text = "Obter informações de imagem"
-                LinkLabel11.Text = "Guardar informação de imagem"
-                LinkLabel4.Text = "Gerir a sua instalação ativa"
-                LinkLabel5.Text = "Gerir instalações em qualquer unidade"
-                ' - Latest news panel
-                Label9.Text = "Para obter as últimas notícias sobre o desenvolvimento do DISMTools, consulte a discussão nos fóruns do My Digital Life. É necessário ter uma conta para ver a maior parte do conteúdo."
-                LinkLabel25.Text = "Visitar"
-                Label22.Text = "Não foi possível obter as últimas notícias"
-                Label34.Text = "Informação de erro:"
-                Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                Button59.Text = "Tentar novamente"
-                ' - Tutorial videos panel
-                Label11.Text = "Não foi possível obter os vídeos mais recentes"
-                Label7.Text = "Informação de erro:"
-                Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                Button17.Text = "Tentar novamente"
             Case 5
                 DynaLog.LogMessage("Language code is 5. Switching to Italian...")
                 ' Top-level menu items
@@ -7530,7 +7334,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestione delle immagini"
                 OSPackagesToolStripMenuItem.Text = "Pacchetti OS"
                 ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti di provisioning"
-                AppPackagesToolStripMenuItem.Text = "Pacchetti app"
+                AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
                 AppPatchesToolStripMenuItem.Text = "Assistenza per le app (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue e impostazioni regionali"
@@ -7578,11 +7382,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
                 ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
-                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
-                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto app..."
+                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
+                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
+                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Ottimizzare i pacchetti in provisioning..."
-                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto app..."
+                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Verifica informazioni patch applicazione..."
                 GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
@@ -7806,35 +7610,6 @@ Public Class MainForm
                 Button56.Text = "Salva configurazione..."
                 Button57.Text = "Imposta percorso destinazione..."
                 Button58.Text = "Imposta spazio temporaneo..."
-                ' New home panel design
-                LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
-                LinkLabel23.Text = "NOVITA'"
-                LinkLabel24.Text = "TUTORIAL VIDEO"
-                ' - Welcome panel
-                Label36.Text = "Questo è un software beta"
-                Label8.Text = "Questo programma non è completo e potreste incontrare dei problemi. Se ciò dovesse accadere, non esitate a inviarci un feedback"
-                Label37.Text = "Per iniziare"
-                LinkLabel6.Text = "Per iniziare a lavorare con le immagini"
-                LinkLabel7.Text = "Per iniziare con DISMTools"
-                LinkLabel8.Text = "Provenienza da altri programmi di utilità?"
-                Label38.Text = "Esecuzione di operazioni"
-                LinkLabel9.Text = "Suggerimenti per eseguire un'ottima manutenzione"
-                LinkLabel10.Text = "Verifica informazioni immagine"
-                LinkLabel11.Text = "Salvataggio informazioni immagine"
-                LinkLabel4.Text = "Gestione installazione attiva"
-                LinkLabel5.Text = "Gestione installazioni in qualsiasi unità"
-                ' - Latest news panel
-                Label9.Text = "Per conoscere le ultime notizie sullo sviluppo di DISMTools, consultate la discussione sui forum di My Digital Life. Per visualizzare la maggior parte dei contenuti è necessario un account."
-                LinkLabel25.Text = "Visita"
-                Label22.Text = "Non è stato possibile ottenere le ultime notizie"
-                Label34.Text = "Informazioni sull'errore:"
-                Label35.Text = "Provare a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verificare se è possibile accedere ai siti web."
-                Button59.Text = "Riprova"
-                ' - Tutorial videos panel
-                Label11.Text = "Non è stato possibile ottenere gli ultimi video"
-                Label7.Text = "Informazioni sull'errore:"
-                Label6.Text = "Provare a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verificare se è possibile accedere ai siti web."
-                Button17.Text = "Riprova"
         End Select
 
         If OnlineManagement Then
@@ -8041,7 +7816,7 @@ Public Class MainForm
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
                 DynaLog.LogMessage("We are dealing with a SQL Server Data Tools project. Cancelling project load...")
-                SqlServerProjectErrorDlg.ShowDialog(Me)
+                MessageBox.Show("The specified project is not a DISMTools project.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
             SaveProjectToolStripMenuItem.Enabled = True
@@ -11436,41 +11211,6 @@ Public Class MainForm
 
     Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
         DynaLog.LogMessage("The mounted image detector is no longer busy.")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
@@ -13835,33 +13575,6 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
-        GetStartedPanel.Visible = True
-        LatestNewsPanel.Visible = False
-        TutorialVideoPanel.Visible = False
-        LinkLabel22.LinkColor = ForeColor
-        LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-    End Sub
-
-    Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
-        GetStartedPanel.Visible = False
-        LatestNewsPanel.Visible = True
-        TutorialVideoPanel.Visible = False
-        LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel23.LinkColor = ForeColor
-        LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-    End Sub
-
-    Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
-        GetStartedPanel.Visible = False
-        LatestNewsPanel.Visible = False
-        TutorialVideoPanel.Visible = True
-        LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel24.LinkColor = ForeColor
-    End Sub
-
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
         If ListView1.SelectedItems.Count = 1 Then
             DynaLog.LogMessage("Starting URL of news article: " & FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
@@ -13907,28 +13620,6 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub Button59_Click(sender As Object, e As EventArgs) Handles Button59.Click
-        DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
-        FeedLinks.Clear()
-        GetFeedNews()
-        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
-        If FeedContents.Items.Count > 0 Then
-            FeedsPanel.Visible = True
-            FeedErrorPanel.Visible = False
-            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-            ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
-                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
-                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
-            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
-        Else
-            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
-            FeedsPanel.Visible = False
-            FeedErrorPanel.Visible = True
-            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
-        End If
-    End Sub
-
     Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
         DynaLog.LogMessage("Detecting if worker needs to be cancelled...")
         If FeedWorker.CancellationPending Then Exit Sub
@@ -13946,8 +13637,6 @@ Public Class MainForm
         Try
             DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
             If FeedContents.Items.Count > 0 Then
-                FeedsPanel.Visible = True
-                FeedErrorPanel.Visible = False
                 Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
                 ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
                                                                                                                                                              TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
@@ -13955,108 +13644,41 @@ Public Class MainForm
                 FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
             Else
                 DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
-                FeedsPanel.Visible = False
-                FeedErrorPanel.Visible = True
-                TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
             End If
+            Panel12.Visible = Not FeedContents.Items.Any()
         Catch ex As Exception
             DynaLog.LogMessage("Could not get feed news. Error message: " & ex.Message)
-            FeedsPanel.Visible = False
-            FeedErrorPanel.Visible = True
-            TextBox1.Text = ex.ToString() & " - " & ex.Message
+            Panel12.Visible = True
         End Try
     End Sub
 
-    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\new_to_servicing.html")
     End Sub
 
-    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html", "first-steps")
     End Sub
 
-    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html")
     End Sub
 
-    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html", "best-practices")
     End Sub
 
-    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\info\infodlgs.html")
     End Sub
 
-    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\info\infodlgs.html", "saving-image-information")
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
         DynaLog.LogMessage("Refreshing news feed...")
         If Not FeedWorker.IsBusy Then FeedWorker.RunWorkerAsync()
-    End Sub
-
-    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\online_inst_mgmt.html")
-    End Sub
-
-    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
-        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\offline_inst_mgmt.html")
-    End Sub
-
-    Private Sub LinkLabel22_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel22.MouseEnter
-        If LinkLabel22.LinkColor = CurrentTheme.ForegroundColor Then
-            Cursor = Cursors.Arrow
-            Exit Sub
-        Else
-            LinkLabel22.LinkColor = CurrentTheme.AccentColors(2)
-        End If
-    End Sub
-
-    Private Sub LinkLabel22_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel22.MouseLeave
-        If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
-        Else
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-        End If
-    End Sub
-
-    Private Sub LinkLabel23_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel23.MouseEnter
-        If LinkLabel23.LinkColor = CurrentTheme.ForegroundColor Then
-            Cursor = Cursors.Arrow
-            Exit Sub
-        Else
-            LinkLabel23.LinkColor = CurrentTheme.AccentColors(2)
-        End If
-    End Sub
-
-    Private Sub LinkLabel23_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel23.MouseLeave
-        If LatestNewsPanel.Visible Then
-            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
-        Else
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-        End If
-    End Sub
-
-    Private Sub LinkLabel24_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel24.MouseEnter
-        If LinkLabel24.LinkColor = CurrentTheme.ForegroundColor Then
-            Cursor = Cursors.Arrow
-            Exit Sub
-        Else
-            LinkLabel24.LinkColor = CurrentTheme.AccentColors(2)
-        End If
-    End Sub
-
-    Private Sub LinkLabel24_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel24.MouseLeave
-        If TutorialVideoPanel.Visible Then
-            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
-        Else
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        End If
-    End Sub
-
-    Private Sub LinkLabel25_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel25.LinkClicked
-        Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
     End Sub
 
     Private Sub WatcherBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WatcherBW.DoWork
@@ -14680,65 +14302,6 @@ Public Class MainForm
         ImgAppend.ShowDialog(Me)
     End Sub
 
-    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
-        Try
-            DynaLog.LogMessage("Getting videos...")
-            Dim videoEx As Exception = New Exception()
-            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
-            Using client As New WebClient()
-                DynaLog.LogMessage("Downloading XML...")
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                Try
-                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
-                Catch ex As Exception
-                    videoEx = ex
-                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-                    Debug.WriteLine("Could not download video list")
-                End Try
-            End Using
-            Try
-                If File.Exists(Application.StartupPath & "\videos.xml") Then
-                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-                    File.Delete(Application.StartupPath & "\videos.xml.old")
-                End If
-            Catch ex As Exception
-                videoEx = ex
-                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
-                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-            End Try
-            ListView2.Items.Clear()
-            Dim thumbnailList As ImageList = New ImageList()
-            thumbnailList.ImageSize = New Size(160, 90)
-            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
-            ListView2.View = View.LargeIcon
-            ListView2.LargeImageList = thumbnailList
-            If VideoList IsNot Nothing Then
-                If VideoList.Count > 0 Then
-                    For Each VideoLink As Video In VideoList
-                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
-                        If thumbnail IsNot Nothing Then
-                            Dim newThumb As Image = CombineImages(thumbnail)
-                            thumbnailList.Images.Add(newThumb)
-                        End If
-                        Dim listItem As ListViewItem = New ListViewItem()
-                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
-                        listItem.Text = VideoLink.VideoName
-                        ListView2.Items.Add(listItem)
-                    Next
-                End If
-            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
-                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-            End If
-            VideosPanel.Visible = True
-            VideoErrorPanel.Visible = False
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not get video feed. Error message: " & ex.Message)
-            VideosPanel.Visible = False
-            VideoErrorPanel.Visible = True
-            TextBox2.Text = ex.ToString() & " - " & ex.Message
-        End Try
-    End Sub
-
     Sub LoadRecentsFromMenu(itemOrder As Integer)
         Dim itmOrder As Integer = 0
         DynaLog.LogMessage("Items in recents list: " & RecentList.Count)
@@ -15025,8 +14588,7 @@ Public Class MainForm
             Else
                 Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
             End If
-            VideosPanel.Visible = True
-            VideoErrorPanel.Visible = False
+            Panel9.Visible = Not VideoList.Any()
         Catch ex As Exception
             Throw ex
         End Try
@@ -15035,9 +14597,8 @@ Public Class MainForm
     Private Sub VideoGetterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles VideoGetterBW.RunWorkerCompleted
         If e.Error IsNot Nothing Then
             DynaLog.LogMessage("Could not get video feed. Error message: " & e.Error.Message)
-            VideosPanel.Visible = False
-            VideoErrorPanel.Visible = True
-            TextBox2.Text = e.Error.ToString() & " - " & e.Error.Message
+            Panel9.Visible = True
+            VideoEx = e.Error
             Exit Sub
         End If
         ListView2.LargeImageList = thumbnailList
@@ -15499,7 +15060,7 @@ Public Class MainForm
         WatcherTimer.Enabled = True
     End Sub
 
-    Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click
+    Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click, LinkLabel28.LinkClicked
         If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
             DynaLog.LogMessage("Tour directory exists. Starting the tour!")
 
@@ -15870,5 +15431,168 @@ Public Class MainForm
 
     Private Sub MenuToggle_Click(sender As Object, e As EventArgs) Handles MenuToggle.Click
         ProjectSidePanel.Visible = Not ProjectSidePanel.Visible
+    End Sub
+
+    Private Sub ChangeComputerNameLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ChangeComputerNameLink.LinkClicked
+        Try
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "systempropertiescomputername.exe"))
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Async Sub RefreshComputerInfoBtn_Click(sender As Object, e As EventArgs) Handles RefreshComputerInfoBtn.Click
+        Cursor = Cursors.WaitCursor
+        Await Task.Run(Sub()
+                           DisplayInfinityComputerInformation()
+                       End Sub)
+        Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub ChangeNetworkConfigBtn_Click(sender As Object, e As EventArgs) Handles ChangeNetworkConfigBtn.Click
+        Try
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "ncpa.cpl"))
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Sub AdminToolsBtn_Click(sender As Object, e As EventArgs) Handles AdminToolsBtn.Click
+        Try
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe"), Quote & "shell:::{D20EA4E1-3957-11d2-A40B-0C5020524153}" & Quote)
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Sub RefreshComputerInfoBtn_MouseHover(sender As Object, e As EventArgs) Handles RefreshComputerInfoBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Refresh information")
+    End Sub
+
+    Private Sub ChangeNetworkConfigBtn_MouseHover(sender As Object, e As EventArgs) Handles ChangeNetworkConfigBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Change network configuration")
+    End Sub
+
+    Private Sub AdminToolsBtn_MouseHover(sender As Object, e As EventArgs) Handles AdminToolsBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Other Windows administrative tools")
+    End Sub
+
+    Private Sub ComputerWallpaperPB_MouseHover(sender As Object, e As EventArgs) Handles ComputerWallpaperPB.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Click here to change your wallpaper")
+    End Sub
+
+    Private Sub ComputerWallpaperPB_Click(sender As Object, e As EventArgs) Handles ComputerWallpaperPB.Click
+        Try
+            If Environment.OSVersion.Version.Major = 10 Then
+                Process.Start("ms-settings:personalization-background")
+            Else
+                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "desk.cpl"))
+            End If
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Sub LinkLabel27_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel27.LinkClicked
+        HelpDocsModule.DisplayHelpDocumentation("docs\whats_new\highlights.html")
+    End Sub
+
+    Private Sub LinkLabel29_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel29.LinkClicked
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\online_inst_mgmt.html")
+    End Sub
+
+    Private Sub LinkLabel30_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel30.LinkClicked
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\offline_inst_mgmt.html")
+    End Sub
+
+    Private Sub InfinityStartPanel_SizeChanged(sender As Object, e As EventArgs) Handles InfinityStartPanel.SizeChanged
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(428)
+    End Sub
+
+    Private Sub LinkLabel32_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel32.LinkClicked
+        Try
+            DynaLog.LogMessage("Getting videos...")
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                DynaLog.LogMessage("Downloading XML...")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                End If
+            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            Panel9.Visible = Not VideoList.Any()
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get video feed. Error message: " & ex.Message)
+            Panel9.Visible = True
+            VideoEx = ex
+        End Try
+    End Sub
+
+    Private Sub LinkLabel33_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel33.LinkClicked
+        DynaLog.LogMessage("Refreshing news feed...")
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        GetFeedNews()
+        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
+        If FeedContents.Items.Count > 0 Then
+            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
+            ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
+            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
+        Else
+            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
+        End If
+        Panel12.Visible = Not FeedContents.Items.Any()
+    End Sub
+
+    Private Sub LinkLabel31_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel31.LinkClicked
+        MessageBox.Show(VideoEx.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
+    Private Sub LinkLabel34_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel34.LinkClicked
+        MessageBox.Show(FeedEx.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
+    Private Sub ComputerNameLabel_MouseHover(sender As Object, e As EventArgs) Handles ComputerNameLabel.MouseHover
+        WindowHelper.DisplayToolTip(sender, String.Format("NetBIOS name: {0}", My.Computer.Name))
     End Sub
 End Class

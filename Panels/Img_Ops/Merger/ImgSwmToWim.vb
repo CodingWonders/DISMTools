@@ -242,6 +242,7 @@ Public Class ImgSwmToWim
         ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(256)

@@ -235,58 +235,52 @@ Partial Class MainForm
         Me.StopDTTourServerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.HomePanel = New System.Windows.Forms.Panel()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
-        Me.StartPanel = New System.Windows.Forms.Panel()
-        Me.StartPanelPContainer = New System.Windows.Forms.Panel()
-        Me.GetStartedPanel = New System.Windows.Forms.Panel()
-        Me.GetStartedContainer = New System.Windows.Forms.Panel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel11 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel10 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel9 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel6 = New System.Windows.Forms.LinkLabel()
-        Me.Label38 = New System.Windows.Forms.Label()
-        Me.Label37 = New System.Windows.Forms.Label()
-        Me.Label36 = New System.Windows.Forms.Label()
-        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
-        Me.LatestNewsPanel = New System.Windows.Forms.Panel()
-        Me.FeedContainer = New System.Windows.Forms.Panel()
-        Me.FeedsPanel = New System.Windows.Forms.Panel()
+        Me.InfinityStartPanel = New System.Windows.Forms.Panel()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.HelpLinksPanel = New System.Windows.Forms.Panel()
+        Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.Panel9 = New System.Windows.Forms.Panel()
+        Me.LinkLabel32 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel31 = New System.Windows.Forms.LinkLabel()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.ListView2 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.LinkLabel30 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel29 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel28 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel27 = New System.Windows.Forms.LinkLabel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.NewsPanel = New System.Windows.Forms.Panel()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.FeedErrorPanel = New System.Windows.Forms.Panel()
-        Me.Button59 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label35 = New System.Windows.Forms.Label()
-        Me.Label34 = New System.Windows.Forms.Label()
-        Me.Label22 = New System.Windows.Forms.Label()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.LinkLabel25 = New System.Windows.Forms.LinkLabel()
-        Me.TutorialVideoPanel = New System.Windows.Forms.Panel()
-        Me.VideoContainer = New System.Windows.Forms.Panel()
-        Me.VideosPanel = New System.Windows.Forms.Panel()
-        Me.ListView2 = New System.Windows.Forms.ListView()
-        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.VideoErrorPanel = New System.Windows.Forms.Panel()
-        Me.Button17 = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Panel12 = New System.Windows.Forms.Panel()
+        Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.LinkLabel22 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel23 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel24 = New System.Windows.Forms.LinkLabel()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.ComputerInfoPanel = New System.Windows.Forms.Panel()
+        Me.ComputerOSLabel = New System.Windows.Forms.Label()
+        Me.AdminToolsBtn = New System.Windows.Forms.Button()
+        Me.ChangeNetworkConfigBtn = New System.Windows.Forms.Button()
+        Me.RefreshComputerInfoBtn = New System.Windows.Forms.Button()
+        Me.ComputerInfoTLP = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.ComputerDhcpStatusLabel = New System.Windows.Forms.Label()
+        Me.ComputerProcessorLabel = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ComputerMemoryLabel = New System.Windows.Forms.Label()
+        Me.ComputerStorageLabel = New System.Windows.Forms.Label()
+        Me.ComputerDomainStatusLabel = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ComputerDomainWorkgroupLabel = New System.Windows.Forms.Label()
+        Me.ComputerModelLabel = New System.Windows.Forms.Label()
+        Me.ComputerNameLabel = New System.Windows.Forms.Label()
+        Me.ComputerWallpaperPB = New System.Windows.Forms.PictureBox()
+        Me.ChangeComputerNameLink = New System.Windows.Forms.LinkLabel()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.RecentsLV = New System.Windows.Forms.ListView()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -518,25 +512,21 @@ Partial Class MainForm
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
-        Me.StartPanel.SuspendLayout()
-        Me.StartPanelPContainer.SuspendLayout()
-        Me.GetStartedPanel.SuspendLayout()
-        Me.GetStartedContainer.SuspendLayout()
-        Me.Panel6.SuspendLayout()
-        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.LatestNewsPanel.SuspendLayout()
-        Me.FeedContainer.SuspendLayout()
-        Me.FeedsPanel.SuspendLayout()
-        Me.FeedErrorPanel.SuspendLayout()
-        Me.Panel4.SuspendLayout()
-        Me.TutorialVideoPanel.SuspendLayout()
-        Me.VideoContainer.SuspendLayout()
-        Me.VideosPanel.SuspendLayout()
-        Me.VideoErrorPanel.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.FlowLayoutPanel2.SuspendLayout()
+        Me.InfinityStartPanel.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        Me.HelpLinksPanel.SuspendLayout()
+        Me.Panel8.SuspendLayout()
+        Me.Panel9.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.NewsPanel.SuspendLayout()
+        Me.Panel12.SuspendLayout()
+        Me.Panel7.SuspendLayout()
+        Me.ComputerInfoPanel.SuspendLayout()
+        Me.ComputerInfoTLP.SuspendLayout()
+        CType(Me.ComputerWallpaperPB, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.UpdatePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -1918,7 +1908,7 @@ Partial Class MainForm
         '
         'WelcomePanel
         '
-        Me.WelcomePanel.Controls.Add(Me.StartPanel)
+        Me.WelcomePanel.Controls.Add(Me.InfinityStartPanel)
         Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.WelcomePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.WelcomePanel.Location = New System.Drawing.Point(256, 0)
@@ -1926,267 +1916,218 @@ Partial Class MainForm
         Me.WelcomePanel.Size = New System.Drawing.Size(1008, 657)
         Me.WelcomePanel.TabIndex = 1
         '
-        'StartPanel
+        'InfinityStartPanel
         '
-        Me.StartPanel.Controls.Add(Me.StartPanelPContainer)
-        Me.StartPanel.Controls.Add(Me.Panel1)
-        Me.StartPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.StartPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StartPanel.Location = New System.Drawing.Point(0, 0)
-        Me.StartPanel.Name = "StartPanel"
-        Me.StartPanel.Size = New System.Drawing.Size(1008, 657)
-        Me.StartPanel.TabIndex = 2
+        Me.InfinityStartPanel.AutoScroll = True
+        Me.InfinityStartPanel.Controls.Add(Me.SplitContainer1)
+        Me.InfinityStartPanel.Controls.Add(Me.ComputerInfoPanel)
+        Me.InfinityStartPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.InfinityStartPanel.Location = New System.Drawing.Point(0, 0)
+        Me.InfinityStartPanel.Name = "InfinityStartPanel"
+        Me.InfinityStartPanel.Size = New System.Drawing.Size(1008, 657)
+        Me.InfinityStartPanel.TabIndex = 9
         '
-        'StartPanelPContainer
+        'SplitContainer1
         '
-        Me.StartPanelPContainer.Controls.Add(Me.GetStartedPanel)
-        Me.StartPanelPContainer.Controls.Add(Me.LatestNewsPanel)
-        Me.StartPanelPContainer.Controls.Add(Me.TutorialVideoPanel)
-        Me.StartPanelPContainer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.StartPanelPContainer.Location = New System.Drawing.Point(0, 38)
-        Me.StartPanelPContainer.Name = "StartPanelPContainer"
-        Me.StartPanelPContainer.Size = New System.Drawing.Size(1008, 619)
-        Me.StartPanelPContainer.TabIndex = 5
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.IsSplitterFixed = True
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 160)
+        Me.SplitContainer1.Name = "SplitContainer1"
         '
-        'GetStartedPanel
+        'SplitContainer1.Panel1
         '
-        Me.GetStartedPanel.Controls.Add(Me.GetStartedContainer)
-        Me.GetStartedPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GetStartedPanel.Location = New System.Drawing.Point(0, 0)
-        Me.GetStartedPanel.Name = "GetStartedPanel"
-        Me.GetStartedPanel.Size = New System.Drawing.Size(1008, 619)
-        Me.GetStartedPanel.TabIndex = 0
+        Me.SplitContainer1.Panel1.Controls.Add(Me.HelpLinksPanel)
         '
-        'GetStartedContainer
+        'SplitContainer1.Panel2
         '
-        Me.GetStartedContainer.Controls.Add(Me.Panel6)
-        Me.GetStartedContainer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GetStartedContainer.Location = New System.Drawing.Point(0, 0)
-        Me.GetStartedContainer.Name = "GetStartedContainer"
-        Me.GetStartedContainer.Size = New System.Drawing.Size(1008, 619)
-        Me.GetStartedContainer.TabIndex = 6
+        Me.SplitContainer1.Panel2.Controls.Add(Me.NewsPanel)
+        Me.SplitContainer1.Size = New System.Drawing.Size(1008, 497)
+        Me.SplitContainer1.SplitterDistance = 428
+        Me.SplitContainer1.TabIndex = 2
         '
-        'Panel6
+        'HelpLinksPanel
         '
-        Me.Panel6.Controls.Add(Me.Label8)
-        Me.Panel6.Controls.Add(Me.LinkLabel5)
-        Me.Panel6.Controls.Add(Me.LinkLabel4)
-        Me.Panel6.Controls.Add(Me.LinkLabel11)
-        Me.Panel6.Controls.Add(Me.LinkLabel8)
-        Me.Panel6.Controls.Add(Me.LinkLabel10)
-        Me.Panel6.Controls.Add(Me.LinkLabel7)
-        Me.Panel6.Controls.Add(Me.LinkLabel9)
-        Me.Panel6.Controls.Add(Me.LinkLabel6)
-        Me.Panel6.Controls.Add(Me.Label38)
-        Me.Panel6.Controls.Add(Me.Label37)
-        Me.Panel6.Controls.Add(Me.Label36)
-        Me.Panel6.Controls.Add(Me.PictureBox8)
-        Me.Panel6.Controls.Add(Me.PictureBox7)
-        Me.Panel6.Controls.Add(Me.PictureBox6)
-        Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel6.Location = New System.Drawing.Point(0, 0)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(1008, 619)
-        Me.Panel6.TabIndex = 0
+        Me.HelpLinksPanel.Controls.Add(Me.Panel8)
+        Me.HelpLinksPanel.Controls.Add(Me.Panel5)
+        Me.HelpLinksPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpLinksPanel.Location = New System.Drawing.Point(0, 0)
+        Me.HelpLinksPanel.Name = "HelpLinksPanel"
+        Me.HelpLinksPanel.Size = New System.Drawing.Size(428, 497)
+        Me.HelpLinksPanel.TabIndex = 1
         '
-        'Label8
+        'Panel8
         '
-        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Panel8.Controls.Add(Me.Panel9)
+        Me.Panel8.Controls.Add(Me.ListView2)
+        Me.Panel8.Controls.Add(Me.Label12)
+        Me.Panel8.Controls.Add(Me.LinkLabel30)
+        Me.Panel8.Controls.Add(Me.LinkLabel29)
+        Me.Panel8.Controls.Add(Me.LinkLabel28)
+        Me.Panel8.Controls.Add(Me.LinkLabel27)
+        Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel8.Location = New System.Drawing.Point(0, 32)
+        Me.Panel8.Name = "Panel8"
+        Me.Panel8.Size = New System.Drawing.Size(428, 465)
+        Me.Panel8.TabIndex = 6
+        '
+        'Panel9
+        '
+        Me.Panel9.Controls.Add(Me.LinkLabel32)
+        Me.Panel9.Controls.Add(Me.LinkLabel31)
+        Me.Panel9.Controls.Add(Me.Label6)
+        Me.Panel9.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel9.Location = New System.Drawing.Point(0, 433)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Size = New System.Drawing.Size(428, 32)
+        Me.Panel9.TabIndex = 2
+        Me.Panel9.Visible = False
+        '
+        'LinkLabel32
+        '
+        Me.LinkLabel32.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel32.AutoSize = True
+        Me.LinkLabel32.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel32.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel32.Location = New System.Drawing.Point(381, 9)
+        Me.LinkLabel32.Name = "LinkLabel32"
+        Me.LinkLabel32.Size = New System.Drawing.Size(34, 15)
+        Me.LinkLabel32.TabIndex = 1
+        Me.LinkLabel32.TabStop = True
+        Me.LinkLabel32.Text = "Retry"
+        '
+        'LinkLabel31
+        '
+        Me.LinkLabel31.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel31.AutoSize = True
+        Me.LinkLabel31.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel31.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel31.Location = New System.Drawing.Point(308, 9)
+        Me.LinkLabel31.Name = "LinkLabel31"
+        Me.LinkLabel31.Size = New System.Drawing.Size(67, 15)
+        Me.LinkLabel31.TabIndex = 1
+        Me.LinkLabel31.TabStop = True
+        Me.LinkLabel31.Text = "Learn more"
+        '
+        'Label6
+        '
+        Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(6, 8)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(193, 15)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Video content could not be loaded."
+        '
+        'ListView2
+        '
+        Me.ListView2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Location = New System.Drawing.Point(74, 40)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(918, 35)
-        Me.Label8.TabIndex = 5
-        Me.Label8.Text = "This program is not complete and you may run into issues. If that happens, don't " & _
-    "hesitate to send us feedback"
+        Me.ListView2.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4})
+        Me.ListView2.FullRowSelect = True
+        Me.ListView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.ListView2.Location = New System.Drawing.Point(20, 140)
+        Me.ListView2.MultiSelect = False
+        Me.ListView2.Name = "ListView2"
+        Me.ListView2.Size = New System.Drawing.Size(388, 278)
+        Me.ListView2.TabIndex = 0
+        Me.ListView2.UseCompatibleStateImageBehavior = False
+        Me.ListView2.View = System.Windows.Forms.View.Details
         '
-        'LinkLabel5
+        'ColumnHeader4
         '
-        Me.LinkLabel5.AutoSize = True
-        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel5.Location = New System.Drawing.Point(73, 262)
-        Me.LinkLabel5.Name = "LinkLabel5"
-        Me.LinkLabel5.Size = New System.Drawing.Size(195, 15)
-        Me.LinkLabel5.TabIndex = 4
-        Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = "Managing installations on any drive"
+        Me.ColumnHeader4.Text = "Name"
+        Me.ColumnHeader4.Width = 384
         '
-        'LinkLabel4
+        'Label12
         '
-        Me.LinkLabel4.AutoSize = True
-        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel4.Location = New System.Drawing.Point(73, 244)
-        Me.LinkLabel4.Name = "LinkLabel4"
-        Me.LinkLabel4.Size = New System.Drawing.Size(183, 15)
-        Me.LinkLabel4.TabIndex = 4
-        Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = "Managing your active installation"
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(16, 116)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(155, 17)
+        Me.Label12.TabIndex = 1
+        Me.Label12.Text = "Learn by watching videos"
         '
-        'LinkLabel11
+        'LinkLabel30
         '
-        Me.LinkLabel11.AutoSize = True
-        Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel11.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel11.Location = New System.Drawing.Point(73, 226)
-        Me.LinkLabel11.Name = "LinkLabel11"
-        Me.LinkLabel11.Size = New System.Drawing.Size(144, 15)
-        Me.LinkLabel11.TabIndex = 4
-        Me.LinkLabel11.TabStop = True
-        Me.LinkLabel11.Text = "Saving image information"
+        Me.LinkLabel30.AutoSize = True
+        Me.LinkLabel30.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel30.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel30.Location = New System.Drawing.Point(16, 86)
+        Me.LinkLabel30.Name = "LinkLabel30"
+        Me.LinkLabel30.Size = New System.Drawing.Size(223, 15)
+        Me.LinkLabel30.TabIndex = 0
+        Me.LinkLabel30.TabStop = True
+        Me.LinkLabel30.Text = "Managing external Windows installations"
         '
-        'LinkLabel8
+        'LinkLabel29
         '
-        Me.LinkLabel8.AutoSize = True
-        Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel8.Location = New System.Drawing.Point(73, 143)
-        Me.LinkLabel8.Name = "LinkLabel8"
-        Me.LinkLabel8.Size = New System.Drawing.Size(156, 15)
-        Me.LinkLabel8.TabIndex = 4
-        Me.LinkLabel8.TabStop = True
-        Me.LinkLabel8.Text = "Coming from other utilities?"
+        Me.LinkLabel29.AutoSize = True
+        Me.LinkLabel29.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel29.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel29.Location = New System.Drawing.Point(16, 62)
+        Me.LinkLabel29.Name = "LinkLabel29"
+        Me.LinkLabel29.Size = New System.Drawing.Size(190, 15)
+        Me.LinkLabel29.TabIndex = 0
+        Me.LinkLabel29.TabStop = True
+        Me.LinkLabel29.Text = "Managing your current installation"
         '
-        'LinkLabel10
+        'LinkLabel28
         '
-        Me.LinkLabel10.AutoSize = True
-        Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel10.Location = New System.Drawing.Point(73, 208)
-        Me.LinkLabel10.Name = "LinkLabel10"
-        Me.LinkLabel10.Size = New System.Drawing.Size(148, 15)
-        Me.LinkLabel10.TabIndex = 4
-        Me.LinkLabel10.TabStop = True
-        Me.LinkLabel10.Text = "Getting image information"
+        Me.LinkLabel28.AutoSize = True
+        Me.LinkLabel28.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel28.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel28.Location = New System.Drawing.Point(16, 39)
+        Me.LinkLabel28.Name = "LinkLabel28"
+        Me.LinkLabel28.Size = New System.Drawing.Size(258, 15)
+        Me.LinkLabel28.TabIndex = 0
+        Me.LinkLabel28.TabStop = True
+        Me.LinkLabel28.Text = "Get started with DISMTools and image servicing"
         '
-        'LinkLabel7
+        'LinkLabel27
         '
-        Me.LinkLabel7.AutoSize = True
-        Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel7.Location = New System.Drawing.Point(73, 125)
-        Me.LinkLabel7.Name = "LinkLabel7"
-        Me.LinkLabel7.Size = New System.Drawing.Size(170, 15)
-        Me.LinkLabel7.TabIndex = 4
-        Me.LinkLabel7.TabStop = True
-        Me.LinkLabel7.Text = "Getting started with DISMTools"
+        Me.LinkLabel27.AutoSize = True
+        Me.LinkLabel27.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel27.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel27.Location = New System.Drawing.Point(16, 16)
+        Me.LinkLabel27.Name = "LinkLabel27"
+        Me.LinkLabel27.Size = New System.Drawing.Size(172, 15)
+        Me.LinkLabel27.TabIndex = 0
+        Me.LinkLabel27.TabStop = True
+        Me.LinkLabel27.Text = "Learn what's new in this release"
         '
-        'LinkLabel9
+        'Panel5
         '
-        Me.LinkLabel9.AutoSize = True
-        Me.LinkLabel9.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel9.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel9.Location = New System.Drawing.Point(73, 190)
-        Me.LinkLabel9.Name = "LinkLabel9"
-        Me.LinkLabel9.Size = New System.Drawing.Size(190, 15)
-        Me.LinkLabel9.TabIndex = 4
-        Me.LinkLabel9.TabStop = True
-        Me.LinkLabel9.Text = "Tips for performing great servicing"
+        Me.Panel5.Controls.Add(Me.Label4)
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel5.Location = New System.Drawing.Point(0, 0)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(428, 32)
+        Me.Panel5.TabIndex = 2
         '
-        'LinkLabel6
+        'Label4
         '
-        Me.LinkLabel6.AutoSize = True
-        Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel6.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel6.Location = New System.Drawing.Point(73, 107)
-        Me.LinkLabel6.Name = "LinkLabel6"
-        Me.LinkLabel6.Size = New System.Drawing.Size(197, 15)
-        Me.LinkLabel6.TabIndex = 4
-        Me.LinkLabel6.TabStop = True
-        Me.LinkLabel6.Text = "Getting started with image servicing"
+        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(6, 6)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(169, 21)
+        Me.Label4.TabIndex = 1
+        Me.Label4.Text = "Explore and get started"
         '
-        'Label38
+        'NewsPanel
         '
-        Me.Label38.AutoSize = True
-        Me.Label38.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label38.Location = New System.Drawing.Point(72, 167)
-        Me.Label38.Name = "Label38"
-        Me.Label38.Size = New System.Drawing.Size(157, 20)
-        Me.Label38.TabIndex = 3
-        Me.Label38.Text = "Performing operations"
-        '
-        'Label37
-        '
-        Me.Label37.AutoSize = True
-        Me.Label37.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label37.Location = New System.Drawing.Point(72, 84)
-        Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(108, 20)
-        Me.Label37.TabIndex = 3
-        Me.Label37.Text = "Getting started"
-        '
-        'Label36
-        '
-        Me.Label36.AutoSize = True
-        Me.Label36.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label36.Location = New System.Drawing.Point(72, 16)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(154, 20)
-        Me.Label36.TabIndex = 3
-        Me.Label36.Text = "This is beta software"
-        '
-        'PictureBox8
-        '
-        Me.PictureBox8.Image = Global.DISMTools.My.Resources.Resources.imgoperation
-        Me.PictureBox8.Location = New System.Drawing.Point(16, 167)
-        Me.PictureBox8.Name = "PictureBox8"
-        Me.PictureBox8.Size = New System.Drawing.Size(48, 48)
-        Me.PictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox8.TabIndex = 0
-        Me.PictureBox8.TabStop = False
-        '
-        'PictureBox7
-        '
-        Me.PictureBox7.Image = Global.DISMTools.My.Resources.Resources.getting_started
-        Me.PictureBox7.Location = New System.Drawing.Point(16, 84)
-        Me.PictureBox7.Name = "PictureBox7"
-        Me.PictureBox7.Size = New System.Drawing.Size(48, 48)
-        Me.PictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox7.TabIndex = 0
-        Me.PictureBox7.TabStop = False
-        '
-        'PictureBox6
-        '
-        Me.PictureBox6.Image = Global.DISMTools.My.Resources.Resources.ver_stability
-        Me.PictureBox6.Location = New System.Drawing.Point(16, 16)
-        Me.PictureBox6.Name = "PictureBox6"
-        Me.PictureBox6.Size = New System.Drawing.Size(48, 48)
-        Me.PictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox6.TabIndex = 0
-        Me.PictureBox6.TabStop = False
-        '
-        'LatestNewsPanel
-        '
-        Me.LatestNewsPanel.Controls.Add(Me.FeedContainer)
-        Me.LatestNewsPanel.Controls.Add(Me.Panel4)
-        Me.LatestNewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LatestNewsPanel.Location = New System.Drawing.Point(0, 0)
-        Me.LatestNewsPanel.Name = "LatestNewsPanel"
-        Me.LatestNewsPanel.Size = New System.Drawing.Size(1008, 619)
-        Me.LatestNewsPanel.TabIndex = 0
-        Me.LatestNewsPanel.Visible = False
-        '
-        'FeedContainer
-        '
-        Me.FeedContainer.Controls.Add(Me.FeedsPanel)
-        Me.FeedContainer.Controls.Add(Me.FeedErrorPanel)
-        Me.FeedContainer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FeedContainer.Location = New System.Drawing.Point(0, 0)
-        Me.FeedContainer.Name = "FeedContainer"
-        Me.FeedContainer.Size = New System.Drawing.Size(1008, 571)
-        Me.FeedContainer.TabIndex = 1
-        '
-        'FeedsPanel
-        '
-        Me.FeedsPanel.Controls.Add(Me.ListView1)
-        Me.FeedsPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FeedsPanel.Location = New System.Drawing.Point(0, 0)
-        Me.FeedsPanel.Name = "FeedsPanel"
-        Me.FeedsPanel.Padding = New System.Windows.Forms.Padding(8)
-        Me.FeedsPanel.Size = New System.Drawing.Size(1008, 571)
-        Me.FeedsPanel.TabIndex = 1
+        Me.NewsPanel.Controls.Add(Me.ListView1)
+        Me.NewsPanel.Controls.Add(Me.Panel12)
+        Me.NewsPanel.Controls.Add(Me.Panel7)
+        Me.NewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NewsPanel.Name = "NewsPanel"
+        Me.NewsPanel.Size = New System.Drawing.Size(576, 497)
+        Me.NewsPanel.TabIndex = 1
         '
         'ListView1
         '
@@ -2195,10 +2136,10 @@ Partial Class MainForm
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListView1.FullRowSelect = True
         Me.ListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.ListView1.Location = New System.Drawing.Point(8, 8)
+        Me.ListView1.Location = New System.Drawing.Point(0, 32)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(992, 555)
+        Me.ListView1.Size = New System.Drawing.Size(576, 433)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -2213,301 +2154,297 @@ Partial Class MainForm
         Me.ColumnHeader2.Text = "Date"
         Me.ColumnHeader2.Width = 320
         '
-        'FeedErrorPanel
+        'Panel12
         '
-        Me.FeedErrorPanel.Controls.Add(Me.Button59)
-        Me.FeedErrorPanel.Controls.Add(Me.TextBox1)
-        Me.FeedErrorPanel.Controls.Add(Me.Label35)
-        Me.FeedErrorPanel.Controls.Add(Me.Label34)
-        Me.FeedErrorPanel.Controls.Add(Me.Label22)
-        Me.FeedErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FeedErrorPanel.Location = New System.Drawing.Point(0, 0)
-        Me.FeedErrorPanel.Name = "FeedErrorPanel"
-        Me.FeedErrorPanel.Size = New System.Drawing.Size(1008, 571)
-        Me.FeedErrorPanel.TabIndex = 0
+        Me.Panel12.Controls.Add(Me.LinkLabel33)
+        Me.Panel12.Controls.Add(Me.LinkLabel34)
+        Me.Panel12.Controls.Add(Me.Label7)
+        Me.Panel12.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel12.Location = New System.Drawing.Point(0, 465)
+        Me.Panel12.Name = "Panel12"
+        Me.Panel12.Size = New System.Drawing.Size(576, 32)
+        Me.Panel12.TabIndex = 3
+        Me.Panel12.Visible = False
         '
-        'Button59
+        'LinkLabel33
         '
-        Me.Button59.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button59.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button59.Location = New System.Drawing.Point(880, 337)
-        Me.Button59.Name = "Button59"
-        Me.Button59.Size = New System.Drawing.Size(114, 23)
-        Me.Button59.TabIndex = 2
-        Me.Button59.Text = "Try again"
-        Me.Button59.UseVisualStyleBackColor = True
+        Me.LinkLabel33.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel33.AutoSize = True
+        Me.LinkLabel33.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel33.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel33.Location = New System.Drawing.Point(529, 9)
+        Me.LinkLabel33.Name = "LinkLabel33"
+        Me.LinkLabel33.Size = New System.Drawing.Size(34, 15)
+        Me.LinkLabel33.TabIndex = 1
+        Me.LinkLabel33.TabStop = True
+        Me.LinkLabel33.Text = "Retry"
         '
-        'TextBox1
+        'LinkLabel34
         '
-        Me.TextBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(18, 78)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ReadOnly = True
-        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(972, 252)
-        Me.TextBox1.TabIndex = 1
-        '
-        'Label35
-        '
-        Me.Label35.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label35.AutoEllipsis = True
-        Me.Label35.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label35.Location = New System.Drawing.Point(14, 363)
-        Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(978, 49)
-        Me.Label35.TabIndex = 0
-        Me.Label35.Text = "Try connecting your system to the network. If your system is connected to the net" & _
-    "work but this error still appears, check whether you can access websites."
-        '
-        'Label34
-        '
-        Me.Label34.AutoSize = True
-        Me.Label34.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label34.Location = New System.Drawing.Point(14, 55)
-        Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(101, 15)
-        Me.Label34.TabIndex = 0
-        Me.Label34.Text = "Error information:"
-        '
-        'Label22
-        '
-        Me.Label22.AutoSize = True
-        Me.Label22.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label22.Location = New System.Drawing.Point(12, 12)
-        Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(305, 30)
-        Me.Label22.TabIndex = 0
-        Me.Label22.Text = "We couldn't get the latest news"
-        '
-        'Panel4
-        '
-        Me.Panel4.Controls.Add(Me.Label9)
-        Me.Panel4.Controls.Add(Me.LinkLabel25)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 571)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1008, 48)
-        Me.Panel4.TabIndex = 1
-        '
-        'Label9
-        '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label9.Location = New System.Drawing.Point(0, 0)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Padding = New System.Windows.Forms.Padding(4, 4, 0, 0)
-        Me.Label9.Size = New System.Drawing.Size(880, 48)
-        Me.Label9.TabIndex = 0
-        Me.Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My " & _
-    "Digital Life forums. An account is required to view most content."
-        '
-        'LinkLabel25
-        '
-        Me.LinkLabel25.AutoEllipsis = True
-        Me.LinkLabel25.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LinkLabel25.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel25.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel25.Location = New System.Drawing.Point(880, 0)
-        Me.LinkLabel25.Name = "LinkLabel25"
-        Me.LinkLabel25.Size = New System.Drawing.Size(128, 48)
-        Me.LinkLabel25.TabIndex = 1
-        Me.LinkLabel25.TabStop = True
-        Me.LinkLabel25.Text = "Visit"
-        Me.LinkLabel25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'TutorialVideoPanel
-        '
-        Me.TutorialVideoPanel.Controls.Add(Me.VideoContainer)
-        Me.TutorialVideoPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TutorialVideoPanel.Location = New System.Drawing.Point(0, 0)
-        Me.TutorialVideoPanel.Name = "TutorialVideoPanel"
-        Me.TutorialVideoPanel.Size = New System.Drawing.Size(1008, 619)
-        Me.TutorialVideoPanel.TabIndex = 0
-        Me.TutorialVideoPanel.Visible = False
-        '
-        'VideoContainer
-        '
-        Me.VideoContainer.Controls.Add(Me.VideosPanel)
-        Me.VideoContainer.Controls.Add(Me.VideoErrorPanel)
-        Me.VideoContainer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VideoContainer.Location = New System.Drawing.Point(0, 0)
-        Me.VideoContainer.Name = "VideoContainer"
-        Me.VideoContainer.Size = New System.Drawing.Size(1008, 619)
-        Me.VideoContainer.TabIndex = 2
-        '
-        'VideosPanel
-        '
-        Me.VideosPanel.Controls.Add(Me.ListView2)
-        Me.VideosPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VideosPanel.Location = New System.Drawing.Point(0, 0)
-        Me.VideosPanel.Name = "VideosPanel"
-        Me.VideosPanel.Padding = New System.Windows.Forms.Padding(8)
-        Me.VideosPanel.Size = New System.Drawing.Size(1008, 619)
-        Me.VideosPanel.TabIndex = 1
-        '
-        'ListView2
-        '
-        Me.ListView2.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4, Me.ColumnHeader5})
-        Me.ListView2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListView2.FullRowSelect = True
-        Me.ListView2.Location = New System.Drawing.Point(8, 8)
-        Me.ListView2.MultiSelect = False
-        Me.ListView2.Name = "ListView2"
-        Me.ListView2.Size = New System.Drawing.Size(992, 603)
-        Me.ListView2.TabIndex = 0
-        Me.ListView2.UseCompatibleStateImageBehavior = False
-        Me.ListView2.View = System.Windows.Forms.View.Details
-        '
-        'ColumnHeader4
-        '
-        Me.ColumnHeader4.Text = "Name"
-        Me.ColumnHeader4.Width = 375
-        '
-        'ColumnHeader5
-        '
-        Me.ColumnHeader5.Text = "Description"
-        Me.ColumnHeader5.Width = 592
-        '
-        'VideoErrorPanel
-        '
-        Me.VideoErrorPanel.Controls.Add(Me.Button17)
-        Me.VideoErrorPanel.Controls.Add(Me.TextBox2)
-        Me.VideoErrorPanel.Controls.Add(Me.Label6)
-        Me.VideoErrorPanel.Controls.Add(Me.Label7)
-        Me.VideoErrorPanel.Controls.Add(Me.Label11)
-        Me.VideoErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VideoErrorPanel.Location = New System.Drawing.Point(0, 0)
-        Me.VideoErrorPanel.Name = "VideoErrorPanel"
-        Me.VideoErrorPanel.Size = New System.Drawing.Size(1008, 619)
-        Me.VideoErrorPanel.TabIndex = 0
-        '
-        'Button17
-        '
-        Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button17.Location = New System.Drawing.Point(880, 385)
-        Me.Button17.Name = "Button17"
-        Me.Button17.Size = New System.Drawing.Size(114, 23)
-        Me.Button17.TabIndex = 2
-        Me.Button17.Text = "Try again"
-        Me.Button17.UseVisualStyleBackColor = True
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(18, 78)
-        Me.TextBox2.Multiline = True
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.ReadOnly = True
-        Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox2.Size = New System.Drawing.Size(972, 300)
-        Me.TextBox2.TabIndex = 1
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label6.Location = New System.Drawing.Point(14, 411)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(978, 49)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Try connecting your system to the network. If your system is connected to the net" & _
-    "work but this error still appears, check whether you can access websites."
+        Me.LinkLabel34.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel34.AutoSize = True
+        Me.LinkLabel34.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel34.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel34.Location = New System.Drawing.Point(456, 9)
+        Me.LinkLabel34.Name = "LinkLabel34"
+        Me.LinkLabel34.Size = New System.Drawing.Size(67, 15)
+        Me.LinkLabel34.TabIndex = 1
+        Me.LinkLabel34.TabStop = True
+        Me.LinkLabel34.Text = "Learn more"
         '
         'Label7
         '
+        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label7.Location = New System.Drawing.Point(14, 55)
+        Me.Label7.Location = New System.Drawing.Point(6, 8)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(101, 15)
+        Me.Label7.Size = New System.Drawing.Size(195, 15)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Error information:"
+        Me.Label7.Text = "The news feed could not be loaded."
         '
-        'Label11
+        'Panel7
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(12, 12)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(317, 30)
-        Me.Label11.TabIndex = 0
-        Me.Label11.Text = "We couldn't get the latest videos"
+        Me.Panel7.Controls.Add(Me.Label5)
+        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel7.Location = New System.Drawing.Point(0, 0)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(576, 32)
+        Me.Panel7.TabIndex = 2
         '
-        'Panel1
+        'Label5
         '
-        Me.Panel1.Controls.Add(Me.FlowLayoutPanel2)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1008, 38)
-        Me.Panel1.TabIndex = 4
+        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(6, 6)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(117, 21)
+        Me.Label5.TabIndex = 1
+        Me.Label5.Text = "Stay up-to-date"
         '
-        'FlowLayoutPanel2
+        'ComputerInfoPanel
         '
-        Me.FlowLayoutPanel2.Controls.Add(Me.LinkLabel22)
-        Me.FlowLayoutPanel2.Controls.Add(Me.LinkLabel23)
-        Me.FlowLayoutPanel2.Controls.Add(Me.LinkLabel24)
-        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Padding = New System.Windows.Forms.Padding(10, 12, 0, 0)
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(1008, 38)
-        Me.FlowLayoutPanel2.TabIndex = 1
+        Me.ComputerInfoPanel.Controls.Add(Me.ComputerOSLabel)
+        Me.ComputerInfoPanel.Controls.Add(Me.AdminToolsBtn)
+        Me.ComputerInfoPanel.Controls.Add(Me.ChangeNetworkConfigBtn)
+        Me.ComputerInfoPanel.Controls.Add(Me.RefreshComputerInfoBtn)
+        Me.ComputerInfoPanel.Controls.Add(Me.ComputerInfoTLP)
+        Me.ComputerInfoPanel.Controls.Add(Me.ComputerModelLabel)
+        Me.ComputerInfoPanel.Controls.Add(Me.ComputerNameLabel)
+        Me.ComputerInfoPanel.Controls.Add(Me.ComputerWallpaperPB)
+        Me.ComputerInfoPanel.Controls.Add(Me.ChangeComputerNameLink)
+        Me.ComputerInfoPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ComputerInfoPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ComputerInfoPanel.Name = "ComputerInfoPanel"
+        Me.ComputerInfoPanel.Size = New System.Drawing.Size(1008, 160)
+        Me.ComputerInfoPanel.TabIndex = 0
         '
-        'LinkLabel22
+        'ComputerOSLabel
         '
-        Me.LinkLabel22.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.LinkLabel22.AutoSize = True
-        Me.LinkLabel22.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel22.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel22.LinkColor = System.Drawing.SystemColors.ControlText
-        Me.LinkLabel22.Location = New System.Drawing.Point(13, 12)
-        Me.LinkLabel22.Name = "LinkLabel22"
-        Me.LinkLabel22.Size = New System.Drawing.Size(64, 15)
-        Me.LinkLabel22.TabIndex = 0
-        Me.LinkLabel22.TabStop = True
-        Me.LinkLabel22.Text = "WELCOME"
+        Me.ComputerOSLabel.AutoEllipsis = True
+        Me.ComputerOSLabel.AutoSize = True
+        Me.ComputerOSLabel.Location = New System.Drawing.Point(182, 96)
+        Me.ComputerOSLabel.Name = "ComputerOSLabel"
+        Me.ComputerOSLabel.Size = New System.Drawing.Size(22, 15)
+        Me.ComputerOSLabel.TabIndex = 7
+        Me.ComputerOSLabel.Text = "OS"
+        Me.ComputerOSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'LinkLabel23
+        'AdminToolsBtn
         '
-        Me.LinkLabel23.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.LinkLabel23.AutoSize = True
-        Me.LinkLabel23.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel23.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel23.LinkColor = System.Drawing.Color.FromArgb(CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer))
-        Me.LinkLabel23.Location = New System.Drawing.Point(83, 12)
-        Me.LinkLabel23.Name = "LinkLabel23"
-        Me.LinkLabel23.Size = New System.Drawing.Size(84, 15)
-        Me.LinkLabel23.TabIndex = 0
-        Me.LinkLabel23.TabStop = True
-        Me.LinkLabel23.Text = "LATEST NEWS"
+        Me.AdminToolsBtn.Image = Global.DISMTools.My.Resources.Resources.infinityhome_admin_tools
+        Me.AdminToolsBtn.Location = New System.Drawing.Point(476, 121)
+        Me.AdminToolsBtn.Name = "AdminToolsBtn"
+        Me.AdminToolsBtn.Size = New System.Drawing.Size(28, 28)
+        Me.AdminToolsBtn.TabIndex = 6
+        Me.AdminToolsBtn.UseVisualStyleBackColor = True
         '
-        'LinkLabel24
+        'ChangeNetworkConfigBtn
         '
-        Me.LinkLabel24.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.LinkLabel24.AutoSize = True
-        Me.LinkLabel24.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel24.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel24.LinkColor = System.Drawing.Color.FromArgb(CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer))
-        Me.LinkLabel24.Location = New System.Drawing.Point(173, 12)
-        Me.LinkLabel24.Name = "LinkLabel24"
-        Me.LinkLabel24.Size = New System.Drawing.Size(111, 15)
-        Me.LinkLabel24.TabIndex = 0
-        Me.LinkLabel24.TabStop = True
-        Me.LinkLabel24.Text = "TUTORIAL VIDEOS"
+        Me.ChangeNetworkConfigBtn.Image = Global.DISMTools.My.Resources.Resources.infinityhome_change_network_config
+        Me.ChangeNetworkConfigBtn.Location = New System.Drawing.Point(442, 121)
+        Me.ChangeNetworkConfigBtn.Name = "ChangeNetworkConfigBtn"
+        Me.ChangeNetworkConfigBtn.Size = New System.Drawing.Size(28, 28)
+        Me.ChangeNetworkConfigBtn.TabIndex = 6
+        Me.ChangeNetworkConfigBtn.UseVisualStyleBackColor = True
+        '
+        'RefreshComputerInfoBtn
+        '
+        Me.RefreshComputerInfoBtn.Image = Global.DISMTools.My.Resources.Resources.refresh_glyph
+        Me.RefreshComputerInfoBtn.Location = New System.Drawing.Point(408, 121)
+        Me.RefreshComputerInfoBtn.Name = "RefreshComputerInfoBtn"
+        Me.RefreshComputerInfoBtn.Size = New System.Drawing.Size(28, 28)
+        Me.RefreshComputerInfoBtn.TabIndex = 6
+        Me.RefreshComputerInfoBtn.UseVisualStyleBackColor = True
+        '
+        'ComputerInfoTLP
+        '
+        Me.ComputerInfoTLP.ColumnCount = 2
+        Me.ComputerInfoTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.ComputerInfoTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.ComputerInfoTLP.Controls.Add(Me.Label3, 0, 5)
+        Me.ComputerInfoTLP.Controls.Add(Me.ComputerDhcpStatusLabel, 1, 5)
+        Me.ComputerInfoTLP.Controls.Add(Me.ComputerProcessorLabel, 0, 0)
+        Me.ComputerInfoTLP.Controls.Add(Me.Label1, 0, 3)
+        Me.ComputerInfoTLP.Controls.Add(Me.ComputerMemoryLabel, 0, 1)
+        Me.ComputerInfoTLP.Controls.Add(Me.ComputerStorageLabel, 0, 2)
+        Me.ComputerInfoTLP.Controls.Add(Me.ComputerDomainStatusLabel, 1, 3)
+        Me.ComputerInfoTLP.Controls.Add(Me.Label2, 0, 4)
+        Me.ComputerInfoTLP.Controls.Add(Me.ComputerDomainWorkgroupLabel, 1, 4)
+        Me.ComputerInfoTLP.Location = New System.Drawing.Point(517, 10)
+        Me.ComputerInfoTLP.Name = "ComputerInfoTLP"
+        Me.ComputerInfoTLP.RowCount = 6
+        Me.ComputerInfoTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.ComputerInfoTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.ComputerInfoTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.ComputerInfoTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.ComputerInfoTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.ComputerInfoTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.ComputerInfoTLP.Size = New System.Drawing.Size(479, 139)
+        Me.ComputerInfoTLP.TabIndex = 3
+        '
+        'Label3
+        '
+        Me.Label3.AutoEllipsis = True
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Location = New System.Drawing.Point(3, 115)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(233, 24)
+        Me.Label3.TabIndex = 3
+        Me.Label3.Text = "IP Address Configuration:"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerDhcpStatusLabel
+        '
+        Me.ComputerDhcpStatusLabel.AutoEllipsis = True
+        Me.ComputerDhcpStatusLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComputerDhcpStatusLabel.Location = New System.Drawing.Point(242, 115)
+        Me.ComputerDhcpStatusLabel.Name = "ComputerDhcpStatusLabel"
+        Me.ComputerDhcpStatusLabel.Size = New System.Drawing.Size(234, 24)
+        Me.ComputerDhcpStatusLabel.TabIndex = 4
+        Me.ComputerDhcpStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerProcessorLabel
+        '
+        Me.ComputerProcessorLabel.AutoEllipsis = True
+        Me.ComputerInfoTLP.SetColumnSpan(Me.ComputerProcessorLabel, 2)
+        Me.ComputerProcessorLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComputerProcessorLabel.Location = New System.Drawing.Point(3, 0)
+        Me.ComputerProcessorLabel.Name = "ComputerProcessorLabel"
+        Me.ComputerProcessorLabel.Size = New System.Drawing.Size(473, 23)
+        Me.ComputerProcessorLabel.TabIndex = 2
+        Me.ComputerProcessorLabel.Text = "Processor"
+        Me.ComputerProcessorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label1
+        '
+        Me.Label1.AutoEllipsis = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(3, 69)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(233, 23)
+        Me.Label1.TabIndex = 2
+        Me.Label1.Text = "Domain Membership:"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerMemoryLabel
+        '
+        Me.ComputerMemoryLabel.AutoEllipsis = True
+        Me.ComputerInfoTLP.SetColumnSpan(Me.ComputerMemoryLabel, 2)
+        Me.ComputerMemoryLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComputerMemoryLabel.Location = New System.Drawing.Point(3, 23)
+        Me.ComputerMemoryLabel.Name = "ComputerMemoryLabel"
+        Me.ComputerMemoryLabel.Size = New System.Drawing.Size(473, 23)
+        Me.ComputerMemoryLabel.TabIndex = 2
+        Me.ComputerMemoryLabel.Text = "Memory"
+        Me.ComputerMemoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerStorageLabel
+        '
+        Me.ComputerStorageLabel.AutoEllipsis = True
+        Me.ComputerInfoTLP.SetColumnSpan(Me.ComputerStorageLabel, 2)
+        Me.ComputerStorageLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComputerStorageLabel.Location = New System.Drawing.Point(3, 46)
+        Me.ComputerStorageLabel.Name = "ComputerStorageLabel"
+        Me.ComputerStorageLabel.Size = New System.Drawing.Size(473, 23)
+        Me.ComputerStorageLabel.TabIndex = 2
+        Me.ComputerStorageLabel.Text = "Storage"
+        Me.ComputerStorageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerDomainStatusLabel
+        '
+        Me.ComputerDomainStatusLabel.AutoEllipsis = True
+        Me.ComputerDomainStatusLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComputerDomainStatusLabel.Location = New System.Drawing.Point(242, 69)
+        Me.ComputerDomainStatusLabel.Name = "ComputerDomainStatusLabel"
+        Me.ComputerDomainStatusLabel.Size = New System.Drawing.Size(234, 23)
+        Me.ComputerDomainStatusLabel.TabIndex = 2
+        Me.ComputerDomainStatusLabel.Text = "Domain Status"
+        Me.ComputerDomainStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label2
+        '
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label2.Location = New System.Drawing.Point(3, 92)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(233, 23)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "Workgroup/Domain:"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerDomainWorkgroupLabel
+        '
+        Me.ComputerDomainWorkgroupLabel.AutoEllipsis = True
+        Me.ComputerDomainWorkgroupLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComputerDomainWorkgroupLabel.Location = New System.Drawing.Point(242, 92)
+        Me.ComputerDomainWorkgroupLabel.Name = "ComputerDomainWorkgroupLabel"
+        Me.ComputerDomainWorkgroupLabel.Size = New System.Drawing.Size(234, 23)
+        Me.ComputerDomainWorkgroupLabel.TabIndex = 2
+        Me.ComputerDomainWorkgroupLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComputerModelLabel
+        '
+        Me.ComputerModelLabel.AutoSize = True
+        Me.ComputerModelLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComputerModelLabel.Location = New System.Drawing.Point(182, 46)
+        Me.ComputerModelLabel.Name = "ComputerModelLabel"
+        Me.ComputerModelLabel.Size = New System.Drawing.Size(128, 21)
+        Me.ComputerModelLabel.TabIndex = 1
+        Me.ComputerModelLabel.Text = "Computer Model"
+        '
+        'ComputerNameLabel
+        '
+        Me.ComputerNameLabel.AutoSize = True
+        Me.ComputerNameLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComputerNameLabel.Location = New System.Drawing.Point(180, 12)
+        Me.ComputerNameLabel.Name = "ComputerNameLabel"
+        Me.ComputerNameLabel.Size = New System.Drawing.Size(167, 30)
+        Me.ComputerNameLabel.TabIndex = 1
+        Me.ComputerNameLabel.Text = "Computer Name"
+        '
+        'ComputerWallpaperPB
+        '
+        Me.ComputerWallpaperPB.BackColor = System.Drawing.Color.Black
+        Me.ComputerWallpaperPB.Location = New System.Drawing.Point(20, 20)
+        Me.ComputerWallpaperPB.Name = "ComputerWallpaperPB"
+        Me.ComputerWallpaperPB.Size = New System.Drawing.Size(150, 96)
+        Me.ComputerWallpaperPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.ComputerWallpaperPB.TabIndex = 0
+        Me.ComputerWallpaperPB.TabStop = False
+        '
+        'ChangeComputerNameLink
+        '
+        Me.ChangeComputerNameLink.AutoSize = True
+        Me.ChangeComputerNameLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.ChangeComputerNameLink.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.ChangeComputerNameLink.Location = New System.Drawing.Point(182, 74)
+        Me.ChangeComputerNameLink.Name = "ChangeComputerNameLink"
+        Me.ChangeComputerNameLink.Size = New System.Drawing.Size(50, 15)
+        Me.ChangeComputerNameLink.TabIndex = 5
+        Me.ChangeComputerNameLink.TabStop = True
+        Me.ChangeComputerNameLink.Text = "Rename"
+        Me.ChangeComputerNameLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'SidePanel
         '
@@ -2672,11 +2609,11 @@ Partial Class MainForm
         '
         'PictureBox5
         '
-        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(32, 14)
+        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.logo_aboutdlg_light
+        Me.PictureBox5.Location = New System.Drawing.Point(18, 0)
         Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(192, 36)
-        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox5.Size = New System.Drawing.Size(220, 64)
+        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox5.TabIndex = 7
         Me.PictureBox5.TabStop = False
         '
@@ -4747,34 +4684,31 @@ Partial Class MainForm
         Me.MenuStrip1.PerformLayout()
         Me.HomePanel.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
-        Me.StartPanel.ResumeLayout(False)
-        Me.StartPanelPContainer.ResumeLayout(False)
-        Me.GetStartedPanel.ResumeLayout(False)
-        Me.GetStartedContainer.ResumeLayout(False)
-        Me.Panel6.ResumeLayout(False)
-        Me.Panel6.PerformLayout()
-        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.LatestNewsPanel.ResumeLayout(False)
-        Me.FeedContainer.ResumeLayout(False)
-        Me.FeedsPanel.ResumeLayout(False)
-        Me.FeedErrorPanel.ResumeLayout(False)
-        Me.FeedErrorPanel.PerformLayout()
-        Me.Panel4.ResumeLayout(False)
-        Me.TutorialVideoPanel.ResumeLayout(False)
-        Me.VideoContainer.ResumeLayout(False)
-        Me.VideosPanel.ResumeLayout(False)
-        Me.VideoErrorPanel.ResumeLayout(False)
-        Me.VideoErrorPanel.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.FlowLayoutPanel2.ResumeLayout(False)
-        Me.FlowLayoutPanel2.PerformLayout()
+        Me.InfinityStartPanel.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.HelpLinksPanel.ResumeLayout(False)
+        Me.Panel8.ResumeLayout(False)
+        Me.Panel8.PerformLayout()
+        Me.Panel9.ResumeLayout(False)
+        Me.Panel9.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        Me.NewsPanel.ResumeLayout(False)
+        Me.Panel12.ResumeLayout(False)
+        Me.Panel12.PerformLayout()
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel7.PerformLayout()
+        Me.ComputerInfoPanel.ResumeLayout(False)
+        Me.ComputerInfoPanel.PerformLayout()
+        Me.ComputerInfoTLP.ResumeLayout(False)
+        CType(Me.ComputerWallpaperPB, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
         Me.SidePanel.PerformLayout()
         Me.UpdatePanel.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PrjPanel.ResumeLayout(False)
         Me.PrjPanel.PerformLayout()
@@ -5029,25 +4963,6 @@ Partial Class MainForm
     Friend WithEvents DiscardAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator20 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents UnmountSettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents StartPanel As System.Windows.Forms.Panel
-    Friend WithEvents StartPanelPContainer As System.Windows.Forms.Panel
-    Friend WithEvents GetStartedPanel As System.Windows.Forms.Panel
-    Friend WithEvents GetStartedContainer As System.Windows.Forms.Panel
-    Friend WithEvents Panel6 As System.Windows.Forms.Panel
-    Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel8 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel10 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel9 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel6 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Label38 As System.Windows.Forms.Label
-    Friend WithEvents Label37 As System.Windows.Forms.Label
-    Friend WithEvents Label36 As System.Windows.Forms.Label
-    Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
-    Friend WithEvents PictureBox7 As System.Windows.Forms.PictureBox
-    Friend WithEvents PictureBox6 As System.Windows.Forms.PictureBox
-    Friend WithEvents TutorialVideoPanel As System.Windows.Forms.Panel
-    Friend WithEvents LatestNewsPanel As System.Windows.Forms.Panel
     Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Discord As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator21 As System.Windows.Forms.ToolStripSeparator
@@ -5216,29 +5131,11 @@ Partial Class MainForm
     Friend WithEvents PictureBox13 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel20 As System.Windows.Forms.LinkLabel
     Friend WithEvents PictureBox14 As System.Windows.Forms.PictureBox
-    Friend WithEvents FlowLayoutPanel2 As System.Windows.Forms.FlowLayoutPanel
-    Friend WithEvents LinkLabel22 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel23 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel24 As System.Windows.Forms.LinkLabel
-    Friend WithEvents FeedContainer As System.Windows.Forms.Panel
-    Friend WithEvents FeedsPanel As System.Windows.Forms.Panel
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents FeedErrorPanel As System.Windows.Forms.Panel
-    Friend WithEvents Button59 As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents Label34 As System.Windows.Forms.Label
-    Friend WithEvents Label22 As System.Windows.Forms.Label
-    Friend WithEvents Label9 As System.Windows.Forms.Label
-    Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents FeedWorker As System.ComponentModel.BackgroundWorker
-    Friend WithEvents Label35 As System.Windows.Forms.Label
     Friend WithEvents Timer2 As System.Windows.Forms.Timer
-    Friend WithEvents LinkLabel5 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel4 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Panel4 As System.Windows.Forms.Panel
-    Friend WithEvents LinkLabel25 As System.Windows.Forms.LinkLabel
     Friend WithEvents WatcherBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents WatcherTimer As System.Windows.Forms.Timer
     Friend WithEvents ImportDriver As System.Windows.Forms.ToolStripMenuItem
@@ -5247,17 +5144,8 @@ Partial Class MainForm
     Friend WithEvents RecentsLV As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents RecentRemoveLink As System.Windows.Forms.LinkLabel
-    Friend WithEvents VideoContainer As System.Windows.Forms.Panel
-    Friend WithEvents VideosPanel As System.Windows.Forms.Panel
     Friend WithEvents ListView2 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents VideoErrorPanel As System.Windows.Forms.Panel
-    Friend WithEvents Button17 As System.Windows.Forms.Button
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents ToolStripSeparator37 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RecentProjectsListMenu As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RecentProject1ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -5287,8 +5175,6 @@ Partial Class MainForm
     Friend WithEvents RegCplToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MountedImageDetectorBWRestarterTimer As System.Windows.Forms.Timer
     Friend WithEvents ToolStripSeparator43 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents WebResourcesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndFODWin10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -5332,4 +5218,46 @@ Partial Class MainForm
     Friend WithEvents ThemeDesignerTimer As System.Windows.Forms.Timer
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents MenuToggle As System.Windows.Forms.Button
+    Friend WithEvents InfinityStartPanel As System.Windows.Forms.Panel
+    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents HelpLinksPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel8 As System.Windows.Forms.Panel
+    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents LinkLabel30 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel29 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel28 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel27 As System.Windows.Forms.LinkLabel
+    Friend WithEvents Panel5 As System.Windows.Forms.Panel
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents NewsPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel7 As System.Windows.Forms.Panel
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents ComputerInfoPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComputerInfoTLP As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents ComputerDhcpStatusLabel As System.Windows.Forms.Label
+    Friend WithEvents ComputerProcessorLabel As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents ComputerMemoryLabel As System.Windows.Forms.Label
+    Friend WithEvents ComputerStorageLabel As System.Windows.Forms.Label
+    Friend WithEvents ComputerDomainStatusLabel As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents ComputerDomainWorkgroupLabel As System.Windows.Forms.Label
+    Friend WithEvents ChangeComputerNameLink As System.Windows.Forms.LinkLabel
+    Friend WithEvents ComputerModelLabel As System.Windows.Forms.Label
+    Friend WithEvents ComputerNameLabel As System.Windows.Forms.Label
+    Friend WithEvents ComputerWallpaperPB As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel9 As System.Windows.Forms.Panel
+    Friend WithEvents LinkLabel32 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel31 As System.Windows.Forms.LinkLabel
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents Panel12 As System.Windows.Forms.Panel
+    Friend WithEvents LinkLabel33 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel34 As System.Windows.Forms.LinkLabel
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents RefreshComputerInfoBtn As System.Windows.Forms.Button
+    Friend WithEvents ChangeNetworkConfigBtn As System.Windows.Forms.Button
+    Friend WithEvents AdminToolsBtn As System.Windows.Forms.Button
+    Friend WithEvents ComputerOSLabel As System.Windows.Forms.Label
 End Class

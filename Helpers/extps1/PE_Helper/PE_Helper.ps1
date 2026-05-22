@@ -595,7 +595,7 @@ function Start-PECustomization
             The path of the mounted Windows PE image
         .PARAMETER arch
             The architecture of the target Windows PE image, which is used to customize the wallpaper
-        .PARAMETE testStartNet
+        .PARAMETER testStartNet
             Customizes the "startnet.cmd" file for WinPE testing
         .EXAMPLE
             Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
@@ -746,7 +746,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout*.ps1" -Destination "$imagePath" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE.PolicyHelper.ps1" -Destination "$imagePath\DTPE.PolicyHelper.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
@@ -806,7 +806,7 @@ function Start-PECustomization
         }
         try
         {
-            $policyVersion = "0.8.0.26042"
+            $policyVersion = "0.8.0.26052"
 
             Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
             Write-Host "Initializing default Preinstallation Environment policy..."
@@ -821,6 +821,8 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AutoUnattendCopytoSysprep /t REG_DWORD /d 0
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PXEServerPort /t REG_DWORD /d 8080
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "00000409"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutOverrideExistingLayout /t REG_DWORD /d 0
             if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
                 reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
             }
@@ -1209,7 +1211,7 @@ function Start-OSApplication
     {
         Write-Host "Adding drivers to the target image..."
         # Add drivers that were previously added to the Windows PE using the DIM
-        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" } | Select-Object -Unique)
         $drvCount = $drivers.Count
         $successfulInstallations = 0
         $failedInstallations = 0
@@ -1256,6 +1258,12 @@ function Start-OSApplication
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride -bootEx $usebootex
+    if ((Get-PolicyValue -PolicyName "KeyboardLayoutOverrideExistingLayout" -DefaultPolicyValue 0 -ValidOptions @(0, 1)) -eq 1) {
+        Write-Host "Configuring target system keyboard layout..."
+        # Get specified keyboard layout
+        $keybLayoutCode = Get-PolicyValue -PolicyName "KeyboardLayoutCode" -DefaultPolicyValue "00000409"
+        dism /image=$($driveLetter):\ /set-inputlocale:0409:$keybLayoutCode
+    }
     Start-Sleep -Milliseconds 250
     Clear-Host
     Write-Host "`n`n`n`n`n`n`n`n`n`n"

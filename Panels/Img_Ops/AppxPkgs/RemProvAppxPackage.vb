@@ -318,6 +318,7 @@ Public Class RemProvAppxPackage
         MainForm.ViewPackageDirectoryToolStripMenuItem.Image = GetGlyphResource("openfile")
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(243)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(202)

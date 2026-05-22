@@ -174,6 +174,7 @@ Public Class SampleScriptBrowser
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         If ComboBox1.SelectedIndex = FinalScriptStage Then
             ' force showing again
@@ -240,7 +241,7 @@ Public Class SampleScriptBrowser
         If targetSS IsNot Nothing Then
             Select Case targetSS.Language.ToLower()
                 Case "batch"
-                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd;*.nt"
+                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd"
                 Case "powershell"
                     ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
                 Case Else

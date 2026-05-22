@@ -512,6 +512,7 @@ Public Class AddDrivers
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ColumnHeader1.Width = WindowHelper.ScaleLogical(350)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(154)
         ImageTaskHeader1.HideWindowTitle(handle)

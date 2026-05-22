@@ -658,6 +658,7 @@ Public Class GetPkgInfoDlg
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ' Populate installed package listing
         DynaLog.LogMessage("Updating items in list...")

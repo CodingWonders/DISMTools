@@ -187,6 +187,7 @@ Public Class OfflineInstDriveLister
                                                                                               FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Timer1.Enabled = True
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(68)

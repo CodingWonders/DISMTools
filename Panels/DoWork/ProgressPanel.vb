@@ -212,6 +212,8 @@ Public Class ProgressPanel
 
     Dim ImgVersion As Version
 
+    Private PreventSystemFromSleeping As Boolean
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -576,6 +578,8 @@ Public Class ProgressPanel
     Private Event AllTasksLogReported(AllTasksMessage As String)
     Private Event CurrTaskLogReported(CurrTaskMessage As String)
     Private Event LogActivityReported(LogMessage As String)
+
+    Private ReferenceImage As WindowsImage
 
     Private Sub OnAllTasksLogReported(AllTasksMessage As String) Handles Me.AllTasksLogReported
         allTasks.Text = AllTasksMessage
@@ -1898,6 +1902,42 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub CommitFfu()
+        Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+        ' Options for capture task
+        FFUCaptureSourceDrive = ReferenceImage.FFUInfo.MountDiskPath
+        FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+        FFUCaptureName = ReferenceImage.ImageName
+        FFUCaptureDescription = ReferenceImage.ImageDescription
+        FFUCaptureCompressType = 1
+
+        ' Options for unmount task
+        MountDir = MountDir
+        UMountOp = 1
+        UMountLocalDir = True
+        RandomMountDir = ""
+        CheckImgIntegrity = False
+        SaveToNewIndex = False
+        UMountImgIndex = 1
+
+        ' Options for replace task
+        FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+        FFUReplaceDestinationFFU = ReferenceImage.ImageFile
+
+        ' Options for mount task
+        SourceImg = ReferenceImage.ImageFile
+        ImgIndex = 1
+        isReadOnly = False
+        isOptimized = False
+        isIntegrityTested = False
+
+        CaptureFfuImage()
+        UnmountImage()
+        ReplaceFfuFile()
+        MountImage()
+    End Sub
+
     Private Sub CommitImage()
         DynaLog.LogMessage("Saving changes to the Windows image...")
         Select Case Language
@@ -1935,6 +1975,12 @@ Public Class ProgressPanel
                 allTasks.Text = "Modifica immagine..."
                 currentTask.Text = "Salvataggio modifiche nell'immagine..."
         End Select
+        If ReferenceImage IsNot Nothing Then
+            If Path.GetExtension(ReferenceImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                CommitFfu()
+                Exit Sub
+            End If
+        End If
         LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                            "- Mount directory: " & MountDir)
         Select Case DismVersionChecker.ProductMajorPart
@@ -7371,7 +7417,7 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
         allTasks.Text = "Replacing FFU files..."
         currentTask.Text = "Replacing original FFU file with modified FFU file..."
-        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceSourceFFU & Quote & " with " & Quote & FFUReplaceDestinationFFU & Quote & "...")
+        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceDestinationFFU & Quote & " with " & Quote & FFUReplaceSourceFFU & Quote & "...")
         Try
             If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
             File.Delete(FFUReplaceDestinationFFU)
@@ -7491,6 +7537,11 @@ Public Class ProgressPanel
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
         TaskList.Clear()
+        If PreventSystemFromSleeping Then
+            ' Restore sleep mode
+            DynaLog.LogMessage("Restoring system sleep mode...")
+            PowerManagementHelper.EnableSystemSleepMode()
+        End If
         If IsSuccessful Then
             DynaLog.LogMessage("Tasks have been successful.")
             If OperationNum = 9 Then LogView.AppendText(CrLf &
@@ -8047,6 +8098,12 @@ Public Class ProgressPanel
         If MainForm.ExpandedProgressPanel AndAlso Not IsExpanded Then
             LogButton.PerformClick()
         End If
+        PreventSystemFromSleeping = MainForm.PreventSystemFromSleeping
+        If PreventSystemFromSleeping Then
+            ' Disable sleep mode now
+            DynaLog.LogMessage("Preventing the system from sleeping...")
+            PowerManagementHelper.DisableSystemSleepMode()
+        End If
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
         MainForm.bwGetImageInfo = True
@@ -8055,6 +8112,7 @@ Public Class ProgressPanel
         AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
         If MainForm.CurrentImage IsNot Nothing Then
+            ReferenceImage = MainForm.CurrentImage
             ImgVersion = MainForm.CurrentImage.ImageVersion
         End If
         ' Determine program colors

@@ -31,6 +31,7 @@ Partial Class DnsZoneChooserDialog
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Refresh_Button = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -42,7 +43,7 @@ Partial Class DnsZoneChooserDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(546, 240)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(626, 240)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -83,12 +84,14 @@ Partial Class DnsZoneChooserDialog
         '
         'ListView1
         '
+        Me.ListView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(13, 36)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(679, 198)
+        Me.ListView1.Size = New System.Drawing.Size(759, 198)
         Me.ListView1.TabIndex = 2
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -111,7 +114,18 @@ Partial Class DnsZoneChooserDialog
         'ColumnHeader4
         '
         Me.ColumnHeader4.Text = "Zone Type"
-        Me.ColumnHeader4.Width = 96
+        Me.ColumnHeader4.Width = 192
+        '
+        'Refresh_Button
+        '
+        Me.Refresh_Button.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Refresh_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Refresh_Button.Location = New System.Drawing.Point(12, 243)
+        Me.Refresh_Button.Name = "Refresh_Button"
+        Me.Refresh_Button.Size = New System.Drawing.Size(75, 23)
+        Me.Refresh_Button.TabIndex = 3
+        Me.Refresh_Button.Text = "Refresh"
+        Me.Refresh_Button.UseVisualStyleBackColor = True
         '
         'DnsZoneChooserDialog
         '
@@ -119,7 +133,8 @@ Partial Class DnsZoneChooserDialog
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(704, 281)
+        Me.ClientSize = New System.Drawing.Size(784, 281)
+        Me.Controls.Add(Me.Refresh_Button)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -145,5 +160,6 @@ Partial Class DnsZoneChooserDialog
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Refresh_Button As System.Windows.Forms.Button
 
 End Class

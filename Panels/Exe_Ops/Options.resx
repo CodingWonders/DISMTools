@@ -123,11 +123,6 @@
   <metadata name="ScratchFBD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>120, 17</value>
   </metadata>
-  <data name="Label39.Text" xml:space="preserve">
-    <value>Keep in mind that this process will start once an action has finished, but will stop automatically unless the action is not image related (like mounting, unmounting or reloading servicing)
-
-To disable this process entirely, uncheck the "Detect mounted images at all times" check box</value>
-  </data>
   <data name="TextBox4.Text" xml:space="preserve">
     <value>Image Version: 10.0.19045.2075
 

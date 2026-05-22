@@ -507,6 +507,7 @@ Public Class AddPackageDlg
         CheckBox3.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Addition_MUMFile = ""
         ImageTaskHeader1.HideWindowTitle(handle)
     End Sub

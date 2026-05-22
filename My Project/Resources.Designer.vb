@@ -571,29 +571,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a REM EXAMPLE SCRIPT. PLEASE MODIFY
-        '''REM -----------------------------------------
-        '''SELECT DISK=0
-        '''CLEAN
-        '''CONVERT GPT
-        '''CREATE PARTITION EFI SIZE=300
-        '''FORMAT QUICK FS=FAT32 LABEL=&quot;System&quot;
-        '''CREATE PARTITION MSR SIZE=16
-        '''CREATE PARTITION PRIMARY
-        '''SHRINK MINIMUM=1000
-        '''FORMAT QUICK FS=NTFS LABEL=&quot;Windows&quot;
-        '''CREATE PARTITION PRIMARY
-        '''FORMAT QUICK FS=NTFS LABEL=&quot;Recovery&quot;
-        '''SET ID=&quot;de94bba4-06d1-4d40-a16a-bfd50179d6ac&quot;
-        '''GPT ATTRIBUTES=0x8000000000000001.
-        '''</summary>
-        Friend ReadOnly Property DefaultDiskPartConfig() As String
-            Get
-                Return ResourceManager.GetString("DefaultDiskPartConfig", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Busca una cadena traducida similar a # Write your code here, or use one of the following buttons at the bottom of this window:
         '''# - Use the Open Script button to load the contents of an existing script file.
         '''# - To get started with our curated set of Starter Scripts, use the &quot;Import a predefined Starter Script&quot; button
@@ -1148,6 +1125,26 @@ Namespace My.Resources
         Friend ReadOnly Property import_driver() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("import_driver", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property infinityhome_admin_tools() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("infinityhome_admin_tools", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property infinityhome_change_network_config() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("infinityhome_change_network_config", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2270,15 +2267,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where tutorial videos would not be playable
-        '''- The WDS Helper client message for downloading unattended answer files no longer shows at all times
+        '''- Fixed an issue where the program would throw an exception when saving Windows PE configuration of an offline Windows PE installation
         '''
         '''New features:
         '''
-        '''- When configuring ports for PXE Helper Servers you can now check if they are in use
-        '''- The architecture for the WDS boot image is now picked graphically
-        '''- The default set of DISMTools Preinstallation Environment backgrounds has been overhauled
-        '''- You can now configure account *display names* independently from ac [resto de la cadena truncado]&quot;;.
+        '''- The WDS Helper Client now detects the assigned volume letter for the image share more reliably
+        '''- ISO file creation results are now displayed in a notification
+        '''- You can now configure the keyboard layout in the Preinstallation Environment graphically
+        '''- A keyboard layout override policy has been added
+        '''- You can now save Preinstallation En [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -214,6 +214,7 @@ Public Class NewTestingEnv
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ' Declare path constant for Windows ADK
         Dim ADKPath As String = Path.Combine(If(Environment.Is64BitOperatingSystem,

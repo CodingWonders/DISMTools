@@ -24,6 +24,7 @@ Public Class ImageFilePickerDialog
         ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ListView1.Items.Clear()
         Dim ImageFiles As IEnumerable(Of String) = Directory.EnumerateFiles(SourceImageFileRepoPath, "*.*", SearchOption.TopDirectoryOnly).Where(Function(file) {".wim", ".esd", ".swm", ".ffu"}.Contains(Path.GetExtension(file).ToLower()))

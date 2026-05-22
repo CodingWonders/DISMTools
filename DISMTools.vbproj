@@ -83,8 +83,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.1.3\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.1.2.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.6.0.0\lib\net472\Microsoft.Dism.dll</HintPath>
@@ -240,6 +240,7 @@
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DnsZoneChooserDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainRole.vb" />
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
@@ -892,12 +893,6 @@
     <Compile Include="Panels\Exe_Ops\Options.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.Designer.vb">
-      <DependentUpon>SqlServerProjectErrorDlg.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Panels\Questions\ImgConversionSuccessDialog.Designer.vb">
       <DependentUpon>ImgConversionSuccessDialog.vb</DependentUpon>
     </Compile>
@@ -1000,6 +995,7 @@
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
+    <Compile Include="Utilities\PowerManagement\PowerManagementHelper.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\RegistryHelper.vb" />
     <Compile Include="Utilities\SamHelper.vb" />
@@ -1322,9 +1318,6 @@
     <EmbeddedResource Include="Panels\Exe_Ops\Options.resx">
       <DependentUpon>Options.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.resx">
-      <DependentUpon>SqlServerProjectErrorDlg.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\ImgConversionSuccessDialog.resx">
       <DependentUpon>ImgConversionSuccessDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -1392,7 +1385,9 @@
     <None Include="docs\css\fonts\Roboto-Slab-Regular.woff2" />
     <None Include="docs\search\search_index.json" />
     <None Include="docs\sitemap.xml.gz" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Change PowerShell Execution Policy.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Current Power Plan Timeout Values.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Shutdown Event Tracker.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Unsigned RDP Warnings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Windows Admin Center banner.dtss" />
@@ -1467,7 +1462,13 @@
     <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\changekeyboardlayout.designer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\ChangeKeyboardLayout.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\changekeyboardlayout.resources.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE.PolicyHelper.ps1">
@@ -1789,6 +1790,8 @@
     <None Include="Resources\prev_element_upward.png" />
     <None Include="Resources\last_element_downward.png" />
     <None Include="Resources\next_element_downward.png" />
+    <None Include="Resources\infinityhome_admin_tools.png" />
+    <None Include="Resources\infinityhome_change_network_config.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

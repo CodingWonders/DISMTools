@@ -1545,6 +1545,7 @@ Public Class WimScriptEditor
         If Visible Then
             Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
             WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+            ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         End If
     End Sub
 

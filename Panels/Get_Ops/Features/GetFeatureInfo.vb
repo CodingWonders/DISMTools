@@ -193,6 +193,7 @@ Public Class GetFeatureInfoDlg
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True

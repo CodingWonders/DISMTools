@@ -408,7 +408,7 @@ Partial Class MainForm
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd;*.nt|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vb" & _
+        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vb" & _
     "s;*.vbe;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
         Me.OpenFileDialog2.Title = "Import Existing Script"
         '

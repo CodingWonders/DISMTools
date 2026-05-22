@@ -355,6 +355,7 @@ Public Class ISOCreator
             Button4.Enabled = True
         End If
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
         Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
@@ -801,7 +802,7 @@ Public Class ISOCreator
             Case 5
                 msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
         End Select
-        MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
+        WindowHelper.DisplayNotificationBalloon(If(success, ToolTipIcon.Info, ToolTipIcon.Warning), ImageTaskHeader1.ItemText, msg)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
         GroupBox1.Enabled = True

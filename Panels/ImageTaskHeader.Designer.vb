@@ -33,7 +33,7 @@ Partial Class ImageTaskHeader
         Me.ItemPictureBox.Location = New System.Drawing.Point(358, 8)
         Me.ItemPictureBox.Name = "ItemPictureBox"
         Me.ItemPictureBox.Size = New System.Drawing.Size(32, 32)
-        Me.ItemPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.ItemPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ItemPictureBox.TabIndex = 2
         Me.ItemPictureBox.TabStop = False
         '
@@ -63,7 +63,6 @@ Partial Class ImageTaskHeader
         Me.Size = New System.Drawing.Size(400, 48)
         CType(Me.ItemPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Private WithEvents ItemPictureBox As System.Windows.Forms.PictureBox
