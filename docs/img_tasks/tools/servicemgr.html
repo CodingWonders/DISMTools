@@ -2645,7 +2645,7 @@
   <span class="md-ellipsis">
     
   
-    SysPrep Preparation Tool
+    Sysprep Preparation Tool
   
 
     
@@ -2904,6 +2904,28 @@
     <span class="md-ellipsis">
       
         Modifying a service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deleting-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deleting a service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-service-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saving service information
       
     </span>
   </a>
@@ -3320,6 +3342,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#deleting-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deleting a service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-service-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saving service information
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#restoring-previous-service-information" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3414,7 +3458,11 @@
 </ul>
 <p>Items marked as Windows applications or services should not have their start types set to Boot Loader or I/O System. When specifying an Automatic start type, you can also check Delayed Start.</p>
 <p>This is the only field you can modify for the moment. More modifyable fields may be added in future versions.</p>
-<p>To save the new list of services, click <em>Save</em>. The process of saving service changes will take around 20-25 seconds.</p>
+<p>To save the new list of services, click <em>Save</em>.</p>
+<h2 id="deleting-a-service">Deleting a service</h2>
+<p>To delete a service, select it and click <em>Delete service</em>. This will mark the service for deletion, and it will be deleted when you save the changes. Services marked for deletion can be cleared of their deletion marks by clicking <em>Restore service</em>.</p>
+<h2 id="saving-service-information">Saving service information</h2>
+<p>To save service information to a report, click <em>Save service information</em>. This will save a report of the current service configuration to a Markdown file.</p>
 <h2 id="restoring-previous-service-information">Restoring previous service information</h2>
 <p>When saving service information, a backup of the current service configuration is created. To restore this backup:</p>
 <ol>

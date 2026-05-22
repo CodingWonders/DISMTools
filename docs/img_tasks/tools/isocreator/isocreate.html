@@ -2385,6 +2385,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Choosing an installation method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changing-keyboard-layouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changing keyboard layouts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preinstallation-environment-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preinstallation Environment policies
+      
+    </span>
+  </a>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2738,7 +2766,7 @@
   <span class="md-ellipsis">
     
   
-    SysPrep Preparation Tool
+    Sysprep Preparation Tool
   
 
     
@@ -3341,6 +3369,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Choosing an installation method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changing-keyboard-layouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changing keyboard layouts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preinstallation-environment-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preinstallation Environment policies
+      
+    </span>
+  </a>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3392,8 +3448,8 @@
 <ul>
 <li>To verify in PowerShell, run this command:</li>
 </ul>
-<div class="language-powershell highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="no">[System.Text.Encoding]</span><span class="p">::</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetString</span><span class="p">((</span><span class="nb">Get-SecureBootUEFI</span> <span class="n">db</span><span class="p">).</span><span class="n">bytes</span><span class="p">)</span> <span class="o">-match</span> <span class="s1">'Windows UEFI CA 2023'</span>
-</span></code></pre></div></td></tr></tbody></table></div>
+<p><code>powershell linenums="1"
+[System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes) -match 'Windows UEFI CA 2023'</code></p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="https://techcommunity.microsoft.com/t5/s/gxcuf89792/images/bS00MTIxNzM1LTU3MzgxN2kwQ0ZBNzNGQ0FEMjU2RTBE?revision=7" data-desc-position="bottom"><img src="https://techcommunity.microsoft.com/t5/s/gxcuf89792/images/bS00MTIxNzM1LTU3MzgxN2kwQ0ZBNzNGQ0FEMjU2RTBE?revision=7"></a>   
     </p><p align="center"><i>Example output of command. Source: Microsoft Tech Community</i></p>
@@ -3438,6 +3494,7 @@
 <li>Type <code>1</code> and press Enter to start a local installation</li>
 <li>Type <code>2</code> and press Enter to start a network-based installation</li>
 <li>Type <code>C</code> and press Enter to open the command line</li>
+<li>Type <code>K</code> and press Enter to open the keyboard layout selection menu</li>
 <li>Type <code>S</code> and press Enter to shut down the computer</li>
 <li>Type <code>R</code> and press Enter to restart the computer</li>
 </ul>
@@ -3446,6 +3503,128 @@
 </p>
 
 <p>Refer to the <em>Installing the operating system</em> section for more information about the 2 installation modes.</p>
+<h4 id="changing-keyboard-layouts">Changing keyboard layouts</h4>
+<p>The keyboard layout that the Preinstallation Environment will use can be configured in one of 2 ways:</p>
+<ul>
+<li>By pressing <kbd>K</kbd> at the installation method selection screen, which will open the following menu:</li>
+</ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_change_keyboard_layout.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_change_keyboard_layout.png"></a>
+</p>
+
+<ul>
+<li>By configuring the default keyboard layout via policies. Refer to the next section for more information.</li>
+</ul>
+<p>Regardless of the method you choose to change the keyboard layout, the Preinstallation Environment will open a new Command Prompt window with the new keyboard layout. From then on, use this new Command Prompt window to perform any tasks in the Preinstallation Environment.</p>
+<h3 id="preinstallation-environment-policies">Preinstallation Environment policies</h3>
+<p>DISMTools 0.8 and later versions allow you to configure the Preinstallation Environment to your liking with policies. The policies you can configure are available by clicking <em>Customize Environment...</em> in the ISO Creator, and are as follows:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy.png"></a>
+</p>
+
+<p><strong>Policy version:</strong> <em>0.8.0.26052</em></p>
+<ul>
+<li><strong>Custom wallpaper</strong>: allows you to set a custom wallpaper (in JPG format) for the Preinstallation Environment, using the wallpaper overrides introduced in version 0.7.3. You can pick any image you like, but you can also go with your current wallpaper, assuming it's in JPG format.</li>
+<li><strong>Show version information on the top-left corner of the primary screen</strong>: this will show the version of the Preinstallation Environment in the top-left corner of the primary screen, like this:</li>
+</ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_watermark.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_watermark.png"></a>
+</p>
+
+<ul>
+<li><strong>Display images and groups in a WDS server in a graphical view</strong>: this will make the PXE Helpers display images and groups from a WDS server in a graphical view, instead of a text-based one, like this:</li>
+</ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_wdshc_graphoview.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_wdshc_graphoview.png"></a>
+</p>
+
+<ul>
+<li><strong>Show a report with hardware IDs of unknown devices when launching the Driver Installation Module</strong>: this will make the Driver Installation Module show a report with hardware IDs of unknown devices when launched, which can be useful for finding drivers for those devices. The report will look like this:</li>
+</ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_dim_hwid.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_dim_hwid.png"></a>
+</p>
+
+<ul>
+<li><strong>Copy unattended answer files specified in the ISO creator to the Sysprep directory of the target system</strong>: this will make the Preinstallation Environment Helper copy any unattended answer file specified in the ISO Creator to the Sysprep directory of the target system, in addition to the Panther directory. In many cases you may want to leave this option unchecked because it may cause conflicts with Sysprep if there is an answer file in its directory.</li>
+<li>
+<p><strong>Default partition table override</strong>: this allows you to specify the default partition table override for the partitioning step of the installation process. The following options are:</p>
+<ul>
+<li><em>Do not use a partition table override</em>: the partitioning step will use a partition table suitable for the target system, based on its firmware type</li>
+<li><em>Default to using a MBR partition table regardless of the firmware type</em></li>
+<li><em>Default to using a GPT partition table regardless of the firmware type</em></li>
+</ul>
+</li>
+<li>
+<p><strong>On supported UEFI systems with Secure Boot and Windows UEFI CA 2023 certificates</strong>: this allows you to specify whether or not to use the new boot binaries signed with the Windows UEFI CA 2023 certificate, on supported systems. The following options are available:</p>
+<ul>
+<li><em>Ask me which version of the boot binary to use</em></li>
+<li><em>Default to boot binaries signed with Microsoft Windows Production PCA 2011</em></li>
+<li><em>Default to boot binaries signed with Windows UEFI CA 2023, if available on my target image</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Amount of connection attempts that should be considered when connecting to a WDS server</strong>: this allows you to specify how many times the WDS Helper should attempt to connect to a WDS server before giving up. You can set it within a range of 2 to 16 attempts, with a default of 5 attempts.</p>
+</li>
+<li>
+<p><strong>Port to be used by PXE Helper clients to send requests by default</strong>: this allows you to specify the default port that PXE Helper clients should use to send requests to the server components. The default port is 8080.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The client will set the port you specify as the default in the connection screen and will use it as long as you don't specify a different port in the connection screen itself.</p>
+</div>
+</li>
+<li>
+<p><strong>Default keyboard layout</strong>: this allows you to specify the default keyboard layout to be used in the Preinstallation Environment. The specified keyboard layout will be the default one, but users can change it in the installation method selection screen if they want to.</p>
+</li>
+</ul>
+<p>Preinstallation Environment policies are stored in the system registry, under <code>HKEY_LOCAL_MACHINE\SOFTWARE\DISMTools\Preinstallation Environment\Policies</code>. The policies use the following names in the registry:</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Value name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Show version information on the top-left corner of the primary screen</td>
+<td><code>ShowWatermark</code></td>
+</tr>
+<tr>
+<td>Display images and groups in a WDS server in a graphical view</td>
+<td><code>WDSHCGraphoView</code></td>
+</tr>
+<tr>
+<td>Show a report with hardware IDs of unknown devices when launching the Driver Installation Module</td>
+<td><code>DTDimShowPnputilOut</code></td>
+</tr>
+<tr>
+<td>Copy unattended answer files specified in the ISO creator to the Sysprep directory of the target system</td>
+<td><code>AutoUnattendCopytoSysprep</code></td>
+</tr>
+<tr>
+<td>Default partition table override</td>
+<td><code>PartTableOverridePreference</code></td>
+</tr>
+<tr>
+<td>On supported UEFI systems with Secure Boot and Windows UEFI CA 2023 certificates</td>
+<td><code>UEFICA23Preference</code></td>
+</tr>
+<tr>
+<td>Amount of connection attempts that should be considered when connecting to a WDS server</td>
+<td><code>WDSHCConnAttempts</code></td>
+</tr>
+<tr>
+<td>Port to be used by PXE Helper clients to send requests by default</td>
+<td><code>PXEServerPort</code></td>
+</tr>
+<tr>
+<td>Default keyboard layout</td>
+<td><code>KeyboardLayoutCode</code></td>
+</tr>
+</tbody>
+</table>
+<p>The policies you configure from the ISO creator are known as <em>custom policies</em>. You can also make policy changes permanent by configuring them as <em>default policies</em> in the application settings. To save the settings as default policies, click <em>Save to default policies</em>.</p>
 <h2 id="remarks">Remarks</h2>
 <ul>
 <li><strong>Please make sure to commit your unsaved changes to your image before creating the ISO file</strong></li>
