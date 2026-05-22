@@ -279,40 +279,15 @@ Public Class Options
         DynaLog.LogMessage("Setting file associations...")
         DynaLog.LogMessage("- Association operation: " & If(AssocOp = 0, "set associations", "remove associations"))
         DynaLog.LogMessage("- Use a custom icon? " & If(UseCustomIcons, "Yes", "No"))
+
         Select Case AssocOp
             Case 0
-                DynaLog.LogMessage("Setting associations and file types on the system...")
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=DISMTools.Project").WaitForExit()
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=" & Quote & Environment.CurrentDirectory & "\DISMTools.exe" & Quote & " " & Quote & "/load=" & Quote & "%1" & Quote & Quote).WaitForExit()
-                DynaLog.LogMessage("Modifying DISMTools project association...")
-                Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project", True)
-                DynaLog.LogMessage("Setting the description of projects for Windows...")
-                AssocRk.SetValue(Nothing, "DISMTools project", RegistryValueKind.String)
-                If UseCustomIcons Then
-                    DynaLog.LogMessage("A custom icon for the project will be used. Checking if it exists...")
-                    If File.Exists(Environment.CurrentDirectory & "\resources\dtproj.ico") Then
-                        DynaLog.LogMessage("The custom project icon exists. Setting it in the association...")
-                        AssocRk.CreateSubKey("DefaultIcon")
-                        Dim DefIcon As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\DefaultIcon", True)
-                        DefIcon.SetValue(Nothing, Environment.CurrentDirectory & "\resources\dtproj.ico", RegistryValueKind.String)
-                        DefIcon.Close()
-                    End If
-                End If
-                AssocRk.Close()
+                FileAssociationHelper.SetFileAssociation(".dtproj", "DISMTools.Project", String.Format("{0}{1}{0} {0}/load={0}%1{0}{0}", Quote, Path.Combine(Application.StartupPath, "DISMTools.exe")),
+                                                         "DISMTools Project", If(UseCustomIcons, Path.Combine(Application.StartupPath, "resources", "dtproj.ico"), ""))
             Case 1
-                DynaLog.LogMessage("Removing associations and file types from the system...")
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
-                ' Delete registry key remnants
-                RegistryHelper.RemoveRegistryItem("HKCR\DISMTools.Project", "/f")
+                FileAssociationHelper.RemoveFileAssociation(".dtproj", "DISMTools.Project")
         End Select
-        ' Clear icon cache
-        DynaLog.LogMessage("Clearing icon cache with ie4uinit...")
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ie4uinit.exe", "-ClearIconCache").WaitForExit()
-        ' Restart explorer.exe
-        DynaLog.LogMessage("Restarting Windows Explorer...")
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\taskkill.exe", "/f /im explorer.exe").WaitForExit()
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe")
+
         DynaLog.LogMessage("Checking file associations one more time...")
         Select Case MainForm.Language
             Case 0
