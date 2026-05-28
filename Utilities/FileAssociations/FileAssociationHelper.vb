@@ -104,4 +104,18 @@ Module FileAssociationHelper
         Return RemoveAssociations(Extension, Type)
     End Function
 
+    Public Function GetFileAssociationCmdline(FileType As String) As String
+        Dim assocRk As RegistryKey = Nothing
+        Dim cmdline As String = ""
+        Try
+            assocRk = Registry.ClassesRoot.OpenSubKey(String.Format("{0}\Shell\Open\Command", FileType), False)
+            cmdline = assocRk.GetValue(Nothing, "")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get association. Error message: " & ex.Message)
+        Finally
+            If assocRk IsNot Nothing Then assocRk.Close()
+        End Try
+        Return cmdline
+    End Function
+
 End Module

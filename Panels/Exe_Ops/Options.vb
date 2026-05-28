@@ -251,11 +251,20 @@ Public Class Options
         DynaLog.LogMessage("Detecting file associations...")
         Try
             DynaLog.LogMessage("Getting values from root class " & Quote & "DISMTools.Project" & Quote & "...")
-            Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\Shell\Open\Command", False)
-            Dim AssocCmd As String = AssocRk.GetValue(Nothing).ToString()
-            AssocRk.Close()
+            Dim AssocCmd As String = FileAssociationHelper.GetFileAssociationCmdline("DISMTools.Project")
             DynaLog.LogMessage("Command-line of association: " & Quote & AssocCmd & Quote)
-            If File.Exists(AssocCmd.Replace(" " & Quote & "/load=" & Quote & "%1" & Quote & Quote, "").Trim().Replace(Quote, "").Trim()) Then
+
+            ' Separate each part of the command-line to get the application path
+            Dim CmdlineParts As String() = AssocCmd.Replace(Quote, "").Split(" ")
+            Dim AssocCmdPath As String = ""
+            For i = 0 To CmdlineParts.Length - 1
+                AssocCmdPath &= " " & CmdlineParts(i)
+                If File.Exists(AssocCmdPath) Then Exit For
+            Next
+
+            AssocCmd = AssocCmdPath
+
+            If File.Exists(AssocCmd) Then
                 DynaLog.LogMessage("DISMTools exists in the association cmdline. Associations have been established.")
                 Return True
             Else
@@ -289,42 +298,43 @@ Public Class Options
         End Select
 
         DynaLog.LogMessage("Checking file associations one more time...")
+        Dim assocsSet As Boolean = DetectFileAssociations()
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
-                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                        Label42.Text = If(assocsSet, "associations set", "associations not set")
+                        Button9.Text = If(assocsSet, "Remove file associations", "Set file associations")
                     Case "ESN"
-                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
-                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                        Label42.Text = If(assocsSet, "asociaciones establecidas", "asociaciones no establecidas")
+                        Button9.Text = If(assocsSet, "Eliminar asociaciones", "Establecer asociaciones")
                     Case "FRA"
-                        Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
-                        Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
+                        Label42.Text = If(assocsSet, "associations établies", "associations non établies")
+                        Button9.Text = If(assocsSet, "Supprimer les associations de fichiers", "Établir des associations de fichiers")
                     Case "PTB", "PTG"
-                        Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
-                        Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
+                        Label42.Text = If(assocsSet, "associações estabelecidas", "associações não estabelecidas")
+                        Button9.Text = If(assocsSet, "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
                     Case "ITA"
-                        Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
-                        Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                        Label42.Text = If(assocsSet, "associazioni impostate", "associazioni non impostate")
+                        Button9.Text = If(assocsSet, "Rimuovi associazioni file", "Imposta associazioni file")
                 End Select
             Case 1
-                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
-                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                Label42.Text = If(assocsSet, "associations set", "associations not set")
+                Button9.Text = If(assocsSet, "Remove file associations", "Set file associations")
             Case 2
-                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
-                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                Label42.Text = If(assocsSet, "asociaciones establecidas", "asociaciones no establecidas")
+                Button9.Text = If(assocsSet, "Eliminar asociaciones", "Establecer asociaciones")
             Case 3
-                Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
-                Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
+                Label42.Text = If(assocsSet, "associations établies", "associations non établies")
+                Button9.Text = If(assocsSet, "Supprimer les associations de fichiers", "Établir des associations de fichiers")
             Case 4
-                Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
-                Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
+                Label42.Text = If(assocsSet, "associações estabelecidas", "associações não estabelecidas")
+                Button9.Text = If(assocsSet, "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
             Case 5
-                Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
-                Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                Label42.Text = If(assocsSet, "associazioni impostate", "associazioni non impostate")
+                Button9.Text = If(assocsSet, "Rimuovi associazioni file", "Imposta associazioni file")
         End Select
-        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
+        CheckBox11.Enabled = If(assocsSet, False, True)
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
