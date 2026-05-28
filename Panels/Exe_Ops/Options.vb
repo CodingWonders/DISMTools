@@ -247,11 +247,11 @@ Public Class Options
         End Select
     End Sub
 
-    Private Function DetectFileAssociations() As Boolean
+    Private Function DetectFileAssociations(RootClass As String) As Boolean
         DynaLog.LogMessage("Detecting file associations...")
         Try
-            DynaLog.LogMessage("Getting values from root class " & Quote & "DISMTools.Project" & Quote & "...")
-            Dim AssocCmd As String = FileAssociationHelper.GetFileAssociationCmdline("DISMTools.Project")
+            DynaLog.LogMessage("Getting values from root class " & Quote & RootClass & Quote & "...")
+            Dim AssocCmd As String = FileAssociationHelper.GetFileAssociationCmdline(RootClass)
             DynaLog.LogMessage("Command-line of association: " & Quote & AssocCmd & Quote)
 
             ' Separate each part of the command-line to get the application path
@@ -261,16 +261,8 @@ Public Class Options
                 AssocCmdPath &= " " & CmdlineParts(i)
                 If File.Exists(AssocCmdPath) Then Exit For
             Next
-
             AssocCmd = AssocCmdPath
-
-            If File.Exists(AssocCmd) Then
-                DynaLog.LogMessage("DISMTools exists in the association cmdline. Associations have been established.")
-                Return True
-            Else
-                DynaLog.LogMessage("DISMTools does not exist in the association cmdline. Associations have not been established.")
-                Return False
-            End If
+            Return File.Exists(AssocCmd)
         Catch ex As Exception
             DynaLog.LogMessage("Could not detect file associations. Error message: " & ex.Message)
             Return False
@@ -281,60 +273,29 @@ Public Class Options
     ''' <summary>
     ''' Manages the file associations for files with the ".dtproj" extension
     ''' </summary>
-    ''' <param name="AssocOp"></param>
     ''' <param name="UseCustomIcons"></param>
     ''' <remarks></remarks>
-    Private Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
+    Private Sub ManageAssociations(UseCustomIcons As Boolean)
         DynaLog.LogMessage("Setting file associations...")
-        DynaLog.LogMessage("- Association operation: " & If(AssocOp = 0, "set associations", "remove associations"))
         DynaLog.LogMessage("- Use a custom icon? " & If(UseCustomIcons, "Yes", "No"))
 
-        Select Case AssocOp
-            Case 0
-                FileAssociationHelper.SetFileAssociation(".dtproj", "DISMTools.Project", String.Format("{0}{1}{0} {0}/load={0}%1{0}{0}", Quote, Path.Combine(Application.StartupPath, "DISMTools.exe")),
-                                                         "DISMTools Project", If(UseCustomIcons, Path.Combine(Application.StartupPath, "resources", "dtproj.ico"), ""))
-            Case 1
-                FileAssociationHelper.RemoveFileAssociation(".dtproj", "DISMTools.Project")
-        End Select
+        If DTProjAssocCB.Checked Then
+            FileAssociationHelper.SetFileAssociation(".dtproj", "DISMTools.Project", String.Format("{0}{1}{0} {0}/load={0}%1{0}{0}", Quote, Path.Combine(Application.StartupPath, "DISMTools.exe")),
+                                                     "DISMTools Project", If(UseCustomIcons, Path.Combine(Application.StartupPath, "resources", "dtproj.ico"), ""))
+        Else
+            FileAssociationHelper.RemoveFileAssociation(".dtproj", "DISMTools.Project")
+        End If
+        If DTSSEditAssocCB.Checked Then
+            FileAssociationHelper.SetFileAssociation(".dtss", "DTSSEdit.StarterScript", String.Format("{0}{1}{0} /dtss={0}%1{0}", Quote, Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")),
+                                                     "DISMTools Starter Script")
+        Else
+            FileAssociationHelper.RemoveFileAssociation(".dtss", "DTSSEdit.StarterScript")
+        End If
 
         DynaLog.LogMessage("Checking file associations one more time...")
-        Dim assocsSet As Boolean = DetectFileAssociations()
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label42.Text = If(assocsSet, "associations set", "associations not set")
-                        Button9.Text = If(assocsSet, "Remove file associations", "Set file associations")
-                    Case "ESN"
-                        Label42.Text = If(assocsSet, "asociaciones establecidas", "asociaciones no establecidas")
-                        Button9.Text = If(assocsSet, "Eliminar asociaciones", "Establecer asociaciones")
-                    Case "FRA"
-                        Label42.Text = If(assocsSet, "associations établies", "associations non établies")
-                        Button9.Text = If(assocsSet, "Supprimer les associations de fichiers", "Établir des associations de fichiers")
-                    Case "PTB", "PTG"
-                        Label42.Text = If(assocsSet, "associações estabelecidas", "associações não estabelecidas")
-                        Button9.Text = If(assocsSet, "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
-                    Case "ITA"
-                        Label42.Text = If(assocsSet, "associazioni impostate", "associazioni non impostate")
-                        Button9.Text = If(assocsSet, "Rimuovi associazioni file", "Imposta associazioni file")
-                End Select
-            Case 1
-                Label42.Text = If(assocsSet, "associations set", "associations not set")
-                Button9.Text = If(assocsSet, "Remove file associations", "Set file associations")
-            Case 2
-                Label42.Text = If(assocsSet, "asociaciones establecidas", "asociaciones no establecidas")
-                Button9.Text = If(assocsSet, "Eliminar asociaciones", "Establecer asociaciones")
-            Case 3
-                Label42.Text = If(assocsSet, "associations établies", "associations non établies")
-                Button9.Text = If(assocsSet, "Supprimer les associations de fichiers", "Établir des associations de fichiers")
-            Case 4
-                Label42.Text = If(assocsSet, "associações estabelecidas", "associações não estabelecidas")
-                Button9.Text = If(assocsSet, "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
-            Case 5
-                Label42.Text = If(assocsSet, "associazioni impostate", "associazioni non impostate")
-                Button9.Text = If(assocsSet, "Rimuovi associazioni file", "Imposta associazioni file")
-        End Select
-        CheckBox11.Enabled = If(assocsSet, False, True)
+
+        DTProjAssocCB.Checked = DetectFileAssociations("DISMTools.Project")
+        DTSSEditAssocCB.Checked = DetectFileAssociations("DTSSEdit.StarterScript")
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -441,9 +402,7 @@ Public Class Options
                         Label27.Text = "Some reports do not allow being shown as a table."
                         Label28.Text = "When should the program notify you about background processes being started?"
                         Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                        Label40.Text = "File associations let you access project files directly, without having to load the program first"
-                        Label41.Text = "Association status:"
-                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                        Label40.Text = "Manage file associations for DISMTools components:"
                         Label43.Text = "Set options you would like to perform when the program starts up:"
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in the online or offline installation management modes, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
@@ -454,7 +413,7 @@ Public Class Options
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
                         Button4.Text = "Browse..."
-                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                        Button9.Text = "Set file associations"
                         Button10.Text = "Advanced settings"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
@@ -482,7 +441,6 @@ Public Class Options
                         Label59.Text = "Log customization"
                         Label60.Text = "Set options you would like to perform when the program closes:"
                         Label61.Text = "Preview:"
-                        GroupBox5.Text = "Associations"
                         Label9.Text = "Saving image information"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
@@ -537,9 +495,7 @@ Public Class Options
                         Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                         Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                         Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                        Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
-                        Label41.Text = "Estado de asociaciones:"
-                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                        Label40.Text = "Administre asociaciones de archivos para componentes de DISMTools:"
                         Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en los modos de administración de instalaciones en línea o fuera de línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
@@ -550,7 +506,7 @@ Public Class Options
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
                         Button4.Text = "Examinar..."
-                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                        Button9.Text = "Establecer asociaciones"
                         Button10.Text = "Opciones avanzadas"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
@@ -578,7 +534,6 @@ Public Class Options
                         Label59.Text = "Personalización del registro"
                         Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
                         Label61.Text = "Vista previa:"
-                        GroupBox5.Text = "Asociaciones"
                         Label9.Text = "Guardando información de la imagen"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
@@ -634,9 +589,7 @@ Public Class Options
                         Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                         Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                         Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                        Label40.Text = "Les associations de fichiers vous permettent d'accéder directement aux fichiers du projet, sans avoir à charger le programme au préalable."
-                        Label41.Text = "État de l'association :"
-                        Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
+                        Label40.Text = "Gérer les associations de fichiers pour les composants DISMTools :"
                         Label43.Text = "Définissez les options que vous souhaitez exécuter au démarrage du programme :"
                         Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en les modes de gestion de l'installation en ligne ou hors ligne, le programme utilisera son répertoire temporaire."
                         Label45.Text = "Style du panneau de progression secondaire :"
@@ -647,7 +600,7 @@ Public Class Options
                         Button2.Text = "Voir les versions des composants DISM"
                         Button3.Text = "Parcourir..."
                         Button4.Text = "Parcourir..."
-                        Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
+                        Button9.Text = "Établir des associations de fichiers"
                         Button10.Text = "Paramètres avancés"
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
@@ -675,7 +628,6 @@ Public Class Options
                         Label59.Text = "Personnalisation du journal"
                         Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
                         Label61.Text = "Aperçu :"
-                        GroupBox5.Text = "Associations"
                         Label9.Text = "Sauvegarde des informations de l'image"
                         LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                         LinkLabel1.LinkArea = New LinkArea(122, 126)
@@ -731,9 +683,7 @@ Public Class Options
                         Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                         Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                         Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                        Label40.Text = "As associações de ficheiros permitem-lhe aceder diretamente aos ficheiros do projeto, sem ter de carregar primeiro o programa"
-                        Label41.Text = "Estado da associação:"
-                        Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
+                        Label40.Text = "Gerir associações de ficheiros para os componentes do DISMTools:"
                         Label43.Text = "Definir opções que gostaria de efetuar quando o programa arranca:"
                         Label44.Text = "O programa utilizará o diretório de rascunho fornecido pelo projeto, se tiver sido carregado um. Se estiver nos modos de gestão da instalação online ou offline, o programa utilizará o seu diretório de rascunho"
                         Label45.Text = "Estilo do painel de progresso secundário:"
@@ -744,7 +694,7 @@ Public Class Options
                         Button2.Text = "Ver versões de componentes DISM"
                         Button3.Text = "Navegar..."
                         Button4.Text = "Navegar..."
-                        Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Configurar associações de ficheiros")
+                        Button9.Text = "Configurar associações de ficheiros"
                         Button10.Text = "Configurações avançadas"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
@@ -772,7 +722,6 @@ Public Class Options
                         Label59.Text = "Personalização do registo"
                         Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
                         Label61.Text = "Pré-visualização:"
-                        GroupBox5.Text = "Associações"
                         Label9.Text = "Guardar informação da imagem"
                         LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
                         LinkLabel1.LinkArea = New LinkArea(107, 118)
@@ -828,9 +777,7 @@ Public Class Options
                         Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                         Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                         Label29.Text = "Il programma usa i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzionalità presenti e altro ancora"
-                        Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
-                        Label41.Text = "Stato associazione:"
-                        Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                        Label40.Text = "Gestisci le associazioni dei file per i componenti di DISMTools:"
                         Label43.Text = "Imposta le opzioni che vuoi eseguire all'avvio del programma:"
                         Label44.Text = "Il programma userà la cartella temporanea fornita dal progetto, se ne è stata caricata una. Se ci si trova nelle modalità di gestione dell'installazione online o offline, il programma userà la sua cartella scratch"
                         Label45.Text = "Stile pannello avanzamento secondario:"
@@ -841,7 +788,7 @@ Public Class Options
                         Button2.Text = "Visualizza le versioni dei componenti DISM"
                         Button3.Text = "Sfoglia..."
                         Button4.Text = "Sfoglia..."
-                        Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                        Button9.Text = "Imposta associazioni file"
                         Button10.Text = "Impostazioni avanzate"
                         Cancel_Button.Text = "Annulla"
                         OK_Button.Text = "OK"
@@ -869,7 +816,6 @@ Public Class Options
                         Label59.Text = "Personalizzazione dei registri"
                         Label60.Text = "Imposta le opzioni che vuoi eseguire alla chiusura del programma:"
                         Label61.Text = "Anteprima:"
-                        GroupBox5.Text = "Associazioni"
                         Label9.Text = "Salvataggio informazioni dell'immagine"
                         LinkLabel1.Text = "Il programma abilita/disabilita alcune funzionalità in base alla versione di DISM supportata. Come influirà sull'uso di questo programma e quali funzioni saranno disabilitate di conseguenza?"
                         LinkLabel1.LinkArea = New LinkArea(92, 100)
@@ -926,9 +872,7 @@ Public Class Options
                 Label27.Text = "Some reports do not allow being shown as a table."
                 Label28.Text = "When should the program notify you about background processes being started?"
                 Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                Label40.Text = "File associations let you access project files directly, without having to load the program first"
-                Label41.Text = "Association status:"
-                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                Label40.Text = "Manage file associations for DISMTools components:"
                 Label43.Text = "Set options you would like to perform when the program starts up:"
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in the online or offline installation management modes, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
@@ -939,7 +883,7 @@ Public Class Options
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
                 Button4.Text = "Browse..."
-                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                Button9.Text = "Set file associations"
                 Button10.Text = "Advanced settings"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
@@ -967,7 +911,6 @@ Public Class Options
                 Label59.Text = "Log customization"
                 Label60.Text = "Set options you would like to perform when the program closes:"
                 Label61.Text = "Preview:"
-                GroupBox5.Text = "Associations"
                 Label9.Text = "Saving image information"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
@@ -1023,9 +966,7 @@ Public Class Options
                 Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                 Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                 Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
-                Label41.Text = "Estado de asociaciones:"
-                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                Label40.Text = "Administre asociaciones de archivos para componentes de DISMTools"
                 Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                 Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en los modos de administración de instalaciones en línea o fuera de línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
@@ -1036,7 +977,7 @@ Public Class Options
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
                 Button4.Text = "Examinar..."
-                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                Button9.Text = "Establecer asociaciones"
                 Button10.Text = "Opciones avanzadas"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
@@ -1064,7 +1005,6 @@ Public Class Options
                 Label59.Text = "Personalización del registro"
                 Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
                 Label61.Text = "Vista previa:"
-                GroupBox5.Text = "Asociaciones"
                 Label9.Text = "Guardando información de la imagen"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
@@ -1120,9 +1060,7 @@ Public Class Options
                 Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                 Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                 Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                Label40.Text = "Les associations de fichiers vous permettent d'accéder directement aux fichiers du projet, sans avoir à charger le programme au préalable."
-                Label41.Text = "État de l'association :"
-                Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
+                Label40.Text = "Gérer les associations de fichiers pour les composants DISMTools :"
                 Label43.Text = "Définissez les options que vous souhaitez exécuter au démarrage du programme :"
                 Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en les modes de gestion de l'installation en ligne ou hors ligne, le programme utilisera son répertoire temporaire."
                 Label45.Text = "Style du panneau de progression secondaire :"
@@ -1133,7 +1071,7 @@ Public Class Options
                 Button2.Text = "Voir les versions des composants DISM"
                 Button3.Text = "Parcourir..."
                 Button4.Text = "Parcourir..."
-                Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
+                Button9.Text = "Établir des associations de fichiers"
                 Button10.Text = "Paramètres avancés"
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
@@ -1161,7 +1099,6 @@ Public Class Options
                 Label59.Text = "Personnalisation du journal"
                 Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
                 Label61.Text = "Aperçu :"
-                GroupBox5.Text = "Associations"
                 Label9.Text = "Sauvegarde des informations de l'image"
                 LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                 LinkLabel1.LinkArea = New LinkArea(122, 126)
@@ -1217,9 +1154,7 @@ Public Class Options
                 Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                 Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                 Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                Label40.Text = "As associações de ficheiros permitem-lhe aceder diretamente aos ficheiros do projeto, sem ter de carregar primeiro o programa"
-                Label41.Text = "Estado da associação:"
-                Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
+                Label40.Text = "Gerir associações de ficheiros para os componentes do DISMTools:"
                 Label43.Text = "Definir opções que gostaria de efetuar quando o programa arranca:"
                 Label44.Text = "O programa utilizará o diretório de rascunho fornecido pelo projeto, se tiver sido carregado um. Se estiver nos modos de gestão da instalação online ou offline, o programa utilizará o seu diretório de rascunho"
                 Label45.Text = "Estilo do painel de progresso secundário:"
@@ -1230,7 +1165,7 @@ Public Class Options
                 Button2.Text = "Ver versões de componentes DISM"
                 Button3.Text = "Navegar..."
                 Button4.Text = "Navegar..."
-                Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Configurar associações de ficheiros")
+                Button9.Text = "Configurar associações de ficheiros"
                 Button10.Text = "Configurações avançadas"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
@@ -1258,7 +1193,6 @@ Public Class Options
                 Label59.Text = "Personalização do registo"
                 Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
                 Label61.Text = "Pré-visualização:"
-                GroupBox5.Text = "Associações"
                 Label9.Text = "Guardar informação da imagem"
                 LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
                 LinkLabel1.LinkArea = New LinkArea(107, 118)
@@ -1314,9 +1248,7 @@ Public Class Options
                 Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                 Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                 Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
-                Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
-                Label41.Text = "Stato dell'associazione:"
-                Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                Label40.Text = "Gestisci le associazioni dei file per i componenti di DISMTools:"
                 Label43.Text = "Impostare le opzioni che si desidera eseguire all'avvio del programma:"
                 Label44.Text = "Il programma utilizzerà la cartella temporanea fornita dal progetto, se ne è stata caricata una. Se ci si trova nelle modalità di gestione dell'installazione online o offline, il programma utilizzerà la sua directory scratch"
                 Label45.Text = "Stile del pannello di avanzamento secondario:"
@@ -1327,7 +1259,7 @@ Public Class Options
                 Button2.Text = "Visualizza le versioni dei componenti DISM"
                 Button3.Text = "Sfoglia..."
                 Button4.Text = "Sfoglia..."
-                Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                Button9.Text = "Imposta associazioni file"
                 Button10.Text = "Impostazioni avanzate"
                 Cancel_Button.Text = "Annulla"
                 OK_Button.Text = "OK"
@@ -1355,7 +1287,6 @@ Public Class Options
                 Label59.Text = "Personalizzazione dei registri"
                 Label60.Text = "Impostare le opzioni che si desidera eseguire alla chiusura del programma:"
                 Label61.Text = "Anteprima:"
-                GroupBox5.Text = "Associazioni"
                 Label9.Text = "Salvataggio delle informazioni sull'immagine"
                 LinkLabel1.Text = "Il programma abilita o disabilita alcune funzioni in base alla versione di DISM supportata. Come influirà sull'uso di questo programma e quali funzioni saranno disabilitate di conseguenza?"
                 LinkLabel1.LinkArea = New LinkArea(92, 100)
@@ -1602,7 +1533,6 @@ Public Class Options
         NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
-        GroupBox5.ForeColor = CurrentTheme.ForegroundColor
         TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
         PictureBox10.Image = GetGlyphResource("options_program")
         PictureBox11.Image = GetGlyphResource("options_personalization")
@@ -1623,7 +1553,6 @@ Public Class Options
         Catch ex As Exception
 
         End Try
-        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -1641,6 +1570,8 @@ Public Class Options
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         End If
 
+        DTProjAssocCB.Checked = DetectFileAssociations("DISMTools.Project")
+        DTSSEditAssocCB.Checked = DetectFileAssociations("DTSSEdit.StarterScript")
         GetAIRServiceInformation()
         ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
@@ -2519,7 +2450,7 @@ Public Class Options
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         DynaLog.LogMessage("Toggling state of file associations...")
-        If DetectFileAssociations() Then ManageAssociations(1, False) Else ManageAssociations(0, If(CheckBox11.Checked, True, False))
+        ManageAssociations(CheckBox11.Checked)
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
@@ -2811,5 +2742,9 @@ Public Class Options
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
         Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "dism.exe"),
                       "/cleanup-mountpoints")
+    End Sub
+
+    Private Sub DTProjAssocCB_CheckedChanged(sender As Object, e As EventArgs) Handles DTProjAssocCB.CheckedChanged
+        CheckBox11.Enabled = DTProjAssocCB.Checked
     End Sub
 End Class
