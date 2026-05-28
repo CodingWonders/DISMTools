@@ -44,7 +44,6 @@ Public Class MainForm
     ' more settings will be added below this initial batch
     Public DismExe As String
     Public SaveOnSettingsIni As Boolean
-    Public VolatileMode As Boolean
     Public ColorMode As Integer
     Public Language As Integer
     Public LogFont As String
@@ -1371,13 +1370,6 @@ Public Class MainForm
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
                 Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
-                If CInt(PrgKey.GetValue("Volatile")) = 1 Then
-                    DynaLog.LogMessage("Volatile mode detected. Setting application has stopped")
-                    VolatileMode = True
-                    Exit Sub
-                Else
-                    VolatileMode = False
-                End If
                 DismExe = PrgKey.GetValue("DismExe").ToString().Replace(Quote, "").Trim()
                 SaveOnSettingsIni = (CInt(PrgKey.GetValue("SaveOnSettingsIni")) = 1)
                 PrgKey.Close()
@@ -1491,12 +1483,6 @@ Public Class MainForm
                 Try
                     Dim parser As New IniDataParser(New SettingsParserConfiguration())
                     Dim settingData As IniData = parser.Parse(File.ReadAllText(Path.Combine(Application.StartupPath, "settings.ini"), UTF8))
-                    VolatileMode = CInt(settingData("Program")("Volatile")) = 1
-                    If VolatileMode Then
-                        DynaLog.LogMessage("Volatile mode detected. Setting application has stopped")
-                        ' Cancel setting application
-                        Exit Sub
-                    End If
                     DismExe = settingData("Program")("DismExe").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     SaveOnSettingsIni = CInt(settingData("Program")("SaveOnSettingsIni")) = 1
                     If Not SaveOnSettingsIni AndAlso Not File.Exists(Path.Combine(Application.StartupPath, "portable")) Then
@@ -4135,10 +4121,7 @@ Public Class MainForm
 
     Sub SaveDTSettings()
         DynaLog.LogMessage("Determining volatile mode status...")
-        If VolatileMode Then
-            DynaLog.LogMessage("Volatile mode detected. Exiting...")
-            Exit Sub
-        Else
+        
             DynaLog.LogMessage("Volatile mode not detected.")
             ShowDTSettings()
             If SaveOnSettingsIni Then
@@ -4153,7 +4136,6 @@ Public Class MainForm
                 settingsData.Sections.AddSection("Program")
                 settingsData("Program").AddKey("DismExe", Quote & DismExe & Quote)
                 settingsData("Program").AddKey("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0))
-                settingsData("Program").AddKey("Volatile", If(VolatileMode, 1, 0))
                 settingsData.Sections.AddSection("Personalization")
                 settingsData("Personalization").AddKey("ColorMode", ColorMode)
                 settingsData("Personalization").AddKey("ColorTheme_Light", LightThemeIndex)
@@ -4249,7 +4231,6 @@ Public Class MainForm
                     Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
                     PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
                     PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
-                    PrgKey.SetValue("Volatile", If(VolatileMode, 1, 0), RegistryValueKind.DWord)
                     PrgKey.Close()
                     DynaLog.LogMessage("Configuring personalization settings...")
                     Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
@@ -4363,7 +4344,6 @@ Public Class MainForm
                     SaveDTSettings()
                 End Try
             End If
-        End If
 
     End Sub
 
@@ -10495,10 +10475,7 @@ Public Class MainForm
         If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
             ToggleFullScreenMode()
         End If
-        If Not VolatileMode Then
-            DynaLog.LogMessage("DISMTools is not in volatile mode. Saving settings...")
-            SaveDTSettings()
-        End If
+        SaveDTSettings()
         If Not EnableDynaLog Then
             ' Settings have already been saved. Re-enable DynaLog for ending
             EnableDynaLog = True

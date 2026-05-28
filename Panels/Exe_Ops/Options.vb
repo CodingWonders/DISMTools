@@ -114,11 +114,6 @@ Public Class Options
             Case 1
                 MainForm.SaveOnSettingsIni = False
         End Select
-        If CheckBox1.Checked Then
-            MainForm.VolatileMode = True
-        Else
-            MainForm.VolatileMode = False
-        End If
         MainForm.ColorMode = ComboBox2.SelectedIndex
         MainForm.Language = ComboBox3.SelectedIndex
         MainForm.LogFont = ComboBox4.Text
@@ -205,9 +200,6 @@ Public Class Options
         MainForm.AutoCleanMounts = CheckBox22.Checked
         MainForm.AutoLogs = CheckBox10.Checked
         MainForm.SystemEditor = TextBox5.Text
-        If MainForm.VolatileMode Then
-            MainForm.SaveDTSettings()
-        End If
         If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.CurrentImage.ImageVersion)
         MainForm.SkipQuestions = CheckBox14.Checked
         MainForm.AutoCompleteInfo(0) = CheckBox15.Checked
@@ -383,7 +375,6 @@ Public Class Options
                         Label2.Text = "DISM executable path:"
                         Label3.Text = "Version:"
                         Label5.Text = "Save settings on:"
-                        Label6.Text = "While in volatile mode, settings will be reset on program closure."
                         Label7.Text = "Color mode:"
                         Label8.Text = "Language:"
                         'Label9.Text = "Please specify the settings for the log window:"
@@ -418,7 +409,6 @@ Public Class Options
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Reset preferences"
-                        CheckBox1.Text = "Volatile mode"
                         CheckBox2.Text = "Quietly perform image operations"
                         CheckBox3.Text = "Skip system restart"
                         CheckBox4.Text = "Use a scratch directory"
@@ -477,7 +467,6 @@ Public Class Options
                         Label2.Text = "Ruta del ejecutable:"
                         Label3.Text = "Versión:"
                         Label5.Text = "Guardar configuraciones en:"
-                        Label6.Text = "Cuando se está en el modo volátil, las configuraciones se restablecerán al cerrar el programa."
                         Label7.Text = "Modo de color:"
                         Label8.Text = "Idioma:"
                         Label10.Text = "Fuente:"
@@ -511,7 +500,6 @@ Public Class Options
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         PrefReset.Text = "Restablecer preferencias"
-                        CheckBox1.Text = "Modo volátil"
                         CheckBox2.Text = "Realizar operaciones silenciosamente"
                         CheckBox3.Text = "Omitir reinicio del sistema"
                         CheckBox4.Text = "Usar un directorio temporal"
@@ -570,7 +558,6 @@ Public Class Options
                         Label2.Text = "Chemin d'accès à l'exécutable DISM :"
                         Label3.Text = "Version:"
                         Label5.Text = "Sauvegarder les paramètres sur :"
-                        Label6.Text = "En mode volatile, les paramètres sont réinitialisés à la fermeture du programme."
                         Label7.Text = "Mode couleur :"
                         Label8.Text = "Langue:"
                         'Label9.Text = "Veuillez spécifier les paramètres de la fenêtre d'enregistrement :"
@@ -605,7 +592,6 @@ Public Class Options
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Réinitialiser les préférences"
-                        CheckBox1.Text = "Mode volatile"
                         CheckBox2.Text = "Effectuer des opérations d'image en silence"
                         CheckBox3.Text = "Sauter le redémarrage du système"
                         CheckBox4.Text = "Utiliser un répertoire temporaire"
@@ -664,7 +650,6 @@ Public Class Options
                         Label2.Text = "Localização do executável DISM:"
                         Label3.Text = "Versão:"
                         Label5.Text = "Guardar configurações em:"
-                        Label6.Text = "Enquanto estiver em modo volátil, as configurações serão repostas quando o programa for encerrado."
                         Label7.Text = "Modo de cor:"
                         Label8.Text = "Idioma:"
                         Label9.Text = "Especifique as configurações para a janela de registo:"
@@ -699,7 +684,6 @@ Public Class Options
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Repor preferências"
-                        CheckBox1.Text = "Modo volátil"
                         CheckBox2.Text = "Efetuar operações de imagem silenciosamente"
                         CheckBox3.Text = "Ignorar o reinício do sistema"
                         CheckBox4.Text = "Utilizar um diretório de rascunho"
@@ -758,7 +742,6 @@ Public Class Options
                         Label2.Text = "Percorso eseguibile DISM:"
                         Label3.Text = "Versione:"
                         Label5.Text = "Salva impostazioni in:"
-                        Label6.Text = "In modalità volatile, le impostazioni verranno ripristinate alla chiusura del programma"
                         Label7.Text = "Modalità colore:"
                         Label8.Text = "Lingua:"
                         Label9.Text = "Specifica le impostazioni per la finestra regsitro:"
@@ -793,7 +776,6 @@ Public Class Options
                         Cancel_Button.Text = "Annulla"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Ripristina preferenze"
-                        CheckBox1.Text = "Modalità volatile"
                         CheckBox2.Text = "Esegui le operazioni sull'immagine in modalità silenziosa"
                         CheckBox3.Text = "Salta il riavvio del sistema"
                         CheckBox4.Text = "Usa cartella scratch"
@@ -853,7 +835,6 @@ Public Class Options
                 Label2.Text = "DISM executable path:"
                 Label3.Text = "Version:"
                 Label5.Text = "Save settings on:"
-                Label6.Text = "While in volatile mode, settings will be reset on program closure."
                 Label7.Text = "Color mode:"
                 Label8.Text = "Language:"
                 'Label9.Text = "Please specify the settings for the log window:"
@@ -888,7 +869,6 @@ Public Class Options
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Reset preferences"
-                CheckBox1.Text = "Volatile mode"
                 CheckBox2.Text = "Quietly perform image operations"
                 CheckBox3.Text = "Skip system restart"
                 CheckBox4.Text = "Use a scratch directory"
@@ -947,7 +927,6 @@ Public Class Options
                 Label2.Text = "Ruta del ejecutable:"
                 Label3.Text = "Versión:"
                 Label5.Text = "Guardar configuraciones en:"
-                Label6.Text = "Cuando se está en el modo volátil, las configuraciones se restablecerán al cerrar el programa."
                 Label7.Text = "Modo de color:"
                 Label8.Text = "Idioma:"
                 'Label9.Text = "Especifique las configuraciones para la ventana de registro:"
@@ -982,7 +961,6 @@ Public Class Options
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 PrefReset.Text = "Restablecer preferencias"
-                CheckBox1.Text = "Modo volátil"
                 CheckBox2.Text = "Realizar operaciones silenciosamente"
                 CheckBox3.Text = "Omitir reinicio del sistema"
                 CheckBox4.Text = "Usar un directorio temporal"
@@ -1041,7 +1019,6 @@ Public Class Options
                 Label2.Text = "Chemin d'accès à l'exécutable DISM :"
                 Label3.Text = "Version:"
                 Label5.Text = "Sauvegarder les paramètres sur :"
-                Label6.Text = "En mode volatile, les paramètres sont réinitialisés à la fermeture du programme."
                 Label7.Text = "Mode couleur :"
                 Label8.Text = "Langue:"
                 'Label9.Text = "Veuillez spécifier les paramètres de la fenêtre d'enregistrement :"
@@ -1076,7 +1053,6 @@ Public Class Options
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Réinitialiser les préférences"
-                CheckBox1.Text = "Mode volatile"
                 CheckBox2.Text = "Effectuer des opérations d'image en silence"
                 CheckBox3.Text = "Sauter le redémarrage du système"
                 CheckBox4.Text = "Utiliser un répertoire temporaire"
@@ -1135,7 +1111,6 @@ Public Class Options
                 Label2.Text = "Localização do executável DISM:"
                 Label3.Text = "Versão:"
                 Label5.Text = "Guardar configurações em:"
-                Label6.Text = "Enquanto estiver em modo volátil, as configurações serão repostas quando o programa for encerrado."
                 Label7.Text = "Modo de cor:"
                 Label8.Text = "Idioma:"
                 Label9.Text = "Especifique as configurações para a janela de registo:"
@@ -1170,7 +1145,6 @@ Public Class Options
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Repor preferências"
-                CheckBox1.Text = "Modo volátil"
                 CheckBox2.Text = "Efetuar operações de imagem silenciosamente"
                 CheckBox3.Text = "Ignorar o reinício do sistema"
                 CheckBox4.Text = "Utilizar um diretório de rascunho"
@@ -1229,7 +1203,6 @@ Public Class Options
                 Label2.Text = "Percorso eseguibile DISM:"
                 Label3.Text = "Versione:"
                 Label5.Text = "Salva impostazioni su:"
-                Label6.Text = "In modalità volatile, le impostazioni verranno ripristinate alla chiusura del programma"
                 Label7.Text = "Modalità colore:"
                 Label8.Text = "Lingua:"
                 Label9.Text = "Specificare le impostazioni per la finestra di log:"
@@ -1264,7 +1237,6 @@ Public Class Options
                 Cancel_Button.Text = "Annulla"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Reimpostare le preferenze"
-                CheckBox1.Text = "Modalità volatile"
                 CheckBox2.Text = "Esegui silenziosamente le operazioni sull'immagine"
                 CheckBox3.Text = "Salta il riavvio del sistema"
                 CheckBox4.Text = "Utilizza una directory scratch"
@@ -1594,11 +1566,6 @@ Public Class Options
             ComboBox1.SelectedIndex = 0
         Else
             ComboBox1.SelectedIndex = 1
-        End If
-        If MainForm.VolatileMode Then
-            CheckBox1.Checked = True
-        Else
-            CheckBox1.Checked = False
         End If
         Select Case MainForm.ColorMode
             Case 0

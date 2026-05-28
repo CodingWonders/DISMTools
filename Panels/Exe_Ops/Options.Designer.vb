@@ -36,7 +36,9 @@ Partial Class Options
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+        Me.DTSSEditAssocCB = New System.Windows.Forms.CheckBox()
         Me.Button9 = New System.Windows.Forms.Button()
+        Me.DTProjAssocCB = New System.Windows.Forms.CheckBox()
         Me.Label40 = New System.Windows.Forms.Label()
         Me.Button10 = New System.Windows.Forms.Button()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
@@ -105,7 +107,6 @@ Partial Class Options
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
@@ -115,7 +116,6 @@ Partial Class Options
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
@@ -155,6 +155,8 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
+        Me.Options_FileAssocs = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel10 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Options_ImgOps = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -253,11 +255,7 @@ Partial Class Options
         Me.FlowLayoutPanel8 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel11 = New System.Windows.Forms.Panel()
         Me.Panel12 = New System.Windows.Forms.Panel()
-        Me.Options_FileAssocs = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel10 = New System.Windows.Forms.FlowLayoutPanel()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.DTProjAssocCB = New System.Windows.Forms.CheckBox()
-        Me.DTSSEditAssocCB = New System.Windows.Forms.CheckBox()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -304,6 +302,8 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
+        Me.Options_FileAssocs.SuspendLayout()
+        Me.FlowLayoutPanel10.SuspendLayout()
         Me.Options_ImgOps.SuspendLayout()
         Me.FlowLayoutPanel5.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -349,8 +349,6 @@ Partial Class Options
         Me.FlowLayoutPanel8.SuspendLayout()
         Me.Panel11.SuspendLayout()
         Me.Panel12.SuspendLayout()
-        Me.Options_FileAssocs.SuspendLayout()
-        Me.FlowLayoutPanel10.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -480,6 +478,16 @@ Partial Class Options
         Me.CheckBox11.Text = "Set custom file icons for DISMTools projects"
         Me.CheckBox11.UseVisualStyleBackColor = True
         '
+        'DTSSEditAssocCB
+        '
+        Me.DTSSEditAssocCB.AutoSize = True
+        Me.DTSSEditAssocCB.Location = New System.Drawing.Point(80, 128)
+        Me.DTSSEditAssocCB.Name = "DTSSEditAssocCB"
+        Me.DTSSEditAssocCB.Size = New System.Drawing.Size(278, 19)
+        Me.DTSSEditAssocCB.TabIndex = 2
+        Me.DTSSEditAssocCB.Text = "Open starter scripts with the Starter Script Editor"
+        Me.DTSSEditAssocCB.UseVisualStyleBackColor = True
+        '
         'Button9
         '
         Me.Button9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -491,6 +499,16 @@ Partial Class Options
         Me.Button9.TabIndex = 1
         Me.Button9.Text = "Set file associations"
         Me.Button9.UseVisualStyleBackColor = True
+        '
+        'DTProjAssocCB
+        '
+        Me.DTProjAssocCB.AutoSize = True
+        Me.DTProjAssocCB.Location = New System.Drawing.Point(80, 72)
+        Me.DTProjAssocCB.Name = "DTProjAssocCB"
+        Me.DTProjAssocCB.Size = New System.Drawing.Size(270, 19)
+        Me.DTProjAssocCB.TabIndex = 2
+        Me.DTProjAssocCB.Text = "Open my projects with this copy of DISMTools"
+        Me.DTProjAssocCB.UseVisualStyleBackColor = True
         '
         'Label40
         '
@@ -1229,16 +1247,6 @@ Partial Class Options
         Me.Label7.Text = "Color mode:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(21, 43)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(98, 19)
-        Me.CheckBox1.TabIndex = 6
-        Me.CheckBox1.Text = "Volatile mode"
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
@@ -1329,14 +1337,6 @@ Partial Class Options
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "Save settings on:"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label6
-        '
-        Me.Label6.Location = New System.Drawing.Point(62, 68)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(663, 33)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "While in volatile mode, settings will be reset on program closure."
         '
         'Label3
         '
@@ -1737,6 +1737,27 @@ Partial Class Options
         Me.ValueContainer.Name = "ValueContainer"
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
+        '
+        'Options_FileAssocs
+        '
+        Me.Options_FileAssocs.Controls.Add(Me.FlowLayoutPanel10)
+        Me.Options_FileAssocs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_FileAssocs.Location = New System.Drawing.Point(0, 0)
+        Me.Options_FileAssocs.Name = "Options_FileAssocs"
+        Me.Options_FileAssocs.Size = New System.Drawing.Size(748, 465)
+        Me.Options_FileAssocs.TabIndex = 8
+        Me.Options_FileAssocs.Visible = False
+        '
+        'FlowLayoutPanel10
+        '
+        Me.FlowLayoutPanel10.AutoScroll = True
+        Me.FlowLayoutPanel10.Controls.Add(Me.Panel2)
+        Me.FlowLayoutPanel10.Controls.Add(Me.Panel3)
+        Me.FlowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel10.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel10.Name = "FlowLayoutPanel10"
+        Me.FlowLayoutPanel10.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel10.TabIndex = 0
         '
         'Options_ImgOps
         '
@@ -2536,10 +2557,8 @@ Partial Class Options
         '
         'Panel15
         '
-        Me.Panel15.Controls.Add(Me.CheckBox1)
         Me.Panel15.Controls.Add(Me.Label5)
         Me.Panel15.Controls.Add(Me.ComboBox1)
-        Me.Panel15.Controls.Add(Me.Label6)
         Me.Panel15.Controls.Add(Me.PictureBox3)
         Me.Panel15.Location = New System.Drawing.Point(0, 138)
         Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
@@ -2850,51 +2869,10 @@ Partial Class Options
         Me.Panel12.Size = New System.Drawing.Size(656, 63)
         Me.Panel12.TabIndex = 8
         '
-        'Options_FileAssocs
-        '
-        Me.Options_FileAssocs.Controls.Add(Me.FlowLayoutPanel10)
-        Me.Options_FileAssocs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_FileAssocs.Location = New System.Drawing.Point(0, 0)
-        Me.Options_FileAssocs.Name = "Options_FileAssocs"
-        Me.Options_FileAssocs.Size = New System.Drawing.Size(748, 465)
-        Me.Options_FileAssocs.TabIndex = 8
-        Me.Options_FileAssocs.Visible = False
-        '
-        'FlowLayoutPanel10
-        '
-        Me.FlowLayoutPanel10.AutoScroll = True
-        Me.FlowLayoutPanel10.Controls.Add(Me.Panel2)
-        Me.FlowLayoutPanel10.Controls.Add(Me.Panel3)
-        Me.FlowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel10.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel10.Name = "FlowLayoutPanel10"
-        Me.FlowLayoutPanel10.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel10.TabIndex = 0
-        '
         'EditorOFD
         '
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
-        '
-        'DTProjAssocCB
-        '
-        Me.DTProjAssocCB.AutoSize = True
-        Me.DTProjAssocCB.Location = New System.Drawing.Point(80, 72)
-        Me.DTProjAssocCB.Name = "DTProjAssocCB"
-        Me.DTProjAssocCB.Size = New System.Drawing.Size(270, 19)
-        Me.DTProjAssocCB.TabIndex = 2
-        Me.DTProjAssocCB.Text = "Open my projects with this copy of DISMTools"
-        Me.DTProjAssocCB.UseVisualStyleBackColor = True
-        '
-        'DTSSEditAssocCB
-        '
-        Me.DTSSEditAssocCB.AutoSize = True
-        Me.DTSSEditAssocCB.Location = New System.Drawing.Point(80, 128)
-        Me.DTSSEditAssocCB.Name = "DTSSEditAssocCB"
-        Me.DTSSEditAssocCB.Size = New System.Drawing.Size(278, 19)
-        Me.DTSSEditAssocCB.TabIndex = 2
-        Me.DTSSEditAssocCB.Text = "Open starter scripts with the Starter Script Editor"
-        Me.DTSSEditAssocCB.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
         '
@@ -2988,6 +2966,8 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
+        Me.Options_FileAssocs.ResumeLayout(False)
+        Me.FlowLayoutPanel10.ResumeLayout(False)
         Me.Options_ImgOps.ResumeLayout(False)
         Me.FlowLayoutPanel5.ResumeLayout(False)
         Me.Panel6.ResumeLayout(False)
@@ -3054,8 +3034,6 @@ Partial Class Options
         Me.Panel11.ResumeLayout(False)
         Me.Panel11.PerformLayout()
         Me.Panel12.ResumeLayout(False)
-        Me.Options_FileAssocs.ResumeLayout(False)
-        Me.FlowLayoutPanel10.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -3064,7 +3042,6 @@ Partial Class Options
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DismOFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents ScratchFBD As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
@@ -3074,7 +3051,6 @@ Partial Class Options
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label11 As System.Windows.Forms.Label
