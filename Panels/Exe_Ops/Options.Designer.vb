@@ -108,7 +108,6 @@ Partial Class Options
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Button2 = New System.Windows.Forms.Button()
@@ -272,7 +271,6 @@ Partial Class Options
         Me.Panel4.SuspendLayout()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.btnPanel.SuspendLayout()
         Me.OptionContainer.SuspendLayout()
@@ -1256,16 +1254,6 @@ Partial Class Options
         Me.ComboBox1.Size = New System.Drawing.Size(556, 23)
         Me.ComboBox1.TabIndex = 5
         Me.ComboBox1.Text = "Settings file"
-        '
-        'PictureBox3
-        '
-        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.info_16px
-        Me.PictureBox3.Location = New System.Drawing.Point(40, 67)
-        Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox3.TabIndex = 3
-        Me.PictureBox3.TabStop = False
         '
         'LinkLabel1
         '
@@ -2559,7 +2547,6 @@ Partial Class Options
         '
         Me.Panel15.Controls.Add(Me.Label5)
         Me.Panel15.Controls.Add(Me.ComboBox1)
-        Me.Panel15.Controls.Add(Me.PictureBox3)
         Me.Panel15.Location = New System.Drawing.Point(0, 138)
         Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel15.Name = "Panel15"
@@ -2926,7 +2913,6 @@ Partial Class Options
         Me.Panel4.PerformLayout()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.btnPanel.ResumeLayout(False)
         Me.OptionContainer.ResumeLayout(False)
@@ -3008,7 +2994,6 @@ Partial Class Options
         Me.Panel14.ResumeLayout(False)
         Me.Panel14.PerformLayout()
         Me.Panel15.ResumeLayout(False)
-        Me.Panel15.PerformLayout()
         Me.Options_Logs.ResumeLayout(False)
         Me.FlowLayoutPanel4.ResumeLayout(False)
         Me.Panel5.ResumeLayout(False)
@@ -3043,7 +3028,6 @@ Partial Class Options
     Friend WithEvents DismOFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents ScratchFBD As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
-    Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
