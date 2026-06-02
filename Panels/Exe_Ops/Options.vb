@@ -219,6 +219,7 @@ Public Class Options
 
         MainForm.AppxDisplayNameFormatOnRemoval = ComboBox8.SelectedIndex
         MainForm.PreventSystemFromSleeping = CheckBox8.Checked
+        MainForm.HumanizeDates = CheckBox1.Checked
     End Sub
 
     Private Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1662,6 +1663,7 @@ Public Class Options
 
         ComboBox8.SelectedIndex = MainForm.AppxDisplayNameFormatOnRemoval
         CheckBox8.Checked = MainForm.PreventSystemFromSleeping
+        CheckBox1.Checked = MainForm.HumanizeDates
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

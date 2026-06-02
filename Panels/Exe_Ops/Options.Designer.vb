@@ -256,6 +256,7 @@ Partial Class Options
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1709,8 +1710,8 @@ Partial Class Options
         '
         'ValueContainer
         '
-        Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
+        Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Controls.Add(Me.Options_Startup)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
@@ -1782,11 +1783,12 @@ Partial Class Options
         Me.Panel6.Controls.Add(Me.CheckBox23)
         Me.Panel6.Controls.Add(Me.CheckBox3)
         Me.Panel6.Controls.Add(Me.Label18)
+        Me.Panel6.Controls.Add(Me.CheckBox1)
         Me.Panel6.Controls.Add(Me.CheckBox8)
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(728, 440)
+        Me.Panel6.Size = New System.Drawing.Size(728, 464)
         Me.Panel6.TabIndex = 0
         '
         'LinkLabel4
@@ -1794,7 +1796,7 @@ Partial Class Options
         Me.LinkLabel4.AutoSize = True
         Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel4.Location = New System.Drawing.Point(18, 406)
+        Me.LinkLabel4.Location = New System.Drawing.Point(18, 438)
         Me.LinkLabel4.Name = "LinkLabel4"
         Me.LinkLabel4.Size = New System.Drawing.Size(397, 15)
         Me.LinkLabel4.TabIndex = 12
@@ -1810,7 +1812,7 @@ Partial Class Options
         Me.TableLayoutPanel3.Controls.Add(Me.Label73, 1, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Label74, 0, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.Label75, 1, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 354)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 386)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -1865,7 +1867,7 @@ Partial Class Options
         '
         Me.ComboBox8.FormattingEnabled = True
         Me.ComboBox8.Items.AddRange(New Object() {"Display name only", "Display name, then friendly display name", "Friendly display name only"})
-        Me.ComboBox8.Location = New System.Drawing.Point(20, 298)
+        Me.ComboBox8.Location = New System.Drawing.Point(20, 330)
         Me.ComboBox8.Name = "ComboBox8"
         Me.ComboBox8.Size = New System.Drawing.Size(686, 23)
         Me.ComboBox8.TabIndex = 10
@@ -1873,7 +1875,7 @@ Partial Class Options
         'Label71
         '
         Me.Label71.AutoSize = True
-        Me.Label71.Location = New System.Drawing.Point(17, 330)
+        Me.Label71.Location = New System.Drawing.Point(17, 362)
         Me.Label71.Name = "Label71"
         Me.Label71.Size = New System.Drawing.Size(54, 15)
         Me.Label71.TabIndex = 9
@@ -1882,7 +1884,7 @@ Partial Class Options
         'Label70
         '
         Me.Label70.AutoSize = True
-        Me.Label70.Location = New System.Drawing.Point(18, 276)
+        Me.Label70.Location = New System.Drawing.Point(18, 308)
         Me.Label70.Name = "Label70"
         Me.Label70.Size = New System.Drawing.Size(384, 15)
         Me.Label70.TabIndex = 9
@@ -1923,7 +1925,7 @@ Partial Class Options
         Me.Panel7.Controls.Add(Me.CheckBox14)
         Me.Panel7.Controls.Add(Me.Label48)
         Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
-        Me.Panel7.Location = New System.Drawing.Point(0, 440)
+        Me.Panel7.Location = New System.Drawing.Point(0, 464)
         Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(728, 172)
@@ -1948,7 +1950,7 @@ Partial Class Options
         Me.Panel21.Controls.Add(Me.Label69)
         Me.Panel21.Controls.Add(Me.Label67)
         Me.Panel21.Controls.Add(Me.Label68)
-        Me.Panel21.Location = New System.Drawing.Point(0, 612)
+        Me.Panel21.Location = New System.Drawing.Point(0, 636)
         Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel21.Name = "Panel21"
         Me.Panel21.Size = New System.Drawing.Size(728, 256)
@@ -2875,6 +2877,16 @@ Partial Class Options
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 6
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(21, 278)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(238, 19)
+        Me.CheckBox1.TabIndex = 13
+        Me.CheckBox1.Text = "Show dates in a human-readable format"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -3255,5 +3267,6 @@ Partial Class Options
     Friend WithEvents CheckBox8 As System.Windows.Forms.CheckBox
     Friend WithEvents DTSSEditAssocCB As System.Windows.Forms.CheckBox
     Friend WithEvents DTProjAssocCB As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class
