@@ -51,19 +51,7 @@ Unlike other user interfaces for DISM that use either the DISM API or the DISM e
 
 DISMTools isn't just a front-end for DISM, but an advanced one. As you perform tasks with your images and installations, you're presented with rich information and functionality. Here are some examples:
 
-- **Rich information during AppX package addition.** When adding an AppX package, you'll see rich information and, in most cases, the main Store logo asset. You can also add encrypted application packages to active installations, and configure stub package preferences, for full AppX package management:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/rich_appx_info.gif" />
-</p>
-
-- **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/app_installer_downloader.png" />
-</p>
-
-- **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
+- **Automatic detection of side-by-side (SxS) component sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
 
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/group_policy_caps.gif" />
@@ -91,7 +79,7 @@ You can also get and save image file information using the manager:
 	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_saver_quick_action.png" />
 </p>
 
-- **Generate and print image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference as a Markdown file. You can also see your Markdown report in HTML form thanks to Markdig:
+- **Generate image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference as a Markdown file. You can also see your Markdown report in HTML form thanks to Markdig:
 
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/info_report_viewer.png" />
@@ -101,6 +89,12 @@ You can also get and save image file information using the manager:
 
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/autounattend_wizard.png" />
+</p>
+
+- **Comprehensive Active Directory support.** Easily make target machines join your domain with the built-in AD DS domain join features. Configure DNS parameters and test resolutions for the domain suffix, and pick from any account object in your domain:
+
+<p align="center">
+	<img src="./res/adds_domain_join.gif" />
 </p>
 
 - **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily. You can also use your unattended answer files to test them, or to speed up the installation process by removing tedious steps from the out-of-box experience:
