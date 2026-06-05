@@ -175,6 +175,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; Value
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "AppxRemovalDisplayNameFormat"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PreventSystemFromSleeping"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "HumanizeDates"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
@@ -203,7 +204,6 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: expandsz; ValueName: "DismExe"; ValueData: "{win}\system32\dism.exe"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "SaveOnSettingsIni"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "Volatile"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; ValueType: dword; ValueName: "AutoScratch"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist

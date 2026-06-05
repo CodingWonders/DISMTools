@@ -4,6 +4,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Globalization
 
 Public Class GetPkgInfoDlg
 
@@ -846,8 +847,22 @@ Public Class GetPkgInfoDlg
                         Label42.Text = If(OSVer.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
                         Label46.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
                         Label34.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
-                        Label27.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime)
-                        Label29.Text = If(OSVer.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+
+                        Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                        Dim PackageInstallTime As Date = If(OSVer.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime),
+                            PackageLastUpdate As Date = If(OSVer.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+                        Dim PackageInstallTimeString As String = "",
+                            PackageLastUpdateString As String = ""
+                        If MainForm.HumanizeDates Then
+                            PackageInstallTimeString = String.Format("{0}, {1}", PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                            PackageLastUpdateString = String.Format("{0}, {1}", PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                        Else
+                            PackageInstallTimeString = PackageInstallTime.ToString("MM/dd/yyyy HH:mm:ss")
+                            PackageLastUpdateString = PackageLastUpdate.ToString("MM/dd/yyyy HH:mm:ss")
+                        End If
+
+                        Label27.Text = PackageInstallTimeString
+                        Label29.Text = PackageLastUpdateString
                         Label38.Text = If(OSVer.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
                         Label44.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
                         Label15.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())

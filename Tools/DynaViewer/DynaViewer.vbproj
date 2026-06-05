@@ -87,11 +87,11 @@
     <Compile Include="EventProperties.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.vb">
+    <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="MainForm.Designer.vb">
+      <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Helpers\LogHelper.vb" />
@@ -110,6 +110,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RegexCheatsheet.Designer.vb">
+      <DependentUpon>RegexCheatsheet.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RegexCheatsheet.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
   </ItemGroup>
@@ -118,15 +124,19 @@
       <SubType>Designer</SubType>
       <DependentUpon>EventProperties.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>Form1.vb</DependentUpon>
+      <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegexCheatsheet.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>RegexCheatsheet.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

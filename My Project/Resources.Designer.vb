@@ -2265,17 +2265,12 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a New features:
         '''
-        '''- Fixed an issue where the program would throw an exception when saving Windows PE configuration of an offline Windows PE installation
-        '''
-        '''New features:
-        '''
-        '''- The WDS Helper Client now detects the assigned volume letter for the image share more reliably
-        '''- ISO file creation results are now displayed in a notification
-        '''- You can now configure the keyboard layout in the Preinstallation Environment graphically
-        '''- A keyboard layout override policy has been added
-        '''- You can now save Preinstallation En [resto de la cadena truncado]&quot;;.
+        '''- In portable installations, file associations can now be toggled for the Starter Script Editor
+        '''- The DynaLog log viewer has received support for event log filters
+        '''- Date properties can now be displayed in a Windows-native format
+        '''- Other under-the-hood changes.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

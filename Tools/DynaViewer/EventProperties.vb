@@ -46,23 +46,23 @@ Public Class EventProperties
     End Sub
 
     Private Sub EventProperties_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        SetColorMode(Form1.CurrentColorMode)
+        SetColorMode(MainForm.CurrentColorMode)
         btnPreviousEvent.Enabled = Not (CurrentEventIndex = 0)
         btnNextEvent.Enabled = Not (CurrentEventIndex >= EventCount - 1)
     End Sub
 
     Sub GetEventInfo()
         Label1.Text = String.Format("Information for event {0} of {1}:", CurrentEventIndex + 1, EventCount)
-        txtEventTimestamp.Text = Form1.ListView1.Items(CurrentEventIndex).SubItems(0).Text
-        Label6.Text = String.Format("PID {0}", Form1.ListView1.Items(CurrentEventIndex).SubItems(1).Text)
-        Dim evtCallerParts As String() = Form1.ListView1.Items(CurrentEventIndex).SubItems(2).Text.Replace(" (", " ").Trim().Split(" ")
+        txtEventTimestamp.Text = MainForm.ListView1.Items(CurrentEventIndex).SubItems(0).Text
+        Label6.Text = String.Format("PID {0}", MainForm.ListView1.Items(CurrentEventIndex).SubItems(1).Text)
+        Dim evtCallerParts As String() = MainForm.ListView1.Items(CurrentEventIndex).SubItems(2).Text.Replace(" (", " ").Trim().Split(" ")
         txtEventCaller.Text = evtCallerParts(0)
         If evtCallerParts.Length = 2 Then
             txtEventParentCaller.Text = evtCallerParts(1).TrimEnd(")")
         Else
             txtEventParentCaller.Text = ""
         End If
-        txtEventMessage.Text = Form1.ListView1.Items(CurrentEventIndex).SubItems(3).Text
+        txtEventMessage.Text = MainForm.ListView1.Items(CurrentEventIndex).SubItems(3).Text
     End Sub
 
     Private Sub btnPreviousEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPreviousEvent.Click

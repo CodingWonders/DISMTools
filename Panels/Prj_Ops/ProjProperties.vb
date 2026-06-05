@@ -5,6 +5,7 @@ Imports System.Text.Encoding
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
 Imports System.Threading
+Imports System.Globalization
 
 Public Class ProjProperties
 
@@ -163,8 +164,20 @@ Public Class ProjProperties
             RWRemountBtn.Visible = MainForm.CurrentImage.ImageMountMode = DismMountMode.ReadOnly
             imgDirs.Text = MainForm.CurrentImage.ImageDirectoryCount
             imgFiles.Text = MainForm.CurrentImage.ImageFileCount
-            imgCreation.Text = MainForm.CurrentImage.ImageCreationDate
-            imgModification.Text = MainForm.CurrentImage.ImageModificationDate
+            Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+            Dim ImageCreationDate As String = "",
+                ImageModificationDate As String = ""
+            Dim CreatedDate As Date = MainForm.CurrentImage.ImageCreationDate,
+                ModifiedDate As Date = MainForm.CurrentImage.ImageModificationDate
+            If MainForm.HumanizeDates Then
+                ImageCreationDate = String.Format("{0}, {1}", CreatedDate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), CreatedDate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                ImageModificationDate = String.Format("{0}, {1}", ModifiedDate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), ModifiedDate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+            Else
+                ImageCreationDate = CreatedDate.Date.ToString("MM/dd/yyyy HH:mm:ss")
+                ImageModificationDate = ModifiedDate.Date.ToString("MM/dd/yyyy HH:mm:ss")
+            End If
+            imgCreation.Text = ImageCreationDate
+            imgModification.Text = ImageModificationDate
             DynaLog.LogMessage("Getting WIMBoot information")
             Dim args As String = "/English",
                 out As String = ""

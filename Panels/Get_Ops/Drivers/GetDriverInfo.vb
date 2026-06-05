@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports System.Threading
 Imports DISMTools.Utilities
+Imports System.Globalization
 
 Public Class GetDriverInfo
 
@@ -1259,7 +1260,16 @@ Public Class GetDriverInfo
                     Label29.Text = drv.Version.ToString()
                     Label32.Text = drv.ClassName
                     Label35.Text = drv.ProviderName
-                    Label38.Text = drv.Date
+
+                    Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                    Dim DriverDateString As String = ""
+                    If MainForm.HumanizeDates Then
+                        DriverDateString = String.Format("{0}, {1}", drv.Date.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), drv.Date.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                    Else
+                        DriverDateString = drv.Date.ToString("MM/dd/yyyy HH:mm:ss")
+                    End If
+
+                    Label38.Text = DriverDateString
                     Label40.Text = drv.ClassDescription
                     Label42.Text = drv.ClassGuid
                     Label44.Text = Casters.CastDismSignatureStatus(drv.DriverSignature, True)

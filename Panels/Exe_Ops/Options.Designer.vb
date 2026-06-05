@@ -35,11 +35,10 @@ Partial Class Options
         Me.Label46 = New System.Windows.Forms.Label()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+        Me.DTSSEditAssocCB = New System.Windows.Forms.CheckBox()
         Me.Button9 = New System.Windows.Forms.Button()
-        Me.Label41 = New System.Windows.Forms.Label()
-        Me.Label42 = New System.Windows.Forms.Label()
+        Me.DTProjAssocCB = New System.Windows.Forms.CheckBox()
         Me.Label40 = New System.Windows.Forms.Label()
         Me.Button10 = New System.Windows.Forms.Button()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
@@ -108,9 +107,7 @@ Partial Class Options
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Button2 = New System.Windows.Forms.Button()
@@ -118,7 +115,6 @@ Partial Class Options
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
@@ -158,6 +154,33 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
+        Me.Options_FileAssocs = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel10 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Options_ImgOps = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label72 = New System.Windows.Forms.Label()
+        Me.Label73 = New System.Windows.Forms.Label()
+        Me.Label74 = New System.Windows.Forms.Label()
+        Me.Label75 = New System.Windows.Forms.Label()
+        Me.ComboBox8 = New System.Windows.Forms.ComboBox()
+        Me.Label71 = New System.Windows.Forms.Label()
+        Me.Label70 = New System.Windows.Forms.Label()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Panel21 = New System.Windows.Forms.Panel()
+        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
+        Me.ComboBox9 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
+        Me.Label76 = New System.Windows.Forms.Label()
+        Me.Label69 = New System.Windows.Forms.Label()
+        Me.Label67 = New System.Windows.Forms.Label()
+        Me.Label68 = New System.Windows.Forms.Label()
         Me.Options_Shutdown = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel12 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel23 = New System.Windows.Forms.Panel()
@@ -182,30 +205,6 @@ Partial Class Options
         Me.Label77 = New System.Windows.Forms.Label()
         Me.Label83 = New System.Windows.Forms.Label()
         Me.Label78 = New System.Windows.Forms.Label()
-        Me.Options_ImgOps = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label72 = New System.Windows.Forms.Label()
-        Me.Label73 = New System.Windows.Forms.Label()
-        Me.Label74 = New System.Windows.Forms.Label()
-        Me.Label75 = New System.Windows.Forms.Label()
-        Me.ComboBox8 = New System.Windows.Forms.ComboBox()
-        Me.Label71 = New System.Windows.Forms.Label()
-        Me.Label70 = New System.Windows.Forms.Label()
-        Me.Label32 = New System.Windows.Forms.Label()
-        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
-        Me.Panel7 = New System.Windows.Forms.Panel()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Panel21 = New System.Windows.Forms.Panel()
-        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
-        Me.ComboBox9 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
-        Me.Label76 = New System.Windows.Forms.Label()
-        Me.Label69 = New System.Windows.Forms.Label()
-        Me.Label67 = New System.Windows.Forms.Label()
-        Me.Label68 = New System.Windows.Forms.Label()
         Me.Options_Personalization = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel16 = New System.Windows.Forms.Panel()
@@ -255,16 +254,13 @@ Partial Class Options
         Me.FlowLayoutPanel8 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel11 = New System.Windows.Forms.Panel()
         Me.Panel12 = New System.Windows.Forms.Panel()
-        Me.Options_FileAssocs = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel10 = New System.Windows.Forms.FlowLayoutPanel()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
-        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
         CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -276,7 +272,6 @@ Partial Class Options
         Me.Panel4.SuspendLayout()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.btnPanel.SuspendLayout()
         Me.OptionContainer.SuspendLayout()
@@ -306,6 +301,14 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
+        Me.Options_FileAssocs.SuspendLayout()
+        Me.FlowLayoutPanel10.SuspendLayout()
+        Me.Options_ImgOps.SuspendLayout()
+        Me.FlowLayoutPanel5.SuspendLayout()
+        Me.Panel6.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
+        Me.Panel7.SuspendLayout()
+        Me.Panel21.SuspendLayout()
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
@@ -316,12 +319,6 @@ Partial Class Options
         Me.TableLayoutPanel5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
-        Me.Options_ImgOps.SuspendLayout()
-        Me.FlowLayoutPanel5.SuspendLayout()
-        Me.Panel6.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
-        Me.Panel7.SuspendLayout()
-        Me.Panel21.SuspendLayout()
         Me.Options_Personalization.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.Panel16.SuspendLayout()
@@ -351,8 +348,6 @@ Partial Class Options
         Me.FlowLayoutPanel8.SuspendLayout()
         Me.Panel11.SuspendLayout()
         Me.Panel12.SuspendLayout()
-        Me.Options_FileAssocs.SuspendLayout()
-        Me.FlowLayoutPanel10.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -435,7 +430,7 @@ Partial Class Options
         '
         Me.Panel3.Controls.Add(Me.Label46)
         Me.Panel3.Controls.Add(Me.PictureBox8)
-        Me.Panel3.Location = New System.Drawing.Point(0, 242)
+        Me.Panel3.Location = New System.Drawing.Point(0, 224)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(746, 57)
@@ -461,66 +456,58 @@ Partial Class Options
         '
         'Panel2
         '
-        Me.Panel2.Controls.Add(Me.GroupBox5)
+        Me.Panel2.Controls.Add(Me.CheckBox11)
+        Me.Panel2.Controls.Add(Me.DTSSEditAssocCB)
+        Me.Panel2.Controls.Add(Me.Button9)
+        Me.Panel2.Controls.Add(Me.DTProjAssocCB)
         Me.Panel2.Controls.Add(Me.Label40)
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(748, 242)
+        Me.Panel2.Size = New System.Drawing.Size(748, 224)
         Me.Panel2.TabIndex = 12
-        '
-        'GroupBox5
-        '
-        Me.GroupBox5.Controls.Add(Me.CheckBox11)
-        Me.GroupBox5.Controls.Add(Me.Button9)
-        Me.GroupBox5.Controls.Add(Me.Label41)
-        Me.GroupBox5.Controls.Add(Me.Label42)
-        Me.GroupBox5.Location = New System.Drawing.Point(24, 71)
-        Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(700, 153)
-        Me.GroupBox5.TabIndex = 1
-        Me.GroupBox5.TabStop = False
-        Me.GroupBox5.Text = "Associations"
         '
         'CheckBox11
         '
         Me.CheckBox11.AutoSize = True
-        Me.CheckBox11.Location = New System.Drawing.Point(31, 60)
+        Me.CheckBox11.Location = New System.Drawing.Point(110, 101)
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(257, 19)
         Me.CheckBox11.TabIndex = 2
         Me.CheckBox11.Text = "Set custom file icons for DISMTools projects"
         Me.CheckBox11.UseVisualStyleBackColor = True
         '
+        'DTSSEditAssocCB
+        '
+        Me.DTSSEditAssocCB.AutoSize = True
+        Me.DTSSEditAssocCB.Location = New System.Drawing.Point(80, 128)
+        Me.DTSSEditAssocCB.Name = "DTSSEditAssocCB"
+        Me.DTSSEditAssocCB.Size = New System.Drawing.Size(278, 19)
+        Me.DTSSEditAssocCB.TabIndex = 2
+        Me.DTSSEditAssocCB.Text = "Open starter scripts with the Starter Script Editor"
+        Me.DTSSEditAssocCB.UseVisualStyleBackColor = True
+        '
         'Button9
         '
-        Me.Button9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Button9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button9.Location = New System.Drawing.Point(217, 111)
+        Me.Button9.Location = New System.Drawing.Point(241, 164)
         Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(266, 23)
+        Me.Button9.Size = New System.Drawing.Size(266, 28)
         Me.Button9.TabIndex = 1
         Me.Button9.Text = "Set file associations"
         Me.Button9.UseVisualStyleBackColor = True
         '
-        'Label41
+        'DTProjAssocCB
         '
-        Me.Label41.Location = New System.Drawing.Point(28, 29)
-        Me.Label41.Name = "Label41"
-        Me.Label41.Size = New System.Drawing.Size(180, 15)
-        Me.Label41.TabIndex = 0
-        Me.Label41.Text = "Association status:"
-        Me.Label41.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Label42
-        '
-        Me.Label42.AutoSize = True
-        Me.Label42.Location = New System.Drawing.Point(214, 30)
-        Me.Label42.Name = "Label42"
-        Me.Label42.Size = New System.Drawing.Size(84, 15)
-        Me.Label42.TabIndex = 0
-        Me.Label42.Text = "<assocStatus>"
+        Me.DTProjAssocCB.AutoSize = True
+        Me.DTProjAssocCB.Location = New System.Drawing.Point(80, 72)
+        Me.DTProjAssocCB.Name = "DTProjAssocCB"
+        Me.DTProjAssocCB.Size = New System.Drawing.Size(270, 19)
+        Me.DTProjAssocCB.TabIndex = 2
+        Me.DTProjAssocCB.Text = "Open my projects with this copy of DISMTools"
+        Me.DTProjAssocCB.UseVisualStyleBackColor = True
         '
         'Label40
         '
@@ -529,8 +516,7 @@ Partial Class Options
         Me.Label40.Name = "Label40"
         Me.Label40.Size = New System.Drawing.Size(705, 38)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = "File associations let you access project files directly, without having to load t" & _
-    "he program first"
+        Me.Label40.Text = "Manage file associations for DISMTools components:"
         '
         'Button10
         '
@@ -1260,16 +1246,6 @@ Partial Class Options
         Me.Label7.Text = "Color mode:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(21, 43)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(98, 19)
-        Me.CheckBox1.TabIndex = 6
-        Me.CheckBox1.Text = "Volatile mode"
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
@@ -1279,16 +1255,6 @@ Partial Class Options
         Me.ComboBox1.Size = New System.Drawing.Size(556, 23)
         Me.ComboBox1.TabIndex = 5
         Me.ComboBox1.Text = "Settings file"
-        '
-        'PictureBox3
-        '
-        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.info_16px
-        Me.PictureBox3.Location = New System.Drawing.Point(40, 67)
-        Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox3.TabIndex = 3
-        Me.PictureBox3.TabStop = False
         '
         'LinkLabel1
         '
@@ -1360,14 +1326,6 @@ Partial Class Options
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "Save settings on:"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label6
-        '
-        Me.Label6.Location = New System.Drawing.Point(62, 68)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(663, 33)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "While in volatile mode, settings will be reset on program closure."
         '
         'Label3
         '
@@ -1753,6 +1711,7 @@ Partial Class Options
         'ValueContainer
         '
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
+        Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Controls.Add(Me.Options_Startup)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
@@ -1761,13 +1720,308 @@ Partial Class Options
         Me.ValueContainer.Controls.Add(Me.Options_Scratch)
         Me.ValueContainer.Controls.Add(Me.Options_Output)
         Me.ValueContainer.Controls.Add(Me.Options_BgProcs)
-        Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ValueContainer.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ValueContainer.Location = New System.Drawing.Point(0, 0)
         Me.ValueContainer.Name = "ValueContainer"
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
+        '
+        'Options_FileAssocs
+        '
+        Me.Options_FileAssocs.Controls.Add(Me.FlowLayoutPanel10)
+        Me.Options_FileAssocs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_FileAssocs.Location = New System.Drawing.Point(0, 0)
+        Me.Options_FileAssocs.Name = "Options_FileAssocs"
+        Me.Options_FileAssocs.Size = New System.Drawing.Size(748, 465)
+        Me.Options_FileAssocs.TabIndex = 8
+        Me.Options_FileAssocs.Visible = False
+        '
+        'FlowLayoutPanel10
+        '
+        Me.FlowLayoutPanel10.AutoScroll = True
+        Me.FlowLayoutPanel10.Controls.Add(Me.Panel2)
+        Me.FlowLayoutPanel10.Controls.Add(Me.Panel3)
+        Me.FlowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel10.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel10.Name = "FlowLayoutPanel10"
+        Me.FlowLayoutPanel10.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel10.TabIndex = 0
+        '
+        'Options_ImgOps
+        '
+        Me.Options_ImgOps.Controls.Add(Me.FlowLayoutPanel5)
+        Me.Options_ImgOps.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_ImgOps.Location = New System.Drawing.Point(0, 0)
+        Me.Options_ImgOps.Name = "Options_ImgOps"
+        Me.Options_ImgOps.Size = New System.Drawing.Size(748, 465)
+        Me.Options_ImgOps.TabIndex = 3
+        Me.Options_ImgOps.Visible = False
+        '
+        'FlowLayoutPanel5
+        '
+        Me.FlowLayoutPanel5.AutoScroll = True
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel6)
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel7)
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel21)
+        Me.FlowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel5.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
+        Me.FlowLayoutPanel5.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel5.TabIndex = 0
+        '
+        'Panel6
+        '
+        Me.Panel6.Controls.Add(Me.LinkLabel4)
+        Me.Panel6.Controls.Add(Me.TableLayoutPanel3)
+        Me.Panel6.Controls.Add(Me.ComboBox8)
+        Me.Panel6.Controls.Add(Me.Label71)
+        Me.Panel6.Controls.Add(Me.Label70)
+        Me.Panel6.Controls.Add(Me.CheckBox2)
+        Me.Panel6.Controls.Add(Me.Label32)
+        Me.Panel6.Controls.Add(Me.Label19)
+        Me.Panel6.Controls.Add(Me.CheckBox23)
+        Me.Panel6.Controls.Add(Me.CheckBox3)
+        Me.Panel6.Controls.Add(Me.Label18)
+        Me.Panel6.Controls.Add(Me.CheckBox1)
+        Me.Panel6.Controls.Add(Me.CheckBox8)
+        Me.Panel6.Location = New System.Drawing.Point(0, 0)
+        Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(728, 464)
+        Me.Panel6.TabIndex = 0
+        '
+        'LinkLabel4
+        '
+        Me.LinkLabel4.AutoSize = True
+        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel4.Location = New System.Drawing.Point(18, 438)
+        Me.LinkLabel4.Name = "LinkLabel4"
+        Me.LinkLabel4.Size = New System.Drawing.Size(397, 15)
+        Me.LinkLabel4.TabIndex = 12
+        Me.LinkLabel4.TabStop = True
+        Me.LinkLabel4.Text = "What is the difference between display names and friendly display names?"
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 2
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.1919193!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.8080826!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Label72, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label73, 1, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label74, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label75, 1, 1)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 386)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 2
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(632, 40)
+        Me.TableLayoutPanel3.TabIndex = 11
+        '
+        'Label72
+        '
+        Me.Label72.AutoSize = True
+        Me.Label72.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label72.Location = New System.Drawing.Point(3, 0)
+        Me.Label72.Name = "Label72"
+        Me.Label72.Size = New System.Drawing.Size(115, 20)
+        Me.Label72.TabIndex = 9
+        Me.Label72.Text = "Package Name:"
+        Me.Label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label73
+        '
+        Me.Label73.AutoSize = True
+        Me.Label73.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label73.Location = New System.Drawing.Point(124, 0)
+        Me.Label73.Name = "Label73"
+        Me.Label73.Size = New System.Drawing.Size(505, 20)
+        Me.Label73.TabIndex = 9
+        Me.Label73.Text = "UbisoftEntertainment.RaymanJungleRun_1.2.0.88_x86__dbgk1hhpxymar"
+        Me.Label73.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label74
+        '
+        Me.Label74.AutoSize = True
+        Me.Label74.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label74.Location = New System.Drawing.Point(3, 20)
+        Me.Label74.Name = "Label74"
+        Me.Label74.Size = New System.Drawing.Size(115, 20)
+        Me.Label74.TabIndex = 9
+        Me.Label74.Text = "Display Name:"
+        Me.Label74.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label75
+        '
+        Me.Label75.AutoSize = True
+        Me.Label75.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label75.Location = New System.Drawing.Point(124, 20)
+        Me.Label75.Name = "Label75"
+        Me.Label75.Size = New System.Drawing.Size(505, 20)
+        Me.Label75.TabIndex = 9
+        Me.Label75.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComboBox8
+        '
+        Me.ComboBox8.FormattingEnabled = True
+        Me.ComboBox8.Items.AddRange(New Object() {"Display name only", "Display name, then friendly display name", "Friendly display name only"})
+        Me.ComboBox8.Location = New System.Drawing.Point(20, 330)
+        Me.ComboBox8.Name = "ComboBox8"
+        Me.ComboBox8.Size = New System.Drawing.Size(686, 23)
+        Me.ComboBox8.TabIndex = 10
+        '
+        'Label71
+        '
+        Me.Label71.AutoSize = True
+        Me.Label71.Location = New System.Drawing.Point(17, 362)
+        Me.Label71.Name = "Label71"
+        Me.Label71.Size = New System.Drawing.Size(54, 15)
+        Me.Label71.TabIndex = 9
+        Me.Label71.Text = "Example:"
+        '
+        'Label70
+        '
+        Me.Label70.AutoSize = True
+        Me.Label70.Location = New System.Drawing.Point(18, 308)
+        Me.Label70.Name = "Label70"
+        Me.Label70.Size = New System.Drawing.Size(384, 15)
+        Me.Label70.TabIndex = 9
+        Me.Label70.Text = "When removing AppX packages, show display names using this format:"
+        '
+        'Label32
+        '
+        Me.Label32.AutoEllipsis = True
+        Me.Label32.Location = New System.Drawing.Point(38, 188)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(680, 51)
+        Me.Label32.TabIndex = 8
+        Me.Label32.Text = resources.GetString("Label32.Text")
+        '
+        'CheckBox23
+        '
+        Me.CheckBox23.AutoSize = True
+        Me.CheckBox23.Location = New System.Drawing.Point(21, 167)
+        Me.CheckBox23.Name = "CheckBox23"
+        Me.CheckBox23.Size = New System.Drawing.Size(346, 19)
+        Me.CheckBox23.TabIndex = 6
+        Me.CheckBox23.Text = "Map system accounts to application registration information"
+        Me.CheckBox23.UseVisualStyleBackColor = True
+        '
+        'CheckBox8
+        '
+        Me.CheckBox8.AutoSize = True
+        Me.CheckBox8.Location = New System.Drawing.Point(21, 248)
+        Me.CheckBox8.Name = "CheckBox8"
+        Me.CheckBox8.Size = New System.Drawing.Size(400, 19)
+        Me.CheckBox8.TabIndex = 13
+        Me.CheckBox8.Text = "Prevent the machine from sleeping while performing image operations"
+        Me.CheckBox8.UseVisualStyleBackColor = True
+        '
+        'Panel7
+        '
+        Me.Panel7.Controls.Add(Me.Label9)
+        Me.Panel7.Controls.Add(Me.CheckBox14)
+        Me.Panel7.Controls.Add(Me.Label48)
+        Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
+        Me.Panel7.Location = New System.Drawing.Point(0, 464)
+        Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(728, 172)
+        Me.Panel7.TabIndex = 1
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(18, 18)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(150, 15)
+        Me.Label9.TabIndex = 3
+        Me.Label9.Text = "Saving image information"
+        '
+        'Panel21
+        '
+        Me.Panel21.Controls.Add(Me.LinkLabel5)
+        Me.Panel21.Controls.Add(Me.ComboBox9)
+        Me.Panel21.Controls.Add(Me.ComboBox7)
+        Me.Panel21.Controls.Add(Me.Label76)
+        Me.Panel21.Controls.Add(Me.Label69)
+        Me.Panel21.Controls.Add(Me.Label67)
+        Me.Panel21.Controls.Add(Me.Label68)
+        Me.Panel21.Location = New System.Drawing.Point(0, 636)
+        Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel21.Name = "Panel21"
+        Me.Panel21.Size = New System.Drawing.Size(728, 256)
+        Me.Panel21.TabIndex = 2
+        '
+        'LinkLabel5
+        '
+        Me.LinkLabel5.AutoSize = True
+        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel5.Location = New System.Drawing.Point(40, 220)
+        Me.LinkLabel5.Name = "LinkLabel5"
+        Me.LinkLabel5.Size = New System.Drawing.Size(253, 15)
+        Me.LinkLabel5.TabIndex = 12
+        Me.LinkLabel5.TabStop = True
+        Me.LinkLabel5.Text = "Help me understand AI feature tolerance levels"
+        '
+        'ComboBox9
+        '
+        Me.ComboBox9.FormattingEnabled = True
+        Me.ComboBox9.Items.AddRange(New Object() {"Turn off as many AI features in search engines as possible. I can't stand these", "Let me control the AI features in my search engine", "Turn on as many AI features in search engines as possible"})
+        Me.ComboBox9.Location = New System.Drawing.Point(43, 188)
+        Me.ComboBox9.Name = "ComboBox9"
+        Me.ComboBox9.Size = New System.Drawing.Size(480, 23)
+        Me.ComboBox9.TabIndex = 5
+        '
+        'ComboBox7
+        '
+        Me.ComboBox7.FormattingEnabled = True
+        Me.ComboBox7.Location = New System.Drawing.Point(43, 129)
+        Me.ComboBox7.Name = "ComboBox7"
+        Me.ComboBox7.Size = New System.Drawing.Size(480, 23)
+        Me.ComboBox7.TabIndex = 5
+        '
+        'Label76
+        '
+        Me.Label76.AutoSize = True
+        Me.Label76.Location = New System.Drawing.Point(40, 163)
+        Me.Label76.Name = "Label76"
+        Me.Label76.Size = New System.Drawing.Size(232, 15)
+        Me.Label76.TabIndex = 4
+        Me.Label76.Text = "Artificial Intelligence (AI) feature tolerance:"
+        '
+        'Label69
+        '
+        Me.Label69.AutoSize = True
+        Me.Label69.Location = New System.Drawing.Point(40, 104)
+        Me.Label69.Name = "Label69"
+        Me.Label69.Size = New System.Drawing.Size(210, 15)
+        Me.Label69.TabIndex = 4
+        Me.Label69.Text = "Search Engine to use for web searches:"
+        '
+        'Label67
+        '
+        Me.Label67.AutoSize = True
+        Me.Label67.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label67.Location = New System.Drawing.Point(18, 18)
+        Me.Label67.Name = "Label67"
+        Me.Label67.Size = New System.Drawing.Size(205, 15)
+        Me.Label67.TabIndex = 3
+        Me.Label67.Text = "Searching image information online"
+        '
+        'Label68
+        '
+        Me.Label68.AutoEllipsis = True
+        Me.Label68.Location = New System.Drawing.Point(41, 47)
+        Me.Label68.Name = "Label68"
+        Me.Label68.Size = New System.Drawing.Size(665, 48)
+        Me.Label68.TabIndex = 0
+        Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
+    "se the settings the program should consider for web searches:"
         '
         'Options_Shutdown
         '
@@ -2040,270 +2294,6 @@ Partial Class Options
     "r servicing by reloading their servicing sessions on system startup. You can con" & _
     "trol the service here:"
         '
-        'Options_ImgOps
-        '
-        Me.Options_ImgOps.Controls.Add(Me.FlowLayoutPanel5)
-        Me.Options_ImgOps.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_ImgOps.Location = New System.Drawing.Point(0, 0)
-        Me.Options_ImgOps.Name = "Options_ImgOps"
-        Me.Options_ImgOps.Size = New System.Drawing.Size(748, 465)
-        Me.Options_ImgOps.TabIndex = 3
-        Me.Options_ImgOps.Visible = False
-        '
-        'FlowLayoutPanel5
-        '
-        Me.FlowLayoutPanel5.AutoScroll = True
-        Me.FlowLayoutPanel5.Controls.Add(Me.Panel6)
-        Me.FlowLayoutPanel5.Controls.Add(Me.Panel7)
-        Me.FlowLayoutPanel5.Controls.Add(Me.Panel21)
-        Me.FlowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel5.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
-        Me.FlowLayoutPanel5.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel5.TabIndex = 0
-        '
-        'Panel6
-        '
-        Me.Panel6.Controls.Add(Me.LinkLabel4)
-        Me.Panel6.Controls.Add(Me.TableLayoutPanel3)
-        Me.Panel6.Controls.Add(Me.ComboBox8)
-        Me.Panel6.Controls.Add(Me.Label71)
-        Me.Panel6.Controls.Add(Me.Label70)
-        Me.Panel6.Controls.Add(Me.CheckBox2)
-        Me.Panel6.Controls.Add(Me.Label32)
-        Me.Panel6.Controls.Add(Me.Label19)
-        Me.Panel6.Controls.Add(Me.CheckBox23)
-        Me.Panel6.Controls.Add(Me.CheckBox3)
-        Me.Panel6.Controls.Add(Me.Label18)
-        Me.Panel6.Controls.Add(Me.CheckBox8)
-        Me.Panel6.Location = New System.Drawing.Point(0, 0)
-        Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(728, 440)
-        Me.Panel6.TabIndex = 0
-        '
-        'LinkLabel4
-        '
-        Me.LinkLabel4.AutoSize = True
-        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel4.Location = New System.Drawing.Point(18, 406)
-        Me.LinkLabel4.Name = "LinkLabel4"
-        Me.LinkLabel4.Size = New System.Drawing.Size(397, 15)
-        Me.LinkLabel4.TabIndex = 12
-        Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = "What is the difference between display names and friendly display names?"
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.ColumnCount = 2
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.1919193!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.8080826!))
-        Me.TableLayoutPanel3.Controls.Add(Me.Label72, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label73, 1, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label74, 0, 1)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label75, 1, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 354)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 2
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(632, 40)
-        Me.TableLayoutPanel3.TabIndex = 11
-        '
-        'Label72
-        '
-        Me.Label72.AutoSize = True
-        Me.Label72.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label72.Location = New System.Drawing.Point(3, 0)
-        Me.Label72.Name = "Label72"
-        Me.Label72.Size = New System.Drawing.Size(115, 20)
-        Me.Label72.TabIndex = 9
-        Me.Label72.Text = "Package Name:"
-        Me.Label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label73
-        '
-        Me.Label73.AutoSize = True
-        Me.Label73.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label73.Location = New System.Drawing.Point(124, 0)
-        Me.Label73.Name = "Label73"
-        Me.Label73.Size = New System.Drawing.Size(505, 20)
-        Me.Label73.TabIndex = 9
-        Me.Label73.Text = "UbisoftEntertainment.RaymanJungleRun_1.2.0.88_x86__dbgk1hhpxymar"
-        Me.Label73.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label74
-        '
-        Me.Label74.AutoSize = True
-        Me.Label74.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label74.Location = New System.Drawing.Point(3, 20)
-        Me.Label74.Name = "Label74"
-        Me.Label74.Size = New System.Drawing.Size(115, 20)
-        Me.Label74.TabIndex = 9
-        Me.Label74.Text = "Display Name:"
-        Me.Label74.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label75
-        '
-        Me.Label75.AutoSize = True
-        Me.Label75.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label75.Location = New System.Drawing.Point(124, 20)
-        Me.Label75.Name = "Label75"
-        Me.Label75.Size = New System.Drawing.Size(505, 20)
-        Me.Label75.TabIndex = 9
-        Me.Label75.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'ComboBox8
-        '
-        Me.ComboBox8.FormattingEnabled = True
-        Me.ComboBox8.Items.AddRange(New Object() {"Display name only", "Display name, then friendly display name", "Friendly display name only"})
-        Me.ComboBox8.Location = New System.Drawing.Point(20, 298)
-        Me.ComboBox8.Name = "ComboBox8"
-        Me.ComboBox8.Size = New System.Drawing.Size(686, 23)
-        Me.ComboBox8.TabIndex = 10
-        '
-        'Label71
-        '
-        Me.Label71.AutoSize = True
-        Me.Label71.Location = New System.Drawing.Point(17, 330)
-        Me.Label71.Name = "Label71"
-        Me.Label71.Size = New System.Drawing.Size(54, 15)
-        Me.Label71.TabIndex = 9
-        Me.Label71.Text = "Example:"
-        '
-        'Label70
-        '
-        Me.Label70.AutoSize = True
-        Me.Label70.Location = New System.Drawing.Point(18, 276)
-        Me.Label70.Name = "Label70"
-        Me.Label70.Size = New System.Drawing.Size(384, 15)
-        Me.Label70.TabIndex = 9
-        Me.Label70.Text = "When removing AppX packages, show display names using this format:"
-        '
-        'Label32
-        '
-        Me.Label32.AutoEllipsis = True
-        Me.Label32.Location = New System.Drawing.Point(38, 188)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(680, 51)
-        Me.Label32.TabIndex = 8
-        Me.Label32.Text = resources.GetString("Label32.Text")
-        '
-        'CheckBox23
-        '
-        Me.CheckBox23.AutoSize = True
-        Me.CheckBox23.Location = New System.Drawing.Point(21, 167)
-        Me.CheckBox23.Name = "CheckBox23"
-        Me.CheckBox23.Size = New System.Drawing.Size(346, 19)
-        Me.CheckBox23.TabIndex = 6
-        Me.CheckBox23.Text = "Map system accounts to application registration information"
-        Me.CheckBox23.UseVisualStyleBackColor = True
-        '
-        'Panel7
-        '
-        Me.Panel7.Controls.Add(Me.Label9)
-        Me.Panel7.Controls.Add(Me.CheckBox14)
-        Me.Panel7.Controls.Add(Me.Label48)
-        Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
-        Me.Panel7.Location = New System.Drawing.Point(0, 440)
-        Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(728, 172)
-        Me.Panel7.TabIndex = 1
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(18, 18)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(150, 15)
-        Me.Label9.TabIndex = 3
-        Me.Label9.Text = "Saving image information"
-        '
-        'Panel21
-        '
-        Me.Panel21.Controls.Add(Me.LinkLabel5)
-        Me.Panel21.Controls.Add(Me.ComboBox9)
-        Me.Panel21.Controls.Add(Me.ComboBox7)
-        Me.Panel21.Controls.Add(Me.Label76)
-        Me.Panel21.Controls.Add(Me.Label69)
-        Me.Panel21.Controls.Add(Me.Label67)
-        Me.Panel21.Controls.Add(Me.Label68)
-        Me.Panel21.Location = New System.Drawing.Point(0, 612)
-        Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel21.Name = "Panel21"
-        Me.Panel21.Size = New System.Drawing.Size(728, 256)
-        Me.Panel21.TabIndex = 2
-        '
-        'LinkLabel5
-        '
-        Me.LinkLabel5.AutoSize = True
-        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel5.Location = New System.Drawing.Point(40, 220)
-        Me.LinkLabel5.Name = "LinkLabel5"
-        Me.LinkLabel5.Size = New System.Drawing.Size(253, 15)
-        Me.LinkLabel5.TabIndex = 12
-        Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = "Help me understand AI feature tolerance levels"
-        '
-        'ComboBox9
-        '
-        Me.ComboBox9.FormattingEnabled = True
-        Me.ComboBox9.Items.AddRange(New Object() {"Turn off as many AI features in search engines as possible. I can't stand these", "Let me control the AI features in my search engine", "Turn on as many AI features in search engines as possible"})
-        Me.ComboBox9.Location = New System.Drawing.Point(43, 188)
-        Me.ComboBox9.Name = "ComboBox9"
-        Me.ComboBox9.Size = New System.Drawing.Size(480, 23)
-        Me.ComboBox9.TabIndex = 5
-        '
-        'ComboBox7
-        '
-        Me.ComboBox7.FormattingEnabled = True
-        Me.ComboBox7.Location = New System.Drawing.Point(43, 129)
-        Me.ComboBox7.Name = "ComboBox7"
-        Me.ComboBox7.Size = New System.Drawing.Size(480, 23)
-        Me.ComboBox7.TabIndex = 5
-        '
-        'Label76
-        '
-        Me.Label76.AutoSize = True
-        Me.Label76.Location = New System.Drawing.Point(40, 163)
-        Me.Label76.Name = "Label76"
-        Me.Label76.Size = New System.Drawing.Size(232, 15)
-        Me.Label76.TabIndex = 4
-        Me.Label76.Text = "Artificial Intelligence (AI) feature tolerance:"
-        '
-        'Label69
-        '
-        Me.Label69.AutoSize = True
-        Me.Label69.Location = New System.Drawing.Point(40, 104)
-        Me.Label69.Name = "Label69"
-        Me.Label69.Size = New System.Drawing.Size(210, 15)
-        Me.Label69.TabIndex = 4
-        Me.Label69.Text = "Search Engine to use for web searches:"
-        '
-        'Label67
-        '
-        Me.Label67.AutoSize = True
-        Me.Label67.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label67.Location = New System.Drawing.Point(18, 18)
-        Me.Label67.Name = "Label67"
-        Me.Label67.Size = New System.Drawing.Size(205, 15)
-        Me.Label67.TabIndex = 3
-        Me.Label67.Text = "Searching image information online"
-        '
-        'Label68
-        '
-        Me.Label68.AutoEllipsis = True
-        Me.Label68.Location = New System.Drawing.Point(41, 47)
-        Me.Label68.Name = "Label68"
-        Me.Label68.Size = New System.Drawing.Size(665, 48)
-        Me.Label68.TabIndex = 0
-        Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
-    "se the settings the program should consider for web searches:"
-        '
         'Options_Personalization
         '
         Me.Options_Personalization.Controls.Add(Me.FlowLayoutPanel3)
@@ -2557,11 +2547,8 @@ Partial Class Options
         '
         'Panel15
         '
-        Me.Panel15.Controls.Add(Me.CheckBox1)
         Me.Panel15.Controls.Add(Me.Label5)
         Me.Panel15.Controls.Add(Me.ComboBox1)
-        Me.Panel15.Controls.Add(Me.Label6)
-        Me.Panel15.Controls.Add(Me.PictureBox3)
         Me.Panel15.Location = New System.Drawing.Point(0, 138)
         Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel15.Name = "Panel15"
@@ -2871,27 +2858,6 @@ Partial Class Options
         Me.Panel12.Size = New System.Drawing.Size(656, 63)
         Me.Panel12.TabIndex = 8
         '
-        'Options_FileAssocs
-        '
-        Me.Options_FileAssocs.Controls.Add(Me.FlowLayoutPanel10)
-        Me.Options_FileAssocs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_FileAssocs.Location = New System.Drawing.Point(0, 0)
-        Me.Options_FileAssocs.Name = "Options_FileAssocs"
-        Me.Options_FileAssocs.Size = New System.Drawing.Size(748, 465)
-        Me.Options_FileAssocs.TabIndex = 8
-        Me.Options_FileAssocs.Visible = False
-        '
-        'FlowLayoutPanel10
-        '
-        Me.FlowLayoutPanel10.AutoScroll = True
-        Me.FlowLayoutPanel10.Controls.Add(Me.Panel2)
-        Me.FlowLayoutPanel10.Controls.Add(Me.Panel3)
-        Me.FlowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel10.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel10.Name = "FlowLayoutPanel10"
-        Me.FlowLayoutPanel10.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel10.TabIndex = 0
-        '
         'EditorOFD
         '
         Me.EditorOFD.Filter = "Programs|*.exe"
@@ -2911,15 +2877,15 @@ Partial Class Options
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 6
         '
-        'CheckBox8
+        'CheckBox1
         '
-        Me.CheckBox8.AutoSize = True
-        Me.CheckBox8.Location = New System.Drawing.Point(21, 248)
-        Me.CheckBox8.Name = "CheckBox8"
-        Me.CheckBox8.Size = New System.Drawing.Size(400, 19)
-        Me.CheckBox8.TabIndex = 13
-        Me.CheckBox8.Text = "Prevent the machine from sleeping while performing image operations"
-        Me.CheckBox8.UseVisualStyleBackColor = True
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(21, 278)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(238, 19)
+        Me.CheckBox1.TabIndex = 13
+        Me.CheckBox1.Text = "Show dates in a human-readable format"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -2944,8 +2910,7 @@ Partial Class Options
         Me.Panel3.PerformLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
-        Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout()
+        Me.Panel2.PerformLayout()
         CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2960,7 +2925,6 @@ Partial Class Options
         Me.Panel4.PerformLayout()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.btnPanel.ResumeLayout(False)
         Me.OptionContainer.ResumeLayout(False)
@@ -3000,6 +2964,18 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
+        Me.Options_FileAssocs.ResumeLayout(False)
+        Me.FlowLayoutPanel10.ResumeLayout(False)
+        Me.Options_ImgOps.ResumeLayout(False)
+        Me.FlowLayoutPanel5.ResumeLayout(False)
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.TableLayoutPanel3.PerformLayout()
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel7.PerformLayout()
+        Me.Panel21.ResumeLayout(False)
+        Me.Panel21.PerformLayout()
         Me.Options_Shutdown.ResumeLayout(False)
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
@@ -3013,16 +2989,6 @@ Partial Class Options
         Me.TableLayoutPanel5.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.TableLayoutPanel4.ResumeLayout(False)
-        Me.Options_ImgOps.ResumeLayout(False)
-        Me.FlowLayoutPanel5.ResumeLayout(False)
-        Me.Panel6.ResumeLayout(False)
-        Me.Panel6.PerformLayout()
-        Me.TableLayoutPanel3.ResumeLayout(False)
-        Me.TableLayoutPanel3.PerformLayout()
-        Me.Panel7.ResumeLayout(False)
-        Me.Panel7.PerformLayout()
-        Me.Panel21.ResumeLayout(False)
-        Me.Panel21.PerformLayout()
         Me.Options_Personalization.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.Panel16.ResumeLayout(False)
@@ -3040,7 +3006,6 @@ Partial Class Options
         Me.Panel14.ResumeLayout(False)
         Me.Panel14.PerformLayout()
         Me.Panel15.ResumeLayout(False)
-        Me.Panel15.PerformLayout()
         Me.Options_Logs.ResumeLayout(False)
         Me.FlowLayoutPanel4.ResumeLayout(False)
         Me.Panel5.ResumeLayout(False)
@@ -3066,8 +3031,6 @@ Partial Class Options
         Me.Panel11.ResumeLayout(False)
         Me.Panel11.PerformLayout()
         Me.Panel12.ResumeLayout(False)
-        Me.Options_FileAssocs.ResumeLayout(False)
-        Me.FlowLayoutPanel10.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -3076,9 +3039,7 @@ Partial Class Options
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DismOFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents ScratchFBD As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
-    Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
@@ -3086,7 +3047,6 @@ Partial Class Options
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label11 As System.Windows.Forms.Label
@@ -3139,11 +3099,8 @@ Partial Class Options
     Friend WithEvents Label29 As System.Windows.Forms.Label
     Friend WithEvents CheckBox9 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox10 As System.Windows.Forms.CheckBox
-    Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox11 As System.Windows.Forms.CheckBox
     Friend WithEvents Button9 As System.Windows.Forms.Button
-    Friend WithEvents Label41 As System.Windows.Forms.Label
-    Friend WithEvents Label42 As System.Windows.Forms.Label
     Friend WithEvents Label40 As System.Windows.Forms.Label
     Friend WithEvents Button10 As System.Windows.Forms.Button
     Friend WithEvents CheckBox12 As System.Windows.Forms.CheckBox
@@ -3308,5 +3265,8 @@ Partial Class Options
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
     Friend WithEvents Button14 As System.Windows.Forms.Button
     Friend WithEvents CheckBox8 As System.Windows.Forms.CheckBox
+    Friend WithEvents DTSSEditAssocCB As System.Windows.Forms.CheckBox
+    Friend WithEvents DTProjAssocCB As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class
