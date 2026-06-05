@@ -983,12 +983,19 @@
     <Compile Include="UserControls\ConsoleControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\WimFileSourceControl.Designer.vb">
+      <DependentUpon>WimFileSourceControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\WimFileSourceControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Utilities\AppxUtilities\AppxHelper.vb" />
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\FileAssociations\FileAssociationHelper.vb" />
+    <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
@@ -1363,6 +1370,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ConsoleControl.resx">
       <DependentUpon>ConsoleControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\WimFileSourceControl.resx">
+      <DependentUpon>WimFileSourceControl.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

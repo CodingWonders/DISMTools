@@ -11370,52 +11370,6 @@ Public Class MainForm
         RemDrivers.ShowDialog(Me)
     End Sub
 
-    ''' <summary>
-    ''' Detects the source for optional feature installs and component repairs from the "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing" registry key
-    ''' </summary>
-    ''' <returns>Returns GPOSource as the aforementioned source if this function runs correctly. Otherwise, it returns Nothing</returns>
-    ''' <remarks>"LocalSourcePath" is updated every time a source is specified in the group policy editor. "GPOSource" pulls the value from "LocalSourcePath", which can be a local folder, a remote server or a Windows image (if it begins with "wim:\")</remarks>
-    Function GetSrcFromGPO() As String
-        Try
-            DynaLog.LogMessage("Getting source of features and component repairs from Group Policy Object...")
-            Dim GPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
-            Dim GPOSource As String = GPOSourceRk.GetValue("LocalSourcePath").ToString()
-            GPOSourceRk.Close()
-            DynaLog.LogMessage("Obtained source: " & GPOSource)
-            Return GPOSource
-        Catch ex As Exception
-            DynaLog.LogMessage("An error occurred while getting GPO source. Error message: " & ex.Message)
-            DynaLog.LogMessage("This could be either because no group policy has been set, or because something is seriously wrong with your system")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
-                        Case "ESN"
-                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
-                        Case "FRA"
-                            MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
-                        Case "PTB", "PTG"
-                            MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
-                        Case "ITA"
-                            MsgBox("Impossibile rilevare l'origine dai criteri di gruppo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Rilevamento da criteri di gruppo")
-                    End Select
-                Case 1
-                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
-                Case 2
-                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
-                Case 3
-                    MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
-                Case 4
-                    MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
-                Case 5
-                    MsgBox("Impossibile rilevare l'origine dai criteri di gruppo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Rilevamento da criteri di gruppo")
-            End Select
-            Return Nothing
-        End Try
-        Return Nothing
-    End Function
-
     Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
         DynaLog.LogMessage("Opening provisioned package addition dialog...")
         AddProvisioningPkg.ShowDialog(Me)

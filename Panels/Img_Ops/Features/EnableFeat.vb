@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Text.RegularExpressions
 
 Public Class EnableFeat
     Implements IImageTaskDialog
@@ -437,7 +438,6 @@ Public Class EnableFeat
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
-        PictureBox2.Image = GetGlyphResource("image_glyph")
         CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         DynaLog.LogMessage("Detecting ability to contact Windows Update (in the case of active installation management)...")
         DynaLog.LogMessage("Boot Mode of Host System: " & SystemInformation.BootMode.ToString())
@@ -456,6 +456,7 @@ Public Class EnableFeat
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        WimFileSourcePanel.SetColors()
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(372)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(339)
@@ -493,21 +494,19 @@ Public Class EnableFeat
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         DynaLog.LogMessage("Getting source established in the group policy...")
-        RichTextBox1.Text = MainForm.GetSrcFromGPO()
-        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
-            TextBoxSourcePanel.Visible = False
+        RichTextBox1.Text = ServicingGPOHelper.GetSrcFromGPO()
+        If Regex.IsMatch(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)") Then
+            ' Divide the source to only grab image file and index
+            Dim ImageFileMatches As MatchCollection = Regex.Matches(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)")
+            WimFileSourcePanel.ImageFile = ImageFileMatches(0).Groups(2).Value
+            WimFileSourcePanel.ImageIndex = CInt(ImageFileMatches(0).Groups(3).Value.Replace(":", ""))
             WimFileSourcePanel.Visible = True
-            Dim parts() As String = RichTextBox1.Text.Split(":")
-            Label6.Text = parts(parts.Length - 1)
-            Label5.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
-            If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
         Else
-            TextBoxSourcePanel.Visible = True
             WimFileSourcePanel.Visible = False
         End If
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As EventArgs)
         TextBoxSourcePanel.Visible = True
         WimFileSourcePanel.Visible = False
     End Sub

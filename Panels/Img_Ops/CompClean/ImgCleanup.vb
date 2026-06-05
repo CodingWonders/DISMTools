@@ -2,6 +2,7 @@
 Imports Microsoft.Win32
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 Public Class ImgCleanup
 
@@ -401,7 +402,7 @@ Public Class ImgCleanup
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        PictureBox2.Image = GetGlyphResource("image_glyph")
+        WimFileSourcePanel.SetColors()
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -810,21 +811,19 @@ Public Class ImgCleanup
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DynaLog.LogMessage("Getting source established in the group policy...")
-        RichTextBox1.Text = MainForm.GetSrcFromGPO()
-        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
-            TextBoxSourcePanel.Visible = False
+        RichTextBox1.Text = ServicingGPOHelper.GetSrcFromGPO()
+        If Regex.IsMatch(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)") Then
+            ' Divide the source to only grab image file and index
+            Dim ImageFileMatches As MatchCollection = Regex.Matches(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)")
+            WimFileSourcePanel.ImageFile = ImageFileMatches(0).Groups(2).Value
+            WimFileSourcePanel.ImageIndex = CInt(ImageFileMatches(0).Groups(3).Value.Replace(":", ""))
             WimFileSourcePanel.Visible = True
-            Dim parts() As String = RichTextBox1.Text.Split(":")
-            Label14.Text = parts(parts.Length - 1)
-            Label13.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
-            If Label13.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label13.Text = Label13.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
         Else
-            TextBoxSourcePanel.Visible = True
             WimFileSourcePanel.Visible = False
         End If
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As EventArgs)
         TextBoxSourcePanel.Visible = True
         WimFileSourcePanel.Visible = False
     End Sub

@@ -49,12 +49,6 @@ Partial Class ImgCleanup
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.TextBoxSourcePanel = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
-        Me.WimFileSourcePanel = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Button5 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
@@ -64,6 +58,7 @@ Partial Class ImgCleanup
         Me.Label3 = New System.Windows.Forms.Label()
         Me.HealthRestoreSourceOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.WimFileSourcePanel = New DISMTools.WimFileSourceControl()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -76,9 +71,6 @@ Partial Class ImgCleanup
         Me.Panel8.SuspendLayout()
         Me.Panel9.SuspendLayout()
         Me.TextBoxSourcePanel.SuspendLayout()
-        Me.WimFileSourcePanel.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -341,8 +333,8 @@ Partial Class ImgCleanup
         '
         'Panel9
         '
-        Me.Panel9.Controls.Add(Me.TextBoxSourcePanel)
         Me.Panel9.Controls.Add(Me.WimFileSourcePanel)
+        Me.Panel9.Controls.Add(Me.TextBoxSourcePanel)
         Me.Panel9.Location = New System.Drawing.Point(102, 44)
         Me.Panel9.Name = "Panel9"
         Me.Panel9.Size = New System.Drawing.Size(355, 26)
@@ -368,76 +360,6 @@ Partial Class ImgCleanup
         Me.RichTextBox1.Size = New System.Drawing.Size(355, 26)
         Me.RichTextBox1.TabIndex = 0
         Me.RichTextBox1.Text = ""
-        '
-        'WimFileSourcePanel
-        '
-        Me.WimFileSourcePanel.Controls.Add(Me.TableLayoutPanel3)
-        Me.WimFileSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WimFileSourcePanel.Location = New System.Drawing.Point(0, 0)
-        Me.WimFileSourcePanel.Name = "WimFileSourcePanel"
-        Me.WimFileSourcePanel.Size = New System.Drawing.Size(355, 26)
-        Me.WimFileSourcePanel.TabIndex = 10
-        Me.WimFileSourcePanel.Visible = False
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.ColumnCount = 4
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 216.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.Label13, 1, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.PictureBox2, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label14, 2, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Button5, 3, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(355, 26)
-        Me.TableLayoutPanel3.TabIndex = 0
-        '
-        'Label13
-        '
-        Me.Label13.AutoEllipsis = True
-        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label13.Location = New System.Drawing.Point(29, 0)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(210, 26)
-        Me.Label13.TabIndex = 8
-        Me.Label13.Text = "Image file"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.image_glyph_light
-        Me.PictureBox2.Location = New System.Drawing.Point(3, 3)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
-        '
-        'Label14
-        '
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label14.Location = New System.Drawing.Point(245, 0)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(81, 26)
-        Me.Label14.TabIndex = 7
-        Me.Label14.Text = "Image index"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Button5
-        '
-        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
-        Me.Button5.Location = New System.Drawing.Point(332, 3)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(20, 20)
-        Me.Button5.TabIndex = 9
-        Me.Button5.UseVisualStyleBackColor = True
         '
         'Button1
         '
@@ -533,6 +455,17 @@ Partial Class ImgCleanup
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(784, 48)
         Me.ImageTaskHeader1.TabIndex = 21
         '
+        'WimFileSourcePanel
+        '
+        Me.WimFileSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WimFileSourcePanel.ImageFile = "Image file"
+        Me.WimFileSourcePanel.ImageIndex = 1
+        Me.WimFileSourcePanel.Location = New System.Drawing.Point(0, 0)
+        Me.WimFileSourcePanel.Name = "WimFileSourcePanel"
+        Me.WimFileSourcePanel.Size = New System.Drawing.Size(355, 26)
+        Me.WimFileSourcePanel.TabIndex = 11
+        Me.WimFileSourcePanel.Visible = False
+        '
         'ImgCleanup
         '
         Me.AcceptButton = Me.OK_Button
@@ -569,9 +502,6 @@ Partial Class ImgCleanup
         Me.Panel8.PerformLayout()
         Me.Panel9.ResumeLayout(False)
         Me.TextBoxSourcePanel.ResumeLayout(False)
-        Me.WimFileSourcePanel.ResumeLayout(False)
-        Me.TableLayoutPanel3.ResumeLayout(False)
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -610,13 +540,8 @@ Partial Class ImgCleanup
     Friend WithEvents Panel9 As System.Windows.Forms.Panel
     Friend WithEvents TextBoxSourcePanel As System.Windows.Forms.Panel
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
-    Friend WithEvents WimFileSourcePanel As System.Windows.Forms.Panel
-    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label13 As System.Windows.Forms.Label
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label14 As System.Windows.Forms.Label
-    Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents WimFileSourcePanel As DISMTools.WimFileSourceControl
 
 End Class
