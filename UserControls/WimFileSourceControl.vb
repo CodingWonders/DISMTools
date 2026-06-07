@@ -1,7 +1,5 @@
 ﻿Public Class WimFileSourceControl
 
-    Private isScaled As Boolean
-
     Sub SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

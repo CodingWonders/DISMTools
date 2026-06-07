@@ -96,8 +96,8 @@ Partial Class WimFileSourceControl
         '
         'WimFileSourceControl
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "WimFileSourceControl"
         Me.Size = New System.Drawing.Size(350, 26)
@@ -107,9 +107,9 @@ Partial Class WimFileSourceControl
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Private WithEvents Label1 As System.Windows.Forms.Label
+    Private WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Private WithEvents Label2 As System.Windows.Forms.Label
+    Private WithEvents Button1 As System.Windows.Forms.Button
 
 End Class
