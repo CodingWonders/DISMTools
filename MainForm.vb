@@ -229,6 +229,9 @@ Public Class MainForm
 
     Public ReinitializeCurImage As Boolean = True
 
+    Private NewsFeedWebContent As WebBrowser
+    Private NewsFeedContent As String
+
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -1012,8 +1015,6 @@ Public Class MainForm
 
         ' On higher DPI settings listview column widths don't adapt correctly, causing stuff to be even more truncated than
         ' necessary. Scale these appropriately
-        ColumnHeader1.Width = WindowHelper.ScaleLogical(726)
-        ColumnHeader2.Width = WindowHelper.ScaleLogical(320)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
 
@@ -1028,6 +1029,17 @@ Public Class MainForm
         If Width < WindowHelper.ScaleLogical(1280) And Height < WindowHelper.ScaleLogical(720) Then
             Size = WindowHelper.ScaleSizeLogical(1280, 720)
         End If
+
+        ' The web browser needs to be initialized way after everything else because ActiveX objects don't like
+        ' to be initialized in MTA threads (this async thread is one of those).
+        NewsFeedWebContent = New WebBrowser() With {
+            .Dock = DockStyle.Fill,
+            .ScriptErrorsSuppressed = True,
+            .AllowWebBrowserDrop = False
+        }
+        NewsContentPreviewerPanel.Controls.Add(NewsFeedWebContent)
+        NewsFeedWebContent.BringToFront()
+        AddHandler NewsFeedWebContent.DocumentCompleted, AddressOf NewsFeedWebContent_DocumentCompleted
     End Sub
 
     Private Sub DisplayInfinityComputerInformation()
@@ -4510,8 +4522,6 @@ Public Class MainForm
         GroupBox8.ForeColor = CurrentTheme.ForegroundColor
         GroupBox9.ForeColor = CurrentTheme.ForegroundColor
         GroupBox10.ForeColor = CurrentTheme.ForegroundColor
-        ListView1.BackColor = CurrentTheme.BackgroundColor
-        ListView1.ForeColor = CurrentTheme.ForegroundColor
         ListView2.BackColor = CurrentTheme.BackgroundColor
         ListView2.ForeColor = CurrentTheme.ForegroundColor
         RecentsLV.BackColor = SidePanel.BackColor
@@ -4543,6 +4553,10 @@ Public Class MainForm
         ThemeHelper.UpdateLinkLabelColors(PrjTasks, ForeColor, CurrentTheme.AccentColors(1))
         ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel7, ForeColor, CurrentTheme.AccentColors(1))
         ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel4, ForeColor, CurrentTheme.AccentColors(1))
+
+        For Each NewsCard As NewsFeedItemCard In NewsItemCardContainerPanel.Controls.OfType(Of NewsFeedItemCard)()
+            NewsCard.SetColors()
+        Next
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -13514,13 +13528,6 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
-        If ListView1.SelectedItems.Count = 1 Then
-            DynaLog.LogMessage("Starting URL of news article: " & FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
-            Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
-        End If
-    End Sub
-
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
         HelpDocsModule.DisplayHelpDocumentation("docs\index.html")
     End Sub
@@ -13569,27 +13576,52 @@ Public Class MainForm
         If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
     End Sub
 
+    Private Sub DisplayFeedItemCardContent(sender As Object, e As NewsFeedItemCardLinkClickedEventArgs)
+        NewsFeedTextLabel.Text = e.Title
+        ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
+        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483
+        NewsFeedContent = e.Contents
+        NewsFeedWebContent.Navigate("about:blank")
+        NewsContentPreviewerPanel.Visible = True
+    End Sub
+
+    Private Sub NewsFeedWebContent_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
+        If e.Url.ToString() <> "about:blank" Then Exit Sub
+
+        NewsFeedWebContent.Document.OpenNew(True)
+        NewsFeedWebContent.Document.Write(NewsFeedContent)
+    End Sub
+
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
         DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
+        NewsItemCardContainerPanel.Controls.Clear()
         FeedLinks.Clear()
         Try
             DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
             If FeedContents.Items.Count > 0 Then
-                Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                    PreviousTop As Integer
+                Dim FirstCard As Boolean = True
+
                 Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-                Dim ArticlesLI As New List(Of ListViewItem)
+                Dim ItemCardControls As New List(Of NewsFeedItemCard)
                 For Each Article In sortedArticles
-                    Dim CurrentTimeZonePublishDate As Date = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
-                    If HumanizeDates Then
-                        ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, String.Format("{0}, {1}", CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                                                                                    CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))}))
-                    Else
-                        ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, CurrentTimeZonePublishDate.ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
-                    End If
+                    Dim newsCard As New NewsFeedItemCard()
+                    newsCard.SetColors()
+                    newsCard.FeedItemText = Article.Title.Text
+                    newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                    newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                    newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                    newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                    newsCard.Left = WindowHelper.ScaleLogical(8)
+                    newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                    newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                    FirstCard = False
+                    PreviousTop = newsCard.Top
+                    AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                    ItemCardControls.Add(newsCard)
                 Next
-                ListView1.Items.AddRange(ArticlesLI.ToArray())
-                FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
+                NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
             Else
                 DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
             End If
@@ -15516,25 +15548,34 @@ Public Class MainForm
 
     Private Sub LinkLabel33_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel33.LinkClicked
         DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
+        NewsItemCardContainerPanel.Controls.Clear()
         FeedLinks.Clear()
         GetFeedNews()
         DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
+        Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
         If FeedContents.Items.Count > 0 Then
-            Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
-            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-            Dim ArticlesLI As New List(Of ListViewItem)
+            Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                PreviousTop As Integer
+            Dim FirstCard As Boolean = True
+
+            Dim ItemCardControls As New List(Of NewsFeedItemCard)
             For Each Article In sortedArticles
-                Dim CurrentTimeZonePublishDate As Date = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
-                If HumanizeDates Then
-                    ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, String.Format("{0}, {1}", CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                                                                                CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))}))
-                Else
-                    ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, CurrentTimeZonePublishDate.ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
-                End If
+                Dim newsCard As New NewsFeedItemCard()
+                newsCard.SetColors()
+                newsCard.FeedItemText = Article.Title.Text
+                newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                newsCard.Left = WindowHelper.ScaleLogical(8)
+                newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                FirstCard = False
+                PreviousTop = newsCard.Top
+                AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                ItemCardControls.Add(newsCard)
             Next
-            ListView1.Items.AddRange(ArticlesLI.ToArray())
-            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
+            NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
         Else
             DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
         End If
@@ -15551,5 +15592,9 @@ Public Class MainForm
 
     Private Sub ComputerNameLabel_MouseHover(sender As Object, e As EventArgs) Handles ComputerNameLabel.MouseHover
         WindowHelper.DisplayToolTip(sender, String.Format("NetBIOS name: {0}", My.Computer.Name))
+    End Sub
+
+    Private Sub NewsFeedCloseBtn_Click(sender As Object, e As EventArgs) Handles NewsFeedCloseBtn.Click
+        NewsContentPreviewerPanel.Visible = False
     End Sub
 End Class

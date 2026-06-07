@@ -983,6 +983,12 @@
     <Compile Include="UserControls\ConsoleControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\NewsFeedItemCard.Designer.vb">
+      <DependentUpon>NewsFeedItemCard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\NewsFeedItemCard.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\WimFileSourceControl.Designer.vb">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>
     </Compile>
@@ -1370,6 +1376,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ConsoleControl.resx">
       <DependentUpon>ConsoleControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\NewsFeedItemCard.resx">
+      <DependentUpon>NewsFeedItemCard.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WimFileSourceControl.resx">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>

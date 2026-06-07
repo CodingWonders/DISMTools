@@ -20,7 +20,7 @@ Partial Class MainForm
     'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
     'Se puede modificar usando el Diseñador de Windows Forms.  
     'No lo modifique con el editor de código.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
@@ -236,6 +236,10 @@ Partial Class MainForm
         Me.HomePanel = New System.Windows.Forms.Panel()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
         Me.InfinityStartPanel = New System.Windows.Forms.Panel()
+        Me.NewsContentPreviewerPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.NewsFeedTextLabel = New System.Windows.Forms.Label()
+        Me.NewsFeedCloseBtn = New System.Windows.Forms.Button()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.HelpLinksPanel = New System.Windows.Forms.Panel()
         Me.Panel8 = New System.Windows.Forms.Panel()
@@ -253,9 +257,6 @@ Partial Class MainForm
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.NewsPanel = New System.Windows.Forms.Panel()
-        Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
@@ -509,10 +510,13 @@ Partial Class MainForm
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.NewsItemCardContainerPanel = New System.Windows.Forms.Panel()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
         Me.InfinityStartPanel.SuspendLayout()
+        Me.NewsContentPreviewerPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -1919,6 +1923,7 @@ Partial Class MainForm
         'InfinityStartPanel
         '
         Me.InfinityStartPanel.AutoScroll = True
+        Me.InfinityStartPanel.Controls.Add(Me.NewsContentPreviewerPanel)
         Me.InfinityStartPanel.Controls.Add(Me.SplitContainer1)
         Me.InfinityStartPanel.Controls.Add(Me.ComputerInfoPanel)
         Me.InfinityStartPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -1926,6 +1931,52 @@ Partial Class MainForm
         Me.InfinityStartPanel.Name = "InfinityStartPanel"
         Me.InfinityStartPanel.Size = New System.Drawing.Size(1008, 657)
         Me.InfinityStartPanel.TabIndex = 9
+        '
+        'NewsContentPreviewerPanel
+        '
+        Me.NewsContentPreviewerPanel.Controls.Add(Me.Panel1)
+        Me.NewsContentPreviewerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 160)
+        Me.NewsContentPreviewerPanel.Name = "NewsContentPreviewerPanel"
+        Me.NewsContentPreviewerPanel.Size = New System.Drawing.Size(1008, 497)
+        Me.NewsContentPreviewerPanel.TabIndex = 3
+        Me.NewsContentPreviewerPanel.Visible = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
+        Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1008, 32)
+        Me.Panel1.TabIndex = 3
+        '
+        'NewsFeedTextLabel
+        '
+        Me.NewsFeedTextLabel.AutoEllipsis = True
+        Me.NewsFeedTextLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsFeedTextLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NewsFeedTextLabel.Location = New System.Drawing.Point(41, 0)
+        Me.NewsFeedTextLabel.Name = "NewsFeedTextLabel"
+        Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(967, 32)
+        Me.NewsFeedTextLabel.TabIndex = 1
+        Me.NewsFeedTextLabel.Text = "Item Feed Text"
+        Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'NewsFeedCloseBtn
+        '
+        Me.NewsFeedCloseBtn.BackColor = System.Drawing.Color.Black
+        Me.NewsFeedCloseBtn.Dock = System.Windows.Forms.DockStyle.Left
+        Me.NewsFeedCloseBtn.FlatAppearance.BorderSize = 0
+        Me.NewsFeedCloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.NewsFeedCloseBtn.Image = Global.DISMTools.My.Resources.Resources.backbox
+        Me.NewsFeedCloseBtn.Location = New System.Drawing.Point(0, 0)
+        Me.NewsFeedCloseBtn.Name = "NewsFeedCloseBtn"
+        Me.NewsFeedCloseBtn.Size = New System.Drawing.Size(41, 32)
+        Me.NewsFeedCloseBtn.TabIndex = 2
+        Me.NewsFeedCloseBtn.UseVisualStyleBackColor = False
         '
         'SplitContainer1
         '
@@ -2120,7 +2171,7 @@ Partial Class MainForm
         '
         'NewsPanel
         '
-        Me.NewsPanel.Controls.Add(Me.ListView1)
+        Me.NewsPanel.Controls.Add(Me.NewsItemCardContainerPanel)
         Me.NewsPanel.Controls.Add(Me.Panel12)
         Me.NewsPanel.Controls.Add(Me.Panel7)
         Me.NewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -2128,31 +2179,6 @@ Partial Class MainForm
         Me.NewsPanel.Name = "NewsPanel"
         Me.NewsPanel.Size = New System.Drawing.Size(576, 497)
         Me.NewsPanel.TabIndex = 1
-        '
-        'ListView1
-        '
-        Me.ListView1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListView1.FullRowSelect = True
-        Me.ListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.ListView1.Location = New System.Drawing.Point(0, 32)
-        Me.ListView1.MultiSelect = False
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(576, 433)
-        Me.ListView1.TabIndex = 0
-        Me.ListView1.UseCompatibleStateImageBehavior = False
-        Me.ListView1.View = System.Windows.Forms.View.Details
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "Title"
-        Me.ColumnHeader1.Width = 726
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "Date"
-        Me.ColumnHeader2.Width = 320
         '
         'Panel12
         '
@@ -4663,6 +4689,15 @@ Partial Class MainForm
         'ThemeDesignerTimer
         '
         '
+        'NewsItemCardContainerPanel
+        '
+        Me.NewsItemCardContainerPanel.AutoScroll = True
+        Me.NewsItemCardContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsItemCardContainerPanel.Location = New System.Drawing.Point(0, 32)
+        Me.NewsItemCardContainerPanel.Name = "NewsItemCardContainerPanel"
+        Me.NewsItemCardContainerPanel.Size = New System.Drawing.Size(576, 433)
+        Me.NewsItemCardContainerPanel.TabIndex = 4
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -4684,6 +4719,8 @@ Partial Class MainForm
         Me.HomePanel.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
         Me.InfinityStartPanel.ResumeLayout(False)
+        Me.NewsContentPreviewerPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -5130,9 +5167,6 @@ Partial Class MainForm
     Friend WithEvents PictureBox13 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel20 As System.Windows.Forms.LinkLabel
     Friend WithEvents PictureBox14 As System.Windows.Forms.PictureBox
-    Friend WithEvents ListView1 As System.Windows.Forms.ListView
-    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents FeedWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents Timer2 As System.Windows.Forms.Timer
     Friend WithEvents WatcherBW As System.ComponentModel.BackgroundWorker
@@ -5259,4 +5293,9 @@ Partial Class MainForm
     Friend WithEvents ChangeNetworkConfigBtn As System.Windows.Forms.Button
     Friend WithEvents AdminToolsBtn As System.Windows.Forms.Button
     Friend WithEvents ComputerOSLabel As System.Windows.Forms.Label
+    Friend WithEvents NewsContentPreviewerPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents NewsFeedTextLabel As System.Windows.Forms.Label
+    Friend WithEvents NewsFeedCloseBtn As System.Windows.Forms.Button
+    Friend WithEvents NewsItemCardContainerPanel As System.Windows.Forms.Panel
 End Class
