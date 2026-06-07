@@ -2242,10 +2242,9 @@ Partial Class MainForm
         'ComputerOSLabel
         '
         Me.ComputerOSLabel.AutoEllipsis = True
-        Me.ComputerOSLabel.AutoSize = True
         Me.ComputerOSLabel.Location = New System.Drawing.Point(182, 96)
         Me.ComputerOSLabel.Name = "ComputerOSLabel"
-        Me.ComputerOSLabel.Size = New System.Drawing.Size(22, 15)
+        Me.ComputerOSLabel.Size = New System.Drawing.Size(322, 15)
         Me.ComputerOSLabel.TabIndex = 7
         Me.ComputerOSLabel.Text = "OS"
         Me.ComputerOSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2405,21 +2404,21 @@ Partial Class MainForm
         '
         'ComputerModelLabel
         '
-        Me.ComputerModelLabel.AutoSize = True
+        Me.ComputerModelLabel.AutoEllipsis = True
         Me.ComputerModelLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComputerModelLabel.Location = New System.Drawing.Point(182, 46)
         Me.ComputerModelLabel.Name = "ComputerModelLabel"
-        Me.ComputerModelLabel.Size = New System.Drawing.Size(128, 21)
+        Me.ComputerModelLabel.Size = New System.Drawing.Size(322, 21)
         Me.ComputerModelLabel.TabIndex = 1
         Me.ComputerModelLabel.Text = "Computer Model"
         '
         'ComputerNameLabel
         '
-        Me.ComputerNameLabel.AutoSize = True
+        Me.ComputerNameLabel.AutoEllipsis = True
         Me.ComputerNameLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComputerNameLabel.Location = New System.Drawing.Point(180, 12)
         Me.ComputerNameLabel.Name = "ComputerNameLabel"
-        Me.ComputerNameLabel.Size = New System.Drawing.Size(167, 30)
+        Me.ComputerNameLabel.Size = New System.Drawing.Size(322, 30)
         Me.ComputerNameLabel.TabIndex = 1
         Me.ComputerNameLabel.Text = "Computer Name"
         '

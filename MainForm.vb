@@ -1051,7 +1051,7 @@ Public Class MainForm
 
         End Try
         ' Computer Information
-        ComputerOSLabel.Text = My.Computer.Info.OSFullName
+        ComputerOSLabel.Text = String.Format("{0} (build {1})", My.Computer.Info.OSFullName, Environment.OSVersion.Version.Build)
         Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
         Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
         Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
@@ -1079,7 +1079,7 @@ Public Class MainForm
             Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
             ComputerDhcpStatusLabel.Text = If(DhcpEnabled, "Automatic (assigned by DHCP)", "Manual")
         Catch ex As Exception
-
+            ComputerDhcpStatusLabel.Text = "Not connected to a network"
         End Try
     End Sub
 
