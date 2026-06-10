@@ -257,6 +257,7 @@ Partial Class MainForm
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.NewsPanel = New System.Windows.Forms.Panel()
+        Me.NewsItemCardContainerPanel = New System.Windows.Forms.Panel()
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
@@ -510,7 +511,7 @@ Partial Class MainForm
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.NewsItemCardContainerPanel = New System.Windows.Forms.Panel()
+        Me.NewsFeedDateLabel = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1945,6 +1946,7 @@ Partial Class MainForm
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
+        Me.Panel1.Controls.Add(Me.NewsFeedDateLabel)
         Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
@@ -1960,7 +1962,7 @@ Partial Class MainForm
         Me.NewsFeedTextLabel.Location = New System.Drawing.Point(41, 0)
         Me.NewsFeedTextLabel.Name = "NewsFeedTextLabel"
         Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(967, 32)
+        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(711, 32)
         Me.NewsFeedTextLabel.TabIndex = 1
         Me.NewsFeedTextLabel.Text = "Item Feed Text"
         Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2179,6 +2181,15 @@ Partial Class MainForm
         Me.NewsPanel.Name = "NewsPanel"
         Me.NewsPanel.Size = New System.Drawing.Size(576, 497)
         Me.NewsPanel.TabIndex = 1
+        '
+        'NewsItemCardContainerPanel
+        '
+        Me.NewsItemCardContainerPanel.AutoScroll = True
+        Me.NewsItemCardContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsItemCardContainerPanel.Location = New System.Drawing.Point(0, 32)
+        Me.NewsItemCardContainerPanel.Name = "NewsItemCardContainerPanel"
+        Me.NewsItemCardContainerPanel.Size = New System.Drawing.Size(576, 433)
+        Me.NewsItemCardContainerPanel.TabIndex = 4
         '
         'Panel12
         '
@@ -4689,14 +4700,16 @@ Partial Class MainForm
         'ThemeDesignerTimer
         '
         '
-        'NewsItemCardContainerPanel
+        'NewsFeedDateLabel
         '
-        Me.NewsItemCardContainerPanel.AutoScroll = True
-        Me.NewsItemCardContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NewsItemCardContainerPanel.Location = New System.Drawing.Point(0, 32)
-        Me.NewsItemCardContainerPanel.Name = "NewsItemCardContainerPanel"
-        Me.NewsItemCardContainerPanel.Size = New System.Drawing.Size(576, 433)
-        Me.NewsItemCardContainerPanel.TabIndex = 4
+        Me.NewsFeedDateLabel.Dock = System.Windows.Forms.DockStyle.Right
+        Me.NewsFeedDateLabel.Location = New System.Drawing.Point(752, 0)
+        Me.NewsFeedDateLabel.Name = "NewsFeedDateLabel"
+        Me.NewsFeedDateLabel.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
+        Me.NewsFeedDateLabel.Size = New System.Drawing.Size(256, 32)
+        Me.NewsFeedDateLabel.TabIndex = 3
+        Me.NewsFeedDateLabel.Text = "Item Feed Date"
+        Me.NewsFeedDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'MainForm
         '
@@ -5298,4 +5311,5 @@ Partial Class MainForm
     Friend WithEvents NewsFeedTextLabel As System.Windows.Forms.Label
     Friend WithEvents NewsFeedCloseBtn As System.Windows.Forms.Button
     Friend WithEvents NewsItemCardContainerPanel As System.Windows.Forms.Panel
+    Friend WithEvents NewsFeedDateLabel As System.Windows.Forms.Label
 End Class

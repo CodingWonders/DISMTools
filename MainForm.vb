@@ -13578,6 +13578,9 @@ Public Class MainForm
 
     Private Sub DisplayFeedItemCardContent(sender As Object, e As NewsFeedItemCardLinkClickedEventArgs)
         NewsFeedTextLabel.Text = e.Title
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        NewsFeedDateLabel.Text = String.Format("{0}, {1}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                           e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
         ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
         ' we need to navigate to the blank page. https://stackoverflow.com/a/174483
         NewsFeedContent = e.Contents

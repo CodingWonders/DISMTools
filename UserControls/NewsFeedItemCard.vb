@@ -55,7 +55,7 @@ Public Class NewsFeedItemCard
     Public Event LinkContentsEvent As NewsFeedItemCardLinkClickedEventHandler
 
     Private Sub FeedItemLinkLabel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles FeedItemLinkLabel.LinkClicked
-        Dim lcea As New NewsFeedItemCardLinkClickedEventArgs(FeedItemText, FeedItemContents)
+        Dim lcea As New NewsFeedItemCardLinkClickedEventArgs(FeedItemText, FeedItemContents, FeedItemDate)
         RaiseEvent LinkContentsEvent(Me, lcea)
     End Sub
 End Class
@@ -65,10 +65,12 @@ Public Class NewsFeedItemCardLinkClickedEventArgs
 
     Private _title As String
     Private _contents As String
+    Private _publishDate As Date
 
-    Public Sub New(Title As String, Contents As String)
+    Public Sub New(Title As String, Contents As String, PublishDate As Date)
         _title = Title
         _contents = Contents
+        _publishDate = PublishDate
     End Sub
 
     Public ReadOnly Property Contents As String
@@ -80,6 +82,12 @@ Public Class NewsFeedItemCardLinkClickedEventArgs
     Public ReadOnly Property Title As String
         Get
             Return _title
+        End Get
+    End Property
+
+    Public ReadOnly Property PublishDate As Date
+        Get
+            Return _publishDate
         End Get
     End Property
 
