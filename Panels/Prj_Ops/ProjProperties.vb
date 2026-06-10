@@ -173,8 +173,8 @@ Public Class ProjProperties
                 ImageCreationDate = String.Format("{0}, {1}", CreatedDate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), CreatedDate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
                 ImageModificationDate = String.Format("{0}, {1}", ModifiedDate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), ModifiedDate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
             Else
-                ImageCreationDate = CreatedDate.Date.ToString("MM/dd/yyyy HH:mm:ss")
-                ImageModificationDate = ModifiedDate.Date.ToString("MM/dd/yyyy HH:mm:ss")
+                ImageCreationDate = CreatedDate.ToString("MM/dd/yyyy HH:mm:ss")
+                ImageModificationDate = ModifiedDate.ToString("MM/dd/yyyy HH:mm:ss")
             End If
             imgCreation.Text = ImageCreationDate
             imgModification.Text = ImageModificationDate
