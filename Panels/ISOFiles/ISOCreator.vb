@@ -623,33 +623,35 @@ Public Class ISOCreator
             Exit Sub
         End If
         If TextBox3.Text = "" Then
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ISOMsg = "The target ISO hasn't been specified. Please specify a location for the ISO file and try again."
-                        Case "ESN"
-                            ISOMsg = "El archivo ISO de destino no se ha especificado. Especifique una ubicación para el archivo ISO e inténtelo de nuevo."
-                        Case "FRA"
-                            ISOMsg = "L'ISO cible n'a pas été spécifiée. Veuillez indiquer un emplacement pour le fichier ISO et réessayez."
-                        Case "PTB", "PTG"
-                            ISOMsg = "O ISO de destino não foi especificado. Especifique uma localização para o ficheiro ISO e tente novamente."
-                        Case "ITA"
-                            ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
-                    End Select
-                Case 1
-                    ISOMsg = "The target ISO hasn't been specified. Please specify a location for the ISO file and try again."
-                Case 2
-                    ISOMsg = "El archivo ISO de destino no se ha especificado. Especifique una ubicación para el archivo ISO e inténtelo de nuevo."
-                Case 3
-                    ISOMsg = "L'ISO cible n'a pas été spécifiée. Veuillez indiquer un emplacement pour le fichier ISO et réessayez."
-                Case 4
-                    ISOMsg = "O ISO de destino não foi especificado. Especifique uma localização para o ficheiro ISO e tente novamente."
-                Case 5
-                    ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
-            End Select
-            MsgBox(ISOMsg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-            Exit Sub
+            If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                ISOMsg = "The target ISO hasn't been specified. Please specify a location for the ISO file and try again."
+                            Case "ESN"
+                                ISOMsg = "El archivo ISO de destino no se ha especificado. Especifique una ubicación para el archivo ISO e inténtelo de nuevo."
+                            Case "FRA"
+                                ISOMsg = "L'ISO cible n'a pas été spécifiée. Veuillez indiquer un emplacement pour le fichier ISO et réessayez."
+                            Case "PTB", "PTG"
+                                ISOMsg = "O ISO de destino não foi especificado. Especifique uma localização para o ficheiro ISO e tente novamente."
+                            Case "ITA"
+                                ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
+                        End Select
+                    Case 1
+                        ISOMsg = "The target ISO hasn't been specified. Please specify a location for the ISO file and try again."
+                    Case 2
+                        ISOMsg = "El archivo ISO de destino no se ha especificado. Especifique una ubicación para el archivo ISO e inténtelo de nuevo."
+                    Case 3
+                        ISOMsg = "L'ISO cible n'a pas été spécifiée. Veuillez indiquer un emplacement pour le fichier ISO et réessayez."
+                    Case 4
+                        ISOMsg = "O ISO de destino não foi especificado. Especifique uma localização para o ficheiro ISO e tente novamente."
+                    Case 5
+                        ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
+                End Select
+                MsgBox(ISOMsg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+                Exit Sub
+            End If
         End If
         Select Case MainForm.Language
             Case 0
