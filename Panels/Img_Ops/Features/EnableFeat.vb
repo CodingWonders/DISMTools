@@ -166,7 +166,7 @@ Public Class EnableFeat
                     ProgressPanel.featSource = RichTextBox1.Text
                 End If
             Else
-                ProgressPanel.featisSourceSpecified = True
+                ProgressPanel.featisSourceSpecified = False
                 ProgressPanel.featSource = ""
             End If
             If CheckBox3.Checked Then
