@@ -1066,13 +1066,24 @@ Public Class MainForm
         ComputerOSLabel.Text = String.Format("{0} (build {1})", My.Computer.Info.OSFullName, Environment.OSVersion.Version.Build)
         Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
         Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
-        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
+        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Label, FreeSpace, Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
         Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
         ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
         ComputerModelLabel.Text = ComputerSystemProps("Model")
         ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
         ComputerMemoryLabel.Text = String.Format("{0} of system memory", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory")))
-        ComputerStorageLabel.Text = String.Format("{0} of total capacity in system volume", Converters.BytesToReadableSize(WMIHelper.GetObjectValue(ComputerCurrentVolMOC(0), "Capacity")))
+        Try
+            Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
+                DiskCapacity As Long = CurrentVolProps("Capacity"),
+                DiskFreeSpace As Long = CurrentVolProps("FreeSpace"),
+                DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
+                DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
+                DiskLabel As String = CurrentVolProps("Label")
+            ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} used out of {3} ({4}%)", DiskVolumeLetter, DiskLabel, Converters.BytesToReadableSize(DiskUsedSpace),
+                                                                                               Converters.BytesToReadableSize(DiskCapacity), Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not display disk information: " & ex.Message)
+        End Try
         Select Case ComputerSystemProps("DomainRole")
             Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
                 ComputerDomainStatusLabel.Text = "Not part of a domain"
