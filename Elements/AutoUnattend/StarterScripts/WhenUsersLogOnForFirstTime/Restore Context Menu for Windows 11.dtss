@@ -1,0 +1,6 @@
+﻿Language: Batch
+Name: Restore old right-click menu in Windows 11
+Description: This script restores the original right click menu found in Windows 10 for all Windows 11 systems.
+Customizable: No
+@ECHO OFF
+REG ADD "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /F /VE

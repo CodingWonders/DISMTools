@@ -1427,6 +1427,7 @@
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Drag Tray.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Restore Context Menu for Windows 11.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Set File Explorer Launch Folder.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Show Extensions for Known File Types.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Second Chance OOBE.dtss" />
