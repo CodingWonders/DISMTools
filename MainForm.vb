@@ -231,7 +231,7 @@ Public Class MainForm
 
     Private NewsFeedWebContent As WebBrowser
     Private NewsFeedContent As String
-
+    Private NewsLastUpdateDate As Date
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -13505,6 +13505,7 @@ Public Class MainForm
 #End Region
 
     Sub GetFeedNews()
+        NewsLastUpdateDate = Date.Now
         DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
         FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -13597,6 +13598,11 @@ Public Class MainForm
 
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
         DynaLog.LogMessage("Refreshing news feed...")
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
+                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
         NewsItemCardContainerPanel.Controls.Clear()
         FeedLinks.Clear()
         Try
@@ -15555,6 +15561,11 @@ Public Class MainForm
         FeedLinks.Clear()
         GetFeedNews()
         DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
+                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
         Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
         If FeedContents.Items.Count > 0 Then
             Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
