@@ -25,11 +25,15 @@ public class NoActivateForm : Form
 }
 "@ -ReferencedAssemblies "System.Windows.Forms.dll" -WarningAction SilentlyContinue
 
+$dtpe_SysType = $env:FIRMWARE_TYPE
+if (Test-Path -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE") {
+    $dtpe_SysType += "/PXE"
+}
 $dtpe_MinVersion = Get-ItemPropertyValue -Path "HKLM:\Software\DISMTools\Preinstallation Environment" -Name "MinBuild"
 $dtpe_FullVersion = Get-ItemPropertyValue -Path "HKLM:\Software\DISMTools\Preinstallation Environment" -Name "FullBuild"
 $winpeBuild = Get-ItemPropertyValue -Path "HKLM:\Software\Microsoft\Windows NT\CurrentVersion" -Name "BuildLabEx"
 
-$message = "DISMTools $dtpe_MinVersion Preinstallation Environment ($($env:FIRMWARE_TYPE))`nComponents Build $($dtpe_FullVersion)`nPreinstallation Environment Build $($winpeBuild)`n$env:SYSTEMROOT"
+$message = "DISMTools $dtpe_MinVersion Preinstallation Environment ($dtpe_SysType)`nComponents Build $($dtpe_FullVersion)`nPreinstallation Environment Build $($winpeBuild)`n$env:SYSTEMROOT"
 
 $form = New-Object NoActivateForm
 $form.FormBorderStyle = 'None'
