@@ -2301,7 +2301,7 @@ IF NOT EXIST AutoUnattend (
 	md AutoUnattend
 	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
 	IF EXIST "$(ProjectDir)Elements\AutoUnattend\StarterScripts" (
-		xcopy "$(ProjectDir)Elements\AutoUnattend\StarterScripts\*.*" AutoUnattend\StarterScripts /cehyi
+		xcopy "$(ProjectDir)Elements\AutoUnattend\StarterScripts\*.dtss" AutoUnattend\StarterScripts /cehyi
 	)
 )
 

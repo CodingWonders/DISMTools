@@ -18,7 +18,7 @@ Module FileAssociationHelper
         NativeMethods.SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, IntPtr.Zero, IntPtr.Zero)
     End Sub
 
-    Private Function SetFileAssociations(FileExtension As String, FileType As String, AssociationCommand As String, AssociationDescription As String, Optional AssociationIconPath As String = "") As Boolean
+    Private Function SetFileAssociations(FileExtension As String, FileType As String, AssociationCommand As String, AssociationDescription As String, Optional AssociationIconPath As String = "", Optional ForceIconReset As Boolean = False) As Boolean
         If String.IsNullOrEmpty(FileExtension) Then Throw New ArgumentNullException(FileExtension)
         If String.IsNullOrEmpty(FileType) Then Throw New ArgumentNullException(FileType)
         If String.IsNullOrEmpty(AssociationCommand) Then Throw New ArgumentNullException(AssociationCommand)
@@ -45,7 +45,7 @@ Module FileAssociationHelper
             Try
                 Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey(FileType, True)
                 AssocRk.SetValue(Nothing, AssociationDescription, RegistryValueKind.String)
-                If AssociationIconPath <> "" AndAlso File.Exists(AssociationIconPath) Then
+                If (AssociationIconPath <> "" AndAlso File.Exists(AssociationIconPath)) OrElse ForceIconReset Then
                     ' We have defined an icon for this association; use it or else we'll have a default file icon.
                     Dim DefaultAssociationIcon As RegistryKey = AssocRk.OpenSubKey("DefaultIcon", True)
                     DefaultAssociationIcon.SetValue(Nothing, AssociationIconPath, RegistryValueKind.String)
@@ -66,8 +66,8 @@ Module FileAssociationHelper
         Return SetFileAssociations(Extension, Type, Command, Description)
     End Function
 
-    Public Function SetFileAssociation(Extension As String, Type As String, Command As String, Description As String, IconPath As String) As Boolean
-        Return SetFileAssociations(Extension, Type, Command, Description, IconPath)
+    Public Function SetFileAssociation(Extension As String, Type As String, Command As String, Description As String, IconPath As String, Optional ForceIconReset As Boolean = False) As Boolean
+        Return SetFileAssociations(Extension, Type, Command, Description, IconPath, ForceIconReset)
     End Function
 
     Private Function RemoveAssociations(FileExtension As String, FileType As String) As Boolean
@@ -116,6 +116,20 @@ Module FileAssociationHelper
             If assocRk IsNot Nothing Then assocRk.Close()
         End Try
         Return cmdline
+    End Function
+
+    Public Function GetFileAssociationIconPath(FileType As String) As String
+        Dim defIconRk As RegistryKey = Nothing
+        Dim iconPath As String = ""
+        Try
+            defIconRk = Registry.ClassesRoot.OpenSubKey(String.Format("{0}\DefaultIcon", FileType), False)
+            iconPath = defIconRk.GetValue(Nothing, "")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get association. Error message: " & ex.Message)
+        Finally
+            If defIconRk IsNot Nothing Then defIconRk.Close()
+        End Try
+        Return iconPath
     End Function
 
 End Module

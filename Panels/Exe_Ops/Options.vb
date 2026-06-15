@@ -266,21 +266,24 @@ Public Class Options
     ''' <summary>
     ''' Manages the file associations for files with the ".dtproj" extension
     ''' </summary>
-    ''' <param name="UseCustomIcons"></param>
     ''' <remarks></remarks>
-    Private Sub ManageAssociations(UseCustomIcons As Boolean)
+    Private Sub ManageAssociations()
+        Dim DtProjUseCustomIcon As Boolean = CheckBox11.Checked,
+            DtssUseCustomIcon As Boolean = CheckBox24.Checked
+
         DynaLog.LogMessage("Setting file associations...")
-        DynaLog.LogMessage("- Use a custom icon? " & If(UseCustomIcons, "Yes", "No"))
+        DynaLog.LogMessage("- Use a custom icon (DTPROJ)? " & If(DtProjUseCustomIcon, "Yes", "No"))
+        DynaLog.LogMessage("- Use a custom icon (DTSS)? " & If(DtssUseCustomIcon, "Yes", "No"))
 
         If DTProjAssocCB.Checked Then
             FileAssociationHelper.SetFileAssociation(".dtproj", "DISMTools.Project", String.Format("{0}{1}{0} {0}/load={0}%1{0}{0}", Quote, Path.Combine(Application.StartupPath, "DISMTools.exe")),
-                                                     "DISMTools Project", If(UseCustomIcons, Path.Combine(Application.StartupPath, "resources", "dtproj.ico"), ""))
+                                                     "DISMTools Project", If(DtProjUseCustomIcon, Path.Combine(Application.StartupPath, "resources", "dtproj.ico"), ""), Not DtProjUseCustomIcon)
         Else
             FileAssociationHelper.RemoveFileAssociation(".dtproj", "DISMTools.Project")
         End If
         If DTSSEditAssocCB.Checked Then
             FileAssociationHelper.SetFileAssociation(".dtss", "DTSSEdit.StarterScript", String.Format("{0}{1}{0} /dtss={0}%1{0}", Quote, Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")),
-                                                     "DISMTools Starter Script")
+                                                     "DISMTools Starter Script", If(DtssUseCustomIcon, Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "DTSSIcon.ico"), ""), Not DtssUseCustomIcon)
         Else
             FileAssociationHelper.RemoveFileAssociation(".dtss", "DTSSEdit.StarterScript")
         End If
@@ -288,7 +291,9 @@ Public Class Options
         DynaLog.LogMessage("Checking file associations one more time...")
 
         DTProjAssocCB.Checked = DetectFileAssociations("DISMTools.Project")
+        CheckBox11.Checked = FileAssociationHelper.GetFileAssociationIconPath("DISMTools.Project") <> ""
         DTSSEditAssocCB.Checked = DetectFileAssociations("DTSSEdit.StarterScript")
+        CheckBox24.Checked = FileAssociationHelper.GetFileAssociationIconPath("DTSSEdit.StarterScript") <> ""
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -2419,7 +2424,7 @@ Public Class Options
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         DynaLog.LogMessage("Toggling state of file associations...")
-        ManageAssociations(CheckBox11.Checked)
+        ManageAssociations()
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
