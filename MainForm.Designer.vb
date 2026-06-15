@@ -240,9 +240,9 @@ Partial Class MainForm
         Me.HelpLinksPanel = New System.Windows.Forms.Panel()
         Me.Panel8 = New System.Windows.Forms.Panel()
         Me.Panel9 = New System.Windows.Forms.Panel()
-        Me.LinkLabel32 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel31 = New System.Windows.Forms.LinkLabel()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.LinkLabel31 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel32 = New System.Windows.Forms.LinkLabel()
         Me.ListView2 = New System.Windows.Forms.ListView()
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label12 = New System.Windows.Forms.Label()
@@ -255,9 +255,9 @@ Partial Class MainForm
         Me.NewsPanel = New System.Windows.Forms.Panel()
         Me.NewsItemCardContainerPanel = New System.Windows.Forms.Panel()
         Me.Panel12 = New System.Windows.Forms.Panel()
-        Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -1925,9 +1925,9 @@ Partial Class MainForm
         'InfinityStartPanel
         '
         Me.InfinityStartPanel.AutoScroll = True
+        Me.InfinityStartPanel.Controls.Add(Me.NewsContentPreviewerPanel)
         Me.InfinityStartPanel.Controls.Add(Me.SplitContainer1)
         Me.InfinityStartPanel.Controls.Add(Me.ComputerInfoPanel)
-        Me.InfinityStartPanel.Controls.Add(Me.NewsContentPreviewerPanel)
         Me.InfinityStartPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InfinityStartPanel.Location = New System.Drawing.Point(0, 0)
         Me.InfinityStartPanel.Name = "InfinityStartPanel"
@@ -1989,20 +1989,17 @@ Partial Class MainForm
         Me.Panel9.TabIndex = 2
         Me.Panel9.Visible = False
         '
-        'LinkLabel32
+        'Label6
         '
-        Me.LinkLabel32.AutoEllipsis = True
-        Me.LinkLabel32.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LinkLabel32.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel32.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel32.Location = New System.Drawing.Point(332, 0)
-        Me.LinkLabel32.Name = "LinkLabel32"
-        Me.LinkLabel32.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
-        Me.LinkLabel32.Size = New System.Drawing.Size(96, 32)
-        Me.LinkLabel32.TabIndex = 1
-        Me.LinkLabel32.TabStop = True
-        Me.LinkLabel32.Text = "Retry"
-        Me.LinkLabel32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(0, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
+        Me.Label6.Size = New System.Drawing.Size(236, 32)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Video content could not be loaded."
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LinkLabel31
         '
@@ -2019,17 +2016,20 @@ Partial Class MainForm
         Me.LinkLabel31.Text = "Learn more"
         Me.LinkLabel31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label6
+        'LinkLabel32
         '
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(0, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
-        Me.Label6.Size = New System.Drawing.Size(236, 32)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Video content could not be loaded."
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.LinkLabel32.AutoEllipsis = True
+        Me.LinkLabel32.Dock = System.Windows.Forms.DockStyle.Right
+        Me.LinkLabel32.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel32.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel32.Location = New System.Drawing.Point(332, 0)
+        Me.LinkLabel32.Name = "LinkLabel32"
+        Me.LinkLabel32.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
+        Me.LinkLabel32.Size = New System.Drawing.Size(96, 32)
+        Me.LinkLabel32.TabIndex = 1
+        Me.LinkLabel32.TabStop = True
+        Me.LinkLabel32.Text = "Retry"
+        Me.LinkLabel32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ListView2
         '
@@ -2164,20 +2164,17 @@ Partial Class MainForm
         Me.Panel12.TabIndex = 3
         Me.Panel12.Visible = False
         '
-        'LinkLabel33
+        'Label7
         '
-        Me.LinkLabel33.AutoEllipsis = True
-        Me.LinkLabel33.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LinkLabel33.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel33.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel33.Location = New System.Drawing.Point(480, 0)
-        Me.LinkLabel33.Name = "LinkLabel33"
-        Me.LinkLabel33.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
-        Me.LinkLabel33.Size = New System.Drawing.Size(96, 32)
-        Me.LinkLabel33.TabIndex = 1
-        Me.LinkLabel33.TabStop = True
-        Me.LinkLabel33.Text = "Retry"
-        Me.LinkLabel33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Location = New System.Drawing.Point(0, 0)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
+        Me.Label7.Size = New System.Drawing.Size(384, 32)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "The news feed could not be loaded."
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LinkLabel34
         '
@@ -2194,17 +2191,20 @@ Partial Class MainForm
         Me.LinkLabel34.Text = "Learn more"
         Me.LinkLabel34.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label7
+        'LinkLabel33
         '
-        Me.Label7.AutoEllipsis = True
-        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label7.Location = New System.Drawing.Point(0, 0)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
-        Me.Label7.Size = New System.Drawing.Size(384, 32)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "The news feed could not be loaded."
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.LinkLabel33.AutoEllipsis = True
+        Me.LinkLabel33.Dock = System.Windows.Forms.DockStyle.Right
+        Me.LinkLabel33.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel33.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel33.Location = New System.Drawing.Point(480, 0)
+        Me.LinkLabel33.Name = "LinkLabel33"
+        Me.LinkLabel33.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
+        Me.LinkLabel33.Size = New System.Drawing.Size(96, 32)
+        Me.LinkLabel33.TabIndex = 1
+        Me.LinkLabel33.TabStop = True
+        Me.LinkLabel33.Text = "Retry"
+        Me.LinkLabel33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
         '
@@ -2466,9 +2466,9 @@ Partial Class MainForm
         '
         Me.NewsContentPreviewerPanel.Controls.Add(Me.Panel1)
         Me.NewsContentPreviewerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 160)
         Me.NewsContentPreviewerPanel.Name = "NewsContentPreviewerPanel"
-        Me.NewsContentPreviewerPanel.Size = New System.Drawing.Size(1008, 657)
+        Me.NewsContentPreviewerPanel.Size = New System.Drawing.Size(1008, 497)
         Me.NewsContentPreviewerPanel.TabIndex = 3
         Me.NewsContentPreviewerPanel.Visible = False
         '
