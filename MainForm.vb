@@ -1043,199 +1043,203 @@ Public Class MainForm
     End Sub
 
     Private Sub DisplayInfinityComputerInformation()
-        ' Wallpaper
         Try
-            Dim WallpaperPath As String = ""
-            ' Wallpaper may be defined by group policy; check there first
+            ' Wallpaper
             Try
-                Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
-                WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
-                WallpaperPolicyRk.Close()
-                If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+                Dim WallpaperPath As String = ""
+                ' Wallpaper may be defined by group policy; check there first
+                Try
+                    Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
+                    WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
+                    WallpaperPolicyRk.Close()
+                    If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+                Catch ex As Exception
+                    ' Ignore and use general wallpaper
+                    Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
+                    WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
+                    WallpaperRk.Close()
+                End Try
+                ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
             Catch ex As Exception
-                ' Ignore and use general wallpaper
-                Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
-                WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
-                WallpaperRk.Close()
+
             End Try
-            ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
+
+            ' Localizable strings
+            Dim BuildStr As String = "",
+                SysMemStr As String = "",
+                CurDiskStr As String = "",
+                NoDomStr As String = "",
+                DomainStr As String = "",
+                BDCStr As String = "",
+                PDCStr As String = "",
+                NoIPStr As String = "",
+                ManualIPStr As String = "",
+                DHCPStr As String = ""
+
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            BuildStr = "build"
+                            SysMemStr = "of system memory"
+                            CurDiskStr = "used out of"
+                            NoDomStr = "Not part of a domain"
+                            DomainStr = "Part of a domain"
+                            BDCStr = "Backup domain controller"
+                            PDCStr = "Primary domain controller"
+                            NoIPStr = "Not connected to a network"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automatic (assigned by DHCP)"
+                        Case "ESN"
+                            BuildStr = "compilación"
+                            SysMemStr = "de memoria de sistema"
+                            CurDiskStr = "usados de"
+                            NoDomStr = "No es parte de un dominio"
+                            DomainStr = "Es parte de un dominio"
+                            BDCStr = "Controlador de dominio secundario"
+                            PDCStr = "Controlador de dominio primario"
+                            NoIPStr = "No conectado a una red"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automática (asignada por DHCP)"
+                        Case "FRA"
+                            BuildStr = "build"
+                            SysMemStr = "de la mémoire système"
+                            CurDiskStr = "utilisé sur"
+                            NoDomStr = "N'appartient pas à un domaine"
+                            DomainStr = "Appartient à un domaine"
+                            BDCStr = "Contrôleur de domaine de secours"
+                            PDCStr = "Contrôleur de domaine principal"
+                            NoIPStr = "Non connecté à un réseau"
+                            ManualIPStr = "Manuel"
+                            DHCPStr = "Automatique (attribué par DHCP)"
+                        Case "PTB", "PTG"
+                            BuildStr = "compilação"
+                            SysMemStr = "da memória do sistema"
+                            CurDiskStr = "utilizada de"
+                            NoDomStr = "Não faz parte de um domínio"
+                            DomainStr = "Faz parte de um domínio"
+                            BDCStr = "Controlador de domínio de backup"
+                            PDCStr = "Controlador de domínio primário"
+                            NoIPStr = "Não está ligado a uma rede"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automático (atribuído por DHCP)"
+                        Case "ITA"
+                            BuildStr = "build"
+                            SysMemStr = "della memoria di sistema"
+                            CurDiskStr = "utilizzata su"
+                            NoDomStr = "Non fa parte di un dominio"
+                            DomainStr = "Fa parte di un dominio"
+                            BDCStr = "Controller di dominio di backup"
+                            PDCStr = "Controller di dominio primario"
+                            NoIPStr = "Non connesso a una rete"
+                            ManualIPStr = "Manuale"
+                            DHCPStr = "Automatico (assegnato da DHCP)"
+                    End Select
+                Case 1
+                    BuildStr = "build"
+                    SysMemStr = "of system memory"
+                    CurDiskStr = "used out of"
+                    NoDomStr = "Not part of a domain"
+                    DomainStr = "Part of a domain"
+                    BDCStr = "Backup domain controller"
+                    PDCStr = "Primary domain controller"
+                    NoIPStr = "Not connected to a network"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automatic (assigned by DHCP)"
+                Case 2
+                    BuildStr = "compilación"
+                    SysMemStr = "de memoria de sistema"
+                    CurDiskStr = "usados de"
+                    NoDomStr = "No es parte de un dominio"
+                    DomainStr = "Es parte de un dominio"
+                    BDCStr = "Controlador de dominio secundario"
+                    PDCStr = "Controlador de dominio primario"
+                    NoIPStr = "No conectado a una red"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automática (asignada por DHCP)"
+                Case 3
+                    BuildStr = "build"
+                    SysMemStr = "de la mémoire système"
+                    CurDiskStr = "utilisé sur"
+                    NoDomStr = "N'appartient pas à un domaine"
+                    DomainStr = "Appartient à un domaine"
+                    BDCStr = "Contrôleur de domaine de secours"
+                    PDCStr = "Contrôleur de domaine principal"
+                    NoIPStr = "Non connecté à un réseau"
+                    ManualIPStr = "Manuel"
+                    DHCPStr = "Automatique (attribué par DHCP)"
+                Case 4
+                    BuildStr = "compilação"
+                    SysMemStr = "da memória do sistema"
+                    CurDiskStr = "utilizada de"
+                    NoDomStr = "Não faz parte de um domínio"
+                    DomainStr = "Faz parte de um domínio"
+                    BDCStr = "Controlador de domínio de backup"
+                    PDCStr = "Controlador de domínio primário"
+                    NoIPStr = "Não está ligado a uma rede"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automático (atribuído por DHCP)"
+                Case 5
+                    BuildStr = "build"
+                    SysMemStr = "della memoria di sistema"
+                    CurDiskStr = "utilizzata su"
+                    NoDomStr = "Non fa parte di un dominio"
+                    DomainStr = "Fa parte di un dominio"
+                    BDCStr = "Controller di dominio di backup"
+                    PDCStr = "Controller di dominio primario"
+                    NoIPStr = "Non connesso a una rete"
+                    ManualIPStr = "Manuale"
+                    DHCPStr = "Automatico (assegnato da DHCP)"
+            End Select
+
+            ' Computer Information
+            ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build)
+            Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
+            Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
+            Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Label, FreeSpace, Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
+            Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
+            ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
+            ComputerModelLabel.Text = ComputerSystemProps("Model")
+            ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
+            ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
+                                                                                               (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3), SysMemStr)
+            Try
+                Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
+                    DiskCapacity As Long = CurrentVolProps("Capacity"),
+                    DiskFreeSpace As Long = CurrentVolProps("FreeSpace"),
+                    DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
+                    DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
+                    DiskLabel As String = CurrentVolProps("Label")
+                ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, DiskLabel,
+                                                                                                   Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                                   CurDiskStr,
+                                                                                                   Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                                   Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not display disk information: " & ex.Message)
+            End Try
+            Select Case ComputerSystemProps("DomainRole")
+                Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
+                    ComputerDomainStatusLabel.Text = NoDomStr
+                Case DomainRole.MemberWorkstation, DomainRole.MemberServer
+                    ComputerDomainStatusLabel.Text = DomainStr
+                Case DomainRole.BackupDomainController
+                    ComputerDomainStatusLabel.Text = BDCStr
+                Case DomainRole.PrimaryDomainController
+                    ComputerDomainStatusLabel.Text = PDCStr
+            End Select
+            ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
+            Try
+                Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
+                Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
+                Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
+                Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
+                ComputerDhcpStatusLabel.Text = If(DhcpEnabled, DHCPStr, ManualIPStr)
+            Catch ex As Exception
+                ComputerDhcpStatusLabel.Text = NoIPStr
+            End Try
         Catch ex As Exception
-
-        End Try
-
-        ' Localizable strings
-        Dim BuildStr As String = "",
-            SysMemStr As String = "",
-            CurDiskStr As String = "",
-            NoDomStr As String = "",
-            DomainStr As String = "",
-            BDCStr As String = "",
-            PDCStr As String = "",
-            NoIPStr As String = "",
-            ManualIPStr As String = "",
-            DHCPStr As String = ""
-
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        BuildStr = "build"
-                        SysMemStr = "of system memory"
-                        CurDiskStr = "used out of"
-                        NoDomStr = "Not part of a domain"
-                        DomainStr = "Part of a domain"
-                        BDCStr = "Backup domain controller"
-                        PDCStr = "Primary domain controller"
-                        NoIPStr = "Not connected to a network"
-                        ManualIPStr = "Manual"
-                        DHCPStr = "Automatic (assigned by DHCP)"
-                    Case "ESN"
-                        BuildStr = "compilación"
-                        SysMemStr = "de memoria de sistema"
-                        CurDiskStr = "usados de"
-                        NoDomStr = "No es parte de un dominio"
-                        DomainStr = "Es parte de un dominio"
-                        BDCStr = "Controlador de dominio secundario"
-                        PDCStr = "Controlador de dominio primario"
-                        NoIPStr = "No conectado a una red"
-                        ManualIPStr = "Manual"
-                        DHCPStr = "Automática (asignada por DHCP)"
-                    Case "FRA"
-                        BuildStr = "build"
-                        SysMemStr = "de la mémoire système"
-                        CurDiskStr = "utilisé sur"
-                        NoDomStr = "N'appartient pas à un domaine"
-                        DomainStr = "Appartient à un domaine"
-                        BDCStr = "Contrôleur de domaine de secours"
-                        PDCStr = "Contrôleur de domaine principal"
-                        NoIPStr = "Non connecté à un réseau"
-                        ManualIPStr = "Manuel"
-                        DHCPStr = "Automatique (attribué par DHCP)"
-                    Case "PTB", "PTG"
-                        BuildStr = "compilação"
-                        SysMemStr = "da memória do sistema"
-                        CurDiskStr = "utilizada de"
-                        NoDomStr = "Não faz parte de um domínio"
-                        DomainStr = "Faz parte de um domínio"
-                        BDCStr = "Controlador de domínio de backup"
-                        PDCStr = "Controlador de domínio primário"
-                        NoIPStr = "Não está ligado a uma rede"
-                        ManualIPStr = "Manual"
-                        DHCPStr = "Automático (atribuído por DHCP)"
-                    Case "ITA"
-                        BuildStr = "build"
-                        SysMemStr = "della memoria di sistema"
-                        CurDiskStr = "utilizzata su"
-                        NoDomStr = "Non fa parte di un dominio"
-                        DomainStr = "Fa parte di un dominio"
-                        BDCStr = "Controller di dominio di backup"
-                        PDCStr = "Controller di dominio primario"
-                        NoIPStr = "Non connesso a una rete"
-                        ManualIPStr = "Manuale"
-                        DHCPStr = "Automatico (assegnato da DHCP)"
-                End Select
-            Case 1
-                BuildStr = "build"
-                SysMemStr = "of system memory"
-                CurDiskStr = "used out of"
-                NoDomStr = "Not part of a domain"
-                DomainStr = "Part of a domain"
-                BDCStr = "Backup domain controller"
-                PDCStr = "Primary domain controller"
-                NoIPStr = "Not connected to a network"
-                ManualIPStr = "Manual"
-                DHCPStr = "Automatic (assigned by DHCP)"
-            Case 2
-                BuildStr = "compilación"
-                SysMemStr = "de memoria de sistema"
-                CurDiskStr = "usados de"
-                NoDomStr = "No es parte de un dominio"
-                DomainStr = "Es parte de un dominio"
-                BDCStr = "Controlador de dominio secundario"
-                PDCStr = "Controlador de dominio primario"
-                NoIPStr = "No conectado a una red"
-                ManualIPStr = "Manual"
-                DHCPStr = "Automática (asignada por DHCP)"
-            Case 3
-                BuildStr = "build"
-                SysMemStr = "de la mémoire système"
-                CurDiskStr = "utilisé sur"
-                NoDomStr = "N'appartient pas à un domaine"
-                DomainStr = "Appartient à un domaine"
-                BDCStr = "Contrôleur de domaine de secours"
-                PDCStr = "Contrôleur de domaine principal"
-                NoIPStr = "Non connecté à un réseau"
-                ManualIPStr = "Manuel"
-                DHCPStr = "Automatique (attribué par DHCP)"
-            Case 4
-                BuildStr = "compilação"
-                SysMemStr = "da memória do sistema"
-                CurDiskStr = "utilizada de"
-                NoDomStr = "Não faz parte de um domínio"
-                DomainStr = "Faz parte de um domínio"
-                BDCStr = "Controlador de domínio de backup"
-                PDCStr = "Controlador de domínio primário"
-                NoIPStr = "Não está ligado a uma rede"
-                ManualIPStr = "Manual"
-                DHCPStr = "Automático (atribuído por DHCP)"
-            Case 5
-                BuildStr = "build"
-                SysMemStr = "della memoria di sistema"
-                CurDiskStr = "utilizzata su"
-                NoDomStr = "Non fa parte di un dominio"
-                DomainStr = "Fa parte di un dominio"
-                BDCStr = "Controller di dominio di backup"
-                PDCStr = "Controller di dominio primario"
-                NoIPStr = "Non connesso a una rete"
-                ManualIPStr = "Manuale"
-                DHCPStr = "Automatico (assegnato da DHCP)"
-        End Select
-
-        ' Computer Information
-        ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build)
-        Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
-        Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
-        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Label, FreeSpace, Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
-        Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
-        ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
-        ComputerModelLabel.Text = ComputerSystemProps("Model")
-        ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
-        ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
-                                                                                           (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3), SysMemStr)
-        Try
-            Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
-                DiskCapacity As Long = CurrentVolProps("Capacity"),
-                DiskFreeSpace As Long = CurrentVolProps("FreeSpace"),
-                DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
-                DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
-                DiskLabel As String = CurrentVolProps("Label")
-            ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, DiskLabel,
-                                                                                               Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
-                                                                                               CurDiskStr,
-                                                                                               Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
-                                                                                               Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not display disk information: " & ex.Message)
-        End Try
-        Select Case ComputerSystemProps("DomainRole")
-            Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
-                ComputerDomainStatusLabel.Text = NoDomStr
-            Case DomainRole.MemberWorkstation, DomainRole.MemberServer
-                ComputerDomainStatusLabel.Text = DomainStr
-            Case DomainRole.BackupDomainController
-                ComputerDomainStatusLabel.Text = BDCStr
-            Case DomainRole.PrimaryDomainController
-                ComputerDomainStatusLabel.Text = PDCStr
-        End Select
-        ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
-        Try
-            Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
-            Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
-            Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
-            Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
-            ComputerDhcpStatusLabel.Text = If(DhcpEnabled, DHCPStr, ManualIPStr)
-        Catch ex As Exception
-            ComputerDhcpStatusLabel.Text = NoIPStr
+            DynaLog.LogMessage("Could not display computer info: " & ex.Message)
         End Try
     End Sub
 
