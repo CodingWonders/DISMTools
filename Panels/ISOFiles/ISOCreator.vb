@@ -26,8 +26,7 @@ Public Class ISOCreator
                         progressMessages(2) = "The ISO file has been created"
                         Text = "Create an ISO file"
                         ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. ISO files created with this utility should be used only on Virtual Machines (VMs) and on computers with standard disk controllers." & CrLf & CrLf &
-                                      "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
+                        Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                         Label3.Text = "Once you're ready, click the Create button."
                         Label4.Text = "Image file to add to ISO file:"
                         Label6.Text = "Architecture:"
@@ -57,8 +56,7 @@ Public Class ISOCreator
                         progressMessages(2) = "El archivo ISO ha sido creado"
                         Text = "Crear un archivo ISO"
                         ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Los archivos ISO creados solo deberían ser utilizados en máquinas virtuales y en ordenadores con controladores de disco estándares." & CrLf & CrLf &
-                                      "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
+                        Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                         Label3.Text = "Cuando esté listo, haga clic en Crear."
                         Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
                         Label6.Text = "Arquitectura:"
@@ -88,8 +86,7 @@ Public Class ISOCreator
                         progressMessages(2) = "Le fichier ISO a été créé"
                         Text = "Créer un fichier ISO"
                         ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Les fichiers ISO créés à l'aide de cet utilitaire ne doivent être utilisés que sur des machines virtuelles (VM) et des ordinateurs dotés de contrôleurs de disque standard." & CrLf & CrLf &
-                                      "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
+                        Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                         Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                         Label4.Text = "Fichier image à ajouter au fichier ISO :"
                         Label6.Text = "Architecture :"
@@ -119,8 +116,7 @@ Public Class ISOCreator
                         progressMessages(2) = "O ficheiro ISO foi criado"
                         Text = "Criar um ficheiro ISO"
                         ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Os ficheiros ISO criados com este utilitário só devem ser utilizados em Máquinas Virtuais (VMs) e computadores com controladores de disco padrão." & CrLf & CrLf &
-                                      "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
+                        Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                         Label3.Text = "Quando estiver pronto, clique no botão Criar."
                         Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
                         Label6.Text = "Arquitetura:"
@@ -150,8 +146,7 @@ Public Class ISOCreator
                         progressMessages(2) = "Il file ISO è stato creato"
                         Text = "Creare un file ISO"
                         ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. I file ISO creati con questa utility devono essere utilizzati solo su macchine virtuali (VM) e su computer con controller del disco standard." & CrLf & CrLf &
-                                      "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
+                        Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                         Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                         Label4.Text = "File immagine da aggiungere al file ISO:"
                         Label6.Text = "Architettura:"
@@ -182,8 +177,7 @@ Public Class ISOCreator
                 progressMessages(2) = "The ISO file has been created"
                 Text = "Create an ISO file"
                 ImageTaskHeader1.ItemText = Text
-                Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. ISO files created with this utility should be used only on Virtual Machines (VMs) and computers with standard disk controllers." & CrLf & CrLf &
-                              "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
+                Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                 Label3.Text = "Once you're ready, click the Create button."
                 Label4.Text = "Image file to add to ISO file:"
                 Label6.Text = "Architecture:"
@@ -213,8 +207,7 @@ Public Class ISOCreator
                 progressMessages(2) = "El archivo ISO ha sido creado"
                 Text = "Crear un archivo ISO"
                 ImageTaskHeader1.ItemText = Text
-                Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Los archivos ISO creados solo deberían ser utilizados en máquinas virtuales y en ordenadores con controladores de disco estándares." & CrLf & CrLf &
-                              "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
+                Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                 Label3.Text = "Cuando esté listo, haga clic en Crear."
                 Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
                 Label6.Text = "Arquitectura:"
@@ -244,8 +237,7 @@ Public Class ISOCreator
                 progressMessages(2) = "Le fichier ISO a été créé"
                 Text = "Créer un fichier ISO"
                 ImageTaskHeader1.ItemText = Text
-                Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Les fichiers ISO créés à l'aide de cet utilitaire ne doivent être utilisés que sur des machines virtuelles (VM) et des ordinateurs dotés de contrôleurs de disque standard." & CrLf & CrLf &
-                              "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
+                Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                 Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                 Label4.Text = "Fichier image à ajouter au fichier ISO :"
                 Label6.Text = "Architecture :"
@@ -275,8 +267,7 @@ Public Class ISOCreator
                 progressMessages(2) = "O ficheiro ISO foi criado"
                 Text = "Criar um ficheiro ISO"
                 ImageTaskHeader1.ItemText = Text
-                Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Os ficheiros ISO criados com este utilitário só devem ser utilizados em Máquinas Virtuais (VMs) e computadores com controladores de disco padrão." & CrLf & CrLf &
-                              "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
+                Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                 Label3.Text = "Quando estiver pronto, clique no botão Criar."
                 Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
                 Label6.Text = "Arquitetura:"
@@ -306,8 +297,7 @@ Public Class ISOCreator
                 progressMessages(2) = "Il file ISO è stato creato"
                 Text = "Creare un file ISO"
                 ImageTaskHeader1.ItemText = Text
-                Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. I file ISO creati con questa utility devono essere utilizzati solo su macchine virtuali (VM) e su computer con controller del disco standard." & CrLf & CrLf &
-                              "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
+                Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                 Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                 Label4.Text = "File immagine da aggiungere al file ISO:"
                 Label6.Text = "Architettura:"
@@ -435,6 +425,7 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Unattended answer file (overrides existing answer files in an image): " & MainForm.PEHelper_UnattendedFile)
         DynaLog.LogMessage("- Copy to Ventoy? " & MainForm.PEHelper_CopyToVentoy)
         DynaLog.LogMessage("- Use new EFI boot binaries? " & MainForm.PEHelper_Use2023EFI)
+        DynaLog.LogMessage("- Include System Drivers? " & MainForm.PEHelper_IncludeSysDrvs)
 
         If MainForm.PEHelper_UnattendedFile <> "" AndAlso File.Exists(MainForm.PEHelper_UnattendedFile) Then
             DynaLog.LogMessage("Unattended answer file has been specified and exists. Using it...")
@@ -447,6 +438,7 @@ Public Class ISOCreator
         End If
         CheckBox2.Checked = MainForm.PEHelper_CopyToVentoy
         CheckBox3.Checked = MainForm.PEHelper_Use2023EFI
+        CheckBox4.Checked = MainForm.PEHelper_IncludeSysDrvs
 
         AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
 
@@ -733,6 +725,7 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
         DynaLog.LogMessage("- Copy the ISO file to Ventoy drives afterwards? " & If(CheckBox2.Checked, "Yes", "No"))
         DynaLog.LogMessage("- Use boot binaries signed with Windows UEFI CA 2023? " & If(CheckBox3.Checked, "Yes", "No"))
+        DynaLog.LogMessage("- Include system essential drivers (SCSI adapters/network controllers)? " & If(CheckBox4.Checked, "Yes", "No"))
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
@@ -750,7 +743,7 @@ Public Class ISOCreator
 
         End Try
 
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & If(CheckBox2.Checked, " -copyToVentoy", "") & If(CheckBox3.Checked, " -bootex", "") & If(CheckBox4.Checked, " -includeSysDrivers", "")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
@@ -827,6 +820,7 @@ Public Class ISOCreator
         End If
         MainForm.PEHelper_CopyToVentoy = CheckBox2.Checked
         MainForm.PEHelper_Use2023EFI = CheckBox3.Checked
+        MainForm.PEHelper_IncludeSysDrvs = CheckBox4.Checked
 
         Dim customPolicyPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg")
         If File.Exists(customPolicyPath) Then
@@ -1052,5 +1046,10 @@ Public Class ISOCreator
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         PECustomizerDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub CheckBox4_MouseHover(sender As Object, e As EventArgs) Handles CheckBox4.MouseHover
+        WindowHelper.DisplayToolTip(sender, "When you check this option, storage controllers and network adapter drivers from this machine will be included" & CrLf &
+                                            "in your ISO file. They will also be applied to the image file once deployed.")
     End Sub
 End Class

@@ -172,6 +172,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; Value
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: string; ValueName: "PEHelper.UnattendedFile"; ValueData: ""; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.CopyToVentoy"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.Use2023EFI"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.IncludeSysDrvs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "AppxRemovalDisplayNameFormat"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PreventSystemFromSleeping"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist

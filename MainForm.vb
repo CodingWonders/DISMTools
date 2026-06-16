@@ -195,9 +195,10 @@ Public Class MainForm
     Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
 
     ' Preinstallation Environment Helper Settings
-    Public PEHelper_UnattendedFile As String = ""   ' A default unattended answer file for new ISOs
-    Public PEHelper_CopyToVentoy As Boolean = False ' Whether to copy new ISO files to Ventoy drives automatically
-    Public PEHelper_Use2023EFI As Boolean = False   ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+    Public PEHelper_UnattendedFile As String = ""       ' A default unattended answer file for new ISOs
+    Public PEHelper_CopyToVentoy As Boolean = False     ' Whether to copy new ISO files to Ventoy drives automatically
+    Public PEHelper_Use2023EFI As Boolean = False       ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+    Public PEHelper_IncludeSysDrvs As Boolean = True    ' Whether to include SCSI adapters and network controllers in the DTPE
 
     ' Web Search Settings
     Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
@@ -1563,6 +1564,7 @@ Public Class MainForm
                 PEHelper_UnattendedFile = ImgOpKey.GetValue("PEHelper.UnattendedFile").ToString().Replace(Quote, "").Trim()
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
+                PEHelper_IncludeSysDrvs = (CInt(ImgOpKey.GetValue("PEHelper.IncludeSysDrvs")) = 1)
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
                 PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 HumanizeDates = CInt(ImgOpKey.GetValue("HumanizeDates", 1)) = 1
@@ -1692,6 +1694,7 @@ Public Class MainForm
                     PEHelper_UnattendedFile = settingData("ImgOps")("PEHelper.UnattendedFile").Replace(Quote, "").Trim()
                     PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
                     PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
+                    PEHelper_IncludeSysDrvs = CInt(settingData("ImgOps")("PEHelper.IncludeSysDrvs")) = 1
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
                     PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
@@ -1904,6 +1907,7 @@ Public Class MainForm
                            "PEHelper_UnattendedFile             =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
                            "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
+                           "PEHelper_IncludeSysDrvs             =    " & PEHelper_IncludeSysDrvs & CrLf &
                            "NoRestart                           =    " & SysNoRestart & CrLf &
                            "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
                            "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
@@ -4327,6 +4331,7 @@ Public Class MainForm
             settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & PEHelper_UnattendedFile & Quote)
             settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
             settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", If(PEHelper_IncludeSysDrvs, 1, 0))
             settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
             settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
             settingsData("ImgOps").AddKey("HumanizeDates", If(HumanizeDates, 1, 0))
@@ -4429,6 +4434,7 @@ Public Class MainForm
                 ImgOpKey.SetValue("PEHelper.UnattendedFile", PEHelper_UnattendedFile, RegistryValueKind.String)
                 ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", PEHelper_IncludeSysDrvs, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("HumanizeDates", HumanizeDates, RegistryValueKind.DWord)
