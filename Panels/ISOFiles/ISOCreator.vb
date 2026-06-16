@@ -1052,4 +1052,9 @@ Public Class ISOCreator
         WindowHelper.DisplayToolTip(sender, "When you check this option, storage controllers and network adapter drivers from this machine will be included" & CrLf &
                                             "in your ISO file. They will also be applied to the image file once deployed.")
     End Sub
+
+    Private Sub CheckBox3_MouseHover(sender As Object, e As EventArgs) Handles CheckBox3.MouseHover
+        WindowHelper.DisplayToolTip(sender, "If available in your installed Assessment and Deployment Kit, your ISO file will use boot binaries signed with Windows UEFI CA 2023." & CrLf &
+                                            "This option is designed for target systems that support Secure Boot and have the latest boot certificates in the allowlist database (DB).")
+    End Sub
 End Class

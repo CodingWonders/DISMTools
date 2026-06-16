@@ -26,6 +26,7 @@ Partial Class ISOCreator
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -66,7 +67,6 @@ Partial Class ISOCreator
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
         Me.ADKDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -119,6 +119,17 @@ Partial Class ISOCreator
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Options"
+        '
+        'CheckBox4
+        '
+        Me.CheckBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Location = New System.Drawing.Point(384, 393)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(224, 17)
+        Me.CheckBox4.TabIndex = 12
+        Me.CheckBox4.Text = "Include essential drivers from this system"
+        Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'Button6
         '
@@ -500,17 +511,6 @@ Partial Class ISOCreator
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1264, 48)
         Me.ImageTaskHeader1.TabIndex = 12
-        '
-        'CheckBox4
-        '
-        Me.CheckBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.Location = New System.Drawing.Point(384, 393)
-        Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(224, 17)
-        Me.CheckBox4.TabIndex = 12
-        Me.CheckBox4.Text = "Include essential drivers from this system"
-        Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'ISOCreator
         '
