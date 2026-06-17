@@ -275,6 +275,7 @@
     <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
+    <Compile Include="Elements\InfinityHome\InfinityFact.vb" />
     <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\IniParserConfigurators\SettingsParserConfiguration.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
@@ -2303,6 +2304,11 @@ IF NOT EXIST AutoUnattend (
 	IF EXIST "$(ProjectDir)Elements\AutoUnattend\StarterScripts" (
 		xcopy "$(ProjectDir)Elements\AutoUnattend\StarterScripts\*.dtss" AutoUnattend\StarterScripts /cehyi
 	)
+)
+
+:: Copy our cool facts
+IF EXIST "$(SolutionDir)Elements\InfinityHome\facts.xml" (
+	copy /y "$(SolutionDir)Elements\InfinityHome\facts.xml" bin\facts.xml
 )
 
 IF %25ISPREVIEW%25=="Yes" (

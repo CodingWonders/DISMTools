@@ -20,6 +20,7 @@ Imports IniParser.Model
 Imports System.Management
 Imports System.Threading.Tasks
 Imports System.Globalization
+Imports DISMTools.Elements.InfinityHome
 
 Public Class MainForm
 
@@ -233,6 +234,9 @@ Public Class MainForm
     Private NewsFeedWebContent As WebBrowser
     Private NewsFeedContent As String
     Private NewsLastUpdateDate As Date
+
+    ' Infinity Home
+    Private InfinityHomeFacts As New List(Of InfinityFact)
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -1041,6 +1045,25 @@ Public Class MainForm
         NewsContentPreviewerPanel.Controls.Add(NewsFeedWebContent)
         NewsFeedWebContent.BringToFront()
         AddHandler NewsFeedWebContent.DocumentCompleted, AddressOf NewsFeedWebContent_DocumentCompleted
+
+        ' Load the facts
+        Dim FactsFile As String = Path.Combine(Application.StartupPath, "bin", "facts.xml")
+        If File.Exists(FactsFile) Then
+            Try
+                Dim factsDeserializer As New XmlSerializer(GetType(InfinityFactsDocument))
+                Using fs As FileStream = File.OpenRead(FactsFile)
+                    Dim document As InfinityFactsDocument = CType(factsDeserializer.Deserialize(fs), InfinityFactsDocument)
+                    InfinityHomeFacts = document.Facts
+                End Using
+
+                If InfinityHomeFacts.Any() Then
+                    ' Show a random one
+                    FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
+                End If
+            Catch ex As Exception
+
+            End Try
+        End If
     End Sub
 
     Private Sub DisplayInfinityComputerInformation()
@@ -15951,5 +15974,16 @@ Public Class MainForm
 
     Private Sub NewsFeedCloseBtn_Click(sender As Object, e As EventArgs) Handles NewsFeedCloseBtn.Click
         NewsContentPreviewerPanel.Visible = False
+    End Sub
+
+    Private Sub RefreshFactButton_Click(sender As Object, e As EventArgs) Handles RefreshFactButton.Click
+        If InfinityHomeFacts.Any() Then
+            ' Show a random one
+            FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
+        End If
+    End Sub
+
+    Private Sub RefreshFactButton_MouseHover(sender As Object, e As EventArgs) Handles RefreshFactButton.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Show a new fact")
     End Sub
 End Class
