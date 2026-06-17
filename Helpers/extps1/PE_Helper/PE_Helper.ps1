@@ -937,6 +937,7 @@ function Start-PECustomization
                 Write-Host "Could not include drivers..."
             }
         }
+        Write-Host "Customizations completed."
         return $true
     }
     catch
