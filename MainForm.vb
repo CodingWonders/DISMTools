@@ -1234,11 +1234,11 @@ Public Class MainForm
                     DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
                     DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
                     DiskLabel As String = CurrentVolProps("Label")
-                ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, DiskLabel,
-                                                                                                   Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
-                                                                                                   CurDiskStr,
-                                                                                                   Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
-                                                                                                   Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
+                ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", DiskLabel, "<unlabeled>"),
+                                                                                            Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            CurDiskStr,
+                                                                                            Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
             Catch ex As Exception
                 DynaLog.LogMessage("Could not display disk information: " & ex.Message)
             End Try
