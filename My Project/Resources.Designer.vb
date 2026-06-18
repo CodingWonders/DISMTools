@@ -2265,12 +2265,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- In portable installations, file associations can now be toggled for the Starter Script Editor
-        '''- The DynaLog log viewer has received support for event log filters
-        '''- Date properties can now be displayed in a Windows-native format
-        '''- Other under-the-hood changes.
+        '''- Fixed an issue where the full date string was not displaying correctly when accessing image properties with Windows representations of dates turned off
+        '''- When adding a boot image to the WDS server, the service start is now requested only when it is not running
+        '''- Fixed an exception that would happen when adding certain AppX packages
+        '''
+        '''New features:
+        '''
+        '''- The Sysprep Preparation Tool has been updated to the latest version
+        '''- If the Sysprep Preparation Tool was invoked before capturing the ima [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
