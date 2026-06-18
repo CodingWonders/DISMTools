@@ -170,6 +170,10 @@ function Start-PEGeneration
                 if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
+                    # Present possible reason as to why
+                    Write-Host "`nMake sure that all of the required ADK components (Deployment Tools and the Windows PE add-on) are"
+                    Write-Host "installed on your computer. Try uninstalling your existing ADK and letting DISMTools install the"
+                    Write-Host "latest one for you. All of the pre-requisites will have been met."
                     Write-Host "`nPress ENTER to exit"
                     Read-Host | Out-Null
                     exit 1
