@@ -33,6 +33,7 @@ Partial Class ProgressPanel
         Me.taskCountLbl = New System.Windows.Forms.Label()
         Me.LogTextContainer = New System.Windows.Forms.Panel()
         Me.DISM_OpLogs = New System.Windows.Forms.Panel()
+        Me.DISM_LogView = New DISMTools.ConsoleControl()
         Me.DT_OpLogs = New System.Windows.Forms.Panel()
         Me.LogView = New System.Windows.Forms.TextBox()
         Me.LogButton = New System.Windows.Forms.Button()
@@ -46,7 +47,6 @@ Partial Class ProgressPanel
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.DISMProc = New System.Diagnostics.Process()
-        Me.DISM_LogView = New DISMTools.ConsoleControl()
         Me.LogTextContainer.SuspendLayout()
         Me.DISM_OpLogs.SuspendLayout()
         Me.DT_OpLogs.SuspendLayout()
@@ -157,6 +157,14 @@ Partial Class ProgressPanel
         Me.DISM_OpLogs.Size = New System.Drawing.Size(654, 161)
         Me.DISM_OpLogs.TabIndex = 4
         Me.DISM_OpLogs.Visible = False
+        '
+        'DISM_LogView
+        '
+        Me.DISM_LogView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DISM_LogView.Location = New System.Drawing.Point(0, 0)
+        Me.DISM_LogView.Name = "DISM_LogView"
+        Me.DISM_LogView.Size = New System.Drawing.Size(654, 161)
+        Me.DISM_LogView.TabIndex = 0
         '
         'DT_OpLogs
         '
@@ -293,7 +301,7 @@ Partial Class ProgressPanel
         Me.PictureBox1.Location = New System.Drawing.Point(13, 13)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
@@ -312,14 +320,6 @@ Partial Class ProgressPanel
         Me.DISMProc.StartInfo.UseShellExecute = False
         Me.DISMProc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
         Me.DISMProc.SynchronizingObject = Me
-        '
-        'DISM_LogView
-        '
-        Me.DISM_LogView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DISM_LogView.Location = New System.Drawing.Point(0, 0)
-        Me.DISM_LogView.Name = "DISM_LogView"
-        Me.DISM_LogView.Size = New System.Drawing.Size(654, 161)
-        Me.DISM_LogView.TabIndex = 0
         '
         'ProgressPanel
         '

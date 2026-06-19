@@ -35,9 +35,10 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
-    [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
-    [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [string]$bootex = "false",
-    [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [string]$scratchPath = "",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [switch]$copyToVentoy,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [switch]$bootex,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [switch]$includeSysDrivers,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 8)] [string]$scratchPath = "",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -169,6 +170,10 @@ function Start-PEGeneration
                 if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
+                    # Present possible reason as to why
+                    Write-Host "`nMake sure that all of the required ADK components (Deployment Tools and the Windows PE add-on) are"
+                    Write-Host "installed on your computer. Try uninstalling your existing ADK and letting DISMTools install the"
+                    Write-Host "latest one for you. All of the pre-requisites will have been met."
                     Write-Host "`nPress ENTER to exit"
                     Read-Host | Out-Null
                     exit 1
@@ -250,7 +255,7 @@ function Start-PEGeneration
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
                 Write-Host "Beginning customizations..."
-                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $false) -eq $false)
+                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $false -includeSysDrivers $includeSysDrivers) -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
                     Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null
@@ -339,7 +344,8 @@ icon=autorun.ico
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
                 Write-Host "Creating ISO file..."
-                if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath -bootex $bootex) -eq $false)
+                $isoCreationSuccessful = if ($bootEx) { New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath -bootex } else { New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath }
+                if (-not ($isoCreationSuccessful))
                 {
                     Write-Host "The ISO file has not been created successfully."
                     Write-Host "Deleting temporary files..."
@@ -356,7 +362,7 @@ icon=autorun.ico
                 }
                 Write-Host "The ISO file has been successfully created on the location you specified"
                 Start-Sleep -Seconds 5
-                if ($copyToVentoy -eq "true")
+                if ($copyToVentoy)
                 {
                     Write-Host "Please insert a Ventoy drive and press ENTER. To create Ventoy drives, follow the guide over at https://www.ventoy.net/en/doc_start.html"
                     Read-Host | Out-Null
@@ -597,13 +603,16 @@ function Start-PECustomization
             The architecture of the target Windows PE image, which is used to customize the wallpaper
         .PARAMETER testStartNet
             Customizes the "startnet.cmd" file for WinPE testing
+        .PARAMETER includeSysDrivers
+            Determines whether to include system SCSI adapters and network controllers in the Windows image.
         .EXAMPLE
             Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$imagePath,
         [Parameter(Mandatory = $true, Position = 1)] [PE_Arch]$arch,
-        [Parameter(Mandatory = $true, Position = 2)] [bool]$testStartNet
+        [Parameter(Mandatory = $true, Position = 2)] [bool]$testStartNet,
+        [Parameter(Mandatory = $true, Position = 3)] [bool]$includeSysDrivers
     )
     try
     {
@@ -837,6 +846,102 @@ function Start-PECustomization
         {
             Write-Host "Could not change registry..."
         }
+        if ($includeSysDrivers) {
+            try
+            {
+                Write-Host "CUSTOMIZATION STEP - Include System Drivers" -BackgroundColor DarkGreen
+                Write-Host "Getting system storage controllers and network adapters..."
+                $sysDrivers = Get-WindowsDriver -Online | Where-Object { @("Net", "SCSIAdapter").Contains($_.ClassName) }
+                # We have grabbed the drivers. We'll export them to a directory outside the driver store,
+                # then we'll add them.
+                $drvCount = $sysDrivers.Count
+                $curDrvIndex = 0
+                $rootDriverPath = "$env:SYSTEMDRIVE\CWS_DRVS"
+                if (-not (Test-Path -Path "$rootDriverPath")) {
+                    New-Item -Path "$rootDriverPath" -ItemType Directory | Out-Null
+                }
+                Write-Host "Exporting available drivers..."
+                foreach ($sysDriver in $sysDrivers) {
+                    try {
+                        $curDrvIndex = $sysDrivers.IndexOf($sysDriver)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Exporting driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($sysDriver.OriginalFileName))`"..." -PercentComplete ((($curDrvIndex / $drvCount) * 100) / 2)
+                        $sysDriverSourcePath = [IO.Path]::GetDirectoryName("$($sysDriver.OriginalFileName)")
+                        $sysDriverTargetPath = "$rootDriverPath\$([IO.Path]::GetFileName($sysDriver.OriginalFileName))_$([Random]::new().Next([int]::MaxValue))"
+                        New-Item -Path "$sysDriverTargetPath" -ItemType Directory | Out-Null
+                        Copy-Item -Path "$sysDriverSourcePath\*.*" -Destination "$sysDriverTargetPath" -Recurse -Force
+                    } catch {
+                        Write-Host "Could not export driver $($sysDriver.OriginalFileName)."
+                    }
+                }
+                Write-Host "Installing drivers..."
+                $curDrvIndex = 0
+                $infFiles = Get-ChildItem -Path "$rootDriverPath" -Recurse -Filter "*.inf"
+                $infCount = $infFiles.Count
+                $successfulInstallations = 0
+                $failedInstallations = 0
+                $successfulDrivers = [List[string]]::new()
+                $failedDrivers = [List[string]]::new()
+                foreach ($infFile in $infFiles) {
+                    try {
+                        $curDrvIndex = $infFiles.IndexOf($infFile)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (50 + ((($curDrvIndex / $drvCount) * 100) / 2))
+                        if ((Start-DismCommand -Verb Add-Driver -ImagePath "$imagePath" -DriverAdditionFile "$($infFile.FullName)" -DriverAdditionRecurse $false) -eq $true)
+                        {
+                            $successfulInstallations++
+                            $successfulDrivers.Add("$($infFile.FullName)")
+                        }
+                        else
+                        {
+                            $failedInstallations++
+                            # Add the driver to the failed list, so we can display it later
+                            $failedDrivers.Add("$($infFile.FullName)")
+                        }
+                    } catch {
+
+                    }
+                }
+                Write-Progress -Activity "Installing system drivers..." -Completed
+                # We'll make the DTPE think we have added these drivers via the DIM, to automate their
+                # installation on the target Windows image.
+                Write-Host "Preparing drivers for deployment on target image..."
+                try {
+                    $winpeDriverRootPath = "$imagePath\CWS_DRVS"
+                    New-Item -Path "$winpeDriverRootPath" -ItemType Directory | Out-Null
+                    New-Item -Path "$imagePath\DT_InstDrvs.txt" | Out-Null
+                    Copy-Item -Path "$rootDriverPath\*.*" -Destination "$winpeDriverRootPath" -Recurse -Force
+                    foreach ($successfulDriver in $successfulDrivers) {
+                        $successfulDriver.Replace("$env:SYSTEMDRIVE", "X:") | Out-File "$imagePath\DT_InstDrvs.txt" -Encoding utf8 -Append
+                    }
+                } catch {
+
+                } finally {
+                    try {
+                        Remove-Item -Path "$rootDriverPath" -Recurse -Force
+                    } catch {
+
+                    }
+                }
+                # Show results
+                Write-Host "==================================================================="
+                Write-Host "Driver installation summary:"
+                Write-Host "- Successful driver installations: $successfulInstallations"
+                Write-Host "- Failed driver installations: $failedInstallations"
+                Write-Host "==================================================================="
+                if ($failedDrivers.Count -gt 0)
+                {
+                    Write-Host "  Drivers that could not be installed:"
+                    foreach ($failedDriver in $failedDrivers)
+                    {
+                        Write-Host "  - `"$failedDriver`""
+                    }
+                }
+            }
+            catch
+            {
+                Write-Host "Could not include drivers..."
+            }
+        }
+        Write-Host "Customizations completed."
         return $true
     }
     catch
@@ -929,7 +1034,7 @@ function New-WinPEIso
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$peToolsPath,
         [Parameter(Mandatory = $true, Position = 1)] [string]$isoLocation,
-        [Parameter(Position = 2)] [string]$bootex = "false"
+        [Parameter(Position = 2)] [switch]$bootex
     )
     try
     {
@@ -965,7 +1070,7 @@ function New-WinPEIso
         $efiVars = "#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\<EFIFILE_REPLACE>`""
         if ($finalPath -eq "bootbins")
         {
-            if (($bootex -eq "true") -and (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\efisys_EX.bin" -PathType Leaf))
+            if (($bootex) -and (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\efisys_EX.bin" -PathType Leaf))
             {
                 $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys_EX.bin").Trim()
             }

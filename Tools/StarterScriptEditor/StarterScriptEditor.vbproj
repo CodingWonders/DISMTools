@@ -179,6 +179,11 @@
     <None Include="Resources\colormode.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF EXIST "$(ProjectDir)DTSSIcon.ico" (
+	COPY /Y "$(ProjectDir)DTSSIcon.ico" "$(ProjectDir)out\DTSSIcon.ico"
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

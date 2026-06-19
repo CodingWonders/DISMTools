@@ -30,8 +30,13 @@ IF %ARGUMENTCOUNT% EQU 2 (
 	IF %ERRORLEVEL% EQU 3 SET Architecture=arm64
 )
 
-echo Starting WDS Server service (if not already started)...
-net start WDSServer >nul 2>&1
+REM to determine the status of the service we'll check if PID > 4 (ntoskrnl) -- if not, then it is stopped
+SET PID=0
+FOR /F "tokens=3" %%a in ('sc queryex WDSServer ^| findstr PID') DO SET PID=%%a
+IF %PID% LEQ 4 (
+	echo Starting WDS Server service...
+	net start WDSServer >nul 2>&1
+)
 
 CD %~dp0
 wdsutil /get-image /image:"%ImageName%" /imagetype:boot /architecture:%Architecture% /filename:boot_dtpe_iso.wim >nul 2>&1

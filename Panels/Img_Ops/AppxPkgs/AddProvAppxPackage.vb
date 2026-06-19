@@ -905,16 +905,16 @@ Public Class AddProvAppxPackage
                     If Directory.Exists(Path.Combine(Application.StartupPath, Package.Replace(Path.GetExtension(Package), "").Trim())) Then
                         Directory.Delete(Path.Combine(Application.StartupPath, Package.Replace(Path.GetExtension(Package), "").Trim()), True)
                     End If
-                    Dim EScannerRTB As New RichTextBox()
-                    EScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
+                    Dim EScanner As String()
+                    EScanner = File.ReadAllLines(Application.StartupPath & "\appxscan\AppxManifest.xml")
                     Dim EIdScanner As String
                     Dim EcurrentAppxName As String = ""
                     Dim EcurrentAppxPublisher As String = ""
                     Dim EcurrentAppxVersion As String = ""
                     Dim EcurrentAppxArchitecture As String = ""
-                    For x = 0 To EScannerRTB.Lines.Count - 1
-                        If EScannerRTB.Lines(x).Contains("<Identity") Then
-                            EIdScanner = EScannerRTB.Lines(x)
+                    For x = 0 To EScanner.Count - 1
+                        If EScanner(x).Contains("<Identity") Then
+                            EIdScanner = EScanner(x)
                             Dim serializer As New XmlSerializer(GetType(AppxPackage))
                             Using tReader As TextReader = New StringReader(EIdScanner)
                                 Using reader As XmlReader = XmlReader.Create(tReader)
@@ -1126,7 +1126,7 @@ Public Class AddProvAppxPackage
         End If
         Dim Stepper As Integer = 2
         Dim QuoteCount As Integer = 0
-        Dim ScannerRTB As New RichTextBox()
+        Dim Scanner As String()
         Dim currentAppxName As String = ""
         Dim currentAppxPublisher As String = ""
         Dim currentAppxVersion As String = ""
@@ -1139,12 +1139,12 @@ Public Class AddProvAppxPackage
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
                 DynaLog.LogMessage("A bundle manifest has been detected. Treating as a bundle package...")
                 ' AppXBundle file
-                ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxMetadata\AppxBundleManifest.xml")
-                StubSupported = ScannerRTB.Text.Contains("IsStub=" & Quote & "true" & Quote)
-                IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                Scanner = File.ReadAllLines(Package & "\AppxMetadata\AppxBundleManifest.xml")
+                StubSupported = Scanner.Contains("IsStub=" & Quote & "true" & Quote)
+                IdScanner = Scanner(If(Scanner(2).EndsWith("<!--"), 10, 4))
                 Dim CharIndex As Integer = 0
                 Dim CharNext As Integer
-                For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                For Each Character As Char In Scanner(If(Scanner(2).EndsWith("<!--"), 10, 4))
                     CharNext = CharIndex + 1
                     If Not IdScanner(CharIndex) = Quote Then
                         CharIndex += 1
@@ -1181,9 +1181,21 @@ Public Class AddProvAppxPackage
                 pkgName = pkgName.Replace(" ", "%20").Trim()
                 QuoteCount = 0
                 Stepper = 2
-                For x = 0 To ScannerRTB.Lines.Count - 1
-                    If ScannerRTB.Lines(x).Contains("<Identity") Then
-                        IdScanner = ScannerRTB.Lines(x)
+                For x = 0 To Scanner.Count - 1
+                    If Scanner(x).Contains("<Identity") Then
+                        IdScanner = Scanner(x)
+
+                        ' Certain AppX packages, like .NET runtimes, decide not to end their identity declarations
+                        ' on their expected lines. If we detect such a case, we keep appending text to the ID scanner
+                        ' to get the full XML string.
+                        If Not IdScanner.EndsWith("/>") Then
+                            Dim offset As Integer = 1
+                            Do Until IdScanner.EndsWith("/>")
+                                IdScanner &= String.Format(" {0}", Scanner(x + offset))
+                                offset += 1
+                            Loop
+                        End If
+
                         Dim serializer As New XmlSerializer(GetType(AppxPackage))
                         Using tReader As TextReader = New StringReader(IdScanner)
                             Using reader As XmlReader = XmlReader.Create(tReader)
@@ -1208,10 +1220,22 @@ Public Class AddProvAppxPackage
             ElseIf File.Exists(Package & "\AppxManifest.xml") Then
                 DynaLog.LogMessage("A standard manifest has been detected. Treating as a standard package...")
                 ' AppX file
-                ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxManifest.xml")
-                For x = 0 To ScannerRTB.Lines.Count - 1
-                    If ScannerRTB.Lines(x).Contains("<Identity") Then
-                        IdScanner = ScannerRTB.Lines(x)
+                Scanner = File.ReadAllLines(Package & "\AppxManifest.xml")
+                For x = 0 To Scanner.Count - 1
+                    If Scanner(x).Contains("<Identity") Then
+                        IdScanner = Scanner(x)
+
+                        ' Certain AppX packages, like .NET runtimes, decide not to end their identity declarations
+                        ' on their expected lines. If we detect such a case, we keep appending text to the ID scanner
+                        ' to get the full XML string.
+                        If Not IdScanner.EndsWith("/>") Then
+                            Dim offset As Integer = 1
+                            Do Until IdScanner.EndsWith("/>")
+                                IdScanner &= String.Format(" {0}", Scanner(x + offset))
+                                offset += 1
+                            Loop
+                        End If
+
                         Dim serializer As New XmlSerializer(GetType(AppxPackage))
                         Using tReader As TextReader = New StringReader(IdScanner)
                             Using reader As XmlReader = XmlReader.Create(tReader)
@@ -1282,13 +1306,13 @@ Public Class AddProvAppxPackage
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("This is a bundle package.")
                     DynaLog.LogMessage("Reading manifest...")
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
+                    Scanner = File.ReadAllLines(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
                     DynaLog.LogMessage("Getting stub package status...")
-                    StubSupported = ScannerRTB.Text.Contains("IsStub=" & Quote & "true" & Quote)
-                    IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                    StubSupported = Scanner.Contains("IsStub=" & Quote & "true" & Quote)
+                    IdScanner = Scanner(If(Scanner(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
                     Dim CharNext As Integer
-                    For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                    For Each Character As Char In Scanner(If(Scanner(2).EndsWith("<!--"), 10, 4))
                         CharNext = CharIndex + 1
                         If Not IdScanner(CharIndex) = Quote Then
                             CharIndex += 1
@@ -1325,9 +1349,21 @@ Public Class AddProvAppxPackage
                     pkgName = pkgName.Replace(" ", "%20").Trim()
                     QuoteCount = 0
                     Stepper = 2
-                    For x = 0 To ScannerRTB.Lines.Count - 1
-                        If ScannerRTB.Lines(x).Contains("<Identity") Then
-                            IdScanner = ScannerRTB.Lines(x)
+                    For x = 0 To Scanner.Count - 1
+                        If Scanner(x).Contains("<Identity") Then
+                            IdScanner = Scanner(x)
+
+                            ' Certain AppX packages, like .NET runtimes, decide not to end their identity declarations
+                            ' on their expected lines. If we detect such a case, we keep appending text to the ID scanner
+                            ' to get the full XML string.
+                            If Not IdScanner.EndsWith("/>") Then
+                                Dim offset As Integer = 1
+                                Do Until IdScanner.EndsWith("/>")
+                                    IdScanner &= String.Format(" {0}", Scanner(x + offset))
+                                    offset += 1
+                                Loop
+                            End If
+
                             Dim serializer As New XmlSerializer(GetType(AppxPackage))
                             Using tReader As TextReader = New StringReader(IdScanner)
                                 Using reader As XmlReader = XmlReader.Create(tReader)
@@ -1352,10 +1388,22 @@ Public Class AddProvAppxPackage
                 Else
                     DynaLog.LogMessage("This is a standard package.")
                     DynaLog.LogMessage("Reading manifest...")
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
-                    For x = 0 To ScannerRTB.Lines.Count - 1
-                        If ScannerRTB.Lines(x).Contains("<Identity") Then
-                            IdScanner = ScannerRTB.Lines(x)
+                    Scanner = File.ReadAllLines(Application.StartupPath & "\appxscan\AppxManifest.xml")
+                    For x = 0 To Scanner.Count - 1
+                        If Scanner(x).Contains("<Identity") Then
+                            IdScanner = Scanner(x)
+
+                            ' Certain AppX packages, like .NET runtimes, decide not to end their identity declarations
+                            ' on their expected lines. If we detect such a case, we keep appending text to the ID scanner
+                            ' to get the full XML string.
+                            If Not IdScanner.EndsWith("/>") Then
+                                Dim offset As Integer = 1
+                                Do Until IdScanner.EndsWith("/>")
+                                    IdScanner &= String.Format(" {0}", Scanner(x + offset))
+                                    offset += 1
+                                Loop
+                            End If
+
                             Dim serializer As New XmlSerializer(GetType(AppxPackage))
                             Using tReader As TextReader = New StringReader(IdScanner)
                                 Using reader As XmlReader = XmlReader.Create(tReader)
@@ -1379,7 +1427,7 @@ Public Class AddProvAppxPackage
                     Next
                 End If
                 DynaLog.LogMessage("Getting Store logo asset...")
-                GetApplicationStoreLogoAssets(pkgName, False, If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), True, False), Package, currentAppxName)
+                GetApplicationStoreLogoAssets(pkgName, False, Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), Package, currentAppxName)
             Else
 
             End If

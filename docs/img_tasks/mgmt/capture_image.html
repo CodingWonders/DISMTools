@@ -43,8 +43,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Roboto Mono"}</style>
       
     
     
@@ -659,6 +659,34 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ffu-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFU Support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFU Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3332,6 +3360,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#ffu-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFU Support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFU Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3365,6 +3421,25 @@
 <h2 id="configuration-lists">Configuration lists</h2>
 <p>This task lets you specify configuration lists to exclude certain files. This is useful to avoid experiencing image capture errors (mostly with user OneDrive folders on Windows installations) or to avoid having an extremely large resulting image.</p>
 <p>Refer to the <a href="../tools/configlisteditor.html">DISM Configuration List Editor</a> utility and the <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-configuration-list-and-wimscriptini-files-winnext?view=windows-11">configuration list reference</a> for more information.</p>
+<h2 id="ffu-support">FFU Support</h2>
+<p>DISMTools 0.8 introduces a variant of the image capture task for Full Flash Utility (FFU) files. You can access this variant by going to <em>Image tasks -&gt; Image management -&gt; Capture partitions to a FFU file...</em>, or by clicking the "Capture image" button and selecting the FFU option:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/capture_image_ffu_cmdmenu.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/capture_image_ffu_cmdmenu.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/capture_image_ffu_btn.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/capture_image_ffu_btn.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/capture_image_ffu.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/capture_image_ffu.png"></a>
+</p>
+
+<h3 id="usage_1">Usage</h3>
+<ol>
+<li>Specify the source drive to capture and the destination FFU file to capture the contents to</li>
+<li>Specify a name for the new Windows image and, if you want, a description</li>
+</ol>
 
 
 

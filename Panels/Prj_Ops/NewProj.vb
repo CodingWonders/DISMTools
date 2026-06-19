@@ -1,11 +1,14 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Text.RegularExpressions
 
 Public Class NewProj
 
     Dim IsReqField1Valid As Boolean
     Dim IsReqField2Valid As Boolean
+
+    Private InvalidFieldRegex As New Regex("(^(?:CON|AUX|PRN|LPT[1-9]|COM[1-9]|NUL))|(<|>|:|\" & Quote & "|/|\\|\||\?|\*)", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
@@ -256,59 +259,7 @@ Public Class NewProj
         DynaLog.LogMessage("Specified project name: " & Quote & TextBox1.Text & Quote)
         If TextBox1.Text <> "" Then
             DynaLog.LogMessage("Verifying name...")
-            If TextBox1.Text.Equals("con", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("CON", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("aux", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("AUX", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("prn", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("PRN", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("nul", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("NUL", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Contains("<") Or _
-                TextBox1.Text.Contains(">") Or _
-                TextBox1.Text.Contains(":") Or _
-                TextBox1.Text.Contains(Quote) Or _
-                TextBox1.Text.Contains("/") Or _
-                TextBox1.Text.Contains("\") Or _
-                TextBox1.Text.Contains("|") Or _
-                TextBox1.Text.Contains("?") Or _
-                TextBox1.Text.Contains("*") Then
+            If InvalidFieldRegex.IsMatch(TextBox1.Text) Then
                 DynaLog.LogMessage("Project name contains invalid text.")
                 IsReqField1Valid = False
             Else
@@ -326,55 +277,7 @@ Public Class NewProj
         DynaLog.LogMessage("Specified project path: " & Quote & TextBox2.Text & Quote)
         If TextBox2.Text <> "" Then
             DynaLog.LogMessage("Verifying path...")
-            If TextBox2.Text.Contains("con") Or _
-                    TextBox2.Text.Contains("CON") Or _
-                    TextBox2.Text.Contains("aux") Or _
-                    TextBox2.Text.Contains("AUX") Or _
-                    TextBox2.Text.Contains("prn") Or _
-                    TextBox2.Text.Contains("PRN") Or _
-                    TextBox2.Text.Contains("nul") Or _
-                    TextBox2.Text.Contains("NUL") Or _
-                    TextBox2.Text.Contains("com1") Or _
-                    TextBox2.Text.Contains("com2") Or _
-                    TextBox2.Text.Contains("com3") Or _
-                    TextBox2.Text.Contains("com4") Or _
-                    TextBox2.Text.Contains("com5") Or _
-                    TextBox2.Text.Contains("com6") Or _
-                    TextBox2.Text.Contains("com7") Or _
-                    TextBox2.Text.Contains("com8") Or _
-                    TextBox2.Text.Contains("com9") Or _
-                    TextBox2.Text.Contains("COM1") Or _
-                    TextBox2.Text.Contains("COM2") Or _
-                    TextBox2.Text.Contains("COM3") Or _
-                    TextBox2.Text.Contains("COM4") Or _
-                    TextBox2.Text.Contains("COM5") Or _
-                    TextBox2.Text.Contains("COM6") Or _
-                    TextBox2.Text.Contains("COM7") Or _
-                    TextBox2.Text.Contains("COM8") Or _
-                    TextBox2.Text.Contains("COM9") Or _
-                    TextBox2.Text.Contains("lpt1") Or _
-                    TextBox2.Text.Contains("lpt2") Or _
-                    TextBox2.Text.Contains("lpt3") Or _
-                    TextBox2.Text.Contains("lpt4") Or _
-                    TextBox2.Text.Contains("lpt5") Or _
-                    TextBox2.Text.Contains("lpt6") Or _
-                    TextBox2.Text.Contains("lpt7") Or _
-                    TextBox2.Text.Contains("lpt8") Or _
-                    TextBox2.Text.Contains("lpt9") Or _
-                    TextBox2.Text.Contains("LPT1") Or _
-                    TextBox2.Text.Contains("LPT2") Or _
-                    TextBox2.Text.Contains("LPT3") Or _
-                    TextBox2.Text.Contains("LPT4") Or _
-                    TextBox2.Text.Contains("LPT5") Or _
-                    TextBox2.Text.Contains("LPT6") Or _
-                    TextBox2.Text.Contains("LPT7") Or _
-                    TextBox2.Text.Contains("LPT8") Or _
-                    TextBox2.Text.Contains("LPT9") Or _
-                    TextBox2.Text.Contains("<") Or _
-                    TextBox2.Text.Contains(">") Or _
-                    TextBox2.Text.Contains("|") Or _
-                    TextBox2.Text.Contains("?") Or _
-                    TextBox2.Text.Contains("*") Then
+            If InvalidFieldRegex.IsMatch(TextBox1.Text) Then
                 DynaLog.LogMessage("Project path contains invalid text.")
                 IsReqField2Valid = False
             Else

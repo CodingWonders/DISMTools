@@ -484,6 +484,8 @@ Public Class MainForm
         End If
 
         If IsViewFiltered Then
+            If FilteredLogEvents.Count = 0 Then Beep()
+
 #If VBC_VER >= 9.0 Then
             ListView1.Items.AddRange(FilteredLogEvents.Select(Function(dle) New ListViewItem(New String() {dle.EventTimestamp, dle.EventPid, dle.EventCaller, dle.EventMessage})).ToArray())
 #Else

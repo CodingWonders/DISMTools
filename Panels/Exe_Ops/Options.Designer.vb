@@ -154,8 +154,6 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
-        Me.Options_FileAssocs = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel10 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Options_ImgOps = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -170,6 +168,7 @@ Partial Class Options
         Me.Label70 = New System.Windows.Forms.Label()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -181,6 +180,8 @@ Partial Class Options
         Me.Label69 = New System.Windows.Forms.Label()
         Me.Label67 = New System.Windows.Forms.Label()
         Me.Label68 = New System.Windows.Forms.Label()
+        Me.Options_FileAssocs = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel10 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Options_Shutdown = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel12 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel23 = New System.Windows.Forms.Panel()
@@ -256,7 +257,7 @@ Partial Class Options
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox24 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -301,14 +302,14 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
-        Me.Options_FileAssocs.SuspendLayout()
-        Me.FlowLayoutPanel10.SuspendLayout()
         Me.Options_ImgOps.SuspendLayout()
         Me.FlowLayoutPanel5.SuspendLayout()
         Me.Panel6.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.Panel21.SuspendLayout()
+        Me.Options_FileAssocs.SuspendLayout()
+        Me.FlowLayoutPanel10.SuspendLayout()
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
@@ -430,7 +431,7 @@ Partial Class Options
         '
         Me.Panel3.Controls.Add(Me.Label46)
         Me.Panel3.Controls.Add(Me.PictureBox8)
-        Me.Panel3.Location = New System.Drawing.Point(0, 224)
+        Me.Panel3.Location = New System.Drawing.Point(0, 256)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(746, 57)
@@ -456,6 +457,7 @@ Partial Class Options
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.CheckBox24)
         Me.Panel2.Controls.Add(Me.CheckBox11)
         Me.Panel2.Controls.Add(Me.DTSSEditAssocCB)
         Me.Panel2.Controls.Add(Me.Button9)
@@ -464,7 +466,7 @@ Partial Class Options
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(748, 224)
+        Me.Panel2.Size = New System.Drawing.Size(748, 256)
         Me.Panel2.TabIndex = 12
         '
         'CheckBox11
@@ -489,10 +491,10 @@ Partial Class Options
         '
         'Button9
         '
-        Me.Button9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Button9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button9.Location = New System.Drawing.Point(241, 164)
+        Me.Button9.Location = New System.Drawing.Point(241, 196)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(266, 28)
         Me.Button9.TabIndex = 1
@@ -1710,8 +1712,8 @@ Partial Class Options
         '
         'ValueContainer
         '
-        Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
+        Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Controls.Add(Me.Options_Startup)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
@@ -1726,27 +1728,6 @@ Partial Class Options
         Me.ValueContainer.Name = "ValueContainer"
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
-        '
-        'Options_FileAssocs
-        '
-        Me.Options_FileAssocs.Controls.Add(Me.FlowLayoutPanel10)
-        Me.Options_FileAssocs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_FileAssocs.Location = New System.Drawing.Point(0, 0)
-        Me.Options_FileAssocs.Name = "Options_FileAssocs"
-        Me.Options_FileAssocs.Size = New System.Drawing.Size(748, 465)
-        Me.Options_FileAssocs.TabIndex = 8
-        Me.Options_FileAssocs.Visible = False
-        '
-        'FlowLayoutPanel10
-        '
-        Me.FlowLayoutPanel10.AutoScroll = True
-        Me.FlowLayoutPanel10.Controls.Add(Me.Panel2)
-        Me.FlowLayoutPanel10.Controls.Add(Me.Panel3)
-        Me.FlowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel10.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel10.Name = "FlowLayoutPanel10"
-        Me.FlowLayoutPanel10.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel10.TabIndex = 0
         '
         'Options_ImgOps
         '
@@ -1909,6 +1890,16 @@ Partial Class Options
         Me.CheckBox23.Text = "Map system accounts to application registration information"
         Me.CheckBox23.UseVisualStyleBackColor = True
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(21, 278)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(238, 19)
+        Me.CheckBox1.TabIndex = 13
+        Me.CheckBox1.Text = "Show dates in a human-readable format"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'CheckBox8
         '
         Me.CheckBox8.AutoSize = True
@@ -2022,6 +2013,27 @@ Partial Class Options
         Me.Label68.TabIndex = 0
         Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
     "se the settings the program should consider for web searches:"
+        '
+        'Options_FileAssocs
+        '
+        Me.Options_FileAssocs.Controls.Add(Me.FlowLayoutPanel10)
+        Me.Options_FileAssocs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_FileAssocs.Location = New System.Drawing.Point(0, 0)
+        Me.Options_FileAssocs.Name = "Options_FileAssocs"
+        Me.Options_FileAssocs.Size = New System.Drawing.Size(748, 465)
+        Me.Options_FileAssocs.TabIndex = 8
+        Me.Options_FileAssocs.Visible = False
+        '
+        'FlowLayoutPanel10
+        '
+        Me.FlowLayoutPanel10.AutoScroll = True
+        Me.FlowLayoutPanel10.Controls.Add(Me.Panel2)
+        Me.FlowLayoutPanel10.Controls.Add(Me.Panel3)
+        Me.FlowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel10.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel10.Name = "FlowLayoutPanel10"
+        Me.FlowLayoutPanel10.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel10.TabIndex = 0
         '
         'Options_Shutdown
         '
@@ -2877,15 +2889,15 @@ Partial Class Options
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 6
         '
-        'CheckBox1
+        'CheckBox24
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(21, 278)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(238, 19)
-        Me.CheckBox1.TabIndex = 13
-        Me.CheckBox1.Text = "Show dates in a human-readable format"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox24.AutoSize = True
+        Me.CheckBox24.Location = New System.Drawing.Point(110, 160)
+        Me.CheckBox24.Name = "CheckBox24"
+        Me.CheckBox24.Size = New System.Drawing.Size(226, 19)
+        Me.CheckBox24.TabIndex = 2
+        Me.CheckBox24.Text = "Set custom file icons for starter scripts"
+        Me.CheckBox24.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -2964,8 +2976,6 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
-        Me.Options_FileAssocs.ResumeLayout(False)
-        Me.FlowLayoutPanel10.ResumeLayout(False)
         Me.Options_ImgOps.ResumeLayout(False)
         Me.FlowLayoutPanel5.ResumeLayout(False)
         Me.Panel6.ResumeLayout(False)
@@ -2976,6 +2986,8 @@ Partial Class Options
         Me.Panel7.PerformLayout()
         Me.Panel21.ResumeLayout(False)
         Me.Panel21.PerformLayout()
+        Me.Options_FileAssocs.ResumeLayout(False)
+        Me.FlowLayoutPanel10.ResumeLayout(False)
         Me.Options_Shutdown.ResumeLayout(False)
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
@@ -3268,5 +3280,6 @@ Partial Class Options
     Friend WithEvents DTSSEditAssocCB As System.Windows.Forms.CheckBox
     Friend WithEvents DTProjAssocCB As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox24 As System.Windows.Forms.CheckBox
 
 End Class

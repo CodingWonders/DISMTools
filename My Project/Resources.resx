@@ -989,12 +989,24 @@ A "contributor" is any person that distributes its contribution under this licen
     <value>..\Resources\set_layeredkeyboarddriver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>New features:
+    <value>Bugfixes:
 
-- In portable installations, file associations can now be toggled for the Starter Script Editor
-- The DynaLog log viewer has received support for event log filters
-- Date properties can now be displayed in a Windows-native format
-- Other under-the-hood changes</value>
+- Fixed an issue where the full date string was not displaying correctly when accessing image properties with Windows representations of dates turned off
+- When adding a boot image to the WDS server, the service start is now requested only when it is not running
+- Fixed an exception that would happen when adding certain AppX packages
+
+New features:
+
+- The Sysprep Preparation Tool has been updated to the latest version
+- If the Sysprep Preparation Tool was invoked before capturing the image, temporary files and boot entries are now removed if the capture succeeds. The resulting Windows image will still not contain any of those items
+- The version reporter watermark in the DISMTools Preinstallation Environment can now detect when the environment has booted via a network
+- The PE Helper can now include your target system's essential drivers (storage controllers and network adapters) in the DISMTools Preinstallation Environment
+- The ISO creation wizard will let you specify a save location if you clicked OK without having specified one
+- Starter scripts have received a new icon
+- "Invoke Windows Utility Configuration" starter script has been updated: invoke command updated
+- "Restore classic context menu in Windows 11" starter script has been introduced
+- Several updates were made to the home screen experience
+- Markdig has been updated to version 1.3.1</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

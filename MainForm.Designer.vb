@@ -20,7 +20,7 @@ Partial Class MainForm
     'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
     'Se puede modificar usando el Diseñador de Windows Forms.  
     'No lo modifique con el editor de código.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
@@ -239,12 +239,15 @@ Partial Class MainForm
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.HelpLinksPanel = New System.Windows.Forms.Panel()
         Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.FactLabel = New System.Windows.Forms.Label()
         Me.Panel9 = New System.Windows.Forms.Panel()
-        Me.LinkLabel32 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel31 = New System.Windows.Forms.LinkLabel()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.LinkLabel31 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel32 = New System.Windows.Forms.LinkLabel()
         Me.ListView2 = New System.Windows.Forms.ListView()
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.RefreshFactButton = New System.Windows.Forms.Button()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.LinkLabel30 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel29 = New System.Windows.Forms.LinkLabel()
@@ -253,15 +256,19 @@ Partial Class MainForm
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.NewsPanel = New System.Windows.Forms.Panel()
-        Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.NewsItemCardContainerPanel = New System.Windows.Forms.Panel()
         Me.Panel12 = New System.Windows.Forms.Panel()
-        Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.LinkLabel34 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel33 = New System.Windows.Forms.LinkLabel()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.NewsContentPreviewerPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.NewsFeedTextLabel = New System.Windows.Forms.Label()
+        Me.NewsFeedDateLabel = New System.Windows.Forms.Label()
+        Me.NewsFeedCloseBtn = New System.Windows.Forms.Button()
         Me.ComputerInfoPanel = New System.Windows.Forms.Panel()
         Me.ComputerOSLabel = New System.Windows.Forms.Label()
         Me.AdminToolsBtn = New System.Windows.Forms.Button()
@@ -524,6 +531,8 @@ Partial Class MainForm
         Me.NewsPanel.SuspendLayout()
         Me.Panel12.SuspendLayout()
         Me.Panel7.SuspendLayout()
+        Me.NewsContentPreviewerPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.ComputerInfoPanel.SuspendLayout()
         Me.ComputerInfoTLP.SuspendLayout()
         CType(Me.ComputerWallpaperPB, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1919,6 +1928,7 @@ Partial Class MainForm
         'InfinityStartPanel
         '
         Me.InfinityStartPanel.AutoScroll = True
+        Me.InfinityStartPanel.Controls.Add(Me.NewsContentPreviewerPanel)
         Me.InfinityStartPanel.Controls.Add(Me.SplitContainer1)
         Me.InfinityStartPanel.Controls.Add(Me.ComputerInfoPanel)
         Me.InfinityStartPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -1957,8 +1967,11 @@ Partial Class MainForm
         '
         'Panel8
         '
+        Me.Panel8.Controls.Add(Me.FactLabel)
         Me.Panel8.Controls.Add(Me.Panel9)
         Me.Panel8.Controls.Add(Me.ListView2)
+        Me.Panel8.Controls.Add(Me.RefreshFactButton)
+        Me.Panel8.Controls.Add(Me.Label9)
         Me.Panel8.Controls.Add(Me.Label12)
         Me.Panel8.Controls.Add(Me.LinkLabel30)
         Me.Panel8.Controls.Add(Me.LinkLabel29)
@@ -1970,11 +1983,22 @@ Partial Class MainForm
         Me.Panel8.Size = New System.Drawing.Size(428, 465)
         Me.Panel8.TabIndex = 6
         '
+        'FactLabel
+        '
+        Me.FactLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.FactLabel.AutoEllipsis = True
+        Me.FactLabel.Location = New System.Drawing.Point(34, 308)
+        Me.FactLabel.Name = "FactLabel"
+        Me.FactLabel.Size = New System.Drawing.Size(360, 106)
+        Me.FactLabel.TabIndex = 3
+        Me.FactLabel.UseMnemonic = False
+        '
         'Panel9
         '
-        Me.Panel9.Controls.Add(Me.LinkLabel32)
-        Me.Panel9.Controls.Add(Me.LinkLabel31)
         Me.Panel9.Controls.Add(Me.Label6)
+        Me.Panel9.Controls.Add(Me.LinkLabel31)
+        Me.Panel9.Controls.Add(Me.LinkLabel32)
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel9.Location = New System.Drawing.Point(0, 433)
         Me.Panel9.Name = "Panel9"
@@ -1982,41 +2006,47 @@ Partial Class MainForm
         Me.Panel9.TabIndex = 2
         Me.Panel9.Visible = False
         '
-        'LinkLabel32
+        'Label6
         '
-        Me.LinkLabel32.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel32.AutoSize = True
-        Me.LinkLabel32.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel32.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel32.Location = New System.Drawing.Point(381, 9)
-        Me.LinkLabel32.Name = "LinkLabel32"
-        Me.LinkLabel32.Size = New System.Drawing.Size(34, 15)
-        Me.LinkLabel32.TabIndex = 1
-        Me.LinkLabel32.TabStop = True
-        Me.LinkLabel32.Text = "Retry"
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(0, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
+        Me.Label6.Size = New System.Drawing.Size(236, 32)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Video content could not be loaded."
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LinkLabel31
         '
-        Me.LinkLabel31.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel31.AutoSize = True
+        Me.LinkLabel31.AutoEllipsis = True
+        Me.LinkLabel31.Dock = System.Windows.Forms.DockStyle.Right
         Me.LinkLabel31.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel31.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel31.Location = New System.Drawing.Point(308, 9)
+        Me.LinkLabel31.Location = New System.Drawing.Point(236, 0)
         Me.LinkLabel31.Name = "LinkLabel31"
-        Me.LinkLabel31.Size = New System.Drawing.Size(67, 15)
+        Me.LinkLabel31.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
+        Me.LinkLabel31.Size = New System.Drawing.Size(96, 32)
         Me.LinkLabel31.TabIndex = 1
         Me.LinkLabel31.TabStop = True
         Me.LinkLabel31.Text = "Learn more"
+        Me.LinkLabel31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label6
+        'LinkLabel32
         '
-        Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(6, 8)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(193, 15)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Video content could not be loaded."
+        Me.LinkLabel32.AutoEllipsis = True
+        Me.LinkLabel32.Dock = System.Windows.Forms.DockStyle.Right
+        Me.LinkLabel32.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel32.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel32.Location = New System.Drawing.Point(332, 0)
+        Me.LinkLabel32.Name = "LinkLabel32"
+        Me.LinkLabel32.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
+        Me.LinkLabel32.Size = New System.Drawing.Size(96, 32)
+        Me.LinkLabel32.TabIndex = 1
+        Me.LinkLabel32.TabStop = True
+        Me.LinkLabel32.Text = "Retry"
+        Me.LinkLabel32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ListView2
         '
@@ -2030,7 +2060,7 @@ Partial Class MainForm
         Me.ListView2.Location = New System.Drawing.Point(20, 140)
         Me.ListView2.MultiSelect = False
         Me.ListView2.Name = "ListView2"
-        Me.ListView2.Size = New System.Drawing.Size(388, 278)
+        Me.ListView2.Size = New System.Drawing.Size(388, 128)
         Me.ListView2.TabIndex = 0
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.Details
@@ -2039,6 +2069,28 @@ Partial Class MainForm
         '
         Me.ColumnHeader4.Text = "Name"
         Me.ColumnHeader4.Width = 384
+        '
+        'RefreshFactButton
+        '
+        Me.RefreshFactButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RefreshFactButton.Image = Global.DISMTools.My.Resources.Resources.refresh_glyph
+        Me.RefreshFactButton.Location = New System.Drawing.Point(380, 274)
+        Me.RefreshFactButton.Name = "RefreshFactButton"
+        Me.RefreshFactButton.Size = New System.Drawing.Size(28, 28)
+        Me.RefreshFactButton.TabIndex = 6
+        Me.RefreshFactButton.UseVisualStyleBackColor = True
+        '
+        'Label9
+        '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(16, 279)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(94, 17)
+        Me.Label9.TabIndex = 1
+        Me.Label9.Text = "Fact of the day"
         '
         'Label12
         '
@@ -2109,18 +2161,19 @@ Partial Class MainForm
         '
         'Label4
         '
-        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label4.AutoSize = True
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(6, 6)
+        Me.Label4.Location = New System.Drawing.Point(0, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(169, 21)
+        Me.Label4.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.Label4.Size = New System.Drawing.Size(428, 32)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Explore and get started"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'NewsPanel
         '
-        Me.NewsPanel.Controls.Add(Me.ListView1)
+        Me.NewsPanel.Controls.Add(Me.NewsItemCardContainerPanel)
         Me.NewsPanel.Controls.Add(Me.Panel12)
         Me.NewsPanel.Controls.Add(Me.Panel7)
         Me.NewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -2129,36 +2182,20 @@ Partial Class MainForm
         Me.NewsPanel.Size = New System.Drawing.Size(576, 497)
         Me.NewsPanel.TabIndex = 1
         '
-        'ListView1
+        'NewsItemCardContainerPanel
         '
-        Me.ListView1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListView1.FullRowSelect = True
-        Me.ListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.ListView1.Location = New System.Drawing.Point(0, 32)
-        Me.ListView1.MultiSelect = False
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(576, 433)
-        Me.ListView1.TabIndex = 0
-        Me.ListView1.UseCompatibleStateImageBehavior = False
-        Me.ListView1.View = System.Windows.Forms.View.Details
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "Title"
-        Me.ColumnHeader1.Width = 726
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "Date"
-        Me.ColumnHeader2.Width = 320
+        Me.NewsItemCardContainerPanel.AutoScroll = True
+        Me.NewsItemCardContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsItemCardContainerPanel.Location = New System.Drawing.Point(0, 32)
+        Me.NewsItemCardContainerPanel.Name = "NewsItemCardContainerPanel"
+        Me.NewsItemCardContainerPanel.Size = New System.Drawing.Size(576, 433)
+        Me.NewsItemCardContainerPanel.TabIndex = 4
         '
         'Panel12
         '
-        Me.Panel12.Controls.Add(Me.LinkLabel33)
-        Me.Panel12.Controls.Add(Me.LinkLabel34)
         Me.Panel12.Controls.Add(Me.Label7)
+        Me.Panel12.Controls.Add(Me.LinkLabel34)
+        Me.Panel12.Controls.Add(Me.LinkLabel33)
         Me.Panel12.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel12.Location = New System.Drawing.Point(0, 465)
         Me.Panel12.Name = "Panel12"
@@ -2166,45 +2203,52 @@ Partial Class MainForm
         Me.Panel12.TabIndex = 3
         Me.Panel12.Visible = False
         '
-        'LinkLabel33
+        'Label7
         '
-        Me.LinkLabel33.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel33.AutoSize = True
-        Me.LinkLabel33.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel33.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel33.Location = New System.Drawing.Point(529, 9)
-        Me.LinkLabel33.Name = "LinkLabel33"
-        Me.LinkLabel33.Size = New System.Drawing.Size(34, 15)
-        Me.LinkLabel33.TabIndex = 1
-        Me.LinkLabel33.TabStop = True
-        Me.LinkLabel33.Text = "Retry"
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Location = New System.Drawing.Point(0, 0)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
+        Me.Label7.Size = New System.Drawing.Size(384, 32)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "The news feed could not be loaded."
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LinkLabel34
         '
-        Me.LinkLabel34.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel34.AutoSize = True
+        Me.LinkLabel34.AutoEllipsis = True
+        Me.LinkLabel34.Dock = System.Windows.Forms.DockStyle.Right
         Me.LinkLabel34.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel34.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel34.Location = New System.Drawing.Point(456, 9)
+        Me.LinkLabel34.Location = New System.Drawing.Point(384, 0)
         Me.LinkLabel34.Name = "LinkLabel34"
-        Me.LinkLabel34.Size = New System.Drawing.Size(67, 15)
+        Me.LinkLabel34.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
+        Me.LinkLabel34.Size = New System.Drawing.Size(96, 32)
         Me.LinkLabel34.TabIndex = 1
         Me.LinkLabel34.TabStop = True
         Me.LinkLabel34.Text = "Learn more"
+        Me.LinkLabel34.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label7
+        'LinkLabel33
         '
-        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(6, 8)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(195, 15)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "The news feed could not be loaded."
+        Me.LinkLabel33.AutoEllipsis = True
+        Me.LinkLabel33.Dock = System.Windows.Forms.DockStyle.Right
+        Me.LinkLabel33.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel33.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel33.Location = New System.Drawing.Point(480, 0)
+        Me.LinkLabel33.Name = "LinkLabel33"
+        Me.LinkLabel33.Padding = New System.Windows.Forms.Padding(8, 0, 8, 0)
+        Me.LinkLabel33.Size = New System.Drawing.Size(96, 32)
+        Me.LinkLabel33.TabIndex = 1
+        Me.LinkLabel33.TabStop = True
+        Me.LinkLabel33.Text = "Retry"
+        Me.LinkLabel33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
         '
         Me.Panel7.Controls.Add(Me.Label5)
+        Me.Panel7.Controls.Add(Me.Label8)
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel7.Location = New System.Drawing.Point(0, 0)
         Me.Panel7.Name = "Panel7"
@@ -2213,14 +2257,84 @@ Partial Class MainForm
         '
         'Label5
         '
-        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label5.AutoSize = True
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(6, 6)
+        Me.Label5.Location = New System.Drawing.Point(0, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(117, 21)
+        Me.Label5.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.Label5.Size = New System.Drawing.Size(216, 32)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "Stay up-to-date"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label8
+        '
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label8.Location = New System.Drawing.Point(216, 0)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
+        Me.Label8.Size = New System.Drawing.Size(360, 32)
+        Me.Label8.TabIndex = 2
+        Me.Label8.Text = "News last updated: "
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'NewsContentPreviewerPanel
+        '
+        Me.NewsContentPreviewerPanel.Controls.Add(Me.Panel1)
+        Me.NewsContentPreviewerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 160)
+        Me.NewsContentPreviewerPanel.Name = "NewsContentPreviewerPanel"
+        Me.NewsContentPreviewerPanel.Size = New System.Drawing.Size(1008, 497)
+        Me.NewsContentPreviewerPanel.TabIndex = 3
+        Me.NewsContentPreviewerPanel.Visible = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
+        Me.Panel1.Controls.Add(Me.NewsFeedDateLabel)
+        Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1008, 32)
+        Me.Panel1.TabIndex = 3
+        '
+        'NewsFeedTextLabel
+        '
+        Me.NewsFeedTextLabel.AutoEllipsis = True
+        Me.NewsFeedTextLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsFeedTextLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NewsFeedTextLabel.Location = New System.Drawing.Point(41, 0)
+        Me.NewsFeedTextLabel.Name = "NewsFeedTextLabel"
+        Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(583, 32)
+        Me.NewsFeedTextLabel.TabIndex = 1
+        Me.NewsFeedTextLabel.Text = "Item Feed Text"
+        Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'NewsFeedDateLabel
+        '
+        Me.NewsFeedDateLabel.Dock = System.Windows.Forms.DockStyle.Right
+        Me.NewsFeedDateLabel.Location = New System.Drawing.Point(624, 0)
+        Me.NewsFeedDateLabel.Name = "NewsFeedDateLabel"
+        Me.NewsFeedDateLabel.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
+        Me.NewsFeedDateLabel.Size = New System.Drawing.Size(384, 32)
+        Me.NewsFeedDateLabel.TabIndex = 3
+        Me.NewsFeedDateLabel.Text = "Item Feed Date"
+        Me.NewsFeedDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'NewsFeedCloseBtn
+        '
+        Me.NewsFeedCloseBtn.BackColor = System.Drawing.Color.Black
+        Me.NewsFeedCloseBtn.Dock = System.Windows.Forms.DockStyle.Left
+        Me.NewsFeedCloseBtn.FlatAppearance.BorderSize = 0
+        Me.NewsFeedCloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.NewsFeedCloseBtn.Image = Global.DISMTools.My.Resources.Resources.backbox
+        Me.NewsFeedCloseBtn.Location = New System.Drawing.Point(0, 0)
+        Me.NewsFeedCloseBtn.Name = "NewsFeedCloseBtn"
+        Me.NewsFeedCloseBtn.Size = New System.Drawing.Size(41, 32)
+        Me.NewsFeedCloseBtn.TabIndex = 2
+        Me.NewsFeedCloseBtn.UseVisualStyleBackColor = False
         '
         'ComputerInfoPanel
         '
@@ -2242,10 +2356,9 @@ Partial Class MainForm
         'ComputerOSLabel
         '
         Me.ComputerOSLabel.AutoEllipsis = True
-        Me.ComputerOSLabel.AutoSize = True
         Me.ComputerOSLabel.Location = New System.Drawing.Point(182, 96)
         Me.ComputerOSLabel.Name = "ComputerOSLabel"
-        Me.ComputerOSLabel.Size = New System.Drawing.Size(22, 15)
+        Me.ComputerOSLabel.Size = New System.Drawing.Size(322, 15)
         Me.ComputerOSLabel.TabIndex = 7
         Me.ComputerOSLabel.Text = "OS"
         Me.ComputerOSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2405,21 +2518,21 @@ Partial Class MainForm
         '
         'ComputerModelLabel
         '
-        Me.ComputerModelLabel.AutoSize = True
+        Me.ComputerModelLabel.AutoEllipsis = True
         Me.ComputerModelLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComputerModelLabel.Location = New System.Drawing.Point(182, 46)
         Me.ComputerModelLabel.Name = "ComputerModelLabel"
-        Me.ComputerModelLabel.Size = New System.Drawing.Size(128, 21)
+        Me.ComputerModelLabel.Size = New System.Drawing.Size(322, 21)
         Me.ComputerModelLabel.TabIndex = 1
         Me.ComputerModelLabel.Text = "Computer Model"
         '
         'ComputerNameLabel
         '
-        Me.ComputerNameLabel.AutoSize = True
+        Me.ComputerNameLabel.AutoEllipsis = True
         Me.ComputerNameLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComputerNameLabel.Location = New System.Drawing.Point(180, 12)
         Me.ComputerNameLabel.Name = "ComputerNameLabel"
-        Me.ComputerNameLabel.Size = New System.Drawing.Size(167, 30)
+        Me.ComputerNameLabel.Size = New System.Drawing.Size(322, 30)
         Me.ComputerNameLabel.TabIndex = 1
         Me.ComputerNameLabel.Text = "Computer Name"
         '
@@ -4693,14 +4806,12 @@ Partial Class MainForm
         Me.Panel8.ResumeLayout(False)
         Me.Panel8.PerformLayout()
         Me.Panel9.ResumeLayout(False)
-        Me.Panel9.PerformLayout()
         Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
         Me.NewsPanel.ResumeLayout(False)
         Me.Panel12.ResumeLayout(False)
-        Me.Panel12.PerformLayout()
         Me.Panel7.ResumeLayout(False)
-        Me.Panel7.PerformLayout()
+        Me.NewsContentPreviewerPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.ComputerInfoPanel.ResumeLayout(False)
         Me.ComputerInfoPanel.PerformLayout()
         Me.ComputerInfoTLP.ResumeLayout(False)
@@ -5131,9 +5242,6 @@ Partial Class MainForm
     Friend WithEvents PictureBox13 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel20 As System.Windows.Forms.LinkLabel
     Friend WithEvents PictureBox14 As System.Windows.Forms.PictureBox
-    Friend WithEvents ListView1 As System.Windows.Forms.ListView
-    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents FeedWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents Timer2 As System.Windows.Forms.Timer
     Friend WithEvents WatcherBW As System.ComponentModel.BackgroundWorker
@@ -5260,4 +5368,14 @@ Partial Class MainForm
     Friend WithEvents ChangeNetworkConfigBtn As System.Windows.Forms.Button
     Friend WithEvents AdminToolsBtn As System.Windows.Forms.Button
     Friend WithEvents ComputerOSLabel As System.Windows.Forms.Label
+    Friend WithEvents NewsContentPreviewerPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents NewsFeedTextLabel As System.Windows.Forms.Label
+    Friend WithEvents NewsFeedCloseBtn As System.Windows.Forms.Button
+    Friend WithEvents NewsItemCardContainerPanel As System.Windows.Forms.Panel
+    Friend WithEvents NewsFeedDateLabel As System.Windows.Forms.Label
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents FactLabel As System.Windows.Forms.Label
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents RefreshFactButton As System.Windows.Forms.Button
 End Class

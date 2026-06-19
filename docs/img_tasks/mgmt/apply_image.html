@@ -43,8 +43,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Roboto Mono"}</style>
       
     
     
@@ -631,6 +631,34 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ffu-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFU Support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFU Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3332,6 +3360,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#ffu-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFU Support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFU Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3359,7 +3415,7 @@
 <ol>
 <li>Specify the source image file to apply. It can be a WIM, SWM or ESD file. If you have loaded a project with an image already mounted, you can also use it</li>
 <li>Specify the index to apply in the Options group by picking an entry in the "Image index:" combo box</li>
-<li>Specify the directory or drive to apply the image to. For regular application operations, you can just use the directory option, as applications to a drive are designed for Full Flash Utility (FFU) files</li>
+<li>Specify the directory to apply the image to</li>
 </ol>
 <h2 id="options">Options</h2>
 <p>The options you can perform when applying the image follow the command-line guides, which you can take a look at <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14?view=windows-11#apply-image">here</a>.</p>
@@ -3370,6 +3426,26 @@
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/apply_image_swm_pattern.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/apply_image_swm_pattern.png"></a>
 </p>
+
+<h2 id="ffu-support">FFU Support</h2>
+<p>DISMTools 0.8 introduces a variant of the image application task for Full Flash Utility (FFU) files. You can access this variant by going to <em>Image tasks -&gt; Image management -&gt; Apply FFU or SFU file...</em>, or by clicking the "Apply image" button and selecting the FFU option:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/apply_image_ffu_cmdmenu.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/apply_image_ffu_cmdmenu.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/apply_image_ffu_btn.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/apply_image_ffu_btn.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/mgmt/apply_image_ffu.png" data-desc-position="bottom"><img src="../../res/img_tasks/mgmt/apply_image_ffu.png"></a>
+</p>
+
+<h3 id="usage_1">Usage</h3>
+<ol>
+<li>Specify the source FFU file to apply. If you have loaded a project with an image already mounted, you can also use it</li>
+<li>Specify the drive to apply the image to</li>
+</ol>
 
 
 

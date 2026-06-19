@@ -121,9 +121,7 @@
     <value>17, 17</value>
   </metadata>
   <data name="Label2.Text" xml:space="preserve">
-    <value>The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. ISO files created with this utility should be used only on Virtual Machines (VMs) and computers with standard disk controllers.
-
-A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here.</value>
+    <value>The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here.</value>
   </data>
   <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>180, 17</value>

@@ -20,6 +20,7 @@ Imports IniParser.Model
 Imports System.Management
 Imports System.Threading.Tasks
 Imports System.Globalization
+Imports DISMTools.Elements.InfinityHome
 
 Public Class MainForm
 
@@ -195,9 +196,10 @@ Public Class MainForm
     Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
 
     ' Preinstallation Environment Helper Settings
-    Public PEHelper_UnattendedFile As String = ""   ' A default unattended answer file for new ISOs
-    Public PEHelper_CopyToVentoy As Boolean = False ' Whether to copy new ISO files to Ventoy drives automatically
-    Public PEHelper_Use2023EFI As Boolean = False   ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+    Public PEHelper_UnattendedFile As String = ""       ' A default unattended answer file for new ISOs
+    Public PEHelper_CopyToVentoy As Boolean = False     ' Whether to copy new ISO files to Ventoy drives automatically
+    Public PEHelper_Use2023EFI As Boolean = False       ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+    Public PEHelper_IncludeSysDrvs As Boolean = True    ' Whether to include SCSI adapters and network controllers in the DTPE
 
     ' Web Search Settings
     Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
@@ -229,6 +231,12 @@ Public Class MainForm
 
     Public ReinitializeCurImage As Boolean = True
 
+    Private NewsFeedWebContent As WebBrowser
+    Private NewsFeedContent As String
+    Private NewsLastUpdateDate As Date
+
+    ' Infinity Home
+    Private InfinityHomeFacts As New List(Of InfinityFact)
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -1012,8 +1020,6 @@ Public Class MainForm
 
         ' On higher DPI settings listview column widths don't adapt correctly, causing stuff to be even more truncated than
         ' necessary. Scale these appropriately
-        ColumnHeader1.Width = WindowHelper.ScaleLogical(726)
-        ColumnHeader2.Width = WindowHelper.ScaleLogical(320)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
 
@@ -1028,58 +1034,236 @@ Public Class MainForm
         If Width < WindowHelper.ScaleLogical(1280) And Height < WindowHelper.ScaleLogical(720) Then
             Size = WindowHelper.ScaleSizeLogical(1280, 720)
         End If
+
+        ' The web browser needs to be initialized way after everything else because ActiveX objects don't like
+        ' to be initialized in MTA threads (this async thread is one of those).
+        NewsFeedWebContent = New WebBrowser() With {
+            .Dock = DockStyle.Fill,
+            .ScriptErrorsSuppressed = True,
+            .AllowWebBrowserDrop = False
+        }
+        NewsContentPreviewerPanel.Controls.Add(NewsFeedWebContent)
+        NewsFeedWebContent.BringToFront()
+        AddHandler NewsFeedWebContent.DocumentCompleted, AddressOf NewsFeedWebContent_DocumentCompleted
+
+        ' Load the facts
+        Dim FactsFile As String = Path.Combine(Application.StartupPath, "bin", "facts.xml")
+        If File.Exists(FactsFile) Then
+            Try
+                Dim factsDeserializer As New XmlSerializer(GetType(InfinityFactsDocument))
+                Using fs As FileStream = File.OpenRead(FactsFile)
+                    Dim document As InfinityFactsDocument = CType(factsDeserializer.Deserialize(fs), InfinityFactsDocument)
+                    InfinityHomeFacts = document.Facts
+                End Using
+
+                If InfinityHomeFacts.Any() Then
+                    ' Show a random one
+                    FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
+                End If
+            Catch ex As Exception
+
+            End Try
+        End If
     End Sub
 
     Private Sub DisplayInfinityComputerInformation()
-        ' Wallpaper
         Try
-            Dim WallpaperPath As String = ""
-            ' Wallpaper may be defined by group policy; check there first
+            ' Wallpaper
             Try
-                Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
-                WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
-                WallpaperPolicyRk.Close()
-                If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+                Dim WallpaperPath As String = ""
+                ' Wallpaper may be defined by group policy; check there first
+                Try
+                    Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
+                    WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
+                    WallpaperPolicyRk.Close()
+                    If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+                Catch ex As Exception
+                    ' Ignore and use general wallpaper
+                    Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
+                    WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
+                    WallpaperRk.Close()
+                End Try
+                ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
             Catch ex As Exception
-                ' Ignore and use general wallpaper
-                Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
-                WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
-                WallpaperRk.Close()
+
             End Try
-            ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
-        Catch ex As Exception
 
-        End Try
-        ' Computer Information
-        ComputerOSLabel.Text = My.Computer.Info.OSFullName
-        Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
-        Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
-        Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
-        Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
-        ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
-        ComputerModelLabel.Text = ComputerSystemProps("Model")
-        ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
-        ComputerMemoryLabel.Text = String.Format("{0} of system memory", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory")))
-        ComputerStorageLabel.Text = String.Format("{0} of total capacity in system volume", Converters.BytesToReadableSize(WMIHelper.GetObjectValue(ComputerCurrentVolMOC(0), "Capacity")))
-        Select Case ComputerSystemProps("DomainRole")
-            Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
-                ComputerDomainStatusLabel.Text = "Not part of a domain"
-            Case DomainRole.MemberWorkstation, DomainRole.MemberServer
-                ComputerDomainStatusLabel.Text = "Part of a domain"
-            Case DomainRole.BackupDomainController
-                ComputerDomainStatusLabel.Text = "Backup domain controller"
-            Case DomainRole.PrimaryDomainController
-                ComputerDomainStatusLabel.Text = "Primary domain controller"
-        End Select
-        ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
-        Try
-            Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
-            Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
-            Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
-            Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
-            ComputerDhcpStatusLabel.Text = If(DhcpEnabled, "Automatic (assigned by DHCP)", "Manual")
-        Catch ex As Exception
+            ' Localizable strings
+            Dim BuildStr As String = "",
+                SysMemStr As String = "",
+                CurDiskStr As String = "",
+                NoDomStr As String = "",
+                DomainStr As String = "",
+                BDCStr As String = "",
+                PDCStr As String = "",
+                NoIPStr As String = "",
+                ManualIPStr As String = "",
+                DHCPStr As String = ""
 
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            BuildStr = "build"
+                            SysMemStr = "of system memory"
+                            CurDiskStr = "used out of"
+                            NoDomStr = "Not part of a domain"
+                            DomainStr = "Part of a domain"
+                            BDCStr = "Backup domain controller"
+                            PDCStr = "Primary domain controller"
+                            NoIPStr = "Not connected to a network"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automatic (assigned by DHCP)"
+                        Case "ESN"
+                            BuildStr = "compilación"
+                            SysMemStr = "de memoria de sistema"
+                            CurDiskStr = "usados de"
+                            NoDomStr = "No es parte de un dominio"
+                            DomainStr = "Es parte de un dominio"
+                            BDCStr = "Controlador de dominio secundario"
+                            PDCStr = "Controlador de dominio primario"
+                            NoIPStr = "No conectado a una red"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automática (asignada por DHCP)"
+                        Case "FRA"
+                            BuildStr = "build"
+                            SysMemStr = "de la mémoire système"
+                            CurDiskStr = "utilisé sur"
+                            NoDomStr = "N'appartient pas à un domaine"
+                            DomainStr = "Appartient à un domaine"
+                            BDCStr = "Contrôleur de domaine de secours"
+                            PDCStr = "Contrôleur de domaine principal"
+                            NoIPStr = "Non connecté à un réseau"
+                            ManualIPStr = "Manuel"
+                            DHCPStr = "Automatique (attribué par DHCP)"
+                        Case "PTB", "PTG"
+                            BuildStr = "compilação"
+                            SysMemStr = "da memória do sistema"
+                            CurDiskStr = "utilizada de"
+                            NoDomStr = "Não faz parte de um domínio"
+                            DomainStr = "Faz parte de um domínio"
+                            BDCStr = "Controlador de domínio de backup"
+                            PDCStr = "Controlador de domínio primário"
+                            NoIPStr = "Não está ligado a uma rede"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automático (atribuído por DHCP)"
+                        Case "ITA"
+                            BuildStr = "build"
+                            SysMemStr = "della memoria di sistema"
+                            CurDiskStr = "utilizzata su"
+                            NoDomStr = "Non fa parte di un dominio"
+                            DomainStr = "Fa parte di un dominio"
+                            BDCStr = "Controller di dominio di backup"
+                            PDCStr = "Controller di dominio primario"
+                            NoIPStr = "Non connesso a una rete"
+                            ManualIPStr = "Manuale"
+                            DHCPStr = "Automatico (assegnato da DHCP)"
+                    End Select
+                Case 1
+                    BuildStr = "build"
+                    SysMemStr = "of system memory"
+                    CurDiskStr = "used out of"
+                    NoDomStr = "Not part of a domain"
+                    DomainStr = "Part of a domain"
+                    BDCStr = "Backup domain controller"
+                    PDCStr = "Primary domain controller"
+                    NoIPStr = "Not connected to a network"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automatic (assigned by DHCP)"
+                Case 2
+                    BuildStr = "compilación"
+                    SysMemStr = "de memoria de sistema"
+                    CurDiskStr = "usados de"
+                    NoDomStr = "No es parte de un dominio"
+                    DomainStr = "Es parte de un dominio"
+                    BDCStr = "Controlador de dominio secundario"
+                    PDCStr = "Controlador de dominio primario"
+                    NoIPStr = "No conectado a una red"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automática (asignada por DHCP)"
+                Case 3
+                    BuildStr = "build"
+                    SysMemStr = "de la mémoire système"
+                    CurDiskStr = "utilisé sur"
+                    NoDomStr = "N'appartient pas à un domaine"
+                    DomainStr = "Appartient à un domaine"
+                    BDCStr = "Contrôleur de domaine de secours"
+                    PDCStr = "Contrôleur de domaine principal"
+                    NoIPStr = "Non connecté à un réseau"
+                    ManualIPStr = "Manuel"
+                    DHCPStr = "Automatique (attribué par DHCP)"
+                Case 4
+                    BuildStr = "compilação"
+                    SysMemStr = "da memória do sistema"
+                    CurDiskStr = "utilizada de"
+                    NoDomStr = "Não faz parte de um domínio"
+                    DomainStr = "Faz parte de um domínio"
+                    BDCStr = "Controlador de domínio de backup"
+                    PDCStr = "Controlador de domínio primário"
+                    NoIPStr = "Não está ligado a uma rede"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automático (atribuído por DHCP)"
+                Case 5
+                    BuildStr = "build"
+                    SysMemStr = "della memoria di sistema"
+                    CurDiskStr = "utilizzata su"
+                    NoDomStr = "Non fa parte di un dominio"
+                    DomainStr = "Fa parte di un dominio"
+                    BDCStr = "Controller di dominio di backup"
+                    PDCStr = "Controller di dominio primario"
+                    NoIPStr = "Non connesso a una rete"
+                    ManualIPStr = "Manuale"
+                    DHCPStr = "Automatico (assegnato da DHCP)"
+            End Select
+
+            ' Computer Information
+            ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build)
+            Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
+            Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
+            Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Label, FreeSpace, Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
+            Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
+            ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
+            ComputerModelLabel.Text = ComputerSystemProps("Model")
+            ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
+            ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
+                                                                                               (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3), SysMemStr)
+            Try
+                Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
+                    DiskCapacity As Long = CurrentVolProps("Capacity"),
+                    DiskFreeSpace As Long = CurrentVolProps("FreeSpace"),
+                    DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
+                    DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
+                    DiskLabel As String = CurrentVolProps("Label")
+                ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", DiskLabel, "<unlabeled>"),
+                                                                                            Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            CurDiskStr,
+                                                                                            Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not display disk information: " & ex.Message)
+            End Try
+            Select Case ComputerSystemProps("DomainRole")
+                Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
+                    ComputerDomainStatusLabel.Text = NoDomStr
+                Case DomainRole.MemberWorkstation, DomainRole.MemberServer
+                    ComputerDomainStatusLabel.Text = DomainStr
+                Case DomainRole.BackupDomainController
+                    ComputerDomainStatusLabel.Text = BDCStr
+                Case DomainRole.PrimaryDomainController
+                    ComputerDomainStatusLabel.Text = PDCStr
+            End Select
+            ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
+            Try
+                Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
+                Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
+                Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
+                Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
+                ComputerDhcpStatusLabel.Text = If(DhcpEnabled, DHCPStr, ManualIPStr)
+            Catch ex As Exception
+                ComputerDhcpStatusLabel.Text = NoIPStr
+            End Try
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not display computer info: " & ex.Message)
         End Try
     End Sub
 
@@ -1403,6 +1587,7 @@ Public Class MainForm
                 PEHelper_UnattendedFile = ImgOpKey.GetValue("PEHelper.UnattendedFile").ToString().Replace(Quote, "").Trim()
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
+                PEHelper_IncludeSysDrvs = (CInt(ImgOpKey.GetValue("PEHelper.IncludeSysDrvs")) = 1)
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
                 PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 HumanizeDates = CInt(ImgOpKey.GetValue("HumanizeDates", 1)) = 1
@@ -1532,6 +1717,7 @@ Public Class MainForm
                     PEHelper_UnattendedFile = settingData("ImgOps")("PEHelper.UnattendedFile").Replace(Quote, "").Trim()
                     PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
                     PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
+                    PEHelper_IncludeSysDrvs = CInt(settingData("ImgOps")("PEHelper.IncludeSysDrvs")) = 1
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
                     PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
@@ -1744,6 +1930,7 @@ Public Class MainForm
                            "PEHelper_UnattendedFile             =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
                            "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
+                           "PEHelper_IncludeSysDrvs             =    " & PEHelper_IncludeSysDrvs & CrLf &
                            "NoRestart                           =    " & SysNoRestart & CrLf &
                            "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
                            "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
@@ -4167,6 +4354,7 @@ Public Class MainForm
             settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & PEHelper_UnattendedFile & Quote)
             settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
             settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", If(PEHelper_IncludeSysDrvs, 1, 0))
             settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
             settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
             settingsData("ImgOps").AddKey("HumanizeDates", If(HumanizeDates, 1, 0))
@@ -4269,6 +4457,7 @@ Public Class MainForm
                 ImgOpKey.SetValue("PEHelper.UnattendedFile", PEHelper_UnattendedFile, RegistryValueKind.String)
                 ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", PEHelper_IncludeSysDrvs, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("HumanizeDates", HumanizeDates, RegistryValueKind.DWord)
@@ -4510,8 +4699,6 @@ Public Class MainForm
         GroupBox8.ForeColor = CurrentTheme.ForegroundColor
         GroupBox9.ForeColor = CurrentTheme.ForegroundColor
         GroupBox10.ForeColor = CurrentTheme.ForegroundColor
-        ListView1.BackColor = CurrentTheme.BackgroundColor
-        ListView1.ForeColor = CurrentTheme.ForegroundColor
         ListView2.BackColor = CurrentTheme.BackgroundColor
         ListView2.ForeColor = CurrentTheme.ForegroundColor
         RecentsLV.BackColor = SidePanel.BackColor
@@ -4543,6 +4730,10 @@ Public Class MainForm
         ThemeHelper.UpdateLinkLabelColors(PrjTasks, ForeColor, CurrentTheme.AccentColors(1))
         ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel7, ForeColor, CurrentTheme.AccentColors(1))
         ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel4, ForeColor, CurrentTheme.AccentColors(1))
+
+        For Each NewsCard As NewsFeedItemCard In NewsItemCardContainerPanel.Controls.OfType(Of NewsFeedItemCard)()
+            NewsCard.SetColors()
+        Next
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -7743,6 +7934,193 @@ Public Class MainForm
                     Label49.Text = "(Installazione offline)"
             End Select
         End If
+
+        ' Infinity Home -- don't refresh computer information
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ChangeComputerNameLink.Text = "Rename"
+                        Label1.Text = "Domain Membership:"
+                        Label2.Text = "Workgroup/Domain:"
+                        Label3.Text = "IP Address Configuration:"
+                        Label4.Text = "Explore and get started"
+                        Label5.Text = "Stay up-to-date"
+                        LinkLabel27.Text = "Learn what's new in this release"
+                        LinkLabel28.Text = "Get started with DISMTools and image servicing"
+                        LinkLabel29.Text = "Manage your current installation"
+                        LinkLabel30.Text = "Manage external Windows installations"
+                        Label12.Text = "Learn by watching videos"
+                        Label6.Text = "Video content could not be loaded."
+                        Label7.Text = "The news feed could not be loaded."
+                        LinkLabel31.Text = "Learn more"
+                        LinkLabel32.Text = "Retry"
+                        LinkLabel33.Text = "Retry"
+                        LinkLabel34.Text = "Learn more"
+                    Case "ESN"
+                        ChangeComputerNameLink.Text = "Cambiar nombre"
+                        Label1.Text = "Membresía de dominio:"
+                        Label2.Text = "Grupo de trabajo/dominio:"
+                        Label3.Text = "Configuración de dirección IP:"
+                        Label4.Text = "Explore y comience"
+                        Label5.Text = "Manténgase informado"
+                        LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
+                        LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
+                        LinkLabel29.Text = "Administre su instalación actual"
+                        LinkLabel30.Text = "Administre instalaciones externas"
+                        Label12.Text = "Aprenda viendo vídeos (en inglés)"
+                        Label6.Text = "No se han podido cargar los vídeos."
+                        Label7.Text = "No se han podido cargar las noticias."
+                        LinkLabel31.Text = "Saber más"
+                        LinkLabel32.Text = "Intentarlo de nuevo"
+                        LinkLabel33.Text = "Intentarlo de nuevo"
+                        LinkLabel34.Text = "Saber más"
+                    Case "FRA"
+                        ChangeComputerNameLink.Text = "Renommer"
+                        Label1.Text = "Appartenance au domaine :"
+                        Label2.Text = "Groupe de travail/Domaine :"
+                        Label3.Text = "Configuration de l'adresse IP :"
+                        Label4.Text = "Découvrir et commencer"
+                        Label5.Text = "Rester à jour"
+                        LinkLabel27.Text = "Découvrez les nouveautés de cette version"
+                        LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
+                        LinkLabel29.Text = "Gérer votre installation actuelle"
+                        LinkLabel30.Text = "Gérer les installations Windows externes"
+                        Label12.Text = "Apprendre en regardant des vidéos (en anglais)"
+                        Label6.Text = "Impossible de charger le contenu vidéo."
+                        Label7.Text = "Impossible de charger le fil d'actualité."
+                        LinkLabel31.Text = "En savoir plus"
+                        LinkLabel32.Text = "Réessayer"
+                        LinkLabel33.Text = "Réessayer"
+                        LinkLabel34.Text = "En savoir plus"
+                    Case "PTB", "PTG"
+                        ChangeComputerNameLink.Text = "Renomear"
+                        Label1.Text = "Pertença a um domínio:"
+                        Label2.Text = "Grupo de trabalho/Domínio:"
+                        Label3.Text = "Configuração do endereço IP:"
+                        Label4.Text = "Explorar e começar"
+                        Label5.Text = "Manter-se atualizado"
+                        LinkLabel27.Text = "Descubra as novidades desta versão"
+                        LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
+                        LinkLabel29.Text = "Gerir a sua instalação atual"
+                        LinkLabel30.Text = "Gerir instalações externas do Windows"
+                        Label12.Text = "Aprenda assistindo a vídeos (em inglês)"
+                        Label6.Text = "Não foi possível carregar o conteúdo de vídeo."
+                        Label7.Text = "Não foi possível carregar o feed de notícias."
+                        LinkLabel31.Text = "Saiba mais"
+                        LinkLabel32.Text = "Tentar novamente"
+                        LinkLabel33.Text = "Tentar novamente"
+                        LinkLabel34.Text = "Saiba mais"
+                    Case "ITA"
+                        ChangeComputerNameLink.Text = "Rinomina"
+                        Label1.Text = "Appartenenza al dominio:"
+                        Label2.Text = "Gruppo di lavoro/Dominio:"
+                        Label3.Text = "Configurazione dell'indirizzo IP:"
+                        Label4.Text = "Esplora e inizia"
+                        Label5.Text = "Rimani aggiornato"
+                        LinkLabel27.Text = "Scopri le novità di questa versione"
+                        LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
+                        LinkLabel29.Text = "Gestisci la tua installazione attuale"
+                        LinkLabel30.Text = "Gestisci installazioni Windows esterne"
+                        Label12.Text = "Impara guardando i video (in inglese)"
+                        Label6.Text = "Impossibile caricare il contenuto video."
+                        Label7.Text = "Impossibile caricare il feed delle notizie."
+                        LinkLabel31.Text = "Ulteriori informazioni"
+                        LinkLabel32.Text = "Riprova"
+                        LinkLabel33.Text = "Riprova"
+                        LinkLabel34.Text = "Ulteriori informazioni"
+                End Select
+            Case 1
+                ChangeComputerNameLink.Text = "Rename"
+                Label1.Text = "Domain Membership:"
+                Label2.Text = "Workgroup/Domain:"
+                Label3.Text = "IP Address Configuration:"
+                Label4.Text = "Explore and get started"
+                Label5.Text = "Stay up-to-date"
+                LinkLabel27.Text = "Learn what's new in this release"
+                LinkLabel28.Text = "Get started with DISMTools and image servicing"
+                LinkLabel29.Text = "Manage your current installation"
+                LinkLabel30.Text = "Manage external Windows installations"
+                Label12.Text = "Learn by watching videos"
+                Label6.Text = "Video content could not be loaded."
+                Label7.Text = "The news feed could not be loaded."
+                LinkLabel31.Text = "Learn more"
+                LinkLabel32.Text = "Retry"
+                LinkLabel33.Text = "Retry"
+                LinkLabel34.Text = "Learn more"
+            Case 2
+                ChangeComputerNameLink.Text = "Cambiar nombre"
+                Label1.Text = "Membresía de dominio:"
+                Label2.Text = "Grupo de trabajo/dominio:"
+                Label3.Text = "Configuración de dirección IP:"
+                Label4.Text = "Explore y comience"
+                Label5.Text = "Manténgase informado"
+                LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
+                LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
+                LinkLabel29.Text = "Administre su instalación actual"
+                LinkLabel30.Text = "Administre instalaciones externas"
+                Label12.Text = "Aprenda viendo vídeos (en inglés)"
+                Label6.Text = "No se han podido cargar los vídeos."
+                Label7.Text = "No se han podido cargar las noticias."
+                LinkLabel31.Text = "Saber más"
+                LinkLabel32.Text = "Intentarlo de nuevo"
+                LinkLabel33.Text = "Intentarlo de nuevo"
+                LinkLabel34.Text = "Saber más"
+            Case 3
+                ChangeComputerNameLink.Text = "Renommer"
+                Label1.Text = "Appartenance au domaine :"
+                Label2.Text = "Groupe de travail/Domaine :"
+                Label3.Text = "Configuration de l'adresse IP :"
+                Label4.Text = "Découvrir et commencer"
+                Label5.Text = "Rester à jour"
+                LinkLabel27.Text = "Découvrez les nouveautés de cette version"
+                LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
+                LinkLabel29.Text = "Gérer votre installation actuelle"
+                LinkLabel30.Text = "Gérer les installations Windows externes"
+                Label12.Text = "Apprendre en regardant des vidéos (en anglais)"
+                Label6.Text = "Impossible de charger le contenu vidéo."
+                Label7.Text = "Impossible de charger le fil d'actualité."
+                LinkLabel31.Text = "En savoir plus"
+                LinkLabel32.Text = "Réessayer"
+                LinkLabel33.Text = "Réessayer"
+                LinkLabel34.Text = "En savoir plus"
+            Case 4
+                ChangeComputerNameLink.Text = "Renomear"
+                Label1.Text = "Pertença a um domínio:"
+                Label2.Text = "Grupo de trabalho/Domínio:"
+                Label3.Text = "Configuração do endereço IP:"
+                Label4.Text = "Explorar e começar"
+                Label5.Text = "Manter-se atualizado"
+                LinkLabel27.Text = "Descubra as novidades desta versão"
+                LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
+                LinkLabel29.Text = "Gerir a sua instalação atual"
+                LinkLabel30.Text = "Gerir instalações externas do Windows"
+                Label12.Text = "Aprenda assistindo a vídeos (em inglês)"
+                Label6.Text = "Não foi possível carregar o conteúdo de vídeo."
+                Label7.Text = "Não foi possível carregar o feed de notícias."
+                LinkLabel31.Text = "Saiba mais"
+                LinkLabel32.Text = "Tentar novamente"
+                LinkLabel33.Text = "Tentar novamente"
+                LinkLabel34.Text = "Saiba mais"
+            Case 5
+                ChangeComputerNameLink.Text = "Rinomina"
+                Label1.Text = "Appartenenza al dominio:"
+                Label2.Text = "Gruppo di lavoro/Dominio:"
+                Label3.Text = "Configurazione dell'indirizzo IP:"
+                Label4.Text = "Esplora e inizia"
+                Label5.Text = "Rimani aggiornato"
+                LinkLabel27.Text = "Scopri le novità di questa versione"
+                LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
+                LinkLabel29.Text = "Gestisci la tua installazione attuale"
+                LinkLabel30.Text = "Gestisci installazioni Windows esterne"
+                Label12.Text = "Impara guardando i video (in inglese)"
+                Label6.Text = "Impossibile caricare il contenuto video."
+                Label7.Text = "Impossibile caricare il feed delle notizie."
+                LinkLabel31.Text = "Ulteriori informazioni"
+                LinkLabel32.Text = "Riprova"
+                LinkLabel33.Text = "Riprova"
+                LinkLabel34.Text = "Ulteriori informazioni"
+        End Select
     End Sub
 
     Sub CheckDTProjHeaders(DTFileName As String)
@@ -11370,52 +11748,6 @@ Public Class MainForm
         RemDrivers.ShowDialog(Me)
     End Sub
 
-    ''' <summary>
-    ''' Detects the source for optional feature installs and component repairs from the "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing" registry key
-    ''' </summary>
-    ''' <returns>Returns GPOSource as the aforementioned source if this function runs correctly. Otherwise, it returns Nothing</returns>
-    ''' <remarks>"LocalSourcePath" is updated every time a source is specified in the group policy editor. "GPOSource" pulls the value from "LocalSourcePath", which can be a local folder, a remote server or a Windows image (if it begins with "wim:\")</remarks>
-    Function GetSrcFromGPO() As String
-        Try
-            DynaLog.LogMessage("Getting source of features and component repairs from Group Policy Object...")
-            Dim GPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
-            Dim GPOSource As String = GPOSourceRk.GetValue("LocalSourcePath").ToString()
-            GPOSourceRk.Close()
-            DynaLog.LogMessage("Obtained source: " & GPOSource)
-            Return GPOSource
-        Catch ex As Exception
-            DynaLog.LogMessage("An error occurred while getting GPO source. Error message: " & ex.Message)
-            DynaLog.LogMessage("This could be either because no group policy has been set, or because something is seriously wrong with your system")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
-                        Case "ESN"
-                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
-                        Case "FRA"
-                            MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
-                        Case "PTB", "PTG"
-                            MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
-                        Case "ITA"
-                            MsgBox("Impossibile rilevare l'origine dai criteri di gruppo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Rilevamento da criteri di gruppo")
-                    End Select
-                Case 1
-                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
-                Case 2
-                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
-                Case 3
-                    MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
-                Case 4
-                    MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
-                Case 5
-                    MsgBox("Impossibile rilevare l'origine dai criteri di gruppo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Rilevamento da criteri di gruppo")
-            End Select
-            Return Nothing
-        End Try
-        Return Nothing
-    End Function
-
     Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
         DynaLog.LogMessage("Opening provisioned package addition dialog...")
         AddProvisioningPkg.ShowDialog(Me)
@@ -13537,6 +13869,7 @@ Public Class MainForm
 #End Region
 
     Sub GetFeedNews()
+        NewsLastUpdateDate = Date.Now
         DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
         FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -13558,13 +13891,6 @@ Public Class MainForm
             DynaLog.LogMessage("Failed to get feed news. Error message: " & ex.Message)
             FeedEx = ex
         End Try
-    End Sub
-
-    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
-        If ListView1.SelectedItems.Count = 1 Then
-            DynaLog.LogMessage("Starting URL of news article: " & FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
-            Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
-        End If
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
@@ -13615,27 +13941,60 @@ Public Class MainForm
         If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
     End Sub
 
+    Private Sub DisplayFeedItemCardContent(sender As Object, e As NewsFeedItemCardLinkClickedEventArgs)
+        NewsFeedTextLabel.Text = e.Title
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        NewsFeedDateLabel.Text = String.Format("{0}, {1}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                           e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
+        ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
+        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483
+        NewsFeedContent = e.Contents
+        NewsFeedWebContent.Navigate("about:blank")
+        NewsContentPreviewerPanel.Visible = True
+    End Sub
+
+    Private Sub NewsFeedWebContent_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
+        If e.Url.ToString() <> "about:blank" Then Exit Sub
+
+        NewsFeedWebContent.Document.OpenNew(True)
+        NewsFeedWebContent.Document.Write(NewsFeedContent)
+    End Sub
+
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
         DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
+                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
+        NewsItemCardContainerPanel.Controls.Clear()
         FeedLinks.Clear()
         Try
             DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
             If FeedContents.Items.Count > 0 Then
-                Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                    PreviousTop As Integer
+                Dim FirstCard As Boolean = True
+
                 Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-                Dim ArticlesLI As New List(Of ListViewItem)
+                Dim ItemCardControls As New List(Of NewsFeedItemCard)
                 For Each Article In sortedArticles
-                    Dim CurrentTimeZonePublishDate As Date = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
-                    If HumanizeDates Then
-                        ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, String.Format("{0}, {1}", CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                                                                                    CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))}))
-                    Else
-                        ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, CurrentTimeZonePublishDate.ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
-                    End If
+                    Dim newsCard As New NewsFeedItemCard()
+                    newsCard.SetColors()
+                    newsCard.FeedItemText = Article.Title.Text
+                    newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                    newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                    newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                    newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                    newsCard.Left = WindowHelper.ScaleLogical(8)
+                    newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                    newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                    FirstCard = False
+                    PreviousTop = newsCard.Top
+                    AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                    ItemCardControls.Add(newsCard)
                 Next
-                ListView1.Items.AddRange(ArticlesLI.ToArray())
-                FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
+                NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
             Else
                 DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
             End If
@@ -15562,25 +15921,39 @@ Public Class MainForm
 
     Private Sub LinkLabel33_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel33.LinkClicked
         DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
+        NewsItemCardContainerPanel.Controls.Clear()
         FeedLinks.Clear()
         GetFeedNews()
         DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
+                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
+        Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
         If FeedContents.Items.Count > 0 Then
-            Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
-            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-            Dim ArticlesLI As New List(Of ListViewItem)
+            Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                PreviousTop As Integer
+            Dim FirstCard As Boolean = True
+
+            Dim ItemCardControls As New List(Of NewsFeedItemCard)
             For Each Article In sortedArticles
-                Dim CurrentTimeZonePublishDate As Date = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
-                If HumanizeDates Then
-                    ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, String.Format("{0}, {1}", CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                                                                                CurrentTimeZonePublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))}))
-                Else
-                    ArticlesLI.Add(New ListViewItem(New String() {Article.Title.Text, CurrentTimeZonePublishDate.ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
-                End If
+                Dim newsCard As New NewsFeedItemCard()
+                newsCard.SetColors()
+                newsCard.FeedItemText = Article.Title.Text
+                newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                newsCard.Left = WindowHelper.ScaleLogical(8)
+                newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                FirstCard = False
+                PreviousTop = newsCard.Top
+                AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                ItemCardControls.Add(newsCard)
             Next
-            ListView1.Items.AddRange(ArticlesLI.ToArray())
-            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
+            NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
         Else
             DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
         End If
@@ -15597,5 +15970,20 @@ Public Class MainForm
 
     Private Sub ComputerNameLabel_MouseHover(sender As Object, e As EventArgs) Handles ComputerNameLabel.MouseHover
         WindowHelper.DisplayToolTip(sender, String.Format("NetBIOS name: {0}", My.Computer.Name))
+    End Sub
+
+    Private Sub NewsFeedCloseBtn_Click(sender As Object, e As EventArgs) Handles NewsFeedCloseBtn.Click
+        NewsContentPreviewerPanel.Visible = False
+    End Sub
+
+    Private Sub RefreshFactButton_Click(sender As Object, e As EventArgs) Handles RefreshFactButton.Click
+        If InfinityHomeFacts.Any() Then
+            ' Show a random one
+            FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
+        End If
+    End Sub
+
+    Private Sub RefreshFactButton_MouseHover(sender As Object, e As EventArgs) Handles RefreshFactButton.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Show a new fact")
     End Sub
 End Class

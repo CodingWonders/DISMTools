@@ -147,7 +147,7 @@ Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes
 ; Associations for Starter Script Editor
 Root: HKA; Subkey: "Software\Classes\.dtss\OpenWithProgids"; ValueType: string; ValueName: "DTSSEdit.StarterScript"; ValueData: ""; Flags: uninsdeletevalue
 Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript"; ValueType: string; ValueName: ""; ValueData: "DISMTools Starter Script"; Flags: uninsdeletekey
-Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{#pfDir}\{#MyAppExeName},0"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{#pfDir}\tools\StarterScriptEditor\DTSSIcon.ico"; Flags: uninsdeletekey
 Root: HKA; Subkey: "Software\Classes\DTSSEdit.StarterScript\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{#pfDir}\tools\StarterScriptEditor\StarterScriptEditor.exe"" /dtss=""%1"""; Flags: uninsdeletekey
 Root: HKA; Subkey: "Software\Classes\Applications\StarterScriptEditor.exe\SupportedTypes"; ValueType: string; ValueName: ".dtss"; ValueData: ""; Flags: uninsdeletekey
 
@@ -172,6 +172,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; Value
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: string; ValueName: "PEHelper.UnattendedFile"; ValueData: ""; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.CopyToVentoy"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.Use2023EFI"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.IncludeSysDrvs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "AppxRemovalDisplayNameFormat"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PreventSystemFromSleeping"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist

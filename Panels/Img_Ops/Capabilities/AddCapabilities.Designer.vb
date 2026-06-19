@@ -42,23 +42,15 @@ Partial Class AddCapabilities
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TextBoxSourcePanel = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
-        Me.WimFileSourcePanel = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Button5 = New System.Windows.Forms.Button()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.WimFileSourcePanel = New DISMTools.WimFileSourceControl()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.TextBoxSourcePanel.SuspendLayout()
-        Me.WimFileSourcePanel.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -246,8 +238,8 @@ Partial Class AddCapabilities
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.TextBoxSourcePanel)
         Me.Panel1.Controls.Add(Me.WimFileSourcePanel)
+        Me.Panel1.Controls.Add(Me.TextBoxSourcePanel)
         Me.Panel1.Location = New System.Drawing.Point(99, 51)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(374, 26)
@@ -274,76 +266,6 @@ Partial Class AddCapabilities
         Me.RichTextBox1.TabIndex = 0
         Me.RichTextBox1.Text = ""
         '
-        'WimFileSourcePanel
-        '
-        Me.WimFileSourcePanel.Controls.Add(Me.TableLayoutPanel3)
-        Me.WimFileSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WimFileSourcePanel.Location = New System.Drawing.Point(0, 0)
-        Me.WimFileSourcePanel.Name = "WimFileSourcePanel"
-        Me.WimFileSourcePanel.Size = New System.Drawing.Size(374, 26)
-        Me.WimFileSourcePanel.TabIndex = 10
-        Me.WimFileSourcePanel.Visible = False
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.ColumnCount = 4
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 216.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.Label5, 1, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.PictureBox2, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label3, 2, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Button5, 3, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(374, 26)
-        Me.TableLayoutPanel3.TabIndex = 0
-        '
-        'Label5
-        '
-        Me.Label5.AutoEllipsis = True
-        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(29, 0)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(210, 26)
-        Me.Label5.TabIndex = 8
-        Me.Label5.Text = "Image file"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.image_glyph_light
-        Me.PictureBox2.Location = New System.Drawing.Point(3, 3)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
-        '
-        'Label3
-        '
-        Me.Label3.AutoEllipsis = True
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(245, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(100, 26)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Image index"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Button5
-        '
-        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
-        Me.Button5.Location = New System.Drawing.Point(351, 3)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(20, 20)
-        Me.Button5.TabIndex = 9
-        Me.Button5.UseVisualStyleBackColor = True
-        '
         'FolderBrowserDialog1
         '
         Me.FolderBrowserDialog1.Description = "Specify the source to use for capability addition:"
@@ -362,6 +284,17 @@ Partial Class AddCapabilities
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(784, 48)
         Me.ImageTaskHeader1.TabIndex = 11
+        '
+        'WimFileSourcePanel
+        '
+        Me.WimFileSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WimFileSourcePanel.ImageFile = "Image file"
+        Me.WimFileSourcePanel.ImageIndex = 1
+        Me.WimFileSourcePanel.Location = New System.Drawing.Point(0, 0)
+        Me.WimFileSourcePanel.Name = "WimFileSourcePanel"
+        Me.WimFileSourcePanel.Size = New System.Drawing.Size(374, 26)
+        Me.WimFileSourcePanel.TabIndex = 10
+        Me.WimFileSourcePanel.Visible = False
         '
         'AddCapabilities
         '
@@ -389,9 +322,6 @@ Partial Class AddCapabilities
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.TextBoxSourcePanel.ResumeLayout(False)
-        Me.WimFileSourcePanel.ResumeLayout(False)
-        Me.TableLayoutPanel3.ResumeLayout(False)
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -413,15 +343,10 @@ Partial Class AddCapabilities
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents WimFileSourcePanel As System.Windows.Forms.Panel
-    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents TextBoxSourcePanel As System.Windows.Forms.Panel
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
-    Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents WimFileSourcePanel As DISMTools.WimFileSourceControl
 
 End Class
