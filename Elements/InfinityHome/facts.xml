@@ -7,7 +7,7 @@
   
   If you want to contribute to this file, you can totally do it.
 -->
-<MicrosoftWindowsFacts version="1.0" generated="2026-06-17" totalFacts="520">
+<InfinityFacts version="1.0" generated="2026-06-20" totalFacts="520">
   <facts>
     <fact id="HF001" type="historical" era="Founding">
       <topic>Founding</topic>
@@ -1717,5 +1717,133 @@
       <topic>Focus sessions (Clock app)</topic>
       <text>Open the Clock app and use the Focus Sessions tab to set a timed work session using the Pomodoro technique, integrating with Microsoft To Do for tasks and Spotify for focus music - all built into Windows 11.</text>
     </fact>
+    <fact id="DT1" type="dttip">
+      <topic></topic>
+      <text>Press F11 to toggle between full-screen modes in the main application window, giving you more screen space to work with.</text>
+    </fact>
+    <fact id="DT2" type="dttip">
+      <topic></topic>
+      <text>Background processes allow DISMTools to get all the information of a Windows image or installation. If this information was modified externally, press Alt + U to refresh this information.</text>
+    </fact>
+    <fact id="DT3" type="dttip">
+      <topic></topic>
+      <text>With just the Windows ADK, you're off to making your ISO files. While doing this, why not customize the preinstallation environment so it works like you want it to?</text>
+    </fact>
+    <fact id="DT4" type="dttip">
+      <topic></topic>
+      <text>Make your own tooling for the Preinstallation Environment with its Extensibility Suite by going to Tools &gt; Create testing environment. Then, with C++ knowledge, you're off to either making new applications or porting existing ones to Windows PE.</text>
+    </fact>
+    <fact id="DT5" type="dttip">
+      <topic></topic>
+      <text>Every last Friday of a July is the international system administrator appreciation day. Show your sysadmin some love (or celebrate if you're the sysadmin!) for keeping systems running smoothly.</text>
+    </fact>
+    <fact id="DT6" type="dttip">
+      <topic></topic>
+      <text>The DISMTools project started on July 30, 2022.</text>
+    </fact>
+    <fact id="DT7" type="dttip">
+      <topic></topic>
+      <text>DISMTools will turn 5 on the sysadmin day for 2027. I will surely celebrate it my way!</text>
+    </fact>
+    <fact id="DT8" type="dttip">
+      <topic></topic>
+      <text>The signature DISMTools table, which became one of the branding assets, is officially called the "DISMTools Workbench". It started in late 2023.</text>
+    </fact>
+    <fact id="DT9" type="dttip">
+      <topic></topic>
+      <text>Some of the tooling of DISMTools can be found in separate repositories, allowing you to use them independently.</text>
+    </fact>
+    <fact id="DT10" type="dttip">
+      <topic></topic>
+      <text>The people behind this project are sailing the seven seas at this exact moment. One of them is Jack Sparrow! (I'm kidding).</text>
+    </fact>
+    <fact id="DT11" type="dttip">
+      <topic></topic>
+      <text>The network features of the Preinstallation Environment are tested in a Hyper-V virtual lab powered by a shared Wi-Fi connection.</text>
+    </fact>
+    <fact id="DT12" type="dttip">
+      <topic></topic>
+      <text>If you have a modern computer with Secure Boot enabled, check your certificates in DB. 2011 certificates start expiring on June 24, 2026. You can also evaluate the readiness.</text>
+    </fact>
+    <fact id="DT13" type="dttip">
+      <topic></topic>
+      <text>Switching Windows Server editions can be done with any type of key, including Generic Volume License Keys (GVLKs) from Microsoft. Perform an edition upgrade by using the edition servicing tasks in DISMTools and use your key.</text>
+    </fact>
+    <fact id="DT14" type="dttip">
+      <topic></topic>
+      <text>DISMTools 0.8 is codenamed "Infinity" for a very simple reason. Turn the 8 sideways and you'll see what I mean.</text>
+    </fact>
+    <fact id="DT15" type="dttip">
+      <topic></topic>
+      <text>Don't go too wild with service management. You can screw up things more quickly than you would with poorly-made servicing tasks. Luckily, backups are saved on your desktop and you can restore them. You've got your backups ready, right? Right?</text>
+    </fact>
+    <fact id="DT16" type="dttip">
+      <topic></topic>
+      <text>There have been 2 cases of characters from shows or videogames being used as codenames for DISMTools components.</text>
+    </fact>
+    <fact id="DT17" type="dttip">
+      <topic></topic>
+      <text>Use the Mounted Image Manager, in the Tools menu, to quickly reference and perform actions with mounted images. Listings in the mounted image manager are updated in real time.</text>
+    </fact>
+    <fact id="DT18" type="dttip">
+      <topic></topic>
+      <text>Don't be confused. While DISMTools 0.8 and later support Full Flash Utility (FFU) files, they only support files for desktop provisioning. Windows Phone FFU servicing is not supported in any way.</text>
+    </fact>
+    <fact id="DT19" type="dttip">
+      <topic></topic>
+      <text>Full Flash Utility files, once mounted, behave like virtual disks (VHDs). These are stored in your %TEMP% folder and their names begin with "_ffumount".</text>
+    </fact>
+    <fact id="DT20" type="dttip">
+      <topic></topic>
+      <text>Saving changes to FFU files normally is not supported. Despite this, DISMTools allows you to commit changes to FFU files by capturing their mounted virtual disks to new FFU files, and replacing the old files with the new copies.</text>
+    </fact>
+    <fact id="DT21" type="dttip">
+      <topic></topic>
+      <text>Make sure that you unmount all your mounted FFU files before shutting down your computer. When shutting down, these virtual disks will be unloaded, but the source FFU files will continue to appear in the mounted image listings as invalid. Thus, you will need to clean up all mount points by going to Tools &gt; Options &gt; Shutdown options &gt; and clicking "Run now".</text>
+    </fact>
+    <fact id="DT22" type="dttip">
+      <topic></topic>
+      <text>"Los Piratillas" make your Windows experience suck less!</text>
+    </fact>
+    <fact id="DT23" type="dttip">
+      <topic></topic>
+      <text>DISMTools supports standard AppX and MSIX packages, AppX and MSIX package bundles, and encrypted applications for deploying games to active installations.</text>
+    </fact>
+    <fact id="DT24" type="dttip">
+      <topic></topic>
+      <text>The DISMTools project started right as another much less successful project was ending: a tool for making Windows 11 ISO files with the requirements bypassed.</text>
+    </fact>
+    <fact id="DT25" type="dttip">
+      <topic></topic>
+      <text>You can remove editions from a Windows image in 2 ways: by simply removing them from image metadata, or by exporting a specific index to a new image file. One allows you to have a smaller image.</text>
+    </fact>
+    <fact id="DT26" type="dttip">
+      <topic></topic>
+      <text>You can merge SWM files into a WIM file by going to Tools &gt; Merge SWM files...</text>
+    </fact>
+    <fact id="DT27" type="dttip">
+      <topic></topic>
+      <text>At one (very early) point in development, DISMTools was codenamed "rayman" just because I had been playing a Rayman game that I loved (and still love to this day) back then.</text>
+    </fact>
+    <fact id="DT28" type="dttip">
+      <topic></topic>
+      <text>DISMTools once supported Windows 7 as a host system. Because of the implementation of the DISM API, it had to be dropped. No support for other operating systems was dropped afterwards, and DISMTools still supports Windows 7 images. Additionally, some components still support Windows 7.</text>
+    </fact>
+    <fact id="DT29" type="dttip">
+      <topic></topic>
+      <text>Starter scripts were introduced during the DISMTools 0.7 Series and allow you to perform tasks more quickly and to get started with unattended installations more easily. DISMTools 0.8 ships with 27 starter scripts, but you can extend this number by using the Starter Script Editor.</text>
+    </fact>
+    <fact id="DT30" type="dttip">
+      <topic></topic>
+      <text>DISMTools versions are grouped in "series". For example, versions 0.7, 0.7.1, 0.7.2, and 0.7.3 of DISMTools are part of the "DISMTools 0.7 Series".</text>
+    </fact>
+    <fact id="DT31" type="dttip">
+      <topic></topic>
+      <text>Discs for languages and features on demand for Windows 11 and Windows 10 can be downloaded by going to Tools &gt; Web Resources.</text>
+    </fact>
+    <fact id="DT32" type="dttip">
+      <topic></topic>
+      <text>The Starter Script Editor, in its 0.8 version, is codenamed "Luffy" because one of my friends sometimes wears a One Piece hoodie. The Editor has had this codename ever since Microsoft implemented the unsigned RDP file warnings back in April.</text>
+    </fact>
   </facts>
-</MicrosoftWindowsFacts>
+</InfinityFacts>

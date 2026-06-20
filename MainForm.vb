@@ -1062,7 +1062,7 @@ Public Class MainForm
                     FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
                 End If
             Catch ex As Exception
-
+                DynaLog.LogMessage("Could not load facts: " & ex.Message)
             End Try
         End If
     End Sub
