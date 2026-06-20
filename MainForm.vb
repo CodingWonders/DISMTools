@@ -21,6 +21,7 @@ Imports System.Management
 Imports System.Threading.Tasks
 Imports System.Globalization
 Imports DISMTools.Elements.InfinityHome
+Imports System.Text.RegularExpressions
 
 Public Class MainForm
 
@@ -13947,14 +13948,45 @@ Public Class MainForm
         NewsFeedDateLabel.Text = String.Format("{0}, {1}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
                                                            e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
         ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
-        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483
-        NewsFeedContent = e.Contents
+        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483. But, as we pull stuff from
+        ' the subreddit, we find that images just show as links to such -- not a good look. Change these too. Additionally,
+        ' we'll spice the look up *just* a bit.
+        Dim contentStyle As String = "<style>" & CrLf &
+                                     "    * {" & CrLf &
+                                     "        background-color: " & ColorTranslator.ToHtml(CurrentTheme.BackgroundColor) & ";" & CrLf &
+                                     "        color: " & ColorTranslator.ToHtml(CurrentTheme.ForegroundColor) & ";" & CrLf &
+                                     "        font-family: " & Quote & "Segoe UI" & Quote & ", Tahoma, Verdana, Arial, Helvetica, sans-serif;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    body {" & CrLf &
+                                     "        margin: 8px;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    code {" & CrLf &
+                                     "        font-family: " & Quote & LogFont.Replace(Quote, "") & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
+                                     "        font-size: " & If(LogFontSize <= 16, LogFontSize, 11) & "pt;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    a {" & CrLf &
+                                     "        color: #1E90FF;" & CrLf &
+                                     "    }" & CrLf &
+                                     "</style>" & CrLf
+        Try
+            ' Quotes don't like to be displayed as such by default; we'll help.
+            Dim baseContents As String = UTF8.GetString(GetEncoding(1252).GetBytes(e.Contents))
+            Dim parsedContents As String = Regex.Replace(baseContents, "<p><a href=" & Quote & "(https?://preview\.redd\.it/[^" & Quote & "]+)" & Quote & ">\1</a></p>", "<p align=" & Quote & "center" & Quote & "><img src=" & Quote & "$1" & Quote & " /></p>")
+            NewsFeedContent = contentStyle & parsedContents
+        Catch ex As Exception
+            NewsFeedContent = contentStyle & e.Contents
+        End Try
         NewsFeedWebContent.Navigate("about:blank")
         NewsContentPreviewerPanel.Visible = True
     End Sub
 
     Private Sub NewsFeedWebContent_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
-        If e.Url.ToString() <> "about:blank" Then Exit Sub
+        If e.Url.ToString() <> "about:blank" Then
+            Process.Start(e.Url.AbsoluteUri)
+            NewsFeedWebContent.Navigate("about:blank")
+            NewsFeedWebContent.Document.OpenNew(True)
+            Exit Sub
+        End If
 
         NewsFeedWebContent.Document.OpenNew(True)
         NewsFeedWebContent.Document.Write(NewsFeedContent)
