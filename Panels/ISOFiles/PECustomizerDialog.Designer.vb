@@ -504,7 +504,7 @@ Partial Class PECustomizerDialog
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage4.Size = New System.Drawing.Size(548, 256)
         Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "Unattended deployments"
+        Me.TabPage4.Text = "Unattended Deployments"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
         'Label12
@@ -538,7 +538,7 @@ Partial Class PECustomizerDialog
         Me.Label13.AutoEllipsis = True
         Me.Label13.Location = New System.Drawing.Point(12, 60)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(508, 96)
+        Me.Label13.Size = New System.Drawing.Size(508, 128)
         Me.Label13.TabIndex = 5
         Me.Label13.Text = resources.GetString("Label13.Text")
         Me.Label13.Visible = False
