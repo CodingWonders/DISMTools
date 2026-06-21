@@ -120,4 +120,9 @@
   <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="Label13.Text" xml:space="preserve">
+    <value>Assuming what each of the answer files will do is not a good idea because you don't expect what each file will have in different operating system deployment runs.
+
+Therefore, you should manually review each of the answer files when you encounter conflicts. Or, if your Windows image contains an answer file, don't include one with your ISO file, as the one from the Windows image will automatically be applied during setup.</value>
+  </data>
 </root>

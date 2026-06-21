@@ -225,6 +225,7 @@ Public Class MainForm
     Public PXEServerPort As Integer = 8080
     Public KeyboardLayoutCode As String = "00000409"
     Public KeyboardLayoutOverrideExistingLayout As Boolean = False
+    Public AnswerFileConflictResponse As Integer = 0
 
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
@@ -1654,6 +1655,7 @@ Public Class MainForm
                 PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
                 KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
                 KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
+                AnswerFileConflictResponse = CInt(PEPolicyKey.GetValue("AnswerFileConflictResponse", 0))
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1773,6 +1775,7 @@ Public Class MainForm
                     PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
                     KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
                     KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
+                    AnswerFileConflictResponse = CInt(settingData("PEPolicy")("AnswerFileConflictResponse"))
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1835,18 +1838,11 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
-        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then
-            PartTableOverridePreference = 0
-        End If
-        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then
-            UEFICA23Preference = 0
-        End If
-        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then
-            WDSHCConnAttempts = 5
-        End If
-        If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then
-            PXEServerPort = 8080
-        End If
+        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then PartTableOverridePreference = 0
+        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then UEFICA23Preference = 0
+        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then WDSHCConnAttempts = 5
+        If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then PXEServerPort = 8080
+        If AnswerFileConflictResponse < 0 OrElse AnswerFileConflictResponse > 2 Then AnswerFileConflictResponse = 0
         Try
             Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
             Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
@@ -1859,7 +1855,7 @@ Public Class MainForm
     End Sub
 
     Public Sub WriteDefaultPEPolicy()
-        Dim PartTableOverridePreferenceStr As String = ""
+        Dim PartTableOverridePreferenceStr As String = "NoOverride"
         Select Case PartTableOverridePreference
             Case 0
                 PartTableOverridePreferenceStr = "NoOverride"
@@ -1868,7 +1864,7 @@ Public Class MainForm
             Case 2
                 PartTableOverridePreferenceStr = "AlwaysGPT"
         End Select
-        Dim UEFICA23PreferenceStr As String = ""
+        Dim UEFICA23PreferenceStr As String = "AskUser"
         Select Case UEFICA23Preference
             Case 0
                 UEFICA23PreferenceStr = "AskUser"
@@ -1876,6 +1872,15 @@ Public Class MainForm
                 UEFICA23PreferenceStr = "UseNever"
             Case 2
                 UEFICA23PreferenceStr = "UseAlways"
+        End Select
+        Dim AnswerFileConflictResponseStr As String = "AskUser"
+        Select Case AnswerFileConflictResponse
+            Case 0
+                AnswerFileConflictResponseStr = "AskUser"
+            Case 1
+                AnswerFileConflictResponseStr = "PreferISO"
+            Case 2
+                AnswerFileConflictResponseStr = "PreferWIM"
         End Select
 
         Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
@@ -1889,10 +1894,11 @@ Public Class MainForm
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
                                                   "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
-                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}",
+                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
+                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0))
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1972,7 +1978,8 @@ Public Class MainForm
                            "AutoUnattendCopytoSysprep           =    " & AutoUnattendCopytoSysprep & CrLf &
                            "PXEServerPort                       =    " & PXEServerPort & CrLf &
                            "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
-                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout)
+                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout & CrLf &
+                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse)
     End Sub
 
 #Region "Background Processes"
@@ -4408,6 +4415,7 @@ Public Class MainForm
             settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
             settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
             settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
+            settingsData("PEPolicy").AddKey("AnswerFileConflictResponse", AnswerFileConflictResponse)
             parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         Else
             DynaLog.LogMessage("Attempting to write to registry...")
@@ -4532,6 +4540,7 @@ Public Class MainForm
                 PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
                 PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
                 PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("AnswerFileConflictResponse", AnswerFileConflictResponse, RegistryValueKind.DWord)
                 PEPolicyKey.Close()
                 Key.Close()
             Catch ex As Exception
