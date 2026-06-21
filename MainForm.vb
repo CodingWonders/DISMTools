@@ -13966,11 +13966,24 @@ Public Class MainForm
                                      "    }" & CrLf & CrLf &
                                      "    a {" & CrLf &
                                      "        color: #1E90FF;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    img {" & CrLf &
+                                     "        max-width: 70%;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    table {" & CrLf &
+                                     "        table-layout: fixed;" & CrLf &
+                                     "        width: 100%;" & CrLf &
                                      "    }" & CrLf &
                                      "</style>" & CrLf
         Try
             ' Quotes don't like to be displayed as such by default; we'll help.
             Dim baseContents As String = UTF8.GetString(GetEncoding(1252).GetBytes(e.Contents))
+
+            ' If the post has pictures a column with the first picture will show up. We don't want this.
+            If baseContents.StartsWith("<table> <tr><td> <a href=", StringComparison.OrdinalIgnoreCase) Then
+                baseContents = baseContents.Replace("<table> <tr><td> <a href=", "<table> <tr><td style=" & Quote & "width: 0px" & Quote & "> <a href=")
+            End If
+
             Dim parsedContents As String = Regex.Replace(baseContents, "<p><a href=" & Quote & "(https?://preview\.redd\.it/[^" & Quote & "]+)" & Quote & ">\1</a></p>", "<p align=" & Quote & "center" & Quote & "><img src=" & Quote & "$1" & Quote & " /></p>")
             NewsFeedContent = contentStyle & parsedContents
         Catch ex As Exception
