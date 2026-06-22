@@ -1301,13 +1301,36 @@ function Start-OSApplication
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
     try {
-        if (Test-Path "$((Get-Location).Path)\unattend.xml" -PathType Leaf)
+        $isoUnattendXml = "$((Get-Location).Path)\unattend.xml"
+        # Rufus, using WUE, puts the answer file in sources\$OEM$\$$\Panther. We'll scan alternatives and use them,
+        # if the user wants to.
+        $wueUnattendXml = "$((Get-Location).Path)\sources\`$OEM`$\`$`$\Panther\unattend.xml"        # escape our dollars; we want our dollars; we want our money! -- a krab
+        $finalAnswerPath = ""       # store the final path of our answer file
+        if ((Test-Path -Path "$isoUnattendXml" -PathType Leaf) -and (Test-Path -Path "$wueUnattendXml" -PathType Leaf)) {
+            # Both files exist; ask user to decide which one to use.
+            Write-Host "This installation medium appears to be made with Rufus and contains an answer file that was created by said utility."
+            Write-Host "At the root of this installation medium is also an answer file copied by DISMTools.`n"
+            $useRufus = Read-Host -Prompt "Use the answer file from Rufus instead of the one from DISMTools? (y/N)"
+            if ($useRufus -eq "y") {
+                $finalAnswerPath = $wueUnattendXml
+            } else {
+                $finalAnswerPath = $isoUnattendXml
+            }
+        } elseif (Test-Path -Path "$wueUnattendXml" -PathType Leaf) {
+            # Only the Rufus file exists.
+            $finalAnswerPath = $wueUnattendXml
+        } else {
+            # Only our (superior) answer file exists.
+            $finalAnswerPath = $isoUnattendXml
+        }
+
+        if (Test-Path -Path "$finalAnswerPath" -PathType Leaf)
         {
             # Check if the image already has an answer file in its panther directory. If it does, then that counts
             # as a conflict that must be resolved.
             if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
                 # CONFLICT!
-                $isoUnattendInfo = Get-Item -Path "$((Get-Location).Path)\unattend.xml"
+                $isoUnattendInfo = Get-Item -Path "$finalAnswerPath"
                 $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
                 # The user may have used a policy to handle this conflict automatically. Guess it and use it.
                 $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
@@ -1354,7 +1377,7 @@ function Start-OSApplication
                                 $isoUnattendFile = "$env:TEMP\Unattended file from ISO file.xml"
                                 $wimUnattendFile = "$env:TEMP\Unattended file from Windows image file.xml"
 
-                                Copy-Item -Path "$((Get-Location).Path)\unattend.xml" -Destination "$isoUnattendFile" -Force
+                                Copy-Item -Path "$finalAnswerPath" -Destination "$isoUnattendFile" -Force
                                 Copy-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml" -Destination "$wimUnattendFile" -Force
 
                                 notepad "$isoUnattendFile"
@@ -1374,7 +1397,7 @@ function Start-OSApplication
             }
 
             Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
-            if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
+            if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$finalAnswerPath") -eq $true)
             {
                 Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
             }
