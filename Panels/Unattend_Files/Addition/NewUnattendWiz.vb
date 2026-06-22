@@ -665,7 +665,7 @@ Public Class NewUnattendWiz
             Exit Sub
         End If
         DynaLog.LogMessage("Checking .NET Runtime installations...")
-        If Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Any() Then
+        If Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), RuntimeVersion & "*", SearchOption.TopDirectoryOnly).Any() Then
             DynaLog.LogMessage("A compatible .NET Runtime installation has been detected.")
             ' .NET Runtime exists, skip further checks
             DotNetRuntimeSupported = True
