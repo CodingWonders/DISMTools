@@ -15684,9 +15684,18 @@ Public Class MainForm
         BGProcFailureDialog.ShowDialog(Me)
     End Sub
 
+    Private Enum SecureBootCA23Status As Integer
+        Unknown = -1
+        NotAvailable = 0
+        InProgress = 1
+        Available = 2
+        AvailableEnforced = 3
+    End Enum
+
     Private Sub EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Click
         DynaLog.LogMessage("Preparing to evaluate readiness...")
         Dim SecureBootKey As RegistryKey = Nothing
+        Dim SecureBootStatus As SecureBootCA23Status = SecureBootCA23Status.Unknown
         Try
             SecureBootKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot")
 
@@ -15702,19 +15711,33 @@ Public Class MainForm
             End If
 
             Dim SBServicingKey As RegistryKey = SecureBootKey.OpenSubKey("Servicing")
+            Dim CA23UpdateStatus As Integer = SBServicingKey.GetValue("WindowsUEFICA2023Capable", 0)
             Dim CA23Updated As String = SBServicingKey.GetValue("UEFICA2023Status", "")
             SBServicingKey.Close()
 
+            DynaLog.LogMessage("UEFI CA 2023 Capable: " & CA23UpdateStatus)
             DynaLog.LogMessage("UEFI CA 2023 Status: " & CA23Updated)
 
+            Select Case CA23UpdateStatus
+                Case 0 : SecureBootStatus = SecureBootCA23Status.NotAvailable
+                Case 1 : SecureBootStatus = SecureBootCA23Status.Available
+                Case 2 : SecureBootStatus = SecureBootCA23Status.AvailableEnforced
+            End Select
+
             Select Case CA23Updated
-                Case "NotStarted"
+                Case "NotStarted" : If SecureBootStatus = SecureBootCA23Status.Unknown Then SecureBootStatus = SecureBootCA23Status.NotAvailable
+                Case "InProgress" : SecureBootStatus = SecureBootCA23Status.InProgress
+                Case "Updated" : If SecureBootStatus < SecureBootCA23Status.Available Then SecureBootStatus = SecureBootCA23Status.Available
+            End Select
+
+            Select Case SecureBootStatus
+                Case SecureBootCA23Status.NotAvailable
                     MessageBox.Show("Secure Boot is enabled on this machine but does not contain Windows UEFI CA 2023 in its database. Make sure your computer receives the Secure Boot updates before Microsoft Windows Production PCA 2011 certificates expire in June 2026.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Case "InProgress"
+                Case SecureBootCA23Status.InProgress
                     MessageBox.Show("An update to Secure Boot to support Windows UEFI CA 2023 is in progress.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case "Updated"
+                Case SecureBootCA23Status.Available, SecureBootCA23Status.AvailableEnforced
                     MessageBox.Show("Secure Boot is enabled on this machine and contains Windows UEFI CA 2023 in its database.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case Else
+                Case SecureBootCA23Status.Unknown
                     MessageBox.Show("We could not determine the status of the Windows UEFI CA 2023 update.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Select
         Catch ex As Exception
