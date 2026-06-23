@@ -2510,7 +2510,7 @@ Public Class NewUnattendWiz
     Sub SaveConfiguredScript(ScriptIndex As Integer, Contents As String)
         DynaLog.LogMessage("Saving script contents...")
         DynaLog.LogMessage("- Script Index: " & ScriptIndex)
-        DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
+        If Debugger.IsAttached Then DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
         DynaLog.LogMessage("Determining status of stage number...")
         If ScriptIndex > CurrentlyConfiguredScripts.Count - 1 Then
             DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
