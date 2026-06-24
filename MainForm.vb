@@ -2049,6 +2049,10 @@ Public Class MainForm
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If Not OnlineMode And Not OfflineMode Then
+            ' Fix up paths, which, in some cases, may begin with <letter>:\\. The filters then fail and return nothing
+            SourceImg = SourceImg.Replace("\\", "\")
+            MountDir = MountDir.Replace("\\", "\")
+
             DynaLog.LogMessage("Creating image session...")
             Try
                 Dim imageToProcess As WindowsImage = MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MountDir)
