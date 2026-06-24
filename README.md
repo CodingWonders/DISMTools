@@ -144,33 +144,57 @@ The following actions are supported by DISMTools:
   - Image mounting and unmounting
   - Image servicing session reloads
   - Image index switches
-  - WIM -> ESD and viceversa conversion
+  - WIM <-> ESD conversion
   - SWM file merger
   - Component cleanup
   - Image splitting
   - Appending changes to Windows images
   - Exporting Windows images to new image files
+  - Image optimization
+- FFU image management
+  - FFU image application and capture
+  - FFU image splitting and optimization
+  - FFU image information retrieval
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
 - AppX package servicing
-  - Application addition and removal
+  - Provisioned application addition and removal
+  - App Installer package downloader
 - Capabilities
   - Capability addition and removal
 - Drivers
   - Driver addition and removal
+  - Driver import and export
 - Provisioning packages
   - Add provisioning packages to an image
 - Languages and regional servicing
   - Setting keyboard layered drivers
+- Edition management
+  - Upgrading the Windows edition of an image
+  - Setting a product key on an image
+- OS uninstall window
+  - Configuring the OS uninstall window
+- Service management
+  - Viewing and modifying services in an image (start type, deletion)
+- Registry management
+  - Loading, browsing, and editing offline registry hives
+- Environment variable management
+  - Viewing and modifying machine and user environment variables in an image
 - Unattended answer files
   - Creating and managing unattended answer files
   - Applying unattended answer files
+- ISO / testing environment
+  - Creating bootable ISO files
+  - Setting up a new testing environment (virtual machine)
+  - Customizing Windows PE in ISOs
+  - Copying install images to Windows Deployment Services (WDS)
 - Other
   - Get complete information of an image
+  - Get and save image information reports (Markdown/HTML)
   - Using the project's or program's scratch directory
   - Get information of packages, features, AppX packages, capabilities, and drivers
-  - Configure Windows PE settings
+  - Configure Windows PE settings (scratch space, target path)
   
 ## Unsupported actions
 
