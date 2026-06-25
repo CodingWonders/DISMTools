@@ -20,7 +20,7 @@
     
     
       
-        <title>Creating a basic network setup (Hyper-V) - DISMTools Help Documentation</title>
+        <title>Creating a basic network setup - DISMTools Help Documentation</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Creating a basic network setup (Hyper-V)
+              Creating a basic network setup
             
           </span>
         </div>
@@ -2493,7 +2493,7 @@
   <span class="md-ellipsis">
     
   
-    Creating a basic network setup (Hyper-V)
+    Creating a basic network setup
   
 
     
@@ -2511,7 +2511,7 @@
   <span class="md-ellipsis">
     
   
-    Creating a basic network setup (Hyper-V)
+    Creating a basic network setup
   
 
     
@@ -3424,8 +3424,9 @@
 </li>
 </ul>
 <h2 id="preparing-the-network-infrastructure">Preparing the network infrastructure</h2>
-<p>If you already have a network infrastructure set up for remote deployment, feel free to skip this step. However, if you just want to tinker with remote installations at home with a wireless connection, you can do the following steps to create a virtual switch (<em>vSwitch</em>).</p>
-<p><strong>Notes:</strong> </p>
+<p>If you already have a network infrastructure set up for remote deployment, feel free to skip this step. Otherwise, follow these steps to set it up.</p>
+<p>You may have a switch lying around that you can use to connect your server and the computers you want to deploy the operating system to. If not, you can use a virtual switch.</p>
+<p><strong>Hyper-V notes:</strong> </p>
 <ul>
 <li>These steps only work with Hyper-V</li>
 <li>After rebooting your host computer, your virtual machines connected to your switch may lose connection to the Internet. However, the switch will still function for remote OS installation</li>
@@ -3446,7 +3447,7 @@
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_connect_to_switch.png" data-desc-position="bottom"><img alt="Connect To Switch" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_connect_to_switch.png"></a></p>
 <p>Turn on the server VM and run <code>ipconfig /all</code> to make sure the virtual network adapter is detecting the address used by Internet Connection Sharing as the default gateway. If so, then try pinging it:</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_ipconfig.png" data-desc-position="bottom"><img alt="Connect To Switch" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_ipconfig.png"></a></p>
-<p><strong>Tip:</strong> if you want to make sure the IP address of the server doesn't change (remains static), or if it can't pick up the default gateway address, go to the network adapter properties of the virtual network adapter, and configure IPv4 to use the following values:</p>
+<p>Configure the static IP address for the DHCP server to the values you see in ipconfig.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_static_ip.png" data-desc-position="bottom"><img alt="Static IP" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_static_ip.png"></a></p>
 <p>If the server can ping your computer, then you have a working vSwitch. You can now hook up the rest of the virtual machines you would like to use to that vSwitch.</p>
 <h2 id="configuring-the-dhcp-scopes">Configuring the DHCP Scopes</h2>

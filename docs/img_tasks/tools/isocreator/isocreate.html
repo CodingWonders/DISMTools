@@ -2599,7 +2599,7 @@
   <span class="md-ellipsis">
     
   
-    Creating a basic network setup (Hyper-V)
+    Creating a basic network setup
   
 
     
@@ -3439,6 +3439,7 @@
 <ul>
 <li><strong>Copy to Ventoy drives</strong> lets you take advantage of your <a href="https://ventoy.net/en">Ventoy</a> drives for operating system installation. After the ISO is generated, it will be copied automatically to all Ventoy drives you have plugged into your computer</li>
 <li><strong>Use newly-signed boot binaries</strong> will make the ISO files that you create ship with EFI boot binaries signed with the <em>Windows UEFI CA 2023</em> code-signing certificate. This is not checked by default because of reasons that are mentioned later in this document</li>
+<li><strong>Include essential drivers from this system</strong> will export SCSI adapters, storage controllers, and network adapters from your system to the Preinstallation Environment, and to the target Windows image</li>
 </ul>
 <p>This process can take between 5 to 10 minutes, depending on the size of the Windows image and the speed of your computer's disk drive.</p>
 <h4 id="windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</h4>
@@ -3475,6 +3476,15 @@
 </p>
 
 <p>This warning will show if you're creating an ISO file on a UEFI system with Secure Boot enabled that does not support the UEFI CA 2023 binaries; if you check the "Use newly-signed boot binaries" option.</p>
+<p>You can also check the state of certificates in DB by navigating through your UEFI firmware settings. Here is an example:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/uefica2023/uefica23_pcuefi_sbadmin.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/uefica2023/uefica23_pcuefi_sbadmin.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/uefica2023/uefica23_pcuefi_sbdb.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/uefica2023/uefica23_pcuefi_sbdb.png"></a>
+</p>
+
 <p>Both Microsoft and OEMs are providing both software and firmware updates to computers in order to add support for the 2023 binaries and to update the revocation lists. To fix this problem, make sure your OS and your firmware are updated. Alternatively, you might be able to continue <em>without</em> using the updated boot binaries, but this may cause new systems to not boot to the resulting ISO files if they have revoked the 2011 certificates.</p>
 <h3 id="continuing-the-installation">Continuing the installation</h3>
 <p>Whether you've started the installation with HotInstall or by booting to installation media, the installation process will be the same. The Preinstallation Environment Helper will guide you through the installation process, which includes:</p>
@@ -3522,7 +3532,7 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy.png"></a>
 </p>
 
-<p><strong>Policy version:</strong> <em>0.8.0.26052</em></p>
+<p><strong>Policy version:</strong> <em>0.8.0.26063</em></p>
 <ul>
 <li><strong>Custom wallpaper</strong>: allows you to set a custom wallpaper (in JPG format) for the Preinstallation Environment, using the wallpaper overrides introduced in version 0.7.3. You can pick any image you like, but you can also go with your current wallpaper, assuming it's in JPG format.</li>
 <li><strong>Show version information on the top-left corner of the primary screen</strong>: this will show the version of the Preinstallation Environment in the top-left corner of the primary screen, like this:</li>
@@ -3575,8 +3585,33 @@
 </li>
 <li>
 <p><strong>Default keyboard layout</strong>: this allows you to specify the default keyboard layout to be used in the Preinstallation Environment. The specified keyboard layout will be the default one, but users can change it in the installation method selection screen if they want to.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The keyboard layout you specify can also be used to override keyboard preferences in the target image, if it does not have an answer file that sets it to something else.</p>
+</div>
+</li>
+<li>
+<p><strong>Conflict resolution for unattended answer files</strong>: if an answer file exists in both the root of the ISO file and in the Windows image, this option allows you to specify which one should be used. The following options are available:</p>
+<ul>
+<li><em>Ask me how to resolve the conflict</em></li>
+<li><em>Handle the conflict by using the answer file of the ISO file</em></li>
+<li><em>Handle the conflict by using the answer file of the Windows image file</em></li>
+</ul>
 </li>
 </ul>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_answerfile_conflict_question.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_answerfile_conflict_question.png"></a>
+</p>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You should not assume what the answer files in both locations contain, and you may experience unexpected behavior if you use the wrong answer file. It is recommended to always check the contents of both answer files before deciding which one to use.</p>
+<p>When being asked how to resolve the conflict, you can invoke a review by pressing <code>R</code>.</p>
+</div>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_answerfile_review.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_answerfile_review.png"></a>
+</p>
+
 <p>Preinstallation Environment policies are stored in the system registry, under <code>HKEY_LOCAL_MACHINE\SOFTWARE\DISMTools\Preinstallation Environment\Policies</code>. The policies use the following names in the registry:</p>
 <table>
 <thead>
@@ -3621,6 +3656,14 @@
 <tr>
 <td>Default keyboard layout</td>
 <td><code>KeyboardLayoutCode</code></td>
+</tr>
+<tr>
+<td>Override keyboard layouts used by target images with the one I select here</td>
+<td><code>KeyboardLayoutOverrideExistingLayout</code></td>
+</tr>
+<tr>
+<td>Unattended answer file conflict resolution</td>
+<td><code>AnswerFileConflictResponse</code></td>
 </tr>
 </tbody>
 </table>

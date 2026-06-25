@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Creating a basic network setup (Hyper-V)
+    Creating a basic network setup
   
 
     
@@ -3338,14 +3338,16 @@
 <ol>
 <li>Specify the unattended answer file to apply</li>
 <li>Click OK</li>
+<li>Commit the image using the commit task</li>
 </ol>
+<p>You can also copy your answer file to the target image's Sysprep directory. However, do this only if the answer file is guaranteed to work with audit mode. Otherwise, the image may go back to audit mode after generalizing it and resealing it to the OOBE.</p>
 <h2 id="applying-unattended-answer-files-with-the-iso-creation-tools">Applying unattended answer files with the ISO creation tools</h2>
 <p>You can also copy your unattended answer file to a test ISO using the ISO creator. Simply check the "Unattended answer file" option and specify an answer file:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_apply/apply_isocreate.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_apply/apply_isocreate.png"></a>
 </p>
 
-<p>Then, after installing the operating system and performing serviceability tests, the Operatins System installer will apply your unattended answer file. Make sure that you leave the medium containing the answer file, or it may not be fully applied.</p>
+<p>Then, after installing the operating system and performing serviceability tests, the Operating System installer will apply your unattended answer file. Make sure that you leave the medium containing the answer file, or it may not be fully applied.</p>
 
 
 
