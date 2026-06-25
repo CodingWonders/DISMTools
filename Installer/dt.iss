@@ -242,6 +242,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; Val
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "PXEServerPort"; ValueData: 8080; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: string; ValueName: "KeyboardLayoutCode"; ValueData: "00000409"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "KeyboardLayoutOverrideExistingLayout"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "AnswerFileConflictResponse"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist

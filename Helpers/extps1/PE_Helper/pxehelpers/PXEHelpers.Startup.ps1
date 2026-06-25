@@ -82,9 +82,21 @@ function Show-InstallNetAdapterScreen {
             if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
             {
                 if ((Get-PolicyValue -PolicyName "DTDimShowPnputilOut" -DefaultPolicyValue 1 -ValidOptions @(0,1)) -eq 1) {
+                    $compSys = Get-CimInstance -Query "SELECT Manufacturer, Model FROM Win32_ComputerSystem"
+                    $baseBrd = Get-CimInstance -Query "SELECT Product FROM Win32_BaseBoard"
+
+                    $manufacturer = $compSys.Manufacturer
+                    $model = $compSys.Model
+                    $boardModel = $baseBrd.Product
+
                     @"
 These are the device IDs of the hardware devices that could not be detected. Please
 install device drivers based on hardware IDs. After installation, please close this window.
+
+To find the drivers for this specific device, please check the following information:
+- Manufacturer/Model: $manufacturer $model
+- Motherboard model : $boardModel
+
 "@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
                     pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
                     notepad "$env:SYSTEMDRIVE\unknowndevs.txt"

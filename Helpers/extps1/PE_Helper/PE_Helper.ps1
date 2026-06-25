@@ -815,7 +815,7 @@ function Start-PECustomization
         }
         try
         {
-            $policyVersion = "0.8.0.26052"
+            $policyVersion = "0.8.0.26063"
 
             Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
             Write-Host "Initializing default Preinstallation Environment policy..."
@@ -832,6 +832,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PXEServerPort /t REG_DWORD /d 8080
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "00000409"
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutOverrideExistingLayout /t REG_DWORD /d 0
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AnswerFileConflictResponse /t REG_SZ /d "AskUser"
             if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
                 reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
             }
@@ -1299,17 +1300,114 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
-    if (Test-Path "$((Get-Location).Path)\unattend.xml" -PathType Leaf)
-    {
-        Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
-        if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
-        {
-            Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+    try {
+        $isoUnattendXml = "$((Get-Location).Path)\unattend.xml"
+        # Rufus, using WUE, puts the answer file in sources\$OEM$\$$\Panther. We'll scan alternatives and use them,
+        # if the user wants to.
+        $wueUnattendXml = "$((Get-Location).Path)\sources\`$OEM`$\`$`$\Panther\unattend.xml"        # escape our dollars; we want our dollars; we want our money! -- a krab
+        $finalAnswerPath = ""       # store the final path of our answer file
+        if ((Test-Path -Path "$isoUnattendXml" -PathType Leaf) -and (Test-Path -Path "$wueUnattendXml" -PathType Leaf)) {
+            # Both files exist; ask user to decide which one to use.
+            Write-Host "This installation medium appears to be made with Rufus and contains an answer file that was created by said utility."
+            Write-Host "At the root of this installation medium is also an answer file copied by DISMTools.`n"
+            $useRufus = Read-Host -Prompt "Use the answer file from Rufus instead of the one from DISMTools? (y/N)"
+            if ($useRufus -eq "y") {
+                $finalAnswerPath = $wueUnattendXml
+            } else {
+                $finalAnswerPath = $isoUnattendXml
+            }
+        } elseif (Test-Path -Path "$wueUnattendXml" -PathType Leaf) {
+            # Only the Rufus file exists.
+            $finalAnswerPath = $wueUnattendXml
+        } else {
+            # Only our (superior) answer file exists.
+            $finalAnswerPath = $isoUnattendXml
         }
-        else
+
+        if (Test-Path -Path "$finalAnswerPath" -PathType Leaf)
         {
-            Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+            # Check if the image already has an answer file in its panther directory. If it does, then that counts
+            # as a conflict that must be resolved.
+            if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
+                # CONFLICT!
+                $isoUnattendInfo = Get-Item -Path "$finalAnswerPath"
+                $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
+                # The user may have used a policy to handle this conflict automatically. Guess it and use it.
+                $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
+                Write-Host "`n`n"
+                Write-Host "Unattended answer files have been found in both the ISO file and the Windows image that you are deploying. Specify "
+                Write-Host "how you want to proceed, but you may encounter unexpected results if you choose the wrong file.`n"
+                Write-Host "    Answer file in the ISO file:`n"
+                Write-Host "      - Creation date: $($isoUnattendInfo.CreationTime)"
+                Write-Host "      - Modification date: $($isoUnattendInfo.LastWriteTime)"
+                Write-Host "      - Size: $([Math]::Round(($isoUnattendInfo.Length / 1KB), 2)) KB"
+                Write-Host ""
+                Write-Host "    Answer file in the Windows image file:`n"
+                Write-Host "      - Creation date: $($wimUnattendInfo.CreationTime)"
+                Write-Host "      - Modification date: $($wimUnattendInfo.LastWriteTime)"
+                Write-Host "      - Size: $([Math]::Round(($wimUnattendInfo.Length / 1KB), 2)) KB"
+                Write-Host ""
+                switch ($policyDecision) {
+                    "PreferISO" {
+                        Write-Host "Handling conflict with answer file from the ISO file..."
+                    }
+                    "PreferWIM" {
+                        Write-Host "Handling conflict with answer file from Windows image..."
+                        throw
+                    }
+                    "AskUser" {
+                        Write-Host "Type ISO if you want to use the answer file from the disc image, or WIM if you want to use the one from the Windows"
+                        Write-Host "image file. To manually review the answer files to see which one is ideal in this situation, press R.`n"
+                        $decided = $false
+                        $decision = ""
+                        do {
+                            $decision = Read-Host -Prompt "Specify an option (ISO, WIM, or R), and press ENTER"
+                            if ($decision -eq "") {
+                                # Blank options are not allowed
+                                continue
+                            }
+
+                            if (-not (@("iso", "wim", "r").Contains($decision.ToLower()))) {
+                                # So are options that are not part of the set
+                                continue
+                            }
+
+                            if ($decision -eq "R") {
+                                # Manually review the files
+                                $isoUnattendFile = "$env:TEMP\Unattended file from ISO file.xml"
+                                $wimUnattendFile = "$env:TEMP\Unattended file from Windows image file.xml"
+
+                                Copy-Item -Path "$finalAnswerPath" -Destination "$isoUnattendFile" -Force
+                                Copy-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml" -Destination "$wimUnattendFile" -Force
+
+                                notepad "$isoUnattendFile"
+                                notepad "$wimUnattendFile"
+                                continue
+                            }
+
+                            $decided = $true
+                        } until ($decided)
+
+                        # If we chose the one from the WIM, we cancel the operation by "throwing" it out the window
+                        if ($decision -eq "WIM") {
+                            throw
+                        }
+                    }
+                }
+            }
+
+            Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
+            if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$finalAnswerPath") -eq $true)
+            {
+                Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+            }
+            else
+            {
+                Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+            }
         }
+    } catch {
+
     }
     $driverPath = "$env:SYSTEMDRIVE\DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
@@ -1473,9 +1571,21 @@ function Get-Disks
                     if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
                         if ((Get-PolicyValue -PolicyName "DTDimShowPnputilOut" -DefaultPolicyValue 1 -ValidOptions @(0,1)) -eq 1) {
+                            $compSys = Get-CimInstance -Query "SELECT Manufacturer, Model FROM Win32_ComputerSystem"
+                            $baseBrd = Get-CimInstance -Query "SELECT Product FROM Win32_BaseBoard"
+
+                            $manufacturer = $compSys.Manufacturer
+                            $model = $compSys.Model
+                            $boardModel = $baseBrd.Product
+
                             @"
 These are the device IDs of the hardware devices that could not be detected. Please
 install device drivers based on hardware IDs. After installation, please close this window.
+
+To find the drivers for this specific device, please check the following information:
+- Manufacturer/Model: $manufacturer $model
+- Motherboard model : $boardModel
+
 "@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
                             pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
                             notepad "$env:SYSTEMDRIVE\unknowndevs.txt"

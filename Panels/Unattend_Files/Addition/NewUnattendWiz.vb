@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2662"
+    Const UnattendGenReleaseTag As String = "2663"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -665,7 +665,7 @@ Public Class NewUnattendWiz
             Exit Sub
         End If
         DynaLog.LogMessage("Checking .NET Runtime installations...")
-        If My.Computer.FileSystem.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Count > 0 Then
+        If Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), RuntimeVersion & "*", SearchOption.TopDirectoryOnly).Any() Then
             DynaLog.LogMessage("A compatible .NET Runtime installation has been detected.")
             ' .NET Runtime exists, skip further checks
             DotNetRuntimeSupported = True
@@ -872,11 +872,11 @@ Public Class NewUnattendWiz
         SwitchScript(0)
 
         ' Detect .NET runtimes/SDKs
-        DetectDotNetRuntime("9.0.100", "9.0")
+        DetectDotNetRuntime("10.0.109", "10.0")
         If Not DotNetRuntimeSupported Then
             DynaLog.LogMessage("Detections have concluded with no recognized .NET Core-based installations. The included copy of UnattendGen cannot be used.")
             DynaLog.LogMessage("Asking user whether or not to download self-contained UnattendGen...")
-            If MsgBox("This wizard requires the .NET 9 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+            If MsgBox("This wizard requires the .NET 10 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
                 DynaLog.LogMessage("Proceeding to download self-contained UnattendGen...")
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
@@ -2510,7 +2510,7 @@ Public Class NewUnattendWiz
     Sub SaveConfiguredScript(ScriptIndex As Integer, Contents As String)
         DynaLog.LogMessage("Saving script contents...")
         DynaLog.LogMessage("- Script Index: " & ScriptIndex)
-        DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
+        If Debugger.IsAttached Then DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
         DynaLog.LogMessage("Determining status of stage number...")
         If ScriptIndex > CurrentlyConfiguredScripts.Count - 1 Then
             DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")

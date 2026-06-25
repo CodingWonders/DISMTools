@@ -27,7 +27,7 @@ Namespace Utilities
         Shared Function WatchStatus(imageFile As String, mountedImages As List(Of WindowsImage)) As Status
             If mountedImages IsNot Nothing AndAlso mountedImages.Count > 0 Then
                 Try
-                    Dim DetectedImage As WindowsImage = mountedImages.FirstOrDefault(Function(image) image.ImageFile = imageFile)
+                    Dim DetectedImage As WindowsImage = mountedImages.FirstOrDefault(Function(image) image.ImageFile = imageFile.Replace("\\", "\"))
                     If DetectedImage IsNot Nothing Then
                         Select Case DetectedImage.ImageMountStatus
                             Case DismMountStatus.Ok

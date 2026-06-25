@@ -2567,7 +2567,7 @@
   <span class="md-ellipsis">
     
   
-    Creating a basic network setup (Hyper-V)
+    Creating a basic network setup
   
 
     
@@ -3384,7 +3384,15 @@
 <p>Moving on to starter scripts, there are <strong>more than 25 starter scripts available to you</strong>. You can also create your starter scripts using your Visual Basic scripts or JScript files, if you still depend on said scripts, and you can do so more comfortably with the new functionality in the Starter Script Editor, such as dark mode support. If one script needs to run before or after a set of scripts, you can quickly change the order of execution to suit your needs.</p>
 <p>Next, when creating local user accounts, you can now configure their display names separately. You should use a custom display name when you have an account whose name contains either spaces or special characters, to avoid issues with certain programs or scripts and environment variables, and potentially more issues. For example, for a user named <em>John Doe</em> you can use an account name of <em>johndoe</em> and use the former name as the display name.</p>
 <p>Finally, when applying unattended answer files, you now have control over whether to copy them to the image's Sysprep directory.</p>
-<p><a href="../img_tasks/exttools/sse.html">Learn more about the improved answer file features</a></p>
+<p align="center">
+  <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/whats_new/WhatsNew_2.png" data-desc-position="bottom"><img src="../res/whats_new/WhatsNew_2.png"></a>
+</p>
+
+<p>Learn more about the improved answer file features:</p>
+<ul>
+<li><a href="../img_tasks/unattend/unatt_create.html#active-directory-domain-services-domain-join">Domain join</a></li>
+<li><a href="../img_tasks/unattend/unatt_create.html#starter-script-reference">Starter scripts</a></li>
+</ul>
 <h2 id="work-more-comfortably-with-windows-images">Work more comfortably with Windows images</h2>
 <p>DISMTools 0.8 introduces several improvements to core Windows image management flows that make working with images more comfortable.</p>
 <p>With the information filter assistants, you can search information about Windows images much more easily. These assistants are available in the feature, capability, and driver information dialogs; and are there to help you quickly find the information you are looking for. Need to filter drivers by class name? You are just a few clicks away from doing that. Want to find a specific set of enabled features with a specific name? You can do that too.</p>
@@ -3392,17 +3400,17 @@
 <p>You can now save system service information to reports similar to the ones you can save for images. You can also mark services for deletion (<em>though don't go mad and delete every service. Don't</em>).</p>
 <p>A major improvement is the support for <strong>Full Flash Utility (FFU)</strong> files, as another entry in sector-based Windows images, suitable for both desktop and mobile system provisioning (<em>though only desktop provisioning is supported as mobile provisioning is for Windows phones</em>). Variants of popular tasks, such as applying images or capturing images, have been introduced to support FFU files, and the program can now also show you information about them (such as the physical disk layout); giving you the edge. A new task has also been introduced to optimize Windows images, and also has a variant for FFU files.</p>
 <p>Need to export certain drivers from an active installation? You can now export drivers using a class name filter. Class name filter selectors also detect third-party classes defined by drivers. For example, if you want to export <a href="https://en.wikipedia.org/wiki/Neural_processing_unit">NPU</a> and compute accelerator devices, you can now do that by filtering for the <em>ComputeAccelerator</em> class. Finally, exporting and viewing information about drivers now works with Windows 7 images.</p>
+<p align="center">
+  <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/whats_new/WhatsNew_3.png" data-desc-position="bottom"><img src="../res/whats_new/WhatsNew_3.png"></a>
+</p>
+
 <h2 id="overall-refinements">Overall refinements</h2>
 <p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, the program is more reliable and components have been updated to their latest versions.</p>
 <!-- Room for more features -->
 
 <h1 id="thanks-to-the-contributors">Thanks to the contributors</h1>
-<!-- The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:
-
-[Real-MullaC](https://github.com/Real-MullaC), [bovirus](https://github.com/bovirus), [jekovcar](https://github.com/jekovcar), [rayman95 (MDL Forums)](https://forums.mydigitallife.net/members/rayman95.1153686/)
-
-If you want to appear in this list, you can report issues or suggestions in any channel you prefer (via the [MDL forum thread](https://forums.mydigitallife.net/threads/dismtools.87263/), via the [GitHub repository](https://github.com/CodingWonders/DISMTools), or via any announcements on the [DISMTools subreddit](https://reddit.com/r/DISMTools) or on the [Windows](https://reddit.com/r/Windows), [Windows11](https://reddit.com/r/Windows11) and [Windows10](https://reddit.com/r/Windows10) subreddits (as comments)) or submit new code changes (read the [contribution guidelines](https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md) for more information). -->
-
+<p>The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:</p>
+<p><a href="https://github.com/TackleBarry80">TackleBarry80</a>, <a href="https://github.com/Dede333">Dede333</a>, <a href="https://github.com/charlezmmonroe-byte">charlezmmonroe-byte</a></p>
 <p>To contribute to the software, you can report issues or suggestions in any channel you prefer (via the <a href="https://forums.mydigitallife.net/threads/dismtools.87263/">MDL forum thread</a>, via the <a href="https://github.com/CodingWonders/DISMTools">GitHub repository</a>, or via any announcements on the <a href="https://reddit.com/r/DISMTools">DISMTools subreddit</a> or on the <a href="https://reddit.com/r/Windows">Windows</a>, <a href="https://reddit.com/r/Windows11">Windows11</a> and <a href="https://reddit.com/r/Windows10">Windows10</a> subreddits (as comments)) or submit new code changes (read the <a href="https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md">contribution guidelines</a> for more information).</p>
 
 

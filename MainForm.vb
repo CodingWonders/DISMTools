@@ -21,6 +21,7 @@ Imports System.Management
 Imports System.Threading.Tasks
 Imports System.Globalization
 Imports DISMTools.Elements.InfinityHome
+Imports System.Text.RegularExpressions
 
 Public Class MainForm
 
@@ -103,7 +104,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_0.8"
+    Public dtBranch As String = "dt_pre_0.8_relcndid"
     Public dt_codeName As String = "Infinity"
 
     ' Arrays and other variables used on background processes
@@ -224,6 +225,7 @@ Public Class MainForm
     Public PXEServerPort As Integer = 8080
     Public KeyboardLayoutCode As String = "00000409"
     Public KeyboardLayoutOverrideExistingLayout As Boolean = False
+    Public AnswerFileConflictResponse As Integer = 0
 
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
@@ -1061,7 +1063,7 @@ Public Class MainForm
                     FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
                 End If
             Catch ex As Exception
-
+                DynaLog.LogMessage("Could not load facts: " & ex.Message)
             End Try
         End If
     End Sub
@@ -1234,7 +1236,7 @@ Public Class MainForm
                     DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
                     DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
                     DiskLabel As String = CurrentVolProps("Label")
-                ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", DiskLabel, "<unlabeled>"),
+                ComputerStorageLabel.Text = String.Format("{0}\{1}: {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", String.Format(" ({0})", DiskLabel), ""),
                                                                                             Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
                                                                                             CurDiskStr,
                                                                                             Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
@@ -1653,6 +1655,7 @@ Public Class MainForm
                 PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
                 KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
                 KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
+                AnswerFileConflictResponse = CInt(PEPolicyKey.GetValue("AnswerFileConflictResponse", 0))
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1772,6 +1775,7 @@ Public Class MainForm
                     PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
                     KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
                     KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
+                    AnswerFileConflictResponse = CInt(settingData("PEPolicy")("AnswerFileConflictResponse"))
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1834,18 +1838,11 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
-        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then
-            PartTableOverridePreference = 0
-        End If
-        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then
-            UEFICA23Preference = 0
-        End If
-        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then
-            WDSHCConnAttempts = 5
-        End If
-        If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then
-            PXEServerPort = 8080
-        End If
+        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then PartTableOverridePreference = 0
+        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then UEFICA23Preference = 0
+        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then WDSHCConnAttempts = 5
+        If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then PXEServerPort = 8080
+        If AnswerFileConflictResponse < 0 OrElse AnswerFileConflictResponse > 2 Then AnswerFileConflictResponse = 0
         Try
             Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
             Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
@@ -1858,7 +1855,7 @@ Public Class MainForm
     End Sub
 
     Public Sub WriteDefaultPEPolicy()
-        Dim PartTableOverridePreferenceStr As String = ""
+        Dim PartTableOverridePreferenceStr As String = "NoOverride"
         Select Case PartTableOverridePreference
             Case 0
                 PartTableOverridePreferenceStr = "NoOverride"
@@ -1867,7 +1864,7 @@ Public Class MainForm
             Case 2
                 PartTableOverridePreferenceStr = "AlwaysGPT"
         End Select
-        Dim UEFICA23PreferenceStr As String = ""
+        Dim UEFICA23PreferenceStr As String = "AskUser"
         Select Case UEFICA23Preference
             Case 0
                 UEFICA23PreferenceStr = "AskUser"
@@ -1875,6 +1872,15 @@ Public Class MainForm
                 UEFICA23PreferenceStr = "UseNever"
             Case 2
                 UEFICA23PreferenceStr = "UseAlways"
+        End Select
+        Dim AnswerFileConflictResponseStr As String = "AskUser"
+        Select Case AnswerFileConflictResponse
+            Case 0
+                AnswerFileConflictResponseStr = "AskUser"
+            Case 1
+                AnswerFileConflictResponseStr = "PreferISO"
+            Case 2
+                AnswerFileConflictResponseStr = "PreferWIM"
         End Select
 
         Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
@@ -1888,10 +1894,11 @@ Public Class MainForm
                                                   "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
                                                   "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
-                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}",
+                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
+                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0))
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1971,7 +1978,8 @@ Public Class MainForm
                            "AutoUnattendCopytoSysprep           =    " & AutoUnattendCopytoSysprep & CrLf &
                            "PXEServerPort                       =    " & PXEServerPort & CrLf &
                            "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
-                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout)
+                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout & CrLf &
+                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse)
     End Sub
 
 #Region "Background Processes"
@@ -2041,6 +2049,10 @@ Public Class MainForm
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If Not OnlineMode And Not OfflineMode Then
+            ' Fix up paths, which, in some cases, may begin with <letter>:\\. The filters then fail and return nothing
+            SourceImg = SourceImg.Replace("\\", "\")
+            MountDir = MountDir.Replace("\\", "\")
+
             DynaLog.LogMessage("Creating image session...")
             Try
                 Dim imageToProcess As WindowsImage = MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MountDir)
@@ -4407,6 +4419,7 @@ Public Class MainForm
             settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
             settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
             settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
+            settingsData("PEPolicy").AddKey("AnswerFileConflictResponse", AnswerFileConflictResponse)
             parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         Else
             DynaLog.LogMessage("Attempting to write to registry...")
@@ -4531,6 +4544,7 @@ Public Class MainForm
                 PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
                 PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
                 PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("AnswerFileConflictResponse", AnswerFileConflictResponse, RegistryValueKind.DWord)
                 PEPolicyKey.Close()
                 Key.Close()
             Catch ex As Exception
@@ -7946,6 +7960,7 @@ Public Class MainForm
                         Label3.Text = "IP Address Configuration:"
                         Label4.Text = "Explore and get started"
                         Label5.Text = "Stay up-to-date"
+                        Label9.Text = "Fact of the day"
                         LinkLabel27.Text = "Learn what's new in this release"
                         LinkLabel28.Text = "Get started with DISMTools and image servicing"
                         LinkLabel29.Text = "Manage your current installation"
@@ -7964,6 +7979,7 @@ Public Class MainForm
                         Label3.Text = "Configuración de dirección IP:"
                         Label4.Text = "Explore y comience"
                         Label5.Text = "Manténgase informado"
+                        Label9.Text = "Dato del día"
                         LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
                         LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
                         LinkLabel29.Text = "Administre su instalación actual"
@@ -7982,6 +7998,7 @@ Public Class MainForm
                         Label3.Text = "Configuration de l'adresse IP :"
                         Label4.Text = "Découvrir et commencer"
                         Label5.Text = "Rester à jour"
+                        Label9.Text = "Le fait du jour"
                         LinkLabel27.Text = "Découvrez les nouveautés de cette version"
                         LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
                         LinkLabel29.Text = "Gérer votre installation actuelle"
@@ -8000,6 +8017,7 @@ Public Class MainForm
                         Label3.Text = "Configuração do endereço IP:"
                         Label4.Text = "Explorar e começar"
                         Label5.Text = "Manter-se atualizado"
+                        Label9.Text = "Curiosidade do dia"
                         LinkLabel27.Text = "Descubra as novidades desta versão"
                         LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
                         LinkLabel29.Text = "Gerir a sua instalação atual"
@@ -8018,6 +8036,7 @@ Public Class MainForm
                         Label3.Text = "Configurazione dell'indirizzo IP:"
                         Label4.Text = "Esplora e inizia"
                         Label5.Text = "Rimani aggiornato"
+                        Label9.Text = "Curiosità del giorno"
                         LinkLabel27.Text = "Scopri le novità di questa versione"
                         LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
                         LinkLabel29.Text = "Gestisci la tua installazione attuale"
@@ -8037,6 +8056,7 @@ Public Class MainForm
                 Label3.Text = "IP Address Configuration:"
                 Label4.Text = "Explore and get started"
                 Label5.Text = "Stay up-to-date"
+                Label9.Text = "Fact of the day"
                 LinkLabel27.Text = "Learn what's new in this release"
                 LinkLabel28.Text = "Get started with DISMTools and image servicing"
                 LinkLabel29.Text = "Manage your current installation"
@@ -8055,6 +8075,7 @@ Public Class MainForm
                 Label3.Text = "Configuración de dirección IP:"
                 Label4.Text = "Explore y comience"
                 Label5.Text = "Manténgase informado"
+                Label9.Text = "Dato del día"
                 LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
                 LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
                 LinkLabel29.Text = "Administre su instalación actual"
@@ -8073,6 +8094,7 @@ Public Class MainForm
                 Label3.Text = "Configuration de l'adresse IP :"
                 Label4.Text = "Découvrir et commencer"
                 Label5.Text = "Rester à jour"
+                Label9.Text = "Le fait du jour"
                 LinkLabel27.Text = "Découvrez les nouveautés de cette version"
                 LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
                 LinkLabel29.Text = "Gérer votre installation actuelle"
@@ -8091,6 +8113,7 @@ Public Class MainForm
                 Label3.Text = "Configuração do endereço IP:"
                 Label4.Text = "Explorar e começar"
                 Label5.Text = "Manter-se atualizado"
+                Label9.Text = "Curiosidade do dia"
                 LinkLabel27.Text = "Descubra as novidades desta versão"
                 LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
                 LinkLabel29.Text = "Gerir a sua instalação atual"
@@ -8109,6 +8132,7 @@ Public Class MainForm
                 Label3.Text = "Configurazione dell'indirizzo IP:"
                 Label4.Text = "Esplora e inizia"
                 Label5.Text = "Rimani aggiornato"
+                Label9.Text = "Curiosità del giorno"
                 LinkLabel27.Text = "Scopri le novità di questa versione"
                 LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
                 LinkLabel29.Text = "Gestisci la tua installazione attuale"
@@ -13947,14 +13971,58 @@ Public Class MainForm
         NewsFeedDateLabel.Text = String.Format("{0}, {1}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
                                                            e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
         ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
-        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483
-        NewsFeedContent = e.Contents
+        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483. But, as we pull stuff from
+        ' the subreddit, we find that images just show as links to such -- not a good look. Change these too. Additionally,
+        ' we'll spice the look up *just* a bit.
+        Dim contentStyle As String = "<style>" & CrLf &
+                                     "    * {" & CrLf &
+                                     "        background-color: " & ColorTranslator.ToHtml(CurrentTheme.BackgroundColor) & ";" & CrLf &
+                                     "        color: " & ColorTranslator.ToHtml(CurrentTheme.ForegroundColor) & ";" & CrLf &
+                                     "        font-family: " & Quote & "Segoe UI" & Quote & ", Tahoma, Verdana, Arial, Helvetica, sans-serif;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    body {" & CrLf &
+                                     "        margin: 8px;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    code {" & CrLf &
+                                     "        font-family: " & Quote & LogFont.Replace(Quote, "") & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
+                                     "        font-size: " & If(LogFontSize <= 16, LogFontSize, 11) & "pt;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    a {" & CrLf &
+                                     "        color: #1E90FF;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    img {" & CrLf &
+                                     "        max-width: 70%;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    table {" & CrLf &
+                                     "        table-layout: fixed;" & CrLf &
+                                     "        width: 100%;" & CrLf &
+                                     "    }" & CrLf &
+                                     "</style>" & CrLf
+        Try
+            ' Quotes don't like to be displayed as such by default; we'll help.
+            Dim baseContents As String = UTF8.GetString(GetEncoding(1252).GetBytes(e.Contents))
+
+            ' If the post has pictures a column with the first picture will show up. We don't want this.
+            If baseContents.StartsWith("<table> <tr><td> <a href=", StringComparison.OrdinalIgnoreCase) Then
+                baseContents = baseContents.Replace("<table> <tr><td> <a href=", "<table> <tr><td style=" & Quote & "width: 0px" & Quote & "> <a href=")
+            End If
+
+            Dim parsedContents As String = Regex.Replace(baseContents, "<p><a href=" & Quote & "(https?://preview\.redd\.it/[^" & Quote & "]+)" & Quote & ">\1</a></p>", "<p align=" & Quote & "center" & Quote & "><img src=" & Quote & "$1" & Quote & " /></p>")
+            NewsFeedContent = contentStyle & parsedContents
+        Catch ex As Exception
+            NewsFeedContent = contentStyle & e.Contents
+        End Try
         NewsFeedWebContent.Navigate("about:blank")
         NewsContentPreviewerPanel.Visible = True
     End Sub
 
     Private Sub NewsFeedWebContent_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
-        If e.Url.ToString() <> "about:blank" Then Exit Sub
+        If e.Url.ToString() <> "about:blank" Then
+            Process.Start(e.Url.AbsoluteUri)
+            NewsFeedWebContent.Navigate("about:blank")
+            NewsFeedWebContent.Document.OpenNew(True)
+            Exit Sub
+        End If
 
         NewsFeedWebContent.Document.OpenNew(True)
         NewsFeedWebContent.Document.Write(NewsFeedContent)
@@ -15630,9 +15698,18 @@ Public Class MainForm
         BGProcFailureDialog.ShowDialog(Me)
     End Sub
 
+    Private Enum SecureBootCA23Status As Integer
+        Unknown = -1
+        NotAvailable = 0
+        InProgress = 1
+        Available = 2
+        AvailableEnforced = 3
+    End Enum
+
     Private Sub EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Click
         DynaLog.LogMessage("Preparing to evaluate readiness...")
         Dim SecureBootKey As RegistryKey = Nothing
+        Dim SecureBootStatus As SecureBootCA23Status = SecureBootCA23Status.Unknown
         Try
             SecureBootKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot")
 
@@ -15648,19 +15725,33 @@ Public Class MainForm
             End If
 
             Dim SBServicingKey As RegistryKey = SecureBootKey.OpenSubKey("Servicing")
+            Dim CA23UpdateStatus As Integer = SBServicingKey.GetValue("WindowsUEFICA2023Capable", 0)
             Dim CA23Updated As String = SBServicingKey.GetValue("UEFICA2023Status", "")
             SBServicingKey.Close()
 
+            DynaLog.LogMessage("UEFI CA 2023 Capable: " & CA23UpdateStatus)
             DynaLog.LogMessage("UEFI CA 2023 Status: " & CA23Updated)
 
+            Select Case CA23UpdateStatus
+                Case 0 : SecureBootStatus = SecureBootCA23Status.NotAvailable
+                Case 1 : SecureBootStatus = SecureBootCA23Status.Available
+                Case 2 : SecureBootStatus = SecureBootCA23Status.AvailableEnforced
+            End Select
+
             Select Case CA23Updated
-                Case "NotStarted"
+                Case "NotStarted" : If SecureBootStatus = SecureBootCA23Status.Unknown Then SecureBootStatus = SecureBootCA23Status.NotAvailable
+                Case "InProgress" : SecureBootStatus = SecureBootCA23Status.InProgress
+                Case "Updated" : If SecureBootStatus < SecureBootCA23Status.Available Then SecureBootStatus = SecureBootCA23Status.Available
+            End Select
+
+            Select Case SecureBootStatus
+                Case SecureBootCA23Status.NotAvailable
                     MessageBox.Show("Secure Boot is enabled on this machine but does not contain Windows UEFI CA 2023 in its database. Make sure your computer receives the Secure Boot updates before Microsoft Windows Production PCA 2011 certificates expire in June 2026.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Case "InProgress"
+                Case SecureBootCA23Status.InProgress
                     MessageBox.Show("An update to Secure Boot to support Windows UEFI CA 2023 is in progress.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case "Updated"
+                Case SecureBootCA23Status.Available, SecureBootCA23Status.AvailableEnforced
                     MessageBox.Show("Secure Boot is enabled on this machine and contains Windows UEFI CA 2023 in its database.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case Else
+                Case SecureBootCA23Status.Unknown
                     MessageBox.Show("We could not determine the status of the Windows UEFI CA 2023 update.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Select
         Catch ex As Exception

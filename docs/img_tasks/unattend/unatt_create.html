@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Creating a basic network setup (Hyper-V)
+    Creating a basic network setup
   
 
     
@@ -3140,10 +3140,32 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#change-powershell-execution-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change PowerShell Execution Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#close-first-logon-animation" class="md-nav__link">
     <span class="md-ellipsis">
       
         Close First Logon Animation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-current-power-plan-timeout-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure current power plan timeout values
       
     </span>
   </a>
@@ -3382,6 +3404,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#restore-context-menu-for-windows-11-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore context menu for Windows 11 systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#set-file-explorer-launch-folder" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3405,17 +3438,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#change-history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Change History
-      
-    </span>
-  </a>
   
 </li>
       
@@ -3738,10 +3760,32 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#change-powershell-execution-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change PowerShell Execution Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#close-first-logon-animation" class="md-nav__link">
     <span class="md-ellipsis">
       
         Close First Logon Animation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-current-power-plan-timeout-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure current power plan timeout values
       
     </span>
   </a>
@@ -3980,6 +4024,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#restore-context-menu-for-windows-11-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore context menu for Windows 11 systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#set-file-explorer-launch-folder" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4003,17 +4058,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#change-history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Change History
-      
-    </span>
-  </a>
   
 </li>
       
@@ -4196,7 +4240,7 @@
 </p>
 
 <h2 id="requirements">Requirements</h2>
-<p>The unattended answer file creator requires the .NET 9 Runtime for the generator program to function. If DISMTools detects that the runtime hasn't been installed, you will be offered the ability to use the self-contained version, which contains the runtime:</p>
+<p>The unattended answer file creator requires the .NET 10 Runtime for the generator program to function. If DISMTools detects that the runtime hasn't been installed, you will be offered the ability to use the self-contained version, which contains the runtime:</p>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/unattend/unatt_creator/unattendgen_selfcontained.png" data-desc-position="bottom"><img src="../../res/img_tasks/unattend/unatt_creator/unattendgen_selfcontained.png"></a>
 </p>
@@ -4283,7 +4327,7 @@
 <p>Finally, specify the password of the user. Since DISMTools will <strong>NOT</strong> check if the password is correct, make sure that you type it correctly.</p>
 <p>You've finished the Domain Services Wizard. When you get to the components screen, you will see that the necessary components and settings have been added to your answer file.</p>
 <h2 id="starter-script-reference">Starter Script Reference</h2>
-<p>Currently, there are <strong>24</strong> starter scripts available:</p>
+<p>Currently, there are <strong>27</strong> starter scripts available:</p>
 <table>
 <thead>
 <tr>
@@ -4293,7 +4337,15 @@
 </thead>
 <tbody>
 <tr>
+<td style="text-align: left;">Change PowerShell Execution Policy</td>
+<td style="text-align: center;">During System Configuration</td>
+</tr>
+<tr>
 <td style="text-align: left;">Close First Logon Animation</td>
+<td style="text-align: center;">During System Configuration</td>
+</tr>
+<tr>
+<td style="text-align: left;">Configure current power plan timeout values</td>
 <td style="text-align: center;">During System Configuration</td>
 </tr>
 <tr>
@@ -4381,6 +4433,10 @@
 <td style="text-align: center;">When users log on for the first time</td>
 </tr>
 <tr>
+<td style="text-align: left;">Restore context menu for Windows 11 systems</td>
+<td style="text-align: center;">When users log on for the first time</td>
+</tr>
+<tr>
 <td style="text-align: left;">Set File Explorer launch folder</td>
 <td style="text-align: center;">When users log on for the first time</td>
 </tr>
@@ -4397,9 +4453,49 @@
 
 <p>You can also create your own starter scripts by using the <a href="../exttools/sse.html">Starter Script Editor</a>.</p>
 <p>Some scripts allow you to configure settings after you import them:</p>
+<h3 id="change-powershell-execution-policy">Change PowerShell Execution Policy</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>Configure the execution policy of PowerShell by setting the <code>_PWSHExecutionPolicy</code> variable to one of the following values:</p>
+<ul>
+<li><code>Unrestricted</code></li>
+<li><code>RemoteSigned</code></li>
+<li><code>Restricted</code></li>
+<li><code>AllSigned</code></li>
+<li><code>Bypass</code></li>
+<li><code>Undefined</code></li>
+</ul>
 <h3 id="close-first-logon-animation">Close First Logon Animation</h3>
 <p><strong>Script language</strong>: Batch</p>
 <p>No settings available.</p>
+<h3 id="configure-current-power-plan-timeout-values">Configure current power plan timeout values</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>Options exist for when the computer is running on battery power and when plugged in. The following table groups them in one option ending in <code>(Ac|Dc)</code>, depending on the context:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Option</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>_MonitorTimeout(Ac|Dc)</code></td>
+<td style="text-align: left;">Sets the number of seconds before the monitor turns off</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>_DiskTimeout(Ac|Dc)</code></td>
+<td style="text-align: left;">Sets the number of seconds before storage devices stop</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>_StandbyTimeout(Ac|Dc)</code></td>
+<td style="text-align: left;">Sets the number of seconds before the device enters sleep mode</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>_HibernateTimeout(Ac|Dc)</code></td>
+<td style="text-align: left;">Sets the number of seconds before the device enters hibernation</td>
+</tr>
+</tbody>
+</table>
 <h3 id="disable-shutdown-event-tracker">Disable Shutdown Event Tracker</h3>
 <p><strong>Script language</strong>: Batch</p>
 <p>No settings available.</p>
@@ -4705,6 +4801,9 @@
 <ul>
 <li>If your source contains spaces, surround it with quotes</li>
 </ul>
+<h3 id="restore-context-menu-for-windows-11-systems">Restore context menu for Windows 11 systems</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
 <h3 id="set-file-explorer-launch-folder">Set File Explorer launch folder</h3>
 <p><strong>Script language</strong>: Batch</p>
 <p>Set the <code>_LaunchTo</code> variable to one of the following values to set the File Explorer launch folder:</p>
@@ -4729,64 +4828,6 @@
 <h3 id="show-file-extensions">Show File Extensions</h3>
 <p><strong>Script language</strong>: Batch</p>
 <p>No settings available.</p>
-<h2 id="change-history">Change History</h2>
-<ul>
-<li>DISMTools 0.7.2 Preview 3:<ul>
-<li>Added:<ul>
-<li>Configure Git folders for File Explorer</li>
-</ul>
-</li>
-<li>Modified:<ul>
-<li>Added name and description fields to starter scripts for script browser</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>DISMTools 0.7.2 Preview 2:<ul>
-<li>Added:<ul>
-<li>Verbose Status Messages</li>
-</ul>
-</li>
-<li>Modified:<ul>
-<li>Disable Windows Notification Sources: added Copilot notifications to blocklist</li>
-<li>Set Quick Machine Recovery Settings: added value checking</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>DISMTools 0.7.1 Preview 4:<ul>
-<li>Added:<ul>
-<li>Disable Windows Notification Sources</li>
-<li>Disable Second Chance OOBE</li>
-<li>Set OEM Information</li>
-<li>Set Registered Owner and Organization</li>
-<li>Set Quick Machine Recovery Settings</li>
-</ul>
-</li>
-<li>Modified:<ul>
-<li>Invoke WinUtil Configuration: reduced ping count to server</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>DISMTools 0.7.1 Preview 3:<ul>
-<li>Added:<ul>
-<li>Skip OOBE First Logon Animation</li>
-<li>Personalize User Environment</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>DISMTools 0.7.1 Preview 2:<ul>
-<li>Added:<ul>
-<li>Set up a custom wallpaper</li>
-<li>Update Microsoft Store apps</li>
-<li>Invoke WinUtil Configuration</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>Special thanks to Christoph Schneegans for creating the library that makes this creator possible.</p>
 

@@ -22,6 +22,7 @@ Partial Class PECustomizerDialog
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PECustomizerDialog))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -57,8 +58,12 @@ Partial Class PECustomizerDialog
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -67,6 +72,7 @@ Partial Class PECustomizerDialog
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.TabPage4.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -405,6 +411,7 @@ Partial Class PECustomizerDialog
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
+        Me.TabControl1.Controls.Add(Me.TabPage4)
         Me.TabControl1.Location = New System.Drawing.Point(34, 144)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -463,6 +470,18 @@ Partial Class PECustomizerDialog
         Me.TabPage3.Text = "Keyboard Layouts"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
+        'Label11
+        '
+        Me.Label11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.Location = New System.Drawing.Point(28, 222)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(492, 13)
+        Me.Label11.TabIndex = 10
+        Me.Label11.Text = "This option will only take effect on images that don't have any answer files appl" & _
+    "ied."
+        '
         'CheckBox6
         '
         Me.CheckBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -475,17 +494,54 @@ Partial Class PECustomizerDialog
         Me.CheckBox6.Text = "Override keyboard layouts used by target images with the one I select here"
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
-        'Label11
+        'TabPage4
         '
-        Me.Label11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TabPage4.Controls.Add(Me.Label13)
+        Me.TabPage4.Controls.Add(Me.Label12)
+        Me.TabPage4.Controls.Add(Me.ComboBox3)
+        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage4.Name = "TabPage4"
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage4.Size = New System.Drawing.Size(548, 256)
+        Me.TabPage4.TabIndex = 3
+        Me.TabPage4.Text = "Unattended Deployments"
+        Me.TabPage4.UseVisualStyleBackColor = True
+        '
+        'Label12
+        '
+        Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.Location = New System.Drawing.Point(28, 222)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(492, 13)
-        Me.Label11.TabIndex = 10
-        Me.Label11.Text = "This option will only take effect on images that don't have any answer files appl" & _
-    "ied."
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Location = New System.Drawing.Point(12, 12)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(508, 13)
+        Me.Label12.TabIndex = 5
+        Me.Label12.Text = "If an unattended answer file exists in both the ISO file and the Windows image fi" & _
+    "le:"
+        '
+        'ComboBox3
+        '
+        Me.ComboBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Items.AddRange(New Object() {"Ask me how to resolve the conflict", "Handle the conflict by using the answer file of the ISO file", "Handle the conflict by using the answer file of the Windows image file"})
+        Me.ComboBox3.Location = New System.Drawing.Point(12, 32)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(511, 21)
+        Me.ComboBox3.TabIndex = 6
+        Me.ComboBox3.Text = "Ask me how to resolve the conflict"
+        '
+        'Label13
+        '
+        Me.Label13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Location = New System.Drawing.Point(12, 60)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(508, 128)
+        Me.Label13.TabIndex = 5
+        Me.Label13.Text = resources.GetString("Label13.Text")
+        Me.Label13.Visible = False
         '
         'PECustomizerDialog
         '
@@ -518,6 +574,7 @@ Partial Class PECustomizerDialog
         Me.TabPage2.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        Me.TabPage4.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -559,5 +616,9 @@ Partial Class PECustomizerDialog
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents CheckBox6 As System.Windows.Forms.CheckBox
+    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
+    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents ComboBox3 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label13 As System.Windows.Forms.Label
 
 End Class

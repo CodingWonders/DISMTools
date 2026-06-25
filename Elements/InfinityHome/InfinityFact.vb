@@ -2,7 +2,7 @@
 
 Namespace Elements.InfinityHome
 
-    <XmlRoot("MicrosoftWindowsFacts")>
+    <XmlRoot("InfinityFacts")>
     Public Class InfinityFactsDocument
 
         <XmlArray("facts")>
