@@ -241,12 +241,18 @@ Module DomainServicesModule
     Private Const ADS_UF_ACCOUNTDISABLE As Integer = &H2
 
     ''' <summary>
+    ''' The user account does not need a password
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const ADS_UF_PASSWD_NOTREQD As Integer = &H20
+
+    ''' <summary>
     ''' Determines whether an account in a domain is enabled
     ''' </summary>
     ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
     ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
-    ''' <returns>Whether the account is enabled or disabled based on a property flag</returns>
-    ''' <remarks>The directory searcher needs to be disposed of because of quirks in .NET that cause memory leaks</remarks>
+    ''' <returns>Whether the account is enabled or disabled based on the value of its <see cref="ADS_UF_ACCOUNTDISABLE"/> property.</returns>
+    ''' <remarks></remarks>
     Public Function DSAccountIsEnabled(dsDomainDnsName As String, accName As String) As Boolean
         DynaLog.LogMessage("Preparing to determine if the specified account is enabled...")
         DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
@@ -277,6 +283,142 @@ Module DomainServicesModule
 
         DynaLog.LogMessage("Account Enabled? (Bitwise-AND): " & enabledStatus)
         Return enabledStatus
+    End Function
+
+    ''' <summary>
+    ''' Determines whether an account in a domain requires a password
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
+    ''' <returns>Whether the account requires a password or not based on the value of its <see cref="ADS_UF_PASSWD_NOTREQD"/> property.</returns>
+    ''' <remarks>
+    ''' ADS_UF_PASSWD_NOTREQD must be enabled by adding 0x20 (32) to the sum of flags in a user's userAccountControl attribute. This can be
+    ''' done via Active Directory Users and Computers (dsa.msc) by enabling all advanced features first, then selecting a user and then selecting the 
+    ''' "Attribute Editor" tab.
+    ''' </remarks>
+    Public Function DSAccountRequiresPassword(dsDomainDnsName As String, accName As String) As Boolean
+        DynaLog.LogMessage("Preparing to determine if the specified account requires a password...")
+        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
+        DynaLog.LogMessage("- SAM account name: " & accName)
+        If dsDomainDnsName = "" Or accName = "" Then Return False
+        Dim passwdReqdStatus As Boolean = False
+
+        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
+        Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
+
+        Try
+            DynaLog.LogMessage("Beginning to search user...")
+            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
+            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
+            searcher.Filter = String.Format("(&(objectCategory=user)(objectClass=user)(samAccountName={0}))", accName)
+
+            For Each result As SearchResult In searcher.FindAll()
+                DynaLog.LogMessage("Getting a directory entry of the user...")
+                Dim dirEntry As DirectoryEntry = result.GetDirectoryEntry()
+                If dirEntry.NativeGuid = "" Then Return False
+
+                passwdReqdStatus = Not Convert.ToBoolean(CInt(dirEntry.Properties("userAccountControl").Value) And ADS_UF_PASSWD_NOTREQD)
+            Next
+            searcher.Dispose()
+        Catch ex As Exception
+
+        End Try
+
+        DynaLog.LogMessage("Account Enabled? (Bitwise-AND): " & passwdReqdStatus)
+        Return passwdReqdStatus
+    End Function
+
+    ''' <summary>
+    ''' Determines whether an account exists in a domain.
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
+    ''' <returns>Whether the account exists in the domain</returns>
+    ''' <remarks></remarks>
+    Public Function DSAccountExists(dsDomainDnsName As String, accName As String) As Boolean
+        DynaLog.LogMessage("Preparing to determine if the specified account exists...")
+        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
+        DynaLog.LogMessage("- SAM account name: " & accName)
+        If dsDomainDnsName = "" Or accName = "" Then Return False
+        Dim dsaExists As Boolean = False
+
+        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
+        Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
+
+        Try
+            DynaLog.LogMessage("Beginning to search user...")
+            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
+            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
+            searcher.Filter = String.Format("(&(objectCategory=user)(objectClass=user)(samAccountName={0}))", accName)
+            dsaExists = searcher.FindAll().Cast(Of SearchResult)().Any()
+            searcher.Dispose()
+        Catch ex As Exception
+
+        End Try
+
+        Return dsaExists
+    End Function
+
+    ''' <summary>
+    ''' Gets the Security Account Manager (SAM) account name of a user account given its Lightweight Directory Access Protocol (LDAP) path
+    ''' in the domain.
+    ''' </summary>
+    ''' <param name="UserLdapPath">The LDAP path of the user to query</param>
+    ''' <returns>The SAM account name</returns>
+    ''' <remarks></remarks>
+    Public Function DSGetSamNameFromUserLdapPath(UserLdapPath As String) As String
+        DynaLog.LogMessage("Getting SAM account name of selected user...")
+        DynaLog.LogMessage("- User LDAP: " & UserLdapPath)
+
+        Dim SamName As String = ""
+
+        Try
+            Dim userDE As New DirectoryEntry(UserLdapPath)
+            SamName = userDE.Properties("sAMAccountName").Value
+        Catch ex As Exception
+
+        End Try
+
+        Return SamName
+    End Function
+
+    ''' <summary>
+    ''' Gets the User Principal Name (UPN) of a user account given its Security Account Manager (SAM) account name
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="samAccName">The SAM account name of a user</param>
+    ''' <returns>The User Principal Name of the specified user account</returns>
+    ''' <remarks>User Principal Names are used from Windows 2000 onwards.</remarks>
+    Public Function DSGetUserPrincipalNameFromSamAccountName(dsDomainDnsName As String, samAccName As String) As String
+        DynaLog.LogMessage("Getting UPN from SAM Name...")
+        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
+        DynaLog.LogMessage("- SAM account name: " & samAccName)
+        If samAccName = "" Then Return ""
+        Dim nt5_UPN As String = ""
+
+        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
+        Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
+
+        Try
+            DynaLog.LogMessage("Beginning to search user...")
+            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
+            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
+            searcher.Filter = String.Format("(&(objectCategory=user)(objectClass=user)(samAccountName={0}))", samAccName)
+
+            For Each result As SearchResult In searcher.FindAll()
+                DynaLog.LogMessage("Getting a directory entry of the user...")
+                Dim dirEntry As DirectoryEntry = result.GetDirectoryEntry()
+                If dirEntry.NativeGuid = "" Then Return False
+
+                nt5_UPN = dirEntry.Properties("userPrincipalName").Value
+            Next
+            searcher.Dispose()
+        Catch ex As Exception
+
+        End Try
+
+        DynaLog.LogMessage("Resulting UPN: " & nt5_UPN)
+        Return nt5_UPN
     End Function
 
 End Module

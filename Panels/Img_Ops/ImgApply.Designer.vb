@@ -25,9 +25,6 @@ Partial Class ImgApply
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.UseMountedImgBtn = New System.Windows.Forms.Button()
@@ -45,11 +42,8 @@ Partial Class ImgApply
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -64,9 +58,8 @@ Partial Class ImgApply
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.Win10Title.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -112,39 +105,6 @@ Partial Class ImgApply
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
         Me.Cancel_Button.Text = "Cancel"
-        '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.PictureBox1)
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(1008, 48)
-        Me.Win10Title.TabIndex = 5
-        Me.Win10Title.Visible = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.apply_img
-        Me.PictureBox1.Location = New System.Drawing.Point(964, 8)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(158, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Apply an image"
         '
         'GroupBox1
         '
@@ -209,7 +169,7 @@ Partial Class ImgApply
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 125)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(659, 182)
+        Me.GroupBox2.Size = New System.Drawing.Size(659, 201)
         Me.GroupBox2.TabIndex = 6
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
@@ -316,51 +276,24 @@ Partial Class ImgApply
         '
         'GroupBox3
         '
-        Me.GroupBox3.Controls.Add(Me.RadioButton2)
-        Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Controls.Add(Me.Button3)
+        Me.GroupBox3.Controls.Add(Me.Label5)
         Me.GroupBox3.Controls.Add(Me.Button2)
-        Me.GroupBox3.Controls.Add(Me.TextBox3)
         Me.GroupBox3.Controls.Add(Me.TextBox2)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 313)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 332)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(659, 81)
+        Me.GroupBox3.Size = New System.Drawing.Size(659, 62)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Destination"
         '
-        'RadioButton2
+        'Label5
         '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(19, 51)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(110, 17)
-        Me.RadioButton2.TabIndex = 3
-        Me.RadioButton2.Text = "Destination drive:"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(19, 24)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(129, 17)
-        Me.RadioButton1.TabIndex = 3
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Destination directory:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.Enabled = False
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(568, 48)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 23)
-        Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Specify..."
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(19, 26)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(111, 13)
+        Me.Label5.TabIndex = 4
+        Me.Label5.Text = "Destination directory:"
         '
         'Button2
         '
@@ -371,14 +304,6 @@ Partial Class ImgApply
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'TextBox3
-        '
-        Me.TextBox3.Enabled = False
-        Me.TextBox3.Location = New System.Drawing.Point(141, 49)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(421, 21)
-        Me.TextBox3.TabIndex = 1
         '
         'TextBox2
         '
@@ -502,6 +427,20 @@ Partial Class ImgApply
         Me.FolderBrowserDialog1.Description = "Please specify the destination directory to apply the image to:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
+        'ImageTaskHeader1
+        '
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Global.DISMTools.My.Resources.Resources.apply_img
+        Me.ImageTaskHeader1.ItemText = "Apply an image"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
+        Me.ImageTaskHeader1.TabIndex = 7
+        '
         'ImgApply
         '
         Me.AcceptButton = Me.OK_Button
@@ -509,11 +448,11 @@ Partial Class ImgApply
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 441)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -524,9 +463,6 @@ Partial Class ImgApply
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Apply an image"
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -547,9 +483,6 @@ Partial Class ImgApply
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents UseMountedImgBtn As System.Windows.Forms.Button
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
@@ -570,10 +503,6 @@ Partial Class ImgApply
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents Button1 As System.Windows.Forms.Button
@@ -586,5 +515,7 @@ Partial Class ImgApply
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
 
 End Class

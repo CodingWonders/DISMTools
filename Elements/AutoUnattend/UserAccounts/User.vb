@@ -21,6 +21,14 @@ Namespace Elements
         Public Property Name As String
 
         ''' <summary>
+        ''' The display name of the account
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property DisplayName As String
+
+        ''' <summary>
         ''' The password of the account
         ''' </summary>
         ''' <value></value>
@@ -39,13 +47,22 @@ Namespace Elements
         Public Sub New(enabled As Boolean, name As String, password As String, group As UserGroup)
             Me.Enabled = enabled
             Me.Name = name
+            Me.DisplayName = name
+            Me.Password = password
+            Me.Group = group
+        End Sub
+
+        Public Sub New(enabled As Boolean, name As String, displayName As String, password As String, group As UserGroup)
+            Me.Enabled = enabled
+            Me.Name = name
+            Me.DisplayName = displayName
             Me.Password = password
             Me.Group = group
         End Sub
 
         Public Overrides Function ToString() As String
             ' You thought that I was going to leak user passwords, hackers?
-            Return "User, with name: " & Quote & Me.Name & Quote & "; Enabled: " & If(Me.Enabled, "Yes", "No") & "; Password: " & Quote & New String("*", Password.Length) & Quote & "; Group: " & Me.Group.ToString()
+            Return "User, with name: " & Quote & Me.Name & Quote & "; Display Name: " & Quote & Me.DisplayName & Quote & "; Enabled: " & If(Me.Enabled, "Yes", "No") & "; Password: " & Quote & New String("*", Password.Length) & Quote & "; Group: " & Me.Group.ToString()
         End Function
 
     End Class

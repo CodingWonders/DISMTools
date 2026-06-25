@@ -8,7 +8,7 @@
 	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools?display_name=release&label=Latest%20Version" /></a>
 	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
 	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
-	<a href="https://discord.gg/hJJTrMNP5p"><img src="https://dcbadge.limes.pink/api/server/https://discord.gg/hJJTrMNP5p?theme=default-inverted&style=for-the-badge" /></a>
+	<a href="https://discord.gg/5TxEmKXNwu"><img src="https://dcbadge.limes.pink/api/server/https://discord.gg/hJJTrMNP5p?theme=default-inverted&style=for-the-badge" /></a>
 </p>
 <hr>
 
@@ -34,7 +34,7 @@ Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects st
 DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/project_sizes.png" />
+	<img src="./res/project_sizes.png" />
 </p>
 
 The program also supports setting and removing file associations for projects with the click of a button (only on portable installations), so you can load your projects instantly by double-clicking them. You can also **copy your installed deployment tools** to your projects, allowing you to use those anywhere you take them.
@@ -51,65 +51,62 @@ Unlike other user interfaces for DISM that use either the DISM API or the DISM e
 
 DISMTools isn't just a front-end for DISM, but an advanced one. As you perform tasks with your images and installations, you're presented with rich information and functionality. Here are some examples:
 
-- **Rich information during AppX package addition.** When adding an AppX package, you'll see rich information and, in most cases, the main Store logo asset. You can also add encrypted application packages to active installations, and configure stub package preferences, for full AppX package management:
+- **Automatic detection of side-by-side (SxS) component sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/rich_appx_info.gif" />
-</p>
-
-- **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/app_installer_downloader.png" />
-</p>
-
-- **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/group_policy_caps.gif" />
+	<img src="./res/group_policy_caps.gif" />
 </p>
 
 - **Easily create configuration lists.** With the *DISM Configuration List Editor* you can quickly create your configuration list to exclude certain items during operations like capturing an image:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/config_list_editor.png" />
+	<img src="./res/config_list_editor.png" />
 </p>
 
 - **Quickly manage all your mounted images in one interface.** The mounted image manager lets you perform basic image management tasks with your mounted images:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/mounted_image_manager.png" />
+	<img src="./res/mounted_image_manager.png" />
 </p>
 
 You can also get and save image file information using the manager:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_quick_action.png" />
+	<img src="./res/img_info_quick_action.png" />
 </p>
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_saver_quick_action.png" />
+	<img src="./res/img_info_saver_quick_action.png" />
 </p>
 
-- **Generate and print image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference as a Markdown file. You can also see your Markdown report in HTML form thanks to Markdig:
+- **Generate image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference as a Markdown file. You can also see your Markdown report in HTML form thanks to Markdig:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/info_report_viewer.png" />
+	<img src="./res/info_report_viewer.png" />
 </p>
 
 - **Generate unattended answer files with ease.** Using the unattended answer file creation wizard, powered by the answer file generator from Christoph Schneegans, you can create your files by simply following the pages:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/autounattend_wizard.png" />
+	<img src="./res/autounattend_wizard.png" />
+</p>
+
+- **Comprehensive Active Directory support.** Easily make target machines join your domain with the built-in AD DS domain join features. Configure DNS parameters and test resolutions for the domain suffix, and pick from any account object in your domain:
+
+<p align="center">
+	<img src="./res/adds_domain_join.gif" />
 </p>
 
 - **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily. You can also use your unattended answer files to test them, or to speed up the installation process by removing tedious steps from the out-of-box experience:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/iso_creator.png" />
+	<img src="./res/iso_creator_img_picker.png" />
 </p>
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/iso_creator_installation.png" />
+	<img src="./res/iso_creator.png" />
+</p>
+<p align="center">
+	<img src="./res/iso_creator_installation.png" />
 </p>
 
 > [!NOTE]
@@ -128,7 +125,7 @@ I'm not kidding. Ask Microsoft Copilot about free, open-source DISM GUIs and it 
 I did this on some of my systems and in test VMs, and it *does* deliver on that:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/copilot_bias_magnet_why_the_heck_microsoft.png" />
+	<img src="./res/copilot_bias_magnet_why_the_heck_microsoft.png" />
 </p>
 
 *Now, if the WDSI pieces of s... stop flagging my program as a false positive, given how much Microsoft seems to like this, I will be happier and I won't have to upload it to the WDSI portal every time only for them to then tell me that no threats are detected.*
@@ -147,33 +144,57 @@ The following actions are supported by DISMTools:
   - Image mounting and unmounting
   - Image servicing session reloads
   - Image index switches
-  - WIM -> ESD and viceversa conversion
+  - WIM <-> ESD conversion
   - SWM file merger
   - Component cleanup
   - Image splitting
   - Appending changes to Windows images
   - Exporting Windows images to new image files
+  - Image optimization
+- FFU image management
+  - FFU image application and capture
+  - FFU image splitting and optimization
+  - FFU image information retrieval
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
 - AppX package servicing
-  - Application addition and removal
+  - Provisioned application addition and removal
+  - App Installer package downloader
 - Capabilities
   - Capability addition and removal
 - Drivers
   - Driver addition and removal
+  - Driver import and export
 - Provisioning packages
   - Add provisioning packages to an image
 - Languages and regional servicing
   - Setting keyboard layered drivers
+- Edition management
+  - Upgrading the Windows edition of an image
+  - Setting a product key on an image
+- OS uninstall window
+  - Configuring the OS uninstall window
+- Service management
+  - Viewing and modifying services in an image (start type, deletion)
+- Registry management
+  - Loading, browsing, and editing offline registry hives
+- Environment variable management
+  - Viewing and modifying machine and user environment variables in an image
 - Unattended answer files
   - Creating and managing unattended answer files
   - Applying unattended answer files
+- ISO / testing environment
+  - Creating bootable ISO files
+  - Setting up a new testing environment (virtual machine)
+  - Customizing Windows PE in ISOs
+  - Copying install images to Windows Deployment Services (WDS)
 - Other
   - Get complete information of an image
+  - Get and save image information reports (Markdown/HTML)
   - Using the project's or program's scratch directory
   - Get information of packages, features, AppX packages, capabilities, and drivers
-  - Configure Windows PE settings
+  - Configure Windows PE settings (scratch space, target path)
   
 ## Unsupported actions
 
@@ -275,9 +296,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 ## Testing the latest
 
-We continue the development of the next version in the Preview branch. To go to it, select "dt_pre_0.7.3" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
+We continue the development of the next version in the Preview branch. To go to it, select "dt_pre_0.8" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-**NOTE:** this branch contains release candidate builds of DISMTools 0.7.3, and will be deleted once this version gets published as a stable release
+**NOTE:** this branch contains release candidate builds of DISMTools 0.8, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

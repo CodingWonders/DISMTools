@@ -1,9 +1,10 @@
 ﻿Language: PowerShell
 Name: Invoke Windows Utility configuration
 Description: This script configures a target system using a configuration file exported from the Windows Utility.
+Customizable: No
 
 # Export your WinUtil configuration file to "winutil-config.json" on the root of the target
 # Windows installation.
 if ((Test-Connection -ComputerName "christitus.com" -Count 1) -and (Test-Path -Path "$env:SYSTEMDRIVE\winutil-config.json" -PathType Leaf)) {
-    iex "& { $(irm christitus.com/win) } -Config `"$env:SYSTEMDRIVE\winutil-config.json`" -Run"
+    & ([ScriptBlock]::Create((irm "https://christitus.com/win"))) -Config "$env:SYSTEMDRIVE\winutil-config.json"
 }

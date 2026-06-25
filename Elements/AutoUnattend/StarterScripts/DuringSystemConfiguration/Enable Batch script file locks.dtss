@@ -1,0 +1,20 @@
+﻿Language: Batch
+Name: Enable Batch script file locks
+Description: This script enables file locks in Batch scripts to keep them from being modified externally.  
+Customizable: No
+
+@echo off
+
+REM This script enables file locks in Batch scripts. Without these locks, Batch scripts (such
+REM as this one) can be easily modified externally. The interpreter will then perform the modified
+REM set of commands as opposed to the ones that were originally in the script.
+
+REM This only works with the latest builds of Windows 11 25H2/26H2 (26220, 26300).
+
+REM NOTE: if your scripts need to be modified by either you or themselves during execution, do not
+REM use this Starter Script. If this value is manually set, all CMD windows need to be reopened.
+
+REM Learn more here:
+REM https://blogs.windows.com/windows-insider/2026/02/27/announcing-windows-11-insider-preview-build-26220-7934-beta-channel/
+
+reg add "HKLM\SOFTWARE\Microsoft\Command Processor" /f /v LockBatchFilesWhenInUse /t REG_DWORD /d 1

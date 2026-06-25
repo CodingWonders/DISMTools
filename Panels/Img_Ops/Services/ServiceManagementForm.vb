@@ -2,7 +2,8 @@
 
 Public Class ServiceManagementForm
 
-    Dim ServiceList As New List(Of WindowsService)
+    Dim ServiceList As New List(Of WindowsService),
+        ModifiedServiceList As New List(Of WindowsService)
     Dim ServiceStartTypes() As String = New String() {"Boot Loader", "I/O System", "Automatic", "Manual", "Disabled"}
 
     Public Event ServiceSaveReported(current As Integer, count As Integer)
@@ -25,6 +26,9 @@ Public Class ServiceManagementForm
 
         Dim selectedService As WindowsService = ServiceList.ElementAtOrDefault(Index)
         If selectedService Is Nothing Then Exit Sub
+
+        DeleteServiceBtn.Enabled = Not selectedService.MarkedForDeletion
+        RestoreServiceBtn.Enabled = selectedService.MarkedForDeletion
 
         TextBox1.Text = selectedService.Name
         TextBox2.Text = selectedService.DisplayName
@@ -149,10 +153,12 @@ Public Class ServiceManagementForm
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         ListView4.Size = New Size(WindowHelper.ScaleLogical(ListView4.Width), WindowHelper.ScaleLogical(ListView4.Height))
 
+        ModifiedServiceList.Clear()
         isModified = False
 
         DynaLog.DisableLogging()
@@ -181,6 +187,9 @@ Public Class ServiceManagementForm
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        DeleteServiceBtn.Enabled = ListView1.SelectedItems.Count = 1
+        RestoreServiceBtn.Enabled = ListView1.SelectedItems.Count = 1
+
         If ListView1.SelectedItems.Count = 1 Then
             DisplayServiceInformation(ListView1.FocusedItem.Index)
         End If
@@ -210,7 +219,17 @@ Public Class ServiceManagementForm
                 End If
             End If
 
-            ServiceList(selectedIndex).StartType = ComboBox1.SelectedIndex
+            ' Hold a copy of the service so we can queue it for modification
+            Dim newService As WindowsService = ServiceList(selectedIndex)
+            newService.StartType = ComboBox1.SelectedIndex
+
+            ' Store it in the modification queue, or update it
+            If ModifiedServiceList.Any(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase)) Then
+                Dim svcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase))
+                ModifiedServiceList(svcIndex) = newService
+            Else
+                ModifiedServiceList.Add(newService)
+            End If
 
             ' We don't have to uncheck the box, we simply disable it, if it's not automatic
             CheckBox1.Enabled = (ComboBox1.SelectedIndex = WindowsService.ServiceStartType.Automatic)
@@ -229,9 +248,9 @@ Public Class ServiceManagementForm
         isBusy = True
         WindowHelper.DisableCloseCapability(Handle)
         If Await Task.Run(Function()
-                              Return WindowsServiceHelper.SaveServiceInformation(mntPath, ServiceList, Sub(current, count)
-                                                                                                           ReportServiceSave(current, count)
-                                                                                                       End Sub)
+                              Return WindowsServiceHelper.SaveServiceInformation(mntPath, ModifiedServiceList, Sub(current, count)
+                                                                                                                   ReportServiceSave(current, count)
+                                                                                                               End Sub)
                           End Function) Then
             MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
                    "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
@@ -276,6 +295,7 @@ Public Class ServiceManagementForm
         NoServiceSelectedPanel.Visible = True
         ListView1.Items.Clear()
 
+        ModifiedServiceList.Clear()
         isModified = False
 
         DynaLog.DisableLogging()
@@ -304,5 +324,66 @@ Public Class ServiceManagementForm
 
         RegisteredServiceHostGroupsDialog.GroupInformation = groups
         RegisteredServiceHostGroupsDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub ReportServiceInfoBtn_Click(sender As Object, e As EventArgs) Handles ReportServiceInfoBtn.Click
+        If ServiceInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Preparing to save image information...")
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ServiceInfoSFD.FileName
+            Dim CurrentImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(mountedImage) mountedImage.ImageMountDirectory = MainForm.MountDir)
+            ' If it's still nothing then we give up.
+            If CurrentImage Is Nothing Then Exit Sub
+            DynaLog.LogMessage("Image to get information about: " & CurrentImage.ImageFile)
+            ImgInfoSaveDlg.SourceImage = CurrentImage.ImageFile
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = MainForm.AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
+            ImgInfoSaveDlg.SaveTask = 10
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.ShowDialog(Me)
+            InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
+        If ListView1.SelectedItems.Count = 1 Then
+            If MessageBox.Show("Continuing with the removal of this service can cause the target system to become either unstable or unbootable. Do you want to continue?",
+                               "Remove service", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
+
+            Dim selectedIndex As Integer = ListView1.FocusedItem.Index
+
+            ' Hold a copy of the service so we can queue it for modification
+            Dim newService As WindowsService = ServiceList(selectedIndex)
+            newService.MarkedForDeletion = True
+
+            ' Store it in the modification queue, or update it
+            If ModifiedServiceList.Any(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase)) Then
+                Dim svcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase))
+                ModifiedServiceList(svcIndex) = newService
+            Else
+                ModifiedServiceList.Add(newService)
+            End If
+
+            MessageBox.Show("The service has been successfully scheduled for deletion. The removal of this service will take place when you save the changes. " &
+                            "Should you ever need this service back, please import the service information backup that will be made during the save process.",
+                            "Remove service", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Force refresh of service information
+            DisplayServiceInformation(ListView1.FocusedItem.Index)
+        End If
+    End Sub
+
+    Private Sub RestoreServiceBtn_Click(sender As Object, e As EventArgs) Handles RestoreServiceBtn.Click
+        If ListView1.SelectedItems.Count = 1 Then
+            ServiceList(ListView1.FocusedItem.Index).MarkedForDeletion = False
+
+            ' Force refresh of service information
+            DisplayServiceInformation(ListView1.FocusedItem.Index)
+        End If
     End Sub
 End Class

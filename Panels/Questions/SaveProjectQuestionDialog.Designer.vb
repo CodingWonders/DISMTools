@@ -27,7 +27,6 @@ Partial Class SaveProjectQuestionDialog
         Me.No_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -86,23 +85,12 @@ Partial Class SaveProjectQuestionDialog
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(238, Byte), Integer), CType(CType(238, Byte), Integer), CType(CType(238, Byte), Integer))
-        Me.Panel1.Controls.Add(Me.CheckBox1)
         Me.Panel1.Controls.Add(Me.TableLayoutPanel1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel1.Location = New System.Drawing.Point(0, 77)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(496, 56)
         Me.Panel1.TabIndex = 1
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(16, 21)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(190, 17)
-        Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "Save changes and unmount image"
-        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -145,7 +133,6 @@ Partial Class SaveProjectQuestionDialog
         Me.Text = "DISMTools"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -156,6 +143,5 @@ Partial Class SaveProjectQuestionDialog
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class

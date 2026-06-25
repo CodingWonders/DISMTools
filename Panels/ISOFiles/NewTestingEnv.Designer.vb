@@ -23,8 +23,6 @@ Partial Class NewTestingEnv
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewTestingEnv))
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -47,7 +45,7 @@ Partial Class NewTestingEnv
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.OptionsPanel = New System.Windows.Forms.Panel()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.Win10Title.SuspendLayout()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.Panel1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.ProgressContainer.SuspendLayout()
@@ -55,27 +53,6 @@ Partial Class NewTestingEnv
         Me.ISOProgressPanel.SuspendLayout()
         Me.OptionsPanel.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(784, 48)
-        Me.Win10Title.TabIndex = 7
-        Me.Win10Title.Visible = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(282, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Create a testing environment"
         '
         'LinkLabel1
         '
@@ -304,27 +281,39 @@ Partial Class NewTestingEnv
         Me.BackgroundWorker1.WorkerReportsProgress = True
         Me.BackgroundWorker1.WorkerSupportsCancellation = True
         '
+        'ImageTaskHeader1
+        '
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Nothing
+        Me.ImageTaskHeader1.ItemText = "Create a testing environment"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(784, 48)
+        Me.ImageTaskHeader1.TabIndex = 23
+        '
         'NewTestingEnv
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(784, 361)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.OptionsPanel)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.OK_Button)
         Me.Controls.Add(Me.Cancel_Button)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MaximizeBox = False
         Me.Name = "NewTestingEnv"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Create a testing environment"
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.ProgressContainer.ResumeLayout(False)
@@ -335,8 +324,6 @@ Partial Class NewTestingEnv
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
@@ -359,4 +346,5 @@ Partial Class NewTestingEnv
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents OptionsPanel As System.Windows.Forms.Panel
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
 End Class

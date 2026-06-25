@@ -151,6 +151,7 @@
 ' 995                   Get-Indexes
 ' 996                   Switch-Indexes
 ' 997                   Remount-ReadWrite
+' 998                   Replace-FFU
 
 
 Imports Microsoft.VisualBasic.ControlChars
@@ -211,6 +212,8 @@ Public Class ProgressPanel
 
     Dim ImgVersion As Version
 
+    Private PreventSystemFromSleeping As Boolean
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -246,6 +249,11 @@ Public Class ProgressPanel
     Public AppendixReparsePt As Boolean                     ' Determine whether to use the reparse point tag fix
     Public AppendixCaptureExtendedAttribs As Boolean        ' Determine whether to capture extended attributes
 
+    ' OperationNum: 2
+    Public FFUApplicationSourceImg As String                ' String which determines which image to apply
+    Public FFUApplicationDestDrive As String                ' Gather destination disk ID
+    Public FFUApplicationSFUPattern As String               ' Spanned/Split WIM (SWM) file pattern string. Usually "install*.sfu", so don't use an array
+
     ' OperationNum: 3
     Public ApplicationSourceImg As String                   ' String which determines which image to apply
     Public ApplicationIndex As Integer                      ' Index to apply to destination
@@ -258,7 +266,13 @@ Public Class ProgressPanel
     Public ApplicationUseWimBoot As Boolean                 ' Determine whether to append image with WIMBoot configuration
     Public ApplicationCompactMode As Boolean                ' Determine whether to apply image in Compact mode (Win10+ only)
     Public ApplicationUseExtAttr As Boolean                 ' Determine whether to apply extended attributes (Win10 1607+ only)
-    Public ApplicationDestDrive As String                   ' Gather destination disk ID
+
+    ' OperationNum: 5
+    Public FFUCaptureSourceDrive As String                  ' Source drive to be captured
+    Public FFUCaptureDestinationFfuImage As String          ' Destination FFU image
+    Public FFUCaptureName As String                         ' Captured FFU name
+    Public FFUCaptureDescription As String                  ' Captured FFU description (optional)
+    Public FFUCaptureCompressType As Integer                ' Compression used for the capture (0: none; 1: default)
 
     ' OperationNum: 6
     Public CaptureSourceDir As String                       ' Source directory to be captured
@@ -311,8 +325,22 @@ Public Class ProgressPanel
     Public isOptimized As Boolean                           ' Determine whether image will be optimized to mount in a shorter time
     Public isIntegrityTested As Boolean                     ' Determine whether the integrity of the image should be tested before mounting the image
 
+    ' OperationNum: 16
+    Public FFUOptimizationSource As String                  ' Source image file to optimize
+    Public FFUOptimizationCustomPartitionNum As Integer     ' The number of the partition to optimize. If set to 0, the default one will be used
+
+    ' OperationNum: 17
+    Public OptimizationSource As String                     ' Source image file to optimize
+    Public OptimizationMode As Integer                      ' The mode with which the image must be optimized (0: boot; 1: wimboot)
+
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
+
+    ' OperationNum: 19
+    Public SFUSplitSourceFile As String                     ' Source image file to be split into SFU files
+    Public SFUSplitFileSize As Integer                      ' The maximum size in MB for each created image
+    Public SFUSplitTargetFile As String                     ' The path of the SFU files
+    Public SFUSplitCheckIntegrity As Boolean                ' Checks the integrity of the source image before splitting it
 
     ' OperationNum: 20
     Public SWMSplitSourceFile As String                     ' Source image file to be split into SWM files
@@ -322,7 +350,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
-    Public ProgramIsBeingClosed As Boolean
     Public UMountLocalDir As Boolean
     Public UMountOp As Integer                              ' 0: commit, then unmount; 1: unmount without saving
     Public RandomMountDir As String                         ' Don't know about that mount dir, other that it was not loaded
@@ -484,6 +511,9 @@ Public Class ProgressPanel
 
     ' OperationNum: 77
     Public drvExportTarget As String                        ' Path the drivers will be exported to
+    Public drvExportAllDrvs As Boolean                      ' Determines whether to export all drivers, or drivers based on the class name
+    Public drvExportSpecificClassName As String             ' The class name that the drivers to export have set
+    Public drvExportWin7Mode As Boolean                     ' Run driver exports in Windows 7 mode
 
     ' OperationNum: 78
     Public ImportSourceInt As Integer                       ' The import source
@@ -494,6 +524,7 @@ Public Class ProgressPanel
 
     ' OperationNum: 79
     Public UnattendedFile As String                         ' The path of the unattended answer file
+    Public UnattendedCopyToSysprep As Boolean               ' Determines whether to copy the unattended answer file to Sysprep
 
     ' OperationNum: 83
     Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
@@ -528,6 +559,10 @@ Public Class ProgressPanel
     ' OperationNum: 997
     Public RWRemountSourceImg As String                     ' Source image to remount with R/W permissions
 
+    ' OperationNum: 998
+    Public FFUReplaceSourceFFU As String                    ' Path to source FFU file that will act as a replacement of the destination
+    Public FFUReplaceDestinationFFU As String               ' Path to destination FFU file that will be replaced by the source FFU
+
     ' Miscellaneous error variables
     Dim PackageErrorCodes As New List(Of String)
     Dim FeatureErrorCodes As New List(Of String)
@@ -543,6 +578,8 @@ Public Class ProgressPanel
     Private Event AllTasksLogReported(AllTasksMessage As String)
     Private Event CurrTaskLogReported(CurrTaskMessage As String)
     Private Event LogActivityReported(LogMessage As String)
+
+    Private ReferenceImage As WindowsImage
 
     Private Sub OnAllTasksLogReported(AllTasksMessage As String) Handles Me.AllTasksLogReported
         allTasks.Text = AllTasksMessage
@@ -586,7 +623,6 @@ Public Class ProgressPanel
         If Cancel_Button.Text = "Cancel" Or Cancel_Button.Text = "Cancelar" Or Cancel_Button.Text = "Annulla" Then
             ProgressBW.CancelAsync()
         ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
-            MainForm.ToolStripButton4.Visible = False
             Close()
         End If
     End Sub
@@ -866,7 +902,7 @@ Public Class ProgressPanel
         Return targetImage
     End Function
 
-    Sub RunOps(opNum As Integer)
+    Private Sub RunOps(opNum As Integer)
         DynaLog.LogMessage("Running operations...")
         DynaLog.LogMessage("Operation number: " & opNum)
         DynaLog.LogMessage("Setting DISM program and grabbing version information...")
@@ -886,8 +922,12 @@ Public Class ProgressPanel
                 CreateProject()
             Case 1
                 AppendImage()
+            Case 2
+                ApplyFfuImage()
             Case 3
                 ApplyImage()
+            Case 5
+                CaptureFfuImage()
             Case 6
                 CaptureImage()
             Case 7
@@ -900,8 +940,14 @@ Public Class ProgressPanel
                 ExportImage()
             Case 15
                 MountImage()
+            Case 16
+                OptimizeFfuImage()
+            Case 17
+                OptimizeImage()
             Case 18
                 RemountImage()
+            Case 19
+                SplitFfuImage()
             Case 20
                 SplitImage()
             Case 21
@@ -958,6 +1004,8 @@ Public Class ProgressPanel
                 MergeSWM()
             Case 996
                 SwitchIndexes()
+            Case 998
+                ReplaceFfuFile()
         End Select
         CurrentPB.Value = CurrentPB.Maximum
         AllPB.Value = AllPB.Maximum
@@ -1233,12 +1281,109 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub ApplyFfuImage()
+        DynaLog.LogMessage("Applying specified FFU image to the specified application drive...")
+        DynaLog.LogMessage("- Image to apply: " & Quote & FFUApplicationSourceImg & Quote)
+        DynaLog.LogMessage("- Application drive: " & Quote & FFUApplicationDestDrive & Quote)
+        DynaLog.LogMessage("- SFU name pattern: " & Quote & FFUApplicationSFUPattern & Quote)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Applying image..."
+                        currentTask.Text = "Applying specified image to the specified destination..."
+                    Case "ESN"
+                        allTasks.Text = "Aplicando imagen..."
+                        currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+                    Case "FRA"
+                        allTasks.Text = "Application de l'image en cours..."
+                        currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Aplicar imagem..."
+                        currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
+                    Case "ITA"
+                        allTasks.Text = "Applicazione dell'immagine..."
+                        currentTask.Text = "Applicazione immagine specificata alla destinazione specificata..."
+                End Select
+            Case 1
+                allTasks.Text = "Applying image..."
+                currentTask.Text = "Applying specified image to the specified destination..."
+            Case 2
+                allTasks.Text = "Aplicando imagen..."
+                currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+            Case 3
+                allTasks.Text = "Application de l'image en cours..."
+                currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
+            Case 4
+                allTasks.Text = "Aplicar imagem..."
+                currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
+            Case 5
+                allTasks.Text = "Applicazione dell'immagine..."
+                currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
+        End Select
+        LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
+                           "- Source image file: " & ApplicationSourceImg & CrLf &
+                           "- Index to apply: " & ApplicationIndex & CrLf &
+                           "- Target directory: " & ApplicationDestDir & CrLf)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' It seems like it's not available :(
+                    Case Is >= 2
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-ffu /imagefile=" & Quote & FFUApplicationSourceImg & Quote
+                End Select
+            Case 10
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-ffu /imagefile=" & Quote & FFUApplicationSourceImg & Quote
+        End Select
+        ' Detect additional options and set CommandArgs
+        CommandArgs &= " /applydrive=" & Quote & FFUApplicationDestDrive & Quote
+        If FFUApplicationSFUPattern = "" Then
+            LogView.AppendText("- Split FFU (SFU) file pattern: not specified/not using SFU file" & CrLf)
+        Else
+            LogView.AppendText("- Split FFU (SFU) file pattern: " & FFUApplicationSFUPattern & CrLf)
+            CommandArgs &= " /sfufile=" & FFUApplicationSFUPattern
+        End If
+        RunProcess(DismProgram, CommandArgs)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+        End If
+    End Sub
+
     Private Sub ApplyImage()
         DynaLog.LogMessage("Applying specified Windows image to the specified application directory...")
         DynaLog.LogMessage("- Image to apply: " & Quote & ApplicationSourceImg & Quote)
         DynaLog.LogMessage("- Image index: " & ApplicationIndex)
-        DynaLog.LogMessage("- Application directory: " & Quote & If(ApplicationDestDrive <> "", ApplicationDestDrive, ApplicationDestDir) & Quote)
-        If ApplicationDestDrive <> "" Then DynaLog.LogMessage("  A drive has been specified")
+        DynaLog.LogMessage("- Application directory: " & Quote & ApplicationDestDir & Quote)
         DynaLog.LogMessage("- Verify image integrity? " & If(ApplicationCheckInt, "Yes", "No"))
         DynaLog.LogMessage("- Check for file errors? " & If(ApplicationVerify, "Yes", "No"))
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(ApplicationReparsePt, "Yes", "No"))
@@ -1298,11 +1443,7 @@ Public Class ProgressPanel
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
         End Select
         ' Detect additional options and set CommandArgs
-        If ApplicationDestDrive = "" Then
-            CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
-        Else
-            CommandArgs &= " /applydrive=" & ApplicationDestDrive
-        End If
+        CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
         If ApplicationCheckInt Then
             LogView.AppendText("- Verify image integrity? Yes" & CrLf)
             CommandArgs &= " /checkintegrity"
@@ -1351,11 +1492,113 @@ Public Class ProgressPanel
         Else
             LogView.AppendText("- Apply using extended attributes? No" & CrLf)
         End If
-        If ApplicationDestDrive = "" Then
-            LogView.AppendText("- Destination drive ID: not specified/not applying on drive" & CrLf)
+        RunProcess(DismProgram, CommandArgs)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
         Else
-            LogView.AppendText("- Destination drive ID: " & ApplicationDestDrive & CrLf)
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
+    End Sub
+
+    Private Sub CaptureFfuImage()
+        DynaLog.LogMessage("Capturing physical drive to the target image...")
+        DynaLog.LogMessage("- Source drive: " & FFUCaptureSourceDrive)
+        DynaLog.LogMessage("- Destination image: " & Quote & FFUCaptureDestinationFfuImage & Quote)
+        DynaLog.LogMessage("- Destination image name: " & Quote & FFUCaptureName & Quote)
+        DynaLog.LogMessage("- Destination image description: " & Quote & FFUCaptureDescription & Quote)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Capturing image..."
+                        currentTask.Text = "Capturing specified directory into a new image..."
+                    Case "ESN"
+                        allTasks.Text = "Capturando imagen..."
+                        currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+                    Case "FRA"
+                        allTasks.Text = "Capture de l'image en cours..."
+                        currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Capturar imagem..."
+                        currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
+                    Case "ITA"
+                        allTasks.Text = "Cattura immagine..."
+                        currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
+                End Select
+            Case 1
+                allTasks.Text = "Capturing image..."
+                currentTask.Text = "Capturing specified directory into a new image..."
+            Case 2
+                allTasks.Text = "Capturando imagen..."
+                currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+            Case 3
+                allTasks.Text = "Capture de l'image en cours..."
+                currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
+            Case 4
+                allTasks.Text = "Capturar imagem..."
+                currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
+            Case 5
+                allTasks.Text = "Cattura immagine..."
+                currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
+        End Select
+        LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
+                           "- Source directory: " & FFUCaptureSourceDrive & CrLf &
+                           "- Destination image: " & FFUCaptureDestinationFfuImage & CrLf &
+                           "- Captured image name: " & FFUCaptureName & CrLf)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' Not available
+                    Case Is >= 2
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-ffu /imagefile=" & Quote & FFUCaptureDestinationFfuImage & Quote & " /capturedrive=" & FFUCaptureSourceDrive & " /name=" & Quote & FFUCaptureName & Quote
+                End Select
+            Case 10
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-ffu /imagefile=" & Quote & FFUCaptureDestinationFfuImage & Quote & " /capturedrive=" & FFUCaptureSourceDrive & " /name=" & Quote & FFUCaptureName & Quote
+        End Select
+        ' Get additional options
+        If FFUCaptureDescription = "" Then
+            LogView.AppendText("- Captured image description: none specified" & CrLf)
+        Else
+            DynaLog.LogMessage("A description has been provided.")
+            LogView.AppendText("- Captured image description: " & Quote & FFUCaptureDescription & Quote & CrLf)
+            CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
+        End If
+        If FFUCaptureCompressType = 0 Then
+            LogView.AppendText("- Compression type: none" & CrLf)
+            CommandArgs &= " /compress=none"
+        ElseIf FFUCaptureCompressType = 1 Then
+            LogView.AppendText("- Compression type: default" & CrLf)
+            CommandArgs &= " /compress=default"
+        End If
+        LogView.AppendText(CrLf & "Capturing image...")
         RunProcess(DismProgram, CommandArgs)
         Select Case Language
             Case 0
@@ -1659,6 +1902,42 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub CommitFfu()
+        Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+        ' Options for capture task
+        FFUCaptureSourceDrive = ReferenceImage.FFUInfo.MountDiskPath
+        FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+        FFUCaptureName = ReferenceImage.ImageName
+        FFUCaptureDescription = ReferenceImage.ImageDescription
+        FFUCaptureCompressType = 1
+
+        ' Options for unmount task
+        MountDir = MountDir
+        UMountOp = 1
+        UMountLocalDir = True
+        RandomMountDir = ""
+        CheckImgIntegrity = False
+        SaveToNewIndex = False
+        UMountImgIndex = 1
+
+        ' Options for replace task
+        FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+        FFUReplaceDestinationFFU = ReferenceImage.ImageFile
+
+        ' Options for mount task
+        SourceImg = ReferenceImage.ImageFile
+        ImgIndex = 1
+        isReadOnly = False
+        isOptimized = False
+        isIntegrityTested = False
+
+        CaptureFfuImage()
+        UnmountImage()
+        ReplaceFfuFile()
+        MountImage()
+    End Sub
+
     Private Sub CommitImage()
         DynaLog.LogMessage("Saving changes to the Windows image...")
         Select Case Language
@@ -1696,6 +1975,12 @@ Public Class ProgressPanel
                 allTasks.Text = "Modifica immagine..."
                 currentTask.Text = "Salvataggio modifiche nell'immagine..."
         End Select
+        If ReferenceImage IsNot Nothing Then
+            If Path.GetExtension(ReferenceImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                CommitFfu()
+                Exit Sub
+            End If
+        End If
         LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                            "- Mount directory: " & MountDir)
         Select Case DismVersionChecker.ProductMajorPart
@@ -2148,6 +2433,71 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub OptimizeFfuImage()
+        DynaLog.LogMessage("Optimizing the Windows FFU image...")
+        DynaLog.LogMessage("- Source image to optimize: " & Quote & FFUOptimizationSource & Quote)
+        DynaLog.LogMessage("- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", ""))
+        allTasks.Text = "Optimizing image..."
+        currentTask.Text = "Optimizing Windows image..."
+        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
+                           "- Source image to optimize: " & Quote & FFUOptimizationSource & Quote & CrLf &
+                           "- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", "") & CrLf)
+        ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                ' Not supported
+            Case 10
+                CommandArgs &= " /optimize-ffu /imagefile=" & Quote & FFUOptimizationSource & Quote
+        End Select
+
+        If FFUOptimizationCustomPartitionNum > 0 Then CommandArgs &= " /partitionnumber=" & FFUOptimizationCustomPartitionNum
+
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
+    End Sub
+
+    Private Sub OptimizeImage()
+        DynaLog.LogMessage("Optimizing the Windows image...")
+        DynaLog.LogMessage("- Source image to optimize: " & Quote & OptimizationSource & Quote)
+        DynaLog.LogMessage("- Optimization mode: " & OptimizationMode)
+        allTasks.Text = "Optimizing image..."
+        currentTask.Text = "Optimizing Windows image..."
+        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
+                           "- Source image to optimize: " & Quote & OptimizationSource & Quote & CrLf &
+                           "- Optimization mode: " & If(OptimizationMode = 0, "Reduce online configuration time", "Prepare image for WIMBoot system") & CrLf)
+        ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                ' Not supported
+            Case 10
+                CommandArgs &= " /image=" & Quote & OptimizationSource & Quote & " /optimize-image " & If(OptimizationMode = 0, "/boot", "/wimboot")
+        End Select
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
+    End Sub
+
     Private Sub RemountImage()
         DynaLog.LogMessage("Reloading the servicing session of the mounted image...")
         DynaLog.LogMessage("- Mount location of the image file we are interested in reloading: " & Quote & MountDir & Quote)
@@ -2245,6 +2595,80 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub SplitFfuImage()
+        DynaLog.LogMessage("Splitting the Windows FFU image...")
+        DynaLog.LogMessage("- Source image file to split: " & Quote & SFUSplitSourceFile & Quote)
+        DynaLog.LogMessage("- Maximum size of split images: " & SFUSplitFileSize & " MB")
+        DynaLog.LogMessage("- Destination of SFU files: " & Quote & SFUSplitTargetFile & Quote)
+        DynaLog.LogMessage("- Check image integrity? " & If(SFUSplitCheckIntegrity, "Yes", "No"))
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        allTasks.Text = "Splitting image..."
+                        currentTask.Text = "Splitting FFU file..."
+                    Case "ESN"
+                        allTasks.Text = "Dividiendo imagen..."
+                        currentTask.Text = "Dividiendo archivo FFU..."
+                    Case "FRA"
+                        allTasks.Text = "Division de l'image en cours..."
+                        currentTask.Text = "Division du fichier FFU en cours..."
+                    Case "PTB", "PTG"
+                        allTasks.Text = "Dividir imagem..."
+                        currentTask.Text = "Dividir ficheiro FFU..."
+                    Case "ITA"
+                        allTasks.Text = "Divisione immagine..."
+                        currentTask.Text = "Divisione file FFU..."
+                End Select
+            Case 1
+                allTasks.Text = "Splitting image..."
+                currentTask.Text = "Splitting FFU file..."
+            Case 2
+                allTasks.Text = "Dividiendo imagen..."
+                currentTask.Text = "Dividiendo archivo FFU..."
+            Case 3
+                allTasks.Text = "Division de l'image en cours..."
+                currentTask.Text = "Division du fichier FFU en cours..."
+            Case 4
+                allTasks.Text = "Dividir imagem..."
+                currentTask.Text = "Dividir ficheiro FFU..."
+            Case 5
+                allTasks.Text = "Divisione immagine..."
+                currentTask.Text = "Divisione file FFU..."
+        End Select
+        LogView.AppendText(CrLf & "Splitting FFU file into SFU files..." & CrLf &
+                           "- Source image file to split: " & Quote & SFUSplitSourceFile & Quote & CrLf &
+                           "- Maximum size of the split images (in MB): " & SFUSplitFileSize & " MB" & CrLf &
+                           "- Name and path of the target SFU file: " & Quote & SFUSplitTargetFile & Quote & CrLf &
+                           "- Check integrity before splitting this image? " & If(SFUSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf &
+                           "Do note that, if the image contains a large file that can't fit within the maximum size, a SFU file may be larger than the rest, to accommodate it." & CrLf)
+        ' Check the DISM version, as the Windows 7 version doesn't allow this action
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        ' Not supported
+                    Case Is >= 2
+                        CommandArgs &= " /split-ffu /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
+                End Select
+            Case 10
+                CommandArgs &= " /split-image /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
+        End Select
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
+    End Sub
+
     Private Sub SplitImage()
         DynaLog.LogMessage("Splitting the Windows image...")
         DynaLog.LogMessage("- Source image file to split: " & Quote & SWMSplitSourceFile & Quote)
@@ -2326,7 +2750,6 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Unmount operation (may not reflect actual operation): " & UMountOp)
         DynaLog.LogMessage("  - Check image integrity before committing changes? " & If(CheckImgIntegrity, "Yes", "No"))
         DynaLog.LogMessage("  - Append changes to new index? " & If(SaveToNewIndex, "Yes", "No"))
-        DynaLog.LogMessage("- Will the program be closed? " & If(ProgramIsBeingClosed, "Yes", "No"))
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2369,162 +2792,86 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
                            "- Mount directory: " & MountDir & CrLf &
                            "- Image index: " & UMountImgIndex)
-        If ProgramIsBeingClosed Then
-            DynaLog.LogMessage("DISMTools will be closed. Proceeding to commit changes...")
-            LogView.AppendText(CrLf & "- Unmount operation: Commit")
-            ' Commit the image and unmount it
-            Try
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
-                            Case Is >= 2
-                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
-                        End Select
-                    Case 10
-                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
-                End Select
-                RunProcess(DismProgram, CommandArgs)
-                If DismExitCode = Decimal.ToInt32(-1052638964) Then
-                    DynaLog.LogMessage("An attempt was made to save changes to an image that was mounted with read-only permissions. Unmounting image whilst discarding changes...")
-                    LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
-                    ' It mostly came from a read-only source. Discard changes
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
-                                Case Is >= 2
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
-                            End Select
-                        Case 10
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+        Try
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            If UMountLocalDir Then
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
+                            Else
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
+                            End If
+                        Case Is >= 2
+                            If UMountLocalDir Then
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                            Else
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                            End If
                     End Select
-                    RunProcess(DismProgram, CommandArgs)
-                End If
-            Catch ex As Exception
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /unmount-image /mountdir=" & MountDir,
-                                  ASCII)
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-            End Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
+                Case 10
+                    If UMountLocalDir Then
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                    Else
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                    End If
             End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            If UMountOp = 0 Then
+                LogView.AppendText(CrLf & "- Unmount operation: Commit")
+                CommandArgs &= " /commit"
+            ElseIf UMountOp = 1 Then
+                LogView.AppendText(CrLf & "- Unmount operation: Discard")
+                CommandArgs &= " /discard"
             End If
+            If UMountOp = 0 Then
+                If CheckImgIntegrity Then
+                    LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                    CommandArgs &= " /checkintegrity"
+                Else
+                    LogView.AppendText(CrLf & "- Check image integrity? No")
+                End If
+                If SaveToNewIndex Then
+                    LogView.AppendText(CrLf & "- Append changes to new index? Yes")
+                    CommandArgs &= " /append"
+                Else
+                    LogView.AppendText(CrLf & "- Append changes to new index? No")
+                End If
+            End If
+            RunProcess(DismProgram, CommandArgs)
+        Catch ex As Exception
+            ' Let's try this before setting things up here
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        currentTask.Text = "Gathering error level..."
+                    Case "ESN"
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case "FRA"
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case "PTB", "PTG"
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case "ITA"
+                        currentTask.Text = "Raccolta livello errore..."
+                End Select
+            Case 1
+                currentTask.Text = "Gathering error level..."
+            Case 2
+                currentTask.Text = "Recopilando nivel de error..."
+            Case 3
+                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+            Case 4
+                currentTask.Text = "A recolher o nível de erro..."
+            Case 5
+                currentTask.Text = "Raccolta livello errore..."
+        End Select
+        LogView.AppendText(CrLf & "Gathering error level...")
+        GetErrorCode(False)
+        If errCode.Length >= 8 Then
+            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
         Else
-            DynaLog.LogMessage("DISMTools will not be closed.")
-            Try
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                If UMountLocalDir Then
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
-                                Else
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
-                                End If
-                            Case Is >= 2
-                                If UMountLocalDir Then
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
-                                Else
-                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
-                                End If
-                        End Select
-                    Case 10
-                        If UMountLocalDir Then
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
-                        Else
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
-                        End If
-                End Select
-                If UMountOp = 0 Then
-                    LogView.AppendText(CrLf & "- Unmount operation: Commit")
-                    CommandArgs &= " /commit"
-                ElseIf UMountOp = 1 Then
-                    LogView.AppendText(CrLf & "- Unmount operation: Discard")
-                    CommandArgs &= " /discard"
-                End If
-                If UMountOp = 0 Then
-                    If CheckImgIntegrity Then
-                        LogView.AppendText(CrLf & "- Check image integrity? Yes")
-                        CommandArgs &= " /checkintegrity"
-                    Else
-                        LogView.AppendText(CrLf & "- Check image integrity? No")
-                    End If
-                    If SaveToNewIndex Then
-                        LogView.AppendText(CrLf & "- Append changes to new index? Yes")
-                        CommandArgs &= " /append"
-                    Else
-                        LogView.AppendText(CrLf & "- Append changes to new index? No")
-                    End If
-                End If
-                RunProcess(DismProgram, CommandArgs)
-            Catch ex As Exception
-                ' Let's try this before setting things up here
-            End Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
-            End If
+            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
         End If
     End Sub
 
@@ -4477,6 +4824,18 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub RemoveOnlineAppxPackages(ParamArray PackageNames As String())
+        Dim extAppxHelperPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "online_appx_removal.ps1")
+        If File.Exists(extAppxHelperPath) Then
+            DynaLog.LogMessage("AppX removal helper exists. Proceeding with the removal of those bastards!")
+            LogView.AppendText(CrLf & "A PowerShell helper will be used to remove AppX packages. Please wait...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       String.Format("-executionpolicy Bypass -noprofile -nologo -file {0}{1}{0} -appxFullNames {0}{2}{0}", Quote, extAppxHelperPath,
+                                     String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))))
+            LogView.AppendText(CrLf & "Log off for the deprovisioning of applications to be fully carried out.")
+        End If
+    End Sub
+
     Private Sub RemoveProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to remove AppX packages...")
         Select Case Language
@@ -4544,91 +4903,100 @@ Public Class ProgressPanel
                 currentTask.Text = "Rimozione pacchetti AppX..."
         End Select
         CurrentPB.Maximum = appxRemovalCount
-        For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
-            If x + 1 > CurrentPB.Maximum Then Exit For
-            CommandArgs = BckArgs
-            Dim removalStoreApp As String = appxRemovalPackages(x)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-            End Select
-            LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & appxRemovalCount)
-            CurrentPB.Value = x + 1
-            ' Display package name and DisplayName
-            LogView.AppendText(CrLf &
-                               "- Package name: " & appxRemovalPackages(x) & CrLf &
-                               "- Display name: " & appxRemovalPkgNames(x))
-            ' Display whether an application is registered to a user
-            CheckAppRegistrationStatus(removalStoreApp)
-            ' Initialize command. Its syntax is simple, so don't spend too much time determining options
-            LogView.AppendText(CrLf & CrLf &
-                               "Processing package...")
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
-            RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
-            If Hex(DismExitCode).Length < 8 Then
-                errCode = DismExitCode
-            Else
-                errCode = Hex(DismExitCode)
-            End If
-            If DismExitCode = 0 Then
-                appxSuccessfulRemovals += 1
-            Else
-                appxFailedRemovals += 1
-            End If
-            If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(" Error level : " & errCode)
-            End If
-            If PackageErrorCodes.Count <= 0 Then
-                If errCode.Length >= 8 Then
-                    PackageErrorCodes.Add("0x" & errCode)
-                Else
-                    PackageErrorCodes.Add(errCode)
-                End If
-            Else
-                If errCode.Length >= 8 Then
-                    PackageErrorCodes.Add("0x" & errCode)
-                Else
-                    PackageErrorCodes.Add(errCode)
-                End If
-            End If
-        Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
-        For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
-        Next
-        Thread.Sleep(2000)
-        AllPB.Value = 100
-        If appxSuccessfulRemovals > 0 Then
+        If OnlineMgmt Then
+            RemoveOnlineAppxPackages(appxRemovalPackages)
+            CurrentPB.Value = CurrentPB.Maximum
+            Thread.Sleep(2000)
+            AllPB.Value = 100
             GetErrorCode(True)
-        ElseIf appxSuccessfulRemovals <= 0 Then
-            GetErrorCode(False)
+        Else
+            For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Dim removalStoreApp As String = appxRemovalPackages(x)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
+                            Case "PTB", "PTG"
+                                currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "ITA"
+                                currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 3
+                        currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
+                    Case 4
+                        currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 5
+                        currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
+                End Select
+                LogView.AppendText(CrLf &
+                                   "Package " & (x + 1) & " of " & appxRemovalCount)
+                CurrentPB.Value = x + 1
+                ' Display package name and DisplayName
+                LogView.AppendText(CrLf &
+                                   "- Package name: " & appxRemovalPackages(x) & CrLf &
+                                   "- Display name: " & appxRemovalPkgNames(x))
+                ' Display whether an application is registered to a user
+                CheckAppRegistrationStatus(removalStoreApp)
+                ' Initialize command. Its syntax is simple, so don't spend too much time determining options
+                LogView.AppendText(CrLf & CrLf &
+                                   "Processing package...")
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                RunProcess(DismProgram, CommandArgs)
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DismExitCode).Length < 8 Then
+                    errCode = DismExitCode
+                Else
+                    errCode = Hex(DismExitCode)
+                End If
+                If DismExitCode = 0 Then
+                    appxSuccessfulRemovals += 1
+                Else
+                    appxFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PackageErrorCodes.Count <= 0 Then
+                    If errCode.Length >= 8 Then
+                        PackageErrorCodes.Add("0x" & errCode)
+                    Else
+                        PackageErrorCodes.Add(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PackageErrorCodes.Add("0x" & errCode)
+                    Else
+                        PackageErrorCodes.Add(errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+            For x = 0 To PackageErrorCodes.Count - 1
+                LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            Next
+            Thread.Sleep(2000)
+            AllPB.Value = 100
+            If appxSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf appxSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
         End If
+
     End Sub
 
 #End Region
@@ -5645,6 +6013,8 @@ Public Class ProgressPanel
     Private Sub ExportDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to export image drivers...")
         DynaLog.LogMessage("Export target: " & Quote & drvExportTarget & Quote)
+        DynaLog.LogMessage("Export all drivers? " & If(drvExportAllDrvs, "Yes", "No"))
+        If Not drvExportAllDrvs Then DynaLog.LogMessage("Class name to use as filter for driver exports: " & Quote & drvExportSpecificClassName & Quote)
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5681,20 +6051,245 @@ Public Class ProgressPanel
                 currentTask.Text = "Esportazione driver terze parti nella cartella specificata..."
         End Select
         LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf &
-                           "- Export target: " & Quote & drvExportTarget & Quote)
-        ' Check the DISM version, as the Windows 7 version doesn't allow this action
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        ' Not supported
-                    Case Is >= 2
+                           "- Export target: " & Quote & drvExportTarget & Quote & CrLf &
+                           "- Export all drivers, or just those with matching class names? " & If(drvExportAllDrvs, "All Drivers", "Drivers with matching class name") & CrLf &
+                           "- If not all drivers are exported, which class name is used for drivers that will be exported? " & drvExportSpecificClassName & CrLf)
+        If drvExportAllDrvs Then
+            If drvExportWin7Mode Then
+                Try
+                    Dim ImageDrivers As New List(Of ImageDriver)
+
+                    ' Run DISM and parse the output in one go.
+                    Using DriverEnumerationProc As New Process() With {
+                        .StartInfo = New ProcessStartInfo() With {
+                            .FileName = DismProgram,
+                            .Arguments = String.Format("/English /image={0} /get-drivers{1}", Quote & MountDir & Quote, If(AllDrivers, " /all", "")),
+                            .CreateNoWindow = True,
+                            .WindowStyle = ProcessWindowStyle.Hidden,
+                            .UseShellExecute = False,
+                            .RedirectStandardOutput = True
+                        }
+                    }
+                        Dim output As String = ""
+                        DriverEnumerationProc.Start()
+                        output = DriverEnumerationProc.StandardOutput.ReadToEnd()
+                        DriverEnumerationProc.WaitForExit()
+                        If DriverEnumerationProc.ExitCode = 0 Then
+                            ' Parse the output.
+                            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Published Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+                            Dim drvPublishedNameString As String = "",
+                                drvOriginalFileNameString As String = "",
+                                drvInboxString As String = "",
+                                drvClassNameString As String = "",
+                                drvProviderNameString As String = "",
+                                drvDateString As String = "",
+                                drvVersionString As String = ""
+                            For Each outputLine In outputLines
+                                If outputLine.StartsWith("Published Name : ") Then
+                                    drvPublishedNameString = outputLine.Replace("Published Name : ", "")
+                                ElseIf outputLine.StartsWith("Original File Name : ") Then
+                                    drvOriginalFileNameString = outputLine.Replace("Original File Name : ", "")
+                                ElseIf outputLine.StartsWith("Inbox : ") Then
+                                    drvInboxString = outputLine.Replace("Inbox : ", "")
+                                ElseIf outputLine.StartsWith("Class Name : ") Then
+                                    drvClassNameString = outputLine.Replace("Class Name : ", "")
+                                ElseIf outputLine.StartsWith("Provider Name : ") Then
+                                    drvProviderNameString = outputLine.Replace("Provider Name : ", "")
+                                ElseIf outputLine.StartsWith("Date : ") Then
+                                    drvDateString = outputLine.Replace("Date : ", "")
+                                ElseIf outputLine.StartsWith("Version : ") Then
+                                    drvVersionString = outputLine.Replace("Version : ", "")
+                                End If
+
+                                ' If we've grabbed everything at this point, we add it to our list,
+                                ' then clear everything and move on.
+                                If drvPublishedNameString <> "" AndAlso
+                                    drvOriginalFileNameString <> "" AndAlso
+                                    drvInboxString <> "" AndAlso
+                                    drvClassNameString <> "" AndAlso
+                                    drvProviderNameString <> "" AndAlso
+                                    drvDateString <> "" AndAlso
+                                    drvVersionString <> "" Then
+                                    ImageDrivers.Add(New ImageDriver(drvPublishedNameString,
+                                                                     drvOriginalFileNameString,
+                                                                     drvInboxString.Equals("Yes", StringComparison.InvariantCultureIgnoreCase),
+                                                                     drvClassNameString,
+                                                                     drvProviderNameString,
+                                                                     drvDateString,
+                                                                     New Version(drvVersionString)))
+                                    drvPublishedNameString = ""
+                                    drvOriginalFileNameString = ""
+                                    drvInboxString = ""
+                                    drvClassNameString = ""
+                                    drvProviderNameString = ""
+                                    drvDateString = ""
+                                    drvVersionString = ""
+                                End If
+                            Next
+                        Else
+                            Throw New Exception(DISMProc.ExitCode)
+                        End If
+                    End Using
+
+                    Dim driversToExport As IEnumerable(Of ImageDriver) = ImageDrivers
+                    If driversToExport Is Nothing Then Exit Try
+
+                    DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
+                    LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                    For Each driverToExport In driversToExport
+                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
+                        Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+                        CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
+                    Next
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                ' Check the DISM version, as the Windows 7 version doesn't allow this action
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                ' Not supported
+                            Case Is >= 2
+                                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                        End Select
+                    Case 10
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
                 End Select
-            Case 10
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
-        End Select
-        RunProcess(DismProgram, CommandArgs)
+                RunProcess(DismProgram, CommandArgs)
+            End If
+        Else
+            ' Selective driver exports, based on class name, cannot be done with DISM as DISM will export all drivers no matter what.
+            ' We have to get the drivers from the image, which will let us filter by class name, then we copy them manually to the destination.
+            If drvExportWin7Mode Then
+                Try
+                    Dim ImageDrivers As New List(Of ImageDriver)
+
+                    ' Run DISM and parse the output in one go.
+                    Using DriverEnumerationProc As New Process() With {
+                        .StartInfo = New ProcessStartInfo() With {
+                            .FileName = DismProgram,
+                            .Arguments = String.Format("/English /image={0} /get-drivers{1}", Quote & MountDir & Quote, If(AllDrivers, " /all", "")),
+                            .CreateNoWindow = True,
+                            .WindowStyle = ProcessWindowStyle.Hidden,
+                            .UseShellExecute = False,
+                            .RedirectStandardOutput = True
+                        }
+                    }
+                        Dim output As String = ""
+                        DriverEnumerationProc.Start()
+                        output = DriverEnumerationProc.StandardOutput.ReadToEnd()
+                        DriverEnumerationProc.WaitForExit()
+                        If DriverEnumerationProc.ExitCode = 0 Then
+                            ' Parse the output.
+                            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Published Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+                            Dim drvPublishedNameString As String = "",
+                                drvOriginalFileNameString As String = "",
+                                drvInboxString As String = "",
+                                drvClassNameString As String = "",
+                                drvProviderNameString As String = "",
+                                drvDateString As String = "",
+                                drvVersionString As String = ""
+                            For Each outputLine In outputLines
+                                If outputLine.StartsWith("Published Name : ") Then
+                                    drvPublishedNameString = outputLine.Replace("Published Name : ", "")
+                                ElseIf outputLine.StartsWith("Original File Name : ") Then
+                                    drvOriginalFileNameString = outputLine.Replace("Original File Name : ", "")
+                                ElseIf outputLine.StartsWith("Inbox : ") Then
+                                    drvInboxString = outputLine.Replace("Inbox : ", "")
+                                ElseIf outputLine.StartsWith("Class Name : ") Then
+                                    drvClassNameString = outputLine.Replace("Class Name : ", "")
+                                ElseIf outputLine.StartsWith("Provider Name : ") Then
+                                    drvProviderNameString = outputLine.Replace("Provider Name : ", "")
+                                ElseIf outputLine.StartsWith("Date : ") Then
+                                    drvDateString = outputLine.Replace("Date : ", "")
+                                ElseIf outputLine.StartsWith("Version : ") Then
+                                    drvVersionString = outputLine.Replace("Version : ", "")
+                                End If
+
+                                ' If we've grabbed everything at this point, we add it to our list,
+                                ' then clear everything and move on.
+                                If drvPublishedNameString <> "" AndAlso
+                                    drvOriginalFileNameString <> "" AndAlso
+                                    drvInboxString <> "" AndAlso
+                                    drvClassNameString <> "" AndAlso
+                                    drvProviderNameString <> "" AndAlso
+                                    drvDateString <> "" AndAlso
+                                    drvVersionString <> "" Then
+                                    ImageDrivers.Add(New ImageDriver(drvPublishedNameString,
+                                                                     drvOriginalFileNameString,
+                                                                     drvInboxString.Equals("Yes", StringComparison.InvariantCultureIgnoreCase),
+                                                                     drvClassNameString,
+                                                                     drvProviderNameString,
+                                                                     drvDateString,
+                                                                     New Version(drvVersionString)))
+                                    drvPublishedNameString = ""
+                                    drvOriginalFileNameString = ""
+                                    drvInboxString = ""
+                                    drvClassNameString = ""
+                                    drvProviderNameString = ""
+                                    drvDateString = ""
+                                    drvVersionString = ""
+                                End If
+                            Next
+                        Else
+                            Throw New Exception(DISMProc.ExitCode)
+                        End If
+                    End Using
+
+                    DynaLog.LogMessage("Filtering driver collection based on class name...")
+                    Dim driversToExport As IEnumerable(Of ImageDriver) = ImageDrivers.Where(Function(driver) driver.DriverClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                    If driversToExport Is Nothing Then Exit Try
+
+                    DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
+                    LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                    For Each driverToExport In driversToExport
+                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
+                        Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+                        CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
+                    Next
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                Try
+                    LogView.AppendText(CrLf & "Getting image drivers...")
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using session As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
+                        DynaLog.LogMessage("Getting drivers with DISMAPI...")
+                        Dim driverPackages As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
+                        If driverPackages Is Nothing Then Exit Try
+                        DynaLog.LogMessage("Filtering driver collection based on class name...")
+                        Dim driversToExport As IEnumerable(Of DismDriverPackage) = driverPackages.Where(Function(driver) driver.ClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                        If driversToExport Is Nothing Then Exit Try
+
+                        DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
+                        LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                        For Each driverToExport In driversToExport
+                            LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.OriginalFileName) & "...")
+                            Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
+                            Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+                            CopyRecursive(Path.GetDirectoryName(driverToExport.OriginalFileName), destinationDriverPath)
+                        Next
+                    End Using
+                    DismExitCode = 0
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                    DismExitCode = ex.HResult
+                Finally
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
+                End Try
+            End If
+        End If
         LogView.AppendText(CrLf & "Getting error level...")
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
@@ -5708,6 +6303,53 @@ Public Class ProgressPanel
         End If
         GetErrorCode(False)
     End Sub
+
+    ''' <summary>
+    ''' Copies the contents of a directory, and any subdirectories within the directory,
+    ''' to a given destination.
+    ''' </summary>
+    ''' <param name="SourceDirectory">The directory to copy</param>
+    ''' <param name="DestinationDirectory">The destination of the copied files</param>
+    ''' <returns>Whether the copy succeeded</returns>
+    Private Function CopyRecursive(SourceDirectory As String, DestinationDirectory As String) As Boolean
+        ' We make sure the directory exists, if it doesn't exist, we stop.
+        If Not Directory.Exists(SourceDirectory) Then Return False
+
+        ' If the destination folder does not exist, then we try creating it. If we couldn't,
+        ' we simply give up.
+        If Not Directory.Exists(DestinationDirectory) Then
+            Try
+                Directory.CreateDirectory(DestinationDirectory)
+            Catch ex As Exception
+                Return False
+            End Try
+        End If
+
+        Try
+            ' Now, we create all the directories of the source folder to the destination
+            Dim dirsInSource As String() = Directory.GetDirectories(SourceDirectory, "*", SearchOption.AllDirectories)
+            For Each dirInSource In dirsInSource
+                Dim sourcePath As String = dirInSource.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                If Not Directory.Exists(destinationPath) Then
+                    Directory.CreateDirectory(destinationPath)
+                End If
+            Next
+
+            ' Next, we copy all the files in the source directory to the destination
+            For Each FileToCopy In Directory.GetFiles(SourceDirectory, "*", SearchOption.AllDirectories)
+                Dim sourcePath As String = FileToCopy.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                File.Copy(FileToCopy, destinationPath, True)
+            Next
+        Catch ex As Exception
+            Return False
+        End Try
+
+        Return True
+    End Function
 
     Private Sub ImportDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to import image drivers...")
@@ -5981,11 +6623,13 @@ Public Class ProgressPanel
                 Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
             End If
             File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"), True)
-            DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
-            If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
-                Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+            If UnattendedCopyToSysprep Then
+                DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             End If
-            File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
             GetErrorCode(True)
         Catch ex As Exception
@@ -6501,7 +7145,6 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub SwitchIndexes()
-        ' TODO Improve significantly
         DynaLog.LogMessage("Preparing to switch image indexes...")
         DynaLog.LogMessage("- Source image file: " & Quote & SwitchSourceImg & Quote)
         DynaLog.LogMessage("- Source image index: " & SwitchSourceIndex)
@@ -6768,6 +7411,26 @@ Public Class ProgressPanel
         End If
     End Sub
 
+    Private Sub ReplaceFfuFile()
+        DynaLog.LogMessage("Preparing to replace FFU files...")
+        DynaLog.LogMessage("- Source file: " & Quote & FFUReplaceSourceFFU & Quote)
+        DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
+        allTasks.Text = "Replacing FFU files..."
+        currentTask.Text = "Replacing original FFU file with modified FFU file..."
+        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceDestinationFFU & Quote & " with " & Quote & FFUReplaceSourceFFU & Quote & "...")
+        Try
+            If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
+            File.Delete(FFUReplaceDestinationFFU)
+            File.Move(FFUReplaceSourceFFU, FFUReplaceDestinationFFU)
+            IsSuccessful = True
+            LogView.AppendText(CrLf & "The FFU file has been successfully replaced.")
+        Catch ex As Exception
+            DynaLog.LogMessage("FFU files could not be replaced. Error message: " & ex.Message)
+            IsSuccessful = False
+            LogView.AppendText(CrLf & "The FFU file could not be replaced: " & ex.Message)
+        End Try
+    End Sub
+
 #End Region
 
     Sub GetPkgErrorLevel()
@@ -6874,6 +7537,11 @@ Public Class ProgressPanel
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
         TaskList.Clear()
+        If PreventSystemFromSleeping Then
+            ' Restore sleep mode
+            DynaLog.LogMessage("Restoring system sleep mode...")
+            PowerManagementHelper.EnableSystemSleepMode()
+        End If
         If IsSuccessful Then
             DynaLog.LogMessage("Tasks have been successful.")
             If OperationNum = 9 Then LogView.AppendText(CrLf &
@@ -6980,11 +7648,13 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 27 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
+                MainForm.ReinitializeCurImage = False
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
@@ -7124,13 +7794,11 @@ Public Class ProgressPanel
             End Select
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
-            MainForm.ToolStripButton4.Visible = False
             MainForm.StartMountedImageDetector()
             Close()
         Else
             DynaLog.LogMessage("Tasks have not been successful.")
             Cancel_Button.Visible = True
-            MainForm.ToolStripButton4.Visible = False
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -7430,6 +8098,12 @@ Public Class ProgressPanel
         If MainForm.ExpandedProgressPanel AndAlso Not IsExpanded Then
             LogButton.PerformClick()
         End If
+        PreventSystemFromSleeping = MainForm.PreventSystemFromSleeping
+        If PreventSystemFromSleeping Then
+            ' Disable sleep mode now
+            DynaLog.LogMessage("Preventing the system from sleeping...")
+            PowerManagementHelper.DisableSystemSleepMode()
+        End If
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
         MainForm.bwGetImageInfo = True
@@ -7438,6 +8112,7 @@ Public Class ProgressPanel
         AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
         If MainForm.CurrentImage IsNot Nothing Then
+            ReferenceImage = MainForm.CurrentImage
             ImgVersion = MainForm.CurrentImage.ImageVersion
         End If
         ' Determine program colors
@@ -7535,11 +8210,16 @@ Public Class ProgressPanel
         Else
             IsDebugged = False
         End If
-        MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         ' Detect settings
         DynaLog.LogMessage("Configuring settings...")
         OnlineMgmt = MainForm.OnlineManagement
@@ -7671,7 +8351,6 @@ Public Class ProgressPanel
                 MainForm.MenuDesc.Text = "Pronto"
         End Select
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
-        MainForm.ToolStripButton4.Visible = False
         MainForm.StartMountedImageDetector()
     End Sub
 

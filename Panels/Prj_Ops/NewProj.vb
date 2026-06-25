@@ -1,11 +1,14 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Text.RegularExpressions
 
 Public Class NewProj
 
     Dim IsReqField1Valid As Boolean
     Dim IsReqField2Valid As Boolean
+
+    Private InvalidFieldRegex As New Regex("(^(?:CON|AUX|PRN|LPT[1-9]|COM[1-9]|NUL))|(<|>|:|\" & Quote & "|/|\\|\||\?|\*)", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
@@ -41,7 +44,7 @@ Public Class NewProj
                 Case 5
                     msg = "La cartella: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "non esiste. Si desidera crearla?"
             End Select
-            If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+            If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("The user has decided to create the folder. Attempting to create it...")
                 Try
                     Directory.CreateDirectory(TextBox2.Text)
@@ -72,7 +75,7 @@ Public Class NewProj
                         Case 5
                             msg = "Non è stato possibile creare la cartella del progetto a causa di: " & CrLf & ex.ToString() & "; " & ex.Message
                     End Select
-                    MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Exit Sub
                 End Try
             Else
@@ -88,7 +91,7 @@ Public Class NewProj
             ElseIf MainForm.OfflineManagement Then
                 MainForm.EndOfflineManagement()
             Else
-                MainForm.UnloadDTProj(False, True, False)
+                MainForm.UnloadDTProj(False, True)
             End If
             If MainForm.ImgBW.IsBusy Then Exit Sub
         End If
@@ -110,7 +113,7 @@ Public Class NewProj
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Create a new project"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Please specify the options to create a new project:"
                         Label3.Text = "Name*:"
                         Label4.Text = "Location*:"
@@ -122,7 +125,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Please select a folder to store this project:"
                     Case "ESN"
                         Text = "Crear un nuevo proyecto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Especifique las opciones para crear un nuevo proyecto:"
                         Label3.Text = "Nombre*:"
                         Label4.Text = "Ubicación*:"
@@ -134,7 +137,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
                     Case "FRA"
                         Text = "Créer un nouveau projet"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Veuillez spécifier les options pour créer un nouveau projet :"
                         Label3.Text = "Nom* :"
                         Label4.Text = "Emplacement* :"
@@ -146,7 +149,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
                     Case "PTB", "PTG"
                         Text = "Criar um novo projeto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
                         Label3.Text = "Nome*:"
                         Label4.Text = "Localização*:"
@@ -158,7 +161,7 @@ Public Class NewProj
                         FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
                     Case "ITA"
                         Text = "Crea un nuovo progetto"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
                         Label3.Text = "Nome*:"
                         Label4.Text = "Ubicazione*:"
@@ -171,7 +174,7 @@ Public Class NewProj
                 End Select
             Case 1
                 Text = "Create a new project"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Please specify the options to create a new project:"
                 Label3.Text = "Name*:"
                 Label4.Text = "Location*:"
@@ -183,7 +186,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Please select a folder to store this project:"
             Case 2
                 Text = "Crear un nuevo proyecto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Especifique las opciones para crear un nuevo proyecto:"
                 Label3.Text = "Nombre*:"
                 Label4.Text = "Ubicación*:"
@@ -195,7 +198,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
             Case 3
                 Text = "Créer un nouveau projet"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Veuillez spécifier les options pour créer un nouveau projet :"
                 Label3.Text = "Nom* :"
                 Label4.Text = "Emplacement* :"
@@ -207,7 +210,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
             Case 4
                 Text = "Criar um novo projeto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
                 Label3.Text = "Nome*:"
                 Label4.Text = "Localização*:"
@@ -219,7 +222,7 @@ Public Class NewProj
                 FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
             Case 5
                 Text = "Crea un nuovo progetto"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
                 Label3.Text = "Nome*:"
                 Label4.Text = "Ubicazione*:"
@@ -230,11 +233,7 @@ Public Class NewProj
                 GroupBox1.Text = "Progetto"
                 FolderBrowserDialog1.Description = "Selezionare una cartella per memorizzare questo progetto:"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -244,6 +243,8 @@ Public Class NewProj
         TextBox2.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -258,59 +259,7 @@ Public Class NewProj
         DynaLog.LogMessage("Specified project name: " & Quote & TextBox1.Text & Quote)
         If TextBox1.Text <> "" Then
             DynaLog.LogMessage("Verifying name...")
-            If TextBox1.Text.Equals("con", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("CON", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("aux", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("AUX", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("prn", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("PRN", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("nul", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("NUL", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("com9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("COM9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("lpt9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT1", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT2", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT3", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT4", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT5", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT6", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT7", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT8", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Equals("LPT9", StringComparison.OrdinalIgnoreCase) Or _
-                TextBox1.Text.Contains("<") Or _
-                TextBox1.Text.Contains(">") Or _
-                TextBox1.Text.Contains(":") Or _
-                TextBox1.Text.Contains(Quote) Or _
-                TextBox1.Text.Contains("/") Or _
-                TextBox1.Text.Contains("\") Or _
-                TextBox1.Text.Contains("|") Or _
-                TextBox1.Text.Contains("?") Or _
-                TextBox1.Text.Contains("*") Then
+            If InvalidFieldRegex.IsMatch(TextBox1.Text) Then
                 DynaLog.LogMessage("Project name contains invalid text.")
                 IsReqField1Valid = False
             Else
@@ -328,55 +277,7 @@ Public Class NewProj
         DynaLog.LogMessage("Specified project path: " & Quote & TextBox2.Text & Quote)
         If TextBox2.Text <> "" Then
             DynaLog.LogMessage("Verifying path...")
-            If TextBox2.Text.Contains("con") Or _
-                    TextBox2.Text.Contains("CON") Or _
-                    TextBox2.Text.Contains("aux") Or _
-                    TextBox2.Text.Contains("AUX") Or _
-                    TextBox2.Text.Contains("prn") Or _
-                    TextBox2.Text.Contains("PRN") Or _
-                    TextBox2.Text.Contains("nul") Or _
-                    TextBox2.Text.Contains("NUL") Or _
-                    TextBox2.Text.Contains("com1") Or _
-                    TextBox2.Text.Contains("com2") Or _
-                    TextBox2.Text.Contains("com3") Or _
-                    TextBox2.Text.Contains("com4") Or _
-                    TextBox2.Text.Contains("com5") Or _
-                    TextBox2.Text.Contains("com6") Or _
-                    TextBox2.Text.Contains("com7") Or _
-                    TextBox2.Text.Contains("com8") Or _
-                    TextBox2.Text.Contains("com9") Or _
-                    TextBox2.Text.Contains("COM1") Or _
-                    TextBox2.Text.Contains("COM2") Or _
-                    TextBox2.Text.Contains("COM3") Or _
-                    TextBox2.Text.Contains("COM4") Or _
-                    TextBox2.Text.Contains("COM5") Or _
-                    TextBox2.Text.Contains("COM6") Or _
-                    TextBox2.Text.Contains("COM7") Or _
-                    TextBox2.Text.Contains("COM8") Or _
-                    TextBox2.Text.Contains("COM9") Or _
-                    TextBox2.Text.Contains("lpt1") Or _
-                    TextBox2.Text.Contains("lpt2") Or _
-                    TextBox2.Text.Contains("lpt3") Or _
-                    TextBox2.Text.Contains("lpt4") Or _
-                    TextBox2.Text.Contains("lpt5") Or _
-                    TextBox2.Text.Contains("lpt6") Or _
-                    TextBox2.Text.Contains("lpt7") Or _
-                    TextBox2.Text.Contains("lpt8") Or _
-                    TextBox2.Text.Contains("lpt9") Or _
-                    TextBox2.Text.Contains("LPT1") Or _
-                    TextBox2.Text.Contains("LPT2") Or _
-                    TextBox2.Text.Contains("LPT3") Or _
-                    TextBox2.Text.Contains("LPT4") Or _
-                    TextBox2.Text.Contains("LPT5") Or _
-                    TextBox2.Text.Contains("LPT6") Or _
-                    TextBox2.Text.Contains("LPT7") Or _
-                    TextBox2.Text.Contains("LPT8") Or _
-                    TextBox2.Text.Contains("LPT9") Or _
-                    TextBox2.Text.Contains("<") Or _
-                    TextBox2.Text.Contains(">") Or _
-                    TextBox2.Text.Contains("|") Or _
-                    TextBox2.Text.Contains("?") Or _
-                    TextBox2.Text.Contains("*") Then
+            If InvalidFieldRegex.IsMatch(TextBox1.Text) Then
                 DynaLog.LogMessage("Project path contains invalid text.")
                 IsReqField2Valid = False
             Else

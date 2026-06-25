@@ -1,0 +1,19 @@
+﻿Language: Batch
+Name: Remove File System MAX_PATH length limit
+Description: This script removes MAX_PATH length limits to allow paths longer than 260 characters 
+Customizable: No
+
+@echo off
+
+REM This script removes MAX_PATH length limitations in file systems to let you use paths
+REM longer than 260 characters. An application can support long file paths in one of 2 ways:
+REM a) It defines compatibility with long file paths in its manifest, in which case it will
+REM    work normally with long file paths; or
+REM b) It does not define compatibility with long file paths in its manifest, but works with
+REM    them via UNC-styled paths (Universal Naming Convention). An example of a UNC path is:
+REM                 For C:\FY25_Reports --> \\?\C:\FY25_Reports
+REM If you use this script on one system, you may want to use it on other systems on which
+REM you access files deep enough within the file system to surpass MAX_PATH. Otherwise you may
+REM receive errors when opening such paths, unless you use UNC paths.
+
+reg add "HKLM\System\CurrentControlSet\Control\FileSystem" /f /v LongPathsEnabled /t REG_DWORD /d 1

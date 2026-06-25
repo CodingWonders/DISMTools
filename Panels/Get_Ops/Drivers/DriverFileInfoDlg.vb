@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Globalization
 
 Public Class DriverFileInfoDlg
 
@@ -121,6 +122,15 @@ Public Class DriverFileInfoDlg
                 Dim drvInfo As DismDriverCollection = DismApi.GetDriverInfo(imgSession, GetDriverInfo.ListBox1.Items(GetDriverInfo.ListBox1.SelectedIndex), drvPkg)
                 If drvPkg IsNot Nothing Then
                     DynaLog.LogMessage("Driver information was obtained successfully. Adding values to list...")
+
+                    Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                    Dim DriverDateString As String = ""
+                    If MainForm.HumanizeDates Then
+                        DriverDateString = String.Format("{0}, {1}", drvPkg.Date.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), drvPkg.Date.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                    Else
+                        DriverDateString = drvPkg.Date.ToString("MM/dd/yyyy HH:mm:ss")
+                    End If
+
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -134,7 +144,7 @@ Public Class DriverFileInfoDlg
                                     ListView1.Items.Add(New ListViewItem(New String() {"Class description", drvPkg.ClassDescription}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Class GUID", drvPkg.ClassGuid}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Provider name", drvPkg.ProviderName}))
-                                    ListView1.Items.Add(New ListViewItem(New String() {"Date", drvPkg.Date}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Date", DriverDateString}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Signature status", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Catalog file", drvPkg.CatalogFile}))
                                 Case "ESN"
@@ -147,7 +157,7 @@ Public Class DriverFileInfoDlg
                                     ListView1.Items.Add(New ListViewItem(New String() {"Descripción de clase", drvPkg.ClassDescription}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"GUID de clase", drvPkg.ClassGuid}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Nombre del proveedor", drvPkg.ProviderName}))
-                                    ListView1.Items.Add(New ListViewItem(New String() {"Fecha", drvPkg.Date}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Fecha", DriverDateString}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Estado de firma del controlador", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Archivo de catálogo", drvPkg.CatalogFile}))
                                 Case "FRA"
@@ -160,7 +170,7 @@ Public Class DriverFileInfoDlg
                                     ListView1.Items.Add(New ListViewItem(New String() {"Description de classe", drvPkg.ClassDescription}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"GUID de classe", drvPkg.ClassGuid}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Nom du prestataire", drvPkg.ProviderName}))
-                                    ListView1.Items.Add(New ListViewItem(New String() {"Date", drvPkg.Date}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Date", DriverDateString}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"État de la signature du pilote", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Chemin d'accès au fichier de catalogue", drvPkg.CatalogFile}))
                                 Case "PTB", "PTG"
@@ -173,7 +183,7 @@ Public Class DriverFileInfoDlg
                                     ListView1.Items.Add(New ListViewItem(New String() {"Descrição da classe", drvPkg.ClassDescription}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"GUID da classe", drvPkg.ClassGuid}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Nome do provedor", drvPkg.ProviderName}))
-                                    ListView1.Items.Add(New ListViewItem(New String() {"Data", drvPkg.Date}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Data", DriverDateString}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Estado da assinatura", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Ficheiro de catálogo", drvPkg.CatalogFile}))
                                 Case "ITA"
@@ -186,7 +196,7 @@ Public Class DriverFileInfoDlg
                                     ListView1.Items.Add(New ListViewItem(New String() {"Descrizione classe", drvPkg.ClassDescription}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"GUID classe", drvPkg.ClassGuid}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Nome provider", drvPkg.ProviderName}))
-                                    ListView1.Items.Add(New ListViewItem(New String() {"Data", drvPkg.Date}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Data", DriverDateString}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Stato firma", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"File catalogo", drvPkg.CatalogFile}))
                             End Select
@@ -200,7 +210,7 @@ Public Class DriverFileInfoDlg
                             ListView1.Items.Add(New ListViewItem(New String() {"Class description", drvPkg.ClassDescription}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Class GUID", drvPkg.ClassGuid}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Provider name", drvPkg.ProviderName}))
-                            ListView1.Items.Add(New ListViewItem(New String() {"Date", drvPkg.Date}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Date", DriverDateString}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Signature status", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Catalog file", drvPkg.CatalogFile}))
                         Case 2
@@ -213,7 +223,7 @@ Public Class DriverFileInfoDlg
                             ListView1.Items.Add(New ListViewItem(New String() {"Descripción de clase", drvPkg.ClassDescription}))
                             ListView1.Items.Add(New ListViewItem(New String() {"GUID de clase", drvPkg.ClassGuid}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Nombre del proveedor", drvPkg.ProviderName}))
-                            ListView1.Items.Add(New ListViewItem(New String() {"Fecha", drvPkg.Date}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Fecha", DriverDateString}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Estado de firma del controlador", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Archivo de catálogo", drvPkg.CatalogFile}))
                         Case 3
@@ -226,7 +236,7 @@ Public Class DriverFileInfoDlg
                             ListView1.Items.Add(New ListViewItem(New String() {"Description de classe", drvPkg.ClassDescription}))
                             ListView1.Items.Add(New ListViewItem(New String() {"GUID de classe", drvPkg.ClassGuid}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Nom du prestataire", drvPkg.ProviderName}))
-                            ListView1.Items.Add(New ListViewItem(New String() {"Date", drvPkg.Date}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Date", DriverDateString}))
                             ListView1.Items.Add(New ListViewItem(New String() {"État de la signature du pilote", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Chemin d'accès au fichier de catalogue", drvPkg.CatalogFile}))
                         Case 4
@@ -239,7 +249,7 @@ Public Class DriverFileInfoDlg
                             ListView1.Items.Add(New ListViewItem(New String() {"Descrição da classe", drvPkg.ClassDescription}))
                             ListView1.Items.Add(New ListViewItem(New String() {"GUID da classe", drvPkg.ClassGuid}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Nome do provedor", drvPkg.ProviderName}))
-                            ListView1.Items.Add(New ListViewItem(New String() {"Data", drvPkg.Date}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Data", DriverDateString}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Estado da assinatura", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Ficheiro de catálogo", drvPkg.CatalogFile}))
                         Case 5
@@ -252,7 +262,7 @@ Public Class DriverFileInfoDlg
                             ListView1.Items.Add(New ListViewItem(New String() {"Descrizione classe", drvPkg.ClassDescription}))
                             ListView1.Items.Add(New ListViewItem(New String() {"GUID classe", drvPkg.ClassGuid}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Nome del provider", drvPkg.ProviderName}))
-                            ListView1.Items.Add(New ListViewItem(New String() {"Data", drvPkg.Date}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Data", DriverDateString}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Stato firma", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                             ListView1.Items.Add(New ListViewItem(New String() {"File catalogo", drvPkg.CatalogFile}))
                     End Select
@@ -275,5 +285,6 @@ Public Class DriverFileInfoDlg
         ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
     End Sub
 End Class

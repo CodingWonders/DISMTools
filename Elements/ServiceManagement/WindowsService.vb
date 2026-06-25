@@ -307,6 +307,12 @@
     Public Property UserServiceFlags As Integer
 
     ''' <summary>
+    ''' Whether the service will be scheduled for deletion
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Property MarkedForDeletion As Boolean
+
+    ''' <summary>
     ''' Initializes an object of the Windows Service class with specified values
     ''' </summary>
     ''' <param name="name">The name of the Windows service</param>
@@ -340,6 +346,11 @@
         Me.FailureActions = failureActions
         Me.UserServiceFlags = userServiceFlags
     End Sub
+
+    Public Overrides Function Equals(obj As Object) As Boolean
+        If Not TypeOf obj Is WindowsService Then Return False
+        Return Name.Equals(CType(obj, WindowsService).Name, StringComparison.OrdinalIgnoreCase)
+    End Function
 
     ''' <summary>
     ''' Parses a start type enum value to a string

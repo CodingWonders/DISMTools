@@ -1,9 +1,10 @@
 #requires -version 5.0
+#requires -runasadministrator
 #                                              ....
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.8                                         |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -34,9 +35,10 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
-    [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
-    [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [string]$bootex = "false",
-    [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [string]$scratchPath = "",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [switch]$copyToVentoy,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [switch]$bootex,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [switch]$includeSysDrivers,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 8)] [string]$scratchPath = "",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -137,7 +139,7 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.7.3"
+    $version = "0.8"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
@@ -168,6 +170,10 @@ function Start-PEGeneration
                 if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
+                    # Present possible reason as to why
+                    Write-Host "`nMake sure that all of the required ADK components (Deployment Tools and the Windows PE add-on) are"
+                    Write-Host "installed on your computer. Try uninstalling your existing ADK and letting DISMTools install the"
+                    Write-Host "latest one for you. All of the pre-requisites will have been met."
                     Write-Host "`nPress ENTER to exit"
                     Read-Host | Out-Null
                     exit 1
@@ -249,7 +255,7 @@ function Start-PEGeneration
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
                 Write-Host "Beginning customizations..."
-                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $false) -eq $false)
+                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $false -includeSysDrivers $includeSysDrivers) -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
                     Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null
@@ -289,6 +295,7 @@ function Start-PEGeneration
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Copy-Item -Path "$((Get-Location).Path)\files\*.sh" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Copy-Item -Path "$((Get-Location).Path)\files\boot_image_to_wds.bat" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                Copy-Item -Path "$((Get-Location).Path)\files\install_image_to_wds.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
                 {
                     Write-Host "Unattended answer file has been detected. Copying to ISO file..."
@@ -337,7 +344,8 @@ icon=autorun.ico
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
                 Write-Host "Creating ISO file..."
-                if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath -bootex $bootex) -eq $false)
+                $isoCreationSuccessful = if ($bootEx) { New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath -bootex } else { New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath }
+                if (-not ($isoCreationSuccessful))
                 {
                     Write-Host "The ISO file has not been created successfully."
                     Write-Host "Deleting temporary files..."
@@ -354,7 +362,7 @@ icon=autorun.ico
                 }
                 Write-Host "The ISO file has been successfully created on the location you specified"
                 Start-Sleep -Seconds 5
-                if ($copyToVentoy -eq "true")
+                if ($copyToVentoy)
                 {
                     Write-Host "Please insert a Ventoy drive and press ENTER. To create Ventoy drives, follow the guide over at https://www.ventoy.net/en/doc_start.html"
                     Read-Host | Out-Null
@@ -593,15 +601,18 @@ function Start-PECustomization
             The path of the mounted Windows PE image
         .PARAMETER arch
             The architecture of the target Windows PE image, which is used to customize the wallpaper
-        .PARAMETE testStartNet
+        .PARAMETER testStartNet
             Customizes the "startnet.cmd" file for WinPE testing
+        .PARAMETER includeSysDrivers
+            Determines whether to include system SCSI adapters and network controllers in the Windows image.
         .EXAMPLE
             Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$imagePath,
         [Parameter(Mandatory = $true, Position = 1)] [PE_Arch]$arch,
-        [Parameter(Mandatory = $true, Position = 2)] [bool]$testStartNet
+        [Parameter(Mandatory = $true, Position = 2)] [bool]$testStartNet,
+        [Parameter(Mandatory = $true, Position = 3)] [bool]$includeSysDrivers
     )
     try
     {
@@ -744,11 +755,10 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout*.ps1" -Destination "$imagePath" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
-            if (Test-Path -Path "$((Get-Location).Path)\let_it_rain" -PathType Leaf) {
-                Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
-            }
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE.PolicyHelper.ps1" -Destination "$imagePath\DTPE.PolicyHelper.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
             New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
@@ -803,6 +813,136 @@ function Start-PECustomization
         {
             Write-Host "Scratch size could not be set."
         }
+        try
+        {
+            $policyVersion = "0.8.0.26063"
+
+            Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
+            Write-Host "Initializing default Preinstallation Environment policy..."
+            if (-not (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)) { throw }
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /ve /t REG_SZ /d "PolicyVer=$policyVersion"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v ShowWatermark /t REG_DWORD /d 0
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v UEFICA23Preference /t REG_SZ /d "AskUser"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PartTableOverridePreference /t REG_SZ /d "NoOverride"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCConnAttempts /t REG_DWORD /d 5
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCGraphoView /t REG_DWORD /d 1
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AutoUnattendCopytoSysprep /t REG_DWORD /d 0
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v PXEServerPort /t REG_DWORD /d 8080
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "00000409"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutOverrideExistingLayout /t REG_DWORD /d 0
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v AnswerFileConflictResponse /t REG_SZ /d "AskUser"
+            if (Test-Path -Path "$((Get-Location).Path)\files\DefaultPolicy.reg" -PathType Leaf) {
+                reg import "$((Get-Location).Path)\files\DefaultPolicy.reg"
+            }
+            if (Test-Path -Path "$((Get-Location).Path)\files\CustomPolicy.reg" -PathType Leaf) {
+                Write-Host "Importing custom policies..."
+                reg import "$((Get-Location).Path)\files\CustomPolicy.reg"
+            }
+            Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
+            Write-Host "Policy System initialized."
+        }
+        catch
+        {
+            Write-Host "Could not change registry..."
+        }
+        if ($includeSysDrivers) {
+            try
+            {
+                Write-Host "CUSTOMIZATION STEP - Include System Drivers" -BackgroundColor DarkGreen
+                Write-Host "Getting system storage controllers and network adapters..."
+                $sysDrivers = Get-WindowsDriver -Online | Where-Object { @("Net", "SCSIAdapter").Contains($_.ClassName) }
+                # We have grabbed the drivers. We'll export them to a directory outside the driver store,
+                # then we'll add them.
+                $drvCount = $sysDrivers.Count
+                $curDrvIndex = 0
+                $rootDriverPath = "$env:SYSTEMDRIVE\CWS_DRVS"
+                if (-not (Test-Path -Path "$rootDriverPath")) {
+                    New-Item -Path "$rootDriverPath" -ItemType Directory | Out-Null
+                }
+                Write-Host "Exporting available drivers..."
+                foreach ($sysDriver in $sysDrivers) {
+                    try {
+                        $curDrvIndex = $sysDrivers.IndexOf($sysDriver)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Exporting driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($sysDriver.OriginalFileName))`"..." -PercentComplete ((($curDrvIndex / $drvCount) * 100) / 2)
+                        $sysDriverSourcePath = [IO.Path]::GetDirectoryName("$($sysDriver.OriginalFileName)")
+                        $sysDriverTargetPath = "$rootDriverPath\$([IO.Path]::GetFileName($sysDriver.OriginalFileName))_$([Random]::new().Next([int]::MaxValue))"
+                        New-Item -Path "$sysDriverTargetPath" -ItemType Directory | Out-Null
+                        Copy-Item -Path "$sysDriverSourcePath\*.*" -Destination "$sysDriverTargetPath" -Recurse -Force
+                    } catch {
+                        Write-Host "Could not export driver $($sysDriver.OriginalFileName)."
+                    }
+                }
+                Write-Host "Installing drivers..."
+                $curDrvIndex = 0
+                $infFiles = Get-ChildItem -Path "$rootDriverPath" -Recurse -Filter "*.inf"
+                $infCount = $infFiles.Count
+                $successfulInstallations = 0
+                $failedInstallations = 0
+                $successfulDrivers = [List[string]]::new()
+                $failedDrivers = [List[string]]::new()
+                foreach ($infFile in $infFiles) {
+                    try {
+                        $curDrvIndex = $infFiles.IndexOf($infFile)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (50 + ((($curDrvIndex / $drvCount) * 100) / 2))
+                        if ((Start-DismCommand -Verb Add-Driver -ImagePath "$imagePath" -DriverAdditionFile "$($infFile.FullName)" -DriverAdditionRecurse $false) -eq $true)
+                        {
+                            $successfulInstallations++
+                            $successfulDrivers.Add("$($infFile.FullName)")
+                        }
+                        else
+                        {
+                            $failedInstallations++
+                            # Add the driver to the failed list, so we can display it later
+                            $failedDrivers.Add("$($infFile.FullName)")
+                        }
+                    } catch {
+
+                    }
+                }
+                Write-Progress -Activity "Installing system drivers..." -Completed
+                # We'll make the DTPE think we have added these drivers via the DIM, to automate their
+                # installation on the target Windows image.
+                Write-Host "Preparing drivers for deployment on target image..."
+                try {
+                    $winpeDriverRootPath = "$imagePath\CWS_DRVS"
+                    New-Item -Path "$winpeDriverRootPath" -ItemType Directory | Out-Null
+                    New-Item -Path "$imagePath\DT_InstDrvs.txt" | Out-Null
+                    Copy-Item -Path "$rootDriverPath\*.*" -Destination "$winpeDriverRootPath" -Recurse -Force
+                    foreach ($successfulDriver in $successfulDrivers) {
+                        $successfulDriver.Replace("$env:SYSTEMDRIVE", "X:") | Out-File "$imagePath\DT_InstDrvs.txt" -Encoding utf8 -Append
+                    }
+                } catch {
+
+                } finally {
+                    try {
+                        Remove-Item -Path "$rootDriverPath" -Recurse -Force
+                    } catch {
+
+                    }
+                }
+                # Show results
+                Write-Host "==================================================================="
+                Write-Host "Driver installation summary:"
+                Write-Host "- Successful driver installations: $successfulInstallations"
+                Write-Host "- Failed driver installations: $failedInstallations"
+                Write-Host "==================================================================="
+                if ($failedDrivers.Count -gt 0)
+                {
+                    Write-Host "  Drivers that could not be installed:"
+                    foreach ($failedDriver in $failedDrivers)
+                    {
+                        Write-Host "  - `"$failedDriver`""
+                    }
+                }
+            }
+            catch
+            {
+                Write-Host "Could not include drivers..."
+            }
+        }
+        Write-Host "Customizations completed."
         return $true
     }
     catch
@@ -895,7 +1035,7 @@ function New-WinPEIso
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$peToolsPath,
         [Parameter(Mandatory = $true, Position = 1)] [string]$isoLocation,
-        [Parameter(Position = 2)] [string]$bootex = "false"
+        [Parameter(Position = 2)] [switch]$bootex
     )
     try
     {
@@ -931,7 +1071,7 @@ function New-WinPEIso
         $efiVars = "#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\<EFIFILE_REPLACE>`""
         if ($finalPath -eq "bootbins")
         {
-            if (($bootex -eq "true") -and (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\efisys_EX.bin" -PathType Leaf))
+            if (($bootex) -and (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\efisys_EX.bin" -PathType Leaf))
             {
                 $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys_EX.bin").Trim()
             }
@@ -987,6 +1127,7 @@ function Start-OSApplication
         Write-Host "This procedure must be run on Windows PE only."
         return
     }
+    . "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
     if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -lt 1)
     {
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
@@ -997,6 +1138,13 @@ function Start-OSApplication
     exit
 '@
     New-Item -Path "$env:SYSTEMDRIVE\files\diskpart" -ItemType Directory -Force | Out-Null
+    $override = [PartitionTableOverride]::NoOverride
+    $overrideStr = Get-PolicyValue -PolicyName "PartTableOverridePreference" -DefaultPolicyValue "NoOverride" -ValidOptions @("NoOverride", "AlwaysMBR", "AlwaysGPT")
+    switch ($overrideStr) {
+        "NoOverride" { $override = [PartitionTableOverride]::NoOverride }
+        "AlwaysMBR" { $override = [PartitionTableOverride]::AlwaysMBR }
+        "AlwaysGPT" { $override = [PartitionTableOverride]::AlwaysGPT }
+    }
     $diskGetterDpScript | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
@@ -1005,7 +1153,7 @@ function Start-OSApplication
         return
     }
     Write-Host "Selected disk: disk $($drive)"
-    $partitionOptions = Get-Partitions $drive
+    $partitionOptions = Get-Partitions $drive $override
     if ($partitionOptions["partitionNumber"] -eq "B")
     {
         do {
@@ -1016,7 +1164,7 @@ function Start-OSApplication
                 return
             }
             Write-Host "Selected disk: disk $($drive)"
-            $partitionOptions = Get-Partitions $drive
+            $partitionOptions = Get-Partitions $drive $override
         } until ($partitionOptions["partitionNumber"] -ne "B")
     }
     if ($partitionOptions["partitionNumber"] -eq 0)
@@ -1036,7 +1184,7 @@ function Start-OSApplication
     {
         do
         {
-            $partitionOptions = Get-Partitions $drive
+            $partitionOptions = Get-Partitions $drive $override
             if ($partitionOptions["partitionNumber"] -eq "B")
             {
                 do {
@@ -1047,7 +1195,7 @@ function Start-OSApplication
                         return
                     }
                     Write-Host "Selected disk: disk $($drive)"
-                    $partitionOptions = Get-Partitions $drive
+                    $partitionOptions = Get-Partitions $drive $override
                 } until ($partitionOptions["partitionNumber"] -ne "B")
             }
             if ($partitionOptions["partitionNumber"] -eq 0)
@@ -1111,8 +1259,15 @@ function Start-OSApplication
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
+    $bootexStr = Get-PolicyValue -PolicyName "UEFICA23Preference" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "UseNever", "UseAlways")
     $usebootex = $false
-    if (($partOverride -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+    $bootexPolicyUsed = $false
+    if ($bootexStr -ne "AskUser") { $bootexPolicyUsed = $true }
+    switch ($bootexStr) {
+        "UseNever" { $usebootex = $false }
+        "UseAlways" { $usebootex = $true }
+    }
+    if (($bootexPolicyUsed -ne $true) -and ($partOverride -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
         # Quick run-down: we only ask for EFI boot binary when no overrides are used, we find Secure Boot on the system, AND
         # if the provided bcdboot supports bootex.
         Write-Host "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions"
@@ -1145,24 +1300,121 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
-    if (Test-Path "$((Get-Location).Path)\unattend.xml" -PathType Leaf)
-    {
-        Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
-        if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
-        {
-            Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+    try {
+        $isoUnattendXml = "$((Get-Location).Path)\unattend.xml"
+        # Rufus, using WUE, puts the answer file in sources\$OEM$\$$\Panther. We'll scan alternatives and use them,
+        # if the user wants to.
+        $wueUnattendXml = "$((Get-Location).Path)\sources\`$OEM`$\`$`$\Panther\unattend.xml"        # escape our dollars; we want our dollars; we want our money! -- a krab
+        $finalAnswerPath = ""       # store the final path of our answer file
+        if ((Test-Path -Path "$isoUnattendXml" -PathType Leaf) -and (Test-Path -Path "$wueUnattendXml" -PathType Leaf)) {
+            # Both files exist; ask user to decide which one to use.
+            Write-Host "This installation medium appears to be made with Rufus and contains an answer file that was created by said utility."
+            Write-Host "At the root of this installation medium is also an answer file copied by DISMTools.`n"
+            $useRufus = Read-Host -Prompt "Use the answer file from Rufus instead of the one from DISMTools? (y/N)"
+            if ($useRufus -eq "y") {
+                $finalAnswerPath = $wueUnattendXml
+            } else {
+                $finalAnswerPath = $isoUnattendXml
+            }
+        } elseif (Test-Path -Path "$wueUnattendXml" -PathType Leaf) {
+            # Only the Rufus file exists.
+            $finalAnswerPath = $wueUnattendXml
+        } else {
+            # Only our (superior) answer file exists.
+            $finalAnswerPath = $isoUnattendXml
         }
-        else
+
+        if (Test-Path -Path "$finalAnswerPath" -PathType Leaf)
         {
-            Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+            # Check if the image already has an answer file in its panther directory. If it does, then that counts
+            # as a conflict that must be resolved.
+            if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
+                # CONFLICT!
+                $isoUnattendInfo = Get-Item -Path "$finalAnswerPath"
+                $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
+                # The user may have used a policy to handle this conflict automatically. Guess it and use it.
+                $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
+                Write-Host "`n`n"
+                Write-Host "Unattended answer files have been found in both the ISO file and the Windows image that you are deploying. Specify "
+                Write-Host "how you want to proceed, but you may encounter unexpected results if you choose the wrong file.`n"
+                Write-Host "    Answer file in the ISO file:`n"
+                Write-Host "      - Creation date: $($isoUnattendInfo.CreationTime)"
+                Write-Host "      - Modification date: $($isoUnattendInfo.LastWriteTime)"
+                Write-Host "      - Size: $([Math]::Round(($isoUnattendInfo.Length / 1KB), 2)) KB"
+                Write-Host ""
+                Write-Host "    Answer file in the Windows image file:`n"
+                Write-Host "      - Creation date: $($wimUnattendInfo.CreationTime)"
+                Write-Host "      - Modification date: $($wimUnattendInfo.LastWriteTime)"
+                Write-Host "      - Size: $([Math]::Round(($wimUnattendInfo.Length / 1KB), 2)) KB"
+                Write-Host ""
+                switch ($policyDecision) {
+                    "PreferISO" {
+                        Write-Host "Handling conflict with answer file from the ISO file..."
+                    }
+                    "PreferWIM" {
+                        Write-Host "Handling conflict with answer file from Windows image..."
+                        throw
+                    }
+                    "AskUser" {
+                        Write-Host "Type ISO if you want to use the answer file from the disc image, or WIM if you want to use the one from the Windows"
+                        Write-Host "image file. To manually review the answer files to see which one is ideal in this situation, press R.`n"
+                        $decided = $false
+                        $decision = ""
+                        do {
+                            $decision = Read-Host -Prompt "Specify an option (ISO, WIM, or R), and press ENTER"
+                            if ($decision -eq "") {
+                                # Blank options are not allowed
+                                continue
+                            }
+
+                            if (-not (@("iso", "wim", "r").Contains($decision.ToLower()))) {
+                                # So are options that are not part of the set
+                                continue
+                            }
+
+                            if ($decision -eq "R") {
+                                # Manually review the files
+                                $isoUnattendFile = "$env:TEMP\Unattended file from ISO file.xml"
+                                $wimUnattendFile = "$env:TEMP\Unattended file from Windows image file.xml"
+
+                                Copy-Item -Path "$finalAnswerPath" -Destination "$isoUnattendFile" -Force
+                                Copy-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml" -Destination "$wimUnattendFile" -Force
+
+                                notepad "$isoUnattendFile"
+                                notepad "$wimUnattendFile"
+                                continue
+                            }
+
+                            $decided = $true
+                        } until ($decided)
+
+                        # If we chose the one from the WIM, we cancel the operation by "throwing" it out the window
+                        if ($decision -eq "WIM") {
+                            throw
+                        }
+                    }
+                }
+            }
+
+            Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
+            if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$finalAnswerPath") -eq $true)
+            {
+                Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+            }
+            else
+            {
+                Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+            }
         }
+    } catch {
+
     }
     $driverPath = "$env:SYSTEMDRIVE\DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
     {
         Write-Host "Adding drivers to the target image..."
         # Add drivers that were previously added to the Windows PE using the DIM
-        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" } | Select-Object -Unique)
         $drvCount = $drivers.Count
         $successfulInstallations = 0
         $failedInstallations = 0
@@ -1209,6 +1461,12 @@ function Start-OSApplication
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride -bootEx $usebootex
+    if ((Get-PolicyValue -PolicyName "KeyboardLayoutOverrideExistingLayout" -DefaultPolicyValue 0 -ValidOptions @(0, 1)) -eq 1) {
+        Write-Host "Configuring target system keyboard layout..."
+        # Get specified keyboard layout
+        $keybLayoutCode = Get-PolicyValue -PolicyName "KeyboardLayoutCode" -DefaultPolicyValue "00000409"
+        dism /image=$($driveLetter):\ /set-inputlocale:0409:$keybLayoutCode
+    }
     Start-Sleep -Milliseconds 250
     Clear-Host
     Write-Host "`n`n`n`n`n`n`n`n`n`n"
@@ -1219,7 +1477,7 @@ function Start-OSApplication
     }
     Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
     if ($partOverride -eq [PartitionTableOverride]::NoOverride) { Write-Host "When your computer restarts, Setup will continue." }
-    Show-Timeout -Seconds 10
+    Show-Timeout -Seconds 10 -override $partOverride
     if ($partOverride -eq [PartitionTableOverride]::NoOverride) {
         wpeutil reboot
     } else {
@@ -1312,6 +1570,26 @@ function Get-Disks
                 {
                     if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
+                        if ((Get-PolicyValue -PolicyName "DTDimShowPnputilOut" -DefaultPolicyValue 1 -ValidOptions @(0,1)) -eq 1) {
+                            $compSys = Get-CimInstance -Query "SELECT Manufacturer, Model FROM Win32_ComputerSystem"
+                            $baseBrd = Get-CimInstance -Query "SELECT Product FROM Win32_BaseBoard"
+
+                            $manufacturer = $compSys.Manufacturer
+                            $model = $compSys.Model
+                            $boardModel = $baseBrd.Product
+
+                            @"
+These are the device IDs of the hardware devices that could not be detected. Please
+install device drivers based on hardware IDs. After installation, please close this window.
+
+To find the drivers for this specific device, please check the following information:
+- Manufacturer/Model: $manufacturer $model
+- Motherboard model : $boardModel
+
+"@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
+                            pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
+                            notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
+                        }
                         Clear-Host
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
@@ -1431,8 +1709,26 @@ function Get-Partitions
             $overrideOption = Read-Host -Prompt "Select the option that you want to use and press ENTER"
             switch ($overrideOption) {
                 "C" { $override = [PartitionTableOverride]::NoOverride }
-                "M" { $override = [PartitionTableOverride]::AlwaysMBR }
-                "G" { $override = [PartitionTableOverride]::AlwaysGPT }
+                "M" {
+                    $override = [PartitionTableOverride]::AlwaysMBR
+                    if ($env:FIRMWARE_TYPE -eq "Legacy") {
+                        Write-Host "You have chosen a MBR partition table override on a computer whose firmware type already"
+                        Write-Host "supports MBR. While you can keep using this override, it becomes redundant and, thus, we"
+                        Write-Host "recommend that you clear this partition table override."
+                        $option = Read-Host -Prompt "Do you want to clear the override? (Y/n)"
+                        if ($option -ne "N") { $override = [PartitionTableOverride]::NoOverride }
+                    }
+                }
+                "G" {
+                    $override = [PartitionTableOverride]::AlwaysGPT
+                    if ($env:FIRMWARE_TYPE -eq "UEFI") {
+                        Write-Host "You have chosen a GPT partition table override on a computer whose firmware type already"
+                        Write-Host "supports GPT. While you can keep using this override, it becomes redundant and, thus, we"
+                        Write-Host "recommend that you clear this partition table override."
+                        $option = Read-Host -Prompt "Do you want to clear the override? (Y/n)"
+                        if ($option -ne "N") { $override = [PartitionTableOverride]::NoOverride }
+                    }
+                }
             }
         }
         Get-Partitions $driveNum $override
@@ -1930,8 +2226,10 @@ function Start-DismCommand
                     # Copy unattended answer file to target image
                     New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\Panther"
                     Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\Panther\unattend.xml" -Force
-                    New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
-                    Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                    if ((Get-PolicyValue -PolicyName "AutoUnattendCopytoSysprep" -DefaultPolicyValue 0 -ValidOptions @(0,1)) -eq 1) {
+                        New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
+                        Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                    }
                 }
                 catch
                 {
@@ -2260,20 +2558,29 @@ function Show-Timeout {
             Show-Timeout -seconds 15
     #>
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [int]$seconds
+        [Parameter(Mandatory = $true, Position = 0)] [int]$seconds,
+        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
     )
     for ($i = 0; $i -lt $seconds; $i++)
     {
-        Write-Progress -Activity "Restarting or shutting down system..." -Status "Your system will restart or shut down in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        if ($override -eq [PartitionTableOverride]::NoOverride) {
+            Write-Progress -Activity "Restarting system..." -Status "Your system will restart in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        } else {
+            Write-Progress -Activity "Shutting down system..." -Status "Your system will shut down in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        }
         Start-Sleep -Seconds 1
     }
-    Write-Progress -Activity "Restarting or shutting down system..." -Status "Restarting or shutting down your system..." -PercentComplete 100
+    if ($override -eq [PartitionTableOverride]::NoOverride) {
+        Write-Progress -Activity "Restarting system..." -Status "Restarting your system..." -PercentComplete 100
+    } else {
+        Write-Progress -Activity "Shutting down system..." -Status "Shutting down your system..." -PercentComplete 100
+    }
 }
 
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.7.3"
+    $version = "0.8"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"

@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Text.RegularExpressions
 
 Public Class EnableFeat
     Implements IImageTaskDialog
@@ -165,7 +166,7 @@ Public Class EnableFeat
                     ProgressPanel.featSource = RichTextBox1.Text
                 End If
             Else
-                ProgressPanel.featisSourceSpecified = True
+                ProgressPanel.featisSourceSpecified = False
                 ProgressPanel.featSource = ""
             End If
             If CheckBox3.Checked Then
@@ -210,9 +211,9 @@ Public Class EnableFeat
         End If
         DynaLog.LogMessage("Adding features to arrays...")
         If MainForm.CurrentImage.ImageFeatures IsNot Nothing AndAlso MainForm.CurrentImage.ImageFeatures.Count > MainForm.CurrentImage.ImageFeatures_Backup.Count Then
-            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged, DismPackageFeatureState.Removed}.Contains(feature.State)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
         Else
-            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures_Backup.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.FeatureState)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.FeatureState, True)})).ToArray())
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures_Backup.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged, DismPackageFeatureState.Removed}.Contains(feature.FeatureState)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.FeatureState, True)})).ToArray())
         End If
         Return True
     End Function
@@ -226,7 +227,7 @@ Public Class EnableFeat
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Enable features"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Package name:"
                         Label4.Text = "Feature source:"
                         Button1.Text = "Lookup..."
@@ -246,7 +247,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
                     Case "ESN"
                         Text = "Habilitar característica"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Paquete:"
                         Label4.Text = "Origen:"
                         Button1.Text = "Consultar"
@@ -266,7 +267,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
                     Case "FRA"
                         Text = "Activer les caractéristiques"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nom du paquet :"
                         Label4.Text = "Source de la caractéristique :"
                         Button1.Text = "Rechercher..."
@@ -286,7 +287,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Spécifiez un répertoire qui servira de source des caractéristiques :"
                     Case "PTB", "PTG"
                         Text = "Ativar características"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nome do pacote:"
                         Label4.Text = "Fonte da caraterística:"
                         Button1.Text = "Navegar..."
@@ -306,7 +307,7 @@ Public Class EnableFeat
                         FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
                     Case "ITA"
                         Text = "Abilita funzionalità"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label3.Text = "Nome pacchetto:"
                         Label4.Text = "Origine caratteristiche:"
                         Button1.Text = "Cerca..."
@@ -327,7 +328,7 @@ Public Class EnableFeat
                 End Select
             Case 1
                 Text = "Enable features"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Package name:"
                 Label4.Text = "Feature source:"
                 Button1.Text = "Lookup..."
@@ -347,7 +348,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
             Case 2
                 Text = "Habilitar característica"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Paquete:"
                 Label4.Text = "Origen:"
                 Button1.Text = "Consultar"
@@ -367,7 +368,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
             Case 3
                 Text = "Activer les caractéristiques"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nom du paquet :"
                 Label4.Text = "Source de la caractéristique :"
                 Button1.Text = "Rechercher..."
@@ -387,7 +388,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Spécifiez un répertoire qui servira de source des caractéristiques :"
             Case 4
                 Text = "Ativar características"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nome do pacote:"
                 Label4.Text = "Fonte da caraterística:"
                 Button1.Text = "Navegar..."
@@ -407,7 +408,7 @@ Public Class EnableFeat
                 FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
             Case 5
                 Text = "Abilita funzionalità"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label3.Text = "Nome pacchetto:"
                 Label4.Text = "Origine caratteristiche:"
                 Button1.Text = "Cerca..."
@@ -426,7 +427,7 @@ Public Class EnableFeat
                 ListView1.Columns(1).Text = "Stato"
                 FolderBrowserDialog1.Description = "Specificare una cartella che fungerà da origine delle caratteristiche:"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -437,11 +438,6 @@ Public Class EnableFeat
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
-        PictureBox2.Image = GetGlyphResource("image_glyph")
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         DynaLog.LogMessage("Detecting ability to contact Windows Update (in the case of active installation management)...")
         DynaLog.LogMessage("Boot Mode of Host System: " & SystemInformation.BootMode.ToString())
@@ -459,9 +455,12 @@ Public Class EnableFeat
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        WimFileSourcePanel.SetColors()
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(372)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(339)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -495,21 +494,19 @@ Public Class EnableFeat
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         DynaLog.LogMessage("Getting source established in the group policy...")
-        RichTextBox1.Text = MainForm.GetSrcFromGPO()
-        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
-            TextBoxSourcePanel.Visible = False
+        RichTextBox1.Text = ServicingGPOHelper.GetSrcFromGPO()
+        If Regex.IsMatch(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)") Then
+            ' Divide the source to only grab image file and index
+            Dim ImageFileMatches As MatchCollection = Regex.Matches(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)")
+            WimFileSourcePanel.ImageFile = ImageFileMatches(0).Groups(2).Value
+            WimFileSourcePanel.ImageIndex = CInt(ImageFileMatches(0).Groups(3).Value.Replace(":", ""))
             WimFileSourcePanel.Visible = True
-            Dim parts() As String = RichTextBox1.Text.Split(":")
-            Label6.Text = parts(parts.Length - 1)
-            Label5.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
-            If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
         Else
-            TextBoxSourcePanel.Visible = True
             WimFileSourcePanel.Visible = False
         End If
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As EventArgs)
         TextBoxSourcePanel.Visible = True
         WimFileSourcePanel.Visible = False
     End Sub

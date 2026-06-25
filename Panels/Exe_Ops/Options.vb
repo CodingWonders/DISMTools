@@ -16,7 +16,10 @@ Public Class Options
 
     Public SectionNum As Integer = 0
 
-    Sub DetermineSettingValidity()
+    Private AutoReloadServiceInstalled As Boolean
+    Private AutoReloadService As WindowsService
+
+    Private Sub DetermineSettingValidity()
         DynaLog.LogMessage("Validating settings...")
         If TextBox1.Text = "" Then
             DynaLog.LogMessage("No DISM executable has been specified.")
@@ -99,7 +102,7 @@ Public Class Options
         End If
     End Sub
 
-    Sub ApplyProgSettings()
+    Private Sub ApplyProgSettings()
         DynaLog.LogMessage("Beginning application of user settings...")
         DynaLog.LogMessage("Determining whether or not settings are valid...")
         DetermineSettingValidity()
@@ -111,11 +114,6 @@ Public Class Options
             Case 1
                 MainForm.SaveOnSettingsIni = False
         End Select
-        If CheckBox1.Checked Then
-            MainForm.VolatileMode = True
-        Else
-            MainForm.VolatileMode = False
-        End If
         MainForm.ColorMode = ComboBox2.SelectedIndex
         MainForm.Language = ComboBox3.SelectedIndex
         MainForm.LogFont = ComboBox4.Text
@@ -202,9 +200,6 @@ Public Class Options
         MainForm.AutoCleanMounts = CheckBox22.Checked
         MainForm.AutoLogs = CheckBox10.Checked
         MainForm.SystemEditor = TextBox5.Text
-        If MainForm.VolatileMode Then
-            MainForm.SaveDTSettings()
-        End If
         If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.CurrentImage.ImageVersion)
         MainForm.SkipQuestions = CheckBox14.Checked
         MainForm.AutoCompleteInfo(0) = CheckBox15.Checked
@@ -223,9 +218,11 @@ Public Class Options
         End If
 
         MainForm.AppxDisplayNameFormatOnRemoval = ComboBox8.SelectedIndex
+        MainForm.PreventSystemFromSleeping = CheckBox8.Checked
+        MainForm.HumanizeDates = CheckBox1.Checked
     End Sub
 
-    Sub GiveErrorExplanation(ErrorCode As Integer)
+    Private Sub GiveErrorExplanation(ErrorCode As Integer)
         DynaLog.LogMessage("Error Code: " & ErrorCode)
         Select Case ErrorCode
             Case 1
@@ -243,21 +240,22 @@ Public Class Options
         End Select
     End Sub
 
-    Function DetectFileAssociations() As Boolean
+    Private Function DetectFileAssociations(RootClass As String) As Boolean
         DynaLog.LogMessage("Detecting file associations...")
         Try
-            DynaLog.LogMessage("Getting values from root class " & Quote & "DISMTools.Project" & Quote & "...")
-            Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\Shell\Open\Command", False)
-            Dim AssocCmd As String = AssocRk.GetValue(Nothing).ToString()
-            AssocRk.Close()
+            DynaLog.LogMessage("Getting values from root class " & Quote & RootClass & Quote & "...")
+            Dim AssocCmd As String = FileAssociationHelper.GetFileAssociationCmdline(RootClass)
             DynaLog.LogMessage("Command-line of association: " & Quote & AssocCmd & Quote)
-            If File.Exists(AssocCmd.Replace(" " & Quote & "/load=" & Quote & "%1" & Quote & Quote, "").Trim().Replace(Quote, "").Trim()) Then
-                DynaLog.LogMessage("DISMTools exists in the association cmdline. Associations have been established.")
-                Return True
-            Else
-                DynaLog.LogMessage("DISMTools does not exist in the association cmdline. Associations have not been established.")
-                Return False
-            End If
+
+            ' Separate each part of the command-line to get the application path
+            Dim CmdlineParts As String() = AssocCmd.Replace(Quote, "").Split(" ")
+            Dim AssocCmdPath As String = ""
+            For i = 0 To CmdlineParts.Length - 1
+                AssocCmdPath &= " " & CmdlineParts(i)
+                If File.Exists(AssocCmdPath) Then Exit For
+            Next
+            AssocCmd = AssocCmdPath
+            Return File.Exists(AssocCmd)
         Catch ex As Exception
             DynaLog.LogMessage("Could not detect file associations. Error message: " & ex.Message)
             Return False
@@ -268,84 +266,34 @@ Public Class Options
     ''' <summary>
     ''' Manages the file associations for files with the ".dtproj" extension
     ''' </summary>
-    ''' <param name="AssocOp"></param>
-    ''' <param name="UseCustomIcons"></param>
     ''' <remarks></remarks>
-    Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
+    Private Sub ManageAssociations()
+        Dim DtProjUseCustomIcon As Boolean = CheckBox11.Checked,
+            DtssUseCustomIcon As Boolean = CheckBox24.Checked
+
         DynaLog.LogMessage("Setting file associations...")
-        DynaLog.LogMessage("- Association operation: " & If(AssocOp = 0, "set associations", "remove associations"))
-        DynaLog.LogMessage("- Use a custom icon? " & If(UseCustomIcons, "Yes", "No"))
-        Select Case AssocOp
-            Case 0
-                DynaLog.LogMessage("Setting associations and file types on the system...")
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=DISMTools.Project").WaitForExit()
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=" & Quote & Environment.CurrentDirectory & "\DISMTools.exe" & Quote & " " & Quote & "/load=" & Quote & "%1" & Quote & Quote).WaitForExit()
-                DynaLog.LogMessage("Modifying DISMTools project association...")
-                Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project", True)
-                DynaLog.LogMessage("Setting the description of projects for Windows...")
-                AssocRk.SetValue(Nothing, "DISMTools project", RegistryValueKind.String)
-                If UseCustomIcons Then
-                    DynaLog.LogMessage("A custom icon for the project will be used. Checking if it exists...")
-                    If File.Exists(Environment.CurrentDirectory & "\resources\dtproj.ico") Then
-                        DynaLog.LogMessage("The custom project icon exists. Setting it in the association...")
-                        AssocRk.CreateSubKey("DefaultIcon")
-                        Dim DefIcon As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\DefaultIcon", True)
-                        DefIcon.SetValue(Nothing, Environment.CurrentDirectory & "\resources\dtproj.ico", RegistryValueKind.String)
-                        DefIcon.Close()
-                    End If
-                End If
-                AssocRk.Close()
-            Case 1
-                DynaLog.LogMessage("Removing associations and file types from the system...")
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
-                ' Delete registry key remnants
-                RegistryHelper.RemoveRegistryItem("HKCR\DISMTools.Project", "/f")
-        End Select
-        ' Clear icon cache
-        DynaLog.LogMessage("Clearing icon cache with ie4uinit...")
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ie4uinit.exe", "-ClearIconCache").WaitForExit()
-        ' Restart explorer.exe
-        DynaLog.LogMessage("Restarting Windows Explorer...")
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\taskkill.exe", "/f /im explorer.exe").WaitForExit()
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe")
+        DynaLog.LogMessage("- Use a custom icon (DTPROJ)? " & If(DtProjUseCustomIcon, "Yes", "No"))
+        DynaLog.LogMessage("- Use a custom icon (DTSS)? " & If(DtssUseCustomIcon, "Yes", "No"))
+
+        If DTProjAssocCB.Checked Then
+            FileAssociationHelper.SetFileAssociation(".dtproj", "DISMTools.Project", String.Format("{0}{1}{0} {0}/load={0}%1{0}{0}", Quote, Path.Combine(Application.StartupPath, "DISMTools.exe")),
+                                                     "DISMTools Project", If(DtProjUseCustomIcon, Path.Combine(Application.StartupPath, "resources", "dtproj.ico"), ""), Not DtProjUseCustomIcon)
+        Else
+            FileAssociationHelper.RemoveFileAssociation(".dtproj", "DISMTools.Project")
+        End If
+        If DTSSEditAssocCB.Checked Then
+            FileAssociationHelper.SetFileAssociation(".dtss", "DTSSEdit.StarterScript", String.Format("{0}{1}{0} /dtss={0}%1{0}", Quote, Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")),
+                                                     "DISMTools Starter Script", If(DtssUseCustomIcon, Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "DTSSIcon.ico"), ""), Not DtssUseCustomIcon)
+        Else
+            FileAssociationHelper.RemoveFileAssociation(".dtss", "DTSSEdit.StarterScript")
+        End If
+
         DynaLog.LogMessage("Checking file associations one more time...")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
-                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
-                    Case "ESN"
-                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
-                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
-                    Case "FRA"
-                        Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
-                        Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
-                    Case "PTB", "PTG"
-                        Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
-                        Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
-                    Case "ITA"
-                        Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
-                        Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
-                End Select
-            Case 1
-                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
-                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
-            Case 2
-                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
-                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
-            Case 3
-                Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
-                Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
-            Case 4
-                Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
-                Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
-            Case 5
-                Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
-                Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
-        End Select
-        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
+
+        DTProjAssocCB.Checked = DetectFileAssociations("DISMTools.Project")
+        CheckBox11.Checked = FileAssociationHelper.GetFileAssociationIconPath("DISMTools.Project") <> ""
+        DTSSEditAssocCB.Checked = DetectFileAssociations("DTSSEdit.StarterScript")
+        CheckBox24.Checked = FileAssociationHelper.GetFileAssociationIconPath("DTSSEdit.StarterScript") <> ""
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -361,6 +309,44 @@ Public Class Options
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
+    End Sub
+
+    Private Sub GetAIRServiceInformation()
+        AutoReloadService = WindowsServiceHelper.GetOnlineSystemServiceInformationByName("DT_AutoReload")
+
+        Label80.Text = If(AutoReloadService IsNot Nothing, "Yes", "No")
+        Button7.Enabled = AutoReloadService Is Nothing
+        Button13.Enabled = AutoReloadService IsNot Nothing
+
+        If AutoReloadService IsNot Nothing Then
+            Label82.Text = AutoReloadService.ImagePath
+
+            ' Let's do some more checks, even though a service can be in a system, its corresponding binary may not be in there.
+            If Not String.IsNullOrEmpty(AutoReloadService.ImagePath) AndAlso File.Exists(AutoReloadService.ImagePath) Then
+                Button11.Enabled = AutoReloadService.StartType = WindowsService.ServiceStartType.Disabled
+                Button12.Enabled = AutoReloadService.StartType < WindowsService.ServiceStartType.Disabled
+
+                Try
+                    Dim airSvcFvi As FileVersionInfo = FileVersionInfo.GetVersionInfo(AutoReloadService.ImagePath)
+                    Label82.Text &= String.Format(" (version {0})", airSvcFvi.ProductVersion)
+                Catch ex As Exception
+                    ' don't grab the version then
+                End Try
+            Else
+                Label80.Text = "No"
+                Label82.Text = ""
+                Button11.Enabled = False
+                Button12.Enabled = False
+                Button7.Enabled = True
+                Button13.Enabled = False
+            End If
+        Else
+            Label80.Text = "No"
+            Label82.Text = ""
+            Button11.Enabled = False
+            Button12.Enabled = False
+        End If
+
     End Sub
 
     Private Sub Options_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -381,7 +367,7 @@ Public Class Options
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Options"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Program"
                         Label50.Text = "Personalization"
                         Label51.Text = "Logs"
@@ -389,14 +375,12 @@ Public Class Options
                         Label53.Text = "Scratch directory"
                         Label54.Text = "Program output"
                         Label55.Text = "Background processes"
-                        Label56.Text = "Image detection"
                         Label57.Text = "File associations"
                         Label58.Text = "Startup options"
                         Label34.Text = "Shutdown options"
                         Label2.Text = "DISM executable path:"
                         Label3.Text = "Version:"
                         Label5.Text = "Save settings on:"
-                        Label6.Text = "While in volatile mode, settings will be reset on program closure."
                         Label7.Text = "Color mode:"
                         Label8.Text = "Language:"
                         'Label9.Text = "Please specify the settings for the log window:"
@@ -415,12 +399,7 @@ Public Class Options
                         Label27.Text = "Some reports do not allow being shown as a table."
                         Label28.Text = "When should the program notify you about background processes being started?"
                         Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                        Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
-                        Label36.Text = "Review the status of this background process:"
-                        Label37.Text = "Status:"
-                        Label40.Text = "File associations let you access project files directly, without having to load the program first"
-                        Label41.Text = "Association status:"
-                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                        Label40.Text = "Manage file associations for DISMTools components:"
                         Label43.Text = "Set options you would like to perform when the program starts up:"
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in the online or offline installation management modes, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
@@ -431,20 +410,17 @@ Public Class Options
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
                         Button4.Text = "Browse..."
-                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                        Button9.Text = "Set file associations"
                         Button10.Text = "Advanced settings"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Reset preferences"
-                        CheckBox1.Text = "Volatile mode"
                         CheckBox2.Text = "Quietly perform image operations"
                         CheckBox3.Text = "Skip system restart"
                         CheckBox4.Text = "Use a scratch directory"
                         CheckBox5.Text = "Show command output in English"
                         CheckBox6.Text = "Notify me when background processes have started"
                         CheckBox7.Text = "Show log view on the progress panel by default"
-                        CheckBox8.Text = "Detect mounted images at all times"
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
                         CheckBox11.Text = "Set custom file icons for DISMTools projects"
@@ -461,7 +437,6 @@ Public Class Options
                         Label59.Text = "Log customization"
                         Label60.Text = "Set options you would like to perform when the program closes:"
                         Label61.Text = "Preview:"
-                        GroupBox5.Text = "Associations"
                         Label9.Text = "Saving image information"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
@@ -484,7 +459,7 @@ Public Class Options
                         CheckBox20.Text = "Disable DynaLog logging"
                     Case "ESN"
                         Text = "Opciones"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programa"
                         Label50.Text = "Personalización"
                         Label51.Text = "Registros"
@@ -492,14 +467,12 @@ Public Class Options
                         Label53.Text = "Directorio temporal"
                         Label54.Text = "Salida del programa"
                         Label55.Text = "Procesos en segundo plano"
-                        Label56.Text = "Detección de imágenes"
                         Label57.Text = "Asociaciones de archivos"
                         Label58.Text = "Opciones de inicio"
                         Label34.Text = "Opciones de cierre"
                         Label2.Text = "Ruta del ejecutable:"
                         Label3.Text = "Versión:"
                         Label5.Text = "Guardar configuraciones en:"
-                        Label6.Text = "Cuando se está en el modo volátil, las configuraciones se restablecerán al cerrar el programa."
                         Label7.Text = "Modo de color:"
                         Label8.Text = "Idioma:"
                         Label10.Text = "Fuente:"
@@ -517,12 +490,7 @@ Public Class Options
                         Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                         Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                         Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                        Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
-                        Label36.Text = "Consulte el estado de este proceso en segundo plano:"
-                        Label37.Text = "Estado:"
-                        Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
-                        Label41.Text = "Estado de asociaciones:"
-                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                        Label40.Text = "Administre asociaciones de archivos para componentes de DISMTools:"
                         Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en los modos de administración de instalaciones en línea o fuera de línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
@@ -533,20 +501,17 @@ Public Class Options
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
                         Button4.Text = "Examinar..."
-                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                        Button9.Text = "Establecer asociaciones"
                         Button10.Text = "Opciones avanzadas"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         PrefReset.Text = "Restablecer preferencias"
-                        CheckBox1.Text = "Modo volátil"
                         CheckBox2.Text = "Realizar operaciones silenciosamente"
                         CheckBox3.Text = "Omitir reinicio del sistema"
                         CheckBox4.Text = "Usar un directorio temporal"
                         CheckBox5.Text = "Mostrar salida del programa en inglés"
                         CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
                         CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
-                        CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                         CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
@@ -563,7 +528,6 @@ Public Class Options
                         Label59.Text = "Personalización del registro"
                         Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
                         Label61.Text = "Vista previa:"
-                        GroupBox5.Text = "Asociaciones"
                         Label9.Text = "Guardando información de la imagen"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
@@ -586,7 +550,7 @@ Public Class Options
                         CheckBox20.Text = "Desactivar el registro de DynaLog"
                     Case "FRA"
                         Text = "Paramètres"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programme"
                         Label50.Text = "Personnalisation"
                         Label51.Text = "Journaux"
@@ -594,14 +558,12 @@ Public Class Options
                         Label53.Text = "Répertoire temporaire"
                         Label54.Text = "Sortie du programme"
                         Label55.Text = "Processus en arrière plan"
-                        Label56.Text = "Détection des images"
                         Label57.Text = "Associations de fichiers"
                         Label58.Text = "Paramètres de démarrage"
                         Label34.Text = "Paramètres de fermeture"
                         Label2.Text = "Chemin d'accès à l'exécutable DISM :"
                         Label3.Text = "Version:"
                         Label5.Text = "Sauvegarder les paramètres sur :"
-                        Label6.Text = "En mode volatile, les paramètres sont réinitialisés à la fermeture du programme."
                         Label7.Text = "Mode couleur :"
                         Label8.Text = "Langue:"
                         'Label9.Text = "Veuillez spécifier les paramètres de la fenêtre d'enregistrement :"
@@ -620,12 +582,7 @@ Public Class Options
                         Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                         Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                         Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                        Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
-                        Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
-                        Label37.Text = "État :"
-                        Label40.Text = "Les associations de fichiers vous permettent d'accéder directement aux fichiers du projet, sans avoir à charger le programme au préalable."
-                        Label41.Text = "État de l'association :"
-                        Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
+                        Label40.Text = "Gérer les associations de fichiers pour les composants DISMTools :"
                         Label43.Text = "Définissez les options que vous souhaitez exécuter au démarrage du programme :"
                         Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en les modes de gestion de l'installation en ligne ou hors ligne, le programme utilisera son répertoire temporaire."
                         Label45.Text = "Style du panneau de progression secondaire :"
@@ -636,20 +593,17 @@ Public Class Options
                         Button2.Text = "Voir les versions des composants DISM"
                         Button3.Text = "Parcourir..."
                         Button4.Text = "Parcourir..."
-                        Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
+                        Button9.Text = "Établir des associations de fichiers"
                         Button10.Text = "Paramètres avancés"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arrêter" Else Button8.Text = "Démarrer"
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Réinitialiser les préférences"
-                        CheckBox1.Text = "Mode volatile"
                         CheckBox2.Text = "Effectuer des opérations d'image en silence"
                         CheckBox3.Text = "Sauter le redémarrage du système"
                         CheckBox4.Text = "Utiliser un répertoire temporaire"
                         CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                         CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
                         CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
-                        CheckBox8.Text = "Détecter les images montées à tout moment"
                         CheckBox9.Text = "Utiliser des menus en majuscules"
                         CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
                         CheckBox11.Text = "Définir des icônes de fichiers personnalisés pour les projets DISMTools"
@@ -666,7 +620,6 @@ Public Class Options
                         Label59.Text = "Personnalisation du journal"
                         Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
                         Label61.Text = "Aperçu :"
-                        GroupBox5.Text = "Associations"
                         Label9.Text = "Sauvegarde des informations de l'image"
                         LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                         LinkLabel1.LinkArea = New LinkArea(122, 126)
@@ -689,7 +642,7 @@ Public Class Options
                         CheckBox20.Text = "Désactiver la journalisation DynaLog"
                     Case "PTB", "PTG"
                         Text = "Opções"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programa"
                         Label50.Text = "Personalização"
                         Label51.Text = "Registos"
@@ -697,14 +650,12 @@ Public Class Options
                         Label53.Text = "Diretório temporário"
                         Label54.Text = "Saída do programa"
                         Label55.Text = "Processos em segundo plano"
-                        Label56.Text = "Deteção de imagens"
                         Label57.Text = "Associações de ficheiros"
                         Label58.Text = "Opções de arranque"
                         Label34.Text = "Opções de encerramento"
                         Label2.Text = "Localização do executável DISM:"
                         Label3.Text = "Versão:"
                         Label5.Text = "Guardar configurações em:"
-                        Label6.Text = "Enquanto estiver em modo volátil, as configurações serão repostas quando o programa for encerrado."
                         Label7.Text = "Modo de cor:"
                         Label8.Text = "Idioma:"
                         Label9.Text = "Especifique as configurações para a janela de registo:"
@@ -723,12 +674,7 @@ Public Class Options
                         Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                         Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                         Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                        Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
-                        Label36.Text = "Rever o estado deste processo em segundo plano:"
-                        Label37.Text = "Estado:"
-                        Label40.Text = "As associações de ficheiros permitem-lhe aceder diretamente aos ficheiros do projeto, sem ter de carregar primeiro o programa"
-                        Label41.Text = "Estado da associação:"
-                        Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
+                        Label40.Text = "Gerir associações de ficheiros para os componentes do DISMTools:"
                         Label43.Text = "Definir opções que gostaria de efetuar quando o programa arranca:"
                         Label44.Text = "O programa utilizará o diretório de rascunho fornecido pelo projeto, se tiver sido carregado um. Se estiver nos modos de gestão da instalação online ou offline, o programa utilizará o seu diretório de rascunho"
                         Label45.Text = "Estilo do painel de progresso secundário:"
@@ -739,20 +685,17 @@ Public Class Options
                         Button2.Text = "Ver versões de componentes DISM"
                         Button3.Text = "Navegar..."
                         Button4.Text = "Navegar..."
-                        Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Configurar associações de ficheiros")
+                        Button9.Text = "Configurar associações de ficheiros"
                         Button10.Text = "Configurações avançadas"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = " Parar" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Repor preferências"
-                        CheckBox1.Text = "Modo volátil"
                         CheckBox2.Text = "Efetuar operações de imagem silenciosamente"
                         CheckBox3.Text = "Ignorar o reinício do sistema"
                         CheckBox4.Text = "Utilizar um diretório de rascunho"
                         CheckBox5.Text = "Mostrar a saída do comando em inglês"
                         CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
                         CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
-                        CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                         CheckBox9.Text = "Utilizar menus em maiúsculas"
                         CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
                         CheckBox11.Text = "Configurar ícones de ficheiros personalizados para projectos DISMTools"
@@ -769,7 +712,6 @@ Public Class Options
                         Label59.Text = "Personalização do registo"
                         Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
                         Label61.Text = "Pré-visualização:"
-                        GroupBox5.Text = "Associações"
                         Label9.Text = "Guardar informação da imagem"
                         LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
                         LinkLabel1.LinkArea = New LinkArea(107, 118)
@@ -792,7 +734,7 @@ Public Class Options
                         CheckBox20.Text = "Desativar o registo DynaLog"
                     Case "ITA"
                         Text = "Opzioni"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label49.Text = "Programma"
                         Label50.Text = "Personalizzazione"
                         Label51.Text = "Registri"
@@ -800,14 +742,12 @@ Public Class Options
                         Label53.Text = "Cartella temporanea"
                         Label54.Text = "Output programma"
                         Label55.Text = "Processi in background"
-                        Label56.Text = "Rilevamento immagini"
                         Label57.Text = "Associazioni file"
                         Label58.Text = "Opzioni avvio"
                         Label34.Text = "Opzioni spegnimento"
                         Label2.Text = "Percorso eseguibile DISM:"
                         Label3.Text = "Versione:"
                         Label5.Text = "Salva impostazioni in:"
-                        Label6.Text = "In modalità volatile, le impostazioni verranno ripristinate alla chiusura del programma"
                         Label7.Text = "Modalità colore:"
                         Label8.Text = "Lingua:"
                         Label9.Text = "Specifica le impostazioni per la finestra regsitro:"
@@ -826,12 +766,7 @@ Public Class Options
                         Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                         Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                         Label29.Text = "Il programma usa i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzionalità presenti e altro ancora"
-                        Label35.Text = "Modifica queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato uso della CPU"
-                        Label36.Text = "Esaminare lo stato di questo processo in background:"
-                        Label37.Text = "Stato:"
-                        Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
-                        Label41.Text = "Stato associazione:"
-                        Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                        Label40.Text = "Gestisci le associazioni dei file per i componenti di DISMTools:"
                         Label43.Text = "Imposta le opzioni che vuoi eseguire all'avvio del programma:"
                         Label44.Text = "Il programma userà la cartella temporanea fornita dal progetto, se ne è stata caricata una. Se ci si trova nelle modalità di gestione dell'installazione online o offline, il programma userà la sua cartella scratch"
                         Label45.Text = "Stile pannello avanzamento secondario:"
@@ -842,20 +777,17 @@ Public Class Options
                         Button2.Text = "Visualizza le versioni dei componenti DISM"
                         Button3.Text = "Sfoglia..."
                         Button4.Text = "Sfoglia..."
-                        Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                        Button9.Text = "Imposta associazioni file"
                         Button10.Text = "Impostazioni avanzate"
-                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arresto" Else Button8.Text = "Avvio"
                         Cancel_Button.Text = "Annulla"
                         OK_Button.Text = "OK"
                         PrefReset.Text = "Ripristina preferenze"
-                        CheckBox1.Text = "Modalità volatile"
                         CheckBox2.Text = "Esegui le operazioni sull'immagine in modalità silenziosa"
                         CheckBox3.Text = "Salta il riavvio del sistema"
                         CheckBox4.Text = "Usa cartella scratch"
                         CheckBox5.Text = "Visualizza l'output del comando in inglese"
                         CheckBox6.Text = "Notifica l'avvio dei processi in background"
                         CheckBox7.Text = "Visualizza il registro nel pannello di avanzamento per impostazione predefinita"
-                        CheckBox8.Text = "Rileva sempre le immagini montate"
                         CheckBox9.Text = "Usa i menu in maiuscolo"
                         CheckBox10.Text = "Crea automaticamente i registri per ogni operazione eseguita"
                         CheckBox11.Text = "Imposta icone file personalizzate per i progetti DISMTools"
@@ -872,7 +804,6 @@ Public Class Options
                         Label59.Text = "Personalizzazione dei registri"
                         Label60.Text = "Imposta le opzioni che vuoi eseguire alla chiusura del programma:"
                         Label61.Text = "Anteprima:"
-                        GroupBox5.Text = "Associazioni"
                         Label9.Text = "Salvataggio informazioni dell'immagine"
                         LinkLabel1.Text = "Il programma abilita/disabilita alcune funzionalità in base alla versione di DISM supportata. Come influirà sull'uso di questo programma e quali funzioni saranno disabilitate di conseguenza?"
                         LinkLabel1.LinkArea = New LinkArea(92, 100)
@@ -896,7 +827,7 @@ Public Class Options
                 End Select
             Case 1
                 Text = "Options"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Program"
                 Label50.Text = "Personalization"
                 Label51.Text = "Logs"
@@ -904,14 +835,12 @@ Public Class Options
                 Label53.Text = "Scratch directory"
                 Label54.Text = "Program output"
                 Label55.Text = "Background processes"
-                Label56.Text = "Image detection"
                 Label57.Text = "File associations"
                 Label58.Text = "Startup options"
                 Label34.Text = "Shutdown options"
                 Label2.Text = "DISM executable path:"
                 Label3.Text = "Version:"
                 Label5.Text = "Save settings on:"
-                Label6.Text = "While in volatile mode, settings will be reset on program closure."
                 Label7.Text = "Color mode:"
                 Label8.Text = "Language:"
                 'Label9.Text = "Please specify the settings for the log window:"
@@ -930,12 +859,7 @@ Public Class Options
                 Label27.Text = "Some reports do not allow being shown as a table."
                 Label28.Text = "When should the program notify you about background processes being started?"
                 Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
-                Label36.Text = "Review the status of this background process:"
-                Label37.Text = "Status:"
-                Label40.Text = "File associations let you access project files directly, without having to load the program first"
-                Label41.Text = "Association status:"
-                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                Label40.Text = "Manage file associations for DISMTools components:"
                 Label43.Text = "Set options you would like to perform when the program starts up:"
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in the online or offline installation management modes, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
@@ -946,20 +870,17 @@ Public Class Options
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
                 Button4.Text = "Browse..."
-                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                Button9.Text = "Set file associations"
                 Button10.Text = "Advanced settings"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Reset preferences"
-                CheckBox1.Text = "Volatile mode"
                 CheckBox2.Text = "Quietly perform image operations"
                 CheckBox3.Text = "Skip system restart"
                 CheckBox4.Text = "Use a scratch directory"
                 CheckBox5.Text = "Show command output in English"
                 CheckBox6.Text = "Notify me when background processes have started"
                 CheckBox7.Text = "Show log view on the progress panel by default"
-                CheckBox8.Text = "Detect mounted images at all times"
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
                 CheckBox11.Text = "Set custom file icons for DISMTools projects"
@@ -976,7 +897,6 @@ Public Class Options
                 Label59.Text = "Log customization"
                 Label60.Text = "Set options you would like to perform when the program closes:"
                 Label61.Text = "Preview:"
-                GroupBox5.Text = "Associations"
                 Label9.Text = "Saving image information"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
@@ -999,7 +919,7 @@ Public Class Options
                 CheckBox20.Text = "Disable DynaLog logging"
             Case 2
                 Text = "Opciones"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programa"
                 Label50.Text = "Personalización"
                 Label51.Text = "Registros"
@@ -1007,14 +927,12 @@ Public Class Options
                 Label53.Text = "Directorio temporal"
                 Label54.Text = "Salida del programa"
                 Label55.Text = "Procesos en segundo plano"
-                Label56.Text = "Detección de imágenes"
                 Label57.Text = "Asociaciones de archivos"
                 Label58.Text = "Opciones de inicio"
                 Label34.Text = "Opciones de cierre"
                 Label2.Text = "Ruta del ejecutable:"
                 Label3.Text = "Versión:"
                 Label5.Text = "Guardar configuraciones en:"
-                Label6.Text = "Cuando se está en el modo volátil, las configuraciones se restablecerán al cerrar el programa."
                 Label7.Text = "Modo de color:"
                 Label8.Text = "Idioma:"
                 'Label9.Text = "Especifique las configuraciones para la ventana de registro:"
@@ -1033,12 +951,7 @@ Public Class Options
                 Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                 Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                 Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
-                Label36.Text = "Consulte el estado de este proceso en segundo plano:"
-                Label37.Text = "Estado:"
-                Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
-                Label41.Text = "Estado de asociaciones:"
-                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                Label40.Text = "Administre asociaciones de archivos para componentes de DISMTools"
                 Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                 Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en los modos de administración de instalaciones en línea o fuera de línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
@@ -1049,20 +962,17 @@ Public Class Options
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
                 Button4.Text = "Examinar..."
-                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                Button9.Text = "Establecer asociaciones"
                 Button10.Text = "Opciones avanzadas"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 PrefReset.Text = "Restablecer preferencias"
-                CheckBox1.Text = "Modo volátil"
                 CheckBox2.Text = "Realizar operaciones silenciosamente"
                 CheckBox3.Text = "Omitir reinicio del sistema"
                 CheckBox4.Text = "Usar un directorio temporal"
                 CheckBox5.Text = "Mostrar salida del programa en inglés"
                 CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
                 CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
-                CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                 CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
@@ -1079,7 +989,6 @@ Public Class Options
                 Label59.Text = "Personalización del registro"
                 Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
                 Label61.Text = "Vista previa:"
-                GroupBox5.Text = "Asociaciones"
                 Label9.Text = "Guardando información de la imagen"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
@@ -1102,7 +1011,7 @@ Public Class Options
                 CheckBox20.Text = "Desactivar el registro de DynaLog"
             Case 3
                 Text = "Paramètres"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programme"
                 Label50.Text = "Personnalisation"
                 Label51.Text = "Journaux"
@@ -1110,14 +1019,12 @@ Public Class Options
                 Label53.Text = "Répertoire temporaire"
                 Label54.Text = "Sortie du programme"
                 Label55.Text = "Processus en arrière plan"
-                Label56.Text = "Détection des images"
                 Label57.Text = "Associations de fichiers"
                 Label58.Text = "Paramètres de démarrage"
                 Label34.Text = "Paramètres de fermeture"
                 Label2.Text = "Chemin d'accès à l'exécutable DISM :"
                 Label3.Text = "Version:"
                 Label5.Text = "Sauvegarder les paramètres sur :"
-                Label6.Text = "En mode volatile, les paramètres sont réinitialisés à la fermeture du programme."
                 Label7.Text = "Mode couleur :"
                 Label8.Text = "Langue:"
                 'Label9.Text = "Veuillez spécifier les paramètres de la fenêtre d'enregistrement :"
@@ -1136,12 +1043,7 @@ Public Class Options
                 Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                 Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                 Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
-                Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
-                Label37.Text = "État :"
-                Label40.Text = "Les associations de fichiers vous permettent d'accéder directement aux fichiers du projet, sans avoir à charger le programme au préalable."
-                Label41.Text = "État de l'association :"
-                Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
+                Label40.Text = "Gérer les associations de fichiers pour les composants DISMTools :"
                 Label43.Text = "Définissez les options que vous souhaitez exécuter au démarrage du programme :"
                 Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en les modes de gestion de l'installation en ligne ou hors ligne, le programme utilisera son répertoire temporaire."
                 Label45.Text = "Style du panneau de progression secondaire :"
@@ -1152,20 +1054,17 @@ Public Class Options
                 Button2.Text = "Voir les versions des composants DISM"
                 Button3.Text = "Parcourir..."
                 Button4.Text = "Parcourir..."
-                Button9.Text = If(DetectFileAssociations(), "Supprimer les associations de fichiers", "Établir des associations de fichiers")
+                Button9.Text = "Établir des associations de fichiers"
                 Button10.Text = "Paramètres avancés"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arrêter" Else Button8.Text = "Démarrer"
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Réinitialiser les préférences"
-                CheckBox1.Text = "Mode volatile"
                 CheckBox2.Text = "Effectuer des opérations d'image en silence"
                 CheckBox3.Text = "Sauter le redémarrage du système"
                 CheckBox4.Text = "Utiliser un répertoire temporaire"
                 CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                 CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
                 CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
-                CheckBox8.Text = "Détecter les images montées à tout moment"
                 CheckBox9.Text = "Utiliser des menus en majuscules"
                 CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
                 CheckBox11.Text = "Définir des icônes de fichiers personnalisés pour les projets DISMTools"
@@ -1182,7 +1081,6 @@ Public Class Options
                 Label59.Text = "Personnalisation du journal"
                 Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
                 Label61.Text = "Aperçu :"
-                GroupBox5.Text = "Associations"
                 Label9.Text = "Sauvegarde des informations de l'image"
                 LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                 LinkLabel1.LinkArea = New LinkArea(122, 126)
@@ -1205,7 +1103,7 @@ Public Class Options
                 CheckBox20.Text = "Désactiver la journalisation DynaLog"
             Case 4
                 Text = "Opções"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programa"
                 Label50.Text = "Personalização"
                 Label51.Text = "Registos"
@@ -1213,14 +1111,12 @@ Public Class Options
                 Label53.Text = "Diretório temporário"
                 Label54.Text = "Saída do programa"
                 Label55.Text = "Processos em segundo plano"
-                Label56.Text = "Deteção de imagens"
                 Label57.Text = "Associações de ficheiros"
                 Label58.Text = "Opções de arranque"
                 Label34.Text = "Opções de encerramento"
                 Label2.Text = "Localização do executável DISM:"
                 Label3.Text = "Versão:"
                 Label5.Text = "Guardar configurações em:"
-                Label6.Text = "Enquanto estiver em modo volátil, as configurações serão repostas quando o programa for encerrado."
                 Label7.Text = "Modo de cor:"
                 Label8.Text = "Idioma:"
                 Label9.Text = "Especifique as configurações para a janela de registo:"
@@ -1239,12 +1135,7 @@ Public Class Options
                 Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                 Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                 Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
-                Label36.Text = "Rever o estado deste processo em segundo plano:"
-                Label37.Text = "Estado:"
-                Label40.Text = "As associações de ficheiros permitem-lhe aceder diretamente aos ficheiros do projeto, sem ter de carregar primeiro o programa"
-                Label41.Text = "Estado da associação:"
-                Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
+                Label40.Text = "Gerir associações de ficheiros para os componentes do DISMTools:"
                 Label43.Text = "Definir opções que gostaria de efetuar quando o programa arranca:"
                 Label44.Text = "O programa utilizará o diretório de rascunho fornecido pelo projeto, se tiver sido carregado um. Se estiver nos modos de gestão da instalação online ou offline, o programa utilizará o seu diretório de rascunho"
                 Label45.Text = "Estilo do painel de progresso secundário:"
@@ -1255,20 +1146,17 @@ Public Class Options
                 Button2.Text = "Ver versões de componentes DISM"
                 Button3.Text = "Navegar..."
                 Button4.Text = "Navegar..."
-                Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Configurar associações de ficheiros")
+                Button9.Text = "Configurar associações de ficheiros"
                 Button10.Text = "Configurações avançadas"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = " Parar" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Repor preferências"
-                CheckBox1.Text = "Modo volátil"
                 CheckBox2.Text = "Efetuar operações de imagem silenciosamente"
                 CheckBox3.Text = "Ignorar o reinício do sistema"
                 CheckBox4.Text = "Utilizar um diretório de rascunho"
                 CheckBox5.Text = "Mostrar a saída do comando em inglês"
                 CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
                 CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
-                CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                 CheckBox9.Text = "Utilizar menus em maiúsculas"
                 CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
                 CheckBox11.Text = "Configurar ícones de ficheiros personalizados para projectos DISMTools"
@@ -1285,7 +1173,6 @@ Public Class Options
                 Label59.Text = "Personalização do registo"
                 Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
                 Label61.Text = "Pré-visualização:"
-                GroupBox5.Text = "Associações"
                 Label9.Text = "Guardar informação da imagem"
                 LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
                 LinkLabel1.LinkArea = New LinkArea(107, 118)
@@ -1308,7 +1195,7 @@ Public Class Options
                 CheckBox20.Text = "Desativar o registo DynaLog"
             Case 5
                 Text = "Opzioni"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label49.Text = "Programma"
                 Label50.Text = "Personalizzazione"
                 Label51.Text = "Registri"
@@ -1316,14 +1203,12 @@ Public Class Options
                 Label53.Text = "Cartella temporanea"
                 Label54.Text = "Output del programma"
                 Label55.Text = "Processi in secondo piano"
-                Label56.Text = "Rilevamento immagini"
                 Label57.Text = "Associazioni di file"
                 Label58.Text = "Opzioni di avvio"
                 Label34.Text = "Opzioni di spegnimento"
                 Label2.Text = "Percorso eseguibile DISM:"
                 Label3.Text = "Versione:"
                 Label5.Text = "Salva impostazioni su:"
-                Label6.Text = "In modalità volatile, le impostazioni verranno ripristinate alla chiusura del programma"
                 Label7.Text = "Modalità colore:"
                 Label8.Text = "Lingua:"
                 Label9.Text = "Specificare le impostazioni per la finestra di log:"
@@ -1342,12 +1227,7 @@ Public Class Options
                 Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                 Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                 Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
-                Label35.Text = "Modificare queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato utilizzo della CPU"
-                Label36.Text = "Esaminare lo stato di questo processo in background:"
-                Label37.Text = "Stato:"
-                Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
-                Label41.Text = "Stato dell'associazione:"
-                Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                Label40.Text = "Gestisci le associazioni dei file per i componenti di DISMTools:"
                 Label43.Text = "Impostare le opzioni che si desidera eseguire all'avvio del programma:"
                 Label44.Text = "Il programma utilizzerà la cartella temporanea fornita dal progetto, se ne è stata caricata una. Se ci si trova nelle modalità di gestione dell'installazione online o offline, il programma utilizzerà la sua directory scratch"
                 Label45.Text = "Stile del pannello di avanzamento secondario:"
@@ -1358,20 +1238,17 @@ Public Class Options
                 Button2.Text = "Visualizza le versioni dei componenti DISM"
                 Button3.Text = "Sfoglia..."
                 Button4.Text = "Sfoglia..."
-                Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                Button9.Text = "Imposta associazioni file"
                 Button10.Text = "Impostazioni avanzate"
-                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arresto" Else Button8.Text = "Avvio"
                 Cancel_Button.Text = "Annulla"
                 OK_Button.Text = "OK"
                 PrefReset.Text = "Reimpostare le preferenze"
-                CheckBox1.Text = "Modalità volatile"
                 CheckBox2.Text = "Esegui silenziosamente le operazioni sull'immagine"
                 CheckBox3.Text = "Salta il riavvio del sistema"
                 CheckBox4.Text = "Utilizza una directory scratch"
                 CheckBox5.Text = "Visualizza l'output del comando in inglese"
                 CheckBox6.Text = "Notifica l'avvio di processi in background"
                 CheckBox7.Text = "Abilita la visualizzazione del registro nel pannello di avanzamento per impostazione predefinita"
-                CheckBox8.Text = "Rileva sempre le immagini montate"
                 CheckBox9.Text = "Utilizza i menu in maiuscolo"
                 CheckBox10.Text = "Crea automaticamente i registri per ogni operazione eseguita"
                 CheckBox11.Text = "Imposta icone di file personalizzate per i progetti DISMTools"
@@ -1388,7 +1265,6 @@ Public Class Options
                 Label59.Text = "Personalizzazione dei registri"
                 Label60.Text = "Impostare le opzioni che si desidera eseguire alla chiusura del programma:"
                 Label61.Text = "Anteprima:"
-                GroupBox5.Text = "Associazioni"
                 Label9.Text = "Salvataggio delle informazioni sull'immagine"
                 LinkLabel1.Text = "Il programma abilita o disabilita alcune funzioni in base alla versione di DISM supportata. Come influirà sull'uso di questo programma e quali funzioni saranno disabilitate di conseguenza?"
                 LinkLabel1.LinkArea = New LinkArea(92, 100)
@@ -1583,10 +1459,6 @@ Public Class Options
         ComboBox7.Items.AddRange(SearchEngineHelper.GetAllSearchEngines().Select(Function(engine) engine.Name).ToArray())
         DynaLog.LogMessage("Checking if portable marker exists...")
         If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         DynaLog.LogMessage("Getting system fonts...")
         GetSystemFonts()
         ' Set default values before loading custom ones
@@ -1598,7 +1470,7 @@ Public Class Options
         GatherCustomSettings()
 
         ' Set program colors
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1638,7 +1510,7 @@ Public Class Options
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
-        GroupBox5.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
         PictureBox10.Image = GetGlyphResource("options_program")
         PictureBox11.Image = GetGlyphResource("options_personalization")
@@ -1647,42 +1519,6 @@ Public Class Options
         PictureBox14.Image = GetGlyphResource("options_scratch")
         PictureBox15.Image = GetGlyphResource("options_output")
         PictureBox16.Image = GetGlyphResource("options_bgprocs")
-        PictureBox17.Image = GetGlyphResource("options_imgdetect")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
         DarkThemesCB.Items.Clear()
         LightThemesCB.Items.Clear()
         For Each LoadedTheme In ThemeHelper.GetThemes()
@@ -1695,9 +1531,9 @@ Public Class Options
         Catch ex As Exception
 
         End Try
-        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         If Not File.Exists(Application.StartupPath & "\portable") Then
             Panel2.Enabled = False
             Panel3.Visible = True
@@ -1706,11 +1542,16 @@ Public Class Options
             Panel3.Visible = False
         End If
         ChangeSections(SectionNum)
-        FlowLayoutPanel1.BackColor = Win10Title.BackColor
+        FlowLayoutPanel1.BackColor = ImageTaskHeader1.BackColor
 
         If SplitContainer1.SplitterDistance = 256 Then
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         End If
+
+        DTProjAssocCB.Checked = DetectFileAssociations("DISMTools.Project")
+        DTSSEditAssocCB.Checked = DetectFileAssociations("DTSSEdit.StarterScript")
+        GetAIRServiceInformation()
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Sub GetSystemFonts()
@@ -1731,11 +1572,6 @@ Public Class Options
             ComboBox1.SelectedIndex = 0
         Else
             ComboBox1.SelectedIndex = 1
-        End If
-        If MainForm.VolatileMode Then
-            CheckBox1.Checked = True
-        Else
-            CheckBox1.Checked = False
         End If
         Select Case MainForm.ColorMode
             Case 0
@@ -1763,14 +1599,6 @@ Public Class Options
         End Select
         TextBox2.Text = MainForm.LogFile
         TrackBar1.Value = If(MainForm.LogLevel = TrackBar1.Minimum, MainForm.LogLevel, MainForm.LogLevel - 1)
-        Select Case MainForm.ImgOperationMode
-            Case 0
-                'RadioButton1.Checked = True
-                'RadioButton2.Checked = False
-            Case 1
-                'RadioButton1.Checked = False
-                'RadioButton2.Checked = True
-        End Select
         If MainForm.QuietOperations Then
             CheckBox2.Checked = True
         Else
@@ -1839,6 +1667,8 @@ Public Class Options
         ComboBox7.SelectedItem = MainForm.SearchEngineName
 
         ComboBox8.SelectedIndex = MainForm.AppxDisplayNameFormatOnRemoval
+        CheckBox8.Checked = MainForm.PreventSystemFromSleeping
+        CheckBox1.Checked = MainForm.HumanizeDates
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -1936,7 +1766,7 @@ Public Class Options
                 Case 5
                     msg = "Non è stato possibile trovare la cartella dei componenti DISM. Se tutti i componenti si trovano nella stessa cartella dell'eseguibile DISM, crea una cartella " & Quote & "dism" & Quote & " e riprova."
             End Select
-            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         DynaLog.LogMessage("Showing component information...")
@@ -2576,105 +2406,6 @@ Public Class Options
         End If
     End Sub
 
-    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        DynaLog.LogMessage("Toggling state of mounted image detector...")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        If Button8.Text = "Stop" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
-                        ElseIf Button8.Text = "Start" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        If Button8.Text = "Detener" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
-                        ElseIf Button8.Text = "Iniciar" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        If Button8.Text = "Arrêter" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
-                        ElseIf Button8.Text = "Démarrer" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        If Button8.Text = "Parar" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
-                        ElseIf Button8.Text = "Iniciar" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        If Button8.Text = "Arresto" Then
-                            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                            MainForm.MountedImageDetectorBW.CancelAsync()
-                        ElseIf Button8.Text = "Avvio" Then
-                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                        End If
-                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                If Button8.Text = "Stop" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                ElseIf Button8.Text = "Start" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                If Button8.Text = "Detener" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                ElseIf Button8.Text = "Iniciar" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                If Button8.Text = "Arrêter" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                ElseIf Button8.Text = "Démarrer" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                If Button8.Text = "Parar" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                ElseIf Button8.Text = "Iniciar" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                If Button8.Text = "Arresto" Then
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                ElseIf Button8.Text = "Avvio" Then
-                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                End If
-                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
-    End Sub
-
     Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
         If CheckBox10.Checked Then
             Label12.Enabled = False
@@ -2693,7 +2424,7 @@ Public Class Options
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         DynaLog.LogMessage("Toggling state of file associations...")
-        If DetectFileAssociations() Then ManageAssociations(1, False) Else ManageAssociations(0, If(CheckBox11.Checked, True, False))
+        ManageAssociations()
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
@@ -2766,382 +2497,36 @@ Public Class Options
 
     Sub ChangeSections(Number As Integer)
         DynaLog.LogMessage("Changing visible section in the settings. Section number index: " & Number)
-        Select Case Number
-            Case 0
-                Options_Program.Visible = True
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 1
-                Options_Program.Visible = False
-                Options_Personalization.Visible = True
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 2
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = True
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 3
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = True
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 4
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = True
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 5
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = True
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 6
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = True
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 7
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = True
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 8
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = True
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 9
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = True
-                Options_Shutdown.Visible = False
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = BackColor
-                ShutdownSectionBtn.BackColor = Win10Title.BackColor
-            Case 10
-                Options_Program.Visible = False
-                Options_Personalization.Visible = False
-                Options_Logs.Visible = False
-                Options_ImgOps.Visible = False
-                Options_Scratch.Visible = False
-                Options_Output.Visible = False
-                Options_BgProcs.Visible = False
-                Options_ImgDetection.Visible = False
-                Options_FileAssocs.Visible = False
-                Options_Startup.Visible = False
-                Options_Shutdown.Visible = True
-                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label34.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                ProgramSectionBtn.BackColor = Win10Title.BackColor
-                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
-                LogSectionBtn.BackColor = Win10Title.BackColor
-                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
-                ScDirSectionBtn.BackColor = Win10Title.BackColor
-                OutputSectionBtn.BackColor = Win10Title.BackColor
-                BgProcsSectionBtn.BackColor = Win10Title.BackColor
-                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
-                AssocsSectionBtn.BackColor = Win10Title.BackColor
-                StartupSectionBtn.BackColor = Win10Title.BackColor
-                ShutdownSectionBtn.BackColor = BackColor
-        End Select
+        Options_Program.Visible = Number = 0
+        Options_Personalization.Visible = Number = 1
+        Options_Logs.Visible = Number = 2
+        Options_ImgOps.Visible = Number = 3
+        Options_Scratch.Visible = Number = 4
+        Options_Output.Visible = Number = 5
+        Options_BgProcs.Visible = Number = 6
+        Options_FileAssocs.Visible = Number = 7
+        Options_Startup.Visible = Number = 8
+        Options_Shutdown.Visible = Number = 9
+        Label49.Font = New Font("Segoe UI", 9, If(Number = 0, FontStyle.Bold, FontStyle.Regular))
+        Label50.Font = New Font("Segoe UI", 9, If(Number = 1, FontStyle.Bold, FontStyle.Regular))
+        Label51.Font = New Font("Segoe UI", 9, If(Number = 2, FontStyle.Bold, FontStyle.Regular))
+        Label52.Font = New Font("Segoe UI", 9, If(Number = 3, FontStyle.Bold, FontStyle.Regular))
+        Label53.Font = New Font("Segoe UI", 9, If(Number = 4, FontStyle.Bold, FontStyle.Regular))
+        Label54.Font = New Font("Segoe UI", 9, If(Number = 5, FontStyle.Bold, FontStyle.Regular))
+        Label55.Font = New Font("Segoe UI", 9, If(Number = 6, FontStyle.Bold, FontStyle.Regular))
+        Label57.Font = New Font("Segoe UI", 9, If(Number = 7, FontStyle.Bold, FontStyle.Regular))
+        Label58.Font = New Font("Segoe UI", 9, If(Number = 8, FontStyle.Bold, FontStyle.Regular))
+        Label34.Font = New Font("Segoe UI", 9, If(Number = 9, FontStyle.Bold, FontStyle.Regular))
+        ProgramSectionBtn.BackColor = If(Number = 0, BackColor, ImageTaskHeader1.BackColor)
+        PersonalizationSectionBtn.BackColor = If(Number = 1, BackColor, ImageTaskHeader1.BackColor)
+        LogSectionBtn.BackColor = If(Number = 2, BackColor, ImageTaskHeader1.BackColor)
+        ImgOpsSectionBtn.BackColor = If(Number = 3, BackColor, ImageTaskHeader1.BackColor)
+        ScDirSectionBtn.BackColor = If(Number = 4, BackColor, ImageTaskHeader1.BackColor)
+        OutputSectionBtn.BackColor = If(Number = 5, BackColor, ImageTaskHeader1.BackColor)
+        BgProcsSectionBtn.BackColor = If(Number = 6, BackColor, ImageTaskHeader1.BackColor)
+        AssocsSectionBtn.BackColor = If(Number = 7, BackColor, ImageTaskHeader1.BackColor)
+        StartupSectionBtn.BackColor = If(Number = 8, BackColor, ImageTaskHeader1.BackColor)
+        ShutdownSectionBtn.BackColor = If(Number = 9, BackColor, ImageTaskHeader1.BackColor)
         SectionNum = Number
     End Sub
 
@@ -3173,20 +2558,16 @@ Public Class Options
         ChangeSections(6)
     End Sub
 
-    Private Sub ImgDetectSectionBtn_Click(sender As Object, e As EventArgs) Handles ImgDetectSectionBtn.Click, Label56.Click, PictureBox17.Click
+    Private Sub AssocsSectionBtn_Click(sender As Object, e As EventArgs) Handles AssocsSectionBtn.Click, Label57.Click, PictureBox18.Click
         ChangeSections(7)
     End Sub
 
-    Private Sub AssocsSectionBtn_Click(sender As Object, e As EventArgs) Handles AssocsSectionBtn.Click, Label57.Click, PictureBox18.Click
+    Private Sub StartupSectionBtn_Click(sender As Object, e As EventArgs) Handles StartupSectionBtn.Click, Label58.Click, PictureBox19.Click
         ChangeSections(8)
     End Sub
 
-    Private Sub StartupSectionBtn_Click(sender As Object, e As EventArgs) Handles StartupSectionBtn.Click, Label58.Click, PictureBox19.Click
-        ChangeSections(9)
-    End Sub
-
     Private Sub ShutdownSectionBtn_Click(sender As Object, e As EventArgs) Handles ShutdownSectionBtn.Click, Label34.Click, PictureBox20.Click
-        ChangeSections(10)
+        ChangeSections(9)
     End Sub
 
 #End Region
@@ -3284,5 +2665,60 @@ Public Class Options
                                                 "Examples of such information are the operating system packages, or features in a Windows image.{0}{0}" &
                                                 "These processes are not just run when getting information about image files, but when managing online, or offline, installations as well.", Environment.NewLine)
         QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        Try
+            If WindowsServiceHelper.InstallService(New WindowsService("DT_AutoReload",
+                                                                      "DISMTools Automatic Image Reload service", "", "",
+                                                                      Path.Combine(Application.StartupPath, "AutoReload", "AutoReloadSvc.exe"),
+                                                                      "", WindowsService.ServiceStartType.Automatic, False,
+                                                                      WindowsService.ServiceType.WindowsApplication,
+                                                                      WindowsService.ServiceErrorControl.Normal,
+                                                                      {}.Cast(Of NTSecurityPrivilegeConstant).ToList(),
+                                                                      {"EventLog"}, New WindowsService.ServiceFailureActions(), Integer.MinValue)) Then
+                ' Set the description manually
+                WindowsServiceHelper.SetOnlineServiceDescription("DT_AutoReload", "This service automatically reloads the servicing sessions of all mounted images on this computer. Feel free to disable this service if you don't need it.")
+
+                GetAIRServiceInformation()
+            Else
+                Throw New Exception("The service could not be installed.")
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If WindowsServiceHelper.EnableOnlineService("DT_AutoReload") Then
+            GetAIRServiceInformation()
+        Else
+            MessageBox.Show("The service could not be enabled.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        If WindowsServiceHelper.DisableOnlineService("DT_AutoReload") Then
+            GetAIRServiceInformation()
+        Else
+            MessageBox.Show("The service could not be disabled.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        If WindowsServiceHelper.DeleteService("DT_AutoReload") Then
+            GetAIRServiceInformation()
+        Else
+            MessageBox.Show("The service could not be removed.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "dism.exe"),
+                      "/cleanup-mountpoints")
+    End Sub
+
+    Private Sub DTProjAssocCB_CheckedChanged(sender As Object, e As EventArgs) Handles DTProjAssocCB.CheckedChanged
+        CheckBox11.Enabled = DTProjAssocCB.Checked
     End Sub
 End Class

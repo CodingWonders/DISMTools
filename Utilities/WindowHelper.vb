@@ -6,7 +6,6 @@ Public Class WindowHelper
     Friend NotInheritable Class NativeMethods
 
         Public Sub New()
-
         End Sub
 
         <DllImport("user32.dll", CharSet:=CharSet.Auto)>
@@ -19,6 +18,28 @@ Public Class WindowHelper
 
         <DllImport("dwmapi.dll")>
         Public Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
+
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Auto)>
+        Public Structure LVITEM
+            Public mask As Integer
+            Public iItem As Integer
+            Public iSubItem As Integer
+            Public state As Integer
+            Public stateMask As Integer
+            <MarshalAs(UnmanagedType.LPTStr)>
+            Public pszText As String
+            Public cchTextMax As Integer
+            Public iImage As Integer
+            Public lParam As IntPtr
+            Public iIndent As Integer
+            Public iGroupId As Integer
+            Public cColumns As Integer
+            Public puColumns As IntPtr
+        End Structure
+
+        <DllImport("user32.dll", EntryPoint:="SendMessage", CharSet:=CharSet.Auto)>
+        Public Shared Function SendMessageLVItem(hWnd As IntPtr, msg As Integer, wParam As Integer, ByRef lvi As LVITEM) As IntPtr
         End Function
     End Class
 
@@ -33,6 +54,13 @@ Public Class WindowHelper
     Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
     Const WS_EX_COMPOSITED As Integer = &H2000000
     Const GWL_EXSTYLE As Integer = -20
+
+    Private Const LVM_FIRST As Integer = &H1000
+    Private Const LVM_SETITEMSTATE As Integer = LVM_FIRST + 43
+
+    Private Const LVIS_UNCHECKED As Integer = &H1000
+    Private Const LVIS_CHECKED As Integer = &H2000
+    Private Const LVIS_STATEIMAGEMASK As Integer = &H3000
 
     Public Shared Sub DisableCloseCapability(wndHandle As IntPtr)
         If Not wndHandle.Equals(IntPtr.Zero) Then
@@ -102,6 +130,36 @@ Public Class WindowHelper
             Dim displayedToolTip As New ToolTip()
             displayedToolTip.SetToolTip(tooltipSender, toolTipMessage)
         End If
+    End Sub
+
+    Private Shared notificationBalloon As NotifyIcon
+
+    Public Shared Sub DisplayNotificationBalloon(balloonIcon As ToolTipIcon, balloonCaption As String, balloonMessage As String)
+        notificationBalloon = New NotifyIcon() With {
+            .BalloonTipIcon = balloonIcon,
+            .Icon = CType(New System.ComponentModel.ComponentResourceManager(GetType(MainForm)).GetObject("$this.Icon"), System.Drawing.Icon),
+            .Text = "DISMTools",
+            .BalloonTipTitle = balloonCaption,
+            .BalloonTipText = balloonMessage,
+            .Visible = True
+        }
+        notificationBalloon.ShowBalloonTip(5000)
+        notificationBalloon.Visible = False
+    End Sub
+
+    Public Shared Sub CheckAllItems(lv As ListView)
+        SetLVItemState(lv, -1, LVIS_STATEIMAGEMASK, LVIS_CHECKED)
+    End Sub
+
+    Public Shared Sub UncheckAllItems(lv As ListView)
+        SetLVItemState(lv, -1, LVIS_STATEIMAGEMASK, LVIS_UNCHECKED)
+    End Sub
+
+    Private Shared Sub SetLVItemState(lv As ListView, itemIndex As Integer, mask As Integer, value As Integer)
+        Dim lvi As New NativeMethods.LVITEM()
+        lvi.stateMask = mask
+        lvi.state = value
+        NativeMethods.SendMessageLVItem(lv.Handle, LVM_SETITEMSTATE, itemIndex, lvi)
     End Sub
 
 End Class

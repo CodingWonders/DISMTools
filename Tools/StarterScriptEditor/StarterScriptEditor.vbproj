@@ -80,7 +80,12 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
     <Compile Include="Classes\StarterScript.vb" />
+    <Compile Include="ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="ColorTables\LightModeColorTable.vb" />
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -103,7 +108,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ScriptVersionChooser.Designer.vb">
+      <DependentUpon>ScriptVersionChooser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ScriptVersionChooser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\BuildGetter.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">
@@ -115,6 +127,10 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScriptVersionChooser.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ScriptVersionChooser.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -156,8 +172,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\savefileas.png" />
+    <None Include="Resources\changefont.png" />
+    <None Include="Resources\targetversion.png" />
+    <None Include="Resources\writable.png" />
+    <None Include="Resources\colormode.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF EXIST "$(ProjectDir)DTSSIcon.ico" (
+	COPY /Y "$(ProjectDir)DTSSIcon.ico" "$(ProjectDir)out\DTSSIcon.ico"
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

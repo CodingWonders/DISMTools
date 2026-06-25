@@ -1,7 +1,7 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 title DISMTools Preinstallation Environment
-set version=0.7.3
+set version=0.8
 set sysdrive=%SYSTEMDRIVE%
 set debug=0
 echo DISMTools %version% - Preinstallation Environment
@@ -24,8 +24,49 @@ if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
 	)
 )
-if exist "%sysdrive%\ShowWatermark.ps1" (
+
+:: Detect the keyboard layout to use via policy. Because we don't have findstr here on winpe we have to use a
+:: different method.
+SET "DefaultKeyboardLayoutCode=00000409"
+
+FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /v KeyboardLayoutCode /t REG_SZ 2^>NUL ^| find "REG_"') DO (
+	SET "DefaultKeyboardLayoutCode=%%A"
+)
+
+SET KeyboardLayoutConfigured=0
+:: If we have a substitute then we have configured the keyboard layout... but first we'll query the preloads
+SET "DefaultPreload=00000409"
+FOR /F "tokens=3" %%A IN ('reg query "HKCU\Keyboard Layout\Preload" /v 1 /t REG_SZ 2^>nul ^| find "REG_"') DO (
+	SET "DefaultPreload=%%A"
+)
+REG QUERY "HKCU\Keyboard Layout\Substitutes" /v "%DefaultPreload%" /t REG_SZ >nul 2>&1
+IF %ERRORLEVEL% EQU 0 SET KeyboardLayoutConfigured=1
+
+IF %KeyboardLayoutConfigured% NEQ 1 (
+	FOR /F "tokens=3" %%A IN ('reg query "HKCU\Control Panel\International" /v Locale /t REG_SZ 2^>nul ^| find "REG_"') DO (
+		IF /I NOT "%DefaultKeyboardLayoutCode%" == "%%A" (
+			echo Configuring keyboard layout to %DefaultKeyboardLayoutCode%...
+			wpeutil setkeyboardlayout 0409:%DefaultKeyboardLayoutCode%
+			REM we need to open a new session; we can no longer use this one as it will still use the older
+			REM keyboard layout
+			IF !ERRORLEVEL! EQU 0 start /wait cmd.exe /k "%SYSTEMROOT%\system32\startnet.cmd"
+		)
+	)
+)
+
+:: Determine if we have set the policy to show a watermark
+SET ShowWatermark=0
+FOR /F "tokens=3" %%A IN ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /v ShowWatermark 2^>NUL') DO (
+	IF /I "%%A" == "0x0" SET ShowWatermark=0
+	IF /I "%%A" == "0x1" SET ShowWatermark=1
+)
+
+reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /v DRY_Watermark >nul 2>&1
+IF !ERRORLEVEL! EQU 0 SET ShowWatermark=0
+
+if !ShowWatermark! EQU 1 (
 	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
+	reg add "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /f /v DRY_Watermark /t REG_DWORD /d 1 >nul 2>&1
 )
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 	if exist "%sysdrive%\scripts\imagecapture.bat" (
@@ -37,6 +78,17 @@ if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 	powershell -noprofile -file "%sysdrive%\menu.ps1"
 	if exist "%sysdrive%\netinstall" (
+		REM Determine if we are in a PXE environment
+		reg query "HKLM\SYSTEM\CurrentControlSet\Control\PXE" >nul 2>&1
+		if !ERRORLEVEL! gtr 0 (
+			REM we are NOT in PXE
+			echo We have detected that you are launching the PXE Helpers in a non-PXE environment. This
+			echo set of conditions is not supported by the PXE Helpers and they may not work correctly.
+			echo.
+			echo Press ENTER to continue anyway, otherwise, restart your computer by closing this window.
+			pause > nul
+		)
+		
 		cd /d "%sysdrive%"\
 		powershell -noprofile -file ".\pxehelpers\PXEHelpers.Startup.ps1"
 	) else if exist "%sysdrive%\cmdcons" (
@@ -49,8 +101,25 @@ if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	echo Please insert the disc image and press ENTER...
 	pause > nul
+	if exist "%sysdrive%\driver_supplements_added" (
+		echo Supplementary drivers were added to the preinstallation environment to allow it to recognize
+		echo your drives. However, you will need to use the Driver Installation Module to reinstall these
+		echo so they can be carried over to the new installation. The drivers you need are in a folder called
+		echo "CWS_HI_SCSI".
+	)
 )
 if %debug% lss 2 (
+	REM Determine if we are in a PXE environment
+	reg query "HKLM\SYSTEM\CurrentControlSet\Control\PXE" >nul 2>&1
+	if !ERRORLEVEL! equ 0 (
+		REM we are in PXE
+		echo We have detected that you are launching the PE Helper in a PXE environment. This
+		echo environment is not supported by the PE Helper.
+		echo.
+		echo Press ENTER to restart your computer.
+		pause > nul
+		wpeutil reboot
+	)
 	for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 		if exist "%%D:\" (
 			if exist "%%D:\PE_Helper.ps1" (

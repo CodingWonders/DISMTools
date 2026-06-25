@@ -3,6 +3,7 @@ Imports System.Net.NetworkInformation
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.RegularExpressions
 Imports System.DirectoryServices.AccountManagement
+Imports Tulpep.ActiveDirectoryObjectPicker
 
 Public Class ADDSJoinDialog
 
@@ -59,6 +60,18 @@ Public Class ADDSJoinDialog
         End Function
     End Class
 
+    ''' <summary>
+    ''' Gets the current domain role of the system.
+    ''' </summary>
+    ''' <returns>The current domain role of the system</returns>
+    Private Function GetSystemDomainRole() As DomainRole
+        Dim domainRoleCollection As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT DomainRole FROM Win32_ComputerSystem")
+        If domainRoleCollection IsNot Nothing Then
+            Return GetObjectValue(domainRoleCollection(0), "DomainRole")
+        End If
+        Return DomainRole.Unknown
+    End Function
+
     Private dnsInfo As DnsInformation
     Private dsInfo As DomainInformation
 
@@ -80,27 +93,35 @@ Public Class ADDSJoinDialog
         ComboBox1.BackColor = BackColor
         ComboBox2.BackColor = BackColor
         ComboBox3.BackColor = BackColor
+        ComboBox4.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox3.BackColor = BackColor
         TextBox4.BackColor = BackColor
         TextBox5.BackColor = BackColor
         TextBox6.BackColor = BackColor
+        TextBox7.BackColor = BackColor
         GroupBox1.BackColor = BackColor
         RichTextBox1.BackColor = BackColor
         ComboBox1.ForeColor = ForeColor
         ComboBox2.ForeColor = ForeColor
         ComboBox3.ForeColor = ForeColor
+        ComboBox4.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         TextBox5.ForeColor = ForeColor
         TextBox6.ForeColor = ForeColor
+        TextBox7.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
+        DsJoinCMS.Renderer = GetProfessionalRenderer()
+        DsJoinCMS.ForeColor = ForeColor
+        DnsResolutionTSMI.Image = GetGlyphResource("search")
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         VerifyInPages.AddRange(New WizardPage() {WizardPage.DnsConfigPage, WizardPage.DsConfigPage})
         ChangePage(WizardPage.DnsConfigPage)
         dnsMappings.Clear()
@@ -113,6 +134,9 @@ Public Class ADDSJoinDialog
             Application.DoEvents()
             Thread.Sleep(100)
         Loop
+
+        ' Let's leave the domain controller-exclusive stuff, well, exclusive to domain controllers ;)
+        DnsZoneTSMI.Enabled = GetSystemDomainRole() >= DomainRole.PrimaryDomainController
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -139,19 +163,23 @@ Public Class ADDSJoinDialog
         ADDSInitBW.ReportProgress(80)
         NtLogonPathStart = DomainServicesModule.DSGetDomainControllerNetBIOSName()
         If dsIsInDomain Then
+            ComboBox4.SelectedIndex = 1
             ProgressReporter.SetMessage("Mapping organizational units and users...")
             ADDSInitBW.ReportProgress(90)
             userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
             If userMappings IsNot Nothing Then
-                ComboBox2.Items.AddRange(userMappings.Keys.ToArray())
+                ComboBox2.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
                 ComboBox2.SelectedIndex = 0
             End If
         Else
-            DomainAutoUserPanel.Enabled = False
-            RadioButton3.Enabled = False
-            RadioButton3.Checked = False
-            RadioButton4.Checked = True
+            ComboBox4.SelectedIndex = 0
+            If ComboBox4.Items.Count > 1 Then
+                ' We do this twice to get rid of both items
+                ComboBox4.Items.RemoveAt(1)
+                ComboBox4.Items.RemoveAt(1)
+            End If
         End If
+        DsAccountObjectPickerBtn.Enabled = dsIsInDomain
         ProgressReporter.SetMessage("Initialization complete.")
         ADDSInitBW.ReportProgress(100)
     End Sub
@@ -183,14 +211,16 @@ Public Class ADDSJoinDialog
         ProgressReporter.Hide()
         DSNoDomainPanel.Visible = Not dsIsInDomain
         If dsIsInDomain Then
+            RemoveHandler TextBox4.TextChanged, AddressOf TextBox4_TextChanged
             TextBox4.Text = dsDomainName
+            AddHandler TextBox4.TextChanged, AddressOf TextBox4_TextChanged
             If NtLogonPathStart = "" Then
                 NtLogonPathStart = "Primary DC NetBIOS"
             End If
         Else
             NtLogonPathStart = "Primary DC NetBIOS"
         End If
-        AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
+        If ComboBox3.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\<user>", NtLogonPathStart)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -263,8 +293,21 @@ Public Class ADDSJoinDialog
                     Return False
                 End If
                 If TextBox6.Text = "" Then
-                    MsgBox("A password must be specified as per security policies imposed by the domain controller", vbOKOnly + vbCritical)
-                    Return False
+                    Try
+                        If DomainServicesModule.DSAccountRequiresPassword(dsDomainName, initialUserName) Then
+                            MsgBox(String.Format("A password for the specified user, {0}{1}{0}, must be specified as per security policies imposed by the domain controller.", Quote, initialUserName), vbOKOnly + vbCritical)
+                            Return False
+                        End If
+                    Catch ex As Exception
+                        MsgBox(String.Format("A password for the specified user, {0}{1}{0}, must be specified as per security policies imposed by the domain controller.", Quote, initialUserName), vbOKOnly + vbCritical)
+                        Return False
+                    End Try
+                End If
+                If dsIsInDomain AndAlso Not DomainServicesModule.DSAccountExists(dsDomainName, initialUserName) Then
+                    If MsgBox(String.Format("The specified user, {1}, does not appear to exist in the provided domain. You may not be able to sign in with this user unless you create it first.{0}{0}" &
+                                            "Do you want to continue?", Environment.NewLine, initialUserName), vbYesNo + vbExclamation, Text) = MsgBoxResult.No Then
+                        Return False
+                    End If
                 End If
                 Return MsgBox("Please verify the information that you typed. If you incorrectly typed a field, the client device may not join the domain." & CrLf & CrLf & "The client device will also not join the domain if it will run home editions of Windows." & CrLf & CrLf & "Are you sure that these settings are correct?", vbYesNo + vbQuestion, "Verify Settings") = MsgBoxResult.Yes
         End Select
@@ -492,25 +535,19 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
+        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
     End Sub
 
     Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
-        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox5.Text)
+        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text))
         initialUserName = TextBox5.Text
-    End Sub
-
-    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
-        DomainAutoUserPanel.Enabled = RadioButton3.Checked
-        TextBox5.Enabled = Not RadioButton3.Checked
-        TextBox4.Enabled = Not RadioButton3.Checked
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
         Try
             ComboBox3.Items.Clear()
-            ComboBox3.Items.AddRange(userMappings(ComboBox2.SelectedItem).Select(Function(adUser) adUser.DisplayName).ToArray())
+            ComboBox3.Items.AddRange(userMappings(ComboBox2.SelectedItem).OrderBy(Function(adUser) adUser.DisplayName).Select(Function(adUser) adUser.DisplayName).ToArray())
             ComboBox3.SelectedIndex = 0
         Catch ex As Exception
 
@@ -518,12 +555,122 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName, TextBox4.Text)
-        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName)
-        initialUserName = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName
+        Dim referenceUserDispName As String = ComboBox3.SelectedItem
+        Dim referenceUser As Principal = userMappings(ComboBox2.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
+        If referenceUser Is Nothing Then Exit Sub
 
-        If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName) Then
+        AddsUpnPathText.Text = referenceUser.UserPrincipalName
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, referenceUser.SamAccountName)
+        initialUserName = referenceUser.SamAccountName
+
+        If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, referenceUser.SamAccountName) Then
             MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
+        End If
+    End Sub
+
+    Private Sub DnsToolsBtn_Click(sender As Object, e As EventArgs) Handles DnsToolsBtn.Click
+        DsJoinCMS.Show(sender, New Point(8, 8))
+    End Sub
+
+    Private Sub DsAccountObjectPickerBtn_Click(sender As Object, e As EventArgs) Handles DsAccountObjectPickerBtn.Click
+        If Not dsIsInDomain Then
+            MessageBox.Show("This computer does not belong to a domain.", Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+        Dim dsaPicker As New DirectoryObjectPickerDialog() With {
+            .AllowedObjectTypes = ObjectTypes.Users,
+            .DefaultObjectTypes = ObjectTypes.Users,
+            .AllowedLocations = Locations.All,
+            .DefaultLocations = Locations.JoinedDomain,
+            .MultiSelect = False,
+            .ShowAdvancedView = True
+        }
+        Using dsaPicker
+            If dsaPicker.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                TextBox7.Text = DomainServicesModule.DSGetSamNameFromUserLdapPath(dsaPicker.SelectedObject.Path)
+            End If
+        End Using
+    End Sub
+
+    Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
+        ManualUserPickerPanel.Visible = ComboBox4.SelectedIndex = 0
+        UserInDomainOuPickerPanel.Visible = ComboBox4.SelectedIndex = 1
+        UserInDomainPickerPanel.Visible = ComboBox4.SelectedIndex = 2
+
+        ' Reconfigure initial user
+        Try
+            Select Case ComboBox4.SelectedIndex
+                Case 0
+                    AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
+                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text))
+                    initialUserName = TextBox5.Text
+                Case 1
+                    Dim referenceUserDispName As String = ComboBox3.SelectedItem
+                    Dim referenceUser As Principal = userMappings(ComboBox2.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
+                    If referenceUser Is Nothing Then Exit Sub
+
+                    AddsUpnPathText.Text = referenceUser.UserPrincipalName
+                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, referenceUser.SamAccountName)
+                    initialUserName = referenceUser.SamAccountName
+                Case 2
+                    initialUserName = TextBox7.Text
+                    AddsUpnPathText.Text = DomainServicesModule.DSGetUserPrincipalNameFromSamAccountName(dsDomainName, initialUserName)
+                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox7.Text)
+            End Select
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TextBox7_TextChanged(sender As Object, e As EventArgs) Handles TextBox7.TextChanged
+        initialUserName = TextBox7.Text
+        AddsUpnPathText.Text = DomainServicesModule.DSGetUserPrincipalNameFromSamAccountName(dsDomainName, initialUserName)
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox7.Text)
+    End Sub
+
+    Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\unattend\unatt_create.html", "active-directory-domain-services-domain-join")
+        DialogResult = Windows.Forms.DialogResult.None
+    End Sub
+
+    Private Sub DnsResolutionTSMI_Click(sender As Object, e As EventArgs) Handles DnsResolutionTSMI.Click
+        If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
+            MsgBox("Please provide a domain for which to test domain name resolution.", vbOKOnly + vbExclamation, Text)
+            Exit Sub
+        End If
+
+        Cursor = Cursors.WaitCursor
+        Dim nslookupProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "nslookup.exe"),
+                .Arguments = TextBox1.Text,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+
+        Try
+            nslookupProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            nslookupProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        Catch ex As Exception
+            nslookupProc.StartInfo.StandardOutputEncoding = Nothing
+            nslookupProc.StartInfo.StandardErrorEncoding = Nothing
+        End Try
+
+        Dim nslookupOut As String = ""
+        nslookupProc.Start()
+        nslookupOut = nslookupProc.StandardOutput.ReadToEnd() & nslookupProc.StandardError.ReadToEnd()
+        nslookupProc.WaitForExit()
+        Cursor = Cursors.Arrow
+        MsgBox(String.Format("NSLOOKUP output:{0}{0}{1}", Environment.NewLine, nslookupOut), vbOKOnly + vbInformation, "Domain name resolution results")
+    End Sub
+
+    Private Sub DnsZoneTSMI_Click(sender As Object, e As EventArgs) Handles DnsZoneTSMI.Click
+        If DnsZoneChooserDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            TextBox1.Text = DnsZoneChooserDialog.SelectedDnsZone
         End If
     End Sub
 End Class

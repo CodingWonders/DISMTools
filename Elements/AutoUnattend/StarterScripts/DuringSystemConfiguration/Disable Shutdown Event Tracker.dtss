@@ -1,0 +1,9 @@
+﻿Language: Batch
+Name: Disable Shutdown Event Tracker
+Description: This script disables the shutdown event tracker on Windows Server 
+Customizable: No
+
+@echo off
+REM This script disables Shutdown Event Tracker
+
+reg add "HKLM\Software\Policies\Microsoft\Windows NT\Reliability" /f /v ShutdownReasonOn /t REG_DWORD /d 0

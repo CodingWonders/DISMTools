@@ -30,26 +30,26 @@ Public Class RemCapabilities
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("There aren't any selected capabilities to remove. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("There aren't any selected capabilities to remove. Please select some capabilities and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ESN"
-                            MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "FRA"
-                            MsgBox("Il n'y a pas de capacités sélectionnées à supprimer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Il n'y a pas de capacités sélectionnées à supprimer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "PTB", "PTG"
-                            MsgBox("Não existem quaisquer capacidades seleccionadas para remover. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Não existem quaisquer capacidades seleccionadas para remover. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ITA"
-                            MsgBox("Non ci sono capacità selezionate da rimuovere. Selezionare alcune funzionalità e riprovare.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Non ci sono capacità selezionate da rimuovere. Selezionare alcune funzionalità e riprovare.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                 Case 1
-                    MsgBox("There aren't any selected capabilities to remove. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("There aren't any selected capabilities to remove. Please select some capabilities and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 2
-                    MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 3
-                    MsgBox("Il n'y a pas de capacités sélectionnées à supprimer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Il n'y a pas de capacités sélectionnées à supprimer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 4
-                    MsgBox("Não existem quaisquer capacidades seleccionadas para remover. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Não existem quaisquer capacidades seleccionadas para remover. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 5
-                    MsgBox("Non ci sono capacità selezionate da rimuovere. Selezionare alcune funzionalità e riprovare.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Non ci sono capacità selezionate da rimuovere. Selezionare alcune funzionalità e riprovare.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Select
             Exit Sub
         End If
@@ -122,35 +122,35 @@ Public Class RemCapabilities
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Remove capabilities"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                         ListView1.Columns(0).Text = "Capability"
                         ListView1.Columns(1).Text = "State"
                     Case "ESN"
                         Text = "Eliminar funcionalidades"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                         ListView1.Columns(0).Text = "Funcionalidad"
                         ListView1.Columns(1).Text = "Estado"
                     Case "FRA"
                         Text = "Supprimer les capacités"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
                         ListView1.Columns(0).Text = "Capacité"
                         ListView1.Columns(1).Text = "État"
                     Case "PTB", "PTG"
                         Text = "Remover capacidades"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                         ListView1.Columns(0).Text = "Capacidade"
                         ListView1.Columns(1).Text = "Estado"
                     Case "ITA"
                         Text = "Rimuovi capacità"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annullare"
                         ListView1.Columns(0).Text = "Capacità"
@@ -158,52 +158,50 @@ Public Class RemCapabilities
                 End Select
             Case 1
                 Text = "Remove capabilities"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
                 ListView1.Columns(0).Text = "Capability"
                 ListView1.Columns(1).Text = "State"
             Case 2
                 Text = "Eliminar funcionalidades"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
                 ListView1.Columns(0).Text = "Funcionalidad"
                 ListView1.Columns(1).Text = "Estado"
             Case 3
                 Text = "Supprimer les capacités"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
                 ListView1.Columns(0).Text = "Capacité"
                 ListView1.Columns(1).Text = "État"
             Case 4
                 Text = "Remover capacidades"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
                 ListView1.Columns(0).Text = "Capacidade"
                 ListView1.Columns(1).Text = "Estado"
             Case 5
                 Text = "Rimuovi capacità"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
                 ListView1.Columns(0).Text = "Capacità"
                 ListView1.Columns(1).Text = "Stato"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ColumnHeader1.Width = WindowHelper.ScaleLogical(524)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(199)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 End Class

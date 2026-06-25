@@ -254,10 +254,6 @@ Public Class SetImageEdition
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annulla"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            ImageTaskHeader1.Visible = True
-        End If
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -269,6 +265,7 @@ Public Class SetImageEdition
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         DynaLog.LogMessage("Determining EULA option compatibility...")
         DynaLog.LogMessage("- Image Installation Type: " & MainForm.CurrentImage.ImageProductType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))
@@ -280,6 +277,7 @@ Public Class SetImageEdition
             DynaLog.LogMessage("Either one or none of the two requirements described above is met. The image we are managing is not an active installation, or a Windows Server installation")
             GroupBox1.Enabled = False
         End If
+        ImageTaskHeader1.HideWindowTitle(Handle)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged

@@ -7,12 +7,17 @@ Public Class SampleScriptBrowser
     Public FinalScriptLanguage As String
     Public FinalScriptStage As Integer
 
+    Private OptionsCustomizable As Boolean
+
     Private SysConfigScripts As New List(Of StarterScript)
     Private FirstUserLogonScripts As New List(Of StarterScript)
     Private UserFirstLogonScripts As New List(Of StarterScript)
     Private UserScripts As New List(Of StarterScript)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If OptionsCustomizable Then
+            MessageBox.Show("After this script is imported, please check its code for any options that you can set. That way you can customize its behavior.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -34,16 +39,21 @@ Public Class SampleScriptBrowser
         Try
             Dim scriptFileContents As String() = File.ReadAllLines(ScriptPath)
 
+            Dim CodeBlockStartingIndex As Integer = 3
+            If scriptFileContents(3).StartsWith("Customizable:", StringComparison.OrdinalIgnoreCase) Then CodeBlockStartingIndex = 4
+
             ' Script Format:
             ' <Language>
             ' <Name>
             ' <Description>
+            ' <Customizable> (0.8+)
             ' <code>
             Dim scriptLang As String = scriptFileContents(0).Replace("Language: ", "")
             Dim scriptName As String = scriptFileContents(1).Replace("Name: ", "")
             Dim scriptDescription As String = scriptFileContents(2).Replace("Description: ", "")
+            Dim scriptOptionsCustomizable As Boolean = scriptFileContents(3).Equals("Customizable: Yes", StringComparison.OrdinalIgnoreCase)
 
-            starterScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, scriptFileContents.Skip(3).ToArray()))
+            starterScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, scriptFileContents.Skip(CodeBlockStartingIndex).ToArray()), scriptOptionsCustomizable)
             If starterScript IsNot Nothing Then DynaLog.LogMessage(starterScript.ToString())
         Catch ex As Exception
             DynaLog.LogMessage("Could not read this file. Error message: " & ex.Message)
@@ -54,6 +64,7 @@ Public Class SampleScriptBrowser
 
     Private Function LoadAllStarterScripts() As Boolean
         DynaLog.LogMessage("Preparing to load all scripts...")
+        If Not Debugger.IsAttached Then DynaLog.DisableLogging()
 
         ' First we check if we have a script collection
         If Not Directory.Exists(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")) Then
@@ -89,6 +100,8 @@ Public Class SampleScriptBrowser
 
             End Try
         End If
+
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
         Return True
     End Function
@@ -133,6 +146,8 @@ Public Class SampleScriptBrowser
         UserFirstLogonScripts.Clear()
         UserScripts.Clear()
 
+        ToggleScriptPreviewFSMode(False)
+
         ' Reset screens and get rid of listview items
         ScriptDetailsPanel.Visible = False
         ListView1.Items.Clear()
@@ -154,9 +169,12 @@ Public Class SampleScriptBrowser
         ListView1.ForeColor = ForeColor
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
+        RichTextBox2.BackColor = BackColor
+        RichTextBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         If ComboBox1.SelectedIndex = FinalScriptStage Then
             ' force showing again
@@ -183,9 +201,11 @@ Public Class SampleScriptBrowser
                 Label4.Text = script.Description
                 Label5.Text = String.Format("Language: {0}", script.Language)
                 RichTextBox1.Text = script.ScriptCode
+                RichTextBox2.Text = script.ScriptCode
 
                 FinalScriptCode = script.ScriptCode
                 FinalScriptLanguage = script.Language
+                OptionsCustomizable = script.OptionsCustomizable
             End If
 
             ScriptDetailsPanel.Visible = (ListView1.SelectedItems.Count = 1)
@@ -221,7 +241,7 @@ Public Class SampleScriptBrowser
         If targetSS IsNot Nothing Then
             Select Case targetSS.Language.ToLower()
                 Case "batch"
-                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd;*.nt"
+                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd"
                 Case "powershell"
                     ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
                 Case Else
@@ -273,5 +293,28 @@ Public Class SampleScriptBrowser
         AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
         ' Force script enumeration for first stage
         ComboBox1.SelectedIndex = 0
+    End Sub
+
+    Private Sub ToggleScriptPreviewFSMode(FullScreen As Boolean)
+        ScriptListPanel.Visible = Not FullScreen
+        ScriptCodeFSPanel.Visible = FullScreen
+        ScriptDetailsContainerPanel.Visible = Not FullScreen
+        ActionPanel.Visible = Not FullScreen
+        ' When the cancel button is set it intercepts ESC, which we don't want in fullscreen mode.
+        CancelButton = If(FullScreen, Nothing, Cancel_Button)
+    End Sub
+
+    Private Sub EnterFSModeBtn_Click(sender As Object, e As EventArgs) Handles EnterFSModeBtn.Click
+        ToggleScriptPreviewFSMode(True)
+    End Sub
+
+    Private Sub ExitFSModeBtn_Click(sender As Object, e As EventArgs) Handles ExitFSModeBtn.Click
+        ToggleScriptPreviewFSMode(False)
+    End Sub
+
+    Private Sub SampleScriptBrowser_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.Escape AndAlso ScriptCodeFSPanel.Visible Then
+            ToggleScriptPreviewFSMode(False)
+        End If
     End Sub
 End Class

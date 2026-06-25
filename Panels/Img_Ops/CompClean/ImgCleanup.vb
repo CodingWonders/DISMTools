@@ -2,6 +2,7 @@
 Imports Microsoft.Win32
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 Public Class ImgCleanup
 
@@ -73,7 +74,7 @@ Public Class ImgCleanup
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Image cleanup"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Choose a task:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Choose a task to see its description"
                         Label4.Text = "There are no configurable options for this task. However, you should only run this task to try to recover a Windows image that fails to boot."
@@ -105,7 +106,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limit access to Windows Update"
                     Case "ESN"
                         Text = "Limpieza de imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Elija una tarea:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Elija una tarea para ver su descripción"
                         Label4.Text = "No hay opciones configurables para esta tarea. Sin embargo, debería ejecutar esta tarea para intentar recuperar una imagen de Windows que no inicia."
@@ -137,7 +138,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limitar acceso a Windows Update"
                     Case "FRA"
                         Text = "Nettoyage de l'image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Choisissez une tâche :"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Choisissez une tâche pour voir sa description"
                         Label4.Text = "Il n'y a pas d'options configurables pour cette tâche. Cependant, vous ne devez exécuter cette tâche que pour essayer de récupérer une image Windows qui ne démarre pas."
@@ -169,7 +170,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limiter l'accès à Windows Update"
                     Case "PTB", "PTG"
                         Text = "Limpeza de imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Escolha uma tarefa:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Escolha uma tarefa para ver a sua descrição"
                         Label4.Text = "Não existem opções configuráveis para esta tarefa. No entanto, só deve executar esta tarefa para tentar recuperar uma imagem do Windows que não arranque."
@@ -201,7 +202,7 @@ Public Class ImgCleanup
                         CheckBox5.Text = "Limitar o acesso ao Windows Update"
                     Case "ITA"
                         Text = "Pulizia immagine"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Scegliere un'attività:"
                         If ComboBox1.SelectedItem = "" Then Label3.Text = "Scegliere un'attività per vederne la descrizione"
                         Label4.Text = "Non ci sono opzioni configurabili per questa attività. Tuttavia, si dovrebbe eseguire questa attività solo per tentare di ripristinare un'immagine di Windows che non riesce ad avviarsi"
@@ -234,7 +235,7 @@ Public Class ImgCleanup
                 End Select
             Case 1
                 Text = "Image cleanup"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Choose a task:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Choose a task to see its description"
                 Label4.Text = "There are no configurable options for this task. However, you should only run this task to try to recover a Windows image that fails to boot."
@@ -266,7 +267,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limit access to Windows Update"
             Case 2
                 Text = "Limpieza de imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Elija una tarea:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Elija una tarea para ver su descripción"
                 Label4.Text = "No hay opciones configurables para esta tarea. Sin embargo, debería ejecutar esta tarea para intentar recuperar una imagen de Windows que no inicia."
@@ -298,7 +299,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limitar acceso a Windows Update"
             Case 3
                 Text = "Nettoyage de l'image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Choisissez une tâche :"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Choisissez une tâche pour voir sa description"
                 Label4.Text = "Il n'y a pas d'options configurables pour cette tâche. Cependant, vous ne devez exécuter cette tâche que pour essayer de récupérer une image Windows qui ne démarre pas."
@@ -330,7 +331,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limiter l'accès à Windows Update"
             Case 4
                 Text = "Limpeza de imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Escolha uma tarefa:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Escolha uma tarefa para ver a sua descrição"
                 Label4.Text = "Não existem opções configuráveis para esta tarefa. No entanto, só deve executar esta tarefa para tentar recuperar uma imagem do Windows que não arranque."
@@ -362,7 +363,7 @@ Public Class ImgCleanup
                 CheckBox5.Text = "Limitar o acesso ao Windows Update"
             Case 5
                 Text = "Pulizia immagine"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Scegliere un'attività:"
                 If ComboBox1.SelectedItem = "" Then Label3.Text = "Scegliere un'attività per vederne la descrizione"
                 Label4.Text = "Non ci sono opzioni configurabili per questa attività. Tuttavia, si dovrebbe eseguire questa attività solo per tentare di ripristinare un'immagine di Windows che non riesce ad avviarsi"
@@ -393,11 +394,7 @@ Public Class ImgCleanup
                 CheckBox4.Text = "Usa un'altra fonte per la riparazione dei componenti"
                 CheckBox5.Text = "Limita l'accesso a Windows Update"
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = BackColor
@@ -405,9 +402,10 @@ Public Class ImgCleanup
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        PictureBox2.Image = GetGlyphResource("image_glyph")
+        WimFileSourcePanel.SetColors()
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ' Determine when the last base reset was run
         DynaLog.LogMessage("Getting status of last base reset...")
         If MainForm.OnlineManagement Then
@@ -522,6 +520,7 @@ Public Class ImgCleanup
         End If
 
         If SelTask >= 0 And SelTask < ComboBox1.Items.Count Then ComboBox1.SelectedIndex = SelTask
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -812,21 +811,19 @@ Public Class ImgCleanup
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DynaLog.LogMessage("Getting source established in the group policy...")
-        RichTextBox1.Text = MainForm.GetSrcFromGPO()
-        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
-            TextBoxSourcePanel.Visible = False
+        RichTextBox1.Text = ServicingGPOHelper.GetSrcFromGPO()
+        If Regex.IsMatch(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)") Then
+            ' Divide the source to only grab image file and index
+            Dim ImageFileMatches As MatchCollection = Regex.Matches(RichTextBox1.Text, "(^wim:\\)(.*)(:\d+$)")
+            WimFileSourcePanel.ImageFile = ImageFileMatches(0).Groups(2).Value
+            WimFileSourcePanel.ImageIndex = CInt(ImageFileMatches(0).Groups(3).Value.Replace(":", ""))
             WimFileSourcePanel.Visible = True
-            Dim parts() As String = RichTextBox1.Text.Split(":")
-            Label14.Text = parts(parts.Length - 1)
-            Label13.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
-            If Label13.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label13.Text = Label13.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
         Else
-            TextBoxSourcePanel.Visible = True
             WimFileSourcePanel.Visible = False
         End If
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As EventArgs)
         TextBoxSourcePanel.Visible = True
         WimFileSourcePanel.Visible = False
     End Sub

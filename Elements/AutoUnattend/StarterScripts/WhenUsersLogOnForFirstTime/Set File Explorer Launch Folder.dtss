@@ -1,0 +1,21 @@
+﻿Language: Batch
+Name: Set File Explorer Launch Folder
+Description: This script configures the folder, or view, that is automatically loaded by the File Explorer on startup. This works on Windows 10 and 11 
+Customizable: Yes
+
+@echo off
+REM This script configures the folder that is automatically loaded
+REM by the File Explorer on startup, based on what you choose from
+REM this list:
+REM 0 -- Quick Access (Windows 10)/Home (Windows 11)
+REM 1 -- This PC
+
+SET _LaunchTo=1
+
+REM leave the rest of the script as is
+IF NOT DEFINED _LaunchTo SET _LaunchTo=1
+
+IF %_LaunchTo% LSS 0 SET _LaunchTo=0
+IF %_LaunchTo% GTR 1 SET _LaunchTo=1
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v LaunchTo /t REG_DWORD /d %_LaunchTo%

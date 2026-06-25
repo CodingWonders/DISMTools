@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Update Microsoft Store Apps
 Description: This script invokes an update of all Microsoft Store applications. A network is required for this to work.
+Customizable: No
 
 @echo off
 echo Updating all Microsoft Store applications. This could take a while...

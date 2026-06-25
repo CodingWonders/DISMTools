@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.8                                         |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for Servers      |
@@ -65,11 +65,14 @@
 #
 #   Settings for the server are declared in the Server Options section.
 
+param (
+    [int] $sPort = 8080
+)
 
 
 # ----------------------- Server Options -----------------------
 $webHost = "*"
-$port = 8080
+$port = $sPort
 # --------------------------------------------------------------
 
 function Write-LogMessage {
@@ -128,7 +131,7 @@ function Get-FogHosts {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7.3"
+$version = "0.8"
 
 Clear-Host
 
@@ -320,6 +323,10 @@ try {
                             button {
                                 font-size: 1.125em;
                                 font-family: "Trebuchet MS", "Arial", "Helvetica", sans-serif;
+                            }
+                            button:disabled {
+                                background-color: darkgray;
+                                color: white;
                             }
                             .important_tab {
                                 font-weight: bold;
@@ -518,6 +525,10 @@ try {
                             function invokeExit() {
                                 fetch('/api/exit', { method: "GET" });
                                 alert("The server has stopped. Close this tab now.");
+                                let buttons = document.getElementsByTagName("button");
+                                for (let i = 0; i < buttons.length; i++) {
+                                    buttons[i].disabled = true;
+                                }
                             }
 
                             function invokeLogViewer() {

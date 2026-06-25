@@ -473,6 +473,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property copy_img_to_wds() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("copy_img_to_wds", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property copytoclip() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("copytoclip", resourceCulture)
@@ -561,29 +571,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a REM EXAMPLE SCRIPT. PLEASE MODIFY
-        '''REM -----------------------------------------
-        '''SELECT DISK=0
-        '''CLEAN
-        '''CONVERT GPT
-        '''CREATE PARTITION EFI SIZE=300
-        '''FORMAT QUICK FS=FAT32 LABEL=&quot;System&quot;
-        '''CREATE PARTITION MSR SIZE=16
-        '''CREATE PARTITION PRIMARY
-        '''SHRINK MINIMUM=1000
-        '''FORMAT QUICK FS=NTFS LABEL=&quot;Windows&quot;
-        '''CREATE PARTITION PRIMARY
-        '''FORMAT QUICK FS=NTFS LABEL=&quot;Recovery&quot;
-        '''SET ID=&quot;de94bba4-06d1-4d40-a16a-bfd50179d6ac&quot;
-        '''GPT ATTRIBUTES=0x8000000000000001.
-        '''</summary>
-        Friend ReadOnly Property DefaultDiskPartConfig() As String
-            Get
-                Return ResourceManager.GetString("DefaultDiskPartConfig", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Busca una cadena traducida similar a # Write your code here, or use one of the following buttons at the bottom of this window:
         '''# - Use the Open Script button to load the contents of an existing script file.
         '''# - To get started with our curated set of Starter Scripts, use the &quot;Import a predefined Starter Script&quot; button
@@ -592,6 +579,23 @@ Namespace My.Resources
         Friend ReadOnly Property DefaultPostInstallScriptCode() As String
             Get
                 Return ResourceManager.GetString("DefaultPostInstallScriptCode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca una cadena traducida similar a &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        '''&lt;unattend xmlns=&quot;urn:schemas-microsoft-com:unattend&quot;&gt;
+        '''    &lt;settings pass=&quot;oobeSystem&quot;&gt;
+        '''        &lt;component name=&quot;Microsoft-Windows-Deployment&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        '''            &lt;Reseal&gt;
+        '''                &lt;Mode&gt;Audit&lt;/Mode&gt;
+        '''            &lt;/Reseal&gt;
+        '''        &lt;/component&gt;
+        '''   [resto de la cadena truncado]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property DefaultUnattended_AuditMode() As String
+            Get
+                Return ResourceManager.GetString("DefaultUnattended_AuditMode", resourceCulture)
             End Get
         End Property
         
@@ -918,6 +922,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property first_element_upward() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("first_element_upward", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property get_appxpkg_info() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("get_appxpkg_info", resourceCulture)
@@ -1118,6 +1132,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property infinityhome_admin_tools() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("infinityhome_admin_tools", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property infinityhome_change_network_config() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("infinityhome_change_network_config", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property info_16px() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("info_16px", resourceCulture)
@@ -1191,6 +1225,16 @@ Namespace My.Resources
         Friend ReadOnly Property last_element() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("last_element", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property last_element_downward() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("last_element_downward", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1393,6 +1437,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property next_element_downward() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("next_element_downward", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property onedrive_exclusion() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("onedrive_exclusion", resourceCulture)
@@ -1426,6 +1480,16 @@ Namespace My.Resources
         Friend ReadOnly Property openfile_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("openfile_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property optimize_img() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("optimize_img", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1613,6 +1677,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property prev_element_upward() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("prev_element_upward", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property preview_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("preview_dark", resourceCulture)
@@ -1776,6 +1850,16 @@ Namespace My.Resources
         Friend ReadOnly Property project() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("project", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property rearrange_elements() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("rearrange_elements", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2183,13 +2267,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''-- Bugfixes
+        '''-- Bugfixes in preview releases
         '''
-        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
-        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
-        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
-        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
-        '''- Fixed issues with recursive driver addition on Windo [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where removed features would appear in the wrong place
+        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
+        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
+        '''- Fixed some HiDPI issues
+        '''- Fixed an issue where, when managing the active installation, the v [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

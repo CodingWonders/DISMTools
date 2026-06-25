@@ -170,6 +170,7 @@ Public Class RegistryControlPanel
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Try
             DynaLog.LogMessage("Getting last key that was opened in the Registry Editor...")
             Dim LastKeyReg As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Applets\Regedit")
@@ -193,8 +194,10 @@ Public Class RegistryControlPanel
         Dim regName As String = "z" & Path.GetFileNameWithoutExtension(HiveLocation)
         Dim regExitCode As Integer
         If Load Then
+            If RegistryHelper.RegistryKeyExists(String.Format("HKLM\{0}", regName)) Then Return True
             regExitCode = RegistryHelper.LoadRegistryHive(HiveLocation, String.Format("HKLM\{0}", regName))
         Else
+            If Not RegistryHelper.RegistryKeyExists(String.Format("HKLM\{0}", regName)) Then Return True
             regExitCode = RegistryHelper.UnloadRegistryHive(String.Format("HKLM\{0}", regName))
         End If
         DynaLog.LogMessage("The REG process finished with exit code " & Hex(regExitCode))

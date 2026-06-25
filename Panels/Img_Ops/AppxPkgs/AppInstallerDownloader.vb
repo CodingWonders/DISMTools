@@ -26,7 +26,10 @@ Public Class AppInstallerDownloader
 
     Private originalTitle As String
 
+    Private DownloadError As Exception
+
     Private Sub AppInstallerDownloader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DownloadError = Nothing
         Timer1.Enabled = True
         downUriLbl.Text = ""
         sw.Reset()
@@ -141,6 +144,7 @@ Public Class AppInstallerDownloader
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Language = MainForm.Language
         Height = WindowHelper.ScaleLogical(320)
         originalTitle = Text
@@ -164,13 +168,19 @@ Public Class AppInstallerDownloader
                                 Using tReader As TextReader = New StringReader(reader(x))
                                     Dim propertyLine As String = ""
                                     If Not reader(x).EndsWith(" />") Then
-                                        DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
+                                        DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next lines until tag closure...")
                                         Dim Properties As New List(Of String)
                                         Properties.Add(If(reader(x).EndsWith("MainBundle"), reader(x).Replace(" ", "").Trim(), reader(x)))
-                                        Properties.Add(reader(x + 1).Replace(" ", "").Trim())
-                                        Properties.Add(reader(x + 2).Replace(" ", "").Trim())
-                                        Properties.Add(reader(x + 3).Replace(" ", "").Trim())
-                                        Properties.Add(reader(x + 4).Replace(" ", "").Trim())
+                                        Dim nextLineIdx As Integer = 1
+                                        Do Until String.Join(" ", Properties).EndsWith(">")
+                                            Try
+                                                Properties.Add(reader(x + nextLineIdx).Replace(" ", "").Trim())
+                                                nextLineIdx += 1
+                                            Catch ex As Exception
+                                                ' We'll roll with what we have
+                                                Exit Do
+                                            End Try
+                                        Loop
                                         propertyLine = String.Join(" ", Properties)
                                         Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallerBundle)
                                         AppInstallerUri = id.MainBundleUri
@@ -191,14 +201,19 @@ Public Class AppInstallerDownloader
                         Using tReader As TextReader = New StringReader(reader(startingIndex))
                             Dim propertyLine As String = ""
                             If Not reader(startingIndex).EndsWith(" />") Then
-                                DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
+                                DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next lines until tag closure...")
                                 Dim Properties As New List(Of String)
                                 Properties.Add(If(reader(startingIndex).EndsWith("MainPackage"), reader(startingIndex).Replace(" ", "").Trim(), reader(startingIndex)))
-                                Properties.Add(reader(startingIndex + 1).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 2).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 3).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 4).Replace(" ", "").Trim())
-                                Properties.Add(reader(startingIndex + 5).Replace(" ", "").Trim())
+                                Dim nextLineIdx As Integer = 1
+                                Do Until String.Join(" ", Properties).EndsWith(">")
+                                    Try
+                                        Properties.Add(reader(startingIndex + nextLineIdx).Replace(" ", "").Trim())
+                                        nextLineIdx += 1
+                                    Catch ex As Exception
+                                        ' We'll roll with what we have
+                                        Exit Do
+                                    End Try
+                                Loop
                                 propertyLine = String.Join(" ", Properties)
                                 Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallerStandalone)
                                 AppInstallerUri = id.MainPackageUri
@@ -276,34 +291,7 @@ Public Class AppInstallerDownloader
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
         If Not e.Cancelled AndAlso e.Error IsNot Nothing Then
-            DynaLog.LogMessage("An error has occurred and was not caused by user cancellation. Error message: " & e.Error.Message)
-            Dim msg As String = ""
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "An error occurred while downloading the file: " & e.Error.Message
-                        Case "ESN"
-                            msg = "Se produjo un error al descargar el archivo: " & e.Error.Message
-                        Case "FRA"
-                            msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
-                        Case "PTB", "PTG"
-                            msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
-                        Case "ITA"
-                            msg = "Si è verificato un errore durante il scaricamento del file: " & e.Error.Message
-                    End Select
-                Case 1
-                    msg = "An error occurred while downloading the file: " & e.Error.Message
-                Case 2
-                    msg = "Se produjo un error al descargar el archivo: " & e.Error.Message
-                Case 3
-                    msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
-                Case 4
-                    msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
-                Case 5
-                    msg = "Si è verificato un errore durante il scaricamento del file: " & e.Error.Message
-            End Select
-            MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
+            DownloadError = e.Error
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
                 DynaLog.LogMessage("Deleting incomplete download...")
                 File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
@@ -367,11 +355,48 @@ Public Class AppInstallerDownloader
     Private Sub AppInstallerDownloader_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         Timer1.Stop()
+
+        If DownloadError IsNot Nothing Then
+            DynaLog.LogMessage("An error has occurred and was not caused by user cancellation. Error message: " & DownloadError.Message)
+            Dim msg As String = ""
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "An error occurred while downloading the file: " & DownloadError.Message
+                        Case "ESN"
+                            msg = "Se produjo un error al descargar el archivo: " & DownloadError.Message
+                        Case "FRA"
+                            msg = "Une erreur s'est produite lors du téléchargement du fichier : " & DownloadError.Message
+                        Case "PTB", "PTG"
+                            msg = "Ocorreu um erro ao baixar o arquivo: " & DownloadError.Message
+                        Case "ITA"
+                            msg = "Si è verificato un errore durante il scaricamento del file: " & DownloadError.Message
+                    End Select
+                Case 1
+                    msg = "An error occurred while downloading the file: " & DownloadError.Message
+                Case 2
+                    msg = "Se produjo un error al descargar el archivo: " & DownloadError.Message
+                Case 3
+                    msg = "Une erreur s'est produite lors du téléchargement du fichier : " & DownloadError.Message
+                Case 4
+                    msg = "Ocorreu um erro ao baixar o arquivo: " & DownloadError.Message
+                Case 5
+                    msg = "Si è verificato un errore durante il scaricamento del file: " & DownloadError.Message
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
+        End If
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         Downloader.CancelAsync()
         Cancel_Button.Enabled = False
         Label3.Visible = True
+    End Sub
+
+    Private Sub CopyUri_Button_Click(sender As Object, e As EventArgs) Handles CopyUri_Button.Click
+        Dim data As New DataObject()
+        data.SetText(downUriLbl.Text)
+        Clipboard.SetDataObject(data, True)
     End Sub
 End Class

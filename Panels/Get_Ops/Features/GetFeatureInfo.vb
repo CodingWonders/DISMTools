@@ -9,7 +9,7 @@ Public Class GetFeatureInfoDlg
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetFeatureInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -22,12 +22,13 @@ Public Class GetFeatureInfoDlg
         cPropValue.ForeColor = ForeColor
         cPropValue.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, If(MainForm.LogFontIsBold, FontStyle.Bold, FontStyle.Regular))
         SearchPic.Image = GetGlyphResource("search")
+        WizardBtn.Image = GetGlyphResource("assistant")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get feature information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ready"
                         Label22.Text = "Feature name:"
                         Label24.Text = "Display name:"
@@ -43,7 +44,7 @@ Public Class GetFeatureInfoDlg
                         SearchBox1.cueBanner = "Type here to search for a feature..."
                     Case "ESN"
                         Text = "Obtener información de características"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Listo"
                         Label22.Text = "Nombre de característica:"
                         Label24.Text = "Nombre para mostrar:"
@@ -59,7 +60,7 @@ Public Class GetFeatureInfoDlg
                         SearchBox1.cueBanner = "Escriba aquí para buscar una característica..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les caractéristiques"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Prêt"
                         Label22.Text = "Nom de la caractéristique :"
                         Label24.Text = "Nom d'affichage :"
@@ -75,7 +76,7 @@ Public Class GetFeatureInfoDlg
                         SearchBox1.cueBanner = "Tapez ici pour rechercher une caractéristique..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre a caraterística"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Pronto"
                         Label22.Text = "Nome da caraterística:"
                         Label24.Text = "Nome do ecrã:"
@@ -91,7 +92,7 @@ Public Class GetFeatureInfoDlg
                         SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
                     Case "ITA"
                         Text = "Verifica informazioni funzionalità"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Pronto"
                         Label22.Text = "Nome funzionalità:"
                         Label24.Text = "Nome visualizzato:"
@@ -108,7 +109,7 @@ Public Class GetFeatureInfoDlg
                 End Select
             Case 1
                 Text = "Get feature information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ready"
                 Label22.Text = "Feature name:"
                 Label24.Text = "Display name:"
@@ -124,7 +125,7 @@ Public Class GetFeatureInfoDlg
                 SearchBox1.cueBanner = "Type here to search for a feature..."
             Case 2
                 Text = "Obtener información de características"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Listo"
                 Label22.Text = "Nombre de característica:"
                 Label24.Text = "Nombre para mostrar:"
@@ -140,7 +141,7 @@ Public Class GetFeatureInfoDlg
                 SearchBox1.cueBanner = "Escriba aquí para buscar una característica..."
             Case 3
                 Text = "Obtenir des informations sur les caractéristiques"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Prêt"
                 Label22.Text = "Nom de la caractéristique :"
                 Label24.Text = "Nom d'affichage :"
@@ -156,7 +157,7 @@ Public Class GetFeatureInfoDlg
                 SearchBox1.cueBanner = "Tapez ici pour rechercher une caractéristique..."
             Case 4
                 Text = "Obter informações sobre a caraterística"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Pronto"
                 Label22.Text = "Nome da caraterística:"
                 Label24.Text = "Nome do ecrã:"
@@ -172,7 +173,7 @@ Public Class GetFeatureInfoDlg
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
             Case 5
                 Text = "Verifica informazioni funzionalità"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Pronto"
                 Label22.Text = "Nome funzionalità:"
                 Label24.Text = "Nome visualizzato:"
@@ -187,15 +188,12 @@ Public Class GetFeatureInfoDlg
                 Button2.Text = "Salva..."
                 SearchBox1.cueBanner = "Digita qui per cercare una funzionalità..."
         End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If SplitContainer2.SplitterDistance = 440 Then
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
@@ -211,6 +209,7 @@ Public Class GetFeatureInfoDlg
         SearchBox1.Text = ""
         ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -248,7 +247,7 @@ Public Class GetFeatureInfoDlg
                         Case 5
                             msg = "Prima di poter visualizzare le informazioni sulle funzionalità i processi in background devono essere stati completati. Attendi che siano stati completati."
                     End Select
-                    MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -445,7 +444,7 @@ Public Class GetFeatureInfoDlg
                         Case 5
                             msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
-                    MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Finally
                     DynaLog.LogMessage("Shutting down API...")
                     Try
@@ -692,5 +691,15 @@ Public Class GetFeatureInfoDlg
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         SearchEngineHelper.InvokeSearchQuery(MainForm.SearchEngineName, String.Format("microsoft windows {0}", Quote & Label23.Text & Quote))
+    End Sub
+
+    Private Sub WizardBtn_Click(sender As Object, e As EventArgs) Handles WizardBtn.Click
+        If FeatureFilterAssistantDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            SearchBox1.Text = FeatureFilterAssistantDialog.AppliedQuery
+        End If
+    End Sub
+
+    Private Sub WizardBtn_MouseHover(sender As Object, e As EventArgs) Handles WizardBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Build query with the Assistant...")
     End Sub
 End Class

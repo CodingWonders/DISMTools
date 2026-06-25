@@ -43,6 +43,22 @@ Module ThemeHelper
     ''' <remarks>These act as default themes in case the themes folder is not present</remarks>
     Private ReadOnly FallbackThemes As New List(Of Theme)
 
+#Region "DPI Handling"
+
+    Private Const DPI_100 As Double = 96.0F
+    Private Const DPI_125 As Double = 120.0F
+    Private Const DPI_125_ASSET As String = "_125"
+    Private Const DPI_150 As Double = 144.0F
+    Private Const DPI_150_ASSET As String = "_150"
+    Private Const DPI_175 As Double = 168.0F
+    Private Const DPI_175_ASSET As String = "_175"
+    Private Const DPI_200 As Double = 192.0F
+    Private Const DPI_200_ASSET As String = "_200"
+    Private Const DPI_300 As Double = 288.0F
+    Private Const DPI_300_ASSET As String = "_300"
+
+#End Region
+
     ''' <summary>
     ''' Loads the themes in <paramref>ThemePath</paramref>
     ''' </summary>
@@ -241,5 +257,19 @@ Module ThemeHelper
     Function GetThemes() As List(Of Theme)
         Return _themes
     End Function
+
+    Public Sub UpdateLinkLabelColors(parentControl As Control, linkColor As Color, activeLinkColor As Color)
+        For Each ctrl As Control In parentControl.Controls
+            If TypeOf ctrl Is LinkLabel Then
+                Dim linkLbl As LinkLabel = DirectCast(ctrl, LinkLabel)
+                linkLbl.LinkColor = linkColor
+                linkLbl.ActiveLinkColor = activeLinkColor
+            End If
+
+            If ctrl.HasChildren Then
+                UpdateLinkLabelColors(ctrl, linkColor, activeLinkColor)
+            End If
+        Next
+    End Sub
 
 End Module

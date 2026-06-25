@@ -143,4 +143,15 @@ Module MarkdownHelper
         Return ""
     End Function
 
+    ''' <summary>
+    ''' Gets a URL link string for Markdown files
+    ''' </summary>
+    ''' <param name="Uri">The site to go to when clicking the link</param>
+    ''' <param name="DisplayString">The name to show to the user of the link</param>
+    ''' <returns>A Markdown link string</returns>
+    ''' <remarks></remarks>
+    Public Function GetLink(Uri As String, DisplayString As String) As String
+        Return String.Format("[{0}]({1})", DisplayString, Uri)
+    End Function
+
 End Module

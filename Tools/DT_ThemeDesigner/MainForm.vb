@@ -1,5 +1,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Win32
+Imports DT_ThemeDesigner.Classes.ColorUtilities
 
 Public Class MainForm
 
@@ -7,7 +9,74 @@ Public Class MainForm
 
     Private UserDataScriptFolder As String
 
+    Public CurrentColorMode As ColorThemeMode
+
+    Private roMode As Boolean
+    Private SavedThemePath As String
+
+    Private Sub ChangeMenuItemColors(ByVal bgColor As Color, ByVal fgColor As Color, ByVal itemCollection As ToolStripItemCollection)
+        For Each tsi As ToolStripItem In itemCollection
+            If TypeOf tsi Is ToolStripDropDownItem Then
+                Dim item As ToolStripDropDownItem = CType(tsi, ToolStripDropDownItem)
+                Try
+                    item.DropDown.BackColor = bgColor
+                    item.DropDown.ForeColor = fgColor
+                    If item.DropDownItems.Count > 0 Then
+                        ChangeMenuItemColors(bgColor, fgColor, item.DropDownItems)
+                    End If
+                Catch ex As Exception
+                    Continue For
+                End Try
+            End If
+        Next
+    End Sub
+
+    Private Sub SetColorMode(ByVal NewColorMode As ColorThemeMode)
+        CurrentColorMode = NewColorMode
+        Select Case NewColorMode
+            Case ColorThemeMode.Light
+                WindowHelper.ToggleDarkTitleBar(Handle, False)
+
+                BackColor = Color.FromArgb(239, 239, 242)
+                ForeColor = Color.Black
+            Case ColorThemeMode.Dark
+                WindowHelper.ToggleDarkTitleBar(Handle, True)
+
+                BackColor = Color.FromArgb(32, 32, 32)
+                ForeColor = Color.White
+            Case ColorThemeMode.System
+                If Environment.OSVersion.Version.Major < 10 Then SetColorMode(ColorThemeMode.Light)
+
+                Try
+                    Dim darkMode As Boolean
+                    Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+                    darkMode = ColorModeRk.GetValue("AppsUseLightTheme", 1) = 0
+                    ColorModeRk.Close()
+
+                    If darkMode Then SetColorMode(ColorThemeMode.Dark) Else SetColorMode(ColorThemeMode.Light)
+                Catch ex As Exception
+                    SetColorMode(ColorThemeMode.Light)
+                End Try
+
+                Exit Sub
+        End Select
+
+        TextBox1.BackColor = BackColor
+        TextBox1.ForeColor = ForeColor
+        GroupBox1.ForeColor = ForeColor
+
+        If NewColorMode = ColorThemeMode.Light Then
+            ToolStrip1.Renderer = New LightModeRenderer()
+        ElseIf NewColorMode = ColorThemeMode.Dark Then
+            ToolStrip1.Renderer = New DarkModeRenderer()
+        End If
+        ChangeMenuItemColors(BackColor, ForeColor, ColorModeTSDDB.DropDownItems)
+    End Sub
+
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        SystemCM_TSMI.Enabled = Environment.OSVersion.Version.Major >= 10
+
+        SetColorMode(ColorThemeMode.System)
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
         NewTheme = GetNewTheme()
@@ -134,13 +203,19 @@ Public Class MainForm
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        NewTheme = ThemeHelper.LoadThemeFile(OpenFileDialog1.FileName)
+        SavedThemePath = OpenFileDialog1.FileName
+        NewTheme = ThemeHelper.LoadThemeFile(SavedThemePath)
+        roMode = False
         TextBox1.Text = NewTheme.Name
         CheckBox1.Checked = NewTheme.IsDark
         ChangeColorPreviews()
         LoadCurrentTheme()
-        Text = String.Format("DISMTools Theme Designer - {0}", Path.GetFileName(OpenFileDialog1.FileName))
-
+        Text = String.Format("DISMTools Theme Designer - {0}", Path.GetFileName(SavedThemePath))
+        If (File.GetAttributes(SavedThemePath) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
+            MessageBox.Show("This theme has been loaded with read-only privileges. If you make changes, you must save them to a new file or enable write access.", "Theme Designer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            roMode = True
+            ToolStripButton5.Enabled = True
+        End If
         TextBox1.Select(TextBox1.TextLength, 0)
     End Sub
 
@@ -178,7 +253,9 @@ Public Class MainForm
         Cursor = Cursors.WaitCursor
         If ThemeHelper.SaveTheme(NewTheme, SaveFileDialog1.FileName) Then
             MessageBox.Show("The theme has been saved successfully at the specified location.", "Save Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Text = String.Format("DISMTools Theme Designer - {0}", Path.GetFileName(SaveFileDialog1.FileName))
+            SavedThemePath = SaveFileDialog1.FileName
+            Text = String.Format("DISMTools Theme Designer - {0}", Path.GetFileName(SavedThemePath))
+            roMode = False
         Else
             MessageBox.Show("Could not save the theme.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
@@ -191,15 +268,17 @@ Public Class MainForm
         CheckBox1.Checked = NewTheme.IsDark
         ChangeColorPreviews()
         LoadCurrentTheme()
+        roMode = False
+        SavedThemePath = ""
         Text = "DISMTools Theme Designer"
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
 #If VBC_VER >= 9.0 Then
-        MsgBox(String.Format("DISMTools Theme Designer version {0}" & CrLf & CrLf & "{1}. ", _
-                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), _
-                My.Application.Info.Copyright) & _
-                "INI File Parser: © 2008 Ricardo Amores Hernández", _
+        MsgBox(String.Format("DISMTools Theme Designer version {0}" & CrLf & CrLf & "{1}. {2}", _
+                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
+                My.Application.Info.Copyright, _
+                "INI File Parser: © 2008 Ricardo Amores Hernández"), _
             vbOKOnly + vbInformation, "About")
 #Else
         MsgBox(String.Format("DISMTools Theme Designer version {0}_NET2REL" & CrLf & CrLf & "{1}. {2}", _
@@ -207,5 +286,32 @@ Public Class MainForm
                 My.Application.Info.Copyright, "INI File Parser: © 2008 Ricardo Amores Hernández"), _
             vbOKOnly + vbInformation, "About")
 #End If
+    End Sub
+
+    Private Sub LightCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LightCM_TSMI.Click
+        SetColorMode(ColorThemeMode.Light)
+    End Sub
+
+    Private Sub DarkCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DarkCM_TSMI.Click
+        SetColorMode(ColorThemeMode.Dark)
+    End Sub
+
+    Private Sub SystemCM_TSMI_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SystemCM_TSMI.Click
+        SetColorMode(ColorThemeMode.System)
+    End Sub
+
+    Private Sub EnableWriteAccess()
+        If SavedThemePath = "" OrElse Not File.Exists(SavedThemePath) Then Exit Sub
+        Try
+            File.SetAttributes(SavedThemePath, (File.GetAttributes(SavedThemePath) And Not FileAttributes.ReadOnly))
+            roMode = False
+            ToolStripButton5.Enabled = False
+        Catch ex As Exception
+            MessageBox.Show("Could not enable write access for this script file. Make sure that the script is not in read-only media.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
+        EnableWriteAccess()
     End Sub
 End Class

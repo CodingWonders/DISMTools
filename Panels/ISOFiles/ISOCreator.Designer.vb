@@ -23,12 +23,11 @@ Partial Class ISOCreator
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ISOCreator))
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.Button6 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -67,8 +66,7 @@ Partial Class ISOCreator
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
         Me.ADKDownloaderBW = New System.ComponentModel.BackgroundWorker()
-        Me.Win10Title.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.GroupBox1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -77,39 +75,6 @@ Partial Class ISOCreator
         Me.IdlePanel.SuspendLayout()
         Me.ISOProgressPanel.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.PictureBox1)
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(1264, 48)
-        Me.Win10Title.TabIndex = 6
-        Me.Win10Title.Visible = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.create_iso
-        Me.PictureBox1.Location = New System.Drawing.Point(1220, 8)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(175, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Create an ISO file"
         '
         'BackgroundWorker1
         '
@@ -123,7 +88,7 @@ Partial Class ISOCreator
         Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(12, 56)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(1240, 56)
+        Me.Label2.Size = New System.Drawing.Size(1240, 32)
         Me.Label2.TabIndex = 7
         Me.Label2.Text = resources.GetString("Label2.Text")
         '
@@ -132,6 +97,8 @@ Partial Class ISOCreator
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.CheckBox4)
+        Me.GroupBox1.Controls.Add(Me.Button6)
         Me.GroupBox1.Controls.Add(Me.ListView1)
         Me.GroupBox1.Controls.Add(Me.Panel2)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
@@ -146,12 +113,34 @@ Partial Class ISOCreator
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Button4)
         Me.GroupBox1.Controls.Add(Me.CheckBox3)
-        Me.GroupBox1.Location = New System.Drawing.Point(13, 116)
+        Me.GroupBox1.Location = New System.Drawing.Point(13, 91)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1238, 420)
+        Me.GroupBox1.Size = New System.Drawing.Size(1238, 445)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Options"
+        '
+        'CheckBox4
+        '
+        Me.CheckBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Location = New System.Drawing.Point(384, 393)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(224, 17)
+        Me.CheckBox4.TabIndex = 12
+        Me.CheckBox4.Text = "Include essential drivers from this system"
+        Me.CheckBox4.UseVisualStyleBackColor = True
+        '
+        'Button6
+        '
+        Me.Button6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button6.Location = New System.Drawing.Point(1025, 409)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(184, 23)
+        Me.Button6.TabIndex = 11
+        Me.Button6.Text = "Customize Environment..."
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'ListView1
         '
@@ -163,7 +152,7 @@ Partial Class ISOCreator
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(24, 73)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1188, 173)
+        Me.ListView1.Size = New System.Drawing.Size(1188, 198)
         Me.ListView1.TabIndex = 10
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -200,7 +189,7 @@ Partial Class ISOCreator
         Me.Panel2.Controls.Add(Me.Button5)
         Me.Panel2.Controls.Add(Me.TextBox4)
         Me.Panel2.Enabled = False
-        Me.Panel2.Location = New System.Drawing.Point(194, 287)
+        Me.Panel2.Location = New System.Drawing.Point(194, 312)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(1018, 33)
         Me.Panel2.TabIndex = 9
@@ -229,7 +218,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(24, 368)
+        Me.CheckBox2.Location = New System.Drawing.Point(24, 393)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(133, 17)
         Me.CheckBox2.TabIndex = 8
@@ -240,7 +229,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoEllipsis = True
-        Me.CheckBox1.Location = New System.Drawing.Point(24, 294)
+        Me.CheckBox1.Location = New System.Drawing.Point(24, 319)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox1.TabIndex = 8
@@ -253,7 +242,7 @@ Partial Class ISOCreator
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.ComboBox1)
         Me.Panel1.Controls.Add(Me.Label6)
-        Me.Panel1.Location = New System.Drawing.Point(24, 252)
+        Me.Panel1.Location = New System.Drawing.Point(24, 277)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1181, 31)
         Me.Panel1.TabIndex = 7
@@ -293,7 +282,7 @@ Partial Class ISOCreator
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(1134, 340)
+        Me.Button3.Location = New System.Drawing.Point(1134, 365)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 2
@@ -315,7 +304,7 @@ Partial Class ISOCreator
         '
         Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox3.Location = New System.Drawing.Point(24, 341)
+        Me.TextBox3.Location = New System.Drawing.Point(24, 366)
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(1104, 21)
         Me.TextBox3.TabIndex = 1
@@ -333,7 +322,7 @@ Partial Class ISOCreator
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(21, 324)
+        Me.Label7.Location = New System.Drawing.Point(21, 349)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 0
@@ -363,7 +352,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(24, 390)
+        Me.CheckBox3.Location = New System.Drawing.Point(24, 415)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(175, 17)
         Me.CheckBox3.TabIndex = 8
@@ -509,19 +498,33 @@ Partial Class ISOCreator
         '
         Me.ADKDownloaderBW.WorkerReportsProgress = True
         '
+        'ImageTaskHeader1
+        '
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Global.DISMTools.My.Resources.Resources.create_iso
+        Me.ImageTaskHeader1.ItemText = "Create an ISO file"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(1264, 48)
+        Me.ImageTaskHeader1.TabIndex = 12
+        '
         'ISOCreator
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.OK_Button)
         Me.Controls.Add(Me.Cancel_Button)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(1024, 640)
@@ -529,9 +532,6 @@ Partial Class ISOCreator
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Create an ISO file"
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
@@ -544,9 +544,6 @@ Partial Class ISOCreator
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
@@ -588,4 +585,7 @@ Partial Class ISOCreator
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents ADKDownloaderBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
 End Class

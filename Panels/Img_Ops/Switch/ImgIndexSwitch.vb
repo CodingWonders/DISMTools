@@ -82,7 +82,7 @@ Public Class ImgIndexSwitch
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Switch image indexes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Image:"
                         Label3.Text = "When unmounting source index, what to do?"
                         Label4.Text = "Destination index to mount:"
@@ -94,7 +94,7 @@ Public Class ImgIndexSwitch
                         RadioButton2.Text = "Unmount discarding changes"
                     Case "ESN"
                         Text = "Cambiar índices de imagen"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagen:"
                         Label3.Text = "Al desmontar índice de origen, ¿qué hacer?"
                         Label4.Text = "Índice de destino a montar:"
@@ -106,7 +106,7 @@ Public Class ImgIndexSwitch
                         RadioButton2.Text = "Desmontar descartando cambios"
                     Case "FRA"
                         Text = "Changer d'index de l'image"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Image :"
                         Label3.Text = "Que faire lors du démonter l'index original ?"
                         Label4.Text = "Index de destination à monter :"
@@ -118,7 +118,7 @@ Public Class ImgIndexSwitch
                         RadioButton2.Text = "Annuler les modifications et démonter"
                     Case "PTB", "PTG"
                         Text = "Mudar os índices de imagem"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagem:"
                         Label3.Text = "Quando desmontar o índice de origem, o que fazer?"
                         Label4.Text = "Índice de destino para montar:"
@@ -130,7 +130,7 @@ Public Class ImgIndexSwitch
                         RadioButton2.Text = "Desmontar descartando as alterações"
                     Case "ITA"
                         Text = "Cambia gli indici delle immagini"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Immagine:"
                         Label3.Text = "Quando si smonta l'indice sorgente, cosa fare?"
                         Label4.Text = "Indice di destinazione da montare:"
@@ -143,7 +143,7 @@ Public Class ImgIndexSwitch
                 End Select
             Case 1
                 Text = "Switch image indexes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Image:"
                 Label3.Text = "When unmounting source index, what to do?"
                 Label4.Text = "Destination index to mount:"
@@ -155,7 +155,7 @@ Public Class ImgIndexSwitch
                 RadioButton2.Text = "Unmount discarding changes"
             Case 2
                 Text = "Cambiar índices de imagen"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagen:"
                 Label3.Text = "Al desmontar índice de origen, ¿qué hacer?"
                 Label4.Text = "Índice de destino a montar:"
@@ -167,7 +167,7 @@ Public Class ImgIndexSwitch
                 RadioButton2.Text = "Desmontar descartando cambios"
             Case 3
                 Text = "Changer d'index de l'image"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Image :"
                 Label3.Text = "Que faire lors du démonter l'index original ?"
                 Label4.Text = "Index de destination à monter :"
@@ -179,7 +179,7 @@ Public Class ImgIndexSwitch
                 RadioButton2.Text = "Annuler les modifications et démonter"
             Case 4
                 Text = "Mudar os índices de imagem"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagem:"
                 Label3.Text = "Quando desmontar o índice de origem, o que fazer?"
                 Label4.Text = "Índice de destino para montar:"
@@ -191,7 +191,7 @@ Public Class ImgIndexSwitch
                 RadioButton2.Text = "Desmontar descartando as alterações"
             Case 5
                 Text = "Cambia gli indici delle immagini"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Immagine:"
                 Label3.Text = "Quando si smonta l'indice sorgente, cosa fare?"
                 Label4.Text = "Indice di destinazione da montare:"
@@ -202,7 +202,7 @@ Public Class ImgIndexSwitch
                 RadioButton1.Text = "Salva le modifiche all'indice"
                 RadioButton2.Text = "Smonta scartando le modifiche"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
@@ -210,10 +210,6 @@ Public Class ImgIndexSwitch
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Label5.Text = indexNames(NumericUpDown1.Value - 1)
         If Label5.Text = MainForm.CurrentImage.ImageName Then
             Label6.Visible = True
@@ -224,6 +220,8 @@ Public Class ImgIndexSwitch
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged

@@ -93,6 +93,7 @@ Public Class ExceptionForm
         ErrorText.ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Try
             Dim data As New DataObject()
             data.SetText(ErrorText.Text, TextDataFormat.Text)

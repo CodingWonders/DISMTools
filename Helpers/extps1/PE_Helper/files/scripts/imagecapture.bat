@@ -67,8 +67,8 @@ if /i "%sourcedrive%" equ "NET" (
 
 	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share): "
 	if not defined destip (goto :main)
-	set /p destuser=Please enter the username: 
-	set /p destpassword=Please enter the password: 
+	set /p "destuser=Please enter the username: "
+	set /p "destpassword=Please enter the password: "
 
 	echo Connecting to network share...
 	IF %_DEBUG% EQU 1 echo Running net use...
@@ -113,6 +113,16 @@ if /i "%sourcedrive%" equ "KBD" (
 	goto :main
 )
 
+if %_DEBUG% EQU 1 echo Checking presence of marker...
+if %_DEBUG% EQU 1 echo "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag"
+if not exist "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag" (
+	echo The installation in the drive that you selected has not been prepared by Sysprep. It is recommended that you
+	echo prepare the installation on a reference computer before running this script.
+	echo.
+	set /p question=Continue? ^(y/N^): || goto :main
+	if /i "!question!" == "n" goto :main
+)
+
 if defined destdrive if %_DEBUG% equ 1 echo Destination drive already set by networking code.
 if not defined destdrive ( set /p destdrive=Please enter the letter of the volume the file will be stored on: )
 if not defined destdrive (
@@ -140,9 +150,7 @@ if not defined imagename (
 
 echo Capturing Windows installation to the target WIM file. This can take a long time, depending on the computer's speed.
 call :create_config_list %sourcedrive%
-if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
-	call :sysprep_hotinstall_remove_temp_files
-)
+
 set dismstart=%date% %time%
 IF %_DEBUG% EQU 1 echo DISM start time: %dismstart%
 IF %_DEBUG% EQU 1 echo Launching DISM...
@@ -153,6 +161,7 @@ IF %_DEBUG% EQU 1 echo   Image Name       : %imagename%
 dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
 if %ERRORLEVEL% equ 0 (
 	set succeeded=true
+	if exist "%SYSTEMDRIVE%\SysprepPrepTool" call :sysprep_hotinstall_remove_temp_files
 ) else (
 	set succeeded=false
 )
@@ -191,6 +200,32 @@ IF %_DEBUG% EQU 1 echo Removal complete.
 exit /b
 
 :dt_dim_driver_install
+set _ShowPnputilOut=1
+for /f "tokens=3" %%a in ('reg query "HKLM\SOFTWARE\DISMTools\Preinstallation Environment\Policies" /v DTDimShowPnputilOut 2^>nul') do (
+	if /i "%%a" == "0x1" set _ShowPnputilOut=1
+	if /i "%%a" == "0x0" set _ShowPnputilOut=0
+)
+
+if !_ShowPnputilOut! equ 1 (
+	REM display hardware IDs that require drivers...
+	echo These are the device IDs of the hardware devices that could not be detected. Please > %sysdrive%\unknowndevs.txt
+	echo install device drivers based on hardware IDs. After installation, please close this window. >> %sysdrive%\unknowndevs.txt
+	echo. >> %sysdrive%\unknowndevs.txt
+	echo To find the drivers for this specific device, please check the following information: >> %sysdrive%\unknowndevs.txt
+	set manufacturer=""
+	set model=""
+	set boardModel=""
+	for /f "usebackq tokens=1,2,3 delims=|" %%A in (`powershell -noprofile -command "$compSys = Get-CimInstance -Query 'SELECT Manufacturer, Model FROM Win32_ComputerSystem'; $baseBrd = Get-CimInstance -Query 'SELECT Product FROM Win32_BaseBoard'; Write-Output ($compSys.Manufacturer + '|' + $compSys.Model + '|' + $baseBrd.Product)"`) do (
+		set "manufacturer=%%A"
+		set "model=%%B"
+		set "boardModel=%%C"
+	)
+	echo - Manufacturer/Model: !manufacturer! !model! >> %sysdrive%\unknowndevs.txt
+	echo - Motherboard model : !boardModel! >> %sysdrive%\unknowndevs.txt
+	echo. >> %sysdrive%\unknowndevs.txt
+	pnputil /enum-devices /problem >> %sysdrive%\unknowndevs.txt
+	start "" notepad %sysdrive%\unknowndevs.txt
+)
 echo Starting the Driver Installation Module for architecture %PROCESSOR_ARCHITECTURE%...
 if "%PROCESSOR_ARCHITECTURE%" equ "X86" (
 	"%sysdrive%\Tools\DIM\i386\DT-DIM.exe"

@@ -20,26 +20,26 @@ Public Class ImgSplit
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ESN"
-                                MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "FRA"
-                                MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "PTB", "PTG"
-                                MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Case "ITA"
-                                MsgBox("Specificare un nome e un percorso per il file SWM di destinazione e riprovare. Assicurarsi inoltre che il percorso di destinazione esista.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("Specificare un nome e un percorso per il file SWM di destinazione e riprovare. Assicurarsi inoltre che il percorso di destinazione esista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         End Select
                     Case 1
-                        MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 2
-                        MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 3
-                        MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 4
-                        MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Case 5
-                        MsgBox("Specificare un nome e un percorso per il file SWM di destinazione e riprovare. Assicurarsi inoltre che il percorso di destinazione esista.", vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox("Specificare un nome e un percorso per il file SWM di destinazione e riprovare. Assicurarsi inoltre che il percorso di destinazione esista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 End Select
                 Exit Sub
             End If
@@ -50,26 +50,26 @@ Public Class ImgSplit
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ESN"
-                            MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "FRA"
-                            MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "PTB", "PTG"
-                            MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Case "ITA"
-                            MsgBox("Specificare un file WIM di origine e riprovare. Assicurarsi inoltre che esista", vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox("Specificare un file WIM di origine e riprovare. Assicurarsi inoltre che esista", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     End Select
                 Case 1
-                    MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 2
-                    MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 3
-                    MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 4
-                    MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Case 5
-                    MsgBox("Specificare un file WIM di origine e riprovare. Assicurarsi inoltre che esista", vbOKOnly + vbCritical, Label1.Text)
+                    MsgBox("Specificare un file WIM di origine e riprovare. Assicurarsi inoltre che esista", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Select
             Exit Sub
         End If
@@ -91,7 +91,7 @@ Public Class ImgSplit
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Split images"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Source image to split:"
                         Label3.Text = "Name and path of the destination split image:"
                         Label4.Text = "Maximum size of split images (in MB):"
@@ -105,7 +105,7 @@ Public Class ImgSplit
                         SaveFileDialog1.Title = "Specify the target location of the split images:"
                     Case "ESN"
                         Text = "Dividir imágenes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagen de origen a dividir:"
                         Label3.Text = "Nombre y ruta de la imagen dividida de destino:"
                         Label4.Text = "Tamaño máximo de imágenes divididas (en MB):"
@@ -119,7 +119,7 @@ Public Class ImgSplit
                         SaveFileDialog1.Title = "Especifique la ubicación de destino de las imágenes divididas:"
                     Case "FRA"
                         Text = "Diviser les images"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Image source à diviser :"
                         Label3.Text = "Nom et chemin de l'image divisée de destination :"
                         Label4.Text = "Taille maximale des images fractionnées (en Mo) :"
@@ -133,7 +133,7 @@ Public Class ImgSplit
                         SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
                     Case "PTB", "PTG"
                         Text = "Dividir imagens"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Imagem de origem a dividir:"
                         Label3.Text = "Nome e caminho da imagem dividida de destino:"
                         Label4.Text = "Tamanho máximo das imagens divididas (em MB):"
@@ -147,7 +147,7 @@ Public Class ImgSplit
                         SaveFileDialog1.Title = "Especificar a localização de destino das imagens divididas:"
                     Case "ITA"
                         Text = "Dividere le immagini"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Immagine sorgente da dividere:"
                         Label3.Text = "Nome e percorso dell'immagine di destinazione da dividere:"
                         Label4.Text = "Dimensione massima delle immagini divise (in MB):"
@@ -162,7 +162,7 @@ Public Class ImgSplit
                 End Select
             Case 1
                 Text = "Split images"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Source image to split:"
                 Label3.Text = "Name and path of the destination split image:"
                 Label4.Text = "Maximum size of split images (in MB):"
@@ -176,7 +176,7 @@ Public Class ImgSplit
                 SaveFileDialog1.Title = "Specify the target location of the split images:"
             Case 2
                 Text = "Dividir imágenes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagen de origen a dividir:"
                 Label3.Text = "Nombre y ruta de la imagen dividida de destino:"
                 Label4.Text = "Tamaño máximo de imágenes divididas (en MB):"
@@ -190,7 +190,7 @@ Public Class ImgSplit
                 SaveFileDialog1.Title = "Especifique la ubicación de destino de las imágenes divididas:"
             Case 3
                 Text = "Diviser les images"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Image source à diviser :"
                 Label3.Text = "Nom et chemin de l'image divisée de destination :"
                 Label4.Text = "Taille maximale des images fractionnées (en Mo) :"
@@ -204,7 +204,7 @@ Public Class ImgSplit
                 SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
             Case 4
                 Text = "Dividir imagens"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Imagem de origem a dividir:"
                 Label3.Text = "Nome e caminho da imagem dividida de destino:"
                 Label4.Text = "Tamanho máximo das imagens divididas (em MB):"
@@ -218,7 +218,7 @@ Public Class ImgSplit
                 SaveFileDialog1.Title = "Especificar a localização de destino das imagens divididas:"
             Case 5
                 Text = "Dividere le immagini"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Immagine sorgente da dividere:"
                 Label3.Text = "Nome e percorso dell'immagine di destinazione da dividere:"
                 Label4.Text = "Dimensione massima delle immagini divise (in MB):"
@@ -231,7 +231,7 @@ Public Class ImgSplit
                 OpenFileDialog1.Title = "Specificare il file WIM di origine da dividere:"
                 SaveFileDialog1.Title = "Specificare la posizione di destinazione delle immagini divise:"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -240,12 +240,10 @@ Public Class ImgSplit
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

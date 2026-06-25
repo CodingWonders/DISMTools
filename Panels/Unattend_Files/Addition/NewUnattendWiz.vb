@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2623"
+    Const UnattendGenReleaseTag As String = "2663"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -145,26 +145,21 @@ Public Class NewUnattendWiz
         ' Initialize Scintilla editor
         DynaLog.LogMessage("Resetting styles...")
         Scintilla1.StyleResetDefault()
-        Scintilla2.StyleResetDefault()
         Scintilla3.StyleResetDefault()
         Scintilla4.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         DynaLog.LogMessage("Setting colors for selection...")
         If CurrentTheme.IsDark Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
-            Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla3.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla4.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
-            Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla3.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla4.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
-        Scintilla2.Styles(Style.Default).Font = fntName
-        Scintilla2.Styles(Style.Default).Size = fntSize
         Scintilla3.Styles(Style.Default).Font = fntName
         Scintilla3.Styles(Style.Default).Size = fntSize
         Scintilla4.Styles(Style.Default).Font = fntName
@@ -175,9 +170,6 @@ Public Class NewUnattendWiz
         Scintilla1.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
-        Scintilla2.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
-        Scintilla2.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
-        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
@@ -185,7 +177,6 @@ Public Class NewUnattendWiz
         Scintilla4.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.StyleClearAll()
-        Scintilla2.StyleClearAll()
         Scintilla3.StyleClearAll()
         Scintilla4.StyleClearAll()
 
@@ -245,7 +236,25 @@ Public Class NewUnattendWiz
             Scintilla3.Styles(Style.Batch.Command).ForeColor = Color.FromArgb(255, 207, 175)
             Scintilla3.Styles(Style.Batch.Identifier).ForeColor = Color.FromArgb(204, 147, 147)
             Scintilla3.Styles(Style.Batch.Operator).ForeColor = Color.FromArgb(159, 157, 109)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Scintilla3.Styles(Style.VbScript.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.VbScript.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla3.Styles(Style.VbScript.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla3.Styles(Style.VbScript.Keyword).ForeColor = Color.FromArgb(206, 223, 153)
+            Scintilla3.Styles(Style.VbScript.String).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.VbScript.Preprocessor).ForeColor = Color.FromArgb(255, 207, 175)
+            Scintilla3.Styles(Style.VbScript.Operator).ForeColor = Color.FromArgb(159, 157, 109)
+            Scintilla3.Styles(Style.VbScript.Date).ForeColor = Color.FromArgb(223, 196, 125)
+            Scintilla3.Styles(Style.JavaScript.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.JavaScript.Word).ForeColor = Color.FromArgb(223, 196, 125)
+            Scintilla3.Styles(Style.JavaScript.Keyword).ForeColor = Color.FromArgb(223, 196, 125)
+            Scintilla3.Styles(Style.JavaScript.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla3.Styles(Style.JavaScript.DoubleString).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.JavaScript.SingleString).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.JavaScript.Regex).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.JavaScript.Comment).ForeColor = Color.FromArgb(127, 159, 207)
+            Scintilla3.Styles(Style.JavaScript.CommentLine).ForeColor = Color.FromArgb(127, 159, 207)
+            Scintilla3.Styles(Style.JavaScript.CommentDoc).ForeColor = Color.FromArgb(127, 159, 207)
+        Else
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.Black
@@ -299,6 +308,24 @@ Public Class NewUnattendWiz
             Scintilla3.Styles(Style.Batch.Command).ForeColor = Color.FromArgb(0, 128, 255)
             Scintilla3.Styles(Style.Batch.Identifier).ForeColor = Color.FromArgb(255, 128, 0)
             Scintilla3.Styles(Style.Batch.Operator).ForeColor = Color.Red
+            Scintilla3.Styles(Style.VbScript.Default).ForeColor = Color.Black
+            Scintilla3.Styles(Style.VbScript.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla3.Styles(Style.VbScript.Number).ForeColor = Color.Red
+            Scintilla3.Styles(Style.VbScript.Keyword).ForeColor = Color.Blue
+            Scintilla3.Styles(Style.VbScript.String).ForeColor = Color.Gray
+            Scintilla3.Styles(Style.VbScript.Preprocessor).ForeColor = Color.Red
+            Scintilla3.Styles(Style.VbScript.Operator).ForeColor = Color.Black
+            Scintilla3.Styles(Style.VbScript.Date).ForeColor = Color.FromArgb(0, 255, 0)
+            Scintilla3.Styles(Style.JavaScript.Default).ForeColor = Color.Black
+            Scintilla3.Styles(Style.JavaScript.Word).ForeColor = Color.Blue
+            Scintilla3.Styles(Style.JavaScript.Keyword).ForeColor = Color.Blue
+            Scintilla3.Styles(Style.JavaScript.Number).ForeColor = Color.FromArgb(255, 128, 0)
+            Scintilla3.Styles(Style.JavaScript.DoubleString).ForeColor = Color.Gray
+            Scintilla3.Styles(Style.JavaScript.SingleString).ForeColor = Color.Gray
+            Scintilla3.Styles(Style.JavaScript.Regex).ForeColor = Color.Black
+            Scintilla3.Styles(Style.JavaScript.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla3.Styles(Style.JavaScript.CommentLine).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla3.Styles(Style.JavaScript.CommentDoc).ForeColor = Color.FromArgb(0, 128, 0)
         End If
         ' Set lexer
         Scintilla1.LexerName = "xml"
@@ -308,19 +335,12 @@ Public Class NewUnattendWiz
         ' Set line number margin properties
         DynaLog.LogMessage("Setting colors for line margin...")
         Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
-        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
-        Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla3.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla4.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
-        Margin.Width = 48
-        Margin.Type = MarginType.Number
-        Margin.Sensitive = True
-        Margin.Mask = 0
-        Margin = Scintilla2.Margins(1)
         Margin.Width = 48
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
@@ -342,10 +362,6 @@ Public Class NewUnattendWiz
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
         Scintilla1.SetProperty("fold.compact", "1")
-        Scintilla2.SetFoldMarginColor(True, Scintilla2.Styles(Style.Default).BackColor)
-        Scintilla2.SetFoldMarginColor(True, Scintilla2.Styles(Style.Default).BackColor)
-        Scintilla2.SetProperty("fold", "1")
-        Scintilla2.SetProperty("fold.compact", "1")
         Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
         Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
         Scintilla3.SetProperty("fold", "1")
@@ -363,16 +379,6 @@ Public Class NewUnattendWiz
         Bookmarks.Type = MarginType.Symbol
         Bookmarks.Mask = (1 << 2)
         Dim Marker = Scintilla1.Markers(2)
-        Marker.Symbol = MarkerSymbol.Circle
-        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
-        Marker.SetForeColor(Color.Black)
-        Marker.SetAlpha(100)
-        Bookmarks = Scintilla2.Margins(2)
-        Bookmarks.Width = 20
-        Bookmarks.Sensitive = True
-        Bookmarks.Type = MarginType.Symbol
-        Bookmarks.Mask = (1 << 2)
-        Marker = Scintilla2.Markers(2)
         Marker.Symbol = MarkerSymbol.Circle
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
@@ -401,7 +407,6 @@ Public Class NewUnattendWiz
         ' Set editor caret settings
         DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
-        Scintilla2.CaretForeColor = ForeColor
         Scintilla3.CaretForeColor = ForeColor
         Scintilla4.CaretForeColor = ForeColor
 
@@ -412,10 +417,6 @@ Public Class NewUnattendWiz
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
         Scintilla1.Margins(3).Width = 1
-        Scintilla2.Margins(3).Type = MarginType.Symbol
-        Scintilla2.Margins(3).Mask = Marker.MaskFolders
-        Scintilla2.Margins(3).Sensitive = True
-        Scintilla2.Margins(3).Width = 1
         Scintilla3.Margins(3).Type = MarginType.Symbol
         Scintilla3.Margins(3).Mask = Marker.MaskFolders
         Scintilla3.Margins(3).Sensitive = True
@@ -430,8 +431,6 @@ Public Class NewUnattendWiz
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
-            Scintilla2.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
-            Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla3.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla3.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla4.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
@@ -447,13 +446,6 @@ Public Class NewUnattendWiz
         Scintilla1.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla1.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla1.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
-        Scintilla2.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
-        Scintilla2.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
-        Scintilla2.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
-        Scintilla2.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
-        Scintilla2.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
-        Scintilla2.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
-        Scintilla2.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
         Scintilla3.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
         Scintilla3.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
         Scintilla3.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
@@ -472,7 +464,6 @@ Public Class NewUnattendWiz
         ' Enable folding
         DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
-        Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla3.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla4.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
 
@@ -495,7 +486,7 @@ Public Class NewUnattendWiz
         If Language <> "" Then
             DynaLog.LogMessage("Language is not nothing. Proceeding to add keywords...")
             Select Case Language
-                Case "powershell", "batch"
+                Case "powershell", "batch", "vbscript", "jscript"
                     Scintilla3.SetKeywords(Index, KeywordSet)
                 Case "xml"
                     Scintilla1.SetKeywords(Index, KeywordSet)
@@ -674,7 +665,7 @@ Public Class NewUnattendWiz
             Exit Sub
         End If
         DynaLog.LogMessage("Checking .NET Runtime installations...")
-        If My.Computer.FileSystem.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Count > 0 Then
+        If Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), RuntimeVersion & "*", SearchOption.TopDirectoryOnly).Any() Then
             DynaLog.LogMessage("A compatible .NET Runtime installation has been detected.")
             ' .NET Runtime exists, skip further checks
             DotNetRuntimeSupported = True
@@ -718,10 +709,13 @@ Public Class NewUnattendWiz
         TextBox16.BackColor = BackColor
         TextBox17.BackColor = BackColor
         TextBox18.BackColor = BackColor
+        TextBox19.BackColor = BackColor
+        TextBox20.BackColor = BackColor
+        TextBox21.BackColor = BackColor
+        TextBox22.BackColor = BackColor
+        TextBox23.BackColor = BackColor
         NumericUpDown1.BackColor = BackColor
         NumericUpDown2.BackColor = BackColor
-        NumericUpDown3.BackColor = BackColor
-        NumericUpDown4.BackColor = BackColor
         NumericUpDown5.BackColor = BackColor
         NumericUpDown6.BackColor = BackColor
         NumericUpDown7.BackColor = BackColor
@@ -759,10 +753,13 @@ Public Class NewUnattendWiz
         TextBox16.ForeColor = ForeColor
         TextBox17.ForeColor = ForeColor
         TextBox18.ForeColor = ForeColor
+        TextBox19.ForeColor = ForeColor
+        TextBox20.ForeColor = ForeColor
+        TextBox21.ForeColor = ForeColor
+        TextBox22.ForeColor = ForeColor
+        TextBox23.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
-        NumericUpDown3.ForeColor = ForeColor
-        NumericUpDown4.ForeColor = ForeColor
         NumericUpDown5.ForeColor = ForeColor
         NumericUpDown6.ForeColor = ForeColor
         NumericUpDown7.ForeColor = ForeColor
@@ -770,6 +767,7 @@ Public Class NewUnattendWiz
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
@@ -864,8 +862,6 @@ Public Class NewUnattendWiz
         ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
         TimeZonePageTimer.Enabled = True
-        ' Modify script contents of disk config for sample DP Script
-        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
         ' Set PRO edition
         If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
         ' Set default auth tech to WPA2
@@ -876,11 +872,11 @@ Public Class NewUnattendWiz
         SwitchScript(0)
 
         ' Detect .NET runtimes/SDKs
-        DetectDotNetRuntime("9.0.100", "9.0")
+        DetectDotNetRuntime("10.0.109", "10.0")
         If Not DotNetRuntimeSupported Then
             DynaLog.LogMessage("Detections have concluded with no recognized .NET Core-based installations. The included copy of UnattendGen cannot be used.")
             DynaLog.LogMessage("Asking user whether or not to download self-contained UnattendGen...")
-            If MsgBox("This wizard requires the .NET 9 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+            If MsgBox("This wizard requires the .NET 10 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
                 DynaLog.LogMessage("Proceeding to download self-contained UnattendGen...")
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
@@ -942,16 +938,10 @@ Public Class NewUnattendWiz
         RadioButton1.Checked = True
         ' Restore disk configuration
         CheckBox4.Checked = True
-        RadioButton5.Checked = True
         RadioButton7.Checked = True
         NumericUpDown1.Value = 300
         CheckBox5.Checked = True
-        RadioButton9.Checked = True
         NumericUpDown2.Value = 1000
-        Scintilla2.Text = My.Resources.DefaultDiskPartConfig
-        RadioButton11.Checked = True
-        NumericUpDown3.Value = 0
-        NumericUpDown4.Value = 3
         SelectedDiskConfiguration = DefaultDiskConfiguration
         ' Restore product key
         RadioButton13.Checked = True
@@ -1105,8 +1095,7 @@ Public Class NewUnattendWiz
         End Select
 
         ' Change sizes of controls if the normal resize event does not work
-        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
-        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
         AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
@@ -1162,13 +1151,6 @@ Public Class NewUnattendWiz
                         MessageBox.Show("No script has been passed for the computer name", "Computer name error")
                         Return False
                     End If
-                End If
-            Case UnattendedWizardPage.Page.DiskConfigPage
-                DynaLog.LogMessage("Checking DiskPart script configuration (if the answer file will use it)...")
-                If Not DiskConfigurationInteractive AndAlso SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart AndAlso Scintilla2.Text = "" Then
-                    DynaLog.LogMessage("No script has been specified.")
-                    MessageBox.Show("Please enter the contents of the DiskPart script and try again. You can also use a script file", "DiskPart Script error")
-                    Return False
                 End If
             Case UnattendedWizardPage.Page.ProductKeyPage
                 If Not GenericChosen Then
@@ -1277,26 +1259,18 @@ Public Class NewUnattendWiz
         ' 4. -- DISK CONFIGURATION
         TextBox13.AppendText("Disk configuration: " & If(DiskConfigurationInteractive, "configured during setup" & CrLf, CrLf))
         If Not DiskConfigurationInteractive Then
-            TextBox13.AppendText("- Disk configuration mode: " & If(SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0, "automatically configure Disk 0", "configure disks with a DiskPart script") & CrLf)
-            Select Case SelectedDiskConfiguration.DiskConfigMode
-                Case DiskConfigurationMode.AutoDisk0
-                    TextBox13.AppendText("    - Partition table: " & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT (UEFI)", "MBR (BIOS/CSM)") & CrLf)
-                    If SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT Then
-                        TextBox13.AppendText("      - EFI System Partition Size: " & SelectedDiskConfiguration.ESPSize & " MB" & CrLf)
-                    End If
-                    TextBox13.AppendText("    - Install a Recovery Environment? " & If(SelectedDiskConfiguration.InstallRecEnv, "Yes", "No") & CrLf)
-                    If SelectedDiskConfiguration.InstallRecEnv Then
-                        TextBox13.AppendText("      - Location of the Recovery Environment: " & If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "Recovery partition", "Windows partition") & CrLf)
-                        If SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition Then
-                            TextBox13.AppendText("        - Recovery Partition Size: " & SelectedDiskConfiguration.RecEnvSize & " MB" & CrLf)
-                        End If
-                    End If
-                Case DiskConfigurationMode.DiskPart
-                    TextBox13.AppendText("    - Action to be performed after disk configuration: " & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "install to first available partition with enough space and no installations", "install to specific disk") & CrLf)
-                    If Not SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall Then
-                        TextBox13.AppendText("      - Target disk/partition: disk " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & ", partition " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & CrLf)
-                    End If
-            End Select
+            TextBox13.AppendText("- Disk configuration mode: automatically configure Disk 0" & CrLf)
+            TextBox13.AppendText("    - Partition table: " & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT (UEFI)", "MBR (BIOS/CSM)") & CrLf)
+            If SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT Then
+                TextBox13.AppendText("      - EFI System Partition Size: " & SelectedDiskConfiguration.ESPSize & " MB" & CrLf)
+            End If
+            TextBox13.AppendText("    - Install a Recovery Environment? " & If(SelectedDiskConfiguration.InstallRecEnv, "Yes", "No") & CrLf)
+            If SelectedDiskConfiguration.InstallRecEnv Then
+                TextBox13.AppendText("      - Location of the Recovery Environment: " & If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "Recovery partition", "Windows partition") & CrLf)
+                If SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition Then
+                    TextBox13.AppendText("        - Recovery Partition Size: " & SelectedDiskConfiguration.RecEnvSize & " MB" & CrLf)
+                End If
+            End If
         End If
         ' 5. -- PRODUCT KEY
         TextBox13.AppendText("Product key: " & If(CheckBox21.Checked, "get from firmware" & CrLf, If(GenericChosen, "generic" & CrLf, "custom" & CrLf)) &
@@ -1308,6 +1282,7 @@ Public Class NewUnattendWiz
                 TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
                 If UserAccount.Enabled Then
                     TextBox13.AppendText("    - Name: " & UserAccount.Name & CrLf &
+                                         "    - Display Name: " & UserAccount.DisplayName & CrLf &
                                          "    - Password: " & UserAccount.Password & CrLf &
                                          "    - Group: " & If(UserAccount.Group = UserGroup.Administrators, "Administrators", "Users") & CrLf)
                 End If
@@ -1598,14 +1573,8 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
-        ManualPartPanel.Enabled = Not CheckBox4.Checked
         DiskConfigurationInteractive = CheckBox4.Checked
-    End Sub
-
-    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
-        AutoDiskConfigPanel.Enabled = RadioButton5.Checked
-        DiskPartPanel.Enabled = Not RadioButton5.Checked
-        SelectedDiskConfiguration.DiskConfigMode = If(RadioButton5.Checked, DiskConfigurationMode.AutoDisk0, DiskConfigurationMode.DiskPart)
+        AutoDiskConfigPanel.Enabled = Not DiskConfigurationInteractive
     End Sub
 
     Private Sub RadioButton7_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton7.CheckedChanged
@@ -1614,18 +1583,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox5.CheckedChanged
-        WindowsREPanel.Enabled = CheckBox5.Checked
         SelectedDiskConfiguration.InstallRecEnv = CheckBox5.Checked
-    End Sub
-
-    Private Sub RadioButton9_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton9.CheckedChanged
-        RESizePanel.Enabled = RadioButton9.Checked
-        SelectedDiskConfiguration.RecEnvPartition = If(RadioButton9.Checked, RecoveryEnvironmentLocation.WinREPartition, RecoveryEnvironmentLocation.WindowsPartition)
-    End Sub
-
-    Private Sub RadioButton11_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton11.CheckedChanged
-        ManualInstallPanel.Enabled = Not RadioButton11.Checked
-        SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall = RadioButton11.Checked
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
@@ -1634,26 +1592,6 @@ Public Class NewUnattendWiz
 
     Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
         SelectedDiskConfiguration.RecEnvSize = NumericUpDown2.Value
-    End Sub
-
-    Private Sub NumericUpDown3_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown3.ValueChanged
-        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = NumericUpDown3.Value
-    End Sub
-
-    Private Sub NumericUpDown4_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown4.ValueChanged
-        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = NumericUpDown4.Value
-    End Sub
-
-    Private Sub Scintilla2_TextChanged(sender As Object, e As EventArgs) Handles Scintilla2.TextChanged
-        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        OpenFileDialog1.ShowDialog(Me)
-    End Sub
-
-    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        Scintilla2.Text = File.ReadAllText(OpenFileDialog1.FileName)
     End Sub
 
     Private Sub RadioButton13_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton13.CheckedChanged
@@ -1680,10 +1618,11 @@ Public Class NewUnattendWiz
 
 #Region "User Account settings"
 
-    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, password As String, group As UserGroup)
+    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, displayName As String, password As String, group As UserGroup)
         If UserAccountsList Is Nothing OrElse UserAccountsList.Count = 0 Then Exit Sub
         UserAccountsList(index).Enabled = enabled
         UserAccountsList(index).Name = name
+        UserAccountsList(index).DisplayName = If(String.IsNullOrWhiteSpace(displayName), name, displayName)
         UserAccountsList(index).Password = password
         UserAccountsList(index).Group = group
     End Sub
@@ -1699,91 +1638,95 @@ Public Class NewUnattendWiz
     End Function
 
     Private Sub CheckBox8_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox8.CheckedChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
         TextBox8.Enabled = CheckBox8.Checked
         TextBox9.Enabled = CheckBox8.Checked
         ComboBox9.Enabled = CheckBox8.Checked
+        DisplayNamePanel2.Enabled = CheckBox8.Checked
     End Sub
 
     Private Sub CheckBox9_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox9.CheckedChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
         TextBox11.Enabled = CheckBox9.Checked
         TextBox12.Enabled = CheckBox9.Checked
         ComboBox10.Enabled = CheckBox9.Checked
+        DisplayNamePanel3.Enabled = CheckBox9.Checked
     End Sub
 
     Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
         TextBox14.Enabled = CheckBox10.Checked
         TextBox15.Enabled = CheckBox10.Checked
         ComboBox11.Enabled = CheckBox10.Checked
+        DisplayNamePanel4.Enabled = CheckBox10.Checked
     End Sub
 
     Private Sub CheckBox11_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox11.CheckedChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
         TextBox17.Enabled = CheckBox11.Checked
         TextBox18.Enabled = CheckBox11.Checked
         ComboBox12.Enabled = CheckBox11.Checked
+        DisplayNamePanel5.Enabled = CheckBox11.Checked
     End Sub
 
     Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
     End Sub
 
     Private Sub TextBox6_TextChanged(sender As Object, e As EventArgs) Handles TextBox6.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
     End Sub
 
     Private Sub TextBox8_TextChanged(sender As Object, e As EventArgs) Handles TextBox8.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
     End Sub
 
     Private Sub TextBox9_TextChanged(sender As Object, e As EventArgs) Handles TextBox9.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
     End Sub
 
     Private Sub TextBox11_TextChanged(sender As Object, e As EventArgs) Handles TextBox11.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
     End Sub
 
     Private Sub TextBox12_TextChanged(sender As Object, e As EventArgs) Handles TextBox12.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
     End Sub
 
     Private Sub TextBox14_TextChanged(sender As Object, e As EventArgs) Handles TextBox14.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
     End Sub
 
     Private Sub TextBox15_TextChanged(sender As Object, e As EventArgs) Handles TextBox15.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
     End Sub
 
     Private Sub TextBox17_TextChanged(sender As Object, e As EventArgs) Handles TextBox17.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 
     Private Sub TextBox18_TextChanged(sender As Object, e As EventArgs) Handles TextBox18.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 
     Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
-        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
     End Sub
 
     Private Sub ComboBox9_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox9.SelectedIndexChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
     End Sub
 
     Private Sub ComboBox10_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox10.SelectedIndexChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
     End Sub
 
     Private Sub ComboBox11_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox11.SelectedIndexChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
     End Sub
 
     Private Sub ComboBox12_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox12.SelectedIndexChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
     End Sub
 
 #End Region
@@ -2048,24 +1991,13 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --partmode=interactive"
             Else
                 DynaLog.LogMessage("Disks will be configured in an unattended manner.")
-                If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
-                    DynaLog.LogMessage("Disk 0 will be configured automatically.")
-                    UnattendGen.StartInfo.Arguments &= " --partmode=unattended"
-                    Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                        "<root>" & CrLf &
-                        "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
-                        "</root>"
-                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
-                ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
-                    DynaLog.LogMessage("Disks will be configured with a DiskPart script.")
-                    UnattendGen.StartInfo.Arguments &= " --partmode=custom"
-                    Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                        "<root>" & CrLf &
-                        "   <DiskPart ScriptFile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp") & Quote & " AutoInst=" & Quote & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "1", "0") & Quote & " Disk=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & Quote & " Partition=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & Quote & " />" & CrLf &
-                        "</root>"
-                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"), SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents, UTF8)
-                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskPartSettings.xml"), diskPartContents, UTF8)
-                End If
+                DynaLog.LogMessage("Disk 0 will be configured automatically.")
+                UnattendGen.StartInfo.Arguments &= " --partmode=unattended"
+                Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf &
+                    "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
+                    "</root>"
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
             End If
             ReportMessage("Saving user settings...", 14)
             DynaLog.LogMessage("Saving edition settings...")
@@ -2093,7 +2025,7 @@ Public Class NewUnattendWiz
                 If UserAccountsList.Count > 0 Then
                     For Each account As User In UserAccountsList
                         DynaLog.LogMessage("Saving information of account " & Quote & account.Name & Quote & " to file...")
-                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
+                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " DisplayName=" & Quote & account.DisplayName.Replace("&", "&amp;") & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
                     Next
                     customUserContents &= "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
@@ -2216,6 +2148,10 @@ Public Class NewUnattendWiz
                                 scriptExt = "ps1"
                             Case PostInstallScript.Extension.Batch
                                 scriptExt = "bat"
+                            Case PostInstallScript.Extension.VBScript
+                                scriptExt = "vbs"
+                            Case PostInstallScript.Extension.JScript
+                                scriptExt = "js"
                         End Select
                         Dim scriptFile As String = String.Format("Script{0}.{1}", scriptCountFlag.ToString().PadLeft(4, "0"), scriptExt)
                         File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", StageString, scriptFile),
@@ -2256,6 +2192,7 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Generating unattended answer file...", 25)
             DynaLog.LogMessage("Starting UnattendGen...")
+            If Debugger.IsAttached Then UnattendGen.StartInfo.Arguments &= " --debug"
             UnattendGen.Start()
             UnattendGen.WaitForExit()
             DynaLog.LogMessage("UnattendGen finished with exit code " & Hex(UnattendGen.ExitCode))
@@ -2478,15 +2415,11 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click, ToolStripButton6.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create.html")
-        HelpBrowserForm.MinimizeBox = False
-        HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog(Me)
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\unattend\unatt_create.html")
     End Sub
 
     Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
-        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
-        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
         AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
@@ -2577,7 +2510,7 @@ Public Class NewUnattendWiz
     Sub SaveConfiguredScript(ScriptIndex As Integer, Contents As String)
         DynaLog.LogMessage("Saving script contents...")
         DynaLog.LogMessage("- Script Index: " & ScriptIndex)
-        DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
+        If Debugger.IsAttached Then DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
         DynaLog.LogMessage("Determining status of stage number...")
         If ScriptIndex > CurrentlyConfiguredScripts.Count - 1 Then
             DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
@@ -2615,6 +2548,7 @@ Public Class NewUnattendWiz
             Button15.Enabled = False
             Button17.Enabled = False
             Button18.Enabled = False
+            Button23.Enabled = False
         End If
         NoSpecifiedScriptsPanel.Visible = (CurrentlyConfiguredScripts.Count = 0)
         ScriptEditorPanel.Visible = (CurrentlyConfiguredScripts.Count > 0)
@@ -2634,6 +2568,7 @@ Public Class NewUnattendWiz
         Button15.Enabled = Not (NewIndex = 0)
         Button17.Enabled = Not (NewIndex = CurrentlyConfiguredScripts.Count - 1)
         Button18.Enabled = Not (NewIndex = CurrentlyConfiguredScripts.Count - 1)
+        Button23.Enabled = True
 
         ComboBox16.SelectedItem = ComboBox16.Items(CurrentlyConfiguredScripts(NewIndex).ScriptExtension)
     End Sub
@@ -2671,7 +2606,7 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("File exists. Attempting to read...")
             Try
                 DynaLog.LogMessage("Checking file extension for special files...")
-                If {".bat", ".cmd", ".nt"}.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
+                If {".bat", ".cmd"}.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
                     ' We'll set it to Batch
                     ComboBox16.SelectedIndex = 1
                 End If
@@ -2992,6 +2927,7 @@ Public Class NewUnattendWiz
             Button15.Enabled = False
             Button17.Enabled = False
             Button18.Enabled = False
+            Button23.Enabled = False
         Else
             If CurrentlyEditedScript > CurrentlyConfiguredScripts.Count - 1 Then
                 CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
@@ -3001,19 +2937,29 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub UpdateScriptEditorLexer(LexerName As String)
-        If {"powershell", "batch"}.Contains(LexerName) Then
+        If {"powershell", "batch", "vbscript", "jscript"}.Contains(LexerName) Then
             ClearScriptEditorKeywords()
 
             ' I want a correct set of keywords whenever we switch the lexer language.
-            Scintilla3.LexerName = LexerName
+            'Scintilla3.LexerName = LexerName
             Select Case LexerName
                 Case "powershell"
+                    Scintilla3.LexerName = "powershell"
                     AddScintillaKeywords("powershell", 0, "begin break catch class continue data do dynamicparam else elseif end enum exit filter finally for foreach function hidden if in inlinescript parallel param process return sequence static switch throw trap try until using while workflow")
                     AddScintillaKeywords("powershell", 1, "add-appprovisionedsharedpackagecontainer add-appsharedpackagecontainer add-appvclientconnectiongroup add-appvclientpackage add-appvpublishingserver add-appxpackage add-appxprovisionedpackage add-appxvolume add-bitsfile add-certificateenrollmentpolicyserver add-computer add-content add-history add-jobtrigger add-kdsrootkey add-localgroupmember add-member add-pssnapin add-signerrule add-type add-windowscapability add-windowsdriver add-windowsimage add-windowspackage checkpoint-computer clear-content clear-eventlog clear-history clear-item clear-itemproperty clear-kdscache clear-recyclebin clear-tpm clear-uevappxpackage clear-uevconfiguration clear-variable clear-windowscorruptmountpoint compare-object complete-bitstransfer complete-dtcdiagnostictransaction complete-transaction confirm-securebootuefi connect-pssession connect-wsman convert-path convert-string convertfrom-cipolicy convertfrom-csv convertfrom-json convertfrom-securestring convertfrom-string convertfrom-stringdata convertto-csv convertto-html convertto-json convertto-processmitigationpolicy convertto-securestring convertto-tpmownerauth convertto-xml copy-bcdentry copy-item copy-itemproperty copy-userinternationalsettingstosystem debug-job debug-process debug-runspace disable-appbackgroundtaskdiagnosticlog disable-appv disable-appvclientconnectiongroup disable-bcdelementbootdebug disable-bcdelementbootems disable-bcdelementdebug disable-bcdelementems disable-bcdelementeventlogging disable-bcdelementhypervisordebug disable-computerrestore disable-jobtrigger disable-localuser disable-psbreakpoint disable-psremoting disable-pssessionconfiguration disable-runspacedebug disable-scheduledjob disable-tlsciphersuite disable-tlsecccurve disable-tlssessionticketkey disable-tpmautoprovisioning disable-uev disable-uevappxpackage disable-uevtemplate disable-wsmancredssp disable-windowserrorreporting disable-windowsoptionalfeature disconnect-pssession disconnect-wsman dismount-appxvolume dismount-windowsimage edit-cipolicyrule enable-appbackgroundtaskdiagnosticlog enable-appv enable-appvclientconnectiongroup enable-bcdelementbootdebug enable-bcdelementbootems enable-bcdelementdebug enable-bcdelementems enable-bcdelementeventlogging enable-bcdelementhypervisordebug enable-computerrestore enable-jobtrigger enable-localuser enable-psbreakpoint enable-psremoting enable-pssessionconfiguration enable-runspacedebug enable-scheduledjob enable-tlsciphersuite enable-tlsecccurve enable-tlssessionticketkey enable-tpmautoprovisioning enable-uev enable-uevappxpackage enable-uevtemplate enable-wsmancredssp enable-windowserrorreporting enable-windowsoptionalfeature enter-pshostprocess enter-pssession exit-pshostprocess exit-pssession expand-windowscustomdataimage expand-windowsimage export-alias export-bcdstore export-binarymilog export-certificate export-clixml export-console export-counter export-csv export-formatdata export-modulemember export-pssession export-pfxcertificate export-provisioningpackage export-startlayout export-startlayoutedgeassets export-tlssessionticketkey export-trace export-uevconfiguration export-uevpackage export-windowscapabilitysource export-windowsdriver export-windowsimage find-package find-packageprovider foreach-object format-custom format-list format-securebootuefi format-table format-wide get-acl get-alias get-applockerfileinformation get-applockerpolicy get-appprovisionedsharedpackagecontainer get-appsharedpackagecontainer get-appvclientapplication get-appvclientconfiguration get-appvclientconnectiongroup get-appvclientmode get-appvclientpackage get-appvpublishingserver get-appvstatus get-appxdefaultvolume get-appxpackage get-appxpackageautoupdatesettings get-appxpackagemanifest get-appxprovisionedpackage get-appxvolume get-authenticodesignature get-bcdentry get-bcdentrydebugsettings get-bcdentryhypervisorsettings get-bcdstore get-bitstransfer get-cipolicy get-cipolicyidinfo get-cipolicyinfo get-certificate get-certificateautoenrollmentpolicy get-certificateenrollmentpolicyserver get-certificatenotificationtask get-childitem get-cimassociatedinstance get-cimclass get-ciminstance get-cimsession get-clipboard get-cmsmessage get-command get-computerinfo get-computerrestorepoint get-content get-controlpanelitem get-counter get-credential get-culture get-dapolicychange get-date get-deliveryoptimizationlog get-deliveryoptimizationloganalysis get-event get-eventlog get-eventsubscriber get-executionpolicy get-formatdata get-help get-history get-host get-hotfix get-installedlanguage get-item get-itemproperty get-itempropertyvalue get-job get-jobtrigger get-kdsconfiguration get-kdsrootkey get-localgroup get-localgroupmember get-localuser get-location get-member get-module get-nonremovableappspolicy get-psbreakpoint get-pscallstack get-psdrive get-pshostprocessinfo get-psprovider get-psreadlinekeyhandler get-psreadlineoption get-pssession get-pssessioncapability get-pssessionconfiguration get-pssnapin get-package get-packageprovider get-packagesource get-pfxcertificate get-pfxdata get-pmemdedicatedmemory get-pmemdisk get-pmemphysicaldevice get-pmemunusedregion get-process get-processmitigation get-provisioningpackage get-random get-runspace get-runspacedebug get-scheduledjob get-scheduledjoboption get-securebootpolicy get-securebootuefi get-service get-systemdriver get-systempreferreduilanguage get-timezone get-tlsciphersuite get-tlsecccurve get-tpm get-tpmendorsementkeyinfo get-tpmsupportedfeature get-tracesource get-transaction get-troubleshootingpack get-trustedprovisioningcertificate get-typedata get-uiculture get-uevappxpackage get-uevconfiguration get-uevstatus get-uevtemplate get-uevtemplateprogram get-unique get-variable get-wimbootentry get-wsmancredssp get-wsmaninstance get-wheamemorypolicy get-winacceptlanguagefromlanguagelistoptout get-winculturefromlanguagelistoptout get-windefaultinputmethodoverride get-winevent get-winhomelocation get-winlanguagebaroption get-winsystemlocale get-winuilanguageoverride get-winuserlanguagelist get-windowscapability get-windowsdeveloperlicense get-windowsdriver get-windowsedition get-windowserrorreporting get-windowsimage get-windowsimagecontent get-windowsoptionalfeature get-windowspackage get-windowsreservedstoragestate get-windowssearchsetting get-wmiobject group-object import-alias import-bcdstore import-binarymilog import-certificate import-clixml import-counter import-csv import-localizeddata import-module import-pssession import-packageprovider import-pfxcertificate import-startlayout import-tpmownerauth import-uevconfiguration initialize-pmemphysicaldevice initialize-tpm install-language install-package install-packageprovider install-provisioningpackage install-trustedprovisioningcertificate invoke-cimmethod invoke-command invoke-commandindesktoppackage invoke-dscresource invoke-expression invoke-history invoke-item invoke-restmethod invoke-troubleshootingpack invoke-wsmanaction invoke-webrequest invoke-wmimethod join-dtcdiagnosticresourcemanager join-path limit-eventlog measure-command measure-object merge-cipolicy mount-appvclientconnectiongroup mount-appvclientpackage mount-appxvolume mount-windowsimage move-appxpackage move-item move-itemproperty new-alias new-applockerpolicy new-bcdentry new-bcdstore new-cipolicy new-cipolicyrule new-certificatenotificationtask new-ciminstance new-cimsession new-cimsessionoption new-dtcdiagnostictransaction new-event new-eventlog new-filecatalog new-item new-itemproperty new-jobtrigger new-localgroup new-localuser new-module new-modulemanifest new-netipsecauthproposal new-netipsecmainmodecryptoproposal new-netipsecquickmodecryptoproposal new-object new-psdrive new-psrolecapabilityfile new-pssession new-pssessionconfigurationfile new-pssessionoption new-pstransportoption new-psworkflowexecutionoption new-pmemdedicatedmemory new-pmemdisk new-provisioningrepro new-scheduledjoboption new-selfsignedcertificate new-service new-timespan new-tlssessionticketkey new-variable new-wsmaninstance new-wsmansessionoption new-webserviceproxy new-winevent new-winuserlanguagelist new-windowscustomimage new-windowsimage optimize-appxprovisionedpackages optimize-windowsimage out-default out-file out-gridview out-host out-null out-printer out-string pop-location protect-cmsmessage publish-appvclientpackage publish-dscconfiguration push-location read-host receive-dtcdiagnostictransaction receive-job receive-pssession register-argumentcompleter register-cimindicationevent register-engineevent register-objectevent register-pssessionconfiguration register-packagesource register-scheduledjob register-uevtemplate register-wmievent remove-appprovisionedsharedpackagecontainer remove-appsharedpackagecontainer remove-appvclientconnectiongroup remove-appvclientpackage remove-appvpublishingserver remove-appxpackage remove-appxpackageautoupdatesettings remove-appxprovisionedpackage remove-appxvolume remove-bcdelement remove-bcdentry remove-bitstransfer remove-cipolicyrule remove-certificateenrollmentpolicyserver remove-certificatenotificationtask remove-ciminstance remove-cimsession remove-computer remove-event remove-eventlog remove-item remove-itemproperty remove-job remove-jobtrigger remove-localgroup remove-localgroupmember remove-localuser remove-module remove-psbreakpoint remove-psdrive remove-psreadlinekeyhandler remove-pssession remove-pssnapin remove-pmemdedicatedmemory remove-pmemdisk remove-typedata remove-variable remove-wsmaninstance remove-windowscapability remove-windowsdriver remove-windowsimage remove-windowspackage remove-wmiobject rename-computer rename-item rename-itemproperty rename-localgroup rename-localuser repair-appvclientconnectiongroup repair-appvclientpackage repair-uevtemplateindex repair-windowsimage reset-appsharedpackagecontainer reset-appxpackage reset-computermachinepassword resolve-dnsname resolve-path restart-computer restart-service restore-computer restore-uevbackup restore-uevusersetting resume-bitstransfer resume-job resume-provisioningsession resume-service save-help save-package save-windowsimage select-object select-string select-xml send-appvclientreport send-dtcdiagnostictransaction send-mailmessage set-acl set-alias set-appbackgroundtaskresourcepolicy set-applockerpolicy set-appxprovisioneddatafile set-appvclientconfiguration set-appvclientmode set-appvclientpackage set-appvpublishingserver set-appxdefaultvolume set-appxpackageautoupdatesettings set-authenticodesignature set-bcdbootdefault set-bcdbootdisplayorder set-bcdbootsequence set-bcdboottimeout set-bcdboottoolsdisplayorder set-bcddebugsettings set-bcdelement set-bcdhypervisorsettings set-bitstransfer set-cipolicyidinfo set-cipolicysetting set-cipolicyversion set-certificateautoenrollmentpolicy set-ciminstance set-clipboard set-content set-culture set-date set-dsclocalconfigurationmanager set-executionpolicy set-hvcioptions set-item set-itemproperty set-jobtrigger set-kdsconfiguration set-localgroup set-localuser set-location set-nonremovableappspolicy set-psbreakpoint set-psdebug set-psreadlinekeyhandler set-psreadlineoption set-pssessionconfiguration set-packagesource set-processmitigation set-ruleoption set-scheduledjob set-scheduledjoboption set-securebootuefi set-service set-strictmode set-systempreferreduilanguage set-timezone set-tpmownerauth set-tracesource set-uevconfiguration set-uevtemplateprofile set-variable set-wsmaninstance set-wsmanquickconfig set-wheamemorypolicy set-winacceptlanguagefromlanguagelistoptout set-winculturefromlanguagelistoptout set-windefaultinputmethodoverride set-winhomelocation set-winlanguagebaroption set-winsystemlocale set-winuilanguageoverride set-winuserlanguagelist set-windowsedition set-windowsproductkey set-windowsreservedstoragestate set-windowssearchsetting set-wmiinstance show-command show-controlpanelitem show-eventlog show-windowsdeveloperlicenseregistration sort-object split-path split-windowsimage start-bitstransfer start-dscconfiguration start-dtcdiagnosticresourcemanager start-job start-osuninstall start-process start-service start-sleep start-transaction start-transcript stop-appvclientconnectiongroup stop-appvclientpackage stop-computer stop-dtcdiagnosticresourcemanager stop-job stop-process stop-service stop-transcript suspend-bitstransfer suspend-job suspend-service switch-certificate sync-appvpublishingserver tee-object test-applockerpolicy test-certificate test-computersecurechannel test-connection test-dscconfiguration test-filecatalog test-kdsrootkey test-modulemanifest test-pssessionconfigurationfile test-path test-uevtemplate test-wsman trace-command unblock-file unblock-tpm undo-dtcdiagnostictransaction undo-transaction uninstall-language uninstall-package uninstall-provisioningpackage uninstall-trustedprovisioningcertificate unprotect-cmsmessage unpublish-appvclientpackage unregister-event unregister-pssessionconfiguration unregister-packagesource unregister-scheduledjob unregister-uevtemplate unregister-windowsdeveloperlicense update-dscconfiguration update-formatdata update-help update-list update-typedata update-uevtemplate update-wimbootentry use-transaction use-windowsunattend wait-debugger wait-event wait-job wait-process where-object write-debug write-error write-eventlog write-host write-information write-output write-progress write-verbose write-warning")
                     AddScintillaKeywords("powershell", 2, "% ? add-apppackage add-apppackagevolume add-appprovisionedpackage add-provisionedapppackage add-provisionedappsharedpackagecontainer add-provisionedappxpackage add-provisioningpackage add-trustedprovisioningcertificate apply-windowsunattend cfs disable-physicaldiskindication disable-storagediagnosticlog dismount-apppackagevolume enable-physicaldiskindication enable-storagediagnosticlog flush-volume get-apppackage get-apppackageautoupdatesettings get-apppackagedefaultvolume get-apppackagelasterror get-apppackagelog get-apppackagemanifest get-apppackagevolume get-appprovisionedpackage get-disksnv get-language get-physicaldisksnv get-preferredlanguage get-provisionedapppackage get-provisionedappsharedpackagecontainer get-provisionedappxpackage get-storageenclosuresnv get-systemlanguage initialize-volume mount-apppackagevolume move-apppackage move-smbclient optimize-appprovisionedpackages optimize-provisionedapppackages optimize-provisionedappxpackages remove-apppackage remove-apppackageautoupdatesettings remove-apppackagevolume remove-appprovisionedpackage remove-etwtracesession remove-provisionedapppackage remove-provisionedappsharedpackagecontainer remove-provisionedappxpackage remove-provisioningpackage remove-trustedprovisioningcertificate reset-apppackage set-apppackageautoupdatesettings set-apppackagedefaultvolume set-apppackageprovisioneddatafile set-autologgerconfig set-etwtracesession set-preferredlanguage set-provisionedapppackagedatafile set-provisionedappxdatafile set-systemlanguage tnc write-filesystemcache ac algm asnp blsmba cat cd chdir clc clear clhy cli clp cls clv cnsn compare copy cp cpi cpp cssmbo cssmbse curl cvpa dbp del diff dir dlu dnsn dsmbd ebp echo elu epal epcsv epsn erase esmbd etsn exsn fc fhx fimo fl foreach ft fw gal gbp gc gcai gcb gcfg gcfgs gci gcim gcls gcm gcms gcs gdr ghy gi gin gip gjb gl glcm glg glgm glu gm gmo gp gps gpv group grsmba gsmba gsmbb gsmbc gsmbcc gsmbcn gsmbd gsmbgm gsmbm gsmbmc gsmbo gsmbs gsmbsc gsmbscm gsmbscp gsmbse gsmbsn gsmbt gsmbw gsn gsnp gsv gtz gu gv gwmi h history icim icm iex ihy ii inmo ipal ipcsv ipmo ipsn irm ise iwmi iwr kill lp ls man md measure mi mount move mp msmbw mv nal ncim ncms ncso ndr ni nlg nlu nmo npssc nsmbgm nsmbm nsmbs nsmbscm nsmbt nsn nv nwsn ogv oh pbcfg popd ps pumo pushd pwd r rbp rcie rcim rcjb rcms rcsn rd rdr ren ri rjb rksmba rlg rlgm rlu rm rmdir rmo rni rnlg rnlu rnp rp rsmbb rsmbc rsmbcc rsmbgm rsmbm rsmbs rsmbsc rsmbscm rsmbt rsn rsnp rtcfg rujb rv rvpa rwmi sacfg sajb sal saps sasv sbp sc scb scim select set shcm si sl slcm sleep slg sls slu sort sp spjb spps spsv ssmbb ssmbcc ssmbp ssmbs ssmbsc ssmbscm start stz sujb sv swmi tcfg tee trcm type udsmbmc ulsmba upcfg upmo wget where wjb write")
                     AddScintillaKeywords("powershell", 3, "a: add-bcdatacacheextension add-bitlockerkeyprotector add-dnsclientdohserveraddress add-dnsclientnrptrule add-dtcclustertmmapping add-etwtraceprovider add-initiatoridtomaskingset add-mppreference add-neteventnetworkadapter add-neteventpacketcaptureprovider add-neteventprovider add-neteventvfpprovider add-neteventvmnetworkadapter add-neteventvmswitch add-neteventvmswitchprovider add-neteventwfpcaptureprovider add-netiphttpscertbinding add-netlbfoteammember add-netlbfoteamnic add-netnatexternaladdress add-netnatstaticmapping add-netswitchteammember add-odbcdsn add-partitionaccesspath add-physicaldisk add-printer add-printerdriver add-printerport add-storagefaultdomain add-targetporttomaskingset add-vmdirectvirtualdisk add-virtualdisktomaskingset add-vpnconnection add-vpnconnectionroute add-vpnconnectiontriggerapplication add-vpnconnectiontriggerdnsconfiguration add-vpnconnectiontriggertrustednetwork afterall aftereach assert-mockcalled assert-verifiablemocks b: backup-bitlockerkeyprotector backuptoaad-bitlockerkeyprotector beforeall beforeeach block-fileshareaccess block-smbshareaccess c: clear-assignedaccess clear-bccache clear-bitlockerautounlock clear-disk clear-dnsclientcache clear-filestoragetier clear-host clear-pcsvdevicelog clear-storagebusdisk clear-storagediagnosticinfo close-smbopenfile close-smbsession compress-archive configuration connect-iscsitarget connect-virtualdisk context convertfrom-sddlstring copy-netfirewallrule copy-netipsecmainmodecryptoset copy-netipsecmainmoderule copy-netipsecphase1authset copy-netipsecphase2authset copy-netipsecquickmodecryptoset copy-netipsecrule d: debug-fileshare debug-mmappprelaunch debug-storagesubsystem debug-volume delete-deliveryoptimizationcache describe disable-bc disable-bcdowngrading disable-bcserveonbattery disable-bitlocker disable-bitlockerautounlock disable-damanualentrypointselection disable-deliveryoptimizationverboselogs disable-dscdebug disable-mmagent disable-netadapter disable-netadapterbinding disable-netadapterchecksumoffload disable-netadapterencapsulatedpackettaskoffload disable-netadapteripsecoffload disable-netadapterlso disable-netadapterpacketdirect disable-netadapterpowermanagement disable-netadapterqos disable-netadapterrdma disable-netadapterrsc disable-netadapterrss disable-netadaptersriov disable-netadapteruso disable-netadaptervmq disable-netdnstransitionconfiguration disable-netfirewallrule disable-netiphttpsprofile disable-netipsecmainmoderule disable-netipsecrule disable-netnattransitionconfiguration disable-networkswitchethernetport disable-networkswitchfeature disable-networkswitchvlan disable-odbcperfcounter disable-pstrace disable-pswsmancombinedtrace disable-physicaldiskidentification disable-pnpdevice disable-scheduledtask disable-smbdelegation disable-storagebuscache disable-storagebusdisk disable-storagedatacollection disable-storageenclosureidentification disable-storageenclosurepower disable-storagehighavailability disable-storagemaintenancemode disable-wsmantrace disable-wdacbidtrace disconnect-iscsitarget disconnect-virtualdisk dismount-diskimage e: enable-bcdistributed enable-bcdowngrading enable-bchostedclient enable-bchostedserver enable-bclocal enable-bcserveonbattery enable-bitlocker enable-bitlockerautounlock enable-damanualentrypointselection enable-deliveryoptimizationverboselogs enable-dscdebug enable-mmagent enable-netadapter enable-netadapterbinding enable-netadapterchecksumoffload enable-netadapterencapsulatedpackettaskoffload enable-netadapteripsecoffload enable-netadapterlso enable-netadapterpacketdirect enable-netadapterpowermanagement enable-netadapterqos enable-netadapterrdma enable-netadapterrsc enable-netadapterrss enable-netadaptersriov enable-netadapteruso enable-netadaptervmq enable-netdnstransitionconfiguration enable-netfirewallrule enable-netiphttpsprofile enable-netipsecmainmoderule enable-netipsecrule enable-netnattransitionconfiguration enable-networkswitchethernetport enable-networkswitchfeature enable-networkswitchvlan enable-odbcperfcounter enable-pstrace enable-pswsmancombinedtrace enable-physicaldiskidentification enable-pnpdevice enable-scheduledtask enable-smbdelegation enable-storagebuscache enable-storagebusdisk enable-storagedatacollection enable-storageenclosureidentification enable-storageenclosurepower enable-storagehighavailability enable-storagemaintenancemode enable-wsmantrace enable-wdacbidtrace expand-archive export-bccachepackage export-bcsecretkey export-odataendpointproxy export-scheduledtask export-winhttpproxy f: find-command find-dscresource find-module find-netipsecrule find-netroute find-rolecapability find-script flush-etwtracesession format-hex format-volume g: get-appbackgroundtask get-appvvirtualprocess get-appxlasterror get-appxlog get-assignedaccess get-autologgerconfig get-bcclientconfiguration get-bccontentserverconfiguration get-bcdatacache get-bcdatacacheextension get-bchashcache get-bchostedcacheserverconfiguration get-bcnetworkconfiguration get-bcstatus get-bitlockervolume get-clusteredscheduledtask get-daclientexperienceconfiguration get-daconnectionstatus get-daentrypointtableitem get-doconfig get-dodownloadmode get-dopercentagemaxbackgroundbandwidth get-dopercentagemaxforegroundbandwidth get-dedupproperties get-deliveryoptimizationperfsnap get-deliveryoptimizationperfsnapthismonth get-deliveryoptimizationstatus get-disk get-diskimage get-diskstoragenodeview get-dnsclient get-dnsclientcache get-dnsclientdohserveraddress get-dnsclientglobalsetting get-dnsclientnrptglobal get-dnsclientnrptpolicy get-dnsclientnrptrule get-dnsclientserveraddress get-dscconfiguration get-dscconfigurationstatus get-dsclocalconfigurationmanager get-dscresource get-dtc get-dtcadvancedhostsetting get-dtcadvancedsetting get-dtcclusterdefault get-dtcclustertmmapping get-dtcdefault get-dtclog get-dtcnetworksetting get-dtctransaction get-dtctransactionsstatistics get-dtctransactionstracesession get-dtctransactionstracesetting get-etwtraceprovider get-etwtracesession get-filehash get-fileintegrity get-fileshare get-fileshareaccesscontrolentry get-filestoragetier get-initiatorid get-initiatorport get-installedmodule get-installedscript get-iscsiconnection get-iscsisession get-iscsitarget get-iscsitargetportal get-isesnippet get-logproperties get-mmagent get-maskingset get-mockdynamicparameters get-mpcomputerstatus get-mpperformancereport get-mppreference get-mpthreat get-mpthreatcatalog get-mpthreatdetection get-ncsipolicyconfiguration get-net6to4configuration get-netadapter get-netadapteradvancedproperty get-netadapterbinding get-netadapterchecksumoffload get-netadapterdatapathconfiguration get-netadapterencapsulatedpackettaskoffload get-netadapterhardwareinfo get-netadapteripsecoffload get-netadapterlso get-netadapterpacketdirect get-netadapterpowermanagement get-netadapterqos get-netadapterrdma get-netadapterrsc get-netadapterrss get-netadaptersriov get-netadaptersriovvf get-netadapterstatistics get-netadapteruso get-netadaptervmqqueue get-netadaptervport get-netadaptervmq get-netcompartment get-netconnectionprofile get-netdnstransitionconfiguration get-netdnstransitionmonitoring get-neteventnetworkadapter get-neteventpacketcaptureprovider get-neteventprovider get-neteventsession get-neteventvfpprovider get-neteventvmnetworkadapter get-neteventvmswitch get-neteventvmswitchprovider get-neteventwfpcaptureprovider get-netfirewalladdressfilter get-netfirewallapplicationfilter get-netfirewalldynamickeywordaddress get-netfirewallinterfacefilter get-netfirewallinterfacetypefilter get-netfirewallportfilter get-netfirewallprofile get-netfirewallrule get-netfirewallsecurityfilter get-netfirewallservicefilter get-netfirewallsetting get-netipaddress get-netipconfiguration get-netiphttpsconfiguration get-netiphttpsstate get-netipinterface get-netipsecdospsetting get-netipsecmainmodecryptoset get-netipsecmainmoderule get-netipsecmainmodesa get-netipsecphase1authset get-netipsecphase2authset get-netipsecquickmodecryptoset get-netipsecquickmodesa get-netipsecrule get-netipv4protocol get-netipv6protocol get-netisatapconfiguration get-netlbfoteam get-netlbfoteammember get-netlbfoteamnic get-netnat get-netnatexternaladdress get-netnatglobal get-netnatsession get-netnatstaticmapping get-netnattransitionconfiguration get-netnattransitionmonitoring get-netneighbor get-netoffloadglobalsetting get-netprefixpolicy get-netqospolicy get-netroute get-netswitchteam get-netswitchteammember get-nettcpconnection get-nettcpsetting get-netteredoconfiguration get-netteredostate get-nettransportfilter get-netudpendpoint get-netudpsetting get-netview get-networkswitchethernetport get-networkswitchfeature get-networkswitchglobaldata get-networkswitchvlan get-odbcdriver get-odbcdsn get-odbcperfcounter get-offloaddatatransfersetting get-operationvalidation get-psrepository get-partition get-partitionsupportedsize get-pcsvdevice get-pcsvdevicelog get-physicaldisk get-physicaldiskstoragenodeview get-physicalextent get-physicalextentassociation get-pnpdevice get-pnpdeviceproperty get-printconfiguration get-printjob get-printer get-printerdriver get-printerport get-printerproperty get-resiliencysetting get-scheduledtask get-scheduledtaskinfo get-smbbandwidthlimit get-smbclientconfiguration get-smbclientnetworkinterface get-smbconnection get-smbdelegation get-smbglobalmapping get-smbmapping get-smbmultichannelconnection get-smbmultichannelconstraint get-smbopenfile get-smbservercertprops get-smbservercertificatemapping get-smbserverconfiguration get-smbservernetworkinterface get-smbsession get-smbshare get-smbshareaccess get-smbwitnessclient get-startapps get-storageadvancedproperty get-storagebusbinding get-storagebuscache get-storagebusclientdevice get-storagebusdisk get-storagebustargetcachestore get-storagebustargetcachestoresinstance get-storagebustargetdevice get-storagebustargetdeviceinstance get-storagechassis get-storagedatacollection get-storagediagnosticinfo get-storageenclosure get-storageenclosurestoragenodeview get-storageenclosurevendordata get-storageextendedstatus get-storagefaultdomain get-storagefileserver get-storagefirmwareinformation get-storagehealthaction get-storagehealthreport get-storagehealthsetting get-storagehistory get-storagejob get-storagenode get-storagepool get-storageprovider get-storagerack get-storagereliabilitycounter get-storagescaleunit get-storagesetting get-storagesite get-storagesubsystem get-storagetier get-storagetiersupportedsize get-supportedclustersizes get-supportedfilesystems get-targetport get-targetportal get-testdriveitem get-vmdirectvirtualdisk get-verb get-virtualdisk get-virtualdisksupportedsize get-volume get-volumecorruptioncount get-volumescrubpolicy get-vpnconnection get-vpnconnectiontrigger get-wdacbidtrace get-windowsupdatelog get-winhttpproxy grant-fileshareaccess grant-smbshareaccess h: hide-virtualdisk i: import-bccachepackage import-bcsecretkey import-isesnippet import-powershelldatafile import-winhttpproxy importsystemmodules in inmodulescope initialize-disk install-dtc install-module install-script invoke-asworkflow invoke-mock invoke-operationvalidation invoke-pester it j: k: l: lock-bitlocker m: mock mount-diskimage move-smbwitnessclient n: new-autologgerconfig new-daentrypointtableitem new-dscchecksum new-eapconfiguration new-etwtracesession new-fileshare new-fixture new-guid new-iscsitargetportal new-isesnippet new-maskingset new-mpperformancerecording new-netadapteradvancedproperty new-neteventsession new-netfirewalldynamickeywordaddress new-netfirewallrule new-netipaddress new-netiphttpsconfiguration new-netipsecdospsetting new-netipsecmainmodecryptoset new-netipsecmainmoderule new-netipsecphase1authset new-netipsecphase2authset new-netipsecquickmodecryptoset new-netipsecrule new-netlbfoteam new-netnat new-netnattransitionconfiguration new-netneighbor new-netqospolicy new-netroute new-netswitchteam new-nettransportfilter new-networkswitchvlan new-psworkflowsession new-partition new-pesteroption new-scheduledtask new-scheduledtaskaction new-scheduledtaskprincipal new-scheduledtasksettingsset new-scheduledtasktrigger new-scriptfileinfo new-smbglobalmapping new-smbmapping new-smbmultichannelconstraint new-smbservercertificatemapping new-smbshare new-storagebusbinding new-storagebuscachestore new-storagefileserver new-storagepool new-storagesubsystemvirtualdisk new-storagetier new-temporaryfile new-virtualdisk new-virtualdiskclone new-virtualdisksnapshot new-volume new-vpnserveraddress o: open-netgpo optimize-storagepool optimize-volume p: psconsolehostreadline pause publish-bcfilecontent publish-bcwebcontent publish-module publish-script q: r: read-printernfctag register-clusteredscheduledtask register-dnsclient register-iscsisession register-psrepository register-scheduledtask register-storagesubsystem remove-autologgerconfig remove-bcdatacacheextension remove-bitlockerkeyprotector remove-daentrypointtableitem remove-dnsclientdohserveraddress remove-dnsclientnrptrule remove-dscconfigurationdocument remove-dtcclustertmmapping remove-etwtraceprovider remove-fileshare remove-initiatorid remove-initiatoridfrommaskingset remove-iscsitargetportal remove-maskingset remove-mppreference remove-mpthreat remove-netadapteradvancedproperty remove-neteventnetworkadapter remove-neteventpacketcaptureprovider remove-neteventprovider remove-neteventsession remove-neteventvfpprovider remove-neteventvmnetworkadapter remove-neteventvmswitch remove-neteventvmswitchprovider remove-neteventwfpcaptureprovider remove-netfirewalldynamickeywordaddress remove-netfirewallrule remove-netipaddress remove-netiphttpscertbinding remove-netiphttpsconfiguration remove-netipsecdospsetting remove-netipsecmainmodecryptoset remove-netipsecmainmoderule remove-netipsecmainmodesa remove-netipsecphase1authset remove-netipsecphase2authset remove-netipsecquickmodecryptoset remove-netipsecquickmodesa remove-netipsecrule remove-netlbfoteam remove-netlbfoteammember remove-netlbfoteamnic remove-netnat remove-netnatexternaladdress remove-netnatstaticmapping remove-netnattransitionconfiguration remove-netneighbor remove-netqospolicy remove-netroute remove-netswitchteam remove-netswitchteammember remove-nettransportfilter remove-networkswitchethernetportipaddress remove-networkswitchvlan remove-odbcdsn remove-partition remove-partitionaccesspath remove-physicaldisk remove-printjob remove-printer remove-printerdriver remove-printerport remove-smbbandwidthlimit remove-smbcomponent remove-smbglobalmapping remove-smbmapping remove-smbmultichannelconstraint remove-smbservercertificatemapping remove-smbshare remove-storagebusbinding remove-storagefaultdomain remove-storagefileserver remove-storagehealthintent remove-storagehealthsetting remove-storagepool remove-storagetier remove-targetportfrommaskingset remove-vmdirectvirtualdisk remove-virtualdisk remove-virtualdiskfrommaskingset remove-vpnconnection remove-vpnconnectionroute remove-vpnconnectiontriggerapplication remove-vpnconnectiontriggerdnsconfiguration remove-vpnconnectiontriggertrustednetwork rename-daentrypointtableitem rename-maskingset rename-netadapter rename-netfirewallrule rename-netiphttpsconfiguration rename-netipsecmainmodecryptoset rename-netipsecmainmoderule rename-netipsecphase1authset rename-netipsecphase2authset rename-netipsecquickmodecryptoset rename-netipsecrule rename-netlbfoteam rename-netswitchteam rename-printer repair-fileintegrity repair-virtualdisk repair-volume reset-bc reset-daclientexperienceconfiguration reset-daentrypointtableitem reset-dtclog reset-ncsipolicyconfiguration reset-net6to4configuration reset-netadapteradvancedproperty reset-netdnstransitionconfiguration reset-netiphttpsconfiguration reset-netisatapconfiguration reset-netteredoconfiguration reset-physicaldisk reset-smbclientconfiguration reset-smbserverconfiguration reset-storagereliabilitycounter reset-winhttpproxy resize-partition resize-storagetier resize-virtualdisk restart-netadapter restart-pcsvdevice restart-printjob restore-dscconfiguration restore-networkswitchconfiguration resume-bitlocker resume-printjob resume-storagebusdisk revoke-fileshareaccess revoke-smbshareaccess s: safegetcommand save-etwtracesession save-module save-netgpo save-networkswitchconfiguration save-script save-storagedatacollection send-etwtracesession set-assignedaccess set-bcauthentication set-bccache set-bcdatacacheentrymaxage set-bcminsmblatency set-bcsecretkey set-clusteredscheduledtask set-daclientexperienceconfiguration set-daentrypointtableitem set-dodownloadmode set-domaxbackgroundbandwidth set-domaxforegroundbandwidth set-dopercentagemaxbackgroundbandwidth set-dopercentagemaxforegroundbandwidth set-deliveryoptimizationstatus set-disk set-dnsclient set-dnsclientdohserveraddress set-dnsclientglobalsetting set-dnsclientnrptglobal set-dnsclientnrptrule set-dnsclientserveraddress set-dtcadvancedhostsetting set-dtcadvancedsetting set-dtcclusterdefault set-dtcclustertmmapping set-dtcdefault set-dtclog set-dtcnetworksetting set-dtctransaction set-dtctransactionstracesession set-dtctransactionstracesetting set-dynamicparametervariables set-etwtraceprovider set-fileintegrity set-fileshare set-filestoragetier set-initiatorport set-iscsichapsecret set-logproperties set-mmagent set-mppreference set-ncsipolicyconfiguration set-net6to4configuration set-netadapter set-netadapteradvancedproperty set-netadapterbinding set-netadapterchecksumoffload set-netadapterdatapathconfiguration set-netadapterencapsulatedpackettaskoffload set-netadapteripsecoffload set-netadapterlso set-netadapterpacketdirect set-netadapterpowermanagement set-netadapterqos set-netadapterrdma set-netadapterrsc set-netadapterrss set-netadaptersriov set-netadapteruso set-netadaptervmq set-netconnectionprofile set-netdnstransitionconfiguration set-neteventpacketcaptureprovider set-neteventprovider set-neteventsession set-neteventvfpprovider set-neteventvmswitchprovider set-neteventwfpcaptureprovider set-netfirewalladdressfilter set-netfirewallapplicationfilter set-netfirewallinterfacefilter set-netfirewallinterfacetypefilter set-netfirewallportfilter set-netfirewallprofile set-netfirewallrule set-netfirewallsecurityfilter set-netfirewallservicefilter set-netfirewallsetting set-netipaddress set-netiphttpsconfiguration set-netipinterface set-netipsecdospsetting set-netipsecmainmodecryptoset set-netipsecmainmoderule set-netipsecphase1authset set-netipsecphase2authset set-netipsecquickmodecryptoset set-netipsecrule set-netipv4protocol set-netipv6protocol set-netisatapconfiguration set-netlbfoteam set-netlbfoteammember set-netlbfoteamnic set-netnat set-netnatglobal set-netnattransitionconfiguration set-netneighbor set-netoffloadglobalsetting set-netqospolicy set-netroute set-nettcpsetting set-netteredoconfiguration set-netudpsetting set-networkswitchethernetportipaddress set-networkswitchportmode set-networkswitchportproperty set-networkswitchvlanproperty set-odbcdriver set-odbcdsn set-psrepository set-partition set-pcsvdevicebootconfiguration set-pcsvdevicenetworkconfiguration set-pcsvdeviceuserpassword set-physicaldisk set-printconfiguration set-printer set-printerproperty set-resiliencysetting set-scheduledtask set-smbbandwidthlimit set-smbclientconfiguration set-smbpathacl set-smbservercertificatemapping set-smbserverconfiguration set-smbshare set-storagebuscache set-storagebusprofile set-storagefileserver set-storagehealthsetting set-storagepool set-storageprovider set-storagesetting set-storagesubsystem set-storagetier set-testinconclusive set-virtualdisk set-volume set-volumescrubpolicy set-vpnconnection set-vpnconnectionipsecconfiguration set-vpnconnectionproxy set-vpnconnectiontriggerdnsconfiguration set-vpnconnectiontriggertrustednetwork set-winhttpproxy setup should show-netfirewallrule show-netipsecrule show-storagehistory show-virtualdisk start-appbackgroundtask start-appvvirtualprocess start-autologgerconfig start-dtc start-dtctransactionstracesession start-etwtracesession start-mprollback start-mpscan start-mpwdoscan start-neteventsession start-pcsvdevice start-scheduledtask start-storagediagnosticlog start-trace stop-dscconfiguration stop-dtc stop-dtctransactionstracesession stop-etwtracesession stop-neteventsession stop-pcsvdevice stop-scheduledtask stop-storagediagnosticlog stop-storagejob stop-trace suspend-bitlocker suspend-printjob suspend-storagebusdisk sync-netipsecrule t: tabexpansion2 test-dtc test-netconnection test-scriptfileinfo u: unblock-fileshareaccess unblock-smbshareaccess uninstall-dtc uninstall-module uninstall-script unlock-bitlocker unregister-appbackgroundtask unregister-clusteredscheduledtask unregister-iscsisession unregister-psrepository unregister-scheduledtask unregister-storagesubsystem update-autologgerconfig update-disk update-etwtracesession update-hoststoragecache update-iscsitarget update-iscsitargetportal update-module update-modulemanifest update-mpsignature update-netfirewalldynamickeywordaddress update-netipsecrule update-script update-scriptfileinfo update-smbmultichannelconnection update-storagebuscache update-storagefirmware update-storagepool update-storageprovidercache v: w: write-dtctransactionstracesession write-printernfctag write-volumecache x: y: z: cd.. cd\ help mkdir more oss prompt")
                 Case "batch"
+                    Scintilla3.LexerName = "batch"
                     AddScintillaKeywords("batch", 0, "assoc aux break call cd chdir cls cmdextversion color com com1 com2 com3 com4 con copy country ctty date defined del dir do dpath echo else endlocal erase errorlevel exist exit for ftype goto if in loadfix loadhigh lpt lpt1 lpt2 lpt3 lpt4 md mkdir move not nul path pause popd prn prompt pushd rd rem ren rename rmdir set setlocal shift start time title type ver verify vol")
+                Case "vbscript"
+                    Scintilla3.LexerName = "vb"
+                    AddScintillaKeywords("vbscript", 0, "addhandler addressof aggregate alias and andalso ansi as assembly async attribute auto await begin binary boolean by byref byte byval call case catch cbool cbyte cchar ccur cdate cdbl cdec char cint class clng clnglng clngptr cobj compare const continue csbyte cshort csng cstr ctype cuint culng currency cushort custom cvar date decimal declare default defbool defbyte defcur defdate defdbl defdec defint deflng deflnglng deflngptr defobj defsng defstr defvar delegate dim directcast distinct do double each else elseif end endif enum equals erase error event exit explicit false finally for friend from function get gettype global gosub goto group handles if implement implements imports in inherits integer interface into is isfalse isnot istrue iterator join key let lib like load long longlong longptr loop lset me mid mod module mustinherit mustoverride mybase myclass namespace narrowing new next not nothing notinheritable notoverridable object of off on operator option optional or order orelse out overloads overridable overrides paramarray partial preserve private property protected ptrsafe public raiseevent readonly redim rem removehandler resume return rset sbyte select set shadows shared short single skip static step stop strict string structure sub synclock take text then throw to true try trycast type typeof uinteger ulong unicode unload until ushort using variant vbarray vbboolean vbbyte vbcurrency vbdataobject vbdate vbdecimal vbdouble vbempty vberror vbinteger vblong vblonglong vbnull vbobject vbsingle vbuserdefinedtype vbvariant wend when where while widening with withevents writeonly xor yield")
+                Case "jscript"
+                    Scintilla3.LexerName = "coffeescript"
+                    AddScintillaKeywords("jscript", 0, "abstract async await boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface let long native new null of package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with true false prototype yield")
+                    AddScintillaKeywords("jscript", 1, "Array Date eval hasOwnProperty Infinity isFinite isNaN isPrototypeOf Math NaN Number Object prototype String toString undefined valueOf")
+                    AddScintillaKeywords("jscript", 2, "alert all anchor anchors area assign blur button checkbox clearInterval clearTimeout clientInformation close closed confirm constructor crypto decodeURI decodeURIComponent defaultStatus document element elements embed embeds encodeURI encodeURIComponent escape event fileUpload focus form forms frame innerHeight innerWidth layer layers link location mimeTypes navigate navigator frames frameRate hidden history image images offscreenBuffering onblur onclick onerror onfocus onkeydown onkeypress onkeyup onmouseover onload onmouseup onmousedown onsubmit open opener option outerHeight outerWidth packages pageXOffset pageYOffset parent parseFloat parseInt password pkcs11 plugin prompt propertyIsEnum radio reset screenX screenY scroll secure select self setInterval setTimeout status submit taint text textarea top unescape untaint window")
             End Select
         End If
     End Sub
@@ -3026,6 +2972,10 @@ Public Class NewUnattendWiz
                     UpdateScriptEditorLexer("powershell")
                 Case 1
                     UpdateScriptEditorLexer("batch")
+                Case 2
+                    UpdateScriptEditorLexer("vbscript")
+                Case 3
+                    UpdateScriptEditorLexer("jscript")
             End Select
         Catch ex As Exception
 
@@ -3053,6 +3003,10 @@ Public Class NewUnattendWiz
                     ComboBox16.SelectedIndex = 0
                 Case "Language: Batch"
                     ComboBox16.SelectedIndex = 1
+                Case "Language: VBScript"
+                    ComboBox16.SelectedIndex = 2
+                Case "Language: JScript"
+                    ComboBox16.SelectedIndex = 3
             End Select
 
             DynaLog.LogMessage("Loading contents...")
@@ -3110,5 +3064,78 @@ Public Class NewUnattendWiz
         WindowHelper.DisplayToolTip(sender, "Choose this option to automatically configure the target location to one of the countries in the European Economic Area (EEA). This will let you" & CrLf &
                                     "configure settings in the target system that you would not be able to when using a region outside the EEA. After Setup is complete, you can reconfigure" & CrLf &
                                     "the region to your current location.")
+    End Sub
+
+    Private Sub CheckBox23_MouseHover(sender As Object, e As EventArgs) Handles CheckBox27.MouseHover, CheckBox26.MouseHover, CheckBox25.MouseHover, CheckBox24.MouseHover, CheckBox23.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Check this field to customize this user's display name")
+    End Sub
+
+    Private Sub CheckBox27_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox27.CheckedChanged
+        TextBox23.Enabled = CheckBox27.Checked
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox26_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox26.CheckedChanged
+        TextBox22.Enabled = CheckBox26.Checked
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox25_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox25.CheckedChanged
+        TextBox21.Enabled = CheckBox25.Checked
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox24_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox24.CheckedChanged
+        TextBox20.Enabled = CheckBox24.Checked
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub CheckBox23_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox23.CheckedChanged
+        TextBox19.Enabled = CheckBox23.Checked
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox19_TextChanged(sender As Object, e As EventArgs) Handles TextBox19.TextChanged
+        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox20_TextChanged(sender As Object, e As EventArgs) Handles TextBox20.TextChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox21_TextChanged(sender As Object, e As EventArgs) Handles TextBox21.TextChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox22_TextChanged(sender As Object, e As EventArgs) Handles TextBox22.TextChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox23_TextChanged(sender As Object, e As EventArgs) Handles TextBox23.TextChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub Button23_Click(sender As Object, e As EventArgs) Handles Button23.Click
+        SaveConfiguredScripts(CurrentlyEditedStage)
+        Select Case CurrentlyEditedStage
+            Case 0
+                ScriptReorderDialog.ScriptSet = ConfiguredScripts(PostInstallScript.Stage.Specialize)
+            Case 1
+                ScriptReorderDialog.ScriptSet = ConfiguredScripts(PostInstallScript.Stage.FirstRun)
+            Case 2
+                ScriptReorderDialog.ScriptSet = ConfiguredScripts(PostInstallScript.Stage.UserFirstLogon)
+        End Select
+        If ScriptReorderDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            CurrentlyConfiguredScripts = New List(Of PostInstallScript)(ScriptReorderDialog.ScriptSet)
+            ' Saving the script set here causes the currently edited script to change its contents
+            ' to the previous values; we'll force setting the new contents.
+            Scintilla3.Text = CurrentlyConfiguredScripts(CurrentlyEditedScript).ScriptContents
+            SaveConfiguredScripts(CurrentlyEditedStage)
+            SwitchScript(CurrentlyEditedScript)
+        End If
+    End Sub
+
+    Private Sub Button23_MouseHover(sender As Object, e As EventArgs) Handles Button23.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Rearrange post-installation scripts...")
     End Sub
 End Class

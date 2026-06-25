@@ -39,10 +39,11 @@ Public Class ApplyUnattendFile
                 Case 5
                     msg = "Non è stato specificato alcun file di risposta non presidiato oppure il file specificato non esiste. Verificare che esista e riprovare."
             End Select
-            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         ProgressPanel.OperationNum = 79
+        ProgressPanel.UnattendedCopyToSysprep = CheckBox1.Checked
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Visible = False
         ProgressPanel.ShowDialog(MainForm)
@@ -69,35 +70,35 @@ Public Class ApplyUnattendFile
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Apply unattended answer file"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Answer file:"
                         Button1.Text = "Browse..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                     Case "ESN"
                         Text = "Aplicar archivo de respuesta desatendida"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Archivo de respuesta:"
                         Button1.Text = "Examinar..."
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                     Case "FRA"
                         Text = "Appliquer le fichier de réponses sans surveillance"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Fichier de réponse :"
                         Button1.Text = "Parcourir..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
                     Case "PTB", "PTG"
                         Text = "Aplicar ficheiro de resposta não assistida"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ficheiro de resposta:"
                         Button1.Text = "Procurar..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                     Case "ITA"
                         Text = "Applicare il file di risposta non presidiato"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "File di risposta:"
                         Button1.Text = "Sfoglia..."
                         OK_Button.Text = "OK"
@@ -105,50 +106,48 @@ Public Class ApplyUnattendFile
                 End Select
             Case 1
                 Text = "Apply unattended answer file"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Answer file:"
                 Button1.Text = "Browse..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
             Case 2
                 Text = "Aplicar archivo de respuesta desatendida"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Archivo de respuesta:"
                 Button1.Text = "Examinar..."
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
             Case 3
                 Text = "Appliquer le fichier de réponses sans surveillance"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Fichier de réponse :"
                 Button1.Text = "Parcourir..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
             Case 4
                 Text = "Aplicar ficheiro de resposta não assistida"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ficheiro de resposta:"
                 Button1.Text = "Procurar..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
             Case 5
                 Text = "Applicare il file di risposta non presidiato"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "File di risposta:"
                 Button1.Text = "Sfoglia..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 End Class

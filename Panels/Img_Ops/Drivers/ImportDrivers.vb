@@ -18,7 +18,7 @@ Public Class ImportDrivers
         If ComboBox1.SelectedItem = "" Then
             DynaLog.LogMessage("No source has been selected.")
             msg = "Choose an action and try again"
-            MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
             DynaLog.LogMessage("A source has been selected. Verifying inputs...")
@@ -35,20 +35,20 @@ Public Class ImportDrivers
                         If TextBox1.Text = MainForm.MountDir Then
                             DynaLog.LogMessage("The import source is the same as the import target.")
                             msg = "The import target can't be specified as the import source. Choose a different source and try again"
-                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Exit Sub
                         End If
                     Else
                         DynaLog.LogMessage("No import source has been specified.")
                         msg = "No import source has been specified. Specify a source and try again"
-                        MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Exit Sub
                     End If
                 Case 1
                     DynaLog.LogMessage("Validating import source...")
                     If MainForm.OnlineManagement Then
                         msg = "The import target can't be specified as the import source. Choose a different source and try again"
-                        MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Exit Sub
                     End If
                 Case 2
@@ -60,21 +60,21 @@ Public Class ImportDrivers
                         If TextBox2.Text = DIList(ListView1.FocusedItem.Index).Name Then
                             DynaLog.LogMessage("The import source is the same as the import target.")
                             msg = "The import target can't be specified as the import source. Choose a different source and try again"
-                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Exit Sub
                         End If
                         DynaLog.LogMessage("Checking drive format...")
                         If DIList(ListView1.FocusedItem.Index).DriveFormat <> "NTFS" Then
                             DynaLog.LogMessage("The source is not formatted with NTFS.")
                             msg = "The import source needs to be a drive formatted with NTFS. Choose a different source and try again"
-                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Exit Sub
                         End If
                         DynaLog.LogMessage("Checking Windows installation in the drive...")
                         If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
                             DynaLog.LogMessage("The source drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
                             msg = "The import source doesn't contain a Windows installation. Choose a different source and try again"
-                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Exit Sub
                         Else
                             DynaLog.LogMessage("The source drive contains ntoskrnl. Checking version...")
@@ -84,14 +84,14 @@ Public Class ImportDrivers
                                (sysVer.ProductMajorPart = 6 And sysVer.ProductMinorPart = 0) Then
                                 DynaLog.LogMessage("The import source contains Windows Vista or an earlier version of Windows.")
                                 msg = "The import source has an installation of Windows Vista or an earlier version of Windows. Choose a different source and try again"
-                                MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                 Exit Sub
                             End If
                         End If
                     Else
                         DynaLog.LogMessage("No import source has been specified.")
                         msg = "No import source has been specified. Specify a source and try again"
-                        MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                        MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                         Exit Sub
                     End If
             End Select
@@ -126,7 +126,7 @@ Public Class ImportDrivers
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Import drivers"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "This process will import all third-party drivers of the source you specify to this image or installation. This ensures that the target image will have the same hardware compatibility of the source image"
                         Label3.Text = "Import source:"
                         Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
@@ -152,7 +152,7 @@ Public Class ImportDrivers
                         ImportSources(2) = "Offline installation"
                     Case "ESN"
                         Text = "Importar controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Este proceso importará todos los controladores de terceros del origen que especifique a esta imagen o instalación. Esto asegura que la imagen de destino tenga la misma compatibilidad de hardware de la imagen de origen"
                         Label3.Text = "Origen de importación:"
                         Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
@@ -178,7 +178,7 @@ Public Class ImportDrivers
                         ImportSources(2) = "Instalación fuera de línea"
                     Case "FRA"
                         Text = "Importer des pilotes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Ce processus importera tous les pilotes tiers de la source que vous spécifiez dans cette image ou installation. Cela garantit que l'image cible aura la même compatibilité matérielle que l'image source."
                         Label3.Text = "Source d'importation :"
                         Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
@@ -204,7 +204,7 @@ Public Class ImportDrivers
                         ImportSources(2) = "Installation hors ligne"
                     Case "PTB", "PTG"
                         Text = "Importar controladores"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
                         Label3.Text = "Importar fonte:"
                         Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
@@ -230,7 +230,7 @@ Public Class ImportDrivers
                         ImportSources(2) = "Instalação offline"
                     Case "ITA"
                         Text = "Importare i driver"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Questo processo importerà tutti i driver di terze parti dell'origine specificata in questa immagine o installazione. Questo assicura che l'immagine di destinazione abbia la stessa compatibilità hardware dell'immagine di origine"
                         Label3.Text = "Importazione dell'origine:"
                         Label4.Text = If(ImportSourceInt = 1, "Questa sorgente non ha impostazioni aggiuntive disponibili.", "Scegliere una sorgente elencata sopra per configurarne le impostazioni.")
@@ -257,7 +257,7 @@ Public Class ImportDrivers
                 End Select
             Case 1
                 Text = "Import drivers"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "This process will import all third-party drivers of the source you specify to this image or installation. This ensures that the target image will have the same hardware compatibility of the source image"
                 Label3.Text = "Import source:"
                 Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
@@ -283,7 +283,7 @@ Public Class ImportDrivers
                 ImportSources(2) = "Offline installation"
             Case 2
                 Text = "Importar controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Este proceso importará todos los controladores de terceros del origen que especifique a esta imagen o instalación. Esto asegura que la imagen de destino tenga la misma compatibilidad de hardware de la imagen de origen"
                 Label3.Text = "Origen de importación:"
                 Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
@@ -309,7 +309,7 @@ Public Class ImportDrivers
                 ImportSources(2) = "Instalación fuera de línea"
             Case 3
                 Text = "Importer des pilotes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Ce processus importera tous les pilotes tiers de la source que vous spécifiez dans cette image ou installation. Cela garantit que l'image cible aura la même compatibilité matérielle que l'image source."
                 Label3.Text = "Source d'importation :"
                 Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
@@ -335,7 +335,7 @@ Public Class ImportDrivers
                 ImportSources(2) = "Installation hors ligne"
             Case 4
                 Text = "Importar controladores"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
                 Label3.Text = "Importar fonte:"
                 Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
@@ -361,7 +361,7 @@ Public Class ImportDrivers
                 ImportSources(2) = "Instalação offline"
             Case 5
                 Text = "Importare i driver"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Questo processo importerà tutti i driver di terze parti dell'origine specificata in questa immagine o installazione. Questo assicura che l'immagine di destinazione abbia la stessa compatibilità hardware dell'immagine di origine"
                 Label3.Text = "Importazione dell'origine:"
                 Label4.Text = If(ImportSourceInt = 1, "Questa sorgente non ha impostazioni aggiuntive disponibili.", "Scegliere una sorgente elencata sopra per configurarne le impostazioni.")
@@ -388,11 +388,7 @@ Public Class ImportDrivers
         End Select
         ComboBox1.Items.AddRange(ImportSources)
         If ImportSourceInt >= 0 Then ComboBox1.SelectedIndex = ImportSourceInt
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -418,6 +414,7 @@ Public Class ImportDrivers
                                                                                               FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ColumnHeader1.Width = WindowHelper.ScaleLogical(68)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(128)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(70)
@@ -426,6 +423,7 @@ Public Class ImportDrivers
         ColumnHeader6.Width = WindowHelper.ScaleLogical(77)
         ColumnHeader7.Width = WindowHelper.ScaleLogical(110)
         ColumnHeader8.Width = WindowHelper.ScaleLogical(104)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

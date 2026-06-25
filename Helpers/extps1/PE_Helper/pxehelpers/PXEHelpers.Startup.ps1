@@ -4,6 +4,7 @@
 using namespace System.Collections.Generic
 
 . "$PSScriptRoot\Common\PXEHelpers.Common.ps1"
+. "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
 
 $networkAdapters = $null
 
@@ -80,6 +81,26 @@ function Show-InstallNetAdapterScreen {
         {
             if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
             {
+                if ((Get-PolicyValue -PolicyName "DTDimShowPnputilOut" -DefaultPolicyValue 1 -ValidOptions @(0,1)) -eq 1) {
+                    $compSys = Get-CimInstance -Query "SELECT Manufacturer, Model FROM Win32_ComputerSystem"
+                    $baseBrd = Get-CimInstance -Query "SELECT Product FROM Win32_BaseBoard"
+
+                    $manufacturer = $compSys.Manufacturer
+                    $model = $compSys.Model
+                    $boardModel = $baseBrd.Product
+
+                    @"
+These are the device IDs of the hardware devices that could not be detected. Please
+install device drivers based on hardware IDs. After installation, please close this window.
+
+To find the drivers for this specific device, please check the following information:
+- Manufacturer/Model: $manufacturer $model
+- Motherboard model : $boardModel
+
+"@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
+                    pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
+                    notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
+                }
                 Clear-Host
                 Show-CenteredTextBox -Text "Starting the Driver Installation Module . . ." -MaxWidth 70 -CenterOfAll
                 Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
@@ -205,6 +226,10 @@ if ($providerList.Count -gt 0) {
     $util = -1
     do {
         $utilStr = Read-Host -Prompt "Choose a utility from the list above and press ENTER"
+        
+        if ($utilStr -eq "") {
+            continue
+        }
 
         if ($utilStr -eq "N") {
             Show-InstallNetAdapterScreen

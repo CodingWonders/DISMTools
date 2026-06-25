@@ -1,0 +1,43 @@
+﻿Language: Batch
+Name: Configure Power Settings
+Description: This script configures default timeout values in the current power plan.
+Customizable: Yes
+@ECHO OFF
+
+REM This script configures timeout values of the current power plan which,
+REM in many cases, is the "Balanced" plan. Configure the following values
+REM based on what you want to customize. If any of the following values is
+REM set to 0, the system will treat it as if there were no timeout set for
+REM the specific field.
+
+REM The following options are grouped under the following categories:
+REM ac -- Values that affect a system when plugged in
+REM dc -- Values that affect a system when using battery power
+REM The following options affect the following scenarios:
+REM - Monitor timeout options control when the display turns off
+REM - Disk timeout options control when storage devices stop
+REM - Standby timeout options control when the device enters sleep mode
+REM - Hibernate timeout options control when the device enters hibernation
+
+REM ========== AC Options ==========
+SET _MonitorTimeoutAc=0
+SET _DiskTimeoutAc=1
+SET _StandbyTimeoutAc=0
+SET _HibernateTimeoutAc=0
+REM ========== DC Options ==========
+SET _MonitorTimeoutDc=5
+SET _DiskTimeoutDc=1
+SET _StandbyTimeoutDc=10
+SET _HibernateTimeoutDc=20
+REM ================================
+
+REM leave the rest of the script as is
+
+IF DEFINED _MonitorTimeoutAc powercfg /x monitor-timeout-ac %_MonitorTimeoutAc%
+IF DEFINED _MonitorTimeoutDc powercfg /x monitor-timeout-dc %_MonitorTimeoutDc%
+IF DEFINED _DiskTimeoutAc powercfg /x disk-timeout-ac %_DiskTimeoutAc%
+IF DEFINED _DiskTimeoutDc powercfg /x disk-timeout-dc %_DiskTimeoutDc%
+IF DEFINED _StandbyTimeoutAc powercfg /x standby-timeout-ac %_StandbyTimeoutAc%
+IF DEFINED _StandbyTimeoutDc powercfg /x standby-timeout-dc %_StandbyTimeoutDc%
+IF DEFINED _HibernateTimeoutAc powercfg /x hibernate-timeout-ac %_HibernateTimeoutAc%
+IF DEFINED _HibernateTimeoutDc powercfg /x hibernate-timeout-dc %_HibernateTimeoutDc%

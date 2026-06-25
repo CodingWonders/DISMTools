@@ -5,12 +5,14 @@ Public Class SysprepPreparatorModeDialog
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         MainForm.AutoCapture = CheckBox1.Checked
+        MainForm.CopyProfile = CheckBox2.Checked
         DialogResult = System.Windows.Forms.DialogResult.Yes
         Close()
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
         MainForm.AutoCapture = CheckBox1.Checked
+        MainForm.CopyProfile = CheckBox2.Checked
         DialogResult = System.Windows.Forms.DialogResult.No
         Close()
     End Sub
@@ -33,6 +35,7 @@ Public Class SysprepPreparatorModeDialog
                 LinkLabel2.Text = "Launch in Manual mode (advanced)"
                 LinkLabel3.Text = "Cancel launch of this tool"
                 CheckBox1.Text = "Capture image after preparing the system"
+                CheckBox2.Text = "Copy registry changes and other current preferences for new user profiles"
             Case "ESN"
                 Label1.Text = "La herramienta de preparación de Sysprep, utilizada para preparar sistemas, puede operar en 2 modos: modo automático y modo manual" & CrLf & CrLf &
                     "- El modo automático realiza comprobaciones y, si dichas comprobaciones se realizaron correctamente, prepara y generaliza su equipo automáticamente. No tiene que interactuar con la herramienta a menos que las comprobaciones fallen o completen con advertencias. Una configuración predeterminada para Sysprep también será usada" & CrLf &
@@ -42,6 +45,7 @@ Public Class SysprepPreparatorModeDialog
                 LinkLabel2.Text = "Iniciar en modo manual (avanzado)"
                 LinkLabel3.Text = "Cancelar el inicio de esta herramienta"
                 CheckBox1.Text = "Capturar imagen tras preparar el sistema"
+                CheckBox2.Text = "Copiar cambios en el registro y otras preferencias actuales para nuevos perfiles de usuario"
             Case "FRA"
                 Label1.Text = "L’outil de préparation Sysprep, chargé de préparer les systèmes pour la capture d’image, peut fonctionner en 2 modes : mode automatique et mode manuel." & CrLf & CrLf &
                     "- Le mode automatique effectue des vérifications et, si celles-ci réussissent, prépare et généralise automatiquement votre ordinateur. Vous n’avez pas besoin d’interagir avec l’outil, sauf si les vérifications échouent ou renvoient des avertissements. Un ensemble d’options par défaut pour Sysprep sera également utilisé" & CrLf &
@@ -51,6 +55,7 @@ Public Class SysprepPreparatorModeDialog
                 LinkLabel2.Text = "Lancer en mode manuel (avancé)"
                 LinkLabel3.Text = "Annuler le lancement de cet outil"
                 CheckBox1.Text = "Capturez l'image après avoir préparé le système"
+                CheckBox2.Text = "Copier les modifications du registre et autres préférences actuelles pour les nouveaux profils utilisateur"
             Case "PTB", "PTG"
                 Label1.Text = "A ferramenta de preparação Sysprep, responsável por preparar sistemas para a captura de imagem, pode funcionar em 2 modos: modo automático e modo manual." & CrLf & CrLf &
                     "- O modo automático realiza verificações e, se estas forem bem-sucedidas, prepara e generaliza o computador automaticamente. Não é necessário interagir com a ferramenta, a menos que as verificações falhem ou retornem avisos. Será também usado um conjunto de opções padrão para o Sysprep" & CrLf &
@@ -60,6 +65,7 @@ Public Class SysprepPreparatorModeDialog
                 LinkLabel2.Text = "Iniciar em modo manual (avançado)"
                 LinkLabel3.Text = "Cancelar o lançamento desta ferramenta"
                 CheckBox1.Text = "Capture a imagem após preparar o sistema"
+                CheckBox2.Text = "Copiar alterações no registo e outras preferências atuais para novos perfis de utilizador"
             Case "ITA"
                 Label1.Text = "Lo strumento di preparazione Sysprep, responsabile della preparazione dei sistemi per l’acquisizione dell’immagine, può funzionare in 2 modalità: automatica e manuale." & CrLf & CrLf &
                     "- La modalità automatica esegue dei controlli e, se superati, prepara e generalizza automaticamente il computer. Non è necessario interagire con lo strumento, a meno che i controlli falliscano o restituiscano avvisi. Verrà anche utilizzato un set di opzioni predefinite per Sysprep" & CrLf &
@@ -69,6 +75,7 @@ Public Class SysprepPreparatorModeDialog
                 LinkLabel2.Text = "Avvia in modalità manuale (avanzata)"
                 LinkLabel3.Text = "Annulla l’avvio di questo strumento"
                 CheckBox1.Text = "Acquisizione dell'immagine dopo aver preparato il sistema"
+                CheckBox2.Text = "Copia le modifiche al registro e altre preferenze correnti per i nuovi profili utente"
         End Select
     End Sub
 End Class

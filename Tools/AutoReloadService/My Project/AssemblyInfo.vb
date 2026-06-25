@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("AutoReloadSvc")> 
+<Assembly: AssemblyTitle("DISMTools Automatic Image Reload Service")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("AutoReloadSvc")> 
-<Assembly: AssemblyCopyright("Copyright ©  2026")> 
+<Assembly: AssemblyProduct("DISMTools Automatic Image Reload Service")> 
+<Assembly: AssemblyCopyright("© 2026 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("0.8.0.26042")> 
+<Assembly: AssemblyFileVersion("0.8.0.26042")> 

@@ -4,6 +4,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Globalization
 
 Public Class GetPkgInfoDlg
 
@@ -12,7 +13,7 @@ Public Class GetPkgInfoDlg
     Dim OSVer As Version
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -30,7 +31,7 @@ Public Class GetPkgInfoDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get package information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "What do you want to get information about?"
                         Label3.Text = "Click here to get information about packages that you've installed or that came with the Windows image you're servicing"
                         Label4.Text = "Click here to get information about packages that you want to add to the Windows image you're servicing before proceeding with the package addition process"
@@ -92,7 +93,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Type here to search for a package..."
                     Case "ESN"
                         Text = "Obtener información de paquetes"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "¿Acerca de qué le gustaría obtener información?"
                         Label3.Text = "Haga clic aquí para obtener información de paquetes que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
                         Label4.Text = "Haga clic aquí para obtener información de paquetes que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de paquetes"
@@ -154,7 +155,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
                         Label3.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance."
                         Label4.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous souhaitez ajouter à l'image Windows que vous maintenez avant de procéder à l'ajout de paquets."
@@ -216,7 +217,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre o pacote"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Sobre o que é que pretende obter informações?"
                         Label3.Text = "Clique aqui para obter informações sobre os pacotes que instalou ou que vieram com a imagem do Windows que está a reparar"
                         Label4.Text = "Clique aqui para obter informações sobre os pacotes que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de pacotes"
@@ -278,7 +279,7 @@ Public Class GetPkgInfoDlg
                         SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
                     Case "ITA"
                         Text = "Ottieni informazioni sui pacchetti"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label2.Text = "Su cosa vuoi ottenere informazioni?"
                         Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
                         Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
@@ -341,7 +342,7 @@ Public Class GetPkgInfoDlg
                 End Select
             Case 1
                 Text = "Get package information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "What do you want to get information about?"
                 Label3.Text = "Click here to get information about packages that you've installed or that came with the Windows image you're servicing"
                 Label4.Text = "Click here to get information about packages that you want to add to the Windows image you're servicing before proceeding with the package addition process"
@@ -403,7 +404,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Type here to search for a package..."
             Case 2
                 Text = "Obtener información de paquetes"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "¿Acerca de qué le gustaría obtener información?"
                 Label3.Text = "Haga clic aquí para obtener información de paquetes que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
                 Label4.Text = "Haga clic aquí para obtener información de paquetes que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de paquetes"
@@ -465,7 +466,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
             Case 3
                 Text = "Obtenir des informations sur les paquets"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
                 Label3.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance."
                 Label4.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous souhaitez ajouter à l'image Windows que vous maintenez avant de procéder à l'ajout de paquets."
@@ -527,7 +528,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
             Case 4
                 Text = "Obter informações sobre o pacote"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Sobre o que é que pretende obter informações?"
                 Label3.Text = "Clique aqui para obter informações sobre os pacotes que instalou ou que vieram com a imagem do Windows que está a reparar"
                 Label4.Text = "Clique aqui para obter informações sobre os pacotes que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de pacotes"
@@ -589,7 +590,7 @@ Public Class GetPkgInfoDlg
                 SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
             Case 5
                 Text = "Ottieni informazioni sui pacchetti"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label2.Text = "Su cosa vuoi ottenere informazioni?"
                 Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
                 Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
@@ -652,16 +653,13 @@ Public Class GetPkgInfoDlg
         End Select
         ListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If SplitContainer1.SplitterDistance = 440 Then
             SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ' Populate installed package listing
         DynaLog.LogMessage("Updating items in list...")
@@ -679,6 +677,7 @@ Public Class GetPkgInfoDlg
         SearchBox1.Text = ""
 
         OSVer = Environment.OSVersion.Version
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -736,7 +735,7 @@ Public Class GetPkgInfoDlg
                         Case 5
                             msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                     End Select
-                    MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                    MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -848,8 +847,22 @@ Public Class GetPkgInfoDlg
                         Label42.Text = If(OSVer.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
                         Label46.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
                         Label34.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
-                        Label27.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime)
-                        Label29.Text = If(OSVer.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+
+                        Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                        Dim PackageInstallTime As Date = If(OSVer.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime),
+                            PackageLastUpdate As Date = If(OSVer.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+                        Dim PackageInstallTimeString As String = "",
+                            PackageLastUpdateString As String = ""
+                        If MainForm.HumanizeDates Then
+                            PackageInstallTimeString = String.Format("{0}, {1}", PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                            PackageLastUpdateString = String.Format("{0}, {1}", PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                        Else
+                            PackageInstallTimeString = PackageInstallTime.ToString("MM/dd/yyyy HH:mm:ss")
+                            PackageLastUpdateString = PackageLastUpdate.ToString("MM/dd/yyyy HH:mm:ss")
+                        End If
+
+                        Label27.Text = PackageInstallTimeString
+                        Label29.Text = PackageLastUpdateString
                         Label38.Text = If(OSVer.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
                         Label44.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
                         Label15.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
@@ -1120,7 +1133,7 @@ Public Class GetPkgInfoDlg
                     Case 5
                         msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                 End Select
-                MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1184,53 +1197,57 @@ Public Class GetPkgInfoDlg
                 DynaLog.LogMessage("Creating session...")
                 Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                     For Each pkgFile In ListBox1.Items
-                        DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(pkgFile) & Quote)
-                        If File.Exists(pkgFile) Then
-                            DynaLog.LogMessage("Package file exists.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
-                                        Case "ESN"
-                                            Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
-                                        Case "FRA"
-                                            Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
-                                        Case "PTB", "PTG"
-                                            Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
-                                        Case "ITA"
-                                            Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
-                                    End Select
-                                Case 1
-                                    Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
-                                Case 2
-                                    Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
-                                Case 3
-                                    Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
-                                Case 4
-                                    Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
-                                Case 5
-                                    Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
-                            End Select
-                            Application.DoEvents()
-                            Dim pkgInfoEx As DismPackageInfoEx = Nothing
-                            Dim pkgInfo As DismPackageInfo = Nothing
-                            DynaLog.LogMessage("Detecting conditions imposed by host system...")
-                            If OSVer.Major >= 10 Then
-                                DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
-                                pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
-                            Else
-                                DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
-                                pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                        Try
+                            DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(pkgFile) & Quote)
+                            If File.Exists(pkgFile) Then
+                                DynaLog.LogMessage("Package file exists.")
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENU", "ENG"
+                                                Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                            Case "ESN"
+                                                Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                            Case "FRA"
+                                                Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                            Case "PTB", "PTG"
+                                                Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                            Case "ITA"
+                                                Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
+                                        End Select
+                                    Case 1
+                                        Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                    Case 2
+                                        Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                    Case 3
+                                        Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                    Case 4
+                                        Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                    Case 5
+                                        Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
+                                End Select
+                                Application.DoEvents()
+                                Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                                Dim pkgInfo As DismPackageInfo = Nothing
+                                DynaLog.LogMessage("Detecting conditions imposed by host system...")
+                                If OSVer.Major >= 10 Then
+                                    DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
+                                    pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                                Else
+                                    DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
+                                    pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                                End If
+                                If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
+                                If pkgInfo IsNot Nothing Then PackageInfoList.Add(pkgInfo)
                             End If
-                            If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
-                            If pkgInfo IsNot Nothing Then PackageInfoList.Add(pkgInfo)
-                        End If
+                        Catch PkgInfoEx As DismException
+                            DynaLog.LogMessage("Could not get package file information. Error message: " & PkgInfoEx.Message)
+                        End Try
                     Next
                 End Using
             Catch DISMEx As DismException
                 DynaLog.LogMessage("Could not get package file information. Error message: " & DISMEx.Message)
-                MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, Label1.Text)
+                MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 Try
                     DismApi.Shutdown()

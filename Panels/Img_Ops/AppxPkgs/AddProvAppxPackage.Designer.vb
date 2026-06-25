@@ -25,9 +25,6 @@ Partial Class AddProvAppxPackage
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.AppxDetailsPanel = New System.Windows.Forms.Panel()
         Me.NoAppxFilePanel = New System.Windows.Forms.Panel()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -49,11 +46,12 @@ Partial Class AddProvAppxPackage
         Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -79,22 +77,20 @@ Partial Class AddProvAppxPackage
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Button10 = New System.Windows.Forms.Button()
-        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.Win10Title.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.AppxDetailsPanel.SuspendLayout()
         Me.NoAppxFilePanel.SuspendLayout()
         Me.AppxFilePanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -132,39 +128,6 @@ Partial Class AddProvAppxPackage
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
         Me.Cancel_Button.Text = "Cancel"
-        '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.PictureBox1)
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(1064, 48)
-        Me.Win10Title.TabIndex = 4
-        Me.Win10Title.Visible = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.add_appxpkg
-        Me.PictureBox1.Location = New System.Drawing.Point(1020, 8)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(312, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Add provisioned AppX packages"
         '
         'AppxDetailsPanel
         '
@@ -387,6 +350,27 @@ Partial Class AddProvAppxPackage
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "AppX dependencies"
         '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Controls.Add(Me.ListBox1)
+        Me.Panel3.Location = New System.Drawing.Point(7, 57)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(491, 122)
+        Me.Panel3.TabIndex = 4
+        '
+        'ListBox1
+        '
+        Me.ListBox1.AllowDrop = True
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.Location = New System.Drawing.Point(0, 0)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.ScrollAlwaysVisible = True
+        Me.ListBox1.Size = New System.Drawing.Size(491, 122)
+        Me.ListBox1.TabIndex = 1
+        '
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -439,17 +423,6 @@ Partial Class AddProvAppxPackage
         Me.Button6.TabIndex = 0
         Me.Button6.Text = "Add dependency..."
         Me.Button6.UseVisualStyleBackColor = True
-        '
-        'ListBox1
-        '
-        Me.ListBox1.AllowDrop = True
-        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(0, 0)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.ScrollAlwaysVisible = True
-        Me.ListBox1.Size = New System.Drawing.Size(491, 122)
-        Me.ListBox1.TabIndex = 1
         '
         'Label3
         '
@@ -708,15 +681,19 @@ Partial Class AddProvAppxPackage
         Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.Button10.UseVisualStyleBackColor = True
         '
-        'Panel3
+        'ImageTaskHeader1
         '
-        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.Controls.Add(Me.ListBox1)
-        Me.Panel3.Location = New System.Drawing.Point(7, 57)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(491, 122)
-        Me.Panel3.TabIndex = 4
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Global.DISMTools.My.Resources.Resources.add_appxpkg
+        Me.ImageTaskHeader1.ItemText = "Add provisioned AppX packages"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(1064, 48)
+        Me.ImageTaskHeader1.TabIndex = 13
         '
         'AddProvAppxPackage
         '
@@ -725,13 +702,13 @@ Partial Class AddProvAppxPackage
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1064, 621)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.Button10)
         Me.Controls.Add(Me.AppxDetailsPanel)
         Me.Controls.Add(Me.CheckBox2)
         Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.FlowLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -743,15 +720,13 @@ Partial Class AddProvAppxPackage
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Add provisioned AppX packages"
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.AppxDetailsPanel.ResumeLayout(False)
         Me.NoAppxFilePanel.ResumeLayout(False)
         Me.AppxFilePanel.ResumeLayout(False)
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
@@ -759,7 +734,6 @@ Partial Class AddProvAppxPackage
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -767,9 +741,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button3 As System.Windows.Forms.Button
@@ -822,5 +793,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
 
 End Class

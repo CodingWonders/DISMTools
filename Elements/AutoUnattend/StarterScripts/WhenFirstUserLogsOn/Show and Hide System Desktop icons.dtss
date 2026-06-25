@@ -1,0 +1,26 @@
+﻿Language: Batch
+Name: Show and Hide System Desktop icons
+Description: This script shows and hides desktop icons. 
+Customizable: Yes
+
+@ECHO OFF
+
+REM Configure the following values to your liking; set them to 0
+REM in order to show them, set them to 1 otherwise. Explorer needs
+REM to be restarted in order for the changes to be applied.
+
+REM You can run this script when users log on for the first time, as opposed
+REM to having it run when the first user logs on, if you are dealing with multiple users
+REM and want to have the same set of desktop icons.
+
+SET _ComputerIconHidden=0
+SET _ControlPanelIconHidden=0
+SET _UserFilesIconHidden=0
+SET _RecycleBinIconHidden=0
+SET _NetworkNeighborhoodIconHidden=0
+
+REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /F /V "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /T REG_DWORD /D %_ComputerIconHidden%
+REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /F /V "{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}" /T REG_DWORD /D %_ControlPanelIconHidden%
+REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /F /V "{59031A47-3F72-44A7-89C5-5595FE6B30EE}" /T REG_DWORD /D %_UserFilesIconHidden%
+REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /F /V "{645FF040-5081-101B-9F08-00AA002F954E}" /T REG_DWORD /D %_RecycleBinIconHidden%
+REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /F /V "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /T REG_DWORD /D %_NetworkNeighborhoodIconHidden%

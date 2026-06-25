@@ -1,6 +1,7 @@
 ﻿Language: PowerShell
 Name: Set Personalization Settings
 Description: This script configures settings related to color modes and accent colors on the user environment of the target system.
+Customizable: Yes
 
 # This script was grabbed from an answer file in Christoph Schneegans' service.
 

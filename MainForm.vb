@@ -12,7 +12,16 @@ Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
 Imports DISMTools.Elements
 Imports DISMTools.Elements.Contemporaneus
+Imports DISMTools.Elements.IniParserConfigurators
 Imports System.ComponentModel
+Imports IniParser
+Imports IniParser.Parser
+Imports IniParser.Model
+Imports System.Management
+Imports System.Threading.Tasks
+Imports System.Globalization
+Imports DISMTools.Elements.InfinityHome
+Imports System.Text.RegularExpressions
 
 Public Class MainForm
 
@@ -38,13 +47,11 @@ Public Class MainForm
     ' more settings will be added below this initial batch
     Public DismExe As String
     Public SaveOnSettingsIni As Boolean
-    Public VolatileMode As Boolean
     Public ColorMode As Integer
     Public Language As Integer
     Public LogFont As String
     Public LogFile As String
     Public LogLevel As Integer = 3
-    Public ImgOperationMode As Integer
     Public QuietOperations As Boolean
     Public SysNoRestart As Boolean
     Public UseScratch As Boolean
@@ -97,8 +104,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "DTVII_MK4"
+    Public dtBranch As String = "dt_pre_0.8_relcndid"
+    Public dt_codeName As String = "Infinity"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
@@ -172,6 +179,7 @@ Public Class MainForm
     Public RecentList As New List(Of Recents)
     Public VideoList As New List(Of Video)
     Dim thumbnailList As ImageList = New ImageList()
+    Dim VideoEx As Exception
 
     Dim AdkCopyEx As Exception
 
@@ -189,20 +197,48 @@ Public Class MainForm
     Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
 
     ' Preinstallation Environment Helper Settings
-    Public PEHelper_UnattendedFile As String = ""   ' A default unattended answer file for new ISOs
-    Public PEHelper_CopyToVentoy As Boolean = False ' Whether to copy new ISO files to Ventoy drives automatically
-    Public PEHelper_Use2023EFI As Boolean = False   ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+    Public PEHelper_UnattendedFile As String = ""       ' A default unattended answer file for new ISOs
+    Public PEHelper_CopyToVentoy As Boolean = False     ' Whether to copy new ISO files to Ventoy drives automatically
+    Public PEHelper_Use2023EFI As Boolean = False       ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+    Public PEHelper_IncludeSysDrvs As Boolean = True    ' Whether to include SCSI adapters and network controllers in the DTPE
 
     ' Web Search Settings
     Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
     Public SearchEngineAITolerance As Integer = 1    ' The amount of tolerance of AI in search engines
 
     ' Tour server
-    Public ReadOnly tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+    Public ReadOnly tourServer As DTHttpServer = New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+    Private ReadOnly videoServer As New DTHttpServer(Path.Combine(Application.StartupPath, "videos"), 2026)
 
     ' Contemporaneus Preview
     Public MountedImageList As New List(Of WindowsImage)
     Public CurrentImage As New WindowsImage()
+
+    ' Default PE Policy settings
+    Public ShowWatermark As Boolean = False
+    Public WDSHCGraphoView As Boolean = True
+    Public DTDimShowPnputilOut As Boolean = True
+    Public AutoUnattendCopytoSysprep As Boolean = False
+    Public PartTableOverridePreference As Integer = 0
+    Public UEFICA23Preference As Integer = 0
+    Public WDSHCConnAttempts As Integer = 5
+    Public PXEServerPort As Integer = 8080
+    Public KeyboardLayoutCode As String = "00000409"
+    Public KeyboardLayoutOverrideExistingLayout As Boolean = False
+    Public AnswerFileConflictResponse As Integer = 0
+
+    ' INFINITY settings
+    Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
+    Public HumanizeDates As Boolean = True                  ' Whether to display all date fields in a human-readable format
+
+    Public ReinitializeCurImage As Boolean = True
+
+    Private NewsFeedWebContent As WebBrowser
+    Private NewsFeedContent As String
+    Private NewsLastUpdateDate As Date
+
+    ' Infinity Home
+    Private InfinityHomeFacts As New List(Of InfinityFact)
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -576,11 +612,12 @@ Public Class MainForm
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
+        DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
         DynaLog.BeginLogging()
         DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
     End Sub
 
-    Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
 
         ' Prepare all user data
@@ -625,7 +662,13 @@ Public Class MainForm
             DynaLog.LogMessage("AME 10/11 has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
         End If
 
-        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\logs")
+            Catch ex As Exception
+                ' don't create such a folder then
+            End Try
+        End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
@@ -654,11 +697,11 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             DynaLog.LogMessage("A settings file has been found. Loading settings...")
             PerformSettingFileValidation()
-            Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
-            If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
+            Dim SettingReader As String = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+            If SettingReader.Contains("SaveOnSettingsIni=1") Or SettingReader.Contains("SaveOnSettingsIni = 1") Then
                 DynaLog.LogMessage("Settings are stored in the settings file (INI). Looking at them...")
                 LoadDTSettings(1)
-            ElseIf SettingReader.Text.Contains("SaveOnSettingsIni=0") Then
+            ElseIf SettingReader.Contains("SaveOnSettingsIni=0") Or SettingReader.Contains("SaveOnSettingsIni = 0") Then
                 DynaLog.LogMessage("Settings are stored in the registry. Looking at them...")
                 LoadDTSettings(0)
             End If
@@ -731,23 +774,12 @@ Public Class MainForm
         Timer1.Enabled = True
         LinkLabel12.LinkColor = CurrentTheme.ForegroundColor
         LinkLabel13.LinkColor = CurrentTheme.DisabledForegroundColor
+
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(InfinityStartPanel.Width / 2)
+
         DynaLog.LogMessage("Getting official news...")
         FeedWorker.RunWorkerAsync()
         Timer2.Enabled = True
-        LinkLabel22.LinkColor = ForeColor
-        If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf LatestNewsPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf TutorialVideoPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
-        End If
         If Not File.Exists(Application.StartupPath & "\recents.xml") Then
             DynaLog.LogMessage("The recents list file does not exist. Creating...")
             File.Create(Application.StartupPath & "\recents.xml")
@@ -801,9 +833,14 @@ Public Class MainForm
             End If
         End If
 
+        ' Fill in INFINITY HOME information
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(428)
+        Await Task.Run(Sub()
+                           DisplayInfinityComputerInformation()
+                       End Sub)
+
         ' Get videos
         ListView2.Items.Clear()
-        ListView2.View = View.LargeIcon
 
         DynaLog.LogMessage("Getting videos...")
 
@@ -978,22 +1015,258 @@ Public Class MainForm
         InstallationTypeRk.Close()
 
         PxeHelperServersTSMI.Enabled = InstallationType.ToLower().Contains("server")
+        UploadThisImageToMyWDSServerToolStripMenuItem.Enabled = InstallationType.ToLower().Contains("server")
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
 
         ' On higher DPI settings listview column widths don't adapt correctly, causing stuff to be even more truncated than
         ' necessary. Scale these appropriately
-        ColumnHeader1.Width = WindowHelper.ScaleLogical(726)
-        ColumnHeader2.Width = WindowHelper.ScaleLogical(320)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
-        ColumnHeader5.Width = WindowHelper.ScaleLogical(592)
 
         If InstallationType.Equals("Server Core", StringComparison.InvariantCultureIgnoreCase) Then
             MessageBox.Show("DISMTools has detected that it is running on a Windows Server Core system. Some functionality may not work as expected.",
                             "Windows Server Core detected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
+
+        ' If the window size is lower than 720p (1280x720), then we'll make it 1280x720, since,
+        ' even though we accept window sizes LOWER than 720p, we consider these either obscure
+        ' window sizes or unacceptable (such as 800x600).
+        If Width < WindowHelper.ScaleLogical(1280) And Height < WindowHelper.ScaleLogical(720) Then
+            Size = WindowHelper.ScaleSizeLogical(1280, 720)
+        End If
+
+        ' The web browser needs to be initialized way after everything else because ActiveX objects don't like
+        ' to be initialized in MTA threads (this async thread is one of those).
+        NewsFeedWebContent = New WebBrowser() With {
+            .Dock = DockStyle.Fill,
+            .ScriptErrorsSuppressed = True,
+            .AllowWebBrowserDrop = False
+        }
+        NewsContentPreviewerPanel.Controls.Add(NewsFeedWebContent)
+        NewsFeedWebContent.BringToFront()
+        AddHandler NewsFeedWebContent.DocumentCompleted, AddressOf NewsFeedWebContent_DocumentCompleted
+
+        ' Load the facts
+        Dim FactsFile As String = Path.Combine(Application.StartupPath, "bin", "facts.xml")
+        If File.Exists(FactsFile) Then
+            Try
+                Dim factsDeserializer As New XmlSerializer(GetType(InfinityFactsDocument))
+                Using fs As FileStream = File.OpenRead(FactsFile)
+                    Dim document As InfinityFactsDocument = CType(factsDeserializer.Deserialize(fs), InfinityFactsDocument)
+                    InfinityHomeFacts = document.Facts
+                End Using
+
+                If InfinityHomeFacts.Any() Then
+                    ' Show a random one
+                    FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
+                End If
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not load facts: " & ex.Message)
+            End Try
+        End If
+    End Sub
+
+    Private Sub DisplayInfinityComputerInformation()
+        Try
+            ' Wallpaper
+            Try
+                Dim WallpaperPath As String = ""
+                ' Wallpaper may be defined by group policy; check there first
+                Try
+                    Dim WallpaperPolicyRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Policies\System")
+                    WallpaperPath = WallpaperPolicyRk.GetValue("Wallpaper", "")
+                    WallpaperPolicyRk.Close()
+                    If WallpaperPath = "" OrElse Not File.Exists(WallpaperPath) Then Throw New Exception()
+                Catch ex As Exception
+                    ' Ignore and use general wallpaper
+                    Dim WallpaperRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop", False)
+                    WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
+                    WallpaperRk.Close()
+                End Try
+                ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
+            Catch ex As Exception
+
+            End Try
+
+            ' Localizable strings
+            Dim BuildStr As String = "",
+                SysMemStr As String = "",
+                CurDiskStr As String = "",
+                NoDomStr As String = "",
+                DomainStr As String = "",
+                BDCStr As String = "",
+                PDCStr As String = "",
+                NoIPStr As String = "",
+                ManualIPStr As String = "",
+                DHCPStr As String = ""
+
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            BuildStr = "build"
+                            SysMemStr = "of system memory"
+                            CurDiskStr = "used out of"
+                            NoDomStr = "Not part of a domain"
+                            DomainStr = "Part of a domain"
+                            BDCStr = "Backup domain controller"
+                            PDCStr = "Primary domain controller"
+                            NoIPStr = "Not connected to a network"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automatic (assigned by DHCP)"
+                        Case "ESN"
+                            BuildStr = "compilación"
+                            SysMemStr = "de memoria de sistema"
+                            CurDiskStr = "usados de"
+                            NoDomStr = "No es parte de un dominio"
+                            DomainStr = "Es parte de un dominio"
+                            BDCStr = "Controlador de dominio secundario"
+                            PDCStr = "Controlador de dominio primario"
+                            NoIPStr = "No conectado a una red"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automática (asignada por DHCP)"
+                        Case "FRA"
+                            BuildStr = "build"
+                            SysMemStr = "de la mémoire système"
+                            CurDiskStr = "utilisé sur"
+                            NoDomStr = "N'appartient pas à un domaine"
+                            DomainStr = "Appartient à un domaine"
+                            BDCStr = "Contrôleur de domaine de secours"
+                            PDCStr = "Contrôleur de domaine principal"
+                            NoIPStr = "Non connecté à un réseau"
+                            ManualIPStr = "Manuel"
+                            DHCPStr = "Automatique (attribué par DHCP)"
+                        Case "PTB", "PTG"
+                            BuildStr = "compilação"
+                            SysMemStr = "da memória do sistema"
+                            CurDiskStr = "utilizada de"
+                            NoDomStr = "Não faz parte de um domínio"
+                            DomainStr = "Faz parte de um domínio"
+                            BDCStr = "Controlador de domínio de backup"
+                            PDCStr = "Controlador de domínio primário"
+                            NoIPStr = "Não está ligado a uma rede"
+                            ManualIPStr = "Manual"
+                            DHCPStr = "Automático (atribuído por DHCP)"
+                        Case "ITA"
+                            BuildStr = "build"
+                            SysMemStr = "della memoria di sistema"
+                            CurDiskStr = "utilizzata su"
+                            NoDomStr = "Non fa parte di un dominio"
+                            DomainStr = "Fa parte di un dominio"
+                            BDCStr = "Controller di dominio di backup"
+                            PDCStr = "Controller di dominio primario"
+                            NoIPStr = "Non connesso a una rete"
+                            ManualIPStr = "Manuale"
+                            DHCPStr = "Automatico (assegnato da DHCP)"
+                    End Select
+                Case 1
+                    BuildStr = "build"
+                    SysMemStr = "of system memory"
+                    CurDiskStr = "used out of"
+                    NoDomStr = "Not part of a domain"
+                    DomainStr = "Part of a domain"
+                    BDCStr = "Backup domain controller"
+                    PDCStr = "Primary domain controller"
+                    NoIPStr = "Not connected to a network"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automatic (assigned by DHCP)"
+                Case 2
+                    BuildStr = "compilación"
+                    SysMemStr = "de memoria de sistema"
+                    CurDiskStr = "usados de"
+                    NoDomStr = "No es parte de un dominio"
+                    DomainStr = "Es parte de un dominio"
+                    BDCStr = "Controlador de dominio secundario"
+                    PDCStr = "Controlador de dominio primario"
+                    NoIPStr = "No conectado a una red"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automática (asignada por DHCP)"
+                Case 3
+                    BuildStr = "build"
+                    SysMemStr = "de la mémoire système"
+                    CurDiskStr = "utilisé sur"
+                    NoDomStr = "N'appartient pas à un domaine"
+                    DomainStr = "Appartient à un domaine"
+                    BDCStr = "Contrôleur de domaine de secours"
+                    PDCStr = "Contrôleur de domaine principal"
+                    NoIPStr = "Non connecté à un réseau"
+                    ManualIPStr = "Manuel"
+                    DHCPStr = "Automatique (attribué par DHCP)"
+                Case 4
+                    BuildStr = "compilação"
+                    SysMemStr = "da memória do sistema"
+                    CurDiskStr = "utilizada de"
+                    NoDomStr = "Não faz parte de um domínio"
+                    DomainStr = "Faz parte de um domínio"
+                    BDCStr = "Controlador de domínio de backup"
+                    PDCStr = "Controlador de domínio primário"
+                    NoIPStr = "Não está ligado a uma rede"
+                    ManualIPStr = "Manual"
+                    DHCPStr = "Automático (atribuído por DHCP)"
+                Case 5
+                    BuildStr = "build"
+                    SysMemStr = "della memoria di sistema"
+                    CurDiskStr = "utilizzata su"
+                    NoDomStr = "Non fa parte di un dominio"
+                    DomainStr = "Fa parte di un dominio"
+                    BDCStr = "Controller di dominio di backup"
+                    PDCStr = "Controller di dominio primario"
+                    NoIPStr = "Non connesso a una rete"
+                    ManualIPStr = "Manuale"
+                    DHCPStr = "Automatico (assegnato da DHCP)"
+            End Select
+
+            ' Computer Information
+            ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build)
+            Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
+            Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
+            Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Label, FreeSpace, Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
+            Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
+            ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
+            ComputerModelLabel.Text = ComputerSystemProps("Model")
+            ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
+            ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
+                                                                                               (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3), SysMemStr)
+            Try
+                Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
+                    DiskCapacity As Long = CurrentVolProps("Capacity"),
+                    DiskFreeSpace As Long = CurrentVolProps("FreeSpace"),
+                    DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
+                    DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
+                    DiskLabel As String = CurrentVolProps("Label")
+                ComputerStorageLabel.Text = String.Format("{0}\{1}: {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", String.Format(" ({0})", DiskLabel), ""),
+                                                                                            Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            CurDiskStr,
+                                                                                            Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not display disk information: " & ex.Message)
+            End Try
+            Select Case ComputerSystemProps("DomainRole")
+                Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
+                    ComputerDomainStatusLabel.Text = NoDomStr
+                Case DomainRole.MemberWorkstation, DomainRole.MemberServer
+                    ComputerDomainStatusLabel.Text = DomainStr
+                Case DomainRole.BackupDomainController
+                    ComputerDomainStatusLabel.Text = BDCStr
+                Case DomainRole.PrimaryDomainController
+                    ComputerDomainStatusLabel.Text = PDCStr
+            End Select
+            ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
+            Try
+                Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
+                Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
+                Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
+                Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
+                ComputerDhcpStatusLabel.Text = If(DhcpEnabled, DHCPStr, ManualIPStr)
+            Catch ex As Exception
+                ComputerDhcpStatusLabel.Text = NoIPStr
+            End Try
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not display computer info: " & ex.Message)
+        End Try
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -1141,10 +1414,8 @@ Public Class MainForm
             End Try
             DynaLog.LogMessage("Reading update information...")
             If File.Exists(Application.StartupPath & "\info.ini") Then
-                Dim infoRTB As New RichTextBox With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\info.ini")
-                }
-                For Each Line In infoRTB.Lines
+                Dim UpdateInfoFileLines As String() = File.ReadAllLines(Application.StartupPath & "\info.ini")
+                For Each Line In UpdateInfoFileLines
                     If Line.StartsWith("LatestVer") Then
                         DynaLog.LogMessage("Getting latest version...")
                         latestVer = Line.Replace("LatestVer = ", "").Trim()
@@ -1199,7 +1470,7 @@ Public Class MainForm
         End Using
     End Sub
 
-    Sub UnblockPSHelpers()
+    Private Sub UnblockPSHelpers()
         DynaLog.LogMessage("Unblocking PowerShell scripts for them to run freely (for those who want technical terms, removing Intenet zone alternate data streams from NTFS)...")
         Dim PSUnblocker As New Process()
         PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
@@ -1207,7 +1478,6 @@ Public Class MainForm
         PSUnblocker.StartInfo.CreateNoWindow = True
         PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         PSUnblocker.Start()
-        PSUnblocker.WaitForExit()
     End Sub
 
     Sub ChangeImgStatus()
@@ -1288,13 +1558,6 @@ Public Class MainForm
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
                 Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
-                If CInt(PrgKey.GetValue("Volatile")) = 1 Then
-                    DynaLog.LogMessage("Volatile mode detected. Setting application has stopped")
-                    VolatileMode = True
-                    Exit Sub
-                Else
-                    VolatileMode = False
-                End If
                 DismExe = PrgKey.GetValue("DismExe").ToString().Replace(Quote, "").Trim()
                 SaveOnSettingsIni = (CInt(PrgKey.GetValue("SaveOnSettingsIni")) = 1)
                 PrgKey.Close()
@@ -1326,7 +1589,10 @@ Public Class MainForm
                 PEHelper_UnattendedFile = ImgOpKey.GetValue("PEHelper.UnattendedFile").ToString().Replace(Quote, "").Trim()
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
+                PEHelper_IncludeSysDrvs = (CInt(ImgOpKey.GetValue("PEHelper.IncludeSysDrvs")) = 1)
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
+                PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
+                HumanizeDates = CInt(ImgOpKey.GetValue("HumanizeDates", 1)) = 1
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1356,8 +1622,8 @@ Public Class MainForm
                 AutoCleanMounts = (CInt(ShutdownKey.GetValue("AutoCleanMounts")) = 1)
                 ShutdownKey.Close()
                 Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
-                Width = CInt(WndKey.GetValue("WndWidth"))
-                Height = CInt(WndKey.GetValue("WndHeight"))
+                Width = WindowHelper.ScaleLogical(CInt(WndKey.GetValue("WndWidth")))
+                Height = WindowHelper.ScaleLogical(CInt(WndKey.GetValue("WndHeight")))
                 StartPosition = If(CInt(WndKey.GetValue("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
                 If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
                 If StartPosition <> FormStartPosition.CenterScreen Then
@@ -1378,6 +1644,19 @@ Public Class MainForm
                 SearchEngineName = SearchKey.GetValue("EngineName").ToString().Replace(Quote, "").Trim()
                 SearchEngineAITolerance = CInt(SearchKey.GetValue("AITolerance"))
                 SearchKey.Close()
+                Dim PEPolicyKey As RegistryKey = Key.OpenSubKey("PEPolicy")
+                ShowWatermark = (CInt(PEPolicyKey.GetValue("ShowWatermark", 0)) = 1)
+                WDSHCGraphoView = (CInt(PEPolicyKey.GetValue("WDSHCGraphoView", 1)) = 1)
+                DTDimShowPnputilOut = (CInt(PEPolicyKey.GetValue("DTDimShowPnputilOut", 1)) = 1)
+                WDSHCConnAttempts = (CInt(PEPolicyKey.GetValue("WDSHCConnAttempts", 5)))
+                PartTableOverridePreference = (CInt(PEPolicyKey.GetValue("PartTableOverridePreference", 0)))
+                UEFICA23Preference = (CInt(PEPolicyKey.GetValue("UEFICA23Preference", 0)))
+                AutoUnattendCopytoSysprep = (CInt(PEPolicyKey.GetValue("AutoUnattendCopytoSysprep", 0)) = 1)
+                PXEServerPort = PEPolicyKey.GetValue("PXEServerPort", 8080)
+                KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
+                KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
+                AnswerFileConflictResponse = CInt(PEPolicyKey.GetValue("AnswerFileConflictResponse", 0))
+                PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1390,305 +1669,117 @@ Public Class MainForm
             End Try
         ElseIf LoadMode = 1 Then
             DynaLog.LogMessage("Load Mode is 1 -- Getting from INI File...")
-            If File.Exists(Application.StartupPath & "\" & "settings.ini") Then
+            If File.Exists(Path.Combine(Application.StartupPath, "settings.ini")) Then
                 DynaLog.LogMessage("Preparing to grab values...")
-                DTSettingForm.RichTextBox1.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                ' Perform the Volatile mode check before applying any settings
-                If DTSettingForm.RichTextBox1.Text.Contains("Volatile=0") Then
-                    VolatileMode = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Volatile=1") Then
-                    DynaLog.LogMessage("Volatile mode detected. Setting application has stopped")
-                    VolatileMode = True
-                    ' Cancel setting application
-                    Exit Sub
-                End If
-                DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
-                If DismExe.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then DismExe = DismExe.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
-                    If Not ForceINILoad Then
+                Try
+                    Dim parser As New IniDataParser(New SettingsParserConfiguration())
+                    Dim settingData As IniData = parser.Parse(File.ReadAllText(Path.Combine(Application.StartupPath, "settings.ini"), UTF8))
+                    DismExe = settingData("Program")("DismExe").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    SaveOnSettingsIni = CInt(settingData("Program")("SaveOnSettingsIni")) = 1
+                    If Not SaveOnSettingsIni AndAlso Not File.Exists(Path.Combine(Application.StartupPath, "portable")) Then
                         DynaLog.LogMessage("We are not forcing load with INI. Proceeding to load from registry...")
-                        SaveOnSettingsIni = False
                         LoadDTSettings(0)
                         Exit Sub
+                    End If
+                    ColorMode = CInt(settingData("Personalization")("ColorMode"))
+                    If ColorMode < 0 Then ColorMode = 0
+                    If ColorMode > 2 Then ColorMode = 2
+                    Language = CInt(settingData("Personalization")("Language"))
+                    If Language < 0 Then Language = 0
+                    If Language > 5 Then Language = 5
+                    ChangeLangs(Language)
+                    LightThemeIndex = CInt(settingData("Personalization")("ColorTheme_Light"))
+                    DarkThemeIndex = CInt(settingData("Personalization")("ColorTheme_Dark"))
+                    ChangePrgColors(ColorMode)
+                    LogFont = settingData("Personalization")("LogFont").Replace(Quote, "").Trim()
+                    LogFontSize = CInt(settingData("Personalization")("LogFontSi"))
+                    LogFontIsBold = CInt(settingData("Personalization")("LogFontBold")) = 1
+                    ProgressPanelStyle = CInt(settingData("Personalization")("SecondaryProgressPanelStyle"))
+                    If ProgressPanelStyle < 0 Then ProgressPanelStyle = 0
+                    If ProgressPanelStyle > 1 Then ProgressPanelStyle = 1
+                    AllCaps = CInt(settingData("Personalization")("AllCaps")) = 1
+                    If AllCaps Then
+                        FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
+                        ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
+                        CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
+                        ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
+                        HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
+                    End If
+                    ExpandedProgressPanel = CInt(settingData("Personalization")("ExpandedProgressPanel")) = 1
+                    ShowDateAndTime = CInt(settingData("Personalization")("ShowDateAndTime")) = 1
+                    LogFile = settingData("Logs")("LogFile").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    LogLevel = CInt(settingData("Logs")("LogLevel"))
+                    If LogLevel < 1 Then LogLevel = 1
+                    If LogLevel > 4 Then LogLevel = 4
+                    AutoLogs = CInt(settingData("Logs")("AutoLogs")) = 1
+                    SystemEditor = settingData("Logs")("SystemEditor").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    EnableDynaLog = CInt(settingData("Logs")("EnableDynaLog")) = 1
+                    QuietOperations = CInt(settingData("ImgOps")("Quiet")) = 1
+                    SysNoRestart = CInt(settingData("ImgOps")("NoRestart")) = 1
+                    NoNTSamMappings = CInt(settingData("ImgOps")("NoNTSamMappings")) = 1
+                    PEHelper_UnattendedFile = settingData("ImgOps")("PEHelper.UnattendedFile").Replace(Quote, "").Trim()
+                    PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
+                    PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
+                    PEHelper_IncludeSysDrvs = CInt(settingData("ImgOps")("PEHelper.IncludeSysDrvs")) = 1
+                    AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
+                    PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
+                    HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
+                    If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
+                    If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
+                    UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
+                    AutoScrDir = CInt(settingData("ScratchDir")("AutoScratch")) = 1
+                    ScratchDir = settingData("ScratchDir")("ScratchDirLocation").Replace(Quote, "")
+                    EnglishOutput = CInt(settingData("Output")("EnglishOutput")) = 1
+                    ReportView = CInt(settingData("Output")("ReportView"))
+                    If ReportView < 0 Then ReportView = 0
+                    If ReportView > 1 Then ReportView = 1
+                    NotificationShow = CInt(settingData("BgProcesses")("ShowNotification")) = 1
+                    NotificationFrequency = CInt(settingData("BgProcesses")("NotifyFrequency"))
+                    If NotificationFrequency < 0 Then NotificationFrequency = 0
+                    If NotificationFrequency > 1 Then NotificationFrequency = 1
+                    ExtAppxGetter = CInt(settingData("AdvBgProcesses")("EnhancedAppxGetter")) = 1
+                    SkipNonRemovable = CInt(settingData("AdvBgProcesses")("SkipNonRemovable")) = 1
+                    AllDrivers = CInt(settingData("AdvBgProcesses")("DetectAllDrivers")) = 1
+                    SkipFrameworks = CInt(settingData("AdvBgProcesses")("SkipFrameworks")) = 1
+                    RunAllProcs = CInt(settingData("AdvBgProcesses")("RunAllProcs")) = 1
+                    StartupRemount = CInt(settingData("Startup")("RemountImages")) = 1
+                    StartupUpdateCheck = CInt(settingData("Startup")("CheckForUpdates")) = 1
+                    AutoCleanMounts = CInt(settingData("Shutdown")("AutoCleanMounts")) = 1
+                    Width = WindowHelper.ScaleLogical(CInt(settingData("WndParams")("WndWidth")))
+                    Height = WindowHelper.ScaleLogical(CInt(settingData("WndParams")("WndHeight")))
+                    StartPosition = If(CInt(settingData("WndParams")("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                    If StartPosition = FormStartPosition.CenterScreen Then
+                        Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
                     Else
-                        SaveOnSettingsIni = True
+                        Left = CInt(settingData("WndParams")("WndLeft"))
+                        Top = CInt(settingData("WndParams")("WndTop"))
                     End If
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=1") Then
-                    SaveOnSettingsIni = True
-                End If
-                ' Detect program color settings: 0 - Detect system settings
-                '                                1 - Light mode
-                '                                2 - Dark mode
-                If DTSettingForm.RichTextBox1.Text.Contains("ColorMode=0") Then
-                    ColorMode = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorMode=1") Then
-                    ColorMode = 1
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorMode=2") Then
-                    ColorMode = 2
-                End If
-                ' Detect language settings: 0 - Detect system language (using "ThreeLetterWindowsLanguageName")
-                '                         nnn - Apply specific language
-                If DTSettingForm.RichTextBox1.Text.Contains("Language=0") Then
-                    ' The note above also applies to the Automatic language setting
-                    Language = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=1") Then
-                    Language = 1
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=2") Then
-                    Language = 2
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=3") Then
-                    Language = 3
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=4") Then
-                    Language = 4
-                End If
-                ' Apply language settings immediately
-                ChangeLangs(Language)
-                ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
-                ' it will revert to "Consolas"
-                For Each line In DTSettingForm.RichTextBox1.Lines
-                    If line.StartsWith("ColorTheme_Light=", StringComparison.OrdinalIgnoreCase) Then
-                        LightThemeIndex = CInt(line.Replace("ColorTheme_Light=", "").Trim())
-                    ElseIf line.StartsWith("ColorTheme_Dark=", StringComparison.OrdinalIgnoreCase) Then
-                        DarkThemeIndex = CInt(line.Replace("ColorTheme_Dark=", "").Trim())
-                    ElseIf line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
-                        LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
-                    ElseIf line.StartsWith("LogFontSi=", StringComparison.OrdinalIgnoreCase) Then
-                        LogFontSize = CInt(line.Replace("LogFontSi=", "").Trim())
-                    ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
-                        ' Detect log file path. If file does not exist, create one
-                        LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
-                        If LogFile.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    ElseIf line.StartsWith("SystemEditor=", StringComparison.OrdinalIgnoreCase) Then
-                        SystemEditor = line.Replace("SystemEditor=", "").Trim().Replace(Quote, "").Trim()
-                        If SystemEditor.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then SystemEditor = SystemEditor.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
-                        ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
-                    ElseIf line.StartsWith("PEHelper.UnattendedFile=", StringComparison.OrdinalIgnoreCase) Then
-                        PEHelper_UnattendedFile = line.Replace("PEHelper.UnattendedFile=", "").Trim().Replace(Quote, "").Trim()
-                    ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
-                        Width = CInt(line.Replace("WndWidth=", "").Trim())
-                    ElseIf line.StartsWith("WndHeight=", StringComparison.OrdinalIgnoreCase) Then
-                        Height = CInt(line.Replace("WndHeight=", "").Trim())
-                    ElseIf line.StartsWith("WndCenter=", StringComparison.OrdinalIgnoreCase) Then
-                        StartPosition = If(CInt(line.Replace("WndCenter=", "").Trim()) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
-                        If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
-                    ElseIf line.StartsWith("WndLeft=", StringComparison.OrdinalIgnoreCase) Then
-                        If StartPosition <> FormStartPosition.CenterScreen Then Left = CInt(line.Replace("WndLeft=", "").Trim())
-                    ElseIf line.StartsWith("WndTop=", StringComparison.OrdinalIgnoreCase) Then
-                        If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
-                    ElseIf line.StartsWith("EngineName=", StringComparison.OrdinalIgnoreCase) Then
-                        SearchEngineName = line.Replace("EngineName=", "").Trim().Replace(Quote, "")
-                    ElseIf line.StartsWith("AppxRemovalDisplayNameFormat=", StringComparison.OrdinalIgnoreCase) Then
-                        AppxDisplayNameFormatOnRemoval = CInt(line.Replace("AppxRemovalDisplayNameFormat=", "").Trim())
-                    ElseIf line.StartsWith("AITolerance=", StringComparison.OrdinalIgnoreCase) Then
-                        SearchEngineAITolerance = CInt(line.Replace("AITolerance=", "").Trim())
-                    End If
-                Next
-                ' Apply program colors immediately
-                ChangePrgColors(ColorMode)
-                If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
-                    LogFontIsBold = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
-                    LogFontIsBold = True
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=0") Then
-                    ProgressPanelStyle = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=1") Then
-                    ProgressPanelStyle = 1
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AllCaps=0") Then
-                    AllCaps = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AllCaps=1") Then
-                    AllCaps = True
-                    FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
-                    ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
-                    CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
-                    ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
-                    HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=0") Then
-                    ExpandedProgressPanel = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
-                    ExpandedProgressPanel = 1
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=0") Then
-                    ShowDateAndTime = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=1") Then
-                    ShowDateAndTime = True
-                End If
+                    WindowState = If(CInt(settingData("WndParams")("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
+                    SkipQuestions = CInt(settingData("InfoSaver")("SkipQuestions")) = 1
+                    AutoCompleteInfo(0) = CInt(settingData("InfoSaver")("Pkg_CompleteInfo")) = 1
+                    AutoCompleteInfo(1) = CInt(settingData("InfoSaver")("Feat_CompleteInfo")) = 1
+                    AutoCompleteInfo(2) = CInt(settingData("InfoSaver")("AppX_CompleteInfo")) = 1
+                    AutoCompleteInfo(3) = CInt(settingData("InfoSaver")("Cap_CompleteInfo")) = 1
+                    AutoCompleteInfo(4) = CInt(settingData("InfoSaver")("Drv_CompleteInfo")) = 1
+                    SearchEngineName = settingData("SearchSettings")("EngineName").Replace(Quote, "")
+                    SearchEngineAITolerance = CInt(settingData("SearchSettings")("AITolerance"))
+                    If SearchEngineAITolerance < 0 Then SearchEngineAITolerance = 0
+                    If SearchEngineAITolerance > 2 Then SearchEngineAITolerance = 2
+                    ShowWatermark = CInt(settingData("PEPolicy")("ShowWatermark")) = 1
+                    WDSHCGraphoView = CInt(settingData("PEPolicy")("WDSHCGraphoView")) = 1
+                    DTDimShowPnputilOut = CInt(settingData("PEPolicy")("DTDimShowPnputilOut")) = 1
+                    WDSHCConnAttempts = CInt(settingData("PEPolicy")("WDSHCConnAttempts"))
+                    PartTableOverridePreference = CInt(settingData("PEPolicy")("PartTableOverridePreference"))
+                    UEFICA23Preference = CInt(settingData("PEPolicy")("UEFICA23Preference"))
+                    AutoUnattendCopytoSysprep = CInt(settingData("PEPolicy")("AutoUnattendCopyToSysprep")) = 1
+                    PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
+                    KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
+                    KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
+                    AnswerFileConflictResponse = CInt(settingData("PEPolicy")("AnswerFileConflictResponse"))
+                Catch ex As Exception
+                    DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
+                End Try
                 ProjectView.Visible = True
-                ' Detect log file level: 1 - Errors only
-                '                        2 - Errors and warnings
-                '                        3 - Errors, warnings and informations
-                '                        4 - Errors, warnings, informations and debug messages
-                If DTSettingForm.RichTextBox1.Text.Contains("LogLevel=1") Then
-                    LogLevel = 1
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=2") Then
-                    LogLevel = 2
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=3") Then
-                    LogLevel = 3
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=4") Then
-                    LogLevel = 4
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=0") Then
-                    AutoLogs = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=1") Then
-                    AutoLogs = True
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("EnableDynaLog=0") Then
-                    EnableDynaLog = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnableDynaLog=1") Then
-                    EnableDynaLog = True
-                End If
-                ' Detect image operation mode: 0 - Offline mode (mounted Windows image)
-                '                              1 - Online mode
-                ' Do note that online mode is not ready yet
-                If DTSettingForm.RichTextBox1.Text.Contains("ImgOperationMode=0") Then
-                    ImgOperationMode = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ImgOperationMode=1") Then
-                    ImgOperationMode = 1
-                End If
-                ' Detect whether operations are performed quietly
-                If DTSettingForm.RichTextBox1.Text.Contains("Quiet=0") Then
-                    QuietOperations = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Quiet=1") Then
-                    QuietOperations = True
-                End If
-                ' Detect whether system should be restarted automatically
-                If DTSettingForm.RichTextBox1.Text.Contains("NoRestart=0") Then
-                    SysNoRestart = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoRestart=1") Then
-                    SysNoRestart = True
-                End If
-                ' Detect whether to map NT account info with pckgdeps
-                If DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=0") Then
-                    NoNTSamMappings = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=1") Then
-                    NoNTSamMappings = True
-                End If
-                ' Detect whether to copy ISOs to Ventoy drives
-                If DTSettingForm.RichTextBox1.Text.Contains("PEHelper.CopyToVentoy=0") Then
-                    PEHelper_CopyToVentoy = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("PEHelper.CopyToVentoy=1") Then
-                    PEHelper_CopyToVentoy = True
-                End If
-                ' Detect whether to use new EFI boot binaries for new ISOs
-                If DTSettingForm.RichTextBox1.Text.Contains("PEHelper.Use2023EFI=0") Then
-                    PEHelper_Use2023EFI = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("PEHelper.Use2023EFI=1") Then
-                    PEHelper_Use2023EFI = True
-                End If
-                ' Detect whether to use scratch directory
-                If DTSettingForm.RichTextBox1.Text.Contains("UseScratch=0") Then
-                    UseScratch = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("UseScratch=1") Then
-                    UseScratch = True
-                End If
-                ' Detect scratch directory
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=1") Then
-                    AutoScrDir = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=0") Then
-                    AutoScrDir = False
-                End If
-                ' Detect whether output should be in English
-                If DTSettingForm.RichTextBox1.Text.Contains("EnglishOutput=0") Then
-                    EnglishOutput = False
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnglishOutput=1") Then
-                    EnglishOutput = True
-                End If
-                ' Detect report view: 0 - List
-                '                     1 - Table
-                If DTSettingForm.RichTextBox1.Text.Contains("ReportView=0") Then
-                    ReportView = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ReportView=1") Then
-                    ReportView = 1
-                End If
-                ' Show notification: 1 - True
-                '                    0 - False
-                If DTSettingForm.RichTextBox1.Text.Contains("ShowNotification=1") Then
-                    NotificationShow = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowNotification=0") Then
-                    NotificationShow = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=0") Then
-                    NotificationFrequency = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=1") Then
-                    NotificationFrequency = 1
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=1") Then
-                    ExtAppxGetter = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=0") Then
-                    ExtAppxGetter = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=1") Then
-                    SkipNonRemovable = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=0") Then
-                    SkipNonRemovable = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=1") Then
-                    AllDrivers = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=0") Then
-                    AllDrivers = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=1") Then
-                    SkipFrameworks = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=0") Then
-                    SkipFrameworks = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=1") Then
-                    RunAllProcs = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=0") Then
-                    RunAllProcs = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
-                    StartupRemount = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RemountImages=0") Then
-                    StartupRemount = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=1") Then
-                    StartupUpdateCheck = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
-                    StartupUpdateCheck = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=1") Then
-                    AutoCleanMounts = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=0") Then
-                    AutoCleanMounts = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=1") Then
-                    WindowState = FormWindowState.Maximized
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
-                    WindowState = FormWindowState.Normal
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=1") Then
-                    SkipQuestions = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=0") Then
-                    SkipQuestions = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=1") Then
-                    AutoCompleteInfo(0) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=0") Then
-                    AutoCompleteInfo(0) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=1") Then
-                    AutoCompleteInfo(1) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=0") Then
-                    AutoCompleteInfo(1) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=1") Then
-                    AutoCompleteInfo(2) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=0") Then
-                    AutoCompleteInfo(2) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=1") Then
-                    AutoCompleteInfo(3) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=0") Then
-                    AutoCompleteInfo(3) = False
-                End If
-                If DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=1") Then
-                    AutoCompleteInfo(4) = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
-                    AutoCompleteInfo(4) = False
-                End If
             Else
                 DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW) and reloading settings...")
                 GenerateDTSettings()
@@ -1747,6 +1838,72 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
+        If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then PartTableOverridePreference = 0
+        If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then UEFICA23Preference = 0
+        If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then WDSHCConnAttempts = 5
+        If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then PXEServerPort = 8080
+        If AnswerFileConflictResponse < 0 OrElse AnswerFileConflictResponse > 2 Then AnswerFileConflictResponse = 0
+        Try
+            Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
+            Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
+            KeyboardLayoutRk.Close()
+            If Not KeyboardLayoutCodes.Contains(KeyboardLayoutCode) Then KeyboardLayoutCode = "00000409"
+        Catch ex As Exception
+
+        End Try
+        WriteDefaultPEPolicy()
+    End Sub
+
+    Public Sub WriteDefaultPEPolicy()
+        Dim PartTableOverridePreferenceStr As String = "NoOverride"
+        Select Case PartTableOverridePreference
+            Case 0
+                PartTableOverridePreferenceStr = "NoOverride"
+            Case 1
+                PartTableOverridePreferenceStr = "AlwaysMBR"
+            Case 2
+                PartTableOverridePreferenceStr = "AlwaysGPT"
+        End Select
+        Dim UEFICA23PreferenceStr As String = "AskUser"
+        Select Case UEFICA23Preference
+            Case 0
+                UEFICA23PreferenceStr = "AskUser"
+            Case 1
+                UEFICA23PreferenceStr = "UseNever"
+            Case 2
+                UEFICA23PreferenceStr = "UseAlways"
+        End Select
+        Dim AnswerFileConflictResponseStr As String = "AskUser"
+        Select Case AnswerFileConflictResponse
+            Case 0
+                AnswerFileConflictResponseStr = "AskUser"
+            Case 1
+                AnswerFileConflictResponseStr = "PreferISO"
+            Case 2
+                AnswerFileConflictResponseStr = "PreferWIM"
+        End Select
+
+        Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
+                                                  "[HKEY_LOCAL_MACHINE\WINPESOFT\DISMTools\Preinstallation Environment\Policies]{0}" &
+                                                  "{1}ShowWatermark{1}=dword:0000000{2}{0}" &
+                                                  "{1}UEFICA23Preference{1}={1}{3}{1}{0}" &
+                                                  "{1}PartTableOverridePreference{1}={1}{4}{1}{0}" &
+                                                  "{1}WDSHCConnAttempts{1}=dword:{5}{0}" &
+                                                  "{1}WDSHCGraphoView{1}=dword:0000000{6}{0}" &
+                                                  "{1}DTDimShowPnputilOut{1}=dword:0000000{7}{0}" &
+                                                  "{1}AutoUnattendCopytoSysprep{1}=dword:0000000{8}{0}" &
+                                                  "{1}PXEServerPort{1}=dword:{9}{0}" &
+                                                  "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
+                                                  "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
+                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}",
+                                                  CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
+                                                  Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr)
+        Try
+            File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
+        Catch ex As Exception
+            Exit Sub
+        End Try
     End Sub
 
     ''' <summary>
@@ -1755,61 +1912,74 @@ Public Class MainForm
     ''' <remarks></remarks>
     Sub ShowDTSettings()
         DynaLog.LogMessage("Program Settings:" & CrLf &
-                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf &
-                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf &
-                           "ColorMode                  =    " & ColorMode & CrLf &
-                           "ColorTheme_Light           =    " & LightThemeIndex & CrLf &
-                           "ColorTheme_Dark            =    " & DarkThemeIndex & CrLf &
-                           "Language                   =    " & Language & CrLf &
-                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf &
-                           "LogFontSi                  =    " & LogFontSize & CrLf &
-                           "LogFontBold                =    " & LogFontIsBold & CrLf &
-                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf &
-                           "AllCaps                    =    " & AllCaps & CrLf &
-                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf &
-                           "ShowDateAndTime            =    " & ShowDateAndTime & CrLf &
-                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf &
-                           "LogLevel                   =    " & LogLevel & CrLf &
-                           "AutoLogs                   =    " & AutoLogs & CrLf &
-                           "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf &
-                           "EnableDynaLog              =    " & EnableDynaLog & CrLf &
-                           "ImgOperationMode           =    " & ImgOperationMode & CrLf &
-                           "Quiet                      =    " & QuietOperations & CrLf &
-                           "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
-                           "WebSearchEngineName        =    " & SearchEngineName & CrLf &
-                           "WebSearchAITolerance       =    " & SearchEngineAITolerance & CrLf &
-                           "PEHelper_UnattendedFile    =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
-                           "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
-                           "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
-                           "NoRestart                  =    " & SysNoRestart & CrLf &
-                           "AppxRemovalDisplayNameFrmt =    " & AppxDisplayNameFormatOnRemoval & CrLf &
-                           "UseScratch                 =    " & UseScratch & CrLf &
-                           "AutoScratch                =    " & AutoScrDir & CrLf &
-                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf &
-                           "EnglishOutput              =    " & EnglishOutput & CrLf &
-                           "ReportView                 =    " & ReportView & CrLf &
-                           "ShowNotification           =    " & NotificationShow & CrLf &
-                           "NotifyFrequency            =    " & NotificationFrequency & CrLf &
-                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf &
-                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf &
-                           "DetectAllDrivers           =    " & AllDrivers & CrLf &
-                           "SkipFrameworks             =    " & SkipFrameworks & CrLf &
-                           "RunAllProcs                =    " & RunAllProcs & CrLf &
-                           "RemountImages              =    " & StartupRemount & CrLf &
-                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf &
-                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf &
-                           "WndWidth                   =    " & WndWidth & CrLf &
-                           "WndHeight                  =    " & WndHeight & CrLf &
-                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
-                           "WndLeft                    =    " & WndLeft & CrLf &
-                           "WndTop                     =    " & WndTop & CrLf &
-                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf &
-                           "SkipQuestions              =    " & SkipQuestions & CrLf &
-                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf &
-                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf &
-                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf &
-                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf &
-                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
+                           "DISMExe                             =    " & Quote & DismExe & Quote & CrLf &
+                           "SaveOnSettingsIni                   =    " & SaveOnSettingsIni & CrLf &
+                           "ColorMode                           =    " & ColorMode & CrLf &
+                           "ColorTheme_Light                    =    " & LightThemeIndex & CrLf &
+                           "ColorTheme_Dark                     =    " & DarkThemeIndex & CrLf &
+                           "Language                            =    " & Language & CrLf &
+                           "LogFont                             =    " & Quote & LogFont & Quote & CrLf &
+                           "LogFontSi                           =    " & LogFontSize & CrLf &
+                           "LogFontBold                         =    " & LogFontIsBold & CrLf &
+                           "SecondaryProgressPanelStyle         =    " & ProgressPanelStyle & CrLf &
+                           "AllCaps                             =    " & AllCaps & CrLf &
+                           "ExpandedProgressPanel               =    " & ExpandedProgressPanel & CrLf &
+                           "ShowDateAndTime                     =    " & ShowDateAndTime & CrLf &
+                           "LogFile                             =    " & Quote & LogFile & Quote & CrLf &
+                           "LogLevel                            =    " & LogLevel & CrLf &
+                           "AutoLogs                            =    " & AutoLogs & CrLf &
+                           "SystemEditor                        =    " & Quote & SystemEditor & Quote & CrLf &
+                           "EnableDynaLog                       =    " & EnableDynaLog & CrLf &
+                           "Quiet                               =    " & QuietOperations & CrLf &
+                           "NoNTSamMappings                     =    " & NoNTSamMappings & CrLf &
+                           "WebSearchEngineName                 =    " & SearchEngineName & CrLf &
+                           "WebSearchAITolerance                =    " & SearchEngineAITolerance & CrLf &
+                           "PEHelper_UnattendedFile             =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
+                           "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
+                           "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
+                           "PEHelper_IncludeSysDrvs             =    " & PEHelper_IncludeSysDrvs & CrLf &
+                           "NoRestart                           =    " & SysNoRestart & CrLf &
+                           "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
+                           "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
+                           "HumanizeDates                       =    " & HumanizeDates & CrLf &
+                           "UseScratch                          =    " & UseScratch & CrLf &
+                           "AutoScratch                         =    " & AutoScrDir & CrLf &
+                           "ScratchDirLocation                  =    " & Quote & ScratchDir & Quote & CrLf &
+                           "EnglishOutput                       =    " & EnglishOutput & CrLf &
+                           "ReportView                          =    " & ReportView & CrLf &
+                           "ShowNotification                    =    " & NotificationShow & CrLf &
+                           "NotifyFrequency                     =    " & NotificationFrequency & CrLf &
+                           "EnhancedAppxGetter                  =    " & ExtAppxGetter & CrLf &
+                           "SkipNonRemovable                    =    " & SkipNonRemovable & CrLf &
+                           "DetectAllDrivers                    =    " & AllDrivers & CrLf &
+                           "SkipFrameworks                      =    " & SkipFrameworks & CrLf &
+                           "RunAllProcs                         =    " & RunAllProcs & CrLf &
+                           "RemountImages                       =    " & StartupRemount & CrLf &
+                           "CheckForUpdates                     =    " & StartupUpdateCheck & CrLf &
+                           "AutoCleanMounts                     =    " & AutoCleanMounts & CrLf &
+                           "WndWidth                            =    " & WndWidth & CrLf &
+                           "WndHeight                           =    " & WndHeight & CrLf &
+                           "WndCenter                           =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
+                           "WndLeft                             =    " & WndLeft & CrLf &
+                           "WndTop                              =    " & WndTop & CrLf &
+                           "WndMaximized                        =    " & (WindowState = FormWindowState.Maximized) & CrLf &
+                           "SkipQuestions                       =    " & SkipQuestions & CrLf &
+                           "Pkg_CompleteInfo                    =    " & AutoCompleteInfo(0) & CrLf &
+                           "Feat_CompleteInfo                   =    " & AutoCompleteInfo(1) & CrLf &
+                           "AppX_CompleteInfo                   =    " & AutoCompleteInfo(2) & CrLf &
+                           "Cap_CompleteInfo                    =    " & AutoCompleteInfo(3) & CrLf &
+                           "Drv_CompleteInfo                    =    " & AutoCompleteInfo(4) & CrLf &
+                           "ShowWatermark                       =    " & ShowWatermark & CrLf &
+                           "WDSHCGraphoView                     =    " & WDSHCGraphoView & CrLf &
+                           "DTDimShowPnputilOut                 =    " & DTDimShowPnputilOut & CrLf &
+                           "WDSHCConnAttempts                   =    " & WDSHCConnAttempts & CrLf &
+                           "PartTableOverridePreference         =    " & PartTableOverridePreference & CrLf &
+                           "UEFICA23Preference                  =    " & UEFICA23Preference & CrLf &
+                           "AutoUnattendCopytoSysprep           =    " & AutoUnattendCopytoSysprep & CrLf &
+                           "PXEServerPort                       =    " & PXEServerPort & CrLf &
+                           "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
+                           "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout & CrLf &
+                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse)
     End Sub
 
 #Region "Background Processes"
@@ -1879,6 +2049,10 @@ Public Class MainForm
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If Not OnlineMode And Not OfflineMode Then
+            ' Fix up paths, which, in some cases, may begin with <letter>:\\. The filters then fail and return nothing
+            SourceImg = SourceImg.Replace("\\", "\")
+            MountDir = MountDir.Replace("\\", "\")
+
             DynaLog.LogMessage("Creating image session...")
             Try
                 Dim imageToProcess As WindowsImage = MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MountDir)
@@ -2492,7 +2666,17 @@ Public Class MainForm
         End If
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
-            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            ' Revision number may not be the one that we're actually on when getting info about ntoskrnl; use UBR if we can
+            Dim revisionNumber As Integer
+            Try
+                Dim ubrRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+                revisionNumber = ubrRk.GetValue("UBR")
+                ubrRk.Close()
+            Catch ex As Exception
+                revisionNumber = FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+            End Try
+
+            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber
             CurrentImage.ImageVersion = Environment.OSVersion.Version
             Select Case Language
                 Case 0
@@ -2630,7 +2814,10 @@ Public Class MainForm
             DynaLog.LogMessage("- Image version: " & Label48.Text)
         Else
             Try
-                CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                If ReinitializeCurImage Then
+                    CurrentImage = MountedImageList.FirstOrDefault(Function(image) image.ImageFile = SourceImg)
+                End If
+                ReinitializeCurImage = True
                 If CurrentImage IsNot Nothing Then
                     Label41.Text = CurrentImage.ImageIndex
                     Label44.Text = CurrentImage.ImageMountDirectory
@@ -2709,6 +2896,63 @@ Public Class MainForm
 
         Return disguised
     End Function
+
+    Private Sub GetFFUInformation(ByRef ImageFile As WindowsImage)
+        If ImageFile Is Nothing Then Exit Sub
+        Dim MountedFFURk As RegistryKey = Nothing
+
+        Try
+            MountedFFURk = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\DISM\Mounted FFUs", False)
+            ' Since the information is stored in subkeys of the aforementioned subkey, we'll have to iterate over them to get the one that
+            ' we wanted.
+            For Each MountedFFUVolume In MountedFFURk.GetSubKeyNames()
+                Dim MountedFFUVolumeRk As RegistryKey = MountedFFURk.OpenSubKey(MountedFFUVolume, False)
+                Dim MountedFFUMountPath As String = MountedFFUVolumeRk.GetValue("Mount Path", "")
+
+                If MountedFFUMountPath.Equals(ImageFile.ImageMountDirectory, StringComparison.OrdinalIgnoreCase) Then
+                    ' Then it's this one
+                    Dim IniManifestContents As Byte() = MountedFFUVolumeRk.GetValue("Manifest", {})
+                    ImageFile.FFUInfo.IniManifest = ASCII.GetString(IniManifestContents)
+                    ImageFile.FFUInfo.VhdPath = MountedFFUVolumeRk.GetValue("VHD Path", "")
+                    ImageFile.FFUInfo.VhdId = MountedFFUVolumeRk.GetValue("VHD Id", "")
+                    ImageFile.FFUInfo.VhdStorageDeviceId = MountedFFUVolumeRk.GetValue("VHD Storage Device Id", 0)
+                    ImageFile.FFUInfo.MountDiskPath = MountedFFUVolumeRk.GetValue("Mount Disk Path", "")
+                    ImageFile.FFUInfo.FullFlashVersionInfo = New Version(MountedFFUVolumeRk.GetValue("Full Flash Major Version", 0),
+                                                                         MountedFFUVolumeRk.GetValue("Full Flash Minor Version", 0))
+                    ImageFile.FFUInfo.VersionInfo = New Version(MountedFFUVolumeRk.GetValue("Major Version", 0), MountedFFUVolumeRk.GetValue("Minor Version", 0))
+                    ImageFile.FFUInfo.MountVersion = MountedFFUVolumeRk.GetValue("Mount Version", 0)
+                    ImageFile.FFUInfo.Compression = MountedFFUVolumeRk.GetValue("Compression", 0)
+                    ImageFile.FFUInfo.OptimizedPartitionNumber = MountedFFUVolumeRk.GetValue("Optimized Partition Number", 0)
+
+                    MountedFFUVolumeRk.Close()
+
+                    ' Try processing the ini manifest so we can fill in the information that we couldn't
+                    Try
+                        Dim parser As New IniDataParser(New FfuIniParserConfiguration())
+                        Dim ffuData As IniData = parser.Parse(ImageFile.FFUInfo.IniManifest)
+
+                        ImageFile.ImageArchitecture = CInt(ffuData("FullFlash")("Architecture"))
+                        ImageFile.ImageCreationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("CreationTime"))).DateTime
+                        ImageFile.ImageModificationDate = DateTimeOffset.FromFileTime(CLng(ffuData("FullFlash")("LastModificationTime"))).DateTime
+                    Catch ex As Exception
+                        ' Don't get that data then
+                    End Try
+
+                    ' Use the size of the entire virtual disk as the expanded size of our FFU.
+                    Dim sizeMO As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Size FROM Win32_DiskDrive WHERE DeviceID LIKE {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(ImageFile.FFUInfo.MountDiskPath)))
+                    If sizeMO IsNot Nothing Then ImageFile.ImageSize = WMIHelper.GetObjectValue(sizeMO(0), "Size")
+
+                    Exit For
+                End If
+
+                MountedFFUVolumeRk.Close()
+            Next
+        Catch ex As Exception
+
+        Finally
+            If MountedFFURk IsNot Nothing Then MountedFFURk.Close()
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
@@ -2791,10 +3035,18 @@ Public Class MainForm
                         CurrentImage.ImageSystemRoot = ImageInformation.SystemRoot
                         CurrentImage.ImageLanguages = ImageInformation.Languages
                         CurrentImage.ImageDefaultLanguage = ImageInformation.DefaultLanguage
-                        CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
-                        CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
-                        CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
-                        CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        If ImageInformation.CustomizedInfo IsNot Nothing Then
+                            CurrentImage.ImageFileCount = ImageInformation.CustomizedInfo.FileCount
+                            CurrentImage.ImageDirectoryCount = ImageInformation.CustomizedInfo.DirectoryCount
+                            CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
+                            CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
+                        Else
+                            ' Either this is a FFU file or it's a badly made WIM.
+                            CurrentImage.ImageFileCount = 0
+                            CurrentImage.ImageDirectoryCount = 0
+                            CurrentImage.ImageCreationDate = Date.MinValue
+                            CurrentImage.ImageModificationDate = Date.MinValue
+                        End If
                         CurrentImage.ImageSize = ImageInformation.ImageSize
                         DynaLog.LogMessage("Getting WIMBoot information")
                         Dim args As String = "/English",
@@ -2824,6 +3076,9 @@ Public Class MainForm
                                 CurrentImage.ImageWimBootCompatible = out.ToLower().Contains("wim bootable : yes")
                             End If
                         End Using
+                        If Path.GetExtension(CurrentImage.ImageFile).EndsWith("ffu", StringComparison.OrdinalIgnoreCase) Then
+                            GetFFUInformation(CurrentImage)
+                        End If
                         DynaLog.LogMessage(CurrentImage.ToString())
                         DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
                     End If
@@ -2958,7 +3213,6 @@ Public Class MainForm
                                 MicrosoftEdgeToolStripMenuItem.Enabled = False
 
                                 ' Disable other stuff
-                                ExportDriver.Enabled = False
                                 ReservedStorageToolStripMenuItem.Enabled = False
                                 SetSysUILang.Enabled = False
                                 ProvisioningPackagesToolStripMenuItem.Enabled = False
@@ -3636,6 +3890,11 @@ Public Class MainForm
                 .RedirectStandardOutput = True
             }
         }
+            Try
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            Catch ex As Exception
+                PSExtAppxProc.StartInfo.StandardOutputEncoding = Nothing
+            End Try
             PSExtAppxProc.Start()
             output = PSExtAppxProc.StandardOutput.ReadToEnd()
             PSExtAppxProc.WaitForExit()
@@ -3862,85 +4121,100 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DynaLog.LogMessage("Generating new settings file...")
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.7.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
+        Dim parser As New FileIniDataParser(),
+            settingsData As New IniData()
+        settingsData.Sections.AddSection("Program")
+        settingsData("Program").AddKey("DismExe", Quote & "{common:WinDir}\system32\dism.exe" & Quote)
+        settingsData("Program").AddKey("SaveOnSettingsIni", 1)
+        settingsData("Program").AddKey("Volatile", 0)
+        settingsData.Sections.AddSection("Personalization")
         Try
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
             Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
             ColorModeRk.Close()
             DynaLog.LogMessage("Auto Coloring from System is supported (Windows 10+). Enabling system color mode...")
-            DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
+            settingsData("Personalization").AddKey("ColorMode", 0)
         Catch ex As Exception
             ' Rollback to light theme
             DynaLog.LogMessage("Auto Coloring from System is not supported. Falling back to light mode (hopefully you're not using this at night)...")
-            DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
+            settingsData("Personalization").AddKey("ColorMode", 1)
         End Try
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Light=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Dark=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Consolas" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=11")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & "{common:WinDir}\system32\notepad.exe" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppxRemovalDisplayNameFormat=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & "" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("WndWidth=1280")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=720")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("SkipQuestions=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & "DuckDuckGo" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=1")
-        File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        settingsData("Personalization").AddKey("ColorTheme_Light", 1)
+        settingsData("Personalization").AddKey("ColorTheme_Dark", 0)
+        settingsData("Personalization").AddKey("Language", 0)
+        settingsData("Personalization").AddKey("LogFont", Quote & "Consolas" & Quote)
+        settingsData("Personalization").AddKey("LogFontSi", 11)
+        settingsData("Personalization").AddKey("LogFontBold", 0)
+        settingsData("Personalization").AddKey("SecondaryProgressPanelStyle", 1)
+        settingsData("Personalization").AddKey("AllCaps", 0)
+        settingsData("Personalization").AddKey("ExpandedProgressPanel", 1)
+        settingsData("Personalization").AddKey("ShowDateAndTime", 1)
+        settingsData.Sections.AddSection("Logs")
+        settingsData("Logs").AddKey("LogFile", Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
+        settingsData("Logs").AddKey("LogLevel", 3)
+        settingsData("Logs").AddKey("AutoLogs", 1)
+        settingsData("Logs").AddKey("SystemEditor", Quote & "{common:WinDir}\system32\notepad.exe" & Quote)
+        settingsData("Logs").AddKey("EnableDynaLog", 1)
+        settingsData.Sections.AddSection("ImgOps")
+        settingsData("ImgOps").AddKey("Quiet", 0)
+        settingsData("ImgOps").AddKey("NoRestart", 0)
+        settingsData("ImgOps").AddKey("NoNTSamMappings", 0)
+        settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & Quote)
+        settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", 0)
+        settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", 0)
+        settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
+        settingsData("ImgOps").AddKey("PreventSystemFromSleeping", 1)
+        settingsData("ImgOps").AddKey("HumanizeDates", 1)
+        settingsData.Sections.AddSection("ScratchDir")
+        settingsData("ScratchDir").AddKey("UseScratch", 0)
+        settingsData("ScratchDir").AddKey("AutoScratch", 1)
+        settingsData("ScratchDir").AddKey("ScratchDirLocation", Quote & Quote)
+        settingsData.Sections.AddSection("Output")
+        settingsData("Output").AddKey("EnglishOutput", 1)
+        settingsData("Output").AddKey("ReportView", 0)
+        settingsData.Sections.AddSection("BgProcesses")
+        settingsData("BgProcesses").AddKey("ShowNotification", 1)
+        settingsData("BgProcesses").AddKey("NotifyFrequency", 1)
+        settingsData.Sections.AddSection("AdvBgProcesses")
+        settingsData("AdvBgProcesses").AddKey("EnhancedAppxGetter", 1)
+        settingsData("AdvBgProcesses").AddKey("SkipNonRemovable", 1)
+        settingsData("AdvBgProcesses").AddKey("DetectAllDrivers", 0)
+        settingsData("AdvBgProcesses").AddKey("SkipFrameworks", 1)
+        settingsData("AdvBgProcesses").AddKey("RunAllProcs", 0)
+        settingsData.Sections.AddSection("Startup")
+        settingsData("Startup").AddKey("RemountImages", 1)
+        settingsData("Startup").AddKey("CheckForUpdates", 1)
+        settingsData.Sections.AddSection("Shutdown")
+        settingsData("Shutdown").AddKey("AutoCleanMounts", 0)
+        settingsData.Sections.AddSection("WndParams")
+        settingsData("WndParams").AddKey("WndWidth", 1280)
+        settingsData("WndParams").AddKey("WndHeight", 720)
+        settingsData("WndParams").AddKey("WndCenter", 1)
+        settingsData("WndParams").AddKey("WndLeft", 0)
+        settingsData("WndParams").AddKey("WndTop", 0)
+        settingsData("WndParams").AddKey("WndMaximized", 0)
+        settingsData.Sections.AddSection("InfoSaver")
+        settingsData("InfoSaver").AddKey("SkipQuestions", 1)
+        settingsData("InfoSaver").AddKey("Pkg_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("Feat_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("AppX_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("Cap_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("Drv_CompleteInfo", 1)
+        settingsData.Sections.AddSection("SearchSettings")
+        settingsData("SearchSettings").AddKey("EngineName", Quote & "DuckDuckGo" & Quote)
+        settingsData("SearchSettings").AddKey("AITolerance", 1)
+        settingsData.Sections.AddSection("PEPolicy")
+        settingsData("PEPolicy").AddKey("ShowWatermark", 0)
+        settingsData("PEPolicy").AddKey("WDSHCGraphoView", 1)
+        settingsData("PEPolicy").AddKey("DTDimShowPnputilOut", 1)
+        settingsData("PEPolicy").AddKey("WDSHCConnAttempts", 5)
+        settingsData("PEPolicy").AddKey("PartTableOverridePreference", 0)
+        settingsData("PEPolicy").AddKey("UEFICA23Preference", 0)
+        settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", 0)
+        settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
+        settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
+        settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", 0)
+        parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
@@ -3987,6 +4261,8 @@ Public Class MainForm
         ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PreventSystemFromSleeping", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("HumanizeDates", 1, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4035,354 +4311,249 @@ Public Class MainForm
         SearchKey.SetValue("EngineName", "DuckDuckGo", RegistryValueKind.String)
         SearchKey.SetValue("AITolerance", 1, RegistryValueKind.DWord)
         SearchKey.Close()
+        Dim PEPolicyKey As RegistryKey = Key.CreateSubKey("PEPolicy")
+        PEPolicyKey.SetValue("ShowWatermark", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("WDSHCGraphoView", 1, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("DTDimShowPnputilOut", 1, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("WDSHCConnAttempts", 5, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("PartTableOverridePreference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("UEFICA23Preference", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
+        PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", 0, RegistryValueKind.DWord)
+        PEPolicyKey.Close()
         Key.Close()
     End Sub
 
     Sub SaveDTSettings()
         DynaLog.LogMessage("Determining volatile mode status...")
-        If VolatileMode Then
-            DynaLog.LogMessage("Volatile mode detected. Exiting...")
-            Exit Sub
-        Else
-            DynaLog.LogMessage("Volatile mode not detected.")
-            ShowDTSettings()
-            If SaveOnSettingsIni Then
-                DynaLog.LogMessage("Checking state of INI File...")
-                If File.Exists(Application.StartupPath & "\settings.ini") Then
-                    DynaLog.LogMessage("Deleting existing INI File...")
-                    File.Delete(Application.StartupPath & "\settings.ini")
-                End If
-                DynaLog.LogMessage("Writing to INI...")
-                DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.7.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
-                If SaveOnSettingsIni Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=0")
-                End If
-                If VolatileMode Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
-                Select Case ColorMode
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
-                    Case 2
-                        DTSettingForm.RichTextBox2.AppendText("ColorMode=2")
-                End Select
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Light=" & LightThemeIndex)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Dark=" & DarkThemeIndex)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=" & Language)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & LogFont & Quote)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=" & LogFontSize)
-                If LogFontIsBold Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
-                End If
-                Select Case ProgressPanelStyle
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
-                End Select
-                If AllCaps Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
-                End If
-                If ExpandedProgressPanel Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
-                End If
-                If ShowDateAndTime Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
-                Select Case LogLevel
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=1")
-                    Case 2
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=2")
-                    Case 3
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
-                    Case 4
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=4")
-                End Select
-                If AutoLogs Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & SystemEditor & Quote)
-                If EnableDynaLog Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
-                Select Case ImgOperationMode
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=1")
-                End Select
-                If QuietOperations Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
-                End If
-                If SysNoRestart Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
-                End If
-                If NoNTSamMappings Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & PEHelper_UnattendedFile & Quote)
-                If PEHelper_CopyToVentoy Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
-                End If
-                If PEHelper_Use2023EFI Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppxRemovalDisplayNameFormat=" & AppxDisplayNameFormatOnRemoval)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
-                If UseScratch Then
-                    DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
-                End If
-                If AutoScrDir Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & ScratchDir & Quote)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
-                If EnglishOutput Then
-                    DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("EnglishOutput=0")
-                End If
-                Select Case ReportView
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=1")
-                End Select
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
-                If NotificationShow Then
-                    DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("ShowNotification=0")
-                End If
-                Select Case NotificationFrequency
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
-                End Select
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
-                If ExtAppxGetter Then
-                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=0")
-                End If
-                If SkipNonRemovable Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=0")
-                End If
-                If AllDrivers Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
-                End If
-                If SkipFrameworks Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=0")
-                End If
-                If RunAllProcs Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
-                If StartupRemount Then
-                    DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("RemountImages=0")
-                End If
-                If StartupUpdateCheck Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Shutdown]" & CrLf)
-                If AutoCleanMounts Then
-                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
-                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=0")
-                End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("SkipQuestions=" & If(SkipQuestions, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=" & If(AutoCompleteInfo(0), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=" & If(AutoCompleteInfo(1), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=" & If(AutoCompleteInfo(2), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=" & If(AutoCompleteInfo(3), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & SearchEngineName & Quote)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=" & SearchEngineAITolerance)
-                File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
-            Else
-                DynaLog.LogMessage("Attempting to write to registry...")
-                Try
-                    ' Tell settings file to use this method
-                    DynaLog.LogMessage("Forcing save to registry in INI File...")
-                    Dim SettingRtb As New RichTextBox() With {
-                        .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                    }
-                    SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
-                    File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
-                    DynaLog.LogMessage("Setting key values...")
-                    Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
-                    DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
-                    Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
-                    DynaLog.LogMessage("Configuring program settings...")
-                    Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
-                    PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
-                    PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
-                    PrgKey.SetValue("Volatile", If(VolatileMode, 1, 0), RegistryValueKind.DWord)
-                    PrgKey.Close()
-                    DynaLog.LogMessage("Configuring personalization settings...")
-                    Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
-                    PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
-                    PersKey.SetValue("ColorTheme_Light", LightThemeIndex, RegistryValueKind.DWord)
-                    PersKey.SetValue("ColorTheme_Dark", DarkThemeIndex, RegistryValueKind.DWord)
-                    PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
-                    PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
-                    PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
-                    PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
-                    PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
-                    PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
-                    PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
-                    PersKey.SetValue("ShowDateAndTime", If(ShowDateAndTime, 1, 0), RegistryValueKind.DWord)
-                    PersKey.Close()
-                    DynaLog.LogMessage("Configuring log settings...")
-                    Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
-                    LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
-                    LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
-                    LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
-                    LogKey.SetValue("SystemEditor", SystemEditor, RegistryValueKind.ExpandString)
-                    LogKey.SetValue("EnableDynaLog", If(EnableDynaLog, 1, 0), RegistryValueKind.DWord)
-                    LogKey.Close()
-                    DynaLog.LogMessage("Configuring image operation settings...")
-                    Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
-                    ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
-                    ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
-                    ImgOpKey.SetValue("NoNTSamMappings", If(NoNTSamMappings, 1, 0), RegistryValueKind.DWord)
-                    ImgOpKey.SetValue("PEHelper.UnattendedFile", PEHelper_UnattendedFile, RegistryValueKind.String)
-                    ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
-                    ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
-                    ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
-                    ImgOpKey.Close()
-                    DynaLog.LogMessage("Configuring scratch directory settings...")
-                    Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
-                    ScrDirKey.SetValue("UseScratch", If(UseScratch, 1, 0), RegistryValueKind.DWord)
-                    ScrDirKey.SetValue("AutoScratch", If(AutoScrDir, 1, 0), RegistryValueKind.DWord)
-                    ScrDirKey.SetValue("ScratchDirLocation", ScratchDir, RegistryValueKind.ExpandString)
-                    ScrDirKey.Close()
-                    DynaLog.LogMessage("Configuring output settings...")
-                    Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
-                    OutKey.SetValue("EnglishOutput", If(EnglishOutput, 1, 0), RegistryValueKind.DWord)
-                    OutKey.SetValue("ReportView", ReportView, RegistryValueKind.DWord)
-                    OutKey.Close()
-                    DynaLog.LogMessage("Configuring background process settings...")
-                    Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
-                    BGKey.SetValue("ShowNotification", If(NotificationShow, 1, 0), RegistryValueKind.DWord)
-                    BGKey.SetValue("NotifyFrequency", NotificationFrequency, RegistryValueKind.DWord)
-                    BGKey.Close()
-                    Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
-                    AdvBGKey.SetValue("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0), RegistryValueKind.DWord)
-                    AdvBGKey.SetValue("SkipNonRemovable", If(SkipNonRemovable, 1, 0), RegistryValueKind.DWord)
-                    AdvBGKey.SetValue("DetectAllDrivers", If(AllDrivers, 1, 0), RegistryValueKind.DWord)
-                    AdvBGKey.SetValue("SkipFrameworks", If(SkipFrameworks, 1, 0), RegistryValueKind.DWord)
-                    AdvBGKey.SetValue("RunAllProcs", If(RunAllProcs, 1, 0), RegistryValueKind.DWord)
-                    AdvBGKey.Close()
-                    DynaLog.LogMessage("Configuring startup settings...")
-                    Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
-                    StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
-                    StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
-                    StartupKey.Close()
-                    DynaLog.LogMessage("Configuring shutdown settings...")
-                    Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Shutdown")
-                    ShutdownKey.SetValue("AutoCleanMounts", If(AutoCleanMounts, 1, 0), RegistryValueKind.DWord)
-                    ShutdownKey.Close()
-                    DynaLog.LogMessage("Configuring window parameters...")
-                    Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
-                    WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
-                    WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
-                    If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
-                        WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
-                    Else
-                        WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
-                    End If
-                    WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
-                    WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
-                    WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
-                    WndKey.Close()
-                    DynaLog.LogMessage("Configuring Information Saver settings...")
-                    Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
-                    InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
-                    InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
-                    InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
-                    InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
-                    InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
-                    InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
-                    InfoSaverKey.Close()
-                    Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
-                    SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
-                    SearchKey.SetValue("AITolerance", SearchEngineAITolerance, RegistryValueKind.DWord)
-                    SearchKey.Close()
-                    Key.Close()
-                Catch ex As Exception
-                    DynaLog.LogMessage("An error occurred while saving settings to registry. Error message: " & ex.Message)
-                    DynaLog.LogMessage("Forcing save to INI...")
-                    ' Fallback to INI method and force save
-                    SaveOnSettingsIni = True
-                    SaveDTSettings()
-                End Try
+        
+        ShowDTSettings()
+        If SaveOnSettingsIni Then
+            DynaLog.LogMessage("Checking state of INI File...")
+            If File.Exists(Application.StartupPath & "\settings.ini") Then
+                DynaLog.LogMessage("Deleting existing INI File...")
+                File.Delete(Application.StartupPath & "\settings.ini")
             End If
+            DynaLog.LogMessage("Writing to INI...")
+            Dim parser As New FileIniDataParser(),
+                settingsData As New IniData()
+            settingsData.Sections.AddSection("Program")
+            settingsData("Program").AddKey("DismExe", Quote & DismExe & Quote)
+            settingsData("Program").AddKey("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0))
+            settingsData.Sections.AddSection("Personalization")
+            settingsData("Personalization").AddKey("ColorMode", ColorMode)
+            settingsData("Personalization").AddKey("ColorTheme_Light", LightThemeIndex)
+            settingsData("Personalization").AddKey("ColorTheme_Dark", DarkThemeIndex)
+            settingsData("Personalization").AddKey("Language", Language)
+            settingsData("Personalization").AddKey("LogFont", Quote & LogFont & Quote)
+            settingsData("Personalization").AddKey("LogFontSi", LogFontSize)
+            settingsData("Personalization").AddKey("LogFontBold", If(LogFontIsBold, 1, 0))
+            settingsData("Personalization").AddKey("SecondaryProgressPanelStyle", ProgressPanelStyle)
+            settingsData("Personalization").AddKey("AllCaps", If(AllCaps, 1, 0))
+            settingsData("Personalization").AddKey("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0))
+            settingsData("Personalization").AddKey("ShowDateAndTime", If(ShowDateAndTime, 1, 0))
+            settingsData.Sections.AddSection("Logs")
+            settingsData("Logs").AddKey("LogFile", Quote & LogFile & Quote)
+            settingsData("Logs").AddKey("LogLevel", LogLevel)
+            settingsData("Logs").AddKey("AutoLogs", If(AutoLogs, 1, 0))
+            settingsData("Logs").AddKey("SystemEditor", Quote & SystemEditor & Quote)
+            settingsData("Logs").AddKey("EnableDynaLog", If(EnableDynaLog, 1, 0))
+            settingsData.Sections.AddSection("ImgOps")
+            settingsData("ImgOps").AddKey("Quiet", If(QuietOperations, 1, 0))
+            settingsData("ImgOps").AddKey("NoRestart", If(SysNoRestart, 1, 0))
+            settingsData("ImgOps").AddKey("NoNTSamMappings", If(NoNTSamMappings, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & PEHelper_UnattendedFile & Quote)
+            settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", If(PEHelper_IncludeSysDrvs, 1, 0))
+            settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
+            settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
+            settingsData("ImgOps").AddKey("HumanizeDates", If(HumanizeDates, 1, 0))
+            settingsData.Sections.AddSection("ScratchDir")
+            settingsData("ScratchDir").AddKey("UseScratch", If(UseScratch, 1, 0))
+            settingsData("ScratchDir").AddKey("AutoScratch", If(AutoScrDir, 1, 0))
+            settingsData("ScratchDir").AddKey("ScratchDirLocation", Quote & ScratchDir & Quote)
+            settingsData.Sections.AddSection("Output")
+            settingsData("Output").AddKey("EnglishOutput", If(EnglishOutput, 1, 0))
+            settingsData("Output").AddKey("ReportView", ReportView)
+            settingsData.Sections.AddSection("BgProcesses")
+            settingsData("BgProcesses").AddKey("ShowNotification", If(NotificationShow, 1, 0))
+            settingsData("BgProcesses").AddKey("NotifyFrequency", NotificationFrequency)
+            settingsData.Sections.AddSection("AdvBgProcesses")
+            settingsData("AdvBgProcesses").AddKey("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0))
+            settingsData("AdvBgProcesses").AddKey("SkipNonRemovable", If(SkipNonRemovable, 1, 0))
+            settingsData("AdvBgProcesses").AddKey("DetectAllDrivers", If(AllDrivers, 1, 0))
+            settingsData("AdvBgProcesses").AddKey("SkipFrameworks", If(SkipFrameworks, 1, 0))
+            settingsData("AdvBgProcesses").AddKey("RunAllProcs", If(RunAllProcs, 1, 0))
+            settingsData.Sections.AddSection("Startup")
+            settingsData("Startup").AddKey("RemountImages", If(StartupRemount, 1, 0))
+            settingsData("Startup").AddKey("CheckForUpdates", If(StartupUpdateCheck, 1, 0))
+            settingsData.Sections.AddSection("Shutdown")
+            settingsData("Shutdown").AddKey("AutoCleanMounts", If(AutoCleanMounts, 1, 0))
+            settingsData.Sections.AddSection("WndParams")
+            settingsData("WndParams").AddKey("WndWidth", Math.Round(WndWidth / (WindowHelper.GetSystemDpi() / 100), 0))
+            settingsData("WndParams").AddKey("WndHeight", Math.Round(WndHeight / (WindowHelper.GetSystemDpi() / 100), 0))
+            settingsData("WndParams").AddKey("WndCenter", If(Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2), 1, 0))
+            settingsData("WndParams").AddKey("WndLeft", WndLeft)
+            settingsData("WndParams").AddKey("WndTop", WndTop)
+            settingsData("WndParams").AddKey("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0))
+            settingsData.Sections.AddSection("InfoSaver")
+            settingsData("InfoSaver").AddKey("SkipQuestions", If(SkipQuestions, 1, 0))
+            settingsData("InfoSaver").AddKey("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0))
+            settingsData("InfoSaver").AddKey("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0))
+            settingsData("InfoSaver").AddKey("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0))
+            settingsData("InfoSaver").AddKey("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0))
+            settingsData("InfoSaver").AddKey("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0))
+            settingsData.Sections.AddSection("SearchSettings")
+            settingsData("SearchSettings").AddKey("EngineName", Quote & SearchEngineName & Quote)
+            settingsData("SearchSettings").AddKey("AITolerance", SearchEngineAITolerance)
+            settingsData.Sections.AddSection("PEPolicy")
+            settingsData("PEPolicy").AddKey("ShowWatermark", If(ShowWatermark, 1, 0))
+            settingsData("PEPolicy").AddKey("WDSHCGraphoView", If(WDSHCGraphoView, 1, 0))
+            settingsData("PEPolicy").AddKey("DTDimShowPnputilOut", If(DTDimShowPnputilOut, 1, 0))
+            settingsData("PEPolicy").AddKey("WDSHCConnAttempts", WDSHCConnAttempts)
+            settingsData("PEPolicy").AddKey("PartTableOverridePreference", PartTableOverridePreference)
+            settingsData("PEPolicy").AddKey("UEFICA23Preference", UEFICA23Preference)
+            settingsData("PEPolicy").AddKey("AutoUnattendCopytoSysprep", If(AutoUnattendCopytoSysprep, 1, 0))
+            settingsData("PEPolicy").AddKey("PXEServerPort", PXEServerPort)
+            settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
+            settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
+            settingsData("PEPolicy").AddKey("AnswerFileConflictResponse", AnswerFileConflictResponse)
+            parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
+        Else
+            DynaLog.LogMessage("Attempting to write to registry...")
+            Try
+                ' Tell settings file to use this method
+                DynaLog.LogMessage("Forcing save to registry in INI File...")
+                Dim SettingRtb As New RichTextBox() With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                }
+                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                DynaLog.LogMessage("Setting key values...")
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
+                DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
+                Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
+                DynaLog.LogMessage("Configuring program settings...")
+                Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
+                PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
+                PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
+                PrgKey.Close()
+                DynaLog.LogMessage("Configuring personalization settings...")
+                Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
+                PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
+                PersKey.SetValue("ColorTheme_Light", LightThemeIndex, RegistryValueKind.DWord)
+                PersKey.SetValue("ColorTheme_Dark", DarkThemeIndex, RegistryValueKind.DWord)
+                PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
+                PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
+                PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
+                PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
+                PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("ShowDateAndTime", If(ShowDateAndTime, 1, 0), RegistryValueKind.DWord)
+                PersKey.Close()
+                DynaLog.LogMessage("Configuring log settings...")
+                Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
+                LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
+                LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
+                LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
+                LogKey.SetValue("SystemEditor", SystemEditor, RegistryValueKind.ExpandString)
+                LogKey.SetValue("EnableDynaLog", If(EnableDynaLog, 1, 0), RegistryValueKind.DWord)
+                LogKey.Close()
+                DynaLog.LogMessage("Configuring image operation settings...")
+                Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
+                ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.SetValue("NoNTSamMappings", If(NoNTSamMappings, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.UnattendedFile", PEHelper_UnattendedFile, RegistryValueKind.String)
+                ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", PEHelper_IncludeSysDrvs, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("HumanizeDates", HumanizeDates, RegistryValueKind.DWord)
+                ImgOpKey.Close()
+                DynaLog.LogMessage("Configuring scratch directory settings...")
+                Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
+                ScrDirKey.SetValue("UseScratch", If(UseScratch, 1, 0), RegistryValueKind.DWord)
+                ScrDirKey.SetValue("AutoScratch", If(AutoScrDir, 1, 0), RegistryValueKind.DWord)
+                ScrDirKey.SetValue("ScratchDirLocation", ScratchDir, RegistryValueKind.ExpandString)
+                ScrDirKey.Close()
+                DynaLog.LogMessage("Configuring output settings...")
+                Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
+                OutKey.SetValue("EnglishOutput", If(EnglishOutput, 1, 0), RegistryValueKind.DWord)
+                OutKey.SetValue("ReportView", ReportView, RegistryValueKind.DWord)
+                OutKey.Close()
+                DynaLog.LogMessage("Configuring background process settings...")
+                Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
+                BGKey.SetValue("ShowNotification", If(NotificationShow, 1, 0), RegistryValueKind.DWord)
+                BGKey.SetValue("NotifyFrequency", NotificationFrequency, RegistryValueKind.DWord)
+                BGKey.Close()
+                Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
+                AdvBGKey.SetValue("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("SkipNonRemovable", If(SkipNonRemovable, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("DetectAllDrivers", If(AllDrivers, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("SkipFrameworks", If(SkipFrameworks, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("RunAllProcs", If(RunAllProcs, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.Close()
+                DynaLog.LogMessage("Configuring startup settings...")
+                Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
+                StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
+                StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
+                StartupKey.Close()
+                DynaLog.LogMessage("Configuring shutdown settings...")
+                Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Shutdown")
+                ShutdownKey.SetValue("AutoCleanMounts", If(AutoCleanMounts, 1, 0), RegistryValueKind.DWord)
+                ShutdownKey.Close()
+                DynaLog.LogMessage("Configuring window parameters...")
+                Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+                WndKey.SetValue("WndWidth", Math.Round(WndWidth / (WindowHelper.GetSystemDpi() / 100), 0), RegistryValueKind.DWord)
+                WndKey.SetValue("WndHeight", Math.Round(WndHeight / (WindowHelper.GetSystemDpi() / 100), 0), RegistryValueKind.DWord)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+                Else
+                    WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
+                End If
+                WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
+                WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
+                WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
+                WndKey.Close()
+                DynaLog.LogMessage("Configuring Information Saver settings...")
+                Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+                InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.Close()
+                Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
+                SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
+                SearchKey.SetValue("AITolerance", SearchEngineAITolerance, RegistryValueKind.DWord)
+                SearchKey.Close()
+                Dim PEPolicyKey As RegistryKey = Key.CreateSubKey("PEPolicy")
+                PEPolicyKey.SetValue("ShowWatermark", If(ShowWatermark, 1, 0), RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("WDSHCGraphoView", If(WDSHCGraphoView, 1, 0), RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("DTDimShowPnputilOut", If(DTDimShowPnputilOut, 1, 0), RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("WDSHCConnAttempts", WDSHCConnAttempts, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("PartTableOverridePreference", PartTableOverridePreference, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("UEFICA23Preference", UEFICA23Preference, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", AutoUnattendCopytoSysprep, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("PXEServerPort", PXEServerPort, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
+                PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("AnswerFileConflictResponse", AnswerFileConflictResponse, RegistryValueKind.DWord)
+                PEPolicyKey.Close()
+                Key.Close()
+            Catch ex As Exception
+                DynaLog.LogMessage("An error occurred while saving settings to registry. Error message: " & ex.Message)
+                DynaLog.LogMessage("Forcing save to INI...")
+                ' Fallback to INI method and force save
+                SaveOnSettingsIni = True
+                SaveDTSettings()
+            End Try
         End If
 
     End Sub
@@ -4409,7 +4580,6 @@ Public Class MainForm
                 DynaLog.LogMessage("Settings file was last modified at a date older than build date. Migrating settings...")
                 ' Perform setting file migration
                 MigrationForm.ShowDialog()
-                Thread.Sleep(1500)
             End If
         Else
             DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW)...")
@@ -4486,7 +4656,7 @@ Public Class MainForm
         MenuStrip1.BackColor = CurrentTheme.SectionBackgroundColor
         MenuStrip1.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, MenuStrip1.Items)
-        PictureBox5.Image = GetGlyphResource("logo_mainscr")
+        PictureBox5.Image = GetGlyphResource("logo_aboutdlg")
         ToolStrip1.BackColor = CurrentTheme.SectionBackgroundColor
         ToolStrip1.ForeColor = CurrentTheme.ForegroundColor
         ToolStrip2.BackColor = CurrentTheme.SectionBackgroundColor
@@ -4497,6 +4667,7 @@ Public Class MainForm
         ToolStripButton3.Image = GetGlyphResource("prj_unload_glyph")
         ToolStripButton4.Image = GetGlyphResource("progress_window")
         RefreshViewTSB.Image = GetGlyphResource("refresh_glyph")
+        MenuToggle.Image = GetGlyphResource("menu")
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
                 ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
@@ -4517,6 +4688,8 @@ Public Class MainForm
         TreeViewCMS.Renderer = GetProfessionalRenderer()
         AppxResCMS.Renderer = GetProfessionalRenderer()
         ImgSpecialToolsCMS.Renderer = GetProfessionalRenderer()
+        ImgApplyModeCMS.Renderer = GetProfessionalRenderer()
+        ImgCaptureModeCMS.Renderer = GetProfessionalRenderer()
         PkgInfoCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgUMountPopupCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxPackagePopupCMS.ForeColor = CurrentTheme.ForegroundColor
@@ -4524,6 +4697,8 @@ Public Class MainForm
         TreeViewCMS.ForeColor = CurrentTheme.ForegroundColor
         AppxResCMS.ForeColor = CurrentTheme.ForegroundColor
         ImgSpecialToolsCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgApplyModeCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgCaptureModeCMS.ForeColor = CurrentTheme.ForegroundColor
         ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, TreeViewCMS.Items)
         InvalidSettingsTSMI.Image = GetGlyphResource("setting_error_glyph")
         ExitFullScreenTSMI.Image = GetGlyphResource("exit_full_screen_glyph")
@@ -4538,28 +4713,9 @@ Public Class MainForm
         GroupBox8.ForeColor = CurrentTheme.ForegroundColor
         GroupBox9.ForeColor = CurrentTheme.ForegroundColor
         GroupBox10.ForeColor = CurrentTheme.ForegroundColor
-        If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf LatestNewsPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        ElseIf TutorialVideoPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
-        End If
-        ListView1.BackColor = LatestNewsPanel.BackColor
-        ListView1.ForeColor = LatestNewsPanel.ForeColor
-        ListView2.BackColor = TutorialVideoPanel.BackColor
-        ListView2.ForeColor = TutorialVideoPanel.ForeColor
+        ListView2.BackColor = CurrentTheme.BackgroundColor
+        ListView2.ForeColor = CurrentTheme.ForegroundColor
         RecentsLV.BackColor = SidePanel.BackColor
-        TextBox1.BackColor = BackColor
-        TextBox1.ForeColor = ForeColor
-        TextBox2.BackColor = BackColor
-        TextBox2.ForeColor = ForeColor
         ' New project view header and side panel tints
         ProjectViewHeader.BackColor = CurrentTheme.AccentColors(0)
         ProjectSidePanel.BackColor = CurrentTheme.AccentColors(0)
@@ -4572,15 +4728,6 @@ Public Class MainForm
         PictureBox15.Image = GetGlyphResource("openfile")
         ProjectViewHeader.ForeColor = ForeColor
         ProjectSidePanel.ForeColor = ForeColor
-        For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In PrjTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
         StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         StatusStrip.ForeColor = CurrentTheme.ForegroundColor
         If ImgBW.IsBusy Then
@@ -4588,6 +4735,19 @@ Public Class MainForm
         Else
             BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
         End If
+        ' Infinity Home
+        ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
+
+        ' Set link label link controls
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ThemeHelper.UpdateLinkLabelColors(ImgTasks, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(PrjTasks, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel7, ForeColor, CurrentTheme.AccentColors(1))
+        ThemeHelper.UpdateLinkLabelColors(TableLayoutPanel4, ForeColor, CurrentTheme.AccentColors(1))
+
+        For Each NewsCard As NewsFeedItemCard In NewsItemCardContainerPanel.Controls.OfType(Of NewsFeedItemCard)()
+            NewsCard.SetColors()
+        Next
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -4625,7 +4785,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Image management"
                         OSPackagesToolStripMenuItem.Text = "OS packages"
                         ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                        AppPackagesToolStripMenuItem.Text = "App packages"
+                        AppPackagesToolStripMenuItem.Text = "AppX packages"
                         AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
@@ -4673,11 +4833,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Get provisioning package information..."
                         ApplyCustomDataImage.Text = "Apply custom data image..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Get app package information..."
-                        AddProvisionedAppxPackage.Text = "Add provisioned app package..."
-                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
+                        GetProvisionedAppxPackages.Text = "Get AppX package information..."
+                        AddProvisionedAppxPackage.Text = "Add provisioned AppX package..."
+                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for AppX package..."
                         OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
-                        SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
+                        SetProvisionedAppxDataFile.Text = "Add custom data file into AppX package..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Get application patch information..."
                         GetAppPatchInfo.Text = "Get detailed application patch information..."
@@ -4756,8 +4916,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Options"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Help Topics"
-                        GlossaryToolStripMenuItem.Text = "Glossary"
-                        CommandHelpToolStripMenuItem.Text = "Command help..."
                         AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "More information"
@@ -4903,35 +5061,6 @@ Public Class MainForm
                         Button56.Text = "Save configuration..."
                         Button57.Text = "Set target path..."
                         Button58.Text = "Set scratch space..."
-                        ' New home panel design
-                        LinkLabel22.Text = "WELCOME"
-                        LinkLabel23.Text = "LATEST NEWS"
-                        LinkLabel24.Text = "TUTORIAL VIDEOS"
-                        ' - Welcome panel
-                        Label36.Text = "This is beta software"
-                        Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
-                        Label37.Text = "Getting started"
-                        LinkLabel6.Text = "Getting started with image servicing"
-                        LinkLabel7.Text = "Getting started with DISMTools"
-                        LinkLabel8.Text = "Coming from other utilities?"
-                        Label38.Text = "Performing operations"
-                        LinkLabel9.Text = "Tips for performing great servicing"
-                        LinkLabel10.Text = "Getting image information"
-                        LinkLabel11.Text = "Saving image information"
-                        LinkLabel4.Text = "Managing your active installation"
-                        LinkLabel5.Text = "Managing installations on any drive"
-                        ' - Latest news panel
-                        Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
-                        LinkLabel25.Text = "Visit"
-                        Label22.Text = "We couldn't get the latest news"
-                        Label34.Text = "Error information:"
-                        Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                        Button59.Text = "Try again"
-                        ' - Tutorial videos panel
-                        Label11.Text = "We couldn't get the latest videos"
-                        Label7.Text = "Error information:"
-                        Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                        Button17.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4960,7 +5089,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
                         OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
                         ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                        AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                        AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
                         AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
@@ -5008,11 +5137,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
                         ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
-                        AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
-                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                        GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
+                        AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionado..."
+                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Obtener información de parche de aplicación..."
                         GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
@@ -5091,8 +5220,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Opciones"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
-                        GlossaryToolStripMenuItem.Text = "Glosario"
-                        CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                         AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Más información"
@@ -5238,35 +5365,6 @@ Public Class MainForm
                         Button56.Text = "Guardar configuración..."
                         Button57.Text = "Establecer ruta de destino..."
                         Button58.Text = "Establecer espacio temporal..."
-                        ' New home panel design
-                        LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
-                        LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
-                        LinkLabel24.Text = "VÍDEOS"
-                        ' - Welcome panel
-                        Label36.Text = "Este es un software en beta"
-                        Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
-                        Label37.Text = "Introducciones"
-                        LinkLabel6.Text = "Introducción al servicio de imágenes"
-                        LinkLabel7.Text = "Introducción a DISMTools"
-                        LinkLabel8.Text = "¿Viniendo de otras herramientas?"
-                        Label38.Text = "Realizando operaciones"
-                        LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
-                        LinkLabel10.Text = "Obteniendo información de imagen"
-                        LinkLabel11.Text = "Guardando información de imagen"
-                        LinkLabel4.Text = "Administrando su instalación activa"
-                        LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
-                        ' - Latest news panel
-                        Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
-                        LinkLabel25.Text = "Visitar"
-                        Label22.Text = "No pudimos obtener las últimas noticias"
-                        Label34.Text = "Información del error:"
-                        Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                        Button59.Text = "Intentar de nuevo"
-                        ' - Tutorial videos panel
-                        Label11.Text = "No pudimos obtener los últimos vídeos"
-                        Label7.Text = "Información del error:"
-                        Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                        Button17.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -5295,7 +5393,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestion des images"
                         OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
                         ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                        AppPackagesToolStripMenuItem.Text = "Paquets d'applications"
+                        AppPackagesToolStripMenuItem.Text = "Paquets AppX"
                         AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
@@ -5345,7 +5443,7 @@ Public Class MainForm
                         ' Menu - Commands - App packages
                         GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
                         AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets d'applications..."
+                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
                         SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
                         ' Menu - Commands - App (MSP) servicing
@@ -5426,8 +5524,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Paramètres"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
-                        GlossaryToolStripMenuItem.Text = "Glossaire"
-                        CommandHelpToolStripMenuItem.Text = "Aide à la commande..."
                         AboutDISMToolsToolStripMenuItem.Text = "À propos de DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Plus d'informations"
@@ -5572,35 +5668,6 @@ Public Class MainForm
                         Button56.Text = "Sauvegarder les paramètres..."
                         Button57.Text = "Configurer le chemin d'accès..."
                         Button58.Text = "Configurer l'espace temporaire..."
-                        ' New home panel design
-                        LinkLabel22.Text = "BIENVENUE"
-                        LinkLabel23.Text = "DERNIÈRES NOUVELLES"
-                        LinkLabel24.Text = "VIDÉOS TUTORIELLES"
-                        ' - Welcome panel
-                        Label36.Text = "Il s'agit d'une version bêta du logiciel"
-                        Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
-                        Label37.Text = "Pour commencer"
-                        LinkLabel6.Text = "Commencer avec le service des images"
-                        LinkLabel7.Text = "Commencer avec DISMTools"
-                        LinkLabel8.Text = "Venant d'autres utilités ?"
-                        Label38.Text = "Réalisation des opérations"
-                        LinkLabel9.Text = "Conseils pour un bon service"
-                        LinkLabel10.Text = "Obtenir des informations sur l'image"
-                        LinkLabel11.Text = "Sauvegarder les informations sur l'image"
-                        LinkLabel4.Text = "Gérer votre installation active"
-                        LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
-                        ' - Latest news panel
-                        Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
-                        LinkLabel25.Text = "Visiter"
-                        Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
-                        Label34.Text = "Information d'erreur :"
-                        Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
-                        Button59.Text = "Réessayer"
-                        ' - Tutorial videos panel
-                        Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
-                        Label7.Text = "Informations sur l'erreur :"
-                        Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
-                        Button17.Text = "Essayez à nouveau"
                     Case "PTB", "PTG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -5629,7 +5696,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
                         OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
                         ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                        AppPackagesToolStripMenuItem.Text = "Pacotes de aplicações"
+                        AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
                         AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
@@ -5677,11 +5744,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
                         ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote de aplicações..."
-                        AddProvisionedAppxPackage.Text = "Adicionar pacote de aplicações provisionado..."
-                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote de aplicações..."
+                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
+                        AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
+                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote da aplicação..."
+                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
                         GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
@@ -5760,8 +5827,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Opções"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
-                        GlossaryToolStripMenuItem.Text = "Glossário"
-                        CommandHelpToolStripMenuItem.Text = "Ajuda de comando..."
                         AboutDISMToolsToolStripMenuItem.Text = "Acerca do DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Mais informações"
@@ -5906,35 +5971,6 @@ Public Class MainForm
                         Button56.Text = "Guardar configuração..."
                         Button57.Text = "Definir caminho de destino..."
                         Button58.Text = "Definir espaço temporário..."
-                        ' New home panel design
-                        LinkLabel22.Text = "BEM-VINDO"
-                        LinkLabel23.Text = "ÚLTIMAS NOTÍCIAS"
-                        LinkLabel24.Text = "VÍDEOS TUTORIAIS"
-                        ' - Welcome panel
-                        Label36.Text = "Este é um software beta"
-                        Label8.Text = "Este programa não está completo e poderá ter problemas. Se isso acontecer, não hesite em enviar-nos os seus comentários"
-                        Label37.Text = "Aprender o programa"
-                        LinkLabel6.Text = "Como começar a utilizar a manutenção de imagens"
-                        LinkLabel7.Text = "Introdução ao DISMTools"
-                        LinkLabel8.Text = "Vindo de outros utilitários?"
-                        Label38.Text = "Efetuar operações"
-                        LinkLabel9.Text = "Dicas para realizar um ótimo serviço"
-                        LinkLabel10.Text = "Obter informações de imagem"
-                        LinkLabel11.Text = "Guardar informação de imagem"
-                        LinkLabel4.Text = "Gerir a sua instalação ativa"
-                        LinkLabel5.Text = "Gerir instalações em qualquer unidade"
-                        ' - Latest news panel
-                        Label9.Text = "Para obter as últimas notícias sobre o desenvolvimento do DISMTools, consulte a discussão nos fóruns do My Digital Life. É necessário ter uma conta para ver a maior parte do conteúdo."
-                        LinkLabel25.Text = "Visitar"
-                        Label22.Text = "Não foi possível obter as últimas notícias"
-                        Label34.Text = "Informação de erro:"
-                        Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                        Button59.Text = "Tentar novamente"
-                        ' - Tutorial videos panel
-                        Label11.Text = "Não foi possível obter os vídeos mais recentes"
-                        Label7.Text = "Informação de erro:"
-                        Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                        Button17.Text = "Tentar novamente"
                     Case "ITA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
@@ -5963,7 +5999,7 @@ Public Class MainForm
                         ImageManagementToolStripMenuItem.Text = "Gestisci immagini"
                         OSPackagesToolStripMenuItem.Text = "Pacchetti SO"
                         ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti provisioning"
-                        AppPackagesToolStripMenuItem.Text = "Pacchetti app"
+                        AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
                         AppPatchesToolStripMenuItem.Text = "Assistenza app (MSP)"
                         DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
                         LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue ed impostazioni regionali"
@@ -6011,11 +6047,11 @@ Public Class MainForm
                         GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
                         ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                         ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
-                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
-                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto app..."
+                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
+                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
+                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto AppX..."
                         OptimizeProvisionedAppxPackages.Text = "Ottimizza pacchetti in provisioning..."
-                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto app..."
+                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto AppX..."
                         ' Menu - Commands - App (MSP) servicing
                         CheckAppPatch.Text = "Verifica informazioni sulle patch applicazione..."
                         GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
@@ -6094,8 +6130,6 @@ Public Class MainForm
                         OptionsToolStripMenuItem.Text = "Opzioni"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Argomenti guida in linea"
-                        GlossaryToolStripMenuItem.Text = "Glossario"
-                        CommandHelpToolStripMenuItem.Text = "Aiuto per i comandi..."
                         AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
                         ' Menu - Invalid settings
                         ISFix.Text = "Altre informazioni"
@@ -6241,35 +6275,6 @@ Public Class MainForm
                         Button56.Text = "Salva configurazione..."
                         Button57.Text = "Imposta percorso destinazione..."
                         Button58.Text = "Imposta spazio temporaneo..."
-                        ' New home panel design
-                        LinkLabel22.Text = "BENVENUTO"
-                        LinkLabel23.Text = "ULTIME NOTIZIE"
-                        LinkLabel24.Text = "TUTORIAL VIDEO"
-                        ' - Welcome panel
-                        Label36.Text = "Questo è un software beta"
-                        Label8.Text = "Questo programma non è completo e potresti incontrare dei problemi. Se ciò dovesse accadere, non esitare ad inviarci un feedback"
-                        Label37.Text = "Per iniziare"
-                        LinkLabel6.Text = "Per iniziare a lavorare con le immagini"
-                        LinkLabel7.Text = "Per iniziare con DISMTools"
-                        LinkLabel8.Text = "Provieni da altri programmi di utilità?"
-                        Label38.Text = "Esecuzione operazioni"
-                        LinkLabel9.Text = "Suggerimenti per eseguire un'ottima manutenzione"
-                        LinkLabel10.Text = "Verifica informazioni immagine"
-                        LinkLabel11.Text = "Salvata informazioni immagine"
-                        LinkLabel4.Text = "Gestisci installazione online"
-                        LinkLabel5.Text = "Gestisci installazioni in qualsiasi unità"
-                        ' - Latest news panel
-                        Label9.Text = "Per conoscere le ultime novità sullo sviluppo di DISMTools, consulta la discussione nei forum di My Digital Life. Per visualizzare la maggior parte dei contenuti è necessario un account."
-                        LinkLabel25.Text = "Visita"
-                        Label22.Text = "Non è stato possibile ottenere le ultime novità"
-                        Label34.Text = "Informazioni errore:"
-                        Label35.Text = "Prova a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verifica se è possibile accedere ai siti web."
-                        Button59.Text = "Riprova"
-                        ' - Tutorial videos panel
-                        Label11.Text = "Non è stato possibile ottenere gli ultimi video"
-                        Label7.Text = "Informazioni sull'errore:"
-                        Label6.Text = "Prova a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verifica se è possibile accedere ai siti web."
-                        Button17.Text = "Riprova"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -6304,7 +6309,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Image management"
                 OSPackagesToolStripMenuItem.Text = "OS packages"
                 ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                AppPackagesToolStripMenuItem.Text = "App packages"
+                AppPackagesToolStripMenuItem.Text = "AppX packages"
                 AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
@@ -6435,8 +6440,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Options"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Help Topics"
-                GlossaryToolStripMenuItem.Text = "Glossary"
-                CommandHelpToolStripMenuItem.Text = "Command help..."
                 AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "More information"
@@ -6582,35 +6585,6 @@ Public Class MainForm
                 Button56.Text = "Save configuration..."
                 Button57.Text = "Set target path..."
                 Button58.Text = "Set scratch space..."
-                ' New home panel design
-                LinkLabel22.Text = "WELCOME"
-                LinkLabel23.Text = "LATEST NEWS"
-                LinkLabel24.Text = "TUTORIAL VIDEOS"
-                ' - Welcome panel
-                Label36.Text = "This is beta software"
-                Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
-                Label37.Text = "Getting started"
-                LinkLabel6.Text = "Getting started with image servicing"
-                LinkLabel7.Text = "Getting started with DISMTools"
-                LinkLabel8.Text = "Coming from other utilities?"
-                Label38.Text = "Performing operations"
-                LinkLabel9.Text = "Tips for performing great servicing"
-                LinkLabel10.Text = "Getting image information"
-                LinkLabel11.Text = "Saving image information"
-                LinkLabel4.Text = "Managing your active installation"
-                LinkLabel5.Text = "Managing installations on any drive"
-                ' - Latest news panel
-                Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
-                LinkLabel25.Text = "Visit"
-                Label22.Text = "We couldn't get the latest news"
-                Label34.Text = "Error information:"
-                Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                Button59.Text = "Try again"
-                ' - Tutorial videos panel
-                Label11.Text = "We couldn't get the latest videos"
-                Label7.Text = "Error information:"
-                Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
-                Button17.Text = "Try again"
             Case 2
                 DynaLog.LogMessage("Language code is 2. Switching to Spanish...")
                 ' Top-level menu items
@@ -6640,7 +6614,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
                 OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
                 ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
                 AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
@@ -6688,11 +6662,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
                 ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
-                AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
-                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
+                AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionada..."
+                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obtener información de parche de aplicación..."
                 GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
@@ -6771,8 +6745,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Opciones"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
-                GlossaryToolStripMenuItem.Text = "Glosario"
-                CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                 AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "Más información"
@@ -6917,35 +6889,6 @@ Public Class MainForm
                 Button56.Text = "Guardar configuración..."
                 Button57.Text = "Establecer ruta de destino..."
                 Button58.Text = "Establecer espacio temporal..."
-                ' New home panel design
-                LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
-                LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
-                LinkLabel24.Text = "VÍDEOS"
-                ' - Welcome panel
-                Label36.Text = "Este es un software en beta"
-                Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
-                Label37.Text = "Introducciones"
-                LinkLabel6.Text = "Introducción al servicio de imágenes"
-                LinkLabel7.Text = "Introducción a DISMTools"
-                LinkLabel8.Text = "¿Viniendo de otras herramientas?"
-                Label38.Text = "Realizando operaciones"
-                LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
-                LinkLabel10.Text = "Obteniendo información de imagen"
-                LinkLabel11.Text = "Guardando información de imagen"
-                LinkLabel4.Text = "Administrando su instalación activa"
-                LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
-                ' - Latest news panel
-                Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
-                LinkLabel25.Text = "Visitar"
-                Label22.Text = "No pudimos obtener las últimas noticias"
-                Label34.Text = "Información del error:"
-                Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                Button59.Text = "Intentar de nuevo"
-                ' - Tutorial videos panel
-                Label11.Text = "No pudimos obtener los últimos vídeos"
-                Label7.Text = "Información del error:"
-                Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
-                Button17.Text = "Intentar de nuevo"
             Case 3
                 DynaLog.LogMessage("Language code is 3. Switching to French...")
                 ' Top-level menu items
@@ -6975,7 +6918,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestion des images"
                 OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
                 ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                AppPackagesToolStripMenuItem.Text = "Paquets d'applications"
+                AppPackagesToolStripMenuItem.Text = "Paquets AppX"
                 AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
@@ -7023,11 +6966,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obtenir des informations sur le paquet de provisionnement..."
                 ApplyCustomDataImage.Text = "Appliquer une image de données personnalisée..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
-                AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets d'applications..."
+                GetProvisionedAppxPackages.Text = "Obtenir des informations sur les paquets AppX..."
+                AddProvisionedAppxPackage.Text = "Ajouter les paquets AppX provisionnées..."
+                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
-                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
+                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans les paquets AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obtenir des informations sur les correctifs de l'application..."
                 GetAppPatchInfo.Text = "Obtenir des informations détaillées sur les correctifs des applications..."
@@ -7106,8 +7049,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Paramètres"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
-                GlossaryToolStripMenuItem.Text = "Glossaire"
-                CommandHelpToolStripMenuItem.Text = "Aide à la commande..."
                 AboutDISMToolsToolStripMenuItem.Text = "À propos de DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "Plus d'informations"
@@ -7253,35 +7194,6 @@ Public Class MainForm
                 Button56.Text = "Sauvegarder les paramètres..."
                 Button57.Text = "Configurer le chemin d'accès..."
                 Button58.Text = "Configurer l'espace temporaire..."
-                ' New home panel design
-                LinkLabel22.Text = "BIENVENUE"
-                LinkLabel23.Text = "DERNIÈRES NOUVELLES"
-                LinkLabel24.Text = "VIDÉOS TUTORIELLES"
-                ' - Welcome panel
-                Label36.Text = "Il s'agit d'une version bêta du logiciel"
-                Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
-                Label37.Text = "Pour commencer"
-                LinkLabel6.Text = "Commencer avec le service des images"
-                LinkLabel7.Text = "Commencer avec DISMTools"
-                LinkLabel8.Text = "Venant d'autres utilités ?"
-                Label38.Text = "Réalisation des opérations"
-                LinkLabel9.Text = "Conseils pour un bon service"
-                LinkLabel10.Text = "Obtenir des informations sur l'image"
-                LinkLabel11.Text = "Sauvegarder les informations sur l'image"
-                LinkLabel4.Text = "Gérer votre installation active"
-                LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
-                ' - Latest news panel
-                Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
-                LinkLabel25.Text = "Visiter"
-                Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
-                Label34.Text = "Information d'erreur :"
-                Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
-                Button59.Text = "Réessayer"
-                ' - Tutorial videos panel
-                Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
-                Label7.Text = "Informations sur l'erreur :"
-                Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
-                Button17.Text = "Essayez à nouveau"
             Case 4
                 DynaLog.LogMessage("Language code is 4. Switching to Portuguese...")
                 ' Top-level menu items
@@ -7311,7 +7223,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
                 OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
                 ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                AppPackagesToolStripMenuItem.Text = "Pacotes de aplicações"
+                AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
                 AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
@@ -7359,11 +7271,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
                 ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote de aplicações..."
-                AddProvisionedAppxPackage.Text = "Adicionar pacote de aplicações provisionado..."
-                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote de aplicações..."
+                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
+                AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
+                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote da aplicação..."
+                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
                 GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
@@ -7442,8 +7354,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Opções"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
-                GlossaryToolStripMenuItem.Text = "Glossário"
-                CommandHelpToolStripMenuItem.Text = "Ajuda de comando..."
                 AboutDISMToolsToolStripMenuItem.Text = "Acerca do DISMTools"
                 ' Menu - Invalid settings
                 ISFix.Text = "Mais informações"
@@ -7588,35 +7498,6 @@ Public Class MainForm
                 Button56.Text = "Guardar configuração..."
                 Button57.Text = "Definir caminho de destino..."
                 Button58.Text = "Definir espaço temporário..."
-                ' New home panel design
-                LinkLabel22.Text = "BEM-VINDO"
-                LinkLabel23.Text = "ÚLTIMAS NOTÍCIAS"
-                LinkLabel24.Text = "VÍDEOS TUTORIAIS"
-                ' - Welcome panel
-                Label36.Text = "Este é um software beta"
-                Label8.Text = "Este programa não está completo e poderá ter problemas. Se isso acontecer, não hesite em enviar-nos os seus comentários"
-                Label37.Text = "Aprender o programa"
-                LinkLabel6.Text = "Como começar a utilizar a manutenção de imagens"
-                LinkLabel7.Text = "Introdução ao DISMTools"
-                LinkLabel8.Text = "Vindo de outros utilitários?"
-                Label38.Text = "Efetuar operações"
-                LinkLabel9.Text = "Dicas para realizar um ótimo serviço"
-                LinkLabel10.Text = "Obter informações de imagem"
-                LinkLabel11.Text = "Guardar informação de imagem"
-                LinkLabel4.Text = "Gerir a sua instalação ativa"
-                LinkLabel5.Text = "Gerir instalações em qualquer unidade"
-                ' - Latest news panel
-                Label9.Text = "Para obter as últimas notícias sobre o desenvolvimento do DISMTools, consulte a discussão nos fóruns do My Digital Life. É necessário ter uma conta para ver a maior parte do conteúdo."
-                LinkLabel25.Text = "Visitar"
-                Label22.Text = "Não foi possível obter as últimas notícias"
-                Label34.Text = "Informação de erro:"
-                Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                Button59.Text = "Tentar novamente"
-                ' - Tutorial videos panel
-                Label11.Text = "Não foi possível obter os vídeos mais recentes"
-                Label7.Text = "Informação de erro:"
-                Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
-                Button17.Text = "Tentar novamente"
             Case 5
                 DynaLog.LogMessage("Language code is 5. Switching to Italian...")
                 ' Top-level menu items
@@ -7646,7 +7527,7 @@ Public Class MainForm
                 ImageManagementToolStripMenuItem.Text = "Gestione delle immagini"
                 OSPackagesToolStripMenuItem.Text = "Pacchetti OS"
                 ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti di provisioning"
-                AppPackagesToolStripMenuItem.Text = "Pacchetti app"
+                AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
                 AppPatchesToolStripMenuItem.Text = "Assistenza per le app (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue e impostazioni regionali"
@@ -7694,11 +7575,11 @@ Public Class MainForm
                 GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
                 ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
-                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
-                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto app..."
+                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
+                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
+                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto AppX..."
                 OptimizeProvisionedAppxPackages.Text = "Ottimizzare i pacchetti in provisioning..."
-                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto app..."
+                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto AppX..."
                 ' Menu - Commands - App (MSP) servicing
                 CheckAppPatch.Text = "Verifica informazioni patch applicazione..."
                 GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
@@ -7777,8 +7658,6 @@ Public Class MainForm
                 OptionsToolStripMenuItem.Text = "Opzioni"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
-                GlossaryToolStripMenuItem.Text = "Glossario"
-                CommandHelpToolStripMenuItem.Text = "Aiuto per i comandi..."
                 AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
                 ' Menu - Tour Server
                 TourActionsTSMI.Text = "Azioni tour"
@@ -7924,35 +7803,6 @@ Public Class MainForm
                 Button56.Text = "Salva configurazione..."
                 Button57.Text = "Imposta percorso destinazione..."
                 Button58.Text = "Imposta spazio temporaneo..."
-                ' New home panel design
-                LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
-                LinkLabel23.Text = "NOVITA'"
-                LinkLabel24.Text = "TUTORIAL VIDEO"
-                ' - Welcome panel
-                Label36.Text = "Questo è un software beta"
-                Label8.Text = "Questo programma non è completo e potreste incontrare dei problemi. Se ciò dovesse accadere, non esitate a inviarci un feedback"
-                Label37.Text = "Per iniziare"
-                LinkLabel6.Text = "Per iniziare a lavorare con le immagini"
-                LinkLabel7.Text = "Per iniziare con DISMTools"
-                LinkLabel8.Text = "Provenienza da altri programmi di utilità?"
-                Label38.Text = "Esecuzione di operazioni"
-                LinkLabel9.Text = "Suggerimenti per eseguire un'ottima manutenzione"
-                LinkLabel10.Text = "Verifica informazioni immagine"
-                LinkLabel11.Text = "Salvataggio informazioni immagine"
-                LinkLabel4.Text = "Gestione installazione attiva"
-                LinkLabel5.Text = "Gestione installazioni in qualsiasi unità"
-                ' - Latest news panel
-                Label9.Text = "Per conoscere le ultime notizie sullo sviluppo di DISMTools, consultate la discussione sui forum di My Digital Life. Per visualizzare la maggior parte dei contenuti è necessario un account."
-                LinkLabel25.Text = "Visita"
-                Label22.Text = "Non è stato possibile ottenere le ultime notizie"
-                Label34.Text = "Informazioni sull'errore:"
-                Label35.Text = "Provare a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verificare se è possibile accedere ai siti web."
-                Button59.Text = "Riprova"
-                ' - Tutorial videos panel
-                Label11.Text = "Non è stato possibile ottenere gli ultimi video"
-                Label7.Text = "Informazioni sull'errore:"
-                Label6.Text = "Provare a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verificare se è possibile accedere ai siti web."
-                Button17.Text = "Riprova"
         End Select
 
         If OnlineManagement Then
@@ -8098,6 +7948,203 @@ Public Class MainForm
                     Label49.Text = "(Installazione offline)"
             End Select
         End If
+
+        ' Infinity Home -- don't refresh computer information
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ChangeComputerNameLink.Text = "Rename"
+                        Label1.Text = "Domain Membership:"
+                        Label2.Text = "Workgroup/Domain:"
+                        Label3.Text = "IP Address Configuration:"
+                        Label4.Text = "Explore and get started"
+                        Label5.Text = "Stay up-to-date"
+                        Label9.Text = "Fact of the day"
+                        LinkLabel27.Text = "Learn what's new in this release"
+                        LinkLabel28.Text = "Get started with DISMTools and image servicing"
+                        LinkLabel29.Text = "Manage your current installation"
+                        LinkLabel30.Text = "Manage external Windows installations"
+                        Label12.Text = "Learn by watching videos"
+                        Label6.Text = "Video content could not be loaded."
+                        Label7.Text = "The news feed could not be loaded."
+                        LinkLabel31.Text = "Learn more"
+                        LinkLabel32.Text = "Retry"
+                        LinkLabel33.Text = "Retry"
+                        LinkLabel34.Text = "Learn more"
+                    Case "ESN"
+                        ChangeComputerNameLink.Text = "Cambiar nombre"
+                        Label1.Text = "Membresía de dominio:"
+                        Label2.Text = "Grupo de trabajo/dominio:"
+                        Label3.Text = "Configuración de dirección IP:"
+                        Label4.Text = "Explore y comience"
+                        Label5.Text = "Manténgase informado"
+                        Label9.Text = "Dato del día"
+                        LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
+                        LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
+                        LinkLabel29.Text = "Administre su instalación actual"
+                        LinkLabel30.Text = "Administre instalaciones externas"
+                        Label12.Text = "Aprenda viendo vídeos (en inglés)"
+                        Label6.Text = "No se han podido cargar los vídeos."
+                        Label7.Text = "No se han podido cargar las noticias."
+                        LinkLabel31.Text = "Saber más"
+                        LinkLabel32.Text = "Intentarlo de nuevo"
+                        LinkLabel33.Text = "Intentarlo de nuevo"
+                        LinkLabel34.Text = "Saber más"
+                    Case "FRA"
+                        ChangeComputerNameLink.Text = "Renommer"
+                        Label1.Text = "Appartenance au domaine :"
+                        Label2.Text = "Groupe de travail/Domaine :"
+                        Label3.Text = "Configuration de l'adresse IP :"
+                        Label4.Text = "Découvrir et commencer"
+                        Label5.Text = "Rester à jour"
+                        Label9.Text = "Le fait du jour"
+                        LinkLabel27.Text = "Découvrez les nouveautés de cette version"
+                        LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
+                        LinkLabel29.Text = "Gérer votre installation actuelle"
+                        LinkLabel30.Text = "Gérer les installations Windows externes"
+                        Label12.Text = "Apprendre en regardant des vidéos (en anglais)"
+                        Label6.Text = "Impossible de charger le contenu vidéo."
+                        Label7.Text = "Impossible de charger le fil d'actualité."
+                        LinkLabel31.Text = "En savoir plus"
+                        LinkLabel32.Text = "Réessayer"
+                        LinkLabel33.Text = "Réessayer"
+                        LinkLabel34.Text = "En savoir plus"
+                    Case "PTB", "PTG"
+                        ChangeComputerNameLink.Text = "Renomear"
+                        Label1.Text = "Pertença a um domínio:"
+                        Label2.Text = "Grupo de trabalho/Domínio:"
+                        Label3.Text = "Configuração do endereço IP:"
+                        Label4.Text = "Explorar e começar"
+                        Label5.Text = "Manter-se atualizado"
+                        Label9.Text = "Curiosidade do dia"
+                        LinkLabel27.Text = "Descubra as novidades desta versão"
+                        LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
+                        LinkLabel29.Text = "Gerir a sua instalação atual"
+                        LinkLabel30.Text = "Gerir instalações externas do Windows"
+                        Label12.Text = "Aprenda assistindo a vídeos (em inglês)"
+                        Label6.Text = "Não foi possível carregar o conteúdo de vídeo."
+                        Label7.Text = "Não foi possível carregar o feed de notícias."
+                        LinkLabel31.Text = "Saiba mais"
+                        LinkLabel32.Text = "Tentar novamente"
+                        LinkLabel33.Text = "Tentar novamente"
+                        LinkLabel34.Text = "Saiba mais"
+                    Case "ITA"
+                        ChangeComputerNameLink.Text = "Rinomina"
+                        Label1.Text = "Appartenenza al dominio:"
+                        Label2.Text = "Gruppo di lavoro/Dominio:"
+                        Label3.Text = "Configurazione dell'indirizzo IP:"
+                        Label4.Text = "Esplora e inizia"
+                        Label5.Text = "Rimani aggiornato"
+                        Label9.Text = "Curiosità del giorno"
+                        LinkLabel27.Text = "Scopri le novità di questa versione"
+                        LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
+                        LinkLabel29.Text = "Gestisci la tua installazione attuale"
+                        LinkLabel30.Text = "Gestisci installazioni Windows esterne"
+                        Label12.Text = "Impara guardando i video (in inglese)"
+                        Label6.Text = "Impossibile caricare il contenuto video."
+                        Label7.Text = "Impossibile caricare il feed delle notizie."
+                        LinkLabel31.Text = "Ulteriori informazioni"
+                        LinkLabel32.Text = "Riprova"
+                        LinkLabel33.Text = "Riprova"
+                        LinkLabel34.Text = "Ulteriori informazioni"
+                End Select
+            Case 1
+                ChangeComputerNameLink.Text = "Rename"
+                Label1.Text = "Domain Membership:"
+                Label2.Text = "Workgroup/Domain:"
+                Label3.Text = "IP Address Configuration:"
+                Label4.Text = "Explore and get started"
+                Label5.Text = "Stay up-to-date"
+                Label9.Text = "Fact of the day"
+                LinkLabel27.Text = "Learn what's new in this release"
+                LinkLabel28.Text = "Get started with DISMTools and image servicing"
+                LinkLabel29.Text = "Manage your current installation"
+                LinkLabel30.Text = "Manage external Windows installations"
+                Label12.Text = "Learn by watching videos"
+                Label6.Text = "Video content could not be loaded."
+                Label7.Text = "The news feed could not be loaded."
+                LinkLabel31.Text = "Learn more"
+                LinkLabel32.Text = "Retry"
+                LinkLabel33.Text = "Retry"
+                LinkLabel34.Text = "Learn more"
+            Case 2
+                ChangeComputerNameLink.Text = "Cambiar nombre"
+                Label1.Text = "Membresía de dominio:"
+                Label2.Text = "Grupo de trabajo/dominio:"
+                Label3.Text = "Configuración de dirección IP:"
+                Label4.Text = "Explore y comience"
+                Label5.Text = "Manténgase informado"
+                Label9.Text = "Dato del día"
+                LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
+                LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
+                LinkLabel29.Text = "Administre su instalación actual"
+                LinkLabel30.Text = "Administre instalaciones externas"
+                Label12.Text = "Aprenda viendo vídeos (en inglés)"
+                Label6.Text = "No se han podido cargar los vídeos."
+                Label7.Text = "No se han podido cargar las noticias."
+                LinkLabel31.Text = "Saber más"
+                LinkLabel32.Text = "Intentarlo de nuevo"
+                LinkLabel33.Text = "Intentarlo de nuevo"
+                LinkLabel34.Text = "Saber más"
+            Case 3
+                ChangeComputerNameLink.Text = "Renommer"
+                Label1.Text = "Appartenance au domaine :"
+                Label2.Text = "Groupe de travail/Domaine :"
+                Label3.Text = "Configuration de l'adresse IP :"
+                Label4.Text = "Découvrir et commencer"
+                Label5.Text = "Rester à jour"
+                Label9.Text = "Le fait du jour"
+                LinkLabel27.Text = "Découvrez les nouveautés de cette version"
+                LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
+                LinkLabel29.Text = "Gérer votre installation actuelle"
+                LinkLabel30.Text = "Gérer les installations Windows externes"
+                Label12.Text = "Apprendre en regardant des vidéos (en anglais)"
+                Label6.Text = "Impossible de charger le contenu vidéo."
+                Label7.Text = "Impossible de charger le fil d'actualité."
+                LinkLabel31.Text = "En savoir plus"
+                LinkLabel32.Text = "Réessayer"
+                LinkLabel33.Text = "Réessayer"
+                LinkLabel34.Text = "En savoir plus"
+            Case 4
+                ChangeComputerNameLink.Text = "Renomear"
+                Label1.Text = "Pertença a um domínio:"
+                Label2.Text = "Grupo de trabalho/Domínio:"
+                Label3.Text = "Configuração do endereço IP:"
+                Label4.Text = "Explorar e começar"
+                Label5.Text = "Manter-se atualizado"
+                Label9.Text = "Curiosidade do dia"
+                LinkLabel27.Text = "Descubra as novidades desta versão"
+                LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
+                LinkLabel29.Text = "Gerir a sua instalação atual"
+                LinkLabel30.Text = "Gerir instalações externas do Windows"
+                Label12.Text = "Aprenda assistindo a vídeos (em inglês)"
+                Label6.Text = "Não foi possível carregar o conteúdo de vídeo."
+                Label7.Text = "Não foi possível carregar o feed de notícias."
+                LinkLabel31.Text = "Saiba mais"
+                LinkLabel32.Text = "Tentar novamente"
+                LinkLabel33.Text = "Tentar novamente"
+                LinkLabel34.Text = "Saiba mais"
+            Case 5
+                ChangeComputerNameLink.Text = "Rinomina"
+                Label1.Text = "Appartenenza al dominio:"
+                Label2.Text = "Gruppo di lavoro/Dominio:"
+                Label3.Text = "Configurazione dell'indirizzo IP:"
+                Label4.Text = "Esplora e inizia"
+                Label5.Text = "Rimani aggiornato"
+                Label9.Text = "Curiosità del giorno"
+                LinkLabel27.Text = "Scopri le novità di questa versione"
+                LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
+                LinkLabel29.Text = "Gestisci la tua installazione attuale"
+                LinkLabel30.Text = "Gestisci installazioni Windows esterne"
+                Label12.Text = "Impara guardando i video (in inglese)"
+                Label6.Text = "Impossibile caricare il contenuto video."
+                Label7.Text = "Impossibile caricare il feed delle notizie."
+                LinkLabel31.Text = "Ulteriori informazioni"
+                LinkLabel32.Text = "Riprova"
+                LinkLabel33.Text = "Riprova"
+                LinkLabel34.Text = "Ulteriori informazioni"
+        End Select
     End Sub
 
     Sub CheckDTProjHeaders(DTFileName As String)
@@ -8159,7 +8206,7 @@ Public Class MainForm
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
                 DynaLog.LogMessage("We are dealing with a SQL Server Data Tools project. Cancelling project load...")
-                SqlServerProjectErrorDlg.ShowDialog(Me)
+                MessageBox.Show("The specified project is not a DISMTools project.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
             SaveProjectToolStripMenuItem.Enabled = True
@@ -8733,13 +8780,11 @@ Public Class MainForm
     ''' </summary>
     ''' <param name="IsBeingClosed">Determines whether the program is being closed</param>
     ''' <param name="SaveProject">Determines whether the program should save the project</param>
-    ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
-    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+    Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean)
         DynaLog.LogMessage("Preparing to unload project...")
         DynaLog.LogMessage("- Is the program being closed? " & If(IsBeingClosed, "Yes", "No"))
         DynaLog.LogMessage("- Will the project be saved? " & If(SaveProject, "Yes", "No"))
-        DynaLog.LogMessage("- Will the image be unmounted? " & If(UnmountImg, "Yes", "No"))
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
@@ -8836,14 +8881,53 @@ Public Class MainForm
         bwGetImageInfo = True
         bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
+            Dim IsInFfuMode As Boolean
             DynaLog.LogMessage("The image will be unmounted committing changes...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            ProgressPanel.UMountOp = 0
+            If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+                IsInFfuMode = True
+
+                ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+                ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+                ' but at least we save the changes...
+
+                Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+                ' Options for capture task
+                ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+                ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+                ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+                ProgressPanel.FFUCaptureCompressType = 1
+
+                ' Options for unmount task
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = 1
+
+                ' Options for replace task
+                ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+                ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+                ProgressPanel.TaskList.AddRange({5, 21, 998})
+            Else
+                IsInFfuMode = False
+
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 0
+            End If
             ProgressPanel.ShowDialog(Me)
+            If IsInFfuMode Then
+                UpdateProjProperties(False, False)
+                SaveDTProj()
+            End If
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             DynaLog.LogMessage("The image will be unmounted discarding changes...")
@@ -8862,19 +8946,6 @@ Public Class MainForm
                 SaveDTProj()
             End If
         End If
-        If UnmountImg Then
-            DynaLog.LogMessage("The image will be unmounted...")
-            ProgressPanel.OperationNum = 21
-            ProgressPanel.UMountLocalDir = True
-            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-            ProgressPanel.UMountImgIndex = ImgIndex
-            ProgressPanel.MountDir = MountDir
-            If IsBeingClosed Then
-                DynaLog.LogMessage("The program will be closed...")
-                ProgressPanel.ProgramIsBeingClosed = True
-            End If
-            ProgressPanel.ShowDialog(Me)
-        End If
         Text = "DISMTools"
         If Debugger.IsAttached Then
             Text &= " (debug mode)"
@@ -8882,10 +8953,7 @@ Public Class MainForm
         DynaLog.LogMessage("Removing items from project tree view...")
         UnpopulateProjectTree()
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
-        Refresh()
         CommandsToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         HomePanel.Visible = True
         PrjPanel.Visible = False
@@ -8980,7 +9048,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in online mode
         ToolStripButton2.Enabled = False
@@ -9135,7 +9202,6 @@ Public Class MainForm
         ImageView_NoImage.Visible = False
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
-        Thread.Sleep(250)
         Refresh()
         ' Saving a project is not possible in offline mode either
         ToolStripButton2.Enabled = False
@@ -9316,7 +9382,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -9468,7 +9533,6 @@ Public Class MainForm
         ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
-        Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         ' Enable tasks in the new design accordingly
@@ -10131,7 +10195,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave, ImportDriver.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave, ImportDriver.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -10555,11 +10619,11 @@ Public Class MainForm
         ShowChildDescs(False, 20)
     End Sub
 
-    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
+    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(False, 21)
     End Sub
 
-    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
+    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(False, 22)
     End Sub
 
@@ -10667,31 +10731,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -10703,31 +10767,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -10737,21 +10801,11 @@ Public Class MainForm
         DynaLog.LogMessage("Showing save question...")
         SaveProjectQuestionDialog.ShowDialog(Me)
         If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Saving project and unmounting the image...")
-                UnloadDTProj(False, True, True)
-            Else
-                DynaLog.LogMessage("Saving project...")
-                UnloadDTProj(False, True, False)
-            End If
+            DynaLog.LogMessage("Saving project...")
+            UnloadDTProj(False, True)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-            If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                UnloadDTProj(False, False, True)
-            Else
-                DynaLog.LogMessage("Discarding project changes...")
-                UnloadDTProj(False, False, False)
-            End If
+            DynaLog.LogMessage("Discarding project changes...")
+            UnloadDTProj(False, False)
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
             DynaLog.LogMessage("Nothing happened here")
             Exit Sub
@@ -10775,28 +10829,19 @@ Public Class MainForm
                 DynaLog.LogMessage("The image this project contains has been modified")
                 SaveProjectQuestionDialog.ShowDialog(Me)
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Saving project and unmounting the image...")
-                        UnloadDTProj(True, True, True)
-                    Else
-                        DynaLog.LogMessage("Saving project...")
-                        UnloadDTProj(True, True, False)
-                    End If
+                    DynaLog.LogMessage("Saving project...")
+                    UnloadDTProj(True, True)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                    If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                        DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                        UnloadDTProj(True, False, True)
-                    Else
-                        DynaLog.LogMessage("Discarding project changes...")
-                        UnloadDTProj(True, False, False)
-                    End If
+                    DynaLog.LogMessage("Discarding project changes...")
+                    UnloadDTProj(True, False)
                 ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Nothing happened here. Cancelling closure...")
                     e.Cancel = True
                 End If
             Else
+                imgCommitOperation = -1
                 DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-                UnloadDTProj(True, False, False)
+                UnloadDTProj(True, False)
             End If
         End If
         If ImgBW.IsBusy Then
@@ -10828,15 +10873,6 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
-        If HelpBrowserForm.Visible Then
-            DynaLog.LogMessage("The help browser is open. Attempting closure...")
-            HelpBrowserForm.Close()
-            If HelpBrowserForm.Visible Then
-                DynaLog.LogMessage("The help browser is still open. Cannot continue closure")
-                e.Cancel = True
-                Exit Sub
-            End If
-        End If
         If InfoSaveResults.Visible Then
             DynaLog.LogMessage("The info saver result viewer is open. Attempting closure...")
             InfoSaveResults.Close()
@@ -10849,10 +10885,7 @@ Public Class MainForm
         If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
             ToggleFullScreenMode()
         End If
-        If Not VolatileMode Then
-            DynaLog.LogMessage("DISMTools is not in volatile mode. Saving settings...")
-            SaveDTSettings()
-        End If
+        SaveDTSettings()
         If Not EnableDynaLog Then
             ' Settings have already been saved. Re-enable DynaLog for ending
             EnableDynaLog = True
@@ -10913,28 +10946,18 @@ Public Class MainForm
             DynaLog.LogMessage("The image this project contains has been modified")
             SaveProjectQuestionDialog.ShowDialog(Me)
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Saving project and unmounting the image...")
-                    UnloadDTProj(False, True, True)
-                Else
-                    DynaLog.LogMessage("Saving project...")
-                    UnloadDTProj(False, True, False)
-                End If
+                DynaLog.LogMessage("Saving project...")
+                UnloadDTProj(False, True)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.No Then
-                If SaveProjectQuestionDialog.CheckBox1.Checked Then
-                    DynaLog.LogMessage("Discarding project changes and unmounting the image...")
-                    UnloadDTProj(False, False, True)
-                Else
-                    DynaLog.LogMessage("Discarding project changes...")
-                    UnloadDTProj(False, False, False)
-                End If
+                DynaLog.LogMessage("Discarding project changes...")
+                UnloadDTProj(False, False)
             ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("Nothing happened here.")
                 Exit Sub
             End If
         Else
             DynaLog.LogMessage("No (unsaved) changes have been detected in this project. Unloading it...")
-            UnloadDTProj(False, False, False)
+            UnloadDTProj(False, False)
         End If
     End Sub
 
@@ -11431,7 +11454,7 @@ Public Class MainForm
                 ProgressPanel.ShowDialog(Me)
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("User decided not to reload the servicing session. Unloading project...")
-                UnloadDTProj(False, False, False)
+                UnloadDTProj(False, False)
                 ImgBW.CancelAsync()
             End If
         End If
@@ -11442,7 +11465,6 @@ Public Class MainForm
                     DynaLog.LogMessage("Incompatibility studied. This is a Windows Vista/Server 2008 image")
                     ' Let the user know about the incompatibility
                     If Not ProgressPanel.IsDisposed Then
-                        ToolStripButton4.Visible = False
                         ProgressPanel.Dispose()
                         ProgressPanel.Close()
                     End If
@@ -11576,41 +11598,6 @@ Public Class MainForm
 
     Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
         DynaLog.LogMessage("The mounted image detector is no longer busy.")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
-                    Case "ESN"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-                    Case "FRA"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB", "PTG"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-                    Case "ITA"
-                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-                End Select
-            Case 1
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
-            Case 2
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
-            Case 3
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-            Case 4
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
-            Case 5
-                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
-                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
-        End Select
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
@@ -11634,7 +11621,7 @@ Public Class MainForm
 
     Private Sub Discord_Click(sender As Object, e As EventArgs) Handles Discord.Click
         DynaLog.LogMessage("Launching discord join link...")
-        Process.Start("https://discord.gg/vPrZXHPP")
+        Process.Start("https://discord.gg/5TxEmKXNwu")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
@@ -11694,7 +11681,7 @@ Public Class MainForm
             DynaLog.LogMessage("File specified in OFD: " & OpenFileDialog1.FileName)
             If File.Exists(OpenFileDialog1.FileName) Then
                 DynaLog.LogMessage("Project file exists")
-                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
                 If ImgBW.IsBusy Then Exit Sub
                 Dim Project As New Recents()
                 Project.ProjPath = OpenFileDialog1.FileName
@@ -11784,52 +11771,6 @@ Public Class MainForm
     Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
         RemDrivers.ShowDialog(Me)
     End Sub
-
-    ''' <summary>
-    ''' Detects the source for optional feature installs and component repairs from the "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing" registry key
-    ''' </summary>
-    ''' <returns>Returns GPOSource as the aforementioned source if this function runs correctly. Otherwise, it returns Nothing</returns>
-    ''' <remarks>"LocalSourcePath" is updated every time a source is specified in the group policy editor. "GPOSource" pulls the value from "LocalSourcePath", which can be a local folder, a remote server or a Windows image (if it begins with "wim:\")</remarks>
-    Function GetSrcFromGPO() As String
-        Try
-            DynaLog.LogMessage("Getting source of features and component repairs from Group Policy Object...")
-            Dim GPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
-            Dim GPOSource As String = GPOSourceRk.GetValue("LocalSourcePath").ToString()
-            GPOSourceRk.Close()
-            DynaLog.LogMessage("Obtained source: " & GPOSource)
-            Return GPOSource
-        Catch ex As Exception
-            DynaLog.LogMessage("An error occurred while getting GPO source. Error message: " & ex.Message)
-            DynaLog.LogMessage("This could be either because no group policy has been set, or because something is seriously wrong with your system")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
-                        Case "ESN"
-                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
-                        Case "FRA"
-                            MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
-                        Case "PTB", "PTG"
-                            MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
-                        Case "ITA"
-                            MsgBox("Impossibile rilevare l'origine dai criteri di gruppo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Rilevamento da criteri di gruppo")
-                    End Select
-                Case 1
-                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
-                Case 2
-                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
-                Case 3
-                    MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
-                Case 4
-                    MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
-                Case 5
-                    MsgBox("Impossibile rilevare l'origine dai criteri di gruppo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Rilevamento da criteri di gruppo")
-            End Select
-            Return Nothing
-        End Try
-        Return Nothing
-    End Function
 
     Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
         DynaLog.LogMessage("Opening provisioned package addition dialog...")
@@ -12614,32 +12555,36 @@ Public Class MainForm
     End Sub
 
     Private Sub AccessDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AccessDirectoryToolStripMenuItem.Click
-        DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
-        If prjTreeView.SelectedNode.Name = "parent" Then
-            Process.Start(projPath)
-        ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
-            Process.Start(projPath & "\dandi")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
-            Process.Start(projPath & "\dandi\x86")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
-            Process.Start(projPath & "\dandi\amd64")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
-            Process.Start(projPath & "\dandi\arm")
-        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
-            Process.Start(projPath & "\dandi\arm64")
-        ElseIf prjTreeView.SelectedNode.Name = "mount" Then
-            If Not MountDir = (projPath & "\mount") Then
-                Process.Start(MountDir)
-            Else
-                Process.Start(projPath & "\mount")
+        Try
+            DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
+            If prjTreeView.SelectedNode.Name = "parent" Then
+                Process.Start(projPath)
+            ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
+                Process.Start(projPath & "\dandi")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+                Process.Start(projPath & "\dandi\x86")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+                Process.Start(projPath & "\dandi\amd64")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+                Process.Start(projPath & "\dandi\arm")
+            ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+                Process.Start(projPath & "\dandi\arm64")
+            ElseIf prjTreeView.SelectedNode.Name = "mount" Then
+                If Not MountDir = (projPath & "\mount") Then
+                    Process.Start(MountDir)
+                Else
+                    Process.Start(projPath & "\mount")
+                End If
+            ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
+                Process.Start(projPath & "\unattend_xml")
+            ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
+                Process.Start(projPath & "\scr_temp")
+            ElseIf prjTreeView.SelectedNode.Name = "reports" Then
+                Process.Start(projPath & "\reports")
             End If
-        ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
-            Process.Start(projPath & "\unattend_xml")
-        ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
-            Process.Start(projPath & "\scr_temp")
-        ElseIf prjTreeView.SelectedNode.Name = "reports" Then
-            Process.Start(projPath & "\reports")
-        End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub UnloadProjectToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem1.Click
@@ -12695,7 +12640,7 @@ Public Class MainForm
             DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
             If ActiveInstAccessWarn.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then Exit Sub
-            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True)
             If ImgBW.IsBusy Then Exit Sub
         End If
         ActiveInstAccessWarn.Label2.Visible = False
@@ -12713,7 +12658,7 @@ Public Class MainForm
             End If
             If isProjectLoaded Then
                 DynaLog.LogMessage("Unloading project...")
-                UnloadDTProj(False, True, False)
+                UnloadDTProj(False, True)
                 If ImgBW.IsBusy Then Exit Sub
             End If
             BeginOfflineManagement(drivePath)
@@ -13271,31 +13216,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13339,7 +13284,7 @@ Public Class MainForm
             DynaLog.LogMessage("Unmounting image directly...")
             If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
             imgCommitOperation = 1
-            UnloadDTProj(False, True, True)
+            UnloadDTProj(False, True)
             Exit Sub
         End If
         DynaLog.LogMessage("Opening image unmount dialog...")
@@ -13353,31 +13298,31 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = "Properties"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà"
+                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = "Properties"
+                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades"
+                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà"
+                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
-            ProjProperties.Text = ProjProperties.Label1.Text
+            ProjProperties.Text = ProjProperties.ImageTaskHeader1.ItemText
         End If
         DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog(Me)
@@ -13413,34 +13358,85 @@ Public Class MainForm
     Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
         DynaLog.LogMessage("Committing changes to the image...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-        ProgressPanel.MountDir = MountDir
-        ' TODO: Add additional options later
-        ProgressPanel.OperationNum = 8
+        Dim IsInFfuMode As Boolean
+
+        If Path.GetExtension(CurrentImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
+            IsInFfuMode = True
+
+            ' We have to do all of this because FFUs can't be saved normally. The workaround is to capture it into a new file,
+            ' unmount the old FFU, replace it with the new one, and mount that one... it will be considered a "new" FFU file,
+            ' but at least we save the changes...
+
+            Dim tempFfuPath As String = String.Format("capturedFFU_{0}.ffu", New Random().Next(Integer.MaxValue))
+
+            ' Options for capture task
+            ProgressPanel.FFUCaptureSourceDrive = CurrentImage.FFUInfo.MountDiskPath
+            ProgressPanel.FFUCaptureDestinationFfuImage = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUCaptureName = CurrentImage.ImageName
+            ProgressPanel.FFUCaptureDescription = CurrentImage.ImageDescription
+            ProgressPanel.FFUCaptureCompressType = 1
+
+            ' Options for unmount task
+            ProgressPanel.MountDir = MountDir
+            ProgressPanel.UMountOp = 1
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.RandomMountDir = ""
+            ProgressPanel.CheckImgIntegrity = False
+            ProgressPanel.SaveToNewIndex = False
+            ProgressPanel.UMountImgIndex = 1
+
+            ' Options for replace task
+            ProgressPanel.FFUReplaceSourceFFU = Path.Combine(Path.GetTempPath(), tempFfuPath)
+            ProgressPanel.FFUReplaceDestinationFFU = CurrentImage.ImageFile
+
+            ' Options for mount task
+            ProgressPanel.SourceImg = CurrentImage.ImageFile
+            ProgressPanel.ImgIndex = 1
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ProgressPanel.TaskList.AddRange({5, 21, 998, 15})
+        Else
+            IsInFfuMode = False
+
+            ProgressPanel.MountDir = MountDir
+            ' TODO: Add additional options later
+            ProgressPanel.OperationNum = 8
+        End If
         ProgressPanel.ShowDialog(Me)
+        If IsInFfuMode Then
+            UpdateProjProperties(True, False)
+            SaveDTProj()
+        End If
     End Sub
 
     Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst committing changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
         DynaLog.LogMessage("Unmounting the Windows image whilst discarding changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
-        UnloadDTProj(False, True, True)
+        UnloadDTProj(False, True)
     End Sub
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        ImgApply.ShowDialog(Me)
+        Dim cmsPos As Point = Button30.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button30.Height)
+        ImgApplyModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
         DynaLog.LogMessage("Opening image capture dialog...")
-        ImgCapture.ShowDialog(Me)
+        Dim cmsPos As Point = Button31.PointToScreen(Point.Empty)
+        cmsPos.Offset(0, Button31.Height)
+        ImgCaptureModeCMS.Show(cmsPos)
     End Sub
 
     Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
@@ -13897,6 +13893,7 @@ Public Class MainForm
 #End Region
 
     Sub GetFeedNews()
+        NewsLastUpdateDate = Date.Now
         DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
         FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -13920,55 +13917,8 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
-        GetStartedPanel.Visible = True
-        LatestNewsPanel.Visible = False
-        TutorialVideoPanel.Visible = False
-        LinkLabel22.LinkColor = ForeColor
-        LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-    End Sub
-
-    Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
-        GetStartedPanel.Visible = False
-        LatestNewsPanel.Visible = True
-        TutorialVideoPanel.Visible = False
-        LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel23.LinkColor = ForeColor
-        LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-    End Sub
-
-    Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
-        GetStartedPanel.Visible = False
-        LatestNewsPanel.Visible = False
-        TutorialVideoPanel.Visible = True
-        LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-        LinkLabel24.LinkColor = ForeColor
-    End Sub
-
-    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
-        If ListView1.SelectedItems.Count = 1 Then
-            DynaLog.LogMessage("Starting URL of news article: " & FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
-            Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
-        End If
-    End Sub
-
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
-        If HelpBrowserForm.Visible Then
-            DynaLog.LogMessage("Showing Help docs window...")
-            If HelpBrowserForm.WindowState = FormWindowState.Minimized Then
-                HelpBrowserForm.WindowState = FormWindowState.Normal
-            Else
-                HelpBrowserForm.BringToFront()
-            End If
-        Else
-            DynaLog.LogMessage("Loading Help docs window...")
-            HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
-            HelpBrowserForm.MinimizeBox = True
-            HelpBrowserForm.MaximizeBox = True
-            HelpBrowserForm.Show()
-        End If
+        HelpDocsModule.DisplayHelpDocumentation("docs\index.html")
     End Sub
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
@@ -14005,28 +13955,6 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub Button59_Click(sender As Object, e As EventArgs) Handles Button59.Click
-        DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
-        FeedLinks.Clear()
-        GetFeedNews()
-        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
-        If FeedContents.Items.Count > 0 Then
-            FeedsPanel.Visible = True
-            FeedErrorPanel.Visible = False
-            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-            ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
-                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
-                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
-            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
-        Else
-            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
-            FeedsPanel.Visible = False
-            FeedErrorPanel.Visible = True
-            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
-        End If
-    End Sub
-
     Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
         DynaLog.LogMessage("Detecting if worker needs to be cancelled...")
         If FeedWorker.CancellationPending Then Exit Sub
@@ -14037,148 +13965,141 @@ Public Class MainForm
         If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
     End Sub
 
+    Private Sub DisplayFeedItemCardContent(sender As Object, e As NewsFeedItemCardLinkClickedEventArgs)
+        NewsFeedTextLabel.Text = e.Title
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        NewsFeedDateLabel.Text = String.Format("{0}, {1}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                           e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
+        ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
+        ' we need to navigate to the blank page. https://stackoverflow.com/a/174483. But, as we pull stuff from
+        ' the subreddit, we find that images just show as links to such -- not a good look. Change these too. Additionally,
+        ' we'll spice the look up *just* a bit.
+        Dim contentStyle As String = "<style>" & CrLf &
+                                     "    * {" & CrLf &
+                                     "        background-color: " & ColorTranslator.ToHtml(CurrentTheme.BackgroundColor) & ";" & CrLf &
+                                     "        color: " & ColorTranslator.ToHtml(CurrentTheme.ForegroundColor) & ";" & CrLf &
+                                     "        font-family: " & Quote & "Segoe UI" & Quote & ", Tahoma, Verdana, Arial, Helvetica, sans-serif;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    body {" & CrLf &
+                                     "        margin: 8px;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    code {" & CrLf &
+                                     "        font-family: " & Quote & LogFont.Replace(Quote, "") & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
+                                     "        font-size: " & If(LogFontSize <= 16, LogFontSize, 11) & "pt;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    a {" & CrLf &
+                                     "        color: #1E90FF;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    img {" & CrLf &
+                                     "        max-width: 70%;" & CrLf &
+                                     "    }" & CrLf & CrLf &
+                                     "    table {" & CrLf &
+                                     "        table-layout: fixed;" & CrLf &
+                                     "        width: 100%;" & CrLf &
+                                     "    }" & CrLf &
+                                     "</style>" & CrLf
+        Try
+            ' Quotes don't like to be displayed as such by default; we'll help.
+            Dim baseContents As String = UTF8.GetString(GetEncoding(1252).GetBytes(e.Contents))
+
+            ' If the post has pictures a column with the first picture will show up. We don't want this.
+            If baseContents.StartsWith("<table> <tr><td> <a href=", StringComparison.OrdinalIgnoreCase) Then
+                baseContents = baseContents.Replace("<table> <tr><td> <a href=", "<table> <tr><td style=" & Quote & "width: 0px" & Quote & "> <a href=")
+            End If
+
+            Dim parsedContents As String = Regex.Replace(baseContents, "<p><a href=" & Quote & "(https?://preview\.redd\.it/[^" & Quote & "]+)" & Quote & ">\1</a></p>", "<p align=" & Quote & "center" & Quote & "><img src=" & Quote & "$1" & Quote & " /></p>")
+            NewsFeedContent = contentStyle & parsedContents
+        Catch ex As Exception
+            NewsFeedContent = contentStyle & e.Contents
+        End Try
+        NewsFeedWebContent.Navigate("about:blank")
+        NewsContentPreviewerPanel.Visible = True
+    End Sub
+
+    Private Sub NewsFeedWebContent_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
+        If e.Url.ToString() <> "about:blank" Then
+            Process.Start(e.Url.AbsoluteUri)
+            NewsFeedWebContent.Navigate("about:blank")
+            NewsFeedWebContent.Document.OpenNew(True)
+            Exit Sub
+        End If
+
+        NewsFeedWebContent.Document.OpenNew(True)
+        NewsFeedWebContent.Document.Write(NewsFeedContent)
+    End Sub
+
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
         DynaLog.LogMessage("Refreshing news feed...")
-        ListView1.Items.Clear()
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
+                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
+        NewsItemCardContainerPanel.Controls.Clear()
         FeedLinks.Clear()
         Try
             DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
             If FeedContents.Items.Count > 0 Then
-                FeedsPanel.Visible = True
-                FeedErrorPanel.Visible = False
+                Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                    PreviousTop As Integer
+                Dim FirstCard As Boolean = True
+
                 Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-                ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
-                                                                                                                                                             TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
-                                                                                                                                                             TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
-                FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
+                Dim ItemCardControls As New List(Of NewsFeedItemCard)
+                For Each Article In sortedArticles
+                    Dim newsCard As New NewsFeedItemCard()
+                    newsCard.SetColors()
+                    newsCard.FeedItemText = Article.Title.Text
+                    newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                    newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                    newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                    newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                    newsCard.Left = WindowHelper.ScaleLogical(8)
+                    newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                    newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                    FirstCard = False
+                    PreviousTop = newsCard.Top
+                    AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                    ItemCardControls.Add(newsCard)
+                Next
+                NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
             Else
                 DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
-                FeedsPanel.Visible = False
-                FeedErrorPanel.Visible = True
-                TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
             End If
+            Panel12.Visible = Not FeedContents.Items.Any()
         Catch ex As Exception
             DynaLog.LogMessage("Could not get feed news. Error message: " & ex.Message)
-            FeedsPanel.Visible = False
-            FeedErrorPanel.Visible = True
-            TextBox1.Text = ex.ToString() & " - " & ex.Message
+            Panel12.Visible = True
         End Try
     End Sub
 
-    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\new_to_servicing.html")
     End Sub
 
-    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html#first-steps")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html", "first-steps")
     End Sub
 
-    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html")
     End Sub
 
-    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html#best-practices")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
+        HelpDocsModule.DisplayHelpDocumentation("docs\getting_started\start.html", "best-practices")
     End Sub
 
-    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\info\infodlgs.html")
     End Sub
 
-    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs.html#saving-image-information")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\info\infodlgs.html", "saving-image-information")
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
         DynaLog.LogMessage("Refreshing news feed...")
-        FeedWorker.RunWorkerAsync()
-    End Sub
-
-    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
-    End Sub
-
-    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
-    End Sub
-
-    Private Sub LinkLabel22_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel22.MouseEnter
-        If LinkLabel22.LinkColor = CurrentTheme.ForegroundColor Then
-            Cursor = Cursors.Arrow
-            Exit Sub
-        Else
-            LinkLabel22.LinkColor = CurrentTheme.AccentColors(2)
-        End If
-    End Sub
-
-    Private Sub LinkLabel22_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel22.MouseLeave
-        If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
-        Else
-            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
-        End If
-    End Sub
-
-    Private Sub LinkLabel23_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel23.MouseEnter
-        If LinkLabel23.LinkColor = CurrentTheme.ForegroundColor Then
-            Cursor = Cursors.Arrow
-            Exit Sub
-        Else
-            LinkLabel23.LinkColor = CurrentTheme.AccentColors(2)
-        End If
-    End Sub
-
-    Private Sub LinkLabel23_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel23.MouseLeave
-        If LatestNewsPanel.Visible Then
-            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
-        Else
-            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
-        End If
-    End Sub
-
-    Private Sub LinkLabel24_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel24.MouseEnter
-        If LinkLabel24.LinkColor = CurrentTheme.ForegroundColor Then
-            Cursor = Cursors.Arrow
-            Exit Sub
-        Else
-            LinkLabel24.LinkColor = CurrentTheme.AccentColors(2)
-        End If
-    End Sub
-
-    Private Sub LinkLabel24_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel24.MouseLeave
-        If TutorialVideoPanel.Visible Then
-            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
-        Else
-            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
-        End If
-    End Sub
-
-    Private Sub LinkLabel25_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel25.LinkClicked
-        Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
+        If Not FeedWorker.IsBusy Then FeedWorker.RunWorkerAsync()
     End Sub
 
     Private Sub WatcherBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WatcherBW.DoWork
@@ -14206,7 +14127,7 @@ Public Class MainForm
                     If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
                 ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                     DynaLog.LogMessage("Not ready to reload. The image needs to be reloading before using this project again. Unloading project...")
-                    UnloadDTProj(False, False, False)
+                    UnloadDTProj(False, False)
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
             Case ImageWatcher.Status.NotMounted
@@ -14219,7 +14140,7 @@ Public Class MainForm
                         UpdateProjProperties(False, False)
                     ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
-                        UnloadDTProj(False, False, False)
+                        UnloadDTProj(False, False)
                         If ImgBW.IsBusy Then ImgBW.CancelAsync()
                     End If
                 End If
@@ -14237,10 +14158,7 @@ Public Class MainForm
     End Sub
 
     Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\add_provisionedappxpackage.html#questions")
-        HelpBrowserForm.MinimizeBox = False
-        HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog(AddProvAppxPackage)
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\appx\add_provisionedappxpackage.html", "questions")
     End Sub
 
     Function CheckOSUninstallCapability() As Boolean
@@ -14734,21 +14652,18 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\videos\videoplay.html") Then File.Delete(Application.StartupPath & "\videos\videoplay.html")
         If File.Exists(Application.StartupPath & "\videos\videoplay_tmp.html") Then
             DynaLog.LogMessage("Reading HTML...")
-            Dim vidPlayRTB As New RichTextBox() With {
-                .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
-            }
+            Dim videoPlayerContents As String = File.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
             DynaLog.LogMessage("Modifying HTML according following values:")
             DynaLog.LogMessage("- Video ID: " & ID)
             DynaLog.LogMessage("- Video Name: " & Name)
             DynaLog.LogMessage("- Video Description: " & Description)
-            vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
+            videoPlayerContents = videoPlayerContents.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
             ' Set appropriate color mode in light theme
             DynaLog.LogMessage("Setting colors...")
             If Not CurrentTheme.IsDark Then
-                vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
+                videoPlayerContents = videoPlayerContents.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
             End If
-            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
-            HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
+            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", videoPlayerContents, UTF8)
             ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
             DynaLog.LogMessage("Checking Internet Explorer browser emulation settings (necessary step for you to watch videos on web browser controls)...")
             Try
@@ -14769,7 +14684,10 @@ Public Class MainForm
                 MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
-            HelpVideoPlayer.Show()
+            If Not videoServer.IsListenerAlive Then videoServer.StartServer()
+            If videoServer.IsListenerAlive() Then
+                Process.Start("http://localhost:2026/videoplay.html")
+            End If
         End If
     End Sub
 
@@ -14805,65 +14723,6 @@ Public Class MainForm
         ImgAppend.ShowDialog(Me)
     End Sub
 
-    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
-        Try
-            DynaLog.LogMessage("Getting videos...")
-            Dim videoEx As Exception = New Exception()
-            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
-            Using client As New WebClient()
-                DynaLog.LogMessage("Downloading XML...")
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                Try
-                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
-                Catch ex As Exception
-                    videoEx = ex
-                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-                    Debug.WriteLine("Could not download video list")
-                End Try
-            End Using
-            Try
-                If File.Exists(Application.StartupPath & "\videos.xml") Then
-                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-                    File.Delete(Application.StartupPath & "\videos.xml.old")
-                End If
-            Catch ex As Exception
-                videoEx = ex
-                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
-                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-            End Try
-            ListView2.Items.Clear()
-            Dim thumbnailList As ImageList = New ImageList()
-            thumbnailList.ImageSize = New Size(160, 90)
-            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
-            ListView2.View = View.LargeIcon
-            ListView2.LargeImageList = thumbnailList
-            If VideoList IsNot Nothing Then
-                If VideoList.Count > 0 Then
-                    For Each VideoLink As Video In VideoList
-                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
-                        If thumbnail IsNot Nothing Then
-                            Dim newThumb As Image = CombineImages(thumbnail)
-                            thumbnailList.Images.Add(newThumb)
-                        End If
-                        Dim listItem As ListViewItem = New ListViewItem()
-                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
-                        listItem.Text = VideoLink.VideoName
-                        ListView2.Items.Add(listItem)
-                    Next
-                End If
-            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
-                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-            End If
-            VideosPanel.Visible = True
-            VideoErrorPanel.Visible = False
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not get video feed. Error message: " & ex.Message)
-            VideosPanel.Visible = False
-            VideoErrorPanel.Visible = True
-            TextBox2.Text = ex.ToString() & " - " & ex.Message
-        End Try
-    End Sub
-
     Sub LoadRecentsFromMenu(itemOrder As Integer)
         Dim itmOrder As Integer = 0
         DynaLog.LogMessage("Items in recents list: " & RecentList.Count)
@@ -14878,7 +14737,7 @@ Public Class MainForm
         End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
-            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True))
             If ImgBW.IsBusy Then Exit Sub
             itmOrder = itemOrder
             Dim recentProj As Recents = RecentList(itmOrder)
@@ -15150,8 +15009,7 @@ Public Class MainForm
             Else
                 Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
             End If
-            VideosPanel.Visible = True
-            VideoErrorPanel.Visible = False
+            Panel9.Visible = Not VideoList.Any()
         Catch ex As Exception
             Throw ex
         End Try
@@ -15160,9 +15018,8 @@ Public Class MainForm
     Private Sub VideoGetterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles VideoGetterBW.RunWorkerCompleted
         If e.Error IsNot Nothing Then
             DynaLog.LogMessage("Could not get video feed. Error message: " & e.Error.Message)
-            VideosPanel.Visible = False
-            VideoErrorPanel.Visible = True
-            TextBox2.Text = e.Error.ToString() & " - " & e.Error.Message
+            Panel9.Visible = True
+            VideoEx = e.Error
             Exit Sub
         End If
         ListView2.LargeImageList = thumbnailList
@@ -15204,6 +15061,9 @@ Public Class MainForm
                 End If
             End If
         End If
+        ' Toggle Menu button and side panel visibility
+        MenuToggle.Visible = Width <= WindowHelper.ScaleLogical(1024)
+        ProjectSidePanel.Visible = Width > WindowHelper.ScaleLogical(1024)
     End Sub
 
     Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
@@ -15621,7 +15481,7 @@ Public Class MainForm
         WatcherTimer.Enabled = True
     End Sub
 
-    Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click
+    Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click, LinkLabel28.LinkClicked
         If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
             DynaLog.LogMessage("Tour directory exists. Starting the tour!")
 
@@ -15672,9 +15532,9 @@ Public Class MainForm
             If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
             DynaLog.LogMessage("Removing existing answer files...")
             DynaLog.LogMessage("Removing answer file from Panther directory...")
-            File.Delete(pantherXml)
+            If File.Exists(pantherXml) Then File.Delete(pantherXml)
             DynaLog.LogMessage("Removing answer file from Sysprep directory...")
-            File.Delete(sysprepXml)
+            If File.Exists(sysprepXml) Then File.Delete(sysprepXml)
             If nonExistentFiles >= 2 Then
                 Throw New Exception("No answer files have been detected in the mounted image.")
             End If
@@ -15794,10 +15654,14 @@ Public Class MainForm
 
     Private Sub StartWdsHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartWdsHelperTSMI.Click
         Dim wdshsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "wds", "wdshelper_server.ps1")
+        Dim serverPort As Integer = PXEServerPort
         If File.Exists(wdshsPath) Then
             DynaLog.LogMessage("WDSHS Script exists. Launching...")
+            If ModifierKeys.HasFlag(Keys.Shift) AndAlso PxeServerPortSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                serverPort = PxeServerPortSpecifier.ServerPort
+            End If
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                       "-Executionpolicy Bypass -File " & Quote & wdshsPath & Quote)
+                       "-Executionpolicy Bypass -File " & Quote & wdshsPath & Quote & " -sPort " & serverPort)
         Else
             DynaLog.LogMessage("WDSHS Script does not exist.")
         End If
@@ -15805,10 +15669,14 @@ Public Class MainForm
 
     Private Sub StartFogHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartFogHelperTSMI.Click
         Dim foghsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "fog", "foghelper_server.ps1")
+        Dim serverPort As Integer = PXEServerPort
         If File.Exists(foghsPath) Then
             DynaLog.LogMessage("FOGHS Script exists. Launching...")
+            If ModifierKeys.HasFlag(Keys.Shift) AndAlso PxeServerPortSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                serverPort = PxeServerPortSpecifier.ServerPort
+            End If
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                       "-Executionpolicy Bypass -File " & Quote & foghsPath & Quote)
+                       "-Executionpolicy Bypass -File " & Quote & foghsPath & Quote & " -sPort " & serverPort)
         Else
             DynaLog.LogMessage("FOGHS Script does not exist.")
         End If
@@ -15830,9 +15698,18 @@ Public Class MainForm
         BGProcFailureDialog.ShowDialog(Me)
     End Sub
 
+    Private Enum SecureBootCA23Status As Integer
+        Unknown = -1
+        NotAvailable = 0
+        InProgress = 1
+        Available = 2
+        AvailableEnforced = 3
+    End Enum
+
     Private Sub EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Click
         DynaLog.LogMessage("Preparing to evaluate readiness...")
         Dim SecureBootKey As RegistryKey = Nothing
+        Dim SecureBootStatus As SecureBootCA23Status = SecureBootCA23Status.Unknown
         Try
             SecureBootKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot")
 
@@ -15848,19 +15725,33 @@ Public Class MainForm
             End If
 
             Dim SBServicingKey As RegistryKey = SecureBootKey.OpenSubKey("Servicing")
+            Dim CA23UpdateStatus As Integer = SBServicingKey.GetValue("WindowsUEFICA2023Capable", 0)
             Dim CA23Updated As String = SBServicingKey.GetValue("UEFICA2023Status", "")
             SBServicingKey.Close()
 
+            DynaLog.LogMessage("UEFI CA 2023 Capable: " & CA23UpdateStatus)
             DynaLog.LogMessage("UEFI CA 2023 Status: " & CA23Updated)
 
+            Select Case CA23UpdateStatus
+                Case 0 : SecureBootStatus = SecureBootCA23Status.NotAvailable
+                Case 1 : SecureBootStatus = SecureBootCA23Status.Available
+                Case 2 : SecureBootStatus = SecureBootCA23Status.AvailableEnforced
+            End Select
+
             Select Case CA23Updated
-                Case "NotStarted"
+                Case "NotStarted" : If SecureBootStatus = SecureBootCA23Status.Unknown Then SecureBootStatus = SecureBootCA23Status.NotAvailable
+                Case "InProgress" : SecureBootStatus = SecureBootCA23Status.InProgress
+                Case "Updated" : If SecureBootStatus < SecureBootCA23Status.Available Then SecureBootStatus = SecureBootCA23Status.Available
+            End Select
+
+            Select Case SecureBootStatus
+                Case SecureBootCA23Status.NotAvailable
                     MessageBox.Show("Secure Boot is enabled on this machine but does not contain Windows UEFI CA 2023 in its database. Make sure your computer receives the Secure Boot updates before Microsoft Windows Production PCA 2011 certificates expire in June 2026.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Case "InProgress"
+                Case SecureBootCA23Status.InProgress
                     MessageBox.Show("An update to Secure Boot to support Windows UEFI CA 2023 is in progress.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case "Updated"
+                Case SecureBootCA23Status.Available, SecureBootCA23Status.AvailableEnforced
                     MessageBox.Show("Secure Boot is enabled on this machine and contains Windows UEFI CA 2023 in its database.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case Else
+                Case SecureBootCA23Status.Unknown
                     MessageBox.Show("We could not determine the status of the Windows UEFI CA 2023 update.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Select
         Catch ex As Exception
@@ -15868,5 +15759,322 @@ Public Class MainForm
         Finally
             If SecureBootKey IsNot Nothing Then SecureBootKey.Close()
         End Try
+    End Sub
+
+    Private Sub ApplyFFU_Click(sender As Object, e As EventArgs) Handles ApplyFFU.Click
+        DynaLog.LogMessage("Opening image application dialog...")
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFFU_Click(sender As Object, e As EventArgs) Handles CaptureFFU.Click
+        DynaLog.LogMessage("Opening image capture dialog...")
+        FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub SplitFFU_Click(sender As Object, e As EventArgs) Handles SplitFFU.Click
+        DynaLog.LogMessage("Opening image split dialog...")
+        FfuSplit.ShowDialog(Me)
+    End Sub
+
+    Private Sub OptimizeImage_Click(sender As Object, e As EventArgs) Handles OptimizeImage.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        ImgOptimize.ShowDialog(Me)
+    End Sub
+
+    Private Sub OptimizeFFU_Click(sender As Object, e As EventArgs) Handles OptimizeFFU.Click
+        DynaLog.LogMessage("Opening image optimization dialog...")
+        FfuOptimize.ShowDialog(Me)
+    End Sub
+
+    Private Sub CopyImageToWdsServerTSMI_Click(sender As Object, e As EventArgs) Handles CopyImageToWdsServerTSMI.Click
+        WDSInstallImageCopy.Show()
+    End Sub
+
+    Private Sub AuditModeTSMI_Click(sender As Object, e As EventArgs) Handles AuditModeTSMI.Click
+        ' Create a new answer file with default options for entering audit mode, then copy that file to the system
+        Dim auditFile As String = Path.Combine(Path.GetTempPath(), "sysprep_audit_unatt.xml")
+
+        Try
+            File.WriteAllText(auditFile, My.Resources.DefaultUnattended_AuditMode, UTF8)
+            If File.Exists(auditFile) Then
+                If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                ProgressPanel.UnattendedFile = auditFile
+                ' Just copying our custom answer file to the sysprep folder of the target system seems to make it enter an infinite loop
+                ' where it can generalize, but won't go back to OOBE; so it keeps entering audit mode. This time do NOT copy the file to
+                ' sysprep.
+                ProgressPanel.UnattendedCopyToSysprep = False
+                ProgressPanel.OperationNum = 79
+                ProgressPanel.ShowDialog(Me)
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ApplyWimTSMI_Click(sender As Object, e As EventArgs) Handles ApplyWimTSMI.Click
+        ImgApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub ApplyFfuTSMI_Click(sender As Object, e As EventArgs) Handles ApplyFfuTSMI.Click
+        FfuApply.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureWimTSMI_Click(sender As Object, e As EventArgs) Handles CaptureWimTSMI.Click
+        ImgCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub CaptureFfuTSMI_Click(sender As Object, e As EventArgs) Handles CaptureFfuTSMI.Click
+        FfuCapture.ShowDialog(Me)
+    End Sub
+
+    Private Sub UploadThisImageToMyWDSServerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadThisImageToMyWDSServerToolStripMenuItem.Click
+        If WDSInstallImageCopy.BackgroundWorker1.IsBusy Then Exit Sub
+        DynaLog.LogMessage("Opening WDS upload wizard...")
+        WDSInstallImageCopy.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        If WDSInstallImageCopy.Visible Then
+            If WDSInstallImageCopy.WindowState = FormWindowState.Minimized Then
+                WDSInstallImageCopy.WindowState = FormWindowState.Normal
+            Else
+                WDSInstallImageCopy.BringToFront()
+            End If
+            WDSInstallImageCopy.Focus()
+        Else
+            WDSInstallImageCopy.Show()
+        End If
+    End Sub
+
+    Private Sub SSE_TSMI_Click(sender As Object, e As EventArgs) Handles SSE_TSMI.Click
+        Dim SSEPath As String = Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")
+        If File.Exists(SSEPath) Then
+            Process.Start(SSEPath, String.Format("/userdata={0}", Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & Quote))
+            SSETimer.Enabled = True
+        End If
+    End Sub
+
+    Private Sub SSETimer_Tick(sender As Object, e As EventArgs) Handles SSETimer.Tick
+        If Not Process.GetProcessesByName("StarterScriptEditor").Any() Then
+            UserDataManagerModule.CopyUserDataToProgramFiles("starter_scripts")
+            SSETimer.Enabled = False
+        End If
+    End Sub
+
+    Private Sub ThemeDesigner_TSMI_Click(sender As Object, e As EventArgs) Handles ThemeDesigner_TSMI.Click
+        Dim TDPath As String = Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")
+        If File.Exists(TDPath) Then
+            Process.Start(TDPath, String.Format("/userdata={0}", Quote & Path.Combine(Application.StartupPath, "userdata", "themes") & Quote))
+            ThemeDesignerTimer.Enabled = True
+        End If
+    End Sub
+
+    Private Sub ThemeDesignerTimer_Tick(sender As Object, e As EventArgs) Handles ThemeDesignerTimer.Tick
+        If Not Process.GetProcessesByName("DT_ThemeDesigner").Any() Then
+            UserDataManagerModule.CopyUserDataToProgramFiles("themes")
+            ThemeDesignerTimer.Enabled = False
+        End If
+    End Sub
+
+    Private Sub MenuToggle_Click(sender As Object, e As EventArgs) Handles MenuToggle.Click
+        ProjectSidePanel.Visible = Not ProjectSidePanel.Visible
+    End Sub
+
+    Private Sub ChangeComputerNameLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ChangeComputerNameLink.LinkClicked
+        Try
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "systempropertiescomputername.exe"))
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Async Sub RefreshComputerInfoBtn_Click(sender As Object, e As EventArgs) Handles RefreshComputerInfoBtn.Click
+        Cursor = Cursors.WaitCursor
+        Await Task.Run(Sub()
+                           DisplayInfinityComputerInformation()
+                       End Sub)
+        Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub ChangeNetworkConfigBtn_Click(sender As Object, e As EventArgs) Handles ChangeNetworkConfigBtn.Click
+        Try
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "ncpa.cpl"))
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Sub AdminToolsBtn_Click(sender As Object, e As EventArgs) Handles AdminToolsBtn.Click
+        Try
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe"), Quote & "shell:::{D20EA4E1-3957-11d2-A40B-0C5020524153}" & Quote)
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Sub RefreshComputerInfoBtn_MouseHover(sender As Object, e As EventArgs) Handles RefreshComputerInfoBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Refresh information")
+    End Sub
+
+    Private Sub ChangeNetworkConfigBtn_MouseHover(sender As Object, e As EventArgs) Handles ChangeNetworkConfigBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Change network configuration")
+    End Sub
+
+    Private Sub AdminToolsBtn_MouseHover(sender As Object, e As EventArgs) Handles AdminToolsBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Other Windows administrative tools")
+    End Sub
+
+    Private Sub ComputerWallpaperPB_MouseHover(sender As Object, e As EventArgs) Handles ComputerWallpaperPB.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Click here to change your wallpaper")
+    End Sub
+
+    Private Sub ComputerWallpaperPB_Click(sender As Object, e As EventArgs) Handles ComputerWallpaperPB.Click
+        Try
+            If Environment.OSVersion.Version.Major = 10 Then
+                Process.Start("ms-settings:personalization-background")
+            Else
+                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "desk.cpl"))
+            End If
+        Catch ex As Exception
+            ' Ignored
+        End Try
+    End Sub
+
+    Private Sub LinkLabel27_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel27.LinkClicked
+        HelpDocsModule.DisplayHelpDocumentation("docs\whats_new\highlights.html")
+    End Sub
+
+    Private Sub LinkLabel29_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel29.LinkClicked
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\online_inst_mgmt.html")
+    End Sub
+
+    Private Sub LinkLabel30_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel30.LinkClicked
+        HelpDocsModule.DisplayHelpDocumentation("docs\img_tasks\offline_inst_mgmt.html")
+    End Sub
+
+    Private Sub InfinityStartPanel_SizeChanged(sender As Object, e As EventArgs) Handles InfinityStartPanel.SizeChanged
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(428)
+    End Sub
+
+    Private Sub LinkLabel32_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel32.LinkClicked
+        Try
+            DynaLog.LogMessage("Getting videos...")
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                DynaLog.LogMessage("Downloading XML...")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                End If
+            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            Panel9.Visible = Not VideoList.Any()
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get video feed. Error message: " & ex.Message)
+            Panel9.Visible = True
+            VideoEx = ex
+        End Try
+    End Sub
+
+    Private Sub LinkLabel33_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel33.LinkClicked
+        DynaLog.LogMessage("Refreshing news feed...")
+        NewsItemCardContainerPanel.Controls.Clear()
+        FeedLinks.Clear()
+        GetFeedNews()
+        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
+                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
+        Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
+        If FeedContents.Items.Count > 0 Then
+            Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                PreviousTop As Integer
+            Dim FirstCard As Boolean = True
+
+            Dim ItemCardControls As New List(Of NewsFeedItemCard)
+            For Each Article In sortedArticles
+                Dim newsCard As New NewsFeedItemCard()
+                newsCard.SetColors()
+                newsCard.FeedItemText = Article.Title.Text
+                newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                newsCard.Left = WindowHelper.ScaleLogical(8)
+                newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                FirstCard = False
+                PreviousTop = newsCard.Top
+                AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                ItemCardControls.Add(newsCard)
+            Next
+            NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
+        Else
+            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
+        End If
+        Panel12.Visible = Not FeedContents.Items.Any()
+    End Sub
+
+    Private Sub LinkLabel31_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel31.LinkClicked
+        MessageBox.Show(VideoEx.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
+    Private Sub LinkLabel34_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel34.LinkClicked
+        MessageBox.Show(FeedEx.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
+    Private Sub ComputerNameLabel_MouseHover(sender As Object, e As EventArgs) Handles ComputerNameLabel.MouseHover
+        WindowHelper.DisplayToolTip(sender, String.Format("NetBIOS name: {0}", My.Computer.Name))
+    End Sub
+
+    Private Sub NewsFeedCloseBtn_Click(sender As Object, e As EventArgs) Handles NewsFeedCloseBtn.Click
+        NewsContentPreviewerPanel.Visible = False
+    End Sub
+
+    Private Sub RefreshFactButton_Click(sender As Object, e As EventArgs) Handles RefreshFactButton.Click
+        If InfinityHomeFacts.Any() Then
+            ' Show a random one
+            FactLabel.Text = InfinityHomeFacts.ElementAt(New Random().Next(InfinityHomeFacts.Count)).Message
+        End If
+    End Sub
+
+    Private Sub RefreshFactButton_MouseHover(sender As Object, e As EventArgs) Handles RefreshFactButton.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Show a new fact")
     End Sub
 End Class

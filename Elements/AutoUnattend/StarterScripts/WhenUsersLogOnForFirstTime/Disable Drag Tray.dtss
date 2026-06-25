@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Disable Drag Tray
 Description: This script disables the Drag Tray feature introduced with the latest builds of Windows 11 24H2 and 25H2 
+Customizable: No
 
 @echo off
 

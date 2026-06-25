@@ -22,9 +22,6 @@ Partial Class GetFeatureInfoDlg
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.FeatureInfoPanel = New System.Windows.Forms.Panel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -33,6 +30,7 @@ Partial Class GetFeatureInfoDlg
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.WizardBtn = New System.Windows.Forms.Button()
         Me.SearchBox1 = New DISMTools.SearchBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -65,8 +63,7 @@ Partial Class GetFeatureInfoDlg
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.Win10Title.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -85,39 +82,6 @@ Partial Class GetFeatureInfoDlg
         Me.Panel5.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.PictureBox1)
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(1008, 48)
-        Me.Win10Title.TabIndex = 4
-        Me.Win10Title.Visible = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.get_feat_info
-        Me.PictureBox1.Location = New System.Drawing.Point(964, 8)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(231, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Get feature information"
         '
         'FeatureInfoPanel
         '
@@ -194,12 +158,26 @@ Partial Class GetFeatureInfoDlg
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.WizardBtn)
         Me.Panel1.Controls.Add(Me.SearchBox1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(24, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(416, 24)
         Me.Panel1.TabIndex = 3
+        '
+        'WizardBtn
+        '
+        Me.WizardBtn.Dock = System.Windows.Forms.DockStyle.Right
+        Me.WizardBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+        Me.WizardBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray
+        Me.WizardBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.WizardBtn.Image = Global.DISMTools.My.Resources.Resources.assistant_light
+        Me.WizardBtn.Location = New System.Drawing.Point(392, 0)
+        Me.WizardBtn.Name = "WizardBtn"
+        Me.WizardBtn.Size = New System.Drawing.Size(24, 24)
+        Me.WizardBtn.TabIndex = 2
+        Me.WizardBtn.UseVisualStyleBackColor = True
         '
         'SearchBox1
         '
@@ -208,7 +186,7 @@ Partial Class GetFeatureInfoDlg
         Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
         Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.Size = New System.Drawing.Size(378, 18)
         Me.SearchBox1.TabIndex = 1
         '
         'SearchPic
@@ -555,16 +533,30 @@ Partial Class GetFeatureInfoDlg
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
         '
+        'ImageTaskHeader1
+        '
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Global.DISMTools.My.Resources.Resources.get_feat_info
+        Me.ImageTaskHeader1.ItemText = "Get feature information"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
+        Me.ImageTaskHeader1.TabIndex = 9
+        '
         'GetFeatureInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FeatureInfoPanel)
-        Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -573,9 +565,6 @@ Partial Class GetFeatureInfoDlg
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Get feature information"
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FeatureInfoPanel.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)
@@ -600,9 +589,6 @@ Partial Class GetFeatureInfoDlg
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents FeatureInfoPanel As System.Windows.Forms.Panel
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
@@ -643,5 +629,7 @@ Partial Class GetFeatureInfoDlg
     Friend WithEvents Label55 As System.Windows.Forms.Label
     Friend WithEvents Label42 As System.Windows.Forms.Label
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents WizardBtn As System.Windows.Forms.Button
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
 
 End Class

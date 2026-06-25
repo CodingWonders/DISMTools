@@ -22,6 +22,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>AutoReloadSvc.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.4.0.7\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Dism.6.0.0\lib\net472\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -124,6 +125,18 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET "_SourceDir=$(ProjectDir)$(OutDir)"
+SET "_SourceBinName=$(TargetFileName)"
+
+SET "_OutputDir=$(ProjectDir)out"
+
+IF NOT EXIST "%25_OutputDir%25" MD "%25_OutputDir%25"
+
+COPY /Y "%25_SourceDir%25%25_SourceBinName%25" "%25_OutputDir%25"
+COPY /Y "%25_SourceDir%25%25_SourceBinName%25.config" "%25_OutputDir%25"
+COPY /Y "%25_SourceDir%25Microsoft.Dism.dll" "%25_OutputDir%25"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

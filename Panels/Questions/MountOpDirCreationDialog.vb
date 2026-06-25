@@ -13,7 +13,7 @@ Public Class MountOpDirCreationDialog
     End Sub
 
     Private Sub MountOpDirCreationDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Text = ImgMount.Label1.Text
+        Text = ImgMount.ImageTaskHeader1.ItemText
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -65,5 +65,6 @@ Public Class MountOpDirCreationDialog
         Label1.ForeColor = Color.FromArgb(0, 122, 204)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
     End Sub
 End Class

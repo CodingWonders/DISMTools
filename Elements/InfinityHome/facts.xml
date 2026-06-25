@@ -1,0 +1,1853 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  I admit it, this first batch of facts and tips was made by Claude. Do I look like I have enough
+  time to write 500 tips? But, I've revised these and they are alright.
+  
+  Now, those whose IDs end in _number are mine.
+  
+  If you want to contribute to this file, you can totally do it.
+-->
+<InfinityFacts version="1.0" generated="2026-06-20" totalFacts="520">
+  <facts>
+    <fact id="HF001" type="historical" era="Founding">
+      <topic>Founding</topic>
+      <text>Microsoft was founded on April 4, 1975, by Bill Gates and Paul Allen in Albuquerque, New Mexico.</text>
+    </fact>
+    <fact id="HF002" type="historical" era="Founding">
+      <topic>Name origin</topic>
+      <text>The name "Microsoft" is a portmanteau of "microcomputer" and "software," coined by Paul Allen.</text>
+    </fact>
+    <fact id="HF003" type="historical" era="Founding">
+      <topic>First product</topic>
+      <text>Microsoft's first product was a version of the BASIC programming language interpreter for the Altair 8800 microcomputer, known as Altair BASIC.</text>
+    </fact>
+    <fact id="HF004" type="historical" era="Founding">
+      <topic>First employees</topic>
+      <text>When Microsoft was founded, Bill Gates was 19 years old and Paul Allen was 22.</text>
+    </fact>
+    <fact id="HF005" type="historical" era="Founding">
+      <topic>Harvard dropout</topic>
+      <text>Bill Gates dropped out of Harvard University in 1975 to co-found Microsoft with Paul Allen.</text>
+    </fact>
+    <fact id="HF006" type="historical" era="Founding">
+      <topic>Altair deal</topic>
+      <text>Gates and Allen wrote the Altair BASIC interpreter without owning an Altair machine, using a software emulator they built on a PDP-10 mainframe at Harvard.</text>
+    </fact>
+    <fact id="HF007" type="historical" era="Founding">
+      <topic>First office</topic>
+      <text>Microsoft's first office was in Albuquerque, New Mexico, near MITS (Micro Instrumentation and Telemetry Systems), the maker of the Altair 8800.</text>
+    </fact>
+    <fact id="HF008" type="historical" era="Founding">
+      <topic>Incorporation</topic>
+      <text>Microsoft was officially incorporated in the state of New Mexico on November 26, 1976.</text>
+    </fact>
+    <fact id="HF009" type="historical" era="Founding">
+      <topic>Move to Washington</topic>
+      <text>Microsoft relocated its headquarters from Albuquerque, New Mexico, to Bellevue, Washington, in January 1979.</text>
+    </fact>
+    <fact id="HF010" type="historical" era="Founding">
+      <topic>First year revenue</topic>
+      <text>Microsoft's revenue in its first year of operation (1975) was approximately $16,005.</text>
+    </fact>
+    <fact id="HF011" type="historical" era="DOS Era">
+      <topic>IBM partnership</topic>
+      <text>In 1980, IBM approached Microsoft to provide an operating system for its upcoming personal computer, the IBM PC.</text>
+    </fact>
+    <fact id="HF012" type="historical" era="DOS Era">
+      <topic>QDOS acquisition</topic>
+      <text>Microsoft purchased 86-DOS (also called QDOS - Quick and Dirty Operating System) from Seattle Computer Products for approximately $50,000 in 1981 and licensed it to IBM as PC-DOS.</text>
+    </fact>
+    <fact id="HF013" type="historical" era="DOS Era">
+      <topic>MS-DOS launch</topic>
+      <text>MS-DOS 1.0 was released in August 1981 alongside the original IBM PC, establishing Microsoft as a dominant force in the PC software market.</text>
+    </fact>
+    <fact id="HF014" type="historical" era="DOS Era">
+      <topic>Licensing strategy</topic>
+      <text>Microsoft retained the right to license MS-DOS to other PC manufacturers - a pivotal decision that allowed it to become the standard OS for IBM-compatible PCs.</text>
+    </fact>
+    <fact id="HF015" type="historical" era="DOS Era">
+      <topic>Redmond HQ</topic>
+      <text>Microsoft moved its headquarters from Bellevue to Redmond, Washington, in February 1986, where it remains to this day.</text>
+    </fact>
+    <fact id="HF016" type="historical" era="DOS Era">
+      <topic>IPO</topic>
+      <text>Microsoft went public on March 13, 1986, with an IPO price of $21 per share, raising approximately $61 million.</text>
+    </fact>
+    <fact id="HF017" type="historical" era="DOS Era">
+      <topic>Gates becomes billionaire</topic>
+      <text>Bill Gates became a billionaire on October 28, 1987, at age 31, following the rise of Microsoft's stock price.</text>
+    </fact>
+    <fact id="HF018" type="historical" era="DOS Era">
+      <topic>MS-DOS versions</topic>
+      <text>MS-DOS went through eight major versions from 1.0 (1981) to 6.22 (1994), each adding features like subdirectories, hard disk support, and memory management.</text>
+    </fact>
+    <fact id="HF019" type="historical" era="DOS Era">
+      <topic>MultiPlan</topic>
+      <text>Microsoft released MultiPlan, its first spreadsheet application, in 1982 - a precursor to Microsoft Excel.</text>
+    </fact>
+    <fact id="HF020" type="historical" era="DOS Era">
+      <topic>Microsoft Word</topic>
+      <text>Microsoft Word was first released in 1983 for MS-DOS, originally called "Multi-Tool Word."</text>
+    </fact>
+    <fact id="HF021" type="historical" era="Windows Beginnings">
+      <topic>Windows 1.0 announcement</topic>
+      <text>Microsoft announced Windows on November 10, 1983, billing it as a graphical extension of MS-DOS inspired in part by Apple's Macintosh interface. It was previously known as Interface Manager.</text>
+    </fact>
+    <fact id="HF022" type="historical" era="Windows Beginnings">
+      <topic>Windows 1.0 launch</topic>
+      <text>Windows 1.0 was officially released on November 20, 1985, after two years of development delays.</text>
+    </fact>
+    <fact id="HF022_1" type="historical" era="Windows Beginnings">
+      <topic>Windows and the locomotive</topic>
+      <text>One of the people who worked on the first versions of Windows was Gabe Newell. He would later found Valve and release popular games and services, such as Half-Life, Portal, and Steam.</text>
+    </fact>
+    <fact id="HF023" type="historical" era="Windows Beginnings">
+      <topic>Windows 1.0 features</topic>
+      <text>Windows 1.0 featured tiled (non-overlapping) windows, a mouse-driven interface, and bundled apps including MS-DOS Executive, Calculator, Clock, and Notepad.</text>
+    </fact>
+    <fact id="HF024" type="historical" era="Windows Beginnings">
+      <topic>Windows 2.0</topic>
+      <text>Windows 2.0, released in December 1987, introduced overlapping windows, keyboard shortcuts, and improved support for expanded memory.</text>
+    </fact>
+    <fact id="HF025" type="historical" era="Windows Beginnings">
+      <topic>Apple lawsuit</topic>
+      <text>Apple sued Microsoft in 1988, claiming Windows 2.0 infringed the "look and feel" of the Macintosh GUI; the case was eventually decided in Microsoft's favor in 1994.</text>
+    </fact>
+    <fact id="HF026" type="historical" era="Windows Beginnings">
+      <topic>Windows 3.0</topic>
+      <text>Windows 3.0, released on May 22, 1990, was the first commercially successful version of Windows, selling more than two million copies within six months of launch.</text>
+    </fact>
+    <fact id="HF027" type="historical" era="Windows Beginnings">
+      <topic>Windows 3.1</topic>
+      <text>Windows 3.1 (1992) added TrueType font support, drag-and-drop functionality, and Object Linking and Embedding (OLE), and sold more than three million copies in its first two months.</text>
+    </fact>
+    <fact id="HF028" type="historical" era="Windows Beginnings">
+      <topic>Windows for Workgroups</topic>
+      <text>Windows for Workgroups 3.11 (1993) added peer-to-peer networking capabilities, making it popular in small business environments.</text>
+    </fact>
+    <fact id="HF029" type="historical" era="Windows Beginnings">
+      <topic>Excel origins</topic>
+      <text>Microsoft Excel was first released for Macintosh in 1985 and for Windows in 1987, eventually overtaking Lotus 1-2-3 as the world's dominant spreadsheet application.</text>
+    </fact>
+    <fact id="HF030" type="historical" era="Windows Beginnings">
+      <topic>Microsoft Office creation</topic>
+      <text>Microsoft Office was introduced in 1989 for Macintosh as a bundle of Word, Excel, and PowerPoint - Microsoft had acquired PowerPoint's developer, Forethought, Inc., earlier that year.</text>
+    </fact>
+    <fact id="HF031" type="historical" era="Windows NT">
+      <topic>Dave Cutler recruited</topic>
+      <text>Microsoft hired Dave Cutler, the chief architect of the DEC VAX VMS operating system, in 1988 to lead the development of a new enterprise-grade OS that would become Windows NT.</text>
+    </fact>
+    <fact id="HF032" type="historical" era="Windows NT">
+      <topic>Windows NT 3.1</topic>
+      <text>Windows NT 3.1 was released on July 27, 1993, introducing a fully 32-bit preemptive multitasking OS with a microkernel architecture, separate from the DOS-based Windows line.</text>
+    </fact>
+    <fact id="HF033" type="historical" era="Windows NT">
+      <topic>NT naming</topic>
+      <text>The "NT" in Windows NT originally stood for "New Technology," distinguishing it from the consumer DOS-based Windows versions.</text>
+    </fact>
+    <fact id="HF034" type="historical" era="Windows NT">
+      <topic>Windows NT 4.0</topic>
+      <text>Windows NT 4.0 (1996) adopted the Windows 95 user interface and became widely deployed in corporate environments as a stable workstation and server OS.</text>
+    </fact>
+    <fact id="HF035" type="historical" era="Windows NT">
+      <topic>Multiple architectures</topic>
+      <text>Windows NT initially supported x86, MIPS, DEC Alpha, and PowerPC. Only the x86 version remained by the time Windows 2000 shipped.</text>
+    </fact>
+    <fact id="HF035_1" type="historical" era="Windows NT">
+      <topic>Subsystems</topic>
+      <text>The Windows NT Session Manager (SM) allows for additional subsystems to be executed. Up until Windows 2000, it supported OS/2 and POSIX subsystems. Afterwards, only the Windows subsystem was included.</text>
+    </fact>
+    <fact id="HF035_2" type="historical" era="Windows NT">
+      <topic>OS/2</topic>
+      <text>The NT kernel was originally going to target OS/2, but, because of the success of Windows 3.0, Microsoft decided to make Windows its target.</text>
+    </fact>
+    <fact id="HF035_3" type="historical" era="Windows NT">
+      <topic>N-Ten</topic>
+      <text>The NT kernel would originally support the Intel i860 processor. Because of technical complications, such as a virtually tagged cache, it was scrapped as one of its targets. The i860 was codenamed N-Ten, making it another possible meaning for NT.</text>
+    </fact>
+    <fact id="HF035_4" type="historical" era="Windows NT">
+      <topic>Visual Workstations</topic>
+      <text>The only x86 machines that did not use a traditional BIOS firmware were the Silicon Graphics Visual Workstations 320 and 540. They required a separate HAL, which was included up until early builds of Windows XP.</text>
+    </fact>
+    <fact id="HF035_5" type="historical" era="Windows NT">
+      <topic>AUTOCHK</topic>
+      <text>The disk check application loaded on Windows startup is not CHKDSK, but AUTOCHK. It is one of the boot-execute programs loaded by the Session Manager.</text>
+    </fact>
+    <fact id="HF035_6" type="historical" era="Windows NT">
+      <topic>The longest sound</topic>
+      <text>The startup sound of Windows NT 4.0 lasts 10 seconds. Its shutdown sound is a reversed version of the startup sound.</text>
+    </fact>
+    <fact id="HF036" type="historical" era="Windows 9x">
+      <topic>Windows 95 launch</topic>
+      <text>Windows 95 was launched on August 24, 1995, with a massive marketing campaign that featured the Rolling Stones song "Start Me Up" and sold more than one million copies in its first four days.</text>
+    </fact>
+    <fact id="HF037" type="historical" era="Windows 9x">
+      <topic>Start button</topic>
+      <text>Windows 95 introduced the iconic Start button and taskbar, which defined the Windows user interface paradigm for the next two decades.</text>
+    </fact>
+    <fact id="HF038" type="historical" era="Windows 9x">
+      <topic>Windows 95 features</topic>
+      <text>Windows 95 introduced long file names (up to 255 characters), Plug and Play hardware detection, and 32-bit application support, while retaining DOS compatibility.</text>
+    </fact>
+    <fact id="HF039" type="historical" era="Windows 9x">
+      <topic>Internet Explorer bundling</topic>
+      <text>Internet Explorer was first bundled with Windows 95 (as part of the Plus! pack in 1995) and later shipped as an integral part of Windows 98, sparking antitrust investigations.</text>
+    </fact>
+    <fact id="HF040" type="historical" era="Windows 9x">
+      <topic>Windows 98</topic>
+      <text>Windows 98, released on June 25, 1998, added native USB support, the Windows Driver Model, Internet Explorer 4.0 integration, and support for DVD-ROM drives.</text>
+    </fact>
+    <fact id="HF041" type="historical" era="Windows 9x">
+      <topic>BSOD live demo</topic>
+      <text>At a 1998 Windows 98 demonstration, a notorious Blue Screen of Death (BSOD) appeared live on stage when a USB scanner was connected, in front of Bill Gates - becoming one of the most famous tech mishaps on record.</text>
+    </fact>
+    <fact id="HF042" type="historical" era="Windows 9x">
+      <topic>Windows Me</topic>
+      <text>Windows Millennium Edition (Me), released in September 2000, was the last DOS-based version of Windows; it was widely criticized for instability and poor performance.</text>
+    </fact>
+    <fact id="HF043" type="historical" era="Windows 9x">
+      <topic>DirectX origins</topic>
+      <text>DirectX was first introduced in 1995 with Windows 95 as a set of APIs for handling multimedia and gaming tasks, becoming a cornerstone of PC gaming on Windows.</text>
+    </fact>
+    <fact id="HF044" type="historical" era="Antitrust">
+      <topic>Browser wars</topic>
+      <text>The browser wars of the late 1990s pitted Microsoft's Internet Explorer against Netscape Navigator, culminating in the U.S. DOJ filing an antitrust suit against Microsoft in 1998.</text>
+    </fact>
+    <fact id="HF045" type="historical" era="Antitrust">
+      <topic>DOJ ruling</topic>
+      <text>In 2000, U.S. District Judge Thomas Penfield Jackson ruled that Microsoft had violated antitrust laws and ordered the company to be broken into two separate entities.</text>
+    </fact>
+    <fact id="HF046" type="historical" era="Antitrust">
+      <topic>Appeal outcome</topic>
+      <text>The breakup order was reversed on appeal in 2001; Microsoft eventually settled with the DOJ in 2001, agreeing to share its APIs with third-party companies without being split up.</text>
+    </fact>
+    <fact id="HF047" type="historical" era="Antitrust">
+      <topic>EU antitrust fine</topic>
+      <text>The European Commission fined Microsoft €497 million in 2004 for abusing its dominant market position, requiring it to offer a version of Windows without Windows Media Player in Europe.</text>
+    </fact>
+    <fact id="HF048" type="historical" era="Windows XP">
+      <topic>Windows 2000</topic>
+      <text>Windows 2000, released on February 17, 2000, was the successor to Windows NT 4.0 and introduced Active Directory, the Microsoft Management Console, and improved hardware support.</text>
+    </fact>
+    <fact id="HF049" type="historical" era="Windows XP">
+      <topic>Windows XP launch</topic>
+      <text>Windows XP was released on October 25, 2001, unifying the consumer (9x) and enterprise (NT) Windows lines for the first time under the NT 5.1 kernel.</text>
+    </fact>
+    <fact id="HF050" type="historical" era="Windows XP">
+      <topic>XP longevity</topic>
+      <text>Windows XP remained in active use for over 12 years; Microsoft officially ended mainstream support in 2009 and extended support in April 2014, yet the OS still powered millions of machines years afterward.</text>
+    </fact>
+    <fact id="HF051" type="historical" era="Windows XP">
+      <topic>Luna interface</topic>
+      <text>Windows XP introduced the "Luna" visual style with the iconic green hill and blue sky default wallpaper called "Bliss," photographed by Charles O'Rear in Sonoma County, California.</text>
+    </fact>
+    <fact id="HF052" type="historical" era="Windows XP">
+      <topic>ClearType</topic>
+      <text>Windows XP introduced ClearType sub-pixel font rendering, significantly improving text readability on LCD displays.</text>
+    </fact>
+    <fact id="HF053" type="historical" era="Windows XP">
+      <topic>Windows XP SP2</topic>
+      <text>Windows XP Service Pack 2 (2004) was a landmark security overhaul that added the Windows Security Center, a built-in firewall enabled by default, and Data Execution Prevention (DEP).</text>
+    </fact>
+    <fact id="HF054" type="historical" era="Windows XP">
+      <topic>Media Center Edition</topic>
+      <text>Windows XP Media Center Edition, introduced in 2002, targeted home theater PCs and included the Media Center application for managing TV, music, and photos from a TV-style remote.</text>
+    </fact>
+    <fact id="HF055" type="historical" era="Windows XP">
+      <topic>Tablet PC Edition</topic>
+      <text>Windows XP Tablet PC Edition (2002) was the first version of Windows to support stylus-based handwriting recognition on tablet computers.</text>
+    </fact>
+    <fact id="HF056" type="historical" era="Xbox">
+      <topic>Xbox launch</topic>
+      <text>Microsoft launched the original Xbox game console in North America on November 15, 2001, entering the console gaming market dominated by Sony and Nintendo.</text>
+    </fact>
+    <fact id="HF057" type="historical" era="Xbox">
+      <topic>Halo launch title</topic>
+      <text>Halo: Combat Evolved was the Xbox's flagship launch title; Microsoft had acquired Bungie Studios in 2000 specifically to secure Halo as an Xbox exclusive.</text>
+    </fact>
+    <fact id="HF058" type="historical" era="Xbox">
+      <topic>Xbox Live</topic>
+      <text>Xbox Live, launched in November 2002, pioneered online console gaming with a unified online multiplayer service, voice chat, and downloadable content.</text>
+    </fact>
+    <fact id="HF059" type="historical" era="Xbox">
+      <topic>Xbox 360</topic>
+      <text>The Xbox 360 launched in November 2005, a year ahead of Sony's PlayStation 3, giving Microsoft an early-mover advantage in the seventh generation of gaming consoles.</text>
+    </fact>
+    <fact id="HF060" type="historical" era="Xbox">
+      <topic>Red Ring of Death</topic>
+      <text>The Xbox 360 suffered a widely reported hardware failure known as the "Red Ring of Death" (RRoD); Microsoft extended warranties and spent an estimated $1.15 billion addressing the defect.</text>
+    </fact>
+    <fact id="HF061" type="historical" era="Windows Vista">
+      <topic>Vista release</topic>
+      <text>Windows Vista was released to manufacturing on November 8, 2006, and made available to the general public on January 30, 2007, after a notoriously long five-year development cycle.</text>
+    </fact>
+    <fact id="HF062" type="historical" era="Windows Vista">
+      <topic>Aero interface</topic>
+      <text>Vista introduced the Aero Glass visual style, featuring translucent window borders, live thumbnails in the taskbar, and the 3D Flip window switcher (Win+Tab).</text>
+    </fact>
+    <fact id="HF063" type="historical" era="Windows Vista">
+      <topic>Vista reception</topic>
+      <text>Windows Vista was criticized for high hardware requirements, aggressive User Account Control (UAC) prompts, driver compatibility issues, and poor performance on low-end hardware.</text>
+    </fact>
+    <fact id="HF064" type="historical" era="Windows Vista">
+      <topic>UAC introduction</topic>
+      <text>Windows Vista introduced User Account Control (UAC) to reduce the attack surface of the OS by prompting users for explicit permission before allowing administrative changes.</text>
+    </fact>
+    <fact id="HF065" type="historical" era="Windows Vista">
+      <topic>WinSxS</topic>
+      <text>Windows Vista introduced the Windows Side-by-Side (WinSxS) assembly store, allowing multiple versions of the same DLL to coexist on the system to prevent "DLL hell."</text>
+    </fact>
+    <fact id="HF066" type="historical" era="Windows Vista">
+      <topic>BitLocker debut</topic>
+      <text>BitLocker Drive Encryption was introduced in Windows Vista Ultimate and Enterprise editions, providing full-volume encryption for system and data drives.</text>
+    </fact>
+    <fact id="HF067" type="historical" era="Windows 7">
+      <topic>Windows 7 release</topic>
+      <text>Windows 7 was released on October 22, 2009, and was widely praised as the successor Vista should have been, praised for its performance, stability, and refined user interface.</text>
+    </fact>
+    <fact id="HF068" type="historical" era="Windows 7">
+      <topic>Taskbar redesign</topic>
+      <text>Windows 7 introduced a significantly redesigned taskbar with pinned applications, Jump Lists, and Aero Peek, consolidating taskbar buttons and eliminating the Quick Launch bar.</text>
+    </fact>
+    <fact id="HF069" type="historical" era="Windows 7">
+      <topic>Libraries</topic>
+      <text>Windows 7 introduced Libraries, a virtual folder concept that aggregated content from multiple physical locations into a single unified view for Documents, Music, Pictures, and Videos.</text>
+    </fact>
+    <fact id="HF070" type="historical" era="Windows 7">
+      <topic>HomeGroup</topic>
+      <text>Windows 7 introduced HomeGroup, a simplified home networking feature that allowed PCs on the same network to share files and printers with a single password.</text>
+    </fact>
+    <fact id="HF071" type="historical" era="Windows 7">
+      <topic>XP Mode</topic>
+      <text>Windows 7 Professional and Ultimate editions offered "XP Mode," a free virtual machine running a licensed copy of Windows XP for legacy application compatibility.</text>
+    </fact>
+    <fact id="HF072" type="historical" era="Windows 7">
+      <topic>Sales record</topic>
+      <text>Windows 7 sold more than 240 million licenses in its first year, making it the fastest-selling OS in Microsoft's history at that time.</text>
+    </fact>
+    <fact id="HF073" type="historical" era="Windows 7">
+      <topic>Touch support</topic>
+      <text>Windows 7 was the first Microsoft OS to include built-in multi-touch support, supporting gestures such as pinch-to-zoom and rotate on compatible hardware.</text>
+    </fact>
+    <fact id="HF074" type="historical" era="Windows 8">
+      <topic>Windows 8 release</topic>
+      <text>Windows 8 was released on October 26, 2012, featuring the radical "Modern UI" (codenamed Metro) that replaced the traditional Start menu with a full-screen Start Screen of live tiles.</text>
+    </fact>
+    <fact id="HF075" type="historical" era="Windows 8">
+      <topic>Start button removed</topic>
+      <text>Windows 8 controversially removed the Start button from the desktop taskbar entirely, drawing widespread criticism from users accustomed to the two-decades-old paradigm.</text>
+    </fact>
+    <fact id="HF076" type="historical" era="Windows 8">
+      <topic>Charms bar</topic>
+      <text>Windows 8 introduced the Charms bar - a hidden sidebar accessible by swiping from the right edge - housing Search, Share, Start, Devices, and Settings.</text>
+    </fact>
+    <fact id="HF077" type="historical" era="Windows 8">
+      <topic>Windows Store</topic>
+      <text>Windows 8 introduced the Windows Store (now Microsoft Store), a curated marketplace for Modern UI (Metro) apps, marking Microsoft's push into the app-store model.</text>
+    </fact>
+    <fact id="HF078" type="historical" era="Windows 8">
+      <topic>Windows 8.1</topic>
+      <text>Windows 8.1, released in October 2013, restored the Start button (though clicking it still went to the Start Screen), added boot-to-desktop option, and improved mouse and keyboard navigation.</text>
+    </fact>
+    <fact id="HF079" type="historical" era="Windows 8">
+      <topic>ARM support</topic>
+      <text>Windows 8 and its companion version Windows RT extended the NT kernel to ARM processors, debuting on the original Microsoft Surface tablet.</text>
+    </fact>
+    <fact id="HF080" type="historical" era="Windows 8">
+      <topic>Surface launch</topic>
+      <text>Microsoft launched the Surface tablet line in October 2012, marking the company's entry into the first-party hardware PC market and signaling a shift toward devices and services.</text>
+    </fact>
+    <fact id="HF081" type="historical" era="Leadership">
+      <topic>Gates CEO tenure</topic>
+      <text>Bill Gates served as CEO of Microsoft from its founding in 1975 until January 2000, when he stepped aside as CEO to focus on software architecture as Chief Software Architect.</text>
+    </fact>
+    <fact id="HF082" type="historical" era="Leadership">
+      <topic>Ballmer as CEO</topic>
+      <text>Steve Ballmer became Microsoft's CEO in January 2000 and served until February 2014, overseeing the launch of Windows XP, Vista, 7, 8, the Xbox, and the company's push into cloud services.</text>
+    </fact>
+    <fact id="HF083" type="historical" era="Leadership">
+      <topic>Satya Nadella</topic>
+      <text>Satya Nadella became Microsoft's third CEO on February 4, 2014, ushering in a cultural and strategic transformation centered on cloud computing, open-source collaboration, and mobile-first, cloud-first vision.</text>
+    </fact>
+    <fact id="HF084" type="historical" era="Leadership">
+      <topic>Gates board chair</topic>
+      <text>Bill Gates stepped down as Microsoft's Chairman of the Board in 2014, the same year Satya Nadella became CEO; Gates remained on the board as a technology advisor until March 2020.</text>
+    </fact>
+    <fact id="HF085" type="historical" era="Leadership">
+      <topic>Paul Allen departure</topic>
+      <text>Paul Allen left Microsoft in 1983 after being diagnosed with Hodgkin's lymphoma; he remained a shareholder and later became a prominent philanthropist and investor until his death in October 2018.</text>
+    </fact>
+    <fact id="HF086" type="historical" era="Windows 10">
+      <topic>Windows 10 release</topic>
+      <text>Windows 10 was released on July 29, 2015, and was offered as a free upgrade to users of genuine Windows 7 and 8.1 for one year after launch.</text>
+    </fact>
+    <fact id="HF087" type="historical" era="Windows 10">
+      <topic>Start menu returns</topic>
+      <text>Windows 10 brought back a hybrid Start menu combining the traditional menu list with live tiles from Windows 8, addressing one of the most criticized aspects of Windows 8.</text>
+    </fact>
+    <fact id="HF088" type="historical" era="Windows 10">
+      <topic>Cortana</topic>
+      <text>Windows 10 introduced Cortana, Microsoft's digital voice assistant, as an integrated component of the OS, competing with Apple's Siri and Google Assistant.</text>
+    </fact>
+    <fact id="HF089" type="historical" era="Windows 10">
+      <topic>Edge browser</topic>
+      <text>Windows 10 shipped with Microsoft Edge as the default browser, replacing Internet Explorer after more than 20 years; Edge was rebuilt on the Chromium engine in 2020.</text>
+    </fact>
+    <fact id="HF090" type="historical" era="Windows 10">
+      <topic>Windows as a Service</topic>
+      <text>Windows 10 introduced a "Windows as a Service" model, delivering feature updates twice a year through the Windows Update mechanism rather than paid major releases.</text>
+    </fact>
+    <fact id="HF091" type="historical" era="Windows 10">
+      <topic>Virtual desktops</topic>
+      <text>Windows 10 introduced native virtual desktop support via Task View (Win+Tab), a feature long present in macOS and Linux desktop environments.</text>
+    </fact>
+    <fact id="HF092" type="historical" era="Windows 10">
+      <topic>DirectX 12</topic>
+      <text>Windows 10 shipped with DirectX 12, enabling lower-level GPU access for game developers, closer to the hardware than prior DirectX versions, leading to better performance and efficiency.</text>
+    </fact>
+    <fact id="HF093" type="historical" era="Windows 10">
+      <topic>WSL introduction</topic>
+      <text>Windows 10 Anniversary Update (2016) introduced the Windows Subsystem for Linux (WSL), allowing users to run a Linux environment natively within Windows without a virtual machine.</text>
+    </fact>
+    <fact id="HF094" type="historical" era="Windows 10">
+      <topic>Windows Hello</topic>
+      <text>Windows 10 introduced Windows Hello, a biometric authentication framework supporting face recognition, fingerprint scanning, and iris scanning as alternatives to passwords.</text>
+    </fact>
+    <fact id="HF095" type="historical" era="Windows 10">
+      <topic>Action Center</topic>
+      <text>Windows 10 replaced the Windows 8 Charms bar with the Action Center - a notification tray on the right side of the screen housing notifications and Quick Action buttons.</text>
+    </fact>
+    <fact id="HF096" type="historical" era="Windows 10">
+      <topic>Adoption speed</topic>
+      <text>Windows 10 reached 75 million installs in its first month - the fastest adoption rate of any version of Windows at that time - aided significantly by the free upgrade offer.</text>
+    </fact>
+    <fact id="HF097" type="historical" era="Cloud">
+      <topic>Azure launch</topic>
+      <text>Microsoft Azure was announced in October 2008 and commercially launched in February 2010 as Windows Azure, later rebranded to Microsoft Azure in 2014.</text>
+    </fact>
+    <fact id="HF098" type="historical" era="Cloud">
+      <topic>Azure growth</topic>
+      <text>Under Satya Nadella, Azure became Microsoft's primary growth engine; by 2023, Microsoft's Intelligent Cloud segment (led by Azure) generated over $87 billion in annual revenue.</text>
+    </fact>
+    <fact id="HF099" type="historical" era="Cloud">
+      <topic>Office 365</topic>
+      <text>Microsoft launched Office 365 in June 2011, transitioning from perpetual software licenses to a subscription-based cloud model for its productivity suite.</text>
+    </fact>
+    <fact id="HF100" type="historical" era="Cloud">
+      <topic>Microsoft 365</topic>
+      <text>Office 365 was rebranded as Microsoft 365 in April 2020, reflecting the broader inclusion of Windows, security, and device management tools beyond the core Office apps.</text>
+    </fact>
+    <fact id="HF101" type="historical" era="Acquisitions">
+      <topic>Hotmail acquisition</topic>
+      <text>Microsoft acquired Hotmail in December 1997 for an estimated $400 million; it was one of the first major web-based email services and was later relaunched as Outlook.com in 2012.</text>
+    </fact>
+    <fact id="HF102" type="historical" era="Acquisitions">
+      <topic>Skype acquisition</topic>
+      <text>Microsoft acquired Skype in May 2011 for $8.5 billion - the largest acquisition in Microsoft's history at the time - gaining 170 million users and a major presence in video calling.</text>
+    </fact>
+    <fact id="HF103" type="historical" era="Acquisitions">
+      <topic>Nokia acquisition</topic>
+      <text>Microsoft acquired Nokia's mobile phone division in April 2014 for approximately €5.44 billion, an attempt to gain traction in the smartphone market that largely failed, resulting in massive write-downs by 2015.</text>
+    </fact>
+    <fact id="HF104" type="historical" era="Acquisitions">
+      <topic>LinkedIn acquisition</topic>
+      <text>Microsoft acquired LinkedIn in December 2016 for $26.2 billion - its largest acquisition at that time - integrating the professional network with Office 365 and Dynamics.</text>
+    </fact>
+    <fact id="HF105" type="historical" era="Acquisitions">
+      <topic>GitHub acquisition</topic>
+      <text>Microsoft acquired GitHub, the world's largest code hosting platform, in October 2018 for $7.5 billion, signaling the company's deep commitment to open-source software.</text>
+    </fact>
+    <fact id="HF106" type="historical" era="Acquisitions">
+      <topic>Nuance acquisition</topic>
+      <text>Microsoft completed its acquisition of Nuance Communications, a leader in conversational AI and speech recognition, in March 2022 for $19.7 billion.</text>
+    </fact>
+    <fact id="HF107" type="historical" era="Acquisitions">
+      <topic>Activision Blizzard</topic>
+      <text>Microsoft completed its acquisition of Activision Blizzard, one of the world's largest video game publishers (Call of Duty, World of Warcraft, Candy Crush), in October 2023 for approximately $68.7 billion - the largest gaming acquisition in history.</text>
+    </fact>
+    <fact id="HF108" type="historical" era="Windows Server">
+      <topic>Windows Server 2003</topic>
+      <text>Windows Server 2003, released April 24, 2003, built on the Windows XP/NT 5.2 kernel and introduced improved Active Directory, IIS 6.0, and enhanced group policy management.</text>
+    </fact>
+    <fact id="HF109" type="historical" era="Windows Server">
+      <topic>Windows Server 2008</topic>
+      <text>Windows Server 2008, released February 27, 2008, introduced Server Core (a minimal headless installation option), Hyper-V virtualization, and PowerShell as a core management tool.</text>
+    </fact>
+    <fact id="HF110" type="historical" era="Windows Server">
+      <topic>Hyper-V debut</topic>
+      <text>Hyper-V, Microsoft's type-1 hypervisor for server virtualization, was introduced with Windows Server 2008 and is now also included in Windows 10 and 11 Pro/Enterprise editions.</text>
+    </fact>
+    <fact id="HF111" type="historical" era="Windows Server">
+      <topic>Windows Server 2012</topic>
+      <text>Windows Server 2012, released September 4, 2012, brought the Metro-era tile interface to server management and introduced Storage Spaces, SMB 3.0, and improved Hyper-V.</text>
+    </fact>
+    <fact id="HF112" type="historical" era="Windows Server">
+      <topic>Windows Server 2016</topic>
+      <text>Windows Server 2016 introduced Nano Server, Containers, Shielded Virtual Machines, and Windows Defender as a built-in service, reflecting strong security and cloud alignment.</text>
+    </fact>
+    <fact id="HF113" type="historical" era="Windows Server">
+      <topic>Windows Server 2019</topic>
+      <text>Windows Server 2019 added Windows Admin Center, Storage Migration Service, System Insights for predictive analytics, and deeper Azure hybrid integration features.</text>
+    </fact>
+    <fact id="HF114" type="historical" era="Windows Server">
+      <topic>Windows Server 2022</topic>
+      <text>Windows Server 2022, released in August 2021, added Secured-core server capabilities, SMB over QUIC for WAN file sharing, and improved Azure Arc integration for hybrid cloud management.</text>
+    </fact>
+    <fact id="HF115" type="historical" era="Windows 11">
+      <topic>Windows 11 announcement</topic>
+      <text>Microsoft announced Windows 11 on June 24, 2021, ending speculation that Windows 10 would be the "last version" of Windows.</text>
+    </fact>
+    <fact id="HF116" type="historical" era="Windows 11">
+      <topic>Windows 11 release</topic>
+      <text>Windows 11 was released on October 5, 2021, as a free upgrade to eligible Windows 10 devices.</text>
+    </fact>
+    <fact id="HF117" type="historical" era="Windows 11">
+      <topic>TPM 2.0 requirement</topic>
+      <text>Windows 11 requires a Trusted Platform Module (TPM) version 2.0, a 64-bit dual-core 1 GHz+ processor, and Secure Boot support - requirements that rendered many older PCs ineligible for the upgrade.</text>
+    </fact>
+    <fact id="HF118" type="historical" era="Windows 11">
+      <topic>Centered taskbar</topic>
+      <text>Windows 11 moved the Start button and taskbar icons to the center of the taskbar by default, a major visual departure from all prior Windows versions.</text>
+    </fact>
+    <fact id="HF119" type="historical" era="Windows 11">
+      <topic>Snap Layouts</topic>
+      <text>Windows 11 introduced Snap Layouts and Snap Groups, allowing users to hover over the maximize button to choose predefined window arrangement templates on screen.</text>
+    </fact>
+    <fact id="HF120" type="historical" era="Windows 11">
+      <topic>Android apps</topic>
+      <text>Windows 11 added the ability to run Android apps natively through the Amazon Appstore and Windows Subsystem for Android (WSA), though this feature was later discontinued in March 2025.</text>
+    </fact>
+    <fact id="HF121" type="historical" era="Windows 11">
+      <topic>Teams integration</topic>
+      <text>Windows 11 integrated Microsoft Teams directly into the taskbar via the Chat button, the deepest integration of a communications app into Windows to date.</text>
+    </fact>
+    <fact id="HF122" type="historical" era="Windows 11">
+      <topic>Rounded corners</topic>
+      <text>Windows 11 introduced a refreshed UI with rounded window corners, Mica material effects (translucent backgrounds that adapt to wallpaper color), and a new Fluent Design icon set.</text>
+    </fact>
+    <fact id="HF123" type="historical" era="Windows 11">
+      <topic>DirectStorage</topic>
+      <text>Windows 11 introduced DirectStorage, a gaming API that allows GPUs to load game assets directly from NVMe SSDs, bypassing the CPU bottleneck to dramatically reduce load times.</text>
+    </fact>
+    <fact id="HF124" type="historical" era="Windows 11">
+      <topic>Widgets panel</topic>
+      <text>Windows 11 brought back a Widgets panel (replacing Live Tiles) providing a news feed, weather, calendar, and other personalized information in a sliding panel accessed from the taskbar.</text>
+    </fact>
+    <fact id="HF125" type="historical" era="AI Era">
+      <topic>OpenAI partnership</topic>
+      <text>Microsoft made a landmark $1 billion investment in OpenAI in 2019, followed by additional multi-billion dollar commitments in 2021 and 2023, gaining exclusive access to GPT models for its products.</text>
+    </fact>
+    <fact id="HF126" type="historical" era="AI Era">
+      <topic>Bing AI launch</topic>
+      <text>In February 2023, Microsoft launched a new AI-powered Bing search engine and Edge browser sidebar powered by a customized version of OpenAI's GPT-4, under the name "Bing Chat."</text>
+    </fact>
+    <fact id="HF127" type="historical" era="AI Era">
+      <topic>Microsoft Copilot</topic>
+      <text>Microsoft introduced Microsoft Copilot as a unified AI assistant brand in 2023, integrating AI capabilities across Windows, Microsoft 365, Edge, and Bing.</text>
+    </fact>
+    <fact id="HF128" type="historical" era="AI Era">
+      <topic>Copilot in Windows</topic>
+      <text>Windows 11 received a built-in Copilot button on the taskbar in September 2023 (via update), giving users direct access to an AI assistant that could change system settings, summarize content, and answer questions.</text>
+    </fact>
+    <fact id="HF129" type="historical" era="AI Era">
+      <topic>Copilot+ PCs</topic>
+      <text>In May 2024, Microsoft unveiled the Copilot+ PC category, requiring a Neural Processing Unit (NPU) capable of at least 40 TOPS, enabling on-device AI features like Recall, Live Captions with real-time translation, and AI image generation.</text>
+    </fact>
+    <fact id="HF130" type="historical" era="AI Era">
+      <topic>Recall feature</topic>
+      <text>Microsoft's Recall feature, announced for Copilot+ PCs in 2024, uses AI to create a searchable "photographic memory" of everything the user has done on their PC, though it faced significant privacy scrutiny before launch.</text>
+    </fact>
+    <fact id="HF131" type="historical" era="Developer Tools">
+      <topic>PowerShell origins</topic>
+      <text>Windows PowerShell 1.0 was released in November 2006, created by Jeffrey Snover, providing a command-line shell and scripting language built on the .NET Framework for system administration.</text>
+    </fact>
+    <fact id="HF132" type="historical" era="Developer Tools">
+      <topic>PowerShell open source</topic>
+      <text>In August 2016, Microsoft open-sourced PowerShell and released it cross-platform for Windows, macOS, and Linux, renaming it "PowerShell Core" (later just "PowerShell").</text>
+    </fact>
+    <fact id="HF133" type="historical" era="Developer Tools">
+      <topic>.NET launch</topic>
+      <text>Microsoft launched the .NET Framework in 2002 as a managed code platform supporting multiple programming languages (C#, VB.NET, F#), simplifying Windows application development.</text>
+    </fact>
+    <fact id="HF134" type="historical" era="Developer Tools">
+      <topic>.NET Core</topic>
+      <text>In 2016, Microsoft released .NET Core, a cross-platform, open-source reimplementation of .NET that runs on Windows, macOS, and Linux, later consolidated as ".NET" from version 5 (2020) onward.</text>
+    </fact>
+    <fact id="HF135" type="historical" era="Developer Tools">
+      <topic>Visual Studio Code</topic>
+      <text>Microsoft released Visual Studio Code (VS Code) in April 2015 as a free, open-source, cross-platform code editor; it has consistently ranked as the world's most popular code editor in developer surveys since 2018.</text>
+    </fact>
+    <fact id="HF136" type="historical" era="Technology">
+      <topic>FAT32 origins</topic>
+      <text>FAT32, introduced with Windows 95 OSR2 in 1996, extended the original FAT file system to support drives larger than 2 GB but has a maximum file size of 4 GB.</text>
+    </fact>
+    <fact id="HF137" type="historical" era="Technology">
+      <topic>NTFS introduction</topic>
+      <text>NTFS (New Technology File System) debuted with Windows NT 3.1 in 1993 and introduced file-level security, compression, encryption, journaling, and support for large volumes.</text>
+    </fact>
+    <fact id="HF138" type="historical" era="Technology">
+      <topic>ReFS</topic>
+      <text>Microsoft introduced the Resilient File System (ReFS) with Windows Server 2012 as a successor to NTFS, designed for maximum data integrity and scalability in storage server workloads.</text>
+    </fact>
+    <fact id="HF139" type="historical" era="Misc">
+      <topic>Solitaire</topic>
+      <text>Microsoft Solitaire was included with Windows 3.0 in 1990 not just for entertainment but to teach users how to use a mouse - particularly the click-and-drag action.</text>
+    </fact>
+    <fact id="HF140" type="historical" era="Misc">
+      <topic>Paint origins</topic>
+      <text>Microsoft Paint debuted with Windows 1.0 in 1985 as a licensed version of ZSoft's PC Paintbrush; it has shipped with every version of Windows since.</text>
+    </fact>
+    <fact id="HF141" type="historical" era="Misc">
+      <topic>Minesweeper</topic>
+      <text>Minesweeper was included with Windows 3.1 in 1992, created to help users practice precise mouse movements - specifically right-clicking and left-clicking.</text>
+    </fact>
+    <fact id="HF142" type="historical" era="Misc">
+      <topic>Windows version numbering</topic>
+      <text>Microsoft skipped from Windows 8.1 (kernel version 6.3) directly to Windows 10 (kernel version 10.0), partly for marketing reasons, and later skipped Windows 9 entirely.</text>
+    </fact>
+    <fact id="HF143" type="historical" era="Misc">
+      <topic>Windows 9 skip reason</topic>
+      <text>One suspected technical reason Microsoft skipped Windows 9 is that many software programs checked for older Windows versions using code like "startsWith('Windows 9')" which would have matched "Windows 95" and "Windows 98," causing compatibility errors. This speculation was debunked.</text>
+    </fact>
+    <fact id="HF144" type="historical" era="Misc">
+      <topic>Market cap milestone</topic>
+      <text>Microsoft became the world's first publicly traded company to reach a $1 trillion market capitalization in April 2019.</text>
+    </fact>
+    <fact id="HF145" type="historical" era="Misc">
+      <topic>Bing launch</topic>
+      <text>Microsoft launched Bing as its rebranded search engine in June 2009, replacing Live Search, with the aim of positioning it as a "decision engine" rather than a traditional search tool.</text>
+    </fact>
+    <fact id="HF146" type="historical" era="Misc">
+      <topic>Windows Update</topic>
+      <text>Windows Update launched in 1998 with Windows 98 as an online service for downloading patches and updates, eliminating the need for users to obtain physical service pack media.</text>
+    </fact>
+    <fact id="HF147" type="historical" era="Misc">
+      <topic>Internet Explorer peak</topic>
+      <text>Internet Explorer reached peak market dominance of approximately 95% browser market share around 2003 before declining due to competition from Firefox, Chrome, and Safari.</text>
+    </fact>
+    <fact id="HF148" type="historical" era="Misc">
+      <topic>IE retirement</topic>
+      <text>Microsoft officially retired Internet Explorer on June 15, 2022, ending its 27-year run; it had fallen to a negligible market share by that point.</text>
+    </fact>
+    <fact id="HF149" type="historical" era="Misc">
+      <topic>Microsoft Teams launch</topic>
+      <text>Microsoft Teams was launched in November 2016 as a workplace chat and collaboration platform, growing massively during the COVID-19 pandemic to reach 300 million monthly active users by 2023.</text>
+    </fact>
+    <fact id="HF150" type="historical" era="Misc">
+      <topic>Open source shift</topic>
+      <text>In 2014, then-CEO Satya Nadella declared "Microsoft loves Linux," a dramatic reversal from Steve Ballmer's 2001 description of Linux as a "cancer" - reflecting a fundamental shift in Microsoft's corporate philosophy toward open-source collaboration.</text>
+    </fact>
+    <fact id="HF151" type="historical" era="Misc">
+      <topic>Windows Insider Program</topic>
+      <text>Microsoft launched the Windows Insider Program in October 2014, allowing millions of users to test pre-release Windows builds, forming a large feedback loop for OS development.</text>
+    </fact>
+    <fact id="HF152" type="historical" era="Misc">
+      <topic>Notepad unchanged</topic>
+      <text>Notepad remained largely unchanged from Windows 1.0 until Windows 10 (version 1809, 2018), when it finally received support for Unix-style line endings and other modern text encoding features.</text>
+    </fact>
+    <fact id="HF153" type="historical" era="Misc">
+      <topic>Ctrl+Alt+Delete</topic>
+      <text>The Ctrl+Alt+Delete key combination was created by IBM engineer David Bradley for the IBM PC in 1981 as a hard reboot shortcut; Microsoft later repurposed it in Windows NT as a secure attention sequence for login.</text>
+    </fact>
+    <fact id="HF154" type="historical" era="Misc">
+      <topic>Gates' first program</topic>
+      <text>Bill Gates wrote his first computer program at age 13 on a PDP-10 at Lakeside School in Seattle - a version of Tic-Tac-Toe that allowed a user to play against the computer.</text>
+    </fact>
+    <fact id="HF155" type="historical" era="Misc">
+      <topic>Windows Activation</topic>
+      <text>Product Activation was introduced with Windows XP in 2001 to combat software piracy; it required users to activate their copy of Windows within 30 days of installation, either online or by phone.</text>
+    </fact>
+    <fact id="HF156" type="historical" era="Misc">
+      <topic>Windows Task Manager origins</topic>
+      <text>Windows Task Manager was introduced in Windows NT 4.0 in 1996; it was created by David Plummer, a Microsoft developer, who wrote it in his spare time.</text>
+    </fact>
+    <fact id="HF157" type="historical" era="Misc">
+      <topic>Registry introduction</topic>
+      <text>The Windows Registry was introduced with Windows 3.1 in 1992, replacing the fragmented .INI file system with a centralized hierarchical database for configuration settings.</text>
+    </fact>
+    <fact id="HF158" type="historical" era="Misc">
+      <topic>Recycle Bin</topic>
+      <text>The Recycle Bin was introduced with Windows 95 in 1995, replacing the earlier "Delete" command that permanently removed files, giving users a safety net to recover accidentally deleted items.</text>
+    </fact>
+    <fact id="HF159" type="historical" era="Misc">
+      <topic>Microsoft Certification</topic>
+      <text>Microsoft launched its professional certification program (MCSE - Microsoft Certified Systems Engineer) in 1992, which became one of the world's most recognized IT credentials.</text>
+    </fact>
+    <fact id="HF160" type="historical" era="Misc">
+      <topic>OneDrive history</topic>
+      <text>Microsoft's cloud storage service launched in 2007 as "Windows Live Folders," was renamed SkyDrive in 2008, and then renamed OneDrive in 2014 following a trademark dispute with British Sky Broadcasting.</text>
+    </fact>
+    <fact id="HF161" type="historical" era="Misc">
+      <topic>Windows Defender origins</topic>
+      <text>Windows Defender began as Microsoft AntiSpyware in 2005, was rebranded as Windows Defender in 2006, and expanded into a full antivirus solution integrated into Windows 8, eventually becoming Microsoft Defender Antivirus.</text>
+    </fact>
+    <fact id="HF162" type="historical" era="Misc">
+      <topic>Xbox Game Pass</topic>
+      <text>Microsoft launched Xbox Game Pass in June 2017, a subscription service for Xbox and PC games; it expanded to include day-one releases of all first-party Microsoft titles, rapidly growing to tens of millions of subscribers.</text>
+    </fact>
+    <fact id="HF163" type="historical" era="Misc">
+      <topic>HoloLens</topic>
+      <text>Microsoft unveiled the HoloLens mixed reality headset in January 2015 - the world's first self-contained holographic computer - running a full version of Windows 10.</text>
+    </fact>
+    <fact id="HF164" type="historical" era="Misc">
+      <topic>Windows PE</topic>
+      <text>Windows Preinstallation Environment (WinPE) was introduced with Windows XP in 2001 as a lightweight bootable version of Windows used for deploying, troubleshooting, and recovering Windows installations.</text>
+    </fact>
+    <fact id="HF165" type="historical" era="Misc">
+      <topic>Search engine market</topic>
+      <text>Despite heavy investment, Bing has consistently held roughly 3-9% of the global search market share, compared to Google's dominance above 90%, though the 2023 AI-powered Bing refresh improved its user engagement significantly.</text>
+    </fact>
+    <fact id="HF166" type="historical" era="Misc">
+      <topic>Clippy</topic>
+      <text>Clippy (officially "Clippit"), the animated paperclip Office Assistant, was introduced with Microsoft Office 97 in 1996 and was widely regarded as annoying, leading to its default disabling in Office 2002 and removal in Office 2007.</text>
+    </fact>
+    <fact id="HF167" type="historical" era="Misc">
+      <topic>Bing Maps</topic>
+      <text>Microsoft launched Virtual Earth in 2005, which became Bing Maps in 2009, providing satellite imagery, street maps, and route planning - competing directly with Google Maps.</text>
+    </fact>
+    <fact id="HF168" type="historical" era="Misc">
+      <topic>WSL 2</topic>
+      <text>Windows Subsystem for Linux 2 (WSL 2), released in May 2020 with Windows 10 version 2004, replaced the translation layer with a real Linux kernel running in a lightweight VM, dramatically improving file system performance and compatibility.</text>
+    </fact>
+    <fact id="HF169" type="historical" era="Misc">
+      <topic>Windows Terminal</topic>
+      <text>Microsoft released Windows Terminal in 2019 as a modern, open-source terminal application supporting multiple tabs, GPU-accelerated text rendering, Unicode, and custom themes - replacing the aging Console Host.</text>
+    </fact>
+    <fact id="HF170" type="historical" era="Misc">
+      <topic>Active Directory launch</topic>
+      <text>Active Directory Domain Services (AD DS) was introduced with Windows 2000 Server in 1999 and became the de-facto identity and access management solution for enterprise Windows networks worldwide.</text>
+    </fact>
+    <fact id="HF171" type="historical" era="Misc">
+      <topic>Windows XP embedded</topic>
+      <text>Windows XP Embedded (XPe) was widely used in ATMs, point-of-sale terminals, medical devices, and industrial systems well into the 2020s, long after mainstream consumer support ended.</text>
+    </fact>
+    <fact id="HF172" type="historical" era="Misc">
+      <topic>Patch Tuesday</topic>
+      <text>Microsoft introduced "Patch Tuesday" in October 2003, standardizing the release of security patches to the second Tuesday of each month, helping IT administrators plan update deployments.</text>
+    </fact>
+    <fact id="HF173" type="historical" era="Misc">
+      <topic>Windows versions list</topic>
+      <text>Consumer versions of Windows released from the 1990s onward include: 3.0, 3.1, 95, 98, Me, XP, Vista, 7, 8, 8.1, 10, and 11 - spanning over three decades of continuous development.</text>
+    </fact>
+    <fact id="HF174" type="historical" era="Misc">
+      <topic>Microsoft Pluton</topic>
+      <text>Microsoft announced the Pluton security chip architecture in 2020, a CPU-integrated security processor that moves security functionality directly into the silicon to address firmware attack vectors, first appearing in Windows 11 devices in 2022.</text>
+    </fact>
+    <fact id="HF175" type="historical" era="Misc">
+      <topic>Windows 10 end of life</topic>
+      <text>Microsoft announced that Windows 10 will reach end of support on October 14, 2025, after which it will no longer receive security updates - urging users to upgrade to Windows 11.</text>
+    </fact>
+    <fact id="TIP001" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+D - Show Desktop</topic>
+      <text>Press Win+D to instantly minimize all open windows and show the desktop. Press it again to restore the windows to their previous positions.</text>
+    </fact>
+    <fact id="TIP002" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+L - Lock screen</topic>
+      <text>Press Win+L to immediately lock your PC and return to the lock screen, useful for quickly securing your workstation when stepping away.</text>
+    </fact>
+    <fact id="TIP003" type="tip" category="Keyboard Shortcuts" applies_to="Windows 10, 11">
+      <topic>Win+Tab - Task View</topic>
+      <text>Press Win+Tab to open Task View, where you can see all open windows, switch between virtual desktops, and view your timeline (Windows 10) or recent activities.</text>
+    </fact>
+    <fact id="TIP004" type="tip" category="Keyboard Shortcuts" applies_to="Windows 10, 11">
+      <topic>Win+Ctrl+D - New virtual desktop</topic>
+      <text>Press Win+Ctrl+D to create a new virtual desktop instantly. Use Win+Ctrl+Left/Right arrows to switch between them and Win+Ctrl+F4 to close the current one.</text>
+    </fact>
+    <fact id="TIP005" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+Arrow - Snap windows</topic>
+      <text>Press Win+Left or Win+Right to snap the active window to the left or right half of the screen. Use Win+Up or Win+Down to maximize or minimize it.</text>
+    </fact>
+    <fact id="TIP006" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+E - File Explorer</topic>
+      <text>Press Win+E to open a new File Explorer window quickly from anywhere in Windows.</text>
+    </fact>
+    <fact id="TIP007" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+R - Run dialog</topic>
+      <text>Press Win+R to open the Run dialog box, where you can quickly launch applications, open folders, or run commands such as "msconfig," "regedit," or "mmc."</text>
+    </fact>
+    <fact id="TIP008" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+X - Power User menu</topic>
+      <text>Press Win+X (or right-click the Start button) to access the Power User menu, providing quick links to Device Manager, PowerShell, Disk Management, Task Manager, and more.</text>
+    </fact>
+    <fact id="TIP009" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+I - Settings</topic>
+      <text>Press Win+I to open the Windows Settings app directly, which is faster than navigating through the Start menu.</text>
+    </fact>
+    <fact id="TIP010" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+P - Projection menu</topic>
+      <text>Press Win+P to open the Project panel for quickly switching between display modes: PC screen only, Duplicate, Extend, or Second screen only.</text>
+    </fact>
+    <fact id="TIP011" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+Shift+S - Screenshot snippet</topic>
+      <text>Press Win+Shift+S to open the Snipping Tool (formerly Snip and Sketch) overlay, allowing you to capture a rectangular, freeform, window, or full-screen screenshot that is copied to the clipboard.</text>
+    </fact>
+    <fact id="TIP012" type="tip" category="Keyboard Shortcuts" applies_to="Windows 10, 11">
+      <topic>Win+V - Clipboard history</topic>
+      <text>Press Win+V to open Clipboard History, which stores the last 25 items you've copied. Enable it first via Settings &gt; System &gt; Clipboard &gt; Clipboard history.</text>
+    </fact>
+    <fact id="TIP013" type="tip" category="Keyboard Shortcuts" applies_to="Windows 10, 11">
+      <topic>Win+. - Emoji picker</topic>
+      <text>Press Win+. (period) or Win+; (semicolon) to open the emoji picker panel, allowing you to insert emoji, GIFs, kaomoji, and special characters into any text field.</text>
+    </fact>
+    <fact id="TIP014" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Alt+F4 - Close application</topic>
+      <text>Press Alt+F4 to close the currently active application window. When no application is focused (on the desktop), it opens the Shut Down Windows dialog.</text>
+    </fact>
+    <fact id="TIP015" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+Pause - System properties</topic>
+      <text>Press Win+Pause/Break to immediately open the System properties page, showing your Windows edition, CPU, RAM, and PC name - useful for quickly checking system specs.</text>
+    </fact>
+    <fact id="TIP016" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Ctrl+Shift+Esc - Task Manager direct</topic>
+      <text>Press Ctrl+Shift+Esc to open Task Manager directly, bypassing the Ctrl+Alt+Delete security screen and saving a step when diagnosing performance issues.</text>
+    </fact>
+    <fact id="TIP017" type="tip" category="Keyboard Shortcuts" applies_to="Windows 11">
+      <topic>Win+Z - Snap Layouts</topic>
+      <text>Press Win+Z on Windows 11 to open the Snap Layouts overlay for the current window, letting you choose a predefined multi-window arrangement without hovering over the maximize button.</text>
+    </fact>
+    <fact id="TIP018" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+Number - Launch pinned app</topic>
+      <text>Press Win+1 through Win+0 to launch or switch to the application pinned to the corresponding position on the taskbar, numbered left to right.</text>
+    </fact>
+    <fact id="TIP019" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+Home - Minimize non-active windows</topic>
+      <text>Press Win+Home to minimize all windows except the currently active one - a quick way to focus on a single application without moving other windows manually.</text>
+    </fact>
+    <fact id="TIP020" type="tip" category="Keyboard Shortcuts" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+Shift+Left/Right - Move window to other monitor</topic>
+      <text>Press Win+Shift+Left or Win+Shift+Right to move the active window to the next monitor in a multi-monitor setup, keeping the window's size and position relative to that display.</text>
+    </fact>
+    <fact id="TIP021" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Address bar navigation</topic>
+      <text>Click in the File Explorer address bar to type a path directly, or press Alt+D to select it. Type a folder path and press Enter to navigate there instantly.</text>
+    </fact>
+    <fact id="TIP022" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>File extensions visibility</topic>
+      <text>In File Explorer, go to View &gt; Show &gt; File name extensions (Windows 11) or View &gt; Options &gt; Change folder and search options &gt; View tab (Windows 10) to toggle visibility of file extensions for all files.</text>
+    </fact>
+    <fact id="TIP023" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Hidden items toggle</topic>
+      <text>In File Explorer on Windows 11, go to View &gt; Show &gt; Hidden items to toggle hidden files and folders. On Windows 10, use View &gt; Hidden items checkbox in the ribbon.</text>
+    </fact>
+    <fact id="TIP024" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Select all with checkbox</topic>
+      <text>Enable item check boxes in File Explorer (View &gt; Show &gt; Item check boxes on Windows 11) to select files by clicking their checkboxes without holding Ctrl, which is especially helpful on touchscreens.</text>
+    </fact>
+    <fact id="TIP025" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Compress to ZIP</topic>
+      <text>Right-click any file or folder in File Explorer and select Send to &gt; Compressed (zipped) folder to create a ZIP archive of the selected items without needing third-party software.</text>
+    </fact>
+    <fact id="TIP026" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Quick access pin</topic>
+      <text>Drag any folder to the Quick Access section in the File Explorer navigation pane (or right-click it and select Pin to Quick access) to add it as a permanent shortcut for fast navigation.</text>
+    </fact>
+    <fact id="TIP027" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Multiple folder opens</topic>
+      <text>Open multiple File Explorer windows to the same or different folders and use Win+Left/Right or drag them side by side for easy file comparison or drag-and-drop between locations.</text>
+    </fact>
+    <fact id="TIP028" type="tip" category="File Explorer" applies_to="Windows 10, 11">
+      <topic>Tabs in File Explorer</topic>
+      <text>Windows 11 (22H2 and later) supports tabs in File Explorer - press Ctrl+T to open a new tab and Ctrl+W to close the current one, allowing multi-location browsing in a single window.</text>
+    </fact>
+    <fact id="TIP029" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Alt+Up to parent folder</topic>
+      <text>Press Alt+Up arrow in File Explorer to navigate to the parent folder of the current directory, equivalent to clicking the up-arrow button in the navigation bar.</text>
+    </fact>
+    <fact id="TIP030" type="tip" category="File Explorer" applies_to="Windows 8.1, 10, 11">
+      <topic>Breadcrumb navigation</topic>
+      <text>Click on any part of the breadcrumb path in the File Explorer address bar (the folder icons between the "&gt;" separators) to jump directly to that ancestor folder in the hierarchy.</text>
+    </fact>
+    <fact id="TIP031" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>Startup programs</topic>
+      <text>Open Task Manager (Ctrl+Shift+Esc) &gt; Startup tab to see all programs that launch at Windows startup and disable unnecessary ones to reduce boot time and improve startup performance.</text>
+    </fact>
+    <fact id="TIP032" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>Visual effects reduction</topic>
+      <text>Search for "Adjust the appearance and performance of Windows" in the Start menu and select "Adjust for best performance" to disable all visual effects, significantly improving performance on low-end hardware.</text>
+    </fact>
+    <fact id="TIP033" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>Power plan setting</topic>
+      <text>In Control Panel &gt; Hardware and Sound &gt; Power Options, select the "High performance" plan (or create a custom one) to prevent Windows from throttling your CPU for energy savings during demanding tasks.</text>
+    </fact>
+    <fact id="TIP034" type="tip" category="Performance" applies_to="Windows 10, 11">
+      <topic>Storage Sense</topic>
+      <text>Enable Storage Sense in Settings &gt; System &gt; Storage to automatically free up disk space by removing temporary files, old Windows Update files, and items in the Recycle Bin that have been there for a set number of days.</text>
+    </fact>
+    <fact id="TIP035" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>ReadyBoost</topic>
+      <text>On systems with limited RAM and a traditional HDD, you can use a USB flash drive as a cache via ReadyBoost: right-click the drive in File Explorer &gt; Properties &gt; ReadyBoost tab and configure the space to use.</text>
+    </fact>
+    <fact id="TIP036" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>Disk Cleanup via cleanmgr</topic>
+      <text>Run "cleanmgr /sageset:1" in an elevated prompt to configure what Disk Cleanup removes, then "cleanmgr /sagerun:1" to execute it silently - useful in scheduled maintenance scripts.</text>
+    </fact>
+    <fact id="TIP037" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>Check disk health</topic>
+      <text>Open an elevated PowerShell prompt and run "Get-PhysicalDisk | Get-StorageReliabilityCounter | Select-Object DeviceId, ReadErrorsTotal, WriteErrorsTotal, Temperature" to check storage health statistics.</text>
+    </fact>
+    <fact id="TIP038" type="tip" category="Performance" applies_to="Windows 10, 11">
+      <topic>Game Mode</topic>
+      <text>Enable Game Mode in Settings &gt; Gaming &gt; Game Mode to prioritize CPU and GPU resources for the active game, reducing background process interference during gaming sessions.</text>
+    </fact>
+    <fact id="TIP039" type="tip" category="Performance" applies_to="Windows 8.1, 10, 11">
+      <topic>Hibernate vs Sleep</topic>
+      <text>Hibernate saves the memory state to disk and powers off completely (using zero power), while Sleep keeps the session in RAM (using a small amount of power). Use Hibernate for overnight pauses on laptops to maximize battery life.</text>
+    </fact>
+    <fact id="TIP040" type="tip" category="Performance" applies_to="Windows 10, 11">
+      <topic>Fast startup</topic>
+      <text>Windows Fast Startup (Settings &gt; Power &amp; sleep &gt; Additional power settings &gt; Choose what the power buttons do &gt; Turn on fast startup) uses a partial hibernate on shutdown to speed up boot times significantly.</text>
+    </fact>
+    <fact id="TIP041" type="tip" category="Security" applies_to="Windows 8.1, 10, 11">
+      <topic>Windows Defender status check</topic>
+      <text>Open Windows Security (search for it in the Start menu) to see the status of your antivirus, firewall, account protection, device security, and app/browser control - your central security dashboard.</text>
+    </fact>
+    <fact id="TIP042" type="tip" category="Security" applies_to="Windows 10, 11">
+      <topic>Windows Hello setup</topic>
+      <text>Set up Windows Hello in Settings &gt; Accounts &gt; Sign-in options to use face recognition, fingerprint, or a PIN for faster and more secure sign-in than a traditional password.</text>
+    </fact>
+    <fact id="TIP043" type="tip" category="Security" applies_to="Windows 8.1, 10, 11">
+      <topic>UAC configuration</topic>
+      <text>Search for "Change User Account Control settings" and adjust the slider to at least "Notify me only when apps try to make changes" to maintain a security baseline while reducing prompts for trusted actions.</text>
+    </fact>
+    <fact id="TIP044" type="tip" category="Security" applies_to="Windows 10, 11">
+      <topic>Exploit protection</topic>
+      <text>Go to Windows Security &gt; App &amp; browser control &gt; Exploit protection settings to configure system-level mitigations like DEP (Data Execution Prevention), ASLR (Address Space Layout Randomization), and CFG (Control Flow Guard).</text>
+    </fact>
+    <fact id="TIP045" type="tip" category="Security" applies_to="Windows 10, 11">
+      <topic>Controlled folder access</topic>
+      <text>Enable Controlled folder access in Windows Security &gt; Virus &amp; threat protection &gt; Ransomware protection to block unauthorized apps from modifying files in protected folders like Documents and Pictures.</text>
+    </fact>
+    <fact id="TIP046" type="tip" category="Security" applies_to="Windows 8.1, 10, 11">
+      <topic>BitLocker encryption</topic>
+      <text>Enable BitLocker on Windows 10/11 Pro, Enterprise, or Education by right-clicking a drive in File Explorer and selecting "Turn on BitLocker" to encrypt the entire drive and protect data if the device is lost or stolen.</text>
+    </fact>
+    <fact id="TIP047" type="tip" category="Security" applies_to="Windows 8.1, 10, 11">
+      <topic>Check BitLocker status via PowerShell</topic>
+      <text>Run "Get-BitLockerVolume" in an elevated PowerShell prompt to see the encryption status, protection status, and key protectors for all volumes on the system.</text>
+    </fact>
+    <fact id="TIP048" type="tip" category="Security" applies_to="Windows 8.1, 10, 11">
+      <topic>Windows Firewall with Advanced Security</topic>
+      <text>Open "Windows Defender Firewall with Advanced Security" (run "wf.msc") to create granular inbound and outbound firewall rules by program, port, protocol, IP address, or network profile.</text>
+    </fact>
+    <fact id="TIP049" type="tip" category="Security" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Local Security Policy</topic>
+      <text>Run "secpol.msc" to open the Local Security Policy editor, where you can enforce password complexity requirements, account lockout policies, audit policies, and other security settings.</text>
+    </fact>
+    <fact id="TIP050" type="tip" category="Security" applies_to="Windows 10, 11">
+      <topic>Dynamic Lock</topic>
+      <text>Enable Dynamic Lock in Settings &gt; Accounts &gt; Sign-in options &gt; Dynamic lock to automatically lock your PC when a paired Bluetooth device (like your phone) moves out of Bluetooth range.</text>
+    </fact>
+    <fact id="TIP051" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Get system information</topic>
+      <text>Run "Get-ComputerInfo" in PowerShell to retrieve comprehensive system information including OS version, BIOS version, CPU, memory, domain membership, and Windows product ID in a single command.</text>
+    </fact>
+    <fact id="TIP052" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>List running services</topic>
+      <text>Run "Get-Service | Where-Object {$_.Status -eq 'Running'}" in PowerShell to list all currently running Windows services, which is useful for auditing or troubleshooting service states.</text>
+    </fact>
+    <fact id="TIP053" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Find large files</topic>
+      <text>Run "Get-ChildItem -Path C:\ -Recurse -ErrorAction SilentlyContinue | Where-Object {$_.Length -gt 100MB} | Sort-Object Length -Descending | Select-Object FullName, Length" in PowerShell to find files larger than 100 MB on the C: drive.</text>
+    </fact>
+    <fact id="TIP054" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Restart a service</topic>
+      <text>Run "Restart-Service -Name 'Spooler'" in an elevated PowerShell prompt to restart the Print Spooler service (replace 'Spooler' with any service name). Faster and scriptable compared to the Services GUI.</text>
+    </fact>
+    <fact id="TIP055" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Check disk space</topic>
+      <text>Run "Get-PSDrive -PSProvider FileSystem" in PowerShell to see all file system drives with their Used, Free, and Root information in a clean tabular format.</text>
+    </fact>
+    <fact id="TIP056" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Export process list</topic>
+      <text>Run "Get-Process | Export-Csv -Path "$env:USERPROFILE\Desktop\processes.csv" -NoTypeInformation" in PowerShell to export a snapshot of all running processes to a CSV file on the desktop.</text>
+    </fact>
+    <fact id="TIP057" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Test network connection</topic>
+      <text>Run "Test-NetConnection -ComputerName google.com -Port 443" in PowerShell for a detailed network test that shows ping results, TCP connection success, route information, and whether the specified port is open.</text>
+    </fact>
+    <fact id="TIP058" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>List installed apps</topic>
+      <text>Run "Get-Package | Sort-Object Name | Format-Table Name, Version, Source" in PowerShell to list all installed packages/applications with their versions - useful for auditing software inventory.</text>
+    </fact>
+    <fact id="TIP059" type="tip" category="PowerShell" applies_to="Windows 10, 11">
+      <topic>Install apps via winget</topic>
+      <text>Use the Windows Package Manager command "winget install --id Microsoft.VisualStudioCode" (or any app ID) in PowerShell or Terminal to download and install apps silently from the Microsoft Store or web.</text>
+    </fact>
+    <fact id="TIP060" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Set execution policy</topic>
+      <text>Run "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" in PowerShell to allow locally created scripts to run while requiring scripts downloaded from the internet to be signed by a trusted publisher.</text>
+    </fact>
+    <fact id="TIP061" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Get scheduled tasks</topic>
+      <text>Run "Get-ScheduledTask | Where-Object {$_.State -eq 'Ready'} | Select-Object TaskName, TaskPath" in PowerShell to list all enabled scheduled tasks, helpful for auditing or identifying potentially unwanted tasks.</text>
+    </fact>
+    <fact id="TIP062" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Bulk rename files</topic>
+      <text>Use PowerShell to bulk rename files: "Get-ChildItem -Path C:\Photos -Filter *.jpg | Rename-Item -NewName { $_.Name -replace 'IMG_','Photo_' }" renames all .jpg files replacing "IMG_" with "Photo_" in a single operation.</text>
+    </fact>
+    <fact id="TIP063" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>System uptime</topic>
+      <text>Run "(Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime" in PowerShell to see how long your Windows system has been running since the last boot, expressed in days, hours, minutes, and seconds.</text>
+    </fact>
+    <fact id="TIP064" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Open Registry Editor</topic>
+      <text>Press Win+R, type "regedit," and press Enter to open the Registry Editor. Always back up a registry key before modifying it by going to File &gt; Export with the key selected.</text>
+    </fact>
+    <fact id="TIP065" type="tip" category="Registry" applies_to="Windows 10, 11">
+      <topic>Disable lockscreen ads</topic>
+      <text>To disable Windows Spotlight lock screen suggestions (ads), navigate to HKCU\Software\Policies\Microsoft\Windows\CloudContent and create a DWORD value "DisableWindowsSpotlightFeatures" set to 1. This disables lock screen advertisements.</text>
+    </fact>
+    <fact id="TIP066" type="tip" category="Registry" applies_to="Windows 10, 11">
+      <topic>Disable Bing in Start search</topic>
+      <text>To disable web/Bing results in the Start menu search, navigate to HKCU\Software\Policies\Microsoft\Windows\Explorer and create a DWORD "DisableSearchBoxSuggestions" set to 1.</text>
+    </fact>
+    <fact id="TIP067" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Speed up shutdown</topic>
+      <text>Navigate to HKLM\SYSTEM\CurrentControlSet\Control and lower the "WaitToKillServiceTimeout" DWORD value (default 5000 milliseconds) to reduce the time Windows waits for services to stop during shutdown.</text>
+    </fact>
+    <fact id="TIP068" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Add "Open command prompt here" to context menu</topic>
+      <text>Add a "Open PowerShell window here" option to the right-click context menu of any folder by navigating to HKCR\Directory\shell, creating a new key named "Open PowerShell here," adding an "icon" value of "powershell.exe" and a subkey "command" with the value: powershell.exe -noexit -command Set-Location '%V'</text>
+    </fact>
+    <fact id="TIP069" type="tip" category="Registry" applies_to="Windows 10, 11">
+      <topic>Disable Cortana</topic>
+      <text>To disable Cortana, navigate to HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search and create or set the DWORD "AllowCortana" to 0. This prevents Cortana from running and removes it from the search bar.</text>
+    </fact>
+    <fact id="TIP070" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Enable verbose startup/shutdown messages</topic>
+      <text>Navigate to HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System and create a DWORD "verbosestatus" set to 1 to see detailed status messages during Windows startup, shutdown, logon, and logoff.</text>
+    </fact>
+    <fact id="TIP071" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Disable annoying "Low disk space" warning</topic>
+      <text>Navigate to HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer and create a DWORD "NoLowDiskSpaceChecks" set to 1 to suppress the low disk space balloon notification.</text>
+    </fact>
+    <fact id="TIP072" type="tip" category="Registry" applies_to="Windows 10, 11">
+      <topic>Disable automatic restart on BSOD</topic>
+      <text>Navigate to HKLM\SYSTEM\CurrentControlSet\Control\CrashControl and set the DWORD "AutoReboot" to 0 so that Windows displays the Blue Screen of Death (BSOD) indefinitely rather than automatically restarting, giving you time to read the error.</text>
+    </fact>
+    <fact id="TIP073" type="tip" category="Registry" applies_to="Windows 10, 11">
+      <topic>Change default browser registry</topic>
+      <text>While the default browser is best set through Settings &gt; Apps &gt; Default apps, its registered ProgID is stored under HKCU\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice - viewing this can help diagnose default app conflicts.</text>
+    </fact>
+    <fact id="TIP074" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Prevent programs from startup via registry</topic>
+      <text>Programs that auto-start for the current user are registered under HKCU\Software\Microsoft\Windows\CurrentVersion\Run. Delete any entry in this key to prevent that program from starting automatically on login.</text>
+    </fact>
+    <fact id="TIP075" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Disable window animation</topic>
+      <text>Navigate to HKCU\Control Panel\Desktop\WindowMetrics and set the string value "MinAnimate" to "0" to disable window minimize/maximize animations, making the UI feel snappier on slower machines.</text>
+    </fact>
+    <fact id="TIP076" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Flush DNS cache</topic>
+      <text>Run "ipconfig /flushdns" in an elevated Command Prompt or PowerShell to clear the DNS resolver cache, useful when you're experiencing DNS resolution issues or visiting a site after a DNS record change.</text>
+    </fact>
+    <fact id="TIP077" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Release and renew IP</topic>
+      <text>Run "ipconfig /release" followed by "ipconfig /renew" in an elevated prompt to release your current DHCP lease and obtain a new IP address from the DHCP server - useful for resolving IP conflict issues.</text>
+    </fact>
+    <fact id="TIP078" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Reset TCP/IP stack</topic>
+      <text>Run "netsh int ip reset" in an elevated prompt to reset the TCP/IP stack to its default state, resolving issues caused by corrupted network settings without reinstalling Windows.</text>
+    </fact>
+    <fact id="TIP079" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Reset Winsock</topic>
+      <text>Run "netsh winsock reset" in an elevated prompt to reset the Windows Sockets API configuration to its default state, which can fix connectivity issues caused by malware or corrupted socket settings.</text>
+    </fact>
+    <fact id="TIP080" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>View open connections</topic>
+      <text>Run "netstat -ano" in a prompt to display all active TCP/UDP connections with their local/remote addresses, ports, connection state, and the PID (Process ID) of the owning process.</text>
+    </fact>
+    <fact id="TIP081" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Map a network drive</topic>
+      <text>Run "net use Z: \\server\share /persistent:yes" in an elevated prompt to map a network share to drive letter Z and make the mapping persist across reboots.</text>
+    </fact>
+    <fact id="TIP082" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Network adapter troubleshooter</topic>
+      <text>Go to Settings &gt; System &gt; Troubleshoot &gt; Other troubleshooters &gt; Internet Connections (Windows 11) or Settings &gt; Update &amp; Security &gt; Troubleshoot &gt; Internet Connections (Windows 10) to run the built-in network diagnostic wizard.</text>
+    </fact>
+    <fact id="TIP083" type="tip" category="Networking" applies_to="Windows 10, 11">
+      <topic>Wi-Fi password retrieval</topic>
+      <text>Run "netsh wlan show profile name="YourNetworkName" key=clear" in an elevated prompt to display the saved Wi-Fi password for any network your PC has previously connected to, shown under "Key Content."</text>
+    </fact>
+    <fact id="TIP084" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Change DNS servers</topic>
+      <text>In Settings &gt; Network &amp; Internet &gt; select your connection &gt; DNS server assignment (Windows 11), or through Network adapter properties &gt; IPv4 &gt; DNS, set your preferred DNS to a public DNS like 1.1.1.1 (Cloudflare) or 8.8.8.8 (Google) for potentially faster resolution.</text>
+    </fact>
+    <fact id="TIP085" type="tip" category="Networking" applies_to="Windows 10, 11">
+      <topic>Network data usage</topic>
+      <text>Go to Settings &gt; Network &amp; Internet &gt; Data usage to see how much data each app has used over the current month on both Wi-Fi and Ethernet - useful for tracking data-hungry applications.</text>
+    </fact>
+    <fact id="TIP086" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>SFC system file check</topic>
+      <text>Run "sfc /scannow" in an elevated prompt to scan all protected Windows system files and automatically repair any corrupted ones using cached copies from the Windows component store.</text>
+    </fact>
+    <fact id="TIP087" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>DISM repair</topic>
+      <text>Run "DISM /Online /Cleanup-Image /RestoreHealth" in an elevated prompt to scan and repair the Windows component store (WinSxS), which SFC relies on - run DISM first if SFC reports it cannot repair files.</text>
+    </fact>
+    <fact id="TIP088" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Event Viewer quick access</topic>
+      <text>Run "eventvwr.msc" to open Event Viewer, your central log for Windows system, application, and security events - the first place to check when diagnosing crashes, service failures, or logon issues.</text>
+    </fact>
+    <fact id="TIP089" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Resource Monitor</topic>
+      <text>Open Resource Monitor by running "resmon.exe" or from Task Manager &gt; Performance tab &gt; Open Resource Monitor for detailed real-time graphs of CPU, memory, disk, and network usage per process.</text>
+    </fact>
+    <fact id="TIP090" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Disk Management</topic>
+      <text>Run "diskmgmt.msc" to open Disk Management and graphically manage drives, partitions, volumes, and drive letters - including creating, formatting, shrinking, or extending volumes without third-party tools.</text>
+    </fact>
+    <fact id="TIP091" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Device Manager</topic>
+      <text>Run "devmgmt.msc" to open Device Manager, where you can view, update, disable, or uninstall hardware drivers, and identify devices with driver problems (shown with a yellow exclamation mark).</text>
+    </fact>
+    <fact id="TIP092" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Services management</topic>
+      <text>Run "services.msc" to open the Services manager, where you can start, stop, pause, resume, and configure the startup type (Automatic, Manual, Disabled) of all Windows and third-party services.</text>
+    </fact>
+    <fact id="TIP093" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11">
+      <topic>Reliability Monitor</topic>
+      <text>Search for "View reliability history" in the Start menu to open Reliability Monitor - a graphical timeline of system crashes, application failures, and Windows updates, useful for diagnosing instability.</text>
+    </fact>
+    <fact id="TIP094" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11">
+      <topic>System Configuration (msconfig)</topic>
+      <text>Run "msconfig" to open System Configuration, where you can manage boot options (Safe Mode, reduced memory), select which services start at boot, and configure advanced startup settings.</text>
+    </fact>
+    <fact id="TIP095" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Performance Monitor</topic>
+      <text>Run "perfmon.msc" to open Performance Monitor, which lets you graph hundreds of real-time counters for CPU, memory, disk, network, and more - powerful for diagnosing long-term performance trends.</text>
+    </fact>
+    <fact id="TIP096" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Local Group Policy Editor</topic>
+      <text>Run "gpedit.msc" on Windows Pro and higher editions to access the Local Group Policy Editor, giving you administrative control over hundreds of OS behaviors, security settings, and app configurations without editing the registry manually.</text>
+    </fact>
+    <fact id="TIP097" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11">
+      <topic>Advanced startup</topic>
+      <text>Hold Shift while clicking Restart (from the Start menu or lock screen) to boot into the Windows Recovery Environment (WinRE), where you can access System Restore, Startup Repair, command prompt, and other recovery tools.</text>
+    </fact>
+    <fact id="TIP098" type="tip" category="System Tools" applies_to="Windows 10, 11">
+      <topic>Reset this PC</topic>
+      <text>Go to Settings &gt; System &gt; Recovery &gt; Reset this PC to reinstall Windows, with the option to keep your personal files or remove everything - useful for resolving deep OS corruption or preparing a device for resale.</text>
+    </fact>
+    <fact id="TIP099" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11">
+      <topic>Credential Manager</topic>
+      <text>Open Credential Manager (search Start menu or run "control keymgr.dll") to view, edit, and delete saved Windows credentials (network passwords, website credentials, and certificates) stored securely by Windows.</text>
+    </fact>
+    <fact id="TIP100" type="tip" category="System Tools" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Task Scheduler</topic>
+      <text>Run "taskschd.msc" to open Task Scheduler, where you can create automated tasks that run programs, scripts, or commands on a schedule, at logon, on idle, or in response to specific system events.</text>
+    </fact>
+    <fact id="TIP101" type="tip" category="Productivity" applies_to="Windows 10, 11">
+      <topic>Virtual desktops</topic>
+      <text>Use Win+Ctrl+D to create virtual desktops and Win+Ctrl+Left/Right to switch between them, allowing you to group related applications (work, browsing, communication) on separate desktops.</text>
+    </fact>
+    <fact id="TIP102" type="tip" category="Productivity" applies_to="Windows 10, 11">
+      <topic>Focus assist (Do Not Disturb)</topic>
+      <text>Enable Focus Assist (Settings &gt; System &gt; Focus assist on Windows 10, or Settings &gt; System &gt; Notifications &gt; Focus on Windows 11) to suppress notifications during work or presentations, with options to allow priority contacts through.</text>
+    </fact>
+    <fact id="TIP103" type="tip" category="Productivity" applies_to="Windows 10, 11">
+      <topic>Night light</topic>
+      <text>Enable Night Light in Settings &gt; System &gt; Display &gt; Night light to reduce blue light emission from your screen after sunset, potentially improving sleep quality if you work late.</text>
+    </fact>
+    <fact id="TIP104" type="tip" category="Productivity" applies_to="Windows 8.1, 10, 11">
+      <topic>Shake to minimize (Aero Shake)</topic>
+      <text>Click and rapidly "shake" a window's title bar back and forth to minimize all other open windows to the taskbar, leaving only the shaken window visible on screen (Aero Shake).</text>
+    </fact>
+    <fact id="TIP105" type="tip" category="Productivity" applies_to="Windows 8.1, 10, 11">
+      <topic>Magnifier tool</topic>
+      <text>Press Win+Plus (+) to launch the Magnifier tool and zoom in on any part of the screen. Press Win+Minus (-) to zoom out and Win+Esc to exit. Useful for accessibility or examining fine details.</text>
+    </fact>
+    <fact id="TIP106" type="tip" category="Productivity" applies_to="Windows 10, 11">
+      <topic>Sticky Notes</topic>
+      <text>Launch Sticky Notes from the Start menu to create digital sticky notes on your desktop; they sync across devices via your Microsoft account and integrate with Cortana (Windows 10) and the OneNote ecosystem.</text>
+    </fact>
+    <fact id="TIP107" type="tip" category="Productivity" applies_to="Windows 10, 11">
+      <topic>Clipboard history paste</topic>
+      <text>After enabling Clipboard History (Win+V &gt; Turn on), press Win+V before pasting to choose from the last 25 copied items rather than only the most recent one.</text>
+    </fact>
+    <fact id="TIP108" type="tip" category="Productivity" applies_to="Windows 11">
+      <topic>Snap to four corners</topic>
+      <text>Windows 11's Snap Layouts support four equal quadrants - hover the maximize button, choose the four-quadrant layout, then place each window into a corner for a productive four-app split-screen view.</text>
+    </fact>
+    <fact id="TIP109" type="tip" category="Productivity" applies_to="Windows 8.1, 10, 11">
+      <topic>Taskbar button middle-click</topic>
+      <text>Middle-click a taskbar button (click with the scroll wheel) to open a new instance of that application - handy for launching a second File Explorer, browser window, or terminal.</text>
+    </fact>
+    <fact id="TIP110" type="tip" category="Productivity" applies_to="Windows 10, 11">
+      <topic>Timeline in Task View</topic>
+      <text>On Windows 10, opening Task View (Win+Tab) also shows your activity timeline - a scrollable history of files and websites you've worked on over the past 30 days, synced with your Microsoft account across devices.</text>
+    </fact>
+    <fact id="TIP111" type="tip" category="Accessibility" applies_to="Windows 8.1, 10, 11">
+      <topic>High contrast mode</topic>
+      <text>Press Left Alt+Left Shift+Print Screen to quickly toggle High Contrast mode on or off, making screen elements easier to see for users with visual impairments.</text>
+    </fact>
+    <fact id="TIP112" type="tip" category="Accessibility" applies_to="Windows 10, 11">
+      <topic>Narrator</topic>
+      <text>Press Win+Ctrl+Enter to toggle the Windows Narrator screen reader on or off. Narrator reads aloud screen content and is fully configurable in Settings &gt; Accessibility &gt; Narrator.</text>
+    </fact>
+    <fact id="TIP113" type="tip" category="Accessibility" applies_to="Windows 8.1, 10, 11">
+      <topic>On-screen keyboard</topic>
+      <text>Run "osk.exe" or go to Settings &gt; Accessibility &gt; Keyboard &gt; On-screen keyboard to open a fully functional virtual keyboard, useful if physical keyboard keys fail or for touchscreen use.</text>
+    </fact>
+    <fact id="TIP114" type="tip" category="Accessibility" applies_to="Windows 10, 11">
+      <topic>Dictation</topic>
+      <text>Press Win+H to open the voice dictation feature, which lets you speak text into any text field using the built-in speech recognition engine - no setup required in Windows 10 or 11.</text>
+    </fact>
+    <fact id="TIP115" type="tip" category="Accessibility" applies_to="Windows 10, 11">
+      <topic>Cursor size and color</topic>
+      <text>Go to Settings &gt; Accessibility &gt; Mouse pointer and touch to change the cursor size and color (including a high-visibility black or custom color) to make it easier to locate on screen.</text>
+    </fact>
+    <fact id="TIP116" type="tip" category="Task Manager" applies_to="Windows 8.1, 10, 11">
+      <topic>Detailed process information</topic>
+      <text>In Task Manager, click "More details" to expand to the full view. Right-click any column header to add additional columns such as Command line, Publisher, PID, or GPU usage for deeper process analysis.</text>
+    </fact>
+    <fact id="TIP117" type="tip" category="Task Manager" applies_to="Windows 10, 11">
+      <topic>App history tab</topic>
+      <text>The App History tab in Task Manager tracks cumulative CPU time and network usage by app since the last reset - useful for identifying which apps have consumed the most resources over time.</text>
+    </fact>
+    <fact id="TIP118" type="tip" category="Task Manager" applies_to="Windows 8.1, 10, 11">
+      <topic>Always on top Task Manager</topic>
+      <text>In Task Manager, go to Options &gt; Always on top to keep it visible above all other windows - useful when monitoring performance metrics while running a demanding task.</text>
+    </fact>
+    <fact id="TIP119" type="tip" category="Task Manager" applies_to="Windows 10, 11">
+      <topic>Efficiency mode</topic>
+      <text>In Windows 11's Task Manager, right-click a process and select "Efficiency mode" to lower its CPU priority and throttle it as a background task, reducing its impact on your system's performance and battery life.</text>
+    </fact>
+    <fact id="TIP120" type="tip" category="Task Manager" applies_to="Windows 8.1, 10, 11">
+      <topic>Set process affinity</topic>
+      <text>In Task Manager &gt; Details tab, right-click a process and select "Set affinity" to restrict which CPU cores it can run on - useful for isolating a process to certain cores for testing or compatibility reasons.</text>
+    </fact>
+    <fact id="TIP121" type="tip" category="Display" applies_to="Windows 8.1, 10, 11">
+      <topic>Multiple display arrangement</topic>
+      <text>Right-click the desktop and select Display settings to drag and arrange the virtual positions of multiple monitors to match their physical layout on your desk, ensuring the mouse moves naturally between screens.</text>
+    </fact>
+    <fact id="TIP122" type="tip" category="Display" applies_to="Windows 10, 11">
+      <topic>HDR display</topic>
+      <text>If you have an HDR-capable monitor, enable HDR in Settings &gt; System &gt; Display &gt; HDR to allow Windows and compatible games and apps to use a wider color range and higher luminance levels.</text>
+    </fact>
+    <fact id="TIP123" type="tip" category="Display" applies_to="Windows 10, 11">
+      <topic>Refresh rate selection</topic>
+      <text>Go to Settings &gt; System &gt; Display &gt; Advanced display settings to select the maximum refresh rate supported by your monitor - ensuring you actually use 144 Hz or higher if your hardware supports it.</text>
+    </fact>
+    <fact id="TIP124" type="tip" category="Display" applies_to="Windows 10, 11">
+      <topic>Text scaling</topic>
+      <text>Go to Settings &gt; System &gt; Display &gt; Scale and set a custom scaling percentage (100%, 125%, 150%, etc.) to make text and UI elements larger or smaller without changing the screen resolution.</text>
+    </fact>
+    <fact id="TIP125" type="tip" category="Display" applies_to="Windows 8.1, 10, 11">
+      <topic>Screen saver as lock</topic>
+      <text>Configure a screen saver (right-click desktop &gt; Personalize &gt; Lock screen &gt; Screen saver settings) and check "On resume, display logon screen" to lock the PC automatically after a period of inactivity.</text>
+    </fact>
+    <fact id="TIP126" type="tip" category="Backup and Recovery" applies_to="Windows 8.1, 10, 11">
+      <topic>File History</topic>
+      <text>Enable File History in Settings &gt; Update &amp; Security &gt; Backup (Windows 10) or Settings &gt; System &gt; Storage &gt; Advanced storage settings &gt; Backup (Windows 11) to automatically back up files in Libraries, Desktop, Contacts, and Favorites to an external drive.</text>
+    </fact>
+    <fact id="TIP127" type="tip" category="Backup and Recovery" applies_to="Windows 8.1, 10, 11">
+      <topic>System Restore</topic>
+      <text>Enable System Restore via "Create a restore point" in the Start menu, and create restore points before making major changes. If Windows becomes unstable, use System Restore to roll back system files and settings to a previous state.</text>
+    </fact>
+    <fact id="TIP128" type="tip" category="Backup and Recovery" applies_to="Windows 8.1, 10, 11">
+      <topic>Create a system image</topic>
+      <text>Use Control Panel &gt; Backup and Restore (Windows 7) &gt; Create a system image to create a complete image backup of your Windows installation to an external drive or network location - enabling a full bare-metal restore.</text>
+    </fact>
+    <fact id="TIP129" type="tip" category="Backup and Recovery" applies_to="Windows 8.1, 10, 11">
+      <topic>Previous Versions</topic>
+      <text>Right-click any file or folder and select "Restore previous versions" to access shadow copies (Volume Shadow Copy) of files at previous points in time - useful for recovering accidentally deleted or overwritten files.</text>
+    </fact>
+    <fact id="TIP130" type="tip" category="Backup and Recovery" applies_to="Windows 8.1, 10, 11">
+      <topic>WinRE access</topic>
+      <text>To access Windows Recovery Environment (WinRE) when Windows won't boot, restart the PC three times in a row during the boot process - Windows will automatically enter the recovery environment on the fourth attempt.</text>
+    </fact>
+    <fact id="TIP131" type="tip" category="Taskbar and Start Menu" applies_to="Windows 10, 11">
+      <topic>Pin to taskbar</topic>
+      <text>Right-click any application in the Start menu or search results and select "Pin to taskbar" to add it as a permanent button on the taskbar for quick one-click access.</text>
+    </fact>
+    <fact id="TIP132" type="tip" category="Taskbar and Start Menu" applies_to="Windows 11">
+      <topic>Taskbar left alignment</topic>
+      <text>On Windows 11, go to Settings &gt; Personalization &gt; Taskbar &gt; Taskbar behaviors &gt; Taskbar alignment and switch from "Center" to "Left" to restore the classic left-aligned Start button and taskbar icons.</text>
+    </fact>
+    <fact id="TIP133" type="tip" category="Taskbar and Start Menu" applies_to="Windows 8.1, 10, 11">
+      <topic>Taskbar auto-hide</topic>
+      <text>Right-click the taskbar &gt; Taskbar settings &gt; Automatically hide the taskbar (in desktop mode) to give your screen more vertical space; the taskbar appears when you hover the mouse near the bottom of the screen.</text>
+    </fact>
+    <fact id="TIP134" type="tip" category="Taskbar and Start Menu" applies_to="Windows 10, 11">
+      <topic>Jump Lists</topic>
+      <text>Right-click any pinned or running app on the taskbar to open its Jump List, which shows recently opened files, frequent destinations, and app-specific quick actions without opening the app first.</text>
+    </fact>
+    <fact id="TIP135" type="tip" category="Taskbar and Start Menu" applies_to="Windows 10">
+      <topic>Resize Start menu</topic>
+      <text>On Windows 10, hover the mouse over the top or side edge of the Start menu until a resize cursor appears, then drag to make the Start menu taller or wider to show more tiles or app entries.</text>
+    </fact>
+    <fact id="TIP136" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>Install WSL</topic>
+      <text>Run "wsl --install" in an elevated PowerShell prompt on Windows 10 (version 2004+) or Windows 11 to install WSL 2 and the default Ubuntu distribution in a single command, with no manual steps required.</text>
+    </fact>
+    <fact id="TIP137" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>List WSL distros</topic>
+      <text>Run "wsl --list --verbose" to see all installed WSL distributions, their current state (Running/Stopped), and their WSL version (1 or 2).</text>
+    </fact>
+    <fact id="TIP138" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>WSL file access</topic>
+      <text>Access your Windows files from within WSL at the path "/mnt/c/" (for the C: drive). Conversely, access WSL files from Windows Explorer by typing "\\wsl$\Ubuntu" in the address bar.</text>
+    </fact>
+    <fact id="TIP139" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>Enable Hyper-V</topic>
+      <text>Run "Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All" in an elevated PowerShell prompt to enable Hyper-V on Windows 10/11 Pro, Enterprise, or Education without navigating through Control Panel.</text>
+    </fact>
+    <fact id="TIP140" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>Sandbox mode</topic>
+      <text>Enable Windows Sandbox (run "Enable-WindowsOptionalFeature -Online -FeatureName Containers-DisposableClientVM -All" in elevated PowerShell, requires Pro/Enterprise) to run a temporary, isolated Windows environment that is destroyed when you close it - perfect for testing unknown software.</text>
+    </fact>
+    <fact id="TIP141" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>Check Windows version</topic>
+      <text>Run "winver" from Win+R or the Start menu to display a dialog showing your exact Windows build number, version, and edition - more precise than looking at System properties.</text>
+    </fact>
+    <fact id="TIP142" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>Upgrade WSL to version 2</topic>
+      <text>Run "wsl --set-default-version 2" to make WSL 2 the default for new distributions, and "wsl --set-version Ubuntu 2" to upgrade an existing Ubuntu installation from WSL 1 to WSL 2.</text>
+    </fact>
+    <fact id="TIP143" type="tip" category="Developer Tools" applies_to="Windows 10, 11">
+      <topic>winget upgrade all</topic>
+      <text>Run "winget upgrade --all" in PowerShell or Terminal to update all installed applications that have available updates through the Windows Package Manager, saving time versus updating apps individually.</text>
+    </fact>
+    <fact id="TIP144" type="tip" category="Printing and Devices" applies_to="Windows 10, 11">
+      <topic>Print to PDF</topic>
+      <text>Select "Microsoft Print to PDF" as the printer in any application's Print dialog to save the document as a PDF file natively in Windows - no third-party PDF software required.</text>
+    </fact>
+    <fact id="TIP145" type="tip" category="Printing and Devices" applies_to="Windows 8.1, 10, 11">
+      <topic>Bluetooth pairing shortcut</topic>
+      <text>Go to Settings &gt; Bluetooth &amp; devices (Windows 11) or Settings &gt; Devices &gt; Bluetooth (Windows 10/8.1) and toggle Bluetooth on, then click "Add device" to pair a new Bluetooth device.</text>
+    </fact>
+    <fact id="TIP146" type="tip" category="Printing and Devices" applies_to="Windows 10, 11">
+      <topic>Phone Link</topic>
+      <text>Open Phone Link (formerly Your Phone) from the Start menu and link your Android phone (or iPhone on Windows 11) to see notifications, send messages, and mirror your phone's screen directly from your PC.</text>
+    </fact>
+    <fact id="TIP147" type="tip" category="Search" applies_to="Windows 8.1, 10, 11">
+      <topic>Win+S - Windows Search</topic>
+      <text>Press Win+S (or just start typing on Windows 10/11) to open Windows Search and search for apps, files, settings, and web results from a single box.</text>
+    </fact>
+    <fact id="TIP148" type="tip" category="Search" applies_to="Windows 10, 11">
+      <topic>Search filter by type</topic>
+      <text>In Windows Search, type your query then click "Apps," "Documents," "Web," or "Settings" tabs to filter results to a specific category and find what you're looking for more quickly.</text>
+    </fact>
+    <fact id="TIP149" type="tip" category="Search" applies_to="Windows 8.1, 10, 11">
+      <topic>File Explorer search filters</topic>
+      <text>In File Explorer's search box, use operators like "kind:document," "datemodified:last week," "size:&gt;1MB," or "ext:.pdf" to narrow file search results by type, date, size, or extension.</text>
+    </fact>
+    <fact id="TIP150" type="tip" category="Search" applies_to="Windows 10, 11">
+      <topic>Search indexing</topic>
+      <text>Go to Settings &gt; Search &gt; Searching Windows and switch from "Classic" to "Enhanced" indexing mode to have Windows index all folders on your PC for faster and more comprehensive file searches.</text>
+    </fact>
+    <fact id="TIP151" type="tip" category="Privacy" applies_to="Windows 10, 11">
+      <topic>App permission management</topic>
+      <text>Go to Settings &gt; Privacy &amp; security (Windows 11) or Settings &gt; Privacy (Windows 10) to review and restrict which apps have access to your camera, microphone, location, contacts, calendar, and other sensitive resources.</text>
+    </fact>
+    <fact id="TIP152" type="tip" category="Privacy" applies_to="Windows 10, 11">
+      <topic>Diagnostic data</topic>
+      <text>Go to Settings &gt; Privacy &amp; security &gt; Diagnostics &amp; feedback to switch diagnostic data from "Full" to "Required" (minimum), limiting the data Microsoft collects about your device usage.</text>
+    </fact>
+    <fact id="TIP153" type="tip" category="Privacy" applies_to="Windows 10, 11">
+      <topic>Activity history</topic>
+      <text>Go to Settings &gt; Privacy &amp; security &gt; Activity history and uncheck "Store my activity history on this device" to prevent Windows from logging your app and website activity for the Timeline feature.</text>
+    </fact>
+    <fact id="TIP154" type="tip" category="Privacy" applies_to="Windows 10, 11">
+      <topic>Advertising ID</topic>
+      <text>Go to Settings &gt; Privacy &amp; security &gt; General and turn off "Let apps show me personalized ads by using my advertising ID" to prevent apps from targeting you with personalized advertising based on your usage patterns.</text>
+    </fact>
+    <fact id="TIP155" type="tip" category="Privacy" applies_to="Windows 10, 11">
+      <topic>Location services</topic>
+      <text>In Settings &gt; Privacy &amp; security &gt; Location, disable location services entirely or use the per-app toggle to control which specific apps are allowed to access your device's location.</text>
+    </fact>
+    <fact id="TIP156" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Grep equivalent in PowerShell</topic>
+      <text>Use "Select-String" in PowerShell as an equivalent to Unix grep: "Get-Content log.txt | Select-String 'error'" searches log.txt for lines containing "error," displaying them with filename and line number.</text>
+    </fact>
+    <fact id="TIP157" type="tip" category="PowerShell" applies_to="Windows 10, 11, Server 2016+">
+      <topic>Get Windows update history</topic>
+      <text>Run "Get-WinEvent -FilterHashtable @{LogName='System'; Id=19} | Select-Object TimeCreated, Message | Format-List" in PowerShell to retrieve a history of successfully installed Windows updates from the System event log.</text>
+    </fact>
+    <fact id="TIP158" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Enable Remote Desktop via PowerShell</topic>
+      <text>Run "Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0" in an elevated PowerShell prompt to enable Remote Desktop without opening the System Properties GUI.</text>
+    </fact>
+    <fact id="TIP159" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Send a test email via PowerShell</topic>
+      <text>Use "Send-MailMessage -From 'a@example.com' -To 'b@example.com' -Subject 'Test' -Body 'Hello' -SmtpServer 'smtp.example.com'" in PowerShell to send an email directly from the command line - useful for testing mail relay configurations.</text>
+    </fact>
+    <fact id="TIP160" type="tip" category="PowerShell" applies_to="Windows 10, 11">
+      <topic>Get battery report</topic>
+      <text>Run "powercfg /batteryreport /output %USERPROFILE%\Desktop\battery-report.html" in an elevated prompt to generate a detailed HTML report of your laptop's battery health, capacity history, and usage patterns.</text>
+    </fact>
+    <fact id="TIP161" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Check BIOS type</topic>
+      <text>Run "bcdedit | findstr /I winpe" or more reliably: run "Confirm-SecureBootUEFI" in PowerShell to check whether the system is using UEFI (returns True/False) instead of legacy BIOS.</text>
+    </fact>
+    <fact id="TIP162" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Create new local user</topic>
+      <text>Run "New-LocalUser -Name 'NewUser' -Password (ConvertTo-SecureString 'P@ssw0rd' -AsPlainText -Force) -FullName 'New User' -Description 'Test account'" in elevated PowerShell to create a new local user account programmatically.</text>
+    </fact>
+    <fact id="TIP163" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Add user to local admin group</topic>
+      <text>Run "Add-LocalGroupMember -Group 'Administrators' -Member 'NewUser'" in an elevated PowerShell prompt to add a user to the local Administrators group without using the GUI.</text>
+    </fact>
+    <fact id="TIP164" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Compress files with PowerShell</topic>
+      <text>Run "Compress-Archive -Path C:\Logs\* -DestinationPath C:\Backup\logs.zip" in PowerShell to zip an entire folder's contents into a .zip file natively, without third-party tools.</text>
+    </fact>
+    <fact id="TIP165" type="tip" category="PowerShell" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Extract archive with PowerShell</topic>
+      <text>Run "Expand-Archive -Path C:\Downloads\file.zip -DestinationPath C:\Extracted" in PowerShell to extract a .zip archive to a specified folder without needing WinZip, 7-Zip, or other tools.</text>
+    </fact>
+    <fact id="TIP166" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Add "Take Ownership" to context menu</topic>
+      <text>Create a registry key at HKCR\*\shell\Take Ownership with the value "(Default)" = "Take Ownership" and a subkey "command" with the value: powershell -command "Start-Process cmd -ArgumentList '/c takeown /f \"%1\" &amp;&amp; icacls \"%1\" /grant administrators:F' -Verb RunAs" to add a one-click ownership transfer option to file context menus.</text>
+    </fact>
+    <fact id="TIP167" type="tip" category="Registry" applies_to="Windows 10, 11">
+      <topic>Change logon screen background</topic>
+      <text>Navigate to HKLM\SOFTWARE\Policies\Microsoft\Windows\System and create a DWORD "DisableLogonBackgroundImage" set to 1 to disable the default logon background and show a plain color, reducing logon screen load times.</text>
+    </fact>
+    <fact id="TIP168" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Remove OneDrive from File Explorer</topic>
+      <text>Navigate to HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6} and set the DWORD "System.IsPinnedToNameSpaceTree" to 0 to hide the OneDrive icon from the File Explorer navigation pane without uninstalling OneDrive.</text>
+    </fact>
+    <fact id="TIP169" type="tip" category="Registry" applies_to="Windows 10">
+      <topic>Disable lock screen</topic>
+      <text>On Windows 10 Pro and higher, navigate to HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization and create a DWORD "NoLockScreen" set to 1 to skip the lock screen and go directly to the sign-in screen on wake.</text>
+    </fact>
+    <fact id="TIP170" type="tip" category="Registry" applies_to="Windows 8.1, 10, 11">
+      <topic>Increase icon cache size</topic>
+      <text>Navigate to HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer and create or modify the string value "Max Cached Icons" (set to "4096" or higher) to increase the icon cache, reducing blank icon appearances after restart.</text>
+    </fact>
+    <fact id="TIP171" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Share a folder over the network</topic>
+      <text>Right-click a folder in File Explorer &gt; Properties &gt; Sharing tab &gt; Advanced Sharing to configure share name, user permissions, and limits on simultaneous connections for network file sharing without a server OS.</text>
+    </fact>
+    <fact id="TIP172" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Enable Remote Desktop</topic>
+      <text>Go to Settings &gt; System &gt; Remote Desktop (Windows 10/11) and toggle "Enable Remote Desktop" on to allow Remote Desktop Protocol (RDP) connections to your PC from other Windows devices on the same network or via VPN.</text>
+    </fact>
+    <fact id="TIP173" type="tip" category="Networking" applies_to="Windows 10, 11">
+      <topic>Mobile hotspot</topic>
+      <text>Go to Settings &gt; Network &amp; internet &gt; Mobile hotspot to turn your Windows PC into a Wi-Fi hotspot, sharing its internet connection with up to eight other devices over Wi-Fi or Bluetooth.</text>
+    </fact>
+    <fact id="TIP174" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11">
+      <topic>Measure network speed in PowerShell</topic>
+      <text>Run "Get-NetAdapter | Select-Object Name, Status, LinkSpeed" in PowerShell to see the connection speed (e.g., 1 Gbps, 100 Mbps) reported by each network adapter, confirming whether you're using your fastest available interface.</text>
+    </fact>
+    <fact id="TIP175" type="tip" category="Networking" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Trace route</topic>
+      <text>Run "tracert hostname" (e.g., "tracert google.com") or the PowerShell equivalent "Test-NetConnection -ComputerName google.com -TraceRoute" to trace the network path to a destination and identify where latency or packet loss occurs.</text>
+    </fact>
+    <fact id="TIP176" type="tip" category="Windows Update" applies_to="Windows 8.1, 10, 11">
+      <topic>Check for updates via PowerShell</topic>
+      <text>Run "Get-WindowsUpdate" in PowerShell (after installing the PSWindowsUpdate module via "Install-Module PSWindowsUpdate") to check for available Windows updates from the command line, enabling scriptable patch management.</text>
+    </fact>
+    <fact id="TIP177" type="tip" category="Windows Update" applies_to="Windows 10, 11">
+      <topic>Pause updates</topic>
+      <text>Go to Settings &gt; Windows Update &gt; Advanced options &gt; Pause updates to suspend Windows Update delivery for up to five weeks - useful when an update breaks critical software or during high-demand work periods.</text>
+    </fact>
+    <fact id="TIP178" type="tip" category="Windows Update" applies_to="Windows 10, 11">
+      <topic>Active hours</topic>
+      <text>Configure Active Hours in Settings &gt; Windows Update &gt; Advanced options &gt; Active hours to tell Windows your working hours, preventing automatic restarts to install updates during that time window.</text>
+    </fact>
+    <fact id="TIP179" type="tip" category="Windows Update" applies_to="Windows 10, 11">
+      <topic>Defer feature updates</topic>
+      <text>On Windows 10/11 Pro and higher, go to Settings &gt; Windows Update &gt; Advanced options and set the "Feature update deferral" to up to 365 days, installing only security patches while delaying major feature updates until they're more stable.</text>
+    </fact>
+    <fact id="TIP180" type="tip" category="Windows Update" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>WSUS update source</topic>
+      <text>Enterprise and Server environments can configure Windows Update to pull updates from a local Windows Server Update Services (WSUS) server via Group Policy (gpedit.msc &gt; Computer Configuration &gt; Administrative Templates &gt; Windows Components &gt; Windows Update) to centralize and control update deployment.</text>
+    </fact>
+    <fact id="TIP181" type="tip" category="Command Line" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>robocopy for file sync</topic>
+      <text>Use "robocopy C:\Source D:\Destination /MIR /Z /LOG:C:\robocopy.log" to mirror a source folder to a destination with resume capability, deletion of orphaned files, and detailed logging - far more powerful than xcopy for backup scripts.</text>
+    </fact>
+    <fact id="TIP182" type="tip" category="Command Line" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>sc.exe service control</topic>
+      <text>Use "sc.exe query type= all state= all" in an elevated prompt to list every service on the system (running and stopped) with its type and current state - a fast audit of all installed services.</text>
+    </fact>
+    <fact id="TIP183" type="tip" category="Command Line" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>wmic (deprecated alternative)</topic>
+      <text>While WMIC is deprecated in favor of PowerShell, "Get-WmiObject -Class Win32_Product | Select Name, Version" in PowerShell provides the same software inventory information using the modern supported interface.</text>
+    </fact>
+    <fact id="TIP184" type="tip" category="Command Line" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>whoami /all</topic>
+      <text>Run "whoami /all" in a prompt to display your current username, security identifier (SID), group memberships, and privilege list - essential for diagnosing permission issues.</text>
+    </fact>
+    <fact id="TIP185" type="tip" category="Command Line" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>cipher - delete files securely</topic>
+      <text>Run "cipher /w:C:\Path\To\Folder" to overwrite all free space in a folder with random data, making previously deleted files unrecoverable - a built-in alternative to third-party secure-delete tools.</text>
+    </fact>
+    <fact id="TIP186" type="tip" category="Personalization" applies_to="Windows 10, 11">
+      <topic>Dynamic wallpaper slideshow</topic>
+      <text>Right-click the desktop &gt; Personalize &gt; Background and select "Slideshow," then choose a folder of images and set the change interval to create an automatic rotating desktop wallpaper.</text>
+    </fact>
+    <fact id="TIP187" type="tip" category="Personalization" applies_to="Windows 10, 11">
+      <topic>Custom accent colors</topic>
+      <text>Go to Settings &gt; Personalization &gt; Colors to choose a custom accent color for your Start menu, taskbar, window title bars, and UI highlights instead of the default blue.</text>
+    </fact>
+    <fact id="TIP188" type="tip" category="Personalization" applies_to="Windows 10, 11">
+      <topic>Dark mode</topic>
+      <text>Go to Settings &gt; Personalization &gt; Colors and set "Choose your mode" to "Dark" to enable system-wide dark mode for the Start menu, taskbar, Settings app, and apps that respect the system theme.</text>
+    </fact>
+    <fact id="TIP189" type="tip" category="Personalization" applies_to="Windows 11">
+      <topic>Themes</topic>
+      <text>Go to Settings &gt; Personalization &gt; Themes to apply a complete theme that simultaneously changes the desktop background, accent color, lock screen, mouse cursor, and system sounds in one click.</text>
+    </fact>
+    <fact id="TIP190" type="tip" category="Personalization" applies_to="Windows 10, 11">
+      <topic>Custom sounds</topic>
+      <text>Right-click the desktop &gt; Personalize &gt; Themes &gt; Sounds to customize which sounds Windows plays for system events like login, error notifications, and new mail - or select "No Sounds" for a completely silent Windows experience.</text>
+    </fact>
+    <fact id="TIP191" type="tip" category="Virtualization" applies_to="Windows 10, 11 Pro/Enterprise">
+      <topic>Create a Hyper-V VM via PowerShell</topic>
+      <text>Run "New-VM -Name 'TestVM' -MemoryStartupBytes 2GB -NewVHDPath 'C:\VMs\TestVM.vhdx' -NewVHDSizeBytes 50GB -Generation 2" in an elevated PowerShell prompt to create a Generation 2 Hyper-V virtual machine without the GUI.</text>
+    </fact>
+    <fact id="TIP192" type="tip" category="Virtualization" applies_to="Windows 10, 11 Pro/Enterprise">
+      <topic>Take a VM checkpoint</topic>
+      <text>Run "Checkpoint-VM -VMName 'TestVM' -SnapshotName 'BeforeUpdate'" in elevated PowerShell to create a Hyper-V checkpoint (snapshot) of a VM before making changes, allowing instant rollback if something goes wrong.</text>
+    </fact>
+    <fact id="TIP193" type="tip" category="Virtualization" applies_to="Windows 10, 11 Pro/Enterprise">
+      <topic>Virtual switch creation</topic>
+      <text>Run "New-VMSwitch -Name 'ExternalSwitch' -NetAdapterName 'Ethernet' -AllowManagementOS $true" in elevated PowerShell to create a Hyper-V external virtual switch tied to a physical network adapter.</text>
+    </fact>
+    <fact id="TIP194" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Get AD user info via PowerShell</topic>
+      <text>Run "Get-ADUser -Identity username -Properties *" in PowerShell (with RSAT/Active Directory module) to retrieve all attributes of an Active Directory user account, including last logon, account status, and group memberships.</text>
+    </fact>
+    <fact id="TIP195" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Find locked-out AD accounts</topic>
+      <text>Run "Search-ADAccount -LockedOut | Select-Object Name, SamAccountName, LockedOut" in PowerShell to list all currently locked-out Active Directory user accounts across the domain.</text>
+    </fact>
+    <fact id="TIP196" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Unlock AD account</topic>
+      <text>Run "Unlock-ADAccount -Identity username" in elevated PowerShell to unlock a locked-out Active Directory user account instantly, without navigating through Active Directory Users and Computers.</text>
+    </fact>
+    <fact id="TIP197" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Force Group Policy update</topic>
+      <text>Run "gpupdate /force" in an elevated prompt on a domain-joined machine to immediately apply all Group Policy Objects (GPOs) from the domain, rather than waiting for the standard 90-minute refresh interval.</text>
+    </fact>
+    <fact id="TIP198" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Get Group Policy result</topic>
+      <text>Run "gpresult /h C:\GPReport.html" in an elevated prompt to generate an HTML report of all Group Policy settings currently applied to the computer and logged-in user - invaluable for diagnosing policy application issues.</text>
+    </fact>
+    <fact id="TIP199" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Check AD replication status</topic>
+      <text>Run "repadmin /showrepl" in an elevated prompt on a domain controller to display the Active Directory replication status between all domain controllers, identifying any replication failures or delays.</text>
+    </fact>
+    <fact id="TIP200" type="tip" category="Active Directory" applies_to="Windows Server 2012+">
+      <topic>Join a PC to a domain via PowerShell</topic>
+      <text>Run "Add-Computer -DomainName 'contoso.com' -Credential (Get-Credential) -Restart" in elevated PowerShell to join the local computer to an Active Directory domain and restart immediately to complete the process.</text>
+    </fact>
+    <fact id="TIP201" type="tip" category="Storage" applies_to="Windows 10, 11, Server 2012+">
+      <topic>Storage Spaces setup</topic>
+      <text>Open the Settings app &gt; System &gt; Storage &gt; Advanced storage settings &gt; Storage Spaces to create a software RAID (mirror or parity) pool from multiple drives - protecting your data from a single drive failure without dedicated RAID hardware.</text>
+    </fact>
+    <fact id="TIP202" type="tip" category="Storage" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Shrink a volume</topic>
+      <text>Open Disk Management (diskmgmt.msc), right-click a volume and select "Shrink Volume" to reduce its size and create unallocated space - useful for creating a second partition without wiping data.</text>
+    </fact>
+    <fact id="TIP203" type="tip" category="Storage" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Check disk for errors</topic>
+      <text>Run "Repair-Volume -DriveLetter C -Scan" in elevated PowerShell to scan the C: drive for file system errors (use -OfflineScanAndFix to repair, requiring a restart for the system drive).</text>
+    </fact>
+    <fact id="TIP204" type="tip" category="Storage" applies_to="Windows 10, 11">
+      <topic>Optimize SSD</topic>
+      <text>Open "Defragment and Optimize Drives" (search the Start menu), select your SSD and click "Optimize" - Windows will run TRIM on SSDs instead of defragmentation, maintaining SSD performance over time.</text>
+    </fact>
+    <fact id="TIP205" type="tip" category="Storage" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Format drive via PowerShell</topic>
+      <text>Run "Format-Volume -DriveLetter D -FileSystem NTFS -NewFileSystemLabel 'DataDrive' -Confirm:$false" in elevated PowerShell to format a volume as NTFS with a custom label, non-interactively.</text>
+    </fact>
+    <fact id="TIP206" type="tip" category="Gaming" applies_to="Windows 10, 11">
+      <topic>Xbox Game Bar</topic>
+      <text>Press Win+G to open the Xbox Game Bar overlay while in a game or app, providing quick access to screen recording, screenshot, audio mixer, performance widgets, and Xbox Social features.</text>
+    </fact>
+    <fact id="TIP207" type="tip" category="Gaming" applies_to="Windows 10, 11">
+      <topic>Record last 30 seconds</topic>
+      <text>Press Win+Alt+G to capture the last 30 seconds of gameplay (or any app) using the Xbox Game Bar's background recording - no need to start recording in advance.</text>
+    </fact>
+    <fact id="TIP208" type="tip" category="Gaming" applies_to="Windows 10, 11">
+      <topic>Hardware-accelerated GPU scheduling</topic>
+      <text>Enable Hardware-Accelerated GPU Scheduling (HAGS) in Settings &gt; System &gt; Display &gt; Graphics settings &gt; Change default graphics settings to reduce latency and improve GPU performance in supported games and on compatible graphics hardware.</text>
+    </fact>
+    <fact id="TIP209" type="tip" category="Gaming" applies_to="Windows 11">
+      <topic>Auto HDR</topic>
+      <text>Enable Auto HDR in Settings &gt; System &gt; Display &gt; Graphics settings &gt; Change default graphics settings to automatically apply HDR enhancement to DirectX 11/12 games that don't natively support HDR on Copilot+ PC or compatible HDR displays.</text>
+    </fact>
+    <fact id="TIP210" type="tip" category="Gaming" applies_to="Windows 10, 11">
+      <topic>Variable refresh rate</topic>
+      <text>Enable Variable Refresh Rate in Settings &gt; System &gt; Display &gt; Graphics settings &gt; Change default graphics settings to allow games to use VRR (G-Sync/FreeSync) even in windowed mode on compatible displays and GPU drivers.</text>
+    </fact>
+    <fact id="TIP211" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Quick Settings panel</topic>
+      <text>Press Win+A to open the Quick Settings panel (Action Center on Windows 10) for fast toggles of Wi-Fi, Bluetooth, airplane mode, Focus assist, screen brightness, and volume without opening Settings.</text>
+    </fact>
+    <fact id="TIP212" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Notification Center</topic>
+      <text>Click the notification bell icon in the taskbar (or press Win+N on Windows 11) to see your notification history - useful when notifications appear briefly and you miss them.</text>
+    </fact>
+    <fact id="TIP213" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>God Mode folder</topic>
+      <text>Create a new folder on the desktop and name it exactly "GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}" to create a "God Mode" shortcut that provides access to all Windows control panel settings in a single window.</text>
+    </fact>
+    <fact id="TIP214" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Run programs as a different user</topic>
+      <text>Hold Shift and right-click an executable or shortcut, then select "Run as different user" to launch the program under a different account's credentials without switching the entire Windows session.</text>
+    </fact>
+    <fact id="TIP215" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Nearby sharing</topic>
+      <text>Enable Nearby Sharing in Settings &gt; System &gt; Nearby sharing to wirelessly send files, links, and photos to other Windows 10/11 PCs in the vicinity via Bluetooth or Wi-Fi without requiring any cables or a shared network folder.</text>
+    </fact>
+    <fact id="TIP216" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Print screen to clipboard</topic>
+      <text>Press PrtSc to copy a screenshot of the entire screen to the clipboard, Alt+PrtSc to capture only the active window, or Win+PrtSc to save a full-screen screenshot directly to the Pictures\Screenshots folder.</text>
+    </fact>
+    <fact id="TIP217" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Live Captions</topic>
+      <text>Press Win+Ctrl+L on Windows 11 (22H2+) to enable Live Captions, which transcribes audio from any application or microphone in real time and displays it as subtitles at the top or bottom of the screen.</text>
+    </fact>
+    <fact id="TIP218" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Rotate display</topic>
+      <text>Press Ctrl+Alt+Arrow key (Up/Down/Left/Right) to rotate the screen orientation - useful for portrait displays or accidentally triggered, causing confusion. This is a display driver shortcut (Intel/AMD) and may not work on all systems.</text>
+    </fact>
+    <fact id="TIP219" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Problem Steps Recorder</topic>
+      <text>Run "psr.exe" (Problem Steps Recorder) to open a built-in tool that records mouse clicks and keystrokes with annotated screenshots, saving the result as a ZIP of an MHTML file - ideal for documenting reproducible bugs to send to support.</text>
+    </fact>
+    <fact id="TIP220" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Voice access</topic>
+      <text>Enable Voice Access in Settings &gt; Accessibility &gt; Speech &gt; Voice access to fully control your PC with voice commands - clicking buttons, typing, scrolling, and navigating menus hands-free using a microphone.</text>
+    </fact>
+    <fact id="TIP221" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Check TPM via PowerShell</topic>
+      <text>Run "Get-TPM" in elevated PowerShell to see whether a Trusted Platform Module is present, enabled, activated, and what version it is (1.2 or 2.0) - key for Windows 11 upgrade eligibility checks.</text>
+    </fact>
+    <fact id="TIP222" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Energy recommendations</topic>
+      <text>Go to Settings &gt; System &gt; Power &amp; battery &gt; Energy recommendations on Windows 11 to see a list of settings changes (like screen timeout, sleep settings) that will reduce energy use, with one-click apply buttons.</text>
+    </fact>
+    <fact id="TIP223" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Steps Recorder replacement - Snipping Tool video</topic>
+      <text>In Windows 11 (22H2+), open the Snipping Tool and switch to video mode (the camera icon) to record a portion of your screen to an MP4 file - a modern replacement for screen recording without third-party software.</text>
+    </fact>
+    <fact id="TIP224" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Font management</topic>
+      <text>Drag a .ttf or .otf font file onto the Settings &gt; Personalization &gt; Fonts page (or right-click the font file and select Install for all users) to install custom fonts system-wide - available to all applications immediately.</text>
+    </fact>
+    <fact id="TIP225" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Optional features management</topic>
+      <text>Go to Settings &gt; Apps &gt; Optional features to add or remove optional Windows components like Notepad, WordPad, the Windows Media Player, XPS Viewer, OpenSSH Client, or the SNMP protocol without needing installation media.</text>
+    </fact>
+    <fact id="TIP226" type="tip" category="Miscellaneous" applies_to="Windows 10, 11, Server 2019+">
+      <topic>OpenSSH built-in</topic>
+      <text>Windows 10 (version 1809+) and Server 2019+ include OpenSSH Client and Server as optional features. Install them via Settings &gt; Apps &gt; Optional features &gt; Add a feature, then connect with "ssh user@hostname" directly from PowerShell or Terminal.</text>
+    </fact>
+    <fact id="TIP227" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Sandbox configuration file</topic>
+      <text>Create a ".wsb" configuration file (XML format) to launch Windows Sandbox with specific settings such as mapped shared folders, networking enabled/disabled, logon scripts, and virtual GPU support, enabling repeatable isolated test environments.</text>
+    </fact>
+    <fact id="TIP228" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11, Server 2012+">
+      <topic>Assign a drive letter to a folder</topic>
+      <text>Run "subst Z: C:\LongPath\To\DeepFolder" to map a deeply nested folder to a virtual drive letter, making it easier to access from File Explorer and Command-line tools.</text>
+    </fact>
+    <fact id="TIP229" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Sign-in options - passwordless</topic>
+      <text>Go to Settings &gt; Accounts &gt; Sign-in options and enable "For improved security, only allow Windows Hello sign-in for Microsoft accounts on this device" to enforce passwordless authentication using biometrics or PIN only.</text>
+    </fact>
+    <fact id="TIP230" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Delivery Optimization</topic>
+      <text>Go to Settings &gt; Windows Update &gt; Advanced options &gt; Delivery Optimization to allow or restrict Windows from using your PC's bandwidth to deliver updates to other PCs on your network or the internet, reducing Microsoft's server load.</text>
+    </fact>
+    <fact id="TIP231" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Open elevated PowerShell from taskbar</topic>
+      <text>Hold Shift and right-click the PowerShell or Terminal button on the taskbar, then select "Run as administrator" to open an elevated prompt without navigating through the Start menu.</text>
+    </fact>
+    <fact id="TIP232" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Rearrange Quick Settings tiles</topic>
+      <text>On Windows 11, open Quick Settings (Win+A) and click the pencil (Edit) icon to add, remove, and rearrange the shortcut tiles in the panel - customizing your Quick Settings layout to show only the toggles you use most.</text>
+    </fact>
+    <fact id="TIP233" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>App volume mixer</topic>
+      <text>Right-click the speaker icon in the system tray and select "Open volume mixer" to set independent volume levels for each running application - for example, lowering game volume while keeping Discord louder.</text>
+    </fact>
+    <fact id="TIP234" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Default app per file type</topic>
+      <text>Go to Settings &gt; Apps &gt; Default apps, scroll down to "Set defaults by file type" to choose exactly which application opens each specific file extension, giving you precise control over .pdf, .mp4, .png, and other associations.</text>
+    </fact>
+    <fact id="TIP235" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Space usage by folder</topic>
+      <text>Go to Settings &gt; System &gt; Storage and click on any category (Apps &amp; features, Temporary files, etc.) to see which folders or applications are consuming the most space, with direct links to manage or uninstall them.</text>
+    </fact>
+    <fact id="TIP236" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Automatic color on desktop</topic>
+      <text>Go to Settings &gt; Personalization &gt; Colors and enable "Automatically pick an accent color from my background" to have Windows dynamically select a complementary accent color every time your wallpaper changes.</text>
+    </fact>
+    <fact id="TIP237" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Set time zone automatically</topic>
+      <text>Go to Settings &gt; Time &amp; language &gt; Date &amp; time and enable "Set time zone automatically" so Windows uses your location to automatically select the correct time zone when you travel with a laptop.</text>
+    </fact>
+    <fact id="TIP238" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Environmental variables</topic>
+      <text>Search "Edit the system environment variables" in the Start menu to open the Environment Variables dialog and add directories to the system PATH variable, making command-line tools available from any location without specifying the full path.</text>
+    </fact>
+    <fact id="TIP239" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Check PATH variable</topic>
+      <text>Run "$env:PATH -split ';'" in PowerShell to display all directories in the current PATH environment variable as a clean list, one per line - useful for diagnosing missing-command errors.</text>
+    </fact>
+    <fact id="TIP240" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Copilot for system settings</topic>
+      <text>On Windows 11 with Copilot enabled, press Win+C and type natural-language instructions like "Turn on dark mode" or "How do I increase font size?" - Copilot can directly change many system settings without requiring manual navigation through menus.</text>
+    </fact>
+    <fact id="TIP241" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Rename multiple files in File Explorer</topic>
+      <text>Select multiple files in File Explorer, press F2, type a new name, and press Enter to rename all selected files at once - Windows automatically appends numbers (1), (2), etc., to each file to keep names unique.</text>
+    </fact>
+    <fact id="TIP242" type="tip" category="Miscellaneous" applies_to="Windows 10, 11, Server 2019+">
+      <topic>Windows Admin Center</topic>
+      <text>Download and install Windows Admin Center (a free browser-based management tool from Microsoft) to manage Windows Servers, PCs, clusters, and Azure services from a single web interface without installing RSAT or using Remote Desktop for each server.</text>
+    </fact>
+    <fact id="TIP243" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Uninstall bloatware via PowerShell</topic>
+      <text>Run "Get-AppxPackage *CandyCrush* | Remove-AppxPackage" in elevated PowerShell to silently uninstall pre-installed apps (like Candy Crush) that lack a standard uninstaller in Add/Remove Programs.</text>
+    </fact>
+    <fact id="TIP244" type="tip" category="Miscellaneous" applies_to="Windows 8.1, 10, 11">
+      <topic>Virtual keyboard shortcut</topic>
+      <text>Press Win+Ctrl+O to open the on-screen keyboard from anywhere in Windows, without navigating through the Accessibility settings - useful when a physical key is broken or unavailable.</text>
+    </fact>
+    <fact id="TIP245" type="tip" category="Miscellaneous" applies_to="Windows 10, 11">
+      <topic>Focus sessions (Clock app)</topic>
+      <text>Open the Clock app and use the Focus Sessions tab to set a timed work session using the Pomodoro technique, integrating with Microsoft To Do for tasks and Spotify for focus music - all built into Windows 11.</text>
+    </fact>
+    <fact id="DT1" type="dttip">
+      <topic></topic>
+      <text>Press F11 to toggle between full-screen modes in the main application window, giving you more screen space to work with.</text>
+    </fact>
+    <fact id="DT2" type="dttip">
+      <topic></topic>
+      <text>Background processes allow DISMTools to get all the information of a Windows image or installation. If this information was modified externally, press Alt + U to refresh this information.</text>
+    </fact>
+    <fact id="DT3" type="dttip">
+      <topic></topic>
+      <text>With just the Windows ADK, you're off to making your ISO files. While doing this, why not customize the preinstallation environment so it works like you want it to?</text>
+    </fact>
+    <fact id="DT4" type="dttip">
+      <topic></topic>
+      <text>Make your own tooling for the Preinstallation Environment with its Extensibility Suite by going to Tools &gt; Create testing environment. Then, with C++ knowledge, you're off to either making new applications or porting existing ones to Windows PE.</text>
+    </fact>
+    <fact id="DT5" type="dttip">
+      <topic></topic>
+      <text>Every last Friday of a July is the international system administrator appreciation day. Show your sysadmin some love (or celebrate if you're the sysadmin!) for keeping systems running smoothly.</text>
+    </fact>
+    <fact id="DT6" type="dttip">
+      <topic></topic>
+      <text>The DISMTools project started on July 30, 2022.</text>
+    </fact>
+    <fact id="DT7" type="dttip">
+      <topic></topic>
+      <text>DISMTools will turn 5 on the sysadmin day for 2027. I will surely celebrate it my way!</text>
+    </fact>
+    <fact id="DT8" type="dttip">
+      <topic></topic>
+      <text>The signature DISMTools table, which became one of the branding assets, is officially called the "DISMTools Workbench". It started in late 2023.</text>
+    </fact>
+    <fact id="DT9" type="dttip">
+      <topic></topic>
+      <text>Some of the tooling of DISMTools can be found in separate repositories, allowing you to use them independently.</text>
+    </fact>
+    <fact id="DT10" type="dttip">
+      <topic></topic>
+      <text>The people behind this project are sailing the seven seas at this exact moment. One of them is Jack Sparrow! (I'm kidding).</text>
+    </fact>
+    <fact id="DT11" type="dttip">
+      <topic></topic>
+      <text>The network features of the Preinstallation Environment are tested in a Hyper-V virtual lab powered by a shared Wi-Fi connection.</text>
+    </fact>
+    <fact id="DT12" type="dttip">
+      <topic></topic>
+      <text>If you have a modern computer with Secure Boot enabled, check your certificates in DB. 2011 certificates start expiring on June 24, 2026. You can also evaluate the readiness.</text>
+    </fact>
+    <fact id="DT13" type="dttip">
+      <topic></topic>
+      <text>Switching Windows Server editions can be done with any type of key, including Generic Volume License Keys (GVLKs) from Microsoft. Perform an edition upgrade by using the edition servicing tasks in DISMTools and use your key.</text>
+    </fact>
+    <fact id="DT14" type="dttip">
+      <topic></topic>
+      <text>DISMTools 0.8 is codenamed "Infinity" for a very simple reason. Turn the 8 sideways and you'll see what I mean.</text>
+    </fact>
+    <fact id="DT15" type="dttip">
+      <topic></topic>
+      <text>Don't go too wild with service management. You can screw up things more quickly than you would with poorly-made servicing tasks. Luckily, backups are saved on your desktop and you can restore them. You've got your backups ready, right? Right?</text>
+    </fact>
+    <fact id="DT16" type="dttip">
+      <topic></topic>
+      <text>There have been 2 cases of characters from shows or videogames being used as codenames for DISMTools components.</text>
+    </fact>
+    <fact id="DT17" type="dttip">
+      <topic></topic>
+      <text>Use the Mounted Image Manager, in the Tools menu, to quickly reference and perform actions with mounted images. Listings in the mounted image manager are updated in real time.</text>
+    </fact>
+    <fact id="DT17_1" type="dttip">
+      <topic></topic>
+      <text>When you launch DISMTools, all Windows images that need servicing session reloads will be automatically reloaded for you. To have them ready on system startup, use the automatic reload service. Click Tools &gt; Options &gt; Startup options, and click "Install service".</text>
+    </fact>
+    <fact id="DT18" type="dttip">
+      <topic></topic>
+      <text>Don't be confused. While DISMTools 0.8 and later support Full Flash Utility (FFU) files, they only support files for desktop provisioning. Windows Phone FFU servicing is not supported in any way.</text>
+    </fact>
+    <fact id="DT19" type="dttip">
+      <topic></topic>
+      <text>Full Flash Utility files, once mounted, behave like virtual disks (VHDs). These are stored in your %TEMP% folder and their names begin with "_ffumount".</text>
+    </fact>
+    <fact id="DT20" type="dttip">
+      <topic></topic>
+      <text>Saving changes to FFU files normally is not supported. Despite this, DISMTools allows you to commit changes to FFU files by capturing their mounted virtual disks to new FFU files, and replacing the old files with the new copies.</text>
+    </fact>
+    <fact id="DT21" type="dttip">
+      <topic></topic>
+      <text>Make sure that you unmount all your mounted FFU files before shutting down your computer. When shutting down, these virtual disks will be unloaded, but the source FFU files will continue to appear in the mounted image listings as invalid. Thus, you will need to clean up all mount points by going to Tools &gt; Options &gt; Shutdown options &gt; and clicking "Run now".</text>
+    </fact>
+    <fact id="DT22" type="dttip">
+      <topic></topic>
+      <text>"Los Piratillas" make your Windows experience suck less!</text>
+    </fact>
+    <fact id="DT23" type="dttip">
+      <topic></topic>
+      <text>DISMTools supports standard AppX and MSIX packages, AppX and MSIX package bundles, and encrypted applications for deploying games to active installations.</text>
+    </fact>
+    <fact id="DT24" type="dttip">
+      <topic></topic>
+      <text>The DISMTools project started right as another much less successful project was ending: a tool for making Windows 11 ISO files with the requirements bypassed.</text>
+    </fact>
+    <fact id="DT25" type="dttip">
+      <topic></topic>
+      <text>You can remove editions from a Windows image in 2 ways: by simply removing them from image metadata, or by exporting a specific index to a new image file. One allows you to have a smaller image.</text>
+    </fact>
+    <fact id="DT26" type="dttip">
+      <topic></topic>
+      <text>You can merge SWM files into a WIM file by going to Tools &gt; Merge SWM files...</text>
+    </fact>
+    <fact id="DT27" type="dttip">
+      <topic></topic>
+      <text>At one (very early) point in development, DISMTools was codenamed "rayman" just because I had been playing a Rayman game that I loved (and still love to this day) back then.</text>
+    </fact>
+    <fact id="DT28" type="dttip">
+      <topic></topic>
+      <text>DISMTools once supported Windows 7 as a host system. Because of the implementation of the DISM API, it had to be dropped. No support for other operating systems was dropped afterwards, and DISMTools still supports Windows 7 images. Additionally, some components still support Windows 7.</text>
+    </fact>
+    <fact id="DT29" type="dttip">
+      <topic></topic>
+      <text>Starter scripts were introduced during the DISMTools 0.7 Series and allow you to perform tasks more quickly and to get started with unattended installations more easily. DISMTools 0.8 ships with 27 starter scripts, but you can extend this number by using the Starter Script Editor.</text>
+    </fact>
+    <fact id="DT30" type="dttip">
+      <topic></topic>
+      <text>DISMTools versions are grouped in "series". For example, versions 0.7, 0.7.1, 0.7.2, and 0.7.3 of DISMTools are part of the "DISMTools 0.7 Series".</text>
+    </fact>
+    <fact id="DT31" type="dttip">
+      <topic></topic>
+      <text>Discs for languages and features on demand for Windows 11 and Windows 10 can be downloaded by going to Tools &gt; Web Resources.</text>
+    </fact>
+    <fact id="DT32" type="dttip">
+      <topic></topic>
+      <text>The Starter Script Editor, in its 0.8 version, is codenamed "Luffy" because one of my friends sometimes wears a One Piece hoodie. The Editor has had this codename ever since Microsoft implemented the unsigned RDP file warnings back in April.</text>
+    </fact>
+  </facts>
+</InfinityFacts>

@@ -5,6 +5,7 @@ Imports System.Text.Encoding
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
 Imports System.Threading
+Imports System.Globalization
 
 Public Class ProjProperties
 
@@ -163,8 +164,20 @@ Public Class ProjProperties
             RWRemountBtn.Visible = MainForm.CurrentImage.ImageMountMode = DismMountMode.ReadOnly
             imgDirs.Text = MainForm.CurrentImage.ImageDirectoryCount
             imgFiles.Text = MainForm.CurrentImage.ImageFileCount
-            imgCreation.Text = MainForm.CurrentImage.ImageCreationDate
-            imgModification.Text = MainForm.CurrentImage.ImageModificationDate
+            Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+            Dim ImageCreationDate As String = "",
+                ImageModificationDate As String = ""
+            Dim CreatedDate As Date = MainForm.CurrentImage.ImageCreationDate,
+                ModifiedDate As Date = MainForm.CurrentImage.ImageModificationDate
+            If MainForm.HumanizeDates Then
+                ImageCreationDate = String.Format("{0}, {1}", CreatedDate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), CreatedDate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                ImageModificationDate = String.Format("{0}, {1}", ModifiedDate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), ModifiedDate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+            Else
+                ImageCreationDate = CreatedDate.ToString("MM/dd/yyyy HH:mm:ss")
+                ImageModificationDate = ModifiedDate.ToString("MM/dd/yyyy HH:mm:ss")
+            End If
+            imgCreation.Text = ImageCreationDate
+            imgModification.Text = ImageModificationDate
             DynaLog.LogMessage("Getting WIMBoot information")
             Dim args As String = "/English",
                 out As String = ""
@@ -568,34 +581,35 @@ Public Class ProjProperties
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        Label1.Text = "Properties"
+                        ImageTaskHeader1.ItemText = "Properties"
                     Case "ESN"
-                        Label1.Text = "Propiedades"
+                        ImageTaskHeader1.ItemText = "Propiedades"
                     Case "FRA"
-                        Label1.Text = "Propriétés"
+                        ImageTaskHeader1.ItemText = "Propriétés"
                     Case "PTB", "PTG"
-                        Label1.Text = "Propriedades"
+                        ImageTaskHeader1.ItemText = "Propriedades"
                     Case "ITA"
-                        Label1.Text = "Proprietà"
+                        ImageTaskHeader1.ItemText = "Proprietà"
                 End Select
             Case 1
-                Label1.Text = "Properties"
+                ImageTaskHeader1.ItemText = "Properties"
             Case 2
-                Label1.Text = "Propiedades"
+                ImageTaskHeader1.ItemText = "Propiedades"
             Case 3
-                Label1.Text = "Propriétés"
+                ImageTaskHeader1.ItemText = "Propriétés"
             Case 4
-                Label1.Text = "Propriedades"
+                ImageTaskHeader1.ItemText = "Propriedades"
             Case 5
-                Label1.Text = "Proprietà"
+                ImageTaskHeader1.ItemText = "Proprietà"
         End Select
         ' Set program colors
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""
@@ -623,20 +637,14 @@ Public Class ProjProperties
         imgRW.Text = ""
         LanguageList.Items.Clear()
         Visible = True
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         Label4.Visible = True
         Label9.Text = MainForm.Label49.Text
         Label10.Text = MainForm.projPath
         Label11.Text = File.GetCreationTime(MainForm.projPath)
         DynaLog.LogMessage("Getting project information...")
-        Dim rtb As New RichTextBox With {
-            .Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\" & MainForm.Label49.Text & ".dtproj")
-        }
-        If rtb.Lines(6).StartsWith("ProjGuid") Then
-            Label12.Text = rtb.Lines(6).Replace("ProjGuid=", "").Trim()
+        Dim ProjectFileLines As String() = File.ReadAllLines(MainForm.projPath & "\" & MainForm.Label49.Text & ".dtproj")
+        If ProjectFileLines(6).StartsWith("ProjGuid") Then
+            Label12.Text = ProjectFileLines(6).Replace("ProjGuid=", "").Trim()
         End If
         If MainForm.IsImageMounted Then
             DynaLog.LogMessage("An image is mounted.")
@@ -990,6 +998,9 @@ Public Class ProjProperties
             Panel3.Visible = True
             Label4.Visible = False
         End If
+        ImageTaskHeader1.HideWindowTitle(handle)
+
+        FfuInfoBtn.Visible = Path.GetExtension(MainForm.SourceImg).Equals(".ffu", StringComparison.OrdinalIgnoreCase)
     End Sub
 
     Private Sub RWRemountBtn_Click(sender As Object, e As EventArgs) Handles RWRemountBtn.Click
@@ -1169,5 +1180,10 @@ Public Class ProjProperties
             Case 5
                 WindowHelper.DisplayToolTip(sender, "Livello di astrazione hardware")
         End Select
+    End Sub
+
+    Private Sub FfuInfoBtn_Click(sender As Object, e As EventArgs) Handles FfuInfoBtn.Click
+        FfuInfoDialog.MountedFfuInformation = MainForm.CurrentImage.FFUInfo
+        FfuInfoDialog.ShowDialog(Me)
     End Sub
 End Class

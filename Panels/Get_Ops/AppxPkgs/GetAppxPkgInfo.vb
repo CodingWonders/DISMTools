@@ -20,7 +20,7 @@ Public Class GetAppxPkgInfoDlg
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Get AppX package information"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label36.Text = "AppX package information"
                         Label37.Text = "Select an installed AppX package on the left to view its information here"
                         Label22.Text = "Package name:"
@@ -39,7 +39,7 @@ Public Class GetAppxPkgInfoDlg
                         SearchBox1.cueBanner = "Type here to search for an application..."
                     Case "ESN"
                         Text = "Obtener información de paquetes AppX"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label36.Text = "Información de paquete AppX"
                         Label37.Text = "Seleccione un paquete AppX instalado en la izquierda para ver su información aquí"
                         Label22.Text = "Nombre de paquete:"
@@ -58,7 +58,7 @@ Public Class GetAppxPkgInfoDlg
                         SearchBox1.cueBanner = "Escriba aquí para buscar una aplicación..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets AppX"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label36.Text = "Informations sur le paquet AppX"
                         Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
                         Label22.Text = "Nom du paquet :"
@@ -77,7 +77,7 @@ Public Class GetAppxPkgInfoDlg
                         SearchBox1.cueBanner = "Tapez ici pour rechercher une application..."
                     Case "PTB", "PTG"
                         Text = "Obter informações do pacote AppX"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label36.Text = "Informações do pacote AppX"
                         Label37.Text = "Seleccione um pacote AppX instalado à esquerda para ver as suas informações aqui"
                         Label22.Text = "Nome do pacote:"
@@ -96,7 +96,7 @@ Public Class GetAppxPkgInfoDlg
                         SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
                     Case "ITA"
                         Text = "Verifica informazioni pacchetto AppX"
-                        Label1.Text = Text
+                        ImageTaskHeader1.ItemText = Text
                         Label36.Text = "Informazioni pacchetti AppX"
                         Label37.Text = "Seleziona un pacchetto AppX installato a sinistra per visualizzarne qui le informazioni"
                         Label22.Text = "Nome pacchetto:"
@@ -116,7 +116,7 @@ Public Class GetAppxPkgInfoDlg
                 End Select
             Case 1
                 Text = "Get AppX package information"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label36.Text = "AppX package information"
                 Label37.Text = "Select an installed AppX package on the left to view its information here"
                 Label22.Text = "Package name:"
@@ -135,7 +135,7 @@ Public Class GetAppxPkgInfoDlg
                 SearchBox1.cueBanner = "Type here to search for an application..."
             Case 2
                 Text = "Obtener información de paquetes AppX"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label36.Text = "Información de paquete AppX"
                 Label37.Text = "Seleccione un paquete AppX instalado en la izquierda para ver su información aquí"
                 Label22.Text = "Nombre de paquete:"
@@ -154,7 +154,7 @@ Public Class GetAppxPkgInfoDlg
                 SearchBox1.cueBanner = "Escriba aquí para buscar una aplicación..."
             Case 3
                 Text = "Obtenir des informations sur les paquets AppX"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label36.Text = "Informations sur le paquet AppX"
                 Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
                 Label22.Text = "Nom du paquet :"
@@ -173,7 +173,7 @@ Public Class GetAppxPkgInfoDlg
                 SearchBox1.cueBanner = "Tapez ici pour rechercher une application..."
             Case 4
                 Text = "Obter informações do pacote AppX"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label36.Text = "Informações do pacote AppX"
                 Label37.Text = "Seleccione um pacote AppX instalado à esquerda para ver as suas informações aqui"
                 Label22.Text = "Nome do pacote:"
@@ -192,7 +192,7 @@ Public Class GetAppxPkgInfoDlg
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
             Case 5
                 Text = "Verifica informazioni sul pacchetto AppX"
-                Label1.Text = Text
+                ImageTaskHeader1.ItemText = Text
                 Label36.Text = "Informazioni pacchetti AppX"
                 Label37.Text = "Seleziona un pacchetto AppX installato a sinistra per visualizzarne qui le informazioni"
                 Label22.Text = "Nome pacchetto:"
@@ -210,7 +210,7 @@ Public Class GetAppxPkgInfoDlg
                 Button2.Text = "Salva..."
                 SearchBox1.cueBanner = "Digita qui per cercare un'applicazione..."
         End Select
-        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -218,15 +218,12 @@ Public Class GetAppxPkgInfoDlg
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-            Win10Title.Visible = True
-        End If
         If SplitContainer2.SplitterDistance = 440 Then
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
@@ -256,6 +253,7 @@ Public Class GetAppxPkgInfoDlg
 
         AppxHelper.ClearRootPaths()
         AppxHelper.SetRootPaths(MainForm.MountDir)
+        ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
@@ -548,7 +546,7 @@ Public Class GetAppxPkgInfoDlg
                 End If
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get some information about this application. Error message: " & ex.Message)
-                MsgBox("Could not get some information about this application.", vbOKOnly + vbCritical, Label1.Text)
+                MsgBox("Could not get some information about this application.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Try
             Panel4.Visible = True
             Panel7.Visible = False

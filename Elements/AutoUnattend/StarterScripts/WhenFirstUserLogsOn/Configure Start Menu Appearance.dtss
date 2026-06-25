@@ -1,0 +1,23 @@
+﻿Language: Batch
+Name: Configure Start Menu Appearance
+Description: This script allows you to customize the default view used by the Start menu. This requires Windows 11 24H2 or newer, and the new Start menu to be present.
+Customizable: Yes
+
+@ECHO OFF
+
+REM This script lets you configure the default view used by the Start menu using one of the following
+REM values:
+REM 0 -- Category View
+REM 1 -- Grid View
+REM 2 -- List View
+REM This script requires Windows 11, version 24H2 or later, plus the new Start menu, to function. The
+REM new Start menu is still under gradual rollout. You can use this script even if your Windows image
+REM still uses the old Start menu, but the setting will not take effect until it is replaced.
+
+SET _StartMenuView=2
+
+REM leave the rest of the script as is
+IF NOT DEFINED _StartMenuView SET _StartMenuView=2
+
+IF %_StartMenuView% LSS 0 SET _StartMenuView=0 ELSE IF %_StartMenuView% GTR 2 SET _StartMenuView=2
+REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Start" /F /V AllAppsViewMode /T REG_DWORD /D %_StartMenuView%

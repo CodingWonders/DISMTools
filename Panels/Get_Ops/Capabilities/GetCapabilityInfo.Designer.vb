@@ -31,6 +31,7 @@ Partial Class GetCapabilityInfoDlg
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.WizardBtn = New System.Windows.Forms.Button()
         Me.SearchBox1 = New DISMTools.SearchBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -54,11 +55,9 @@ Partial Class GetCapabilityInfoDlg
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Win10Title = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -73,8 +72,6 @@ Partial Class GetCapabilityInfoDlg
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.Panel7.SuspendLayout()
-        Me.Win10Title.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label2
@@ -162,12 +159,26 @@ Partial Class GetCapabilityInfoDlg
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.WizardBtn)
         Me.Panel1.Controls.Add(Me.SearchBox1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(24, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(416, 24)
         Me.Panel1.TabIndex = 3
+        '
+        'WizardBtn
+        '
+        Me.WizardBtn.Dock = System.Windows.Forms.DockStyle.Right
+        Me.WizardBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+        Me.WizardBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray
+        Me.WizardBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.WizardBtn.Image = Global.DISMTools.My.Resources.Resources.assistant_light
+        Me.WizardBtn.Location = New System.Drawing.Point(392, 0)
+        Me.WizardBtn.Name = "WizardBtn"
+        Me.WizardBtn.Size = New System.Drawing.Size(24, 24)
+        Me.WizardBtn.TabIndex = 3
+        Me.WizardBtn.UseVisualStyleBackColor = True
         '
         'SearchBox1
         '
@@ -176,7 +187,7 @@ Partial Class GetCapabilityInfoDlg
         Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
         Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.Size = New System.Drawing.Size(378, 18)
         Me.SearchBox1.TabIndex = 1
         '
         'SearchPic
@@ -424,39 +435,6 @@ Partial Class GetCapabilityInfoDlg
         Me.FlowLayoutPanel4.Size = New System.Drawing.Size(200, 100)
         Me.FlowLayoutPanel4.TabIndex = 0
         '
-        'Win10Title
-        '
-        Me.Win10Title.BackColor = System.Drawing.Color.White
-        Me.Win10Title.Controls.Add(Me.PictureBox1)
-        Me.Win10Title.Controls.Add(Me.Label1)
-        Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Win10Title.Location = New System.Drawing.Point(0, 0)
-        Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(1008, 48)
-        Me.Win10Title.TabIndex = 7
-        Me.Win10Title.Visible = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.get_feat_info
-        Me.PictureBox1.Location = New System.Drawing.Point(964, 8)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(253, 30)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Get capability information"
-        '
         'Button2
         '
         Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -479,16 +457,30 @@ Partial Class GetCapabilityInfoDlg
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
         '
+        'ImageTaskHeader1
+        '
+        Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
+        Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ItemPicture = Global.DISMTools.My.Resources.Resources.get_feat_info
+        Me.ImageTaskHeader1.ItemText = "Get capability information"
+        Me.ImageTaskHeader1.Location = New System.Drawing.Point(0, 0)
+        Me.ImageTaskHeader1.MaximumSize = New System.Drawing.Size(19200, 48)
+        Me.ImageTaskHeader1.MinimumSize = New System.Drawing.Size(400, 48)
+        Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
+        Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
+        Me.ImageTaskHeader1.TabIndex = 12
+        '
         'GetCapabilityInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FeatureInfoPanel)
-        Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -513,9 +505,6 @@ Partial Class GetCapabilityInfoDlg
         Me.FlowLayoutPanel3.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
-        Me.Win10Title.ResumeLayout(False)
-        Me.Win10Title.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -547,9 +536,6 @@ Partial Class GetCapabilityInfoDlg
     Friend WithEvents Panel7 As System.Windows.Forms.Panel
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
-    Friend WithEvents Win10Title As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label55 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents SearchPanel As System.Windows.Forms.Panel
@@ -557,5 +543,7 @@ Partial Class GetCapabilityInfoDlg
     Friend WithEvents SearchBox1 As DISMTools.SearchBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents WizardBtn As System.Windows.Forms.Button
+    Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
 
 End Class

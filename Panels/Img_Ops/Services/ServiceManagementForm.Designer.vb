@@ -100,9 +100,13 @@ Partial Class ServiceManagementForm
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
         Me.ServiceInfoContainerPanel = New System.Windows.Forms.Panel()
-        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
         Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label15 = New System.Windows.Forms.Label()
+        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
+        Me.ReportServiceInfoBtn = New System.Windows.Forms.Button()
+        Me.ServiceInfoSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.RestoreServiceBtn = New System.Windows.Forms.Button()
+        Me.DeleteServiceBtn = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -121,8 +125,8 @@ Partial Class ServiceManagementForm
         Me.TabPage5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.ServiceInfoContainerPanel.SuspendLayout()
-        Me.SelectedServicePanel.SuspendLayout()
         Me.NoServiceSelectedPanel.SuspendLayout()
+        Me.SelectedServicePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -134,8 +138,8 @@ Partial Class ServiceManagementForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(1240, 42)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "This tool lets you view and manage the services of this target image. Click the S" & _
-    "ave button to save any changes made to the Windows services."
+        Me.Label1.Text = "This tool lets you view and manage the services of this target image. Click Save " & _
+    "service changes to save any changes made to the Windows services."
         '
         'ListView1
         '
@@ -148,7 +152,7 @@ Partial Class ServiceManagementForm
         Me.ListView1.Location = New System.Drawing.Point(12, 59)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1240, 310)
+        Me.ListView1.Size = New System.Drawing.Size(1240, 282)
         Me.ListView1.TabIndex = 2
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -457,6 +461,8 @@ Partial Class ServiceManagementForm
         '
         'Panel4
         '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel4.Controls.Add(Me.TextBox8)
         Me.Panel4.Location = New System.Drawing.Point(258, 14)
         Me.Panel4.Name = "Panel4"
@@ -822,11 +828,11 @@ Partial Class ServiceManagementForm
         '
         Me.SaveServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SaveServiceInfoBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1177, 647)
+        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1097, 647)
         Me.SaveServiceInfoBtn.Name = "SaveServiceInfoBtn"
-        Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(75, 23)
+        Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(155, 23)
         Me.SaveServiceInfoBtn.TabIndex = 4
-        Me.SaveServiceInfoBtn.Text = "Save"
+        Me.SaveServiceInfoBtn.Text = "Save service changes"
         Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
         '
         'ProgressLabel
@@ -866,15 +872,6 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
         Me.ServiceInfoContainerPanel.TabIndex = 7
         '
-        'SelectedServicePanel
-        '
-        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
-        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
-        Me.SelectedServicePanel.Name = "SelectedServicePanel"
-        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
-        Me.SelectedServicePanel.TabIndex = 1
-        '
         'NoServiceSelectedPanel
         '
         Me.NoServiceSelectedPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -897,11 +894,62 @@ Partial Class ServiceManagementForm
         Me.Label15.Text = "No service has been selected. Select a service above to view details."
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'SelectedServicePanel
+        '
+        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
+        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
+        Me.SelectedServicePanel.Name = "SelectedServicePanel"
+        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
+        Me.SelectedServicePanel.TabIndex = 1
+        '
+        'ReportServiceInfoBtn
+        '
+        Me.ReportServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ReportServiceInfoBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ReportServiceInfoBtn.Location = New System.Drawing.Point(900, 647)
+        Me.ReportServiceInfoBtn.Name = "ReportServiceInfoBtn"
+        Me.ReportServiceInfoBtn.Size = New System.Drawing.Size(191, 23)
+        Me.ReportServiceInfoBtn.TabIndex = 8
+        Me.ReportServiceInfoBtn.Text = "Save service information..."
+        Me.ReportServiceInfoBtn.UseVisualStyleBackColor = True
+        '
+        'ServiceInfoSFD
+        '
+        Me.ServiceInfoSFD.Filter = "Markdown files|*.md"
+        '
+        'RestoreServiceBtn
+        '
+        Me.RestoreServiceBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RestoreServiceBtn.Enabled = False
+        Me.RestoreServiceBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RestoreServiceBtn.Location = New System.Drawing.Point(1097, 347)
+        Me.RestoreServiceBtn.Name = "RestoreServiceBtn"
+        Me.RestoreServiceBtn.Size = New System.Drawing.Size(156, 23)
+        Me.RestoreServiceBtn.TabIndex = 8
+        Me.RestoreServiceBtn.Text = "Restore service"
+        Me.RestoreServiceBtn.UseVisualStyleBackColor = True
+        '
+        'DeleteServiceBtn
+        '
+        Me.DeleteServiceBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DeleteServiceBtn.Enabled = False
+        Me.DeleteServiceBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DeleteServiceBtn.Location = New System.Drawing.Point(935, 347)
+        Me.DeleteServiceBtn.Name = "DeleteServiceBtn"
+        Me.DeleteServiceBtn.Size = New System.Drawing.Size(156, 23)
+        Me.DeleteServiceBtn.TabIndex = 8
+        Me.DeleteServiceBtn.Text = "Delete service"
+        Me.DeleteServiceBtn.UseVisualStyleBackColor = True
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.DeleteServiceBtn)
+        Me.Controls.Add(Me.RestoreServiceBtn)
+        Me.Controls.Add(Me.ReportServiceInfoBtn)
         Me.Controls.Add(Me.ServiceInfoContainerPanel)
         Me.Controls.Add(Me.ReloadServiceInformationBtn)
         Me.Controls.Add(Me.ProgressLabel)
@@ -941,8 +989,8 @@ Partial Class ServiceManagementForm
         Me.TabPage5.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
-        Me.SelectedServicePanel.ResumeLayout(False)
         Me.NoServiceSelectedPanel.ResumeLayout(False)
+        Me.SelectedServicePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1026,4 +1074,8 @@ Partial Class ServiceManagementForm
     Friend WithEvents Panel4 As System.Windows.Forms.Panel
     Friend WithEvents TextBox14 As System.Windows.Forms.TextBox
     Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents ReportServiceInfoBtn As System.Windows.Forms.Button
+    Friend WithEvents ServiceInfoSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents RestoreServiceBtn As System.Windows.Forms.Button
+    Friend WithEvents DeleteServiceBtn As System.Windows.Forms.Button
 End Class

@@ -1,6 +1,7 @@
 ﻿Language: Batch
 Name: Display Bugcheck Parameters
 Description: This script shows the 4 additional parameters of a bugcheck during a system crash.
+Customizable: No
 
 @echo off
 REM This script shows the 4 additional parameters of a bugcheck during a system crash.

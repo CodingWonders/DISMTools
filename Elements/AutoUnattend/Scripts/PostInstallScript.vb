@@ -25,8 +25,10 @@ Public Class PostInstallScript
     Public Enum Extension As Integer
         PowerShell = 0
         Batch = 1
-        'Reg
-        Unknown = 2
+        Reg = 2
+        VBScript = 3
+        JScript = 4
+        Unknown = 5
     End Enum
 
     Public Property ScriptExtension As Extension

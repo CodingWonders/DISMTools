@@ -83,7 +83,6 @@ Partial Class SetImageKey
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(624, 48)
         Me.ImageTaskHeader1.TabIndex = 1
-        Me.ImageTaskHeader1.Visible = False
         '
         'Label1
         '

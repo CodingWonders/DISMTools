@@ -66,7 +66,6 @@
 
     Public Enum DiskConfigurationMode As Integer
         AutoDisk0 = 0
-        DiskPart = 1
     End Enum
 
     Public Enum PartitionStyle As Integer

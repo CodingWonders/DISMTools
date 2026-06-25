@@ -70,6 +70,20 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property changefont() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("changefont", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property colormode() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("colormode", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
@@ -96,6 +110,27 @@ Namespace My.Resources
         Friend ReadOnly Property savefile() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("savefile", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property savefileas() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("savefileas", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property targetversion() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("targetversion", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property writable() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("writable", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

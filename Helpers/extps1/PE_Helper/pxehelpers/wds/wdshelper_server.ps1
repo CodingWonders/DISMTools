@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.8                                         |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Helper Server |
@@ -55,11 +55,13 @@
 #
 #   Settings for the server are declared in the Server Options section.
 
-
+param (
+    [int] $sPort = 8080
+)
 
 # ----------------------- Server Options -----------------------
 $webHost = "*"
-$port = 8080
+$port = $sPort
 $tmpImageFolderPath = "$env:SystemDrive\NetInstallWDSTemp"
 $shareName = "NetInstallTemp"
 # --------------------------------------------------------------
@@ -81,7 +83,7 @@ function Get-WindowsRole {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7.3"
+$version = "0.8"
 
 Clear-Host
 
@@ -116,7 +118,7 @@ if (((Get-WindowsRole -RoleName "WDS") -eq $false) -or ((Get-WindowsRole -RoleNa
 
 Write-LogMessage -message "Checking share locations..."
 $wdsShareLocation = ""
-$wdsShareLocation = (Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Shares" -Name "REMINST" -ErrorAction SilentlyContinue)[3].Replace("Path=", "")
+$wdsShareLocation = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WDSServer\Providers\WDSTFTP" -Name "RootFolder" -ErrorAction SilentlyContinue
 
 Write-LogMessage -message "Starting Windows Deployment Services Web API..."
 Write-LogMessage -message "Server Options:"
@@ -149,7 +151,7 @@ function Get-WdsInstallImages {
         $imageGroups = Get-WdsInstallImageGroup
         $images = @()
         foreach ($group in $imageGroups) {
-            $groupImages = Get-WdsInstallImage -ImageGroup $group.Name | Select-Object FileName, Name, Description, ImageGroup, Size, @{Name='Last Modification Time (UTC)'; Expression='LastModificationTime'}, Version, @{Name='Priority'; Expression='DisplayOrder'} | Sort-Object -Property Priority
+            $groupImages = Get-WdsInstallImage -ImageGroup $group.Name | Select-Object FileName, Name, Description, ImageGroup, Size, @{Name='LastModifyUtc'; Expression='LastModificationTime'}, Version, @{Name='Priority'; Expression='DisplayOrder'} | Sort-Object -Property Priority
             $images += $groupImages
         }
         Write-LogMessage -message "Returning $($images.Count) image(s)..."
@@ -332,6 +334,10 @@ try {
         $request = $context.Request
         $response = $context.Response
 
+        $response.Headers.Add("Access-Control-Allow-Origin", "*")
+        $response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        $response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
         $sendJson = {
             param($data, $status = 200)
             $response.StatusCode = $status
@@ -419,6 +425,10 @@ try {
                             button {
                                 font-size: 1.125em;
                                 font-family: "Trebuchet MS", "Arial", "Helvetica", sans-serif;
+                            }
+                            button:disabled {
+                                background-color: darkgray;
+                                color: white;
                             }
                             .important_tab {
                                 font-weight: bold;
@@ -609,6 +619,10 @@ try {
                             function invokeExit() {
                                 fetch('/api/exit', { method: "GET" });
                                 alert("The server has stopped. Close this tab now.");
+                                let buttons = document.getElementsByTagName("button");
+                                for (let i = 0; i < buttons.length; i++) {
+                                    buttons[i].disabled = true;
+                                }
                             }
 
                             function invokeLogViewer() {

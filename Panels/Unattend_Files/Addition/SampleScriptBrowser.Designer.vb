@@ -37,6 +37,7 @@ Partial Class SampleScriptBrowser
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ScriptDetailsContainerPanel = New System.Windows.Forms.Panel()
         Me.ScriptDetailsPanel = New System.Windows.Forms.Panel()
+        Me.EnterFSModeBtn = New System.Windows.Forms.Button()
         Me.ExportScriptCodeBtn = New System.Windows.Forms.Button()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -49,6 +50,11 @@ Partial Class SampleScriptBrowser
         Me.Label8 = New System.Windows.Forms.Label()
         Me.ScriptCodeExporterSFD = New System.Windows.Forms.SaveFileDialog()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ScriptCodeFSPanel = New System.Windows.Forms.Panel()
+        Me.RichTextBox2 = New System.Windows.Forms.RichTextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.ExitFSModeBtn = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
@@ -56,6 +62,8 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsContainerPanel.SuspendLayout()
         Me.ScriptDetailsPanel.SuspendLayout()
         Me.ScriptDetailsNoSelectedPanel.SuspendLayout()
+        Me.ScriptCodeFSPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -183,6 +191,7 @@ Partial Class SampleScriptBrowser
         '
         'ScriptDetailsPanel
         '
+        Me.ScriptDetailsPanel.Controls.Add(Me.EnterFSModeBtn)
         Me.ScriptDetailsPanel.Controls.Add(Me.ExportScriptCodeBtn)
         Me.ScriptDetailsPanel.Controls.Add(Me.RichTextBox1)
         Me.ScriptDetailsPanel.Controls.Add(Me.Label7)
@@ -197,10 +206,20 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsPanel.TabIndex = 1
         Me.ScriptDetailsPanel.Visible = False
         '
+        'EnterFSModeBtn
+        '
+        Me.EnterFSModeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.EnterFSModeBtn.Location = New System.Drawing.Point(531, 158)
+        Me.EnterFSModeBtn.Name = "EnterFSModeBtn"
+        Me.EnterFSModeBtn.Size = New System.Drawing.Size(107, 23)
+        Me.EnterFSModeBtn.TabIndex = 7
+        Me.EnterFSModeBtn.Text = "Enlarge preview"
+        Me.EnterFSModeBtn.UseVisualStyleBackColor = True
+        '
         'ExportScriptCodeBtn
         '
         Me.ExportScriptCodeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExportScriptCodeBtn.Location = New System.Drawing.Point(446, 158)
+        Me.ExportScriptCodeBtn.Location = New System.Drawing.Point(333, 158)
         Me.ExportScriptCodeBtn.Name = "ExportScriptCodeBtn"
         Me.ExportScriptCodeBtn.Size = New System.Drawing.Size(192, 23)
         Me.ExportScriptCodeBtn.TabIndex = 7
@@ -311,6 +330,61 @@ Partial Class SampleScriptBrowser
         'SSETimer
         '
         '
+        'ScriptCodeFSPanel
+        '
+        Me.ScriptCodeFSPanel.Controls.Add(Me.RichTextBox2)
+        Me.ScriptCodeFSPanel.Controls.Add(Me.Panel1)
+        Me.ScriptCodeFSPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ScriptCodeFSPanel.Location = New System.Drawing.Point(320, 0)
+        Me.ScriptCodeFSPanel.Name = "ScriptCodeFSPanel"
+        Me.ScriptCodeFSPanel.Size = New System.Drawing.Size(688, 513)
+        Me.ScriptCodeFSPanel.TabIndex = 4
+        Me.ScriptCodeFSPanel.Visible = False
+        '
+        'RichTextBox2
+        '
+        Me.RichTextBox2.DetectUrls = False
+        Me.RichTextBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox2.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RichTextBox2.Location = New System.Drawing.Point(0, 48)
+        Me.RichTextBox2.Name = "RichTextBox2"
+        Me.RichTextBox2.ReadOnly = True
+        Me.RichTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
+        Me.RichTextBox2.Size = New System.Drawing.Size(688, 465)
+        Me.RichTextBox2.TabIndex = 7
+        Me.RichTextBox2.Text = ""
+        Me.RichTextBox2.WordWrap = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Controls.Add(Me.ExitFSModeBtn)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(688, 48)
+        Me.Panel1.TabIndex = 8
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(16, 17)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(336, 13)
+        Me.Label9.TabIndex = 9
+        Me.Label9.Text = "To leave full screen mode, click the button on the right or press ESC."
+        '
+        'ExitFSModeBtn
+        '
+        Me.ExitFSModeBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ExitFSModeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ExitFSModeBtn.Location = New System.Drawing.Point(565, 12)
+        Me.ExitFSModeBtn.Name = "ExitFSModeBtn"
+        Me.ExitFSModeBtn.Size = New System.Drawing.Size(107, 23)
+        Me.ExitFSModeBtn.TabIndex = 8
+        Me.ExitFSModeBtn.Text = "Go back"
+        Me.ExitFSModeBtn.UseVisualStyleBackColor = True
+        '
         'SampleScriptBrowser
         '
         Me.AcceptButton = Me.OK_Button
@@ -319,10 +393,12 @@ Partial Class SampleScriptBrowser
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.ScriptDetailsContainerPanel)
+        Me.Controls.Add(Me.ScriptCodeFSPanel)
         Me.Controls.Add(Me.ScriptListPanel)
         Me.Controls.Add(Me.ActionPanel)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SampleScriptBrowser"
@@ -338,6 +414,9 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsPanel.ResumeLayout(False)
         Me.ScriptDetailsPanel.PerformLayout()
         Me.ScriptDetailsNoSelectedPanel.ResumeLayout(False)
+        Me.ScriptCodeFSPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -366,5 +445,11 @@ Partial Class SampleScriptBrowser
     Friend WithEvents ExportScriptCodeBtn As System.Windows.Forms.Button
     Friend WithEvents ScriptCodeExporterSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents SSETimer As System.Windows.Forms.Timer
+    Friend WithEvents EnterFSModeBtn As System.Windows.Forms.Button
+    Friend WithEvents ScriptCodeFSPanel As System.Windows.Forms.Panel
+    Friend WithEvents RichTextBox2 As System.Windows.Forms.RichTextBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents ExitFSModeBtn As System.Windows.Forms.Button
 
 End Class
