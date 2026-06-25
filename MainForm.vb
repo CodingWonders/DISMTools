@@ -1236,7 +1236,7 @@ Public Class MainForm
                     DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
                     DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
                     DiskLabel As String = CurrentVolProps("Label")
-                ComputerStorageLabel.Text = String.Format("{0}\ ({1}): {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", DiskLabel, "<unlabeled>"),
+                ComputerStorageLabel.Text = String.Format("{0}\{1}: {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", String.Format(" ({0})", DiskLabel), ""),
                                                                                             Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
                                                                                             CurDiskStr,
                                                                                             Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
@@ -7960,6 +7960,7 @@ Public Class MainForm
                         Label3.Text = "IP Address Configuration:"
                         Label4.Text = "Explore and get started"
                         Label5.Text = "Stay up-to-date"
+                        Label9.Text = "Fact of the day"
                         LinkLabel27.Text = "Learn what's new in this release"
                         LinkLabel28.Text = "Get started with DISMTools and image servicing"
                         LinkLabel29.Text = "Manage your current installation"
@@ -7978,6 +7979,7 @@ Public Class MainForm
                         Label3.Text = "Configuración de dirección IP:"
                         Label4.Text = "Explore y comience"
                         Label5.Text = "Manténgase informado"
+                        Label9.Text = "Dato del día"
                         LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
                         LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
                         LinkLabel29.Text = "Administre su instalación actual"
@@ -7996,6 +7998,7 @@ Public Class MainForm
                         Label3.Text = "Configuration de l'adresse IP :"
                         Label4.Text = "Découvrir et commencer"
                         Label5.Text = "Rester à jour"
+                        Label9.Text = "Le fait du jour"
                         LinkLabel27.Text = "Découvrez les nouveautés de cette version"
                         LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
                         LinkLabel29.Text = "Gérer votre installation actuelle"
@@ -8014,6 +8017,7 @@ Public Class MainForm
                         Label3.Text = "Configuração do endereço IP:"
                         Label4.Text = "Explorar e começar"
                         Label5.Text = "Manter-se atualizado"
+                        Label9.Text = "Curiosidade do dia"
                         LinkLabel27.Text = "Descubra as novidades desta versão"
                         LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
                         LinkLabel29.Text = "Gerir a sua instalação atual"
@@ -8032,6 +8036,7 @@ Public Class MainForm
                         Label3.Text = "Configurazione dell'indirizzo IP:"
                         Label4.Text = "Esplora e inizia"
                         Label5.Text = "Rimani aggiornato"
+                        Label9.Text = "Curiosità del giorno"
                         LinkLabel27.Text = "Scopri le novità di questa versione"
                         LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
                         LinkLabel29.Text = "Gestisci la tua installazione attuale"
@@ -8051,6 +8056,7 @@ Public Class MainForm
                 Label3.Text = "IP Address Configuration:"
                 Label4.Text = "Explore and get started"
                 Label5.Text = "Stay up-to-date"
+                Label9.Text = "Fact of the day"
                 LinkLabel27.Text = "Learn what's new in this release"
                 LinkLabel28.Text = "Get started with DISMTools and image servicing"
                 LinkLabel29.Text = "Manage your current installation"
@@ -8069,6 +8075,7 @@ Public Class MainForm
                 Label3.Text = "Configuración de dirección IP:"
                 Label4.Text = "Explore y comience"
                 Label5.Text = "Manténgase informado"
+                Label9.Text = "Dato del día"
                 LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
                 LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
                 LinkLabel29.Text = "Administre su instalación actual"
@@ -8087,6 +8094,7 @@ Public Class MainForm
                 Label3.Text = "Configuration de l'adresse IP :"
                 Label4.Text = "Découvrir et commencer"
                 Label5.Text = "Rester à jour"
+                Label9.Text = "Le fait du jour"
                 LinkLabel27.Text = "Découvrez les nouveautés de cette version"
                 LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
                 LinkLabel29.Text = "Gérer votre installation actuelle"
@@ -8105,6 +8113,7 @@ Public Class MainForm
                 Label3.Text = "Configuração do endereço IP:"
                 Label4.Text = "Explorar e começar"
                 Label5.Text = "Manter-se atualizado"
+                Label9.Text = "Curiosidade do dia"
                 LinkLabel27.Text = "Descubra as novidades desta versão"
                 LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
                 LinkLabel29.Text = "Gerir a sua instalação atual"
@@ -8123,6 +8132,7 @@ Public Class MainForm
                 Label3.Text = "Configurazione dell'indirizzo IP:"
                 Label4.Text = "Esplora e inizia"
                 Label5.Text = "Rimani aggiornato"
+                Label9.Text = "Curiosità del giorno"
                 LinkLabel27.Text = "Scopri le novità di questa versione"
                 LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
                 LinkLabel29.Text = "Gestisci la tua installazione attuale"
