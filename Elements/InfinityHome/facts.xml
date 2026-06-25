@@ -1785,6 +1785,10 @@
       <topic></topic>
       <text>Use the Mounted Image Manager, in the Tools menu, to quickly reference and perform actions with mounted images. Listings in the mounted image manager are updated in real time.</text>
     </fact>
+    <fact id="DT17_1" type="dttip">
+      <topic></topic>
+      <text>When you launch DISMTools, all Windows images that need servicing session reloads will be automatically reloaded for you. To have them ready on system startup, use the automatic reload service. Click Tools &gt; Options &gt; Startup options, and click "Install service".</text>
+    </fact>
     <fact id="DT18" type="dttip">
       <topic></topic>
       <text>Don't be confused. While DISMTools 0.8 and later support Full Flash Utility (FFU) files, they only support files for desktop provisioning. Windows Phone FFU servicing is not supported in any way.</text>
