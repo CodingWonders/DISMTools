@@ -2265,16 +2265,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''- Fixed an issue where the full date string was not displaying correctly when accessing image properties with Windows representations of dates turned off
-        '''- When adding a boot image to the WDS server, the service start is now requested only when it is not running
-        '''- Fixed an exception that would happen when adding certain AppX packages
+        '''-- Bugfixes in preview releases
         '''
-        '''New features:
-        '''
-        '''- The Sysprep Preparation Tool has been updated to the latest version
-        '''- If the Sysprep Preparation Tool was invoked before capturing the ima [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where removed features would appear in the wrong place
+        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
+        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
+        '''- Fixed some HiDPI issues
+        '''- Fixed an issue where, when managing the active installation, the v [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
