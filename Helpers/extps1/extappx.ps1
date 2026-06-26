@@ -1,4 +1,4 @@
-﻿# DISMTools 0.8 - Extended AppX package getter for online installations
+﻿# DISMTools 0.8.1 - Extended AppX package getter for online installations
 
 param (
 	[Parameter(Position = 0)] [string] $noNonRemovable = "false",

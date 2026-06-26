@@ -2189,7 +2189,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 SET CREATE_SAMPLE_USERDATA="Yes"
