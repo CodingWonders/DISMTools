@@ -778,10 +778,11 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
+            $codename = "infinity_mk2"
             if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
-                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$(Get-Content -Path "$((Get-Location).Path)\version")"
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$(Get-Content -Path "$((Get-Location).Path)\version")"
             } else {
-                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$((Get-Date).ToString('yyMMdd-HHmm'))"
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$((Get-Date).ToString('yyMMdd-HHmm'))"
             }
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Registry changed."
