@@ -909,6 +909,8 @@ function Start-PECustomization
                     $winpeDriverRootPath = "$imagePath\CWS_DRVS"
                     New-Item -Path "$winpeDriverRootPath" -ItemType Directory | Out-Null
                     New-Item -Path "$imagePath\DT_InstDrvs.txt" | Out-Null
+                    # WDSHC rescans and re-adds the drivers, which we don't want.
+                    New-Item -Path "$imagePath\essential_drivers_exported" | Out-Null
                     Copy-Item -Path "$rootDriverPath\*.*" -Destination "$winpeDriverRootPath" -Recurse -Force
                     foreach ($successfulDriver in $successfulDrivers) {
                         $successfulDriver.Replace("$env:SYSTEMDRIVE", "X:") | Out-File "$imagePath\DT_InstDrvs.txt" -Encoding utf8 -Append

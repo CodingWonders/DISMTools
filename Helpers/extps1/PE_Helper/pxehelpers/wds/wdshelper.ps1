@@ -808,7 +808,7 @@ function Start-OSApplication {
         }
     }
 
-    if ((Get-WindowsDriver -Online).Count -gt 0) {
+    if ((-not (Test-Path -Path "$env:SYSTEMDRIVE\essential_drivers_exported" -PathType Leaf)) -and ((Get-WindowsDriver -Online).Count -gt 0)) {
         Show-CenteredTextBox -Text "Drivers were detected in this boot image and are being exported in order to be applied to the target device. Please wait, this can take some time..." -MaxWidth 100 -CenterOfAll
         New-Item -Path "$($driveLetter):\NetInstall\drivers" -ItemType Directory | Out-Null
         Export-WindowsDriver -Online -Destination "$($driveLetter):\NetInstall\drivers"
