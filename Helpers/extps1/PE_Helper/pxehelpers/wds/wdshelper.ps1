@@ -871,17 +871,93 @@ function Start-OSApplication {
     }
     Show-SectionMessage -sectionTitle "Initializing the Windows image" -sectionDescription "Please wait while Setup initializes your installation configuration."
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
-    if (Test-Path "$($driveLetter):\NetInstall\unattend.xml" -PathType Leaf)
-    {
-        Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
-        if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$($driveLetter):\NetInstall\unattend.xml") -eq $true)
+    try {
+        $finalAnswerPath = "$($driveLetter):\NetInstall\unattend.xml"
+
+        if (Test-Path -Path "$finalAnswerPath" -PathType Leaf)
         {
-            Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+            # Check if the image already has an answer file in its panther directory. If it does, then that counts
+            # as a conflict that must be resolved.
+            if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
+                # CONFLICT!
+                $netUnattendInfo = Get-Item -Path "$finalAnswerPath"
+                $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
+                # The user may have used a policy to handle this conflict automatically. Guess it and use it.
+                $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
+                Write-Host "`n`n"
+                Write-Host "Unattended answer files have been found in both the network and the Windows image that you are deploying. Specify "
+                Write-Host "how you want to proceed, but you may encounter unexpected results if you choose the wrong file.`n"
+                Write-Host "    Answer file in the network:`n"
+                Write-Host "      - Creation date: $($netUnattendInfo.CreationTime)"
+                Write-Host "      - Modification date: $($netUnattendInfo.LastWriteTime)"
+                Write-Host "      - Size: $([Math]::Round(($netUnattendInfo.Length / 1KB), 2)) KB"
+                Write-Host ""
+                Write-Host "    Answer file in the Windows image file:`n"
+                Write-Host "      - Creation date: $($wimUnattendInfo.CreationTime)"
+                Write-Host "      - Modification date: $($wimUnattendInfo.LastWriteTime)"
+                Write-Host "      - Size: $([Math]::Round(($wimUnattendInfo.Length / 1KB), 2)) KB"
+                Write-Host ""
+                switch ($policyDecision) {
+                    "PreferISO" {
+                        Write-Host "Handling conflict with answer file from the network..."
+                    }
+                    "PreferWIM" {
+                        Write-Host "Handling conflict with answer file from Windows image..."
+                        throw
+                    }
+                    "AskUser" {
+                        Write-Host "Type NET if you want to use the answer file from the network, or WIM if you want to use the one from the Windows"
+                        Write-Host "image file. To manually review the answer files to see which one is ideal in this situation, press R.`n"
+                        $decided = $false
+                        $decision = ""
+                        do {
+                            $decision = Read-Host -Prompt "Specify an option (NET, WIM, or R), and press ENTER"
+                            if ($decision -eq "") {
+                                # Blank options are not allowed
+                                continue
+                            }
+
+                            if (-not (@("net", "wim", "r").Contains($decision.ToLower()))) {
+                                # So are options that are not part of the set
+                                continue
+                            }
+
+                            if ($decision -eq "R") {
+                                # Manually review the files
+                                $isoUnattendFile = "$env:TEMP\Unattended file from network.xml"
+                                $wimUnattendFile = "$env:TEMP\Unattended file from Windows image file.xml"
+
+                                Copy-Item -Path "$finalAnswerPath" -Destination "$isoUnattendFile" -Force
+                                Copy-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml" -Destination "$wimUnattendFile" -Force
+
+                                notepad "$isoUnattendFile"
+                                notepad "$wimUnattendFile"
+                                continue
+                            }
+
+                            $decided = $true
+                        } until ($decided)
+
+                        # If we chose the one from the WIM, we cancel the operation by "throwing" it out the window
+                        if ($decision -eq "WIM") {
+                            throw
+                        }
+                    }
+                }
+            }
+
+            Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
+            if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$finalAnswerPath") -eq $true)
+            {
+                Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+            }
+            else
+            {
+                Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+            }
         }
-        else
-        {
-            Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
-        }
+    } catch {
+
     }
     $driverPath = "$env:SYSTEMDRIVE\DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
