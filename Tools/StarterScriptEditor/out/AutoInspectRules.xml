@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rules>
+  <rule severity="High">
+    <name>password= literal</name>
+    <description>A cleartext password is being stored, potentially in a variable, or used for a command.</description>
+    <expression>(?i)password\s*=\s*(?![\s%&quot;'])[^\s%&quot;';,]{3,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>pass= assignment</name>
+    <description>A cleartext password is being stored, potentially in a variable, or used for a command.</description>
+    <expression>(?i)\bpass\s*=\s*(?![\s%&quot;'])[^\s%&quot;';,]{3,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>-Password plaintext arg</name>
+    <description>A cleartext password is being passed as an argument.</description>
+    <expression>(?i)-Password\s+&quot;[^&quot;]{3,}&quot;</expression>
+  </rule>
+  <rule severity="High">
+    <name>ConvertTo-SecureString literal</name>
+    <description>A cleartext password is being converted to a PowerShell SecureString object at runtime.</description>
+    <expression>(?i)ConvertTo-SecureString\s+&quot;[^&quot;]+?&quot;\s+-AsPlainText</expression>
+  </rule>
+  <rule severity="High">
+    <name>net use inline credentials</name>
+    <description>Cleartext credentials are being used in NET USE commands.</description>
+    <expression>(?i)net\s+use\s+\S+\s+/user:\S+\s+\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>runas /password: inline</name>
+    <description>A hardcoded credential is being used to start a process as another user.</description>
+    <expression>(?i)runas\s+.+/password:\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>cmdkey /pass: literal</name>
+    <description>A hardcoded credential is being used to access stored users and passwords.</description>
+    <expression>(?i)cmdkey\s+.+/pass:\S+</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>PSCredential hardcoded username</name>
+    <description>A hardcoded credential is being used to run a PowerShell command.</description>
+    <expression>(?i)New-Object\s+PSCredential\s*\(\s*[&quot;']</expression>
+  </rule>
+  <rule severity="High">
+    <name>schtasks /rp password</name>
+    <description>A hardcoded credential is being used to schedule a task.</description>
+    <expression>(?i)schtasks\s+.+/rp\s+\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>sc config password=</name>
+    <description>A hardcoded credential is being used to configure a system service.</description>
+    <expression>(?i)sc\s+config\s+\S+.*\bpassword=\s*&quot;[^&quot;]+&quot;</expression>
+  </rule>
+  <rule severity="High">
+    <name>wmic /password: inline</name>
+    <description>A hardcoded credential is being used to invoke a WMI query.</description>
+    <expression>(?i)wmic\s+.+/password:\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>dsadd/dsmod -pwd</name>
+    <description>A hardcoded credential is being used to perform addition and modification tasks in Active Directory.</description>
+    <expression>(?i)ds(?:add|mod)\s+.+-pwd\s+\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>sqlcmd -P password</name>
+    <description>A hardcoded credential is being used to connect to a server running a SQL Server DBMS.</description>
+    <expression>(?i)sqlcmd\s+.+-P\s+\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>mysql -p&lt;password&gt;</name>
+    <description>A hardcoded credential is being used to connect to a server running a MySQL DBMS.</description>
+    <expression>(?i)mysql\s+.+-p(?!assword\b)\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>FTP PASS line</name>
+    <description>A hardcoded credential is being used to invoke a request to a FTP server.</description>
+    <expression>(?i)^PASS\s+\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>curl -u user:password</name>
+    <description>A hardcoded credential is being used to invoke a web request.</description>
+    <expression>(?i)curl\s+.+-u\s+[^:\s]+:[^\s&quot;']+</expression>
+  </rule>
+  <rule severity="High">
+    <name>Invoke-WebRequest inline Credential</name>
+    <description>A hardcoded credential is being used to invoke a web request.</description>
+    <expression>(?i)(?:Invoke-WebRequest|iwr)\s+.+-Credential\s+\(</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Start-Process hardcoded Credential</name>
+    <description>A hardcoded credential is being used to start a process.</description>
+    <expression>(?i)(?:Start-Process|saps)\s+.+-Credential\s+\$</expression>
+  </rule>
+  <rule severity="High">
+    <name>psexec -p password</name>
+    <description>A password is being used when running PSExec.</description>
+    <expression>(?i)psexec\s+.+-p\s+\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>mstsc /pass: inline</name>
+    <description>A password is being used when connecting to a Terminal Services session.</description>
+    <expression>(?i)/p(?:ass(?:word)?):\S+</expression>
+  </rule>
+  <rule severity="High">
+    <name>Authorization: Bearer token</name>
+    <description>A bearer token string literal has been detected.</description>
+    <expression>Bearer\s+[A-Za-z0-9\-_\.]{20,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>api_key= literal</name>
+    <description>An API key literal has been detected.</description>
+    <expression>(?i)api_?key\s*=\s*(?![\$%])[^\s&amp;&quot;']{8,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>$token = string literal</name>
+    <description>A token string literal has been detected.</description>
+    <expression>(?i)\$token\s*=\s*&quot;[^&quot;]{8,}&quot;</expression>
+  </rule>
+  <rule severity="High">
+    <name>client_secret= literal</name>
+    <description>A client secret literal has been detected.</description>
+    <expression>(?i)client_?secret\s*=\s*(?![\$%])[^\s&amp;&quot;';]{6,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>X-Api-Key header hardcoded</name>
+    <description>A hardcoded X-Api-Key header has been detected.</description>
+    <expression>(?i)X-Api-Key[&quot;']?\s*[=:]\s*[&quot;'][^&quot;']{8,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>GitHub token ghp_/gho_/ghs_</name>
+    <description>A GitHub classic or fine-grained token is being stored. It may be used to perform actions on GitHub accounts or repositories.</description>
+    <expression>gh[pos]_[A-Za-z0-9]{36}</expression>
+  </rule>
+  <rule severity="High">
+    <name>AWS access key AKIA...</name>
+    <description>An AWS access key is being stored. It may be used to access Amazon web services.</description>
+    <expression>AKIA[0-9A-Z]{16}</expression>
+  </rule>
+  <rule severity="High">
+    <name>Azure SAS token</name>
+    <description>An Azure SAS token is being stored. It may be used to access Microsoft cloud services.</description>
+    <expression>\?sv=[^&amp;&quot;\s]+&amp;[^&quot;]*sig=</expression>
+  </rule>
+  <rule severity="High">
+    <name>Slack webhook URL</name>
+    <description>A URL for a Slack webhook is being stored. It may be used to access a Slack application.</description>
+    <expression>hooks\.slack\.com/services/[A-Z0-9]{9,11}/[A-Z0-9]{9,11}/[A-Za-z0-9]{24}</expression>
+  </rule>
+  <rule severity="High">
+    <name>Stripe live key sk_live_</name>
+    <description>A Stripe live key is being stored. It may be used to access a Stripe service for payment processing.</description>
+    <expression>[rs]k_live_[A-Za-z0-9]{24,}</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Twilio Account SID</name>
+    <description>A Twilio account SID key is being stored. It may be used to access a Twilio service.</description>
+    <expression>AC[0-9a-f]{32}</expression>
+  </rule>
+  <rule severity="High">
+    <name>SendGrid API key SG.</name>
+    <description>A SendGrid API key is being stored. It may be used to access a SendGrid service.</description>
+    <expression>SG\.[A-Za-z0-9\-_]{22}\.[A-Za-z0-9\-_]{43}</expression>
+  </rule>
+  <rule severity="High">
+    <name>Google API key AIza...</name>
+    <description>A Google API key is being stored. It may be used to access a Google Cloud service.</description>
+    <expression>AIza[0-9A-Za-z\-_]{35}</expression>
+  </rule>
+  <rule severity="High">
+    <name>OAuth2 client_secret in body</name>
+    <description>A OAuth2 client secret is being stored. It may be used to authenticate to a Web service.</description>
+    <expression>(?i)client_secret=[^&amp;\$%&quot;'\s]{6,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>PAT variable literal</name>
+    <description>A variable literal is being stored for a personal access token. It may be used to authenticate to a Web service.</description>
+    <expression>(?i)\$PAT\s*=\s*&quot;[A-Za-z0-9]{20,}&quot;</expression>
+  </rule>
+  <rule severity="High">
+    <name>SQL conn string Password=</name>
+    <description>A password credential is being stored for a SQL database connection string.</description>
+    <expression>(?i)Password\s*=\s*(?!Integrated)[^;&quot;'\s]{3,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>ADO.NET conn string Password=</name>
+    <description>A password credential is being stored for a ADO.NET database connection string.</description>
+    <expression>(?i)Initial\s+Catalog\s*=.+Password\s*=</expression>
+  </rule>
+  <rule severity="High">
+    <name>MongoDB URI credentials</name>
+    <description>A password credential is being stored for a MongoDB database connection string.</description>
+    <expression>mongodb.*://[^:@\s]+:[^@\s]+@</expression>
+  </rule>
+  <rule severity="High">
+    <name>PostgreSQL URI credentials</name>
+    <description>A password credential is being stored for a PostgreSQL database connection string.</description>
+    <expression>postgres(?:ql)?://[^:@\s]+:[^@\s]+@</expression>
+  </rule>
+  <rule severity="High">
+    <name>JDBC URL password=</name>
+    <description>A password credential is being stored for a Java database connection string (JDBC).</description>
+    <expression>(?i)jdbc:[^;]+;.*password=[^;&quot;'\s]{3,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>Redis URI password</name>
+    <description>A password credential is being stored for a Redis database.</description>
+    <expression>rediss?://:[^@\s]+@</expression>
+  </rule>
+  <rule severity="High">
+    <name>ODBC PWD=</name>
+    <description>A password credential is being stored for a ODBC database connection string.</description>
+    <expression>(?i)PWD\s*=\s*(?!Integrated)[^;&quot;'\s]{3,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>AMQP URI credentials</name>
+    <description>A password credential is being stored for a AMQP URL.</description>
+    <expression>amqps?://[^:@\s]+:[^@\s]+@</expression>
+  </rule>
+  <rule severity="High">
+    <name>MySQL ODBC Pwd=</name>
+    <description>A password credential is being stored for a MySQL ODBC database connection string.</description>
+    <expression>(?i)\bPwd\s*=\s*[^;&quot;'\s]{3,}</expression>
+  </rule>
+  <rule severity="High">
+    <name>Encrypted conn string Password=</name>
+    <description>An encrypted password credential is being stored for a database connection string.</description>
+    <expression>(?i)(?:Encrypt|TrustServerCert(?:ificate)?)\s*=.+Password\s*=\s*[^;&quot;'\s]{3,}</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Internal FQDN</name>
+    <description>A Fully Qualified Domain Name (FQDN) has been found. You may be accessing this network resource.</description>
+    <expression>(?i)[\w\-]+\.(?:corp|internal|local|lan)\b</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>RFC-1918 IP address</name>
+    <description>A host IP address has been found. You may be accessing this network resource.</description>
+    <expression>(?:10\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01])|192\.168)\.\d{1,3}\.\d{1,3}</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>UNC path with hostname</name>
+    <description>A Universal Naming Convention path containing a host name has been found. You may be accessing this network resource.</description>
+    <expression>\\\\[\w\-]+\\[\w\-\$]+</expression>
+  </rule>
+  <rule severity="Low">
+    <name>$env:COMPUTERNAME echoed</name>
+    <description>The machine name is being displayed.</description>
+    <expression>(?i)\$env:COMPUTERNAME</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>LDAP DN with domain literals</name>
+    <description>A domain name with domain literals has been found in Lightweight Directory Access Protocol (LDAP) strings.</description>
+    <expression>(?i)DC=[A-Za-z0-9\-]+,DC=</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Test-Connection internal host</name>
+    <description>An internal host is being pinged.</description>
+    <expression>(?i)(?:Test-Connection|tnc)\s+.+-ComputerName\s+&quot;[\w\-]+\.(?:corp|local|internal)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Resolve-DnsName internal host</name>
+    <description>An internal DNS name is being resolved.</description>
+    <expression>(?i)Resolve-DnsName\s+&quot;[\w\-]+\.(?:corp|local|internal)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Send-MailMessage internal SMTP</name>
+    <description>An email is being sent using an internal SMTP server.</description>
+    <expression>(?i)Send-MailMessage\s+.+-SmtpServer\s+&quot;[\w\-]+\.(?:corp|local|internal)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Hardcoded proxy URL</name>
+    <description>A proxy URL used to perform a network connection has been found.</description>
+    <expression>(?i)http://[\w\-]+\.(?:corp|local|internal):\d+</expression>
+  </rule>
+  <rule severity="Low">
+    <name>VPN/firewall comment with IP</name>
+    <description>VPN connection information has been found in a comment.</description>
+    <expression>(?i)#.*(?:vpn|gateway|firewall|fw)\b</expression>
+  </rule>
+  <rule severity="Low">
+    <name>Bare SET command</name>
+    <description>All Windows environment variables are being displayed.</description>
+    <expression>(?i)^\s*set\s*$</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Get-ChildItem Env:</name>
+    <description>All Windows environment variables are being displayed.</description>
+    <expression>(?i)(?:Get-ChildItem|gci|dir|ls)\s+Env:</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>GetEnvironmentVariables() dump</name>
+    <description>All Windows environment variables are being displayed.</description>
+    <expression>(?i)GetEnvironmentVariables\s*\(\s*\)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>wsl printenv (no var)</name>
+    <description>All Linux environment variables are being displayed.</description>
+    <expression>(?i)wsl\s+printenv\s*$</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Env:* wildcard expansion</name>
+    <description>Environment variables are being expanded with a wildcard.</description>
+    <expression>(?i)Env:\*</expression>
+  </rule>
+  <rule severity="High">
+    <name>Write-Host/echo [DEBUG] + secret</name>
+    <description>A cleartext secret is being written to standard output.</description>
+    <expression>(?i)(?:Write-Host|echo)\s+.*\[?[Dd]ebug\]?.*\$\w*(?:pass|password|token|secret|key)\w*</expression>
+  </rule>
+  <rule severity="High">
+    <name>Write-Verbose GetNetworkCredential</name>
+    <description>Network credential information is being written to the PowerShell verbose stream.</description>
+    <expression>(?i)(?:Write-Verbose|wv)\s+.*GetNetworkCredential\(\)\.Password</expression>
+  </rule>
+  <rule severity="High">
+    <name>Write-Debug sensitive variable</name>
+    <description>A sensitive variable is being written to the PowerShell debug stream.</description>
+    <expression>(?i)(?:Write-Debug|wdb)\s+.*\$\w*(?:token|secret|key|cred|pass)\w*</expression>
+  </rule>
+  <rule severity="High">
+    <name>Out-File/Tee-Object with secret</name>
+    <description>A secret is being exported to a file.</description>
+    <expression>(?i)(?:Out-File|Tee-Object)\s+.*\$\w*(?:pass|token|secret|key|cred)\w*</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Start-Transcript (review)</name>
+    <description>A transcript has started.</description>
+    <expression>(?i)(?:Start-Transcript|stt)</expression>
+  </rule>
+  <rule severity="Low">
+    <name>$DebugPreference = Continue</name>
+    <description>Manual debug preferences have been set.</description>
+    <expression>(?i)\$DebugPreference\s*=\s*&quot;Continue&quot;</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Set-PSDebug -Trace 1/2</name>
+    <description>Tracing has been enabled for a PowerShell script.</description>
+    <expression>(?i)Set-PSDebug\s+-Trace\s+[12]</expression>
+  </rule>
+  <rule severity="High">
+    <name>echo %SECRET_VAR%</name>
+    <description>A variable potentially used for secrets is being displayed to host.</description>
+    <expression>(?i)echo\s+.*%(?:API_KEY|TOKEN|SECRET|PASSWORD|PASS|PWD)%</expression>
+  </rule>
+  <rule severity="High">
+    <name>BEGIN RSA/PKCS#8 PRIVATE KEY</name>
+    <description>A private key (RSA/PKCS#8) has been detected.</description>
+    <expression>-----BEGIN (?:RSA )?PRIVATE KEY-----</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>BEGIN CERTIFICATE</name>
+    <description>A certificate has been detected.</description>
+    <expression>-----BEGIN CERTIFICATE-----</expression>
+  </rule>
+  <rule severity="High">
+    <name>PFX/P12 base64 blob</name>
+    <description>A blob for a private key or certificate has been detected.</description>
+    <expression>(?i)(?:pfx|p12|certificate|cert)\b[^&quot;']{0,200}[A-Za-z0-9+/]{60,}={0,2}</expression>
+  </rule>
+  <rule severity="High">
+    <name>BEGIN OPENSSH PRIVATE KEY</name>
+    <description>An OpenSSH private key has been detected.</description>
+    <expression>-----BEGIN OPENSSH PRIVATE KEY-----</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>certutil -decode from stdin</name>
+    <description>A certificate or certificate vault is being decoded from standard input.</description>
+    <expression>(?i)certutil\s+.*-decode\s+-\b</expression>
+  </rule>
+  <rule severity="High">
+    <name>.Export() with hardcoded password</name>
+    <description>A hardcoded credential is being used in an export operation.</description>
+    <expression>(?i)\.Export\s*\([^,]+,\s*&quot;[^&quot;]+?&quot;\)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>HR/Payroll/Finance path</name>
+    <description>A network share containing confidential financial information is being accessed.</description>
+    <expression>(?i)\\(?:HR|Payroll|Finance|Legal|Exec|Board)\\</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Sensitive backup share name</name>
+    <description>A network share containing potentially sensitive information is being accessed.</description>
+    <expression>(?i)\\\\[\w\-]+\\[^\\]*(?:secret|confidential|private|sensitive)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Path to secrets directory</name>
+    <description>A secrets, password, or key directory is being accessed.</description>
+    <expression>(?i)(?:[A-za-z]:\\secrets\\|%APPDATA%\\.*[Cc]redential)</expression>
+  </rule>
+  <rule severity="High">
+    <name>Get-Content secrets file to output</name>
+    <description>The contents of a secrets, password, or key file are being written directly to the host console.</description>
+    <expression>(?i)(?:Get-Content|gc|cat|type)\s+.+(?:password|secret|token|key)\.\w+.*\|\s*Write-Host</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Log path with USERNAME/COMPUTERNAME</name>
+    <description>PowerShell transcripts are being created using user or computer names.</description>
+    <expression>(?i)(?:Transcript|log).+\$env:(?:USERNAME|COMPUTERNAME)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Path to cert/key file</name>
+    <description>An absolute or relative path to a certificate or key file is being accessed.</description>
+    <expression>(?i)[A-Za-z]:\\[^&quot;'\r\n]+\.(?:pfx|pem|key|p12|cer)</expression>
+  </rule>
+  <rule severity="Low">
+    <name>Comment with client/customer name</name>
+    <description>Information about a client, customer, associate, or account is being stored in a comment.</description>
+    <expression>(?i)(?:#|REM)\s+.+(?:client|customer|account|partner)\s+\w+</expression>
+  </rule>
+  <rule severity="High">
+    <name>Get-ItemProperty sensitive value</name>
+    <description>A potential cleartext credential or key is being queried.</description>
+    <expression>(?i)(?:Get-ItemProperty|gp)\s+.+(?:LicenseKey|ApiToken|Password|Secret)</expression>
+  </rule>
+  <rule severity="High">
+    <name>reg query sensitive value</name>
+    <description>A potential cleartext credential or key is being queried.</description>
+    <expression>(?i)reg\s+query\s+.+/v\s+(?:Password|Token|Key|Secret)</expression>
+  </rule>
+  <rule severity="High">
+    <name>reg add plaintext password</name>
+    <description>A potential cleartext credential is being added to a system registry.</description>
+    <expression>(?i)reg\s+add\s+.+/v\s+\S*[Pp]assword\S*\s+.+/d\s+\S+</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>HKCU Credentials hive access</name>
+    <description>The Credentials registry hive of the current user is being accessed.</description>
+    <expression>(?i)HKCU:[^&quot;']*[Cc]redential</expression>
+  </rule>
+  <rule severity="High">
+    <name>reg export HKLM\SECURITY</name>
+    <description>The SECURITY registry hive is being exported.</description>
+    <expression>(?i)reg\s+export\s+HKLM\SECURITY</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Get-WmiObject -Credential</name>
+    <description>A credential is being used to get a WMI/CIM object.</description>
+    <expression>(?i)(?:Get-WmiObject|gwmi)\s+.+-Credential\s+\$</expression>
+  </rule>
+  <rule severity="High">
+    <name>Invoke-WmiMethod inline Credential</name>
+    <description>A credential is being used to invoke a WMI/CIM method.</description>
+    <expression>(?i)(?:Invoke-WmiMethod|iwmi)\s+.+-Credential\s+\(</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>New-CimSession -Credential</name>
+    <description>A credential is being used to initialize a WMI/CIM session.</description>
+    <expression>(?i)New-CimSession\s+.+-Credential\b</expression>
+  </rule>
+  <rule severity="High">
+    <name>powershell -Command with secret</name>
+    <description>A cleartext credential is being wrapped during the execution of a command.</description>
+    <expression>(?i)powershell(?:\.exe)?\s+.*-Command\s+.*(?:token|secret|pass|key)</expression>
+  </rule>
+  <rule severity="High">
+    <name>cmd /c wrapping credential command</name>
+    <description>A cleartext credential is being wrapped during the execution of a command.</description>
+    <expression>(?i)cmd\s+/c\s+&quot;.*(?:password|/p\s+\S+)</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>msiexec PASSWORD=/LICENSEKEY=</name>
+    <description>An exposed password or license key is being used to activate software and might be used to pirate it if in the wrong hands.</description>
+    <expression>(?i)msiexec\s+.+(?:PASSWORD|LICENSEKEY|SERIALNUMBER)=\S+</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>gpupdate /logon: credential</name>
+    <description>A cleartext credential is being used to update the Group Policy.</description>
+    <expression>(?i)gpupdate\s+.+/logon:\S+</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Scriptblock with literal string arg</name>
+    <description>A PowerShell script block is being launched with string arguments potentially containing exposed credentials.</description>
+    <expression>(?i)&amp;\s*\{[^}]+param[^}]+\}\s+&quot;[^&quot;]{5,}&quot;</expression>
+  </rule>
+  <rule severity="High">
+    <name>Send-MailMessage inline Credential</name>
+    <description>Exposed credentials are being used to send an email.</description>
+    <expression>(?i)Send-MailMessage\s+.+-Credential\s+\(</expression>
+  </rule>
+  <rule severity="High">
+    <name>Invoke-RestMethod body password=</name>
+    <description>A PowerShell IRM command is being fired with cleartext credentials and/or secrets passed to a JSON body.</description>
+    <expression>(?i)(?:Invoke-RestMethod|irm)\s+.+-Body\s+.*(?:password|secret)=</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>Windows product key XXXXX-XXXXX</name>
+    <description>An operating system product key is being stored in cleartext and might be used to pirate it if in the wrong hands.</description>
+    <expression>[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}</expression>
+  </rule>
+  <rule severity="High">
+    <name>Comment with credential value</name>
+    <description>Cleartext credentials are being stored in script comments.</description>
+    <expression>(?i)(?:#|REM)\s+.*\b(?:password|pass|pwd|key|token)\b\s*(?:is|=|:)\s*\S+</expression>
+  </rule>
+  <rule severity="Medium">
+    <name>powershell -EncodedCommand base64</name>
+    <description>PowerShell is run using an encoded command that may be malicious.</description>
+    <expression>(?i)powershell(?:\.exe)?\s+.*-Enc(?:odedCommand)?\s+[A-Za-z0-9+/]{40,}</expression>
+  </rule>
+</rules>
