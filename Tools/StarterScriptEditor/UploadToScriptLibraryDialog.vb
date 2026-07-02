@@ -118,7 +118,7 @@ Public Class UploadToScriptLibraryDialog
         Return String.Format("Language: {0}{1}" & _
             "Name: {2}{1}" & _
             "Description: {3}{1}" & _
-            "Customizable? {4}{1}" & _
+            "Customizable: {4}{1}" & _
             "{5}", StarterScriptToUpload.Language, Environment.NewLine, StarterScriptToUpload.Name, _
                    StarterScriptToUpload.Description, IIf(StarterScriptToUpload.OptionsCustomizable, "Yes", "No"), StarterScriptToUpload.Code)
     End Function

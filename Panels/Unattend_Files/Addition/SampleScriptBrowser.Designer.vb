@@ -164,7 +164,7 @@ Partial Class SampleScriptBrowser
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
+        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts uploaded to the Library", "Scripts defined by the user"})
         Me.ComboBox1.Location = New System.Drawing.Point(15, 36)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(291, 21)
