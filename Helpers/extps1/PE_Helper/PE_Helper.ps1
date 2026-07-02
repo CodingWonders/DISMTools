@@ -2662,7 +2662,7 @@ function Start-ProjectDevelopment {
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
                 Write-Host "Beginning customizations..."
-                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true) -eq $false)
+                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true -includeSysDrivers $false) -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
                     Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null
