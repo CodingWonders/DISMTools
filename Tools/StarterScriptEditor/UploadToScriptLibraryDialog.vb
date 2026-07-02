@@ -22,6 +22,8 @@ Public Class UploadToScriptLibraryDialog
 
     Private cryptoHelper As New CryptographyHelper()
 
+    Private IsUploading As Boolean
+
     Public StarterScriptToUpload As StarterScript
 #If VBC_VER >= 10.0 Then        ' VS2010 introduced async/await
     Private Async Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -29,6 +31,13 @@ Public Class UploadToScriptLibraryDialog
             MessageBox.Show("You have not provided a valid GitHub API key.", "GitHub API Key", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
+        If IsUploading Then
+            MessageBox.Show("Wait until the current upload operation finishes.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Exit Sub
+        End If
+        IsUploading = True
+        Enabled = False
+        Cursor = Cursors.WaitCursor
         Dim GHClient As New GitHubClient(TextBox1.Text)
         Dim GHUserName As String = Await GHClient.GetAuthenticatedUserNameAsync()
         Dim IsCWS As Boolean = GHUserName = RepoOwner
@@ -46,10 +55,14 @@ Public Class UploadToScriptLibraryDialog
         Dim PullRequestUrl As String = Await GHClient.CreatePullRequestAsync(RepoOwner, RepoName, String.Format("Starter Script Addition: {0}{1}{0}", ControlChars.Quote, StarterScriptToUpload.Name),
                                                                              String.Format("{0}{1}", If(Not IsCWS, String.Format("{0}:", GHUserName), ""), TargetBranch),
                                                                              "main", "This is my contribution to the library.")
+        IsUploading = False
+        Enabled = True
+        Cursor = Cursors.Arrow
         If PullRequestUrl <> "" Then
             Process.Start(PullRequestUrl)
             MessageBox.Show(PullRequestUrl, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
+        If CheckBox3.Checked Then EncryptApiKey()
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -176,6 +189,10 @@ Public Class UploadToScriptLibraryDialog
     End Sub
 
     Private Sub UploadToScriptLibraryDialog_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+        If IsUploading Then
+            e.Cancel = True
+            Exit Sub
+        End If
         TextBox1.Text = ""
     End Sub
 
