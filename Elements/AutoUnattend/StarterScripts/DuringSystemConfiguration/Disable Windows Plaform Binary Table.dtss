@@ -1,0 +1,6 @@
+﻿Language: Batch
+Name: Disable Windows Platform Binary Table (WPBT)
+Description: This script disables the Windows Platform Binary Table, which can be used by computer manufacturers to preload applications that you may not need.
+Customizable: No
+@ECHO OFF
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /F /V DisableWpbtExecution /T REG_DWORD /D 1

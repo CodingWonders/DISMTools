@@ -590,7 +590,8 @@ Public Class MainForm
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -613,6 +614,10 @@ Public Class MainForm
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
+        DynaLog.LogMessage("- DynaLog Log Viewer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- DISMTools Theme Designer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("  Starter Script Library: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software. Testing made by Abs and DaleCooper")
         DynaLog.BeginLogging()
         DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
     End Sub
@@ -14848,8 +14853,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
             ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ImgInfoSaveDlg.OnlineMode = OnlineManagement
-            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.OnlineMode = False
+            ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo

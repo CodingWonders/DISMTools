@@ -3806,7 +3806,11 @@ Public Class ProgressPanel
                 CommandArgs &= " /packagename=" & featParentPkgName
             End If
             If featisSourceSpecified And featSource <> "" Then
-                CommandArgs &= " /source=" & Quote & featSource & Quote
+                ' Like image captures, feature enablements will fail if the source is in the root
+                ' of a volume and is quoted.
+                Dim SourceIsRooted As Boolean = Path.GetPathRoot(featSource) = featSource
+                Dim SourcePath As String = If(SourceIsRooted, featSource, Quote & featSource & Quote)
+                CommandArgs &= " /source=" & SourcePath
             End If
             If featParentIsEnabled Then
                 CommandArgs &= " /all"
@@ -4330,7 +4334,11 @@ Public Class ProgressPanel
                                    "- Use different source? " & If(UseCompRepairSource, "Yes (" & Quote & ComponentRepairSource & Quote & ")", "No") & CrLf &
                                    "- Limit Windows Update access? " & If(LimitWUAccess And OnlineMgmt, "Yes", If(LimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) &
                                    If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", ""))
-                CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
+                ' Like image captures, cleanup/comp store restore will fail if the source is in the root
+                ' of a volume and is quoted.
+                Dim SourceIsRooted As Boolean = Path.GetPathRoot(ComponentRepairSource) = ComponentRepairSource
+                Dim SourcePath As String = If(SourceIsRooted, ComponentRepairSource, Quote & ComponentRepairSource & Quote)
+                CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
         Select Case Language
@@ -5238,7 +5246,11 @@ Public Class ProgressPanel
             End Try
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
             If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
-                CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
+                ' Like image captures, capability additions will fail if the source is in the root
+                ' of a volume and is quoted.
+                Dim SourceIsRooted As Boolean = Path.GetPathRoot(capAdditionSource) = capAdditionSource
+                Dim SourcePath As String = If(SourceIsRooted, capAdditionSource, Quote & capAdditionSource & Quote)
+                CommandArgs &= " /source=" & SourcePath
             End If
             If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
             RunProcess(DismProgram, CommandArgs)

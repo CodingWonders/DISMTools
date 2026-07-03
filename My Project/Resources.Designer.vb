@@ -2265,15 +2265,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes in preview releases
+        '''- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
+        '''- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
+        '''- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
         '''
-        '''- Fixed an issue where removed features would appear in the wrong place
-        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
-        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
-        '''- Fixed some HiDPI issues
-        '''- Fixed an issue where, when managing the active installation, the v [resto de la cadena truncado]&quot;;.
+        '''New features:
+        '''
+        '''- Unattended answer file conflict resolution has been p [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

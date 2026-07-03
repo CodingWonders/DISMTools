@@ -778,10 +778,11 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
+            $codename = "infinity_mk2"
             if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
-                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$(Get-Content -Path "$((Get-Location).Path)\version")"
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$(Get-Content -Path "$((Get-Location).Path)\version")"
             } else {
-                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$((Get-Date).ToString('yyMMdd-HHmm'))"
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$((Get-Date).ToString('yyMMdd-HHmm'))"
             }
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Registry changed."
@@ -909,6 +910,8 @@ function Start-PECustomization
                     $winpeDriverRootPath = "$imagePath\CWS_DRVS"
                     New-Item -Path "$winpeDriverRootPath" -ItemType Directory | Out-Null
                     New-Item -Path "$imagePath\DT_InstDrvs.txt" | Out-Null
+                    # WDSHC rescans and re-adds the drivers, which we don't want.
+                    New-Item -Path "$imagePath\essential_drivers_exported" | Out-Null
                     Copy-Item -Path "$rootDriverPath\*.*" -Destination "$winpeDriverRootPath" -Recurse -Force
                     foreach ($successfulDriver in $successfulDrivers) {
                         $successfulDriver.Replace("$env:SYSTEMDRIVE", "X:") | Out-File "$imagePath\DT_InstDrvs.txt" -Encoding utf8 -Append
@@ -2659,7 +2662,7 @@ function Start-ProjectDevelopment {
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
                 Write-Host "Beginning customizations..."
-                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true) -eq $false)
+                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true -includeSysDrivers $false) -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
                     Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null

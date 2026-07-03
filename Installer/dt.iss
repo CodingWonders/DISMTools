@@ -104,8 +104,7 @@ Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\IniFileParser.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Markdig.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
-Source: ".\files\Microsoft.Dism.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
-Source: ".\files\Microsoft.WindowsAPI*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\Microsoft*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Presentation*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Scintilla.NET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
@@ -114,6 +113,7 @@ Source: ".\files\System.Co*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Design.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Drawing.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.IO.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.IO.Pipelines.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Management.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Memory.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Net.Http.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
@@ -123,6 +123,9 @@ Source: ".\files\System.Runtime.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Security*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.ServiceModel.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Text.*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Threading.Tasks.Extensions.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.ValueTuple.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Windows.Forms.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.Linq.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion

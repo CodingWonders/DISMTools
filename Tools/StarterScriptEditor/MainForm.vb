@@ -23,19 +23,6 @@ Public Class MainForm
 
     Private Const SSECodeName As String = "Luffy"
 
-    Private Enum ScriptVersion As Integer
-        ''' <summary>
-        ''' Starter scripts for the DISMTools 0.7 Series (0.7.2, 0.7.3)
-        ''' </summary>
-        ''' <remarks></remarks>
-        Seven = 0
-        ''' <summary>
-        ''' Starter scripts for the DISMTools 0.8 Series
-        ''' </summary>
-        ''' <remarks></remarks>
-        Infinity = 1
-    End Enum
-
     Private ScriptVer As ScriptVersion = ScriptVersion.Infinity
 
     Private Sub ChangeMenuItemColors(ByVal bgColor As Color, ByVal fgColor As Color, ByVal itemCollection As ToolStripItemCollection)
@@ -119,7 +106,7 @@ Public Class MainForm
                 End If
             ElseIf arg.StartsWith("/dtss", StringComparison.OrdinalIgnoreCase) Then
                 ' This parameter determines the path to a DTSS
-                Dim dtssPath As String = arg.Replace("/dtss=", "")
+                Dim dtssPath As String = Regex.Replace(arg, "\/dtss=", "", RegexOptions.IgnoreCase)
 
                 If File.Exists(dtssPath) Then
                     LoadScriptFile(dtssPath)
@@ -127,6 +114,11 @@ Public Class MainForm
                     ' Loading the script file will make the modification factor true; we don't want that
                     Modified = False
                 End If
+            ElseIf arg.StartsWith("/convert", StringComparison.OrdinalIgnoreCase) Then
+                Dim sourcePath As String = Regex.Replace(arg, "\/convert=", "", RegexOptions.IgnoreCase)
+
+                BulkScriptConversionDialog.SourceScriptPath = sourcePath
+                BulkScriptConversionDialog.ShowDialog()
             End If
         Next
     End Sub
@@ -157,8 +149,9 @@ Public Class MainForm
 
         roMode = False
         ToolStripButton5.Enabled = False
-        Dim scriptFileContents As String() = File.ReadAllLines(ScriptFile)
 
+        ' Read the file here first so we can guess the version
+        Dim scriptFileContents As String() = File.ReadAllLines(ScriptFile)
         ScriptVer = ScriptVersion.Seven
         Dim CodeBlockStartingIndex As Integer = 3
         If scriptFileContents(3).StartsWith("Customizable:", StringComparison.OrdinalIgnoreCase) Then
@@ -166,26 +159,8 @@ Public Class MainForm
             CodeBlockStartingIndex = 4
         End If
 
-        ' Script Format:
-        ' <Language>
-        ' <Name>
-        ' <Description>
-        ' <Customizable> (0.8+)
-        ' <code>
-        Dim scriptLang As String = scriptFileContents(0).Replace("Language: ", "")
-        Dim scriptName As String = scriptFileContents(1).Replace("Name: ", "")
-        Dim scriptDescription As String = scriptFileContents(2).Replace("Description: ", "")
-        Dim scriptOptionsCustomizable As Boolean = scriptFileContents(3).Equals("Customizable: Yes", StringComparison.OrdinalIgnoreCase)
-#If VBC_VER >= 9.0 Then
-        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, New List(Of String)(scriptFileContents).Skip(CodeBlockStartingIndex).ToArray()), scriptOptionsCustomizable)
-#Else
-        ' NDPv2 and earlier do not support LINQ statements.
-        Dim ScriptCodeLines As New List(Of String)
-        For x As Integer = CodeBlockStartingIndex To scriptFileContents.Length - 1
-            ScriptCodeLines.Add(scriptFileContents(x))
-        Next
-        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, ScriptCodeLines.ToArray()), scriptOptionsCustomizable)
-#End If
+        CurrentScript = StarterScriptHelper.LoadScriptFile(ScriptFile, CodeBlockStartingIndex)
+
         SavedScriptPath = ScriptFile
         Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
 
@@ -214,24 +189,10 @@ Public Class MainForm
         End If
 
         Try
-            Dim customizableStr As String
-            If CurrentScript.OptionsCustomizable Then
-                customizableStr = "Yes"
-            Else
-                customizableStr = "No"
-            End If
-
             If Not DefaultScriptVersion AndAlso ScriptVer = ScriptVersion.Seven Then
-                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
-                "Name: {2}{1}" & _
-                "Description: {3}{1}" & _
-                "{4}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, CurrentScript.Code), UTF8)
+                If Not StarterScriptHelper.SaveStarterScript(ScriptFile, CurrentScript, ScriptVersion.Seven) Then Throw New Exception()
             Else
-                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
-                "Name: {2}{1}" & _
-                "Description: {3}{1}" & _
-                "Customizable: {4}{1}" & _
-                "{5}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, customizableStr, CurrentScript.Code), UTF8)
+                If Not StarterScriptHelper.SaveStarterScript(ScriptFile, CurrentScript, ScriptVersion.Infinity) Then Throw New Exception()
             End If
 
             SavedScriptPath = ScriptFile
@@ -299,6 +260,12 @@ Public Class MainForm
         UpdateCaretPosition()
 
         Modified = False
+
+#If VBC_VER < 10.0 Then
+#If Not Debug Then
+        ToolStripButton9.Visible = False
+#End If
+#End If
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
@@ -444,7 +411,7 @@ Public Class MainForm
         UpdateCaretPosition()
     End Sub
 
-    Private Sub UpdateCaretPosition()
+    Public Sub UpdateCaretPosition()
         Dim caret As Integer = TextBox3.SelectionStart, _
             line As Integer = TextBox3.GetLineFromCharIndex(caret), _
             column As Integer = caret - TextBox3.GetFirstCharIndexFromLine(line)
@@ -487,6 +454,14 @@ Public Class MainForm
                         ' Save item
                         ToolStripButton3.PerformClick()
                     End If
+#If VBC_VER >= 10.0 Then
+                Case Keys.U
+                    ' Upload to Script Library
+                    ToolStripButton9.PerformClick()
+#End If
+                Case Keys.I
+                    ' Inspect Code
+                    ToolStripButton10.PerformClick()
             End Select
         End If
     End Sub
@@ -593,5 +568,19 @@ Public Class MainForm
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         TextBox3.Text = Regex.Replace(TextBox3.Text, ControlChars.Tab, "    ")
+    End Sub
+
+    Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton9.Click
+        AIResults.Close()
+        UploadToScriptLibraryDialog.StarterScriptToUpload = CurrentScript
+        UploadToScriptLibraryDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub ToolStripButton10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton10.Click
+        AIResults.Close()
+        InspectionProgressDialog.ScriptCode = CurrentScript.Code
+        InspectionProgressDialog.ShowDialog(Me)
+        AIResults.Results = InspectionProgressDialog.InspectionResults
+        AIResults.Show()
     End Sub
 End Class
