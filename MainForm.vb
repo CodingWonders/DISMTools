@@ -14853,8 +14853,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
             ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ImgInfoSaveDlg.OnlineMode = OnlineManagement
-            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.OnlineMode = False
+            ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
