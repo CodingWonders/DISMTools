@@ -229,6 +229,7 @@ Public Class GetAppxPkgInfoDlg
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
+        WizardBtn.Image = GetGlyphResource("assistant")
         If SplitContainer2.SplitterDistance = 440 Then
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
@@ -278,6 +279,8 @@ Public Class GetAppxPkgInfoDlg
         AppxHelper.ClearRootPaths()
         AppxHelper.SetRootPaths(MainForm.MountDir)
         ImageTaskHeader1.HideWindowTitle(handle)
+
+        WizardBtn.Enabled = MainForm.OnlineManagement
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
@@ -692,5 +695,15 @@ Public Class GetAppxPkgInfoDlg
             e.SuppressKeyPress = True
             SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
+    End Sub
+
+    Private Sub WizardBtn_Click(sender As Object, e As EventArgs) Handles WizardBtn.Click
+        If AppxFilterAssistantDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            SearchBox1.Text = AppxFilterAssistantDialog.AppliedQuery
+        End If
+    End Sub
+
+    Private Sub WizardBtn_MouseHover(sender As Object, e As EventArgs) Handles WizardBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Build query with the Assistant...")
     End Sub
 End Class

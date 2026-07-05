@@ -63,6 +63,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.WizardBtn = New System.Windows.Forms.Button()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -132,6 +133,7 @@ Partial Class GetAppxPkgInfoDlg
         'SearchPanel
         '
         Me.SearchPanel.Controls.Add(Me.Panel1)
+        Me.SearchPanel.Controls.Add(Me.WizardBtn)
         Me.SearchPanel.Controls.Add(Me.SearchPic)
         Me.SearchPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.SearchPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -146,7 +148,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(24, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(416, 24)
+        Me.Panel1.Size = New System.Drawing.Size(392, 24)
         Me.Panel1.TabIndex = 3
         '
         'SearchBox1
@@ -156,7 +158,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
         Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.Size = New System.Drawing.Size(381, 18)
         Me.SearchBox1.TabIndex = 1
         '
         'SearchPic
@@ -549,6 +551,19 @@ Partial Class GetAppxPkgInfoDlg
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 13
         '
+        'WizardBtn
+        '
+        Me.WizardBtn.Dock = System.Windows.Forms.DockStyle.Right
+        Me.WizardBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+        Me.WizardBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray
+        Me.WizardBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.WizardBtn.Image = Global.DISMTools.My.Resources.Resources.assistant_light
+        Me.WizardBtn.Location = New System.Drawing.Point(416, 0)
+        Me.WizardBtn.Name = "WizardBtn"
+        Me.WizardBtn.Size = New System.Drawing.Size(24, 24)
+        Me.WizardBtn.TabIndex = 5
+        Me.WizardBtn.UseVisualStyleBackColor = True
+        '
         'GetAppxPkgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -626,5 +641,6 @@ Partial Class GetAppxPkgInfoDlg
     Friend WithEvents SearchBox1 As DISMTools.SearchBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents WizardBtn As System.Windows.Forms.Button
 
 End Class
