@@ -150,7 +150,7 @@ Public Class MainForm
 
     Dim IsCompatible As Boolean = True
 
-    Dim SysVer As Version
+    Dim SysVer As New Version
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
     Public SkipUpdates As Boolean                                        ' Same for this one
