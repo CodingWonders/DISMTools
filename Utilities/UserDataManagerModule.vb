@@ -15,7 +15,8 @@ Module UserDataManagerModule
     Private UserDataMapping As New Dictionary(Of String, String) From {
         {"dtpe_backgrounds", "bin\extps1\PE_Helper\backgrounds"},
         {"themes", "bin\themes"},
-        {"starter_scripts", "AutoUnattend\StarterScripts\UserScripts"}
+        {"starter_scripts", "AutoUnattend\StarterScripts\UserScripts"},
+        {"sse_config_rules", "Tools\StarterScriptEditor"}
     }
 
     ''' <summary>

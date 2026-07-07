@@ -2356,7 +2356,7 @@ IF %25COPY_DOCS%25=="Yes" (
 IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	echo Creating sample userdata structure...
 	IF NOT EXIST "userdata" (md "userdata")
-	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts) DO (
+	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts sse_config_rules) DO (
 		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
 	)
 )

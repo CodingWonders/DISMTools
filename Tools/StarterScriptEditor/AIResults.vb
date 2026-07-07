@@ -157,4 +157,8 @@ Public Class AIResults
     Private Sub ToggleViolationFilters(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbLowViolations.CheckedChanged, cbMediumViolations.CheckedChanged, cbHighViolations.CheckedChanged
         FilterViolations(cbHighViolations.Checked, cbMediumViolations.Checked, cbLowViolations.Checked)
     End Sub
+
+    Private Sub CustomRulesButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CustomRulesButton.Click
+        AICustomRuleViewer.Show()
+    End Sub
 End Class

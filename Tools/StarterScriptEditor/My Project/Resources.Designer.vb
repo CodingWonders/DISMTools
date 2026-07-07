@@ -77,6 +77,16 @@ Namespace My.Resources
             End Get
         End Property
         
+        '''<summary>
+        '''  Looks up a localized string similar to $env:APIKEY = &quot;YOUR_API_KEY_HERE&quot;
+        '''set &quot;API_URI=https://your-service-here.com/API_KEY&quot;.
+        '''</summary>
+        Friend ReadOnly Property ApiKeyLeakTemplate() As String
+            Get
+                Return ResourceManager.GetString("ApiKeyLeakTemplate", resourceCulture)
+            End Get
+        End Property
+        
         Friend ReadOnly Property bottomleft() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("bottomleft", resourceCulture)
@@ -220,6 +230,39 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("openfile", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Character Classes:
+        '''.        Any character except newline
+        '''\d       Digit [0-9]
+        '''\D       Non-digit
+        '''\w       Word character [A-Za-z0-9_]
+        '''\W       Non-word character
+        '''\s       Whitespace
+        '''\S       Non-whitespace
+        '''[abc]    Any of a, b, or c
+        '''[^abc]   Not a, b, or c
+        '''[a-z]    Lowercase letter
+        '''
+        '''Quantifiers:
+        '''
+        '''* 0 or more
+        '''- 1 or more
+        '''
+        '''?        0 or 1
+        '''{n}      Exactly n times
+        '''{n,}     n or more times
+        '''{n,m}    Between n and m times
+        '''
+        '''Anchors:
+        '''^        Start of string/line
+        '''$        End of string/line        ''' [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property RegexCheatsheet() As String
+            Get
+                Return ResourceManager.GetString("RegexCheatsheet", resourceCulture)
             End Get
         End Property
         
