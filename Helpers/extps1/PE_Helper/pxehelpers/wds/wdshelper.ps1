@@ -879,12 +879,12 @@ function Start-OSApplication {
             # Check if the image already has an answer file in its panther directory. If it does, then that counts
             # as a conflict that must be resolved.
             if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
+                Show-SectionMessage -sectionTitle "Select answer file to deploy" -sectionDescription "Setup has detected answer files in both your network and the Windows image you are deploying."
                 # CONFLICT!
                 $netUnattendInfo = Get-Item -Path "$finalAnswerPath"
                 $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
                 # The user may have used a policy to handle this conflict automatically. Guess it and use it.
                 $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
-                Write-Host "`n`n"
                 Write-Host "Unattended answer files have been found in both the network and the Windows image that you are deploying. Specify "
                 Write-Host "how you want to proceed, but you may encounter unexpected results if you choose the wrong file.`n"
                 Write-Host "    Answer file in the network:`n"
@@ -937,6 +937,9 @@ function Start-OSApplication {
 
                             $decided = $true
                         } until ($decided)
+                        
+                        # Back on track for the messages
+                        Show-SectionMessage -sectionTitle "Initializing the Windows image" -sectionDescription "Please wait while Setup initializes your installation configuration."
 
                         # If we chose the one from the WIM, we cancel the operation by "throwing" it out the window
                         if ($decision -eq "WIM") {
@@ -957,7 +960,7 @@ function Start-OSApplication {
             }
         }
     } catch {
-
+        
     }
     $driverPath = "$env:SYSTEMDRIVE\DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
