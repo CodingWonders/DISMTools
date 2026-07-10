@@ -336,6 +336,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Panels\BDE\LockVolumeDialog.Designer.vb">
+      <DependentUpon>LockVolumeDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\BDE\LockVolumeDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\BDE\UnlockVolumeDialog.Designer.vb">
+      <DependentUpon>UnlockVolumeDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\BDE\UnlockVolumeDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\ConfigLists\AddListEntryDlg.Designer.vb">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
     </Compile>
@@ -1071,6 +1083,12 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\BDE\LockVolumeDialog.resx">
+      <DependentUpon>LockVolumeDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\BDE\UnlockVolumeDialog.resx">
+      <DependentUpon>UnlockVolumeDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\ConfigLists\AddListEntryDlg.resx">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
@@ -2216,6 +2234,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Tools\BDELib\BDELib.vbproj">
+      <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
+      <Name>BDELib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

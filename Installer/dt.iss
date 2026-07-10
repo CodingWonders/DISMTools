@@ -100,6 +100,7 @@ Name: "autoreload"; Description: "Install automatic image reload service"; Group
 [Files]
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\ActiveDirectoryObjectPicker.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\BDELib.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\IniFileParser.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion
@@ -180,6 +181,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; Value
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "AppxRemovalDisplayNameFormat"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PreventSystemFromSleeping"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "HumanizeDates"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "LockUnlockedVolumes"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
