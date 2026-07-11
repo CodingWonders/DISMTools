@@ -299,6 +299,8 @@
     <Compile Include="Elements\InfinityHome\InfinityFact.vb" />
     <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\IniParserConfigurators\SettingsParserConfiguration.vb" />
+    <Compile Include="Elements\ISOCreation\IsoCreationJobManager.vb" />
+    <Compile Include="Elements\ISOCreation\IsoCreationTask.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">

@@ -14882,7 +14882,6 @@ Public Class MainForm
     End Sub
 
     Private Sub CreateDiscImageWithThisFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageWithThisFileToolStripMenuItem.Click
-        If ISOCreator.BackgroundWorker1.IsBusy Then Exit Sub
         DynaLog.LogMessage("Opening ISO creator...")
         ISOCreator.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
         If ISOCreator.Visible Then
