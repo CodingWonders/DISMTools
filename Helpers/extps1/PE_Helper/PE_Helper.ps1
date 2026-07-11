@@ -918,7 +918,8 @@ function Start-PECustomization
                         if ((Start-DismCommand -Verb Add-Driver -ImagePath "$imagePath" -DriverAdditionFile "$($infFile.FullName)" -DriverAdditionRecurse $false) -eq $true)
                         {
                             $successfulInstallations++
-                            $successfulDrivers.Add("$($infFile.FullName)")
+                            $driverFilePath = $infFile.FullName.Replace("$taskRoot\Drivers", "$($env:SYSTEMDRIVE)\CWS_DRVS")
+                            $successfulDrivers.Add("$driverFilePath")
                         }
                         else
                         {
