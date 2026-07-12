@@ -9257,7 +9257,6 @@ Public Class MainForm
                 Label44.Text = "(Installazione offline)"
         End Select
         Panel2.Visible = False
-        ManageOfflineInstallationToolStripMenuItem.Enabled = False
         DynaLog.LogMessage("Setting mount directory to disk...")
         MountDir = ImageDrive
         DynaLog.LogMessage("Beginning background processes...")
@@ -9409,7 +9408,6 @@ Public Class MainForm
         Button29.Enabled = True
         Panel2.Visible = True
         BGProcDetails.Hide()
-        ManageOfflineInstallationToolStripMenuItem.Enabled = True
         DynaLog.LogMessage("Clearing completion state of background processes...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()

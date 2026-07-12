@@ -8,14 +8,15 @@ Public Class OfflineInstDriveLister
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Try
-            MainForm.InBitLockerMode = False
             DynaLog.LogMessage("Selected drive: " & ListView1.FocusedItem.SubItems(0).Text)
 
             Dim SelectedDrive As DriveInfo = DIList.ElementAtOrDefault(ListView1.FocusedItem.Index)
             If SelectedDrive Is Nothing Then Exit Sub
 
+            Dim IsEncryptedWithBitLocker As Boolean = GetDriveFSType(SelectedDrive) = "BITLOCKER"
+
             ' If it is encrypted with BitLocker then we ask for the key
-            If GetDriveFSType(SelectedDrive) = "BITLOCKER" Then
+            If IsEncryptedWithBitLocker Then
                 UnlockVolumeDialog.DriveLetter = SelectedDrive.Name
                 If UnlockVolumeDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
 
@@ -24,6 +25,7 @@ Public Class OfflineInstDriveLister
                     DynaLog.LogMessage("The selected drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
                     LockVolumeDialog.DriveLetter = SelectedDrive.Name
                     LockVolumeDialog.ShowDialog(Me)
+                    MainForm.InBitLockerMode = False
                     Exit Sub
                 Else
                     DynaLog.LogMessage("The selected drive contains ntoskrnl. Checking version...")
@@ -33,12 +35,16 @@ Public Class OfflineInstDriveLister
                         DynaLog.LogMessage("The specified drive contains Windows Vista or an earlier version of Windows.")
                         LockVolumeDialog.DriveLetter = SelectedDrive.Name
                         LockVolumeDialog.ShowDialog(Me)
+                        MainForm.InBitLockerMode = False
                         Exit Sub
                     End If
                 End If
-
-                MainForm.InBitLockerMode = True
             End If
+
+            ' If we're already in offline installation management mode, leave it and enter it again
+            If MainForm.OfflineManagement Then MainForm.EndOfflineManagement()
+            MainForm.InBitLockerMode = IsEncryptedWithBitLocker
+
             MainForm.drivePath = SelectedDrive.Name
         Catch ex As Exception
 
