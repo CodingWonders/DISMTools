@@ -894,7 +894,7 @@ function Start-PECustomization
                 foreach ($sysDriver in $sysDrivers) {
                     try {
                         $curDrvIndex = $sysDrivers.IndexOf($sysDriver)
-                        Write-Progress -Activity "Installing system drivers..." -Status "Exporting driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($sysDriver.OriginalFileName))`"..." -PercentComplete ((($curDrvIndex / $drvCount) * 100) / 2)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Exporting driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($sysDriver.OriginalFileName))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                         $sysDriverSourcePath = [IO.Path]::GetDirectoryName("$($sysDriver.OriginalFileName)")
                         $sysDriverTargetPath = "$rootDriverPath\$([IO.Path]::GetFileName($sysDriver.OriginalFileName))_$([Random]::new().Next([int]::MaxValue))"
                         New-Item -Path "$sysDriverTargetPath" -ItemType Directory | Out-Null
@@ -914,7 +914,7 @@ function Start-PECustomization
                 foreach ($infFile in $infFiles) {
                     try {
                         $curDrvIndex = $infFiles.IndexOf($infFile)
-                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (50 + ((($curDrvIndex / $drvCount) * 100) / 2))
+                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                         if ((Start-DismCommand -Verb Add-Driver -ImagePath "$imagePath" -DriverAdditionFile "$($infFile.FullName)" -DriverAdditionRecurse $false) -eq $true)
                         {
                             $successfulInstallations++
