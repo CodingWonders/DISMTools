@@ -595,7 +595,8 @@ Public Class MainForm
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC")
+                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC" & CrLf &
+                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software.")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -620,8 +621,8 @@ Public Class MainForm
         DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
         DynaLog.LogMessage("- DynaLog Log Viewer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- DISMTools Theme Designer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("  Starter Script Library: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software. Testing made by Abs and DaleCooper")
+        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Starter Script Library: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software. Testing made by Abs and DaleCooper")
         DynaLog.BeginLogging()
         DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
     End Sub

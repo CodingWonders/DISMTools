@@ -1,3 +1,6 @@
 [submodule "tour"]
 	path = tour
 	url = https://github.com/CodingWonders/dt_tour
+[submodule "Helpers/extps1/PE_Helper/tools/BDE-GUI"]
+	path = Helpers/extps1/PE_Helper/tools/BDE-GUI
+	url = https://github.com/CodingWonders/BDE-GUI

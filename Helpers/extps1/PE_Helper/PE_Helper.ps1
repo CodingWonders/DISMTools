@@ -755,6 +755,8 @@ function Start-PECustomization
                 Write-Host "Copying Driver Installation Module..."
                 New-Item -Path "$imagePath\Tools\DIM" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$imagePath\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                New-Item -Path "$imagePath\Tools\BDE-GUI" -ItemType Directory | Out-Null
+                Copy-Item -Path "$((Get-Location).Path)\tools\BDE-GUI\*" -Destination "$imagePath\Tools\BDE-GUI" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Write-Host "First-party tools have been successfully copied."
             }
             catch

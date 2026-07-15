@@ -2347,6 +2347,12 @@ IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.ex
 	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
 )
 
+:: Copy BDE-GUI utilities
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI" (
+	MD "bin\extps1\PE_Helper\tools\BDE-GUI"
+	FOR %25%25A IN (ps1 bat cmd) DO xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI\*.%25%25A" "bin\extps1\PE_Helper\tools\BDE-GUI" /CEHYI
+)
+
 :: Copy Tour
 IF EXIST "$(SolutionDir)tour" (
 	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
