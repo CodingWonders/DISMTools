@@ -619,7 +619,7 @@ Public Class MainForm
         DynaLog.LogMessage("- DISMTools Theme Designer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
         DynaLog.BeginLogging()
-        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
+        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S --------")
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
