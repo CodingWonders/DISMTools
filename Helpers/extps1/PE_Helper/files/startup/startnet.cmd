@@ -166,7 +166,7 @@ if %debug% lss 2 (
 	doskey StartDim=cmd /c "%sysdrive%\dimstart.bat"
 	doskey netinit=cmd /c "%sysdrive%\scripts\initializenetwork.bat"
 	doskey keyboardchange=powershell -noprofile -file "%sysdrive%\ChangeKeyboardLayout.ps1"
-	doskey bdemgr=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat"
+	doskey bdemgr=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" $*
 	doskey bdelock=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" lock
 	doskey bdeunlock=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" unlock
 	exit /b
