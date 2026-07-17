@@ -991,18 +991,17 @@ A "contributor" is any person that distributes its contribution under this licen
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
-- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
-- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
+- Fixed issues with some image tasks targeting rooted paths
 
 New features:
 
-- Unattended answer file conflict resolution has been ported to the WDS Helper Client
-- The "Disable Windows Platform Binary Table" starter script has been introduced
-- The Starter Script Editor has seen many improvements:
-  - Bulk script conversion as a command-line argument, to convert starter scripts created for DISMTools 0.7.3 to the new format
-  - Upload capabilities to the Starter Script Library
-  - Rule-based Automated Inspection for script security</value>
+- You can now create multiple ISO files at the same time
+- The set of wallpapers for the Preinstallation Environment has been updated to reflect the 4th anniversary of the project
+- Tooling for locking and unlocking BitLocker encrypted volumes has been introduced
+- You can now unlock BitLocker encrypted volumes from the offline installation management mode
+- You can now switch between offline installations more quickly
+- You can now fillter AppX package information in an online system based on its registration status using the "regto:" filter
+- Markdig has been updated to version 1.3.2</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -35,11 +35,11 @@ Partial Class SplashScreen
         '
         Me.LogoPic.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.LogoPic.BackColor = System.Drawing.Color.Transparent
-        Me.LogoPic.Image = Global.DISMTools.My.Resources.Resources.dt_branding
-        Me.LogoPic.Location = New System.Drawing.Point(12, 36)
+        Me.LogoPic.Image = Global.DISMTools.My.Resources.Resources.dt_branding_preview
+        Me.LogoPic.Location = New System.Drawing.Point(24, 12)
         Me.LogoPic.Name = "LogoPic"
-        Me.LogoPic.Size = New System.Drawing.Size(776, 119)
-        Me.LogoPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.LogoPic.Size = New System.Drawing.Size(752, 62)
+        Me.LogoPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.LogoPic.TabIndex = 0
         Me.LogoPic.TabStop = False
         '

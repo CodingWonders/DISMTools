@@ -84,7 +84,7 @@
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Markdig, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.3.1\lib\net462\Markdig.dll</HintPath>
+      <HintPath>packages\Markdig.1.3.2\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -299,6 +299,8 @@
     <Compile Include="Elements\InfinityHome\InfinityFact.vb" />
     <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\IniParserConfigurators\SettingsParserConfiguration.vb" />
+    <Compile Include="Elements\ISOCreation\IsoCreationJobManager.vb" />
+    <Compile Include="Elements\ISOCreation\IsoCreationTask.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -335,6 +337,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Panels\BDE\LockVolumeDialog.Designer.vb">
+      <DependentUpon>LockVolumeDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\BDE\LockVolumeDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\BDE\UnlockVolumeDialog.Designer.vb">
+      <DependentUpon>UnlockVolumeDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\BDE\UnlockVolumeDialog.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\ConfigLists\AddListEntryDlg.Designer.vb">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
@@ -443,6 +457,12 @@
       <DependentUpon>GetFeatureInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\AppxFilterAssistantDialog.Designer.vb">
+      <DependentUpon>AppxFilterAssistantDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\AppxFilterAssistantDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.Designer.vb">
@@ -1066,6 +1086,12 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\BDE\LockVolumeDialog.resx">
+      <DependentUpon>LockVolumeDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\BDE\UnlockVolumeDialog.resx">
+      <DependentUpon>UnlockVolumeDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\ConfigLists\AddListEntryDlg.resx">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
     </EmbeddedResource>
@@ -1119,6 +1145,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Features\GetFeatureInfo.resx">
       <DependentUpon>GetFeatureInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\AppxFilterAssistantDialog.resx">
+      <DependentUpon>AppxFilterAssistantDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.resx">
       <DependentUpon>CapabilityFilterAssistantDialog.vb</DependentUpon>
@@ -2208,6 +2237,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Tools\BDELib\BDELib.vbproj">
+      <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
+      <Name>BDELib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
@@ -2312,6 +2347,12 @@ IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.ex
 	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
 )
 
+:: Copy BDE-GUI utilities
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI" (
+	MD "bin\extps1\PE_Helper\tools\BDE-GUI"
+	FOR %25%25A IN (ps1 bat cmd) DO xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI\*.%25%25A" "bin\extps1\PE_Helper\tools\BDE-GUI" /CEHYI
+)
+
 :: Copy Tour
 IF EXIST "$(SolutionDir)tour" (
 	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
@@ -2347,7 +2388,7 @@ IF %25COPY_DOCS%25=="Yes" (
 IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	echo Creating sample userdata structure...
 	IF NOT EXIST "userdata" (md "userdata")
-	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts) DO (
+	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts sse_config_rules) DO (
 		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
 	)
 )

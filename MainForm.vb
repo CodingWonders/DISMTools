@@ -22,6 +22,8 @@ Imports System.Threading.Tasks
 Imports System.Globalization
 Imports DISMTools.Elements.InfinityHome
 Imports System.Text.RegularExpressions
+Imports BDELib.BDELib
+Imports BDELib.Classes
 
 Public Class MainForm
 
@@ -150,12 +152,13 @@ Public Class MainForm
 
     Dim IsCompatible As Boolean = True
 
-    Dim SysVer As Version
+    Dim SysVer As New Version
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
     Public SkipUpdates As Boolean                                        ' Same for this one
 
     Public drivePath As String = ""
+    Public InBitLockerMode As Boolean = False
 
     Public EnableExperiments As Boolean
 
@@ -230,6 +233,7 @@ Public Class MainForm
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
     Public HumanizeDates As Boolean = True                  ' Whether to display all date fields in a human-readable format
+    Public LockUnlockedVolumes As Boolean = True            ' Whether to lock unlocked bitlocker volumes after ending offline management
 
     Public ReinitializeCurImage As Boolean = True
 
@@ -591,7 +595,8 @@ Public Class MainForm
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC")
+                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC" & CrLf &
+                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software.")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -616,10 +621,11 @@ Public Class MainForm
         DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
         DynaLog.LogMessage("- DynaLog Log Viewer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- DISMTools Theme Designer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("  Starter Script Library: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software. Testing made by Abs and DaleCooper")
+        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Starter Script Library: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software. Testing made by Abs and DaleCooper")
+        DynaLog.LogMessage("- BitLocker Drive Encryption Managed Library (BDELib): (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
         DynaLog.BeginLogging()
-        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
+        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S --------")
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1598,6 +1604,7 @@ Public Class MainForm
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
                 PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 HumanizeDates = CInt(ImgOpKey.GetValue("HumanizeDates", 1)) = 1
+                LockUnlockedVolumes = CInt(ImgOpKey.GetValue("LockUnlockedVolumes", 1)) = 1
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1729,6 +1736,7 @@ Public Class MainForm
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
                     PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
+                    LockUnlockedVolumes = CInt(settingData("ImgOps")("LockUnlockedVolumes")) = 1
                     If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
                     If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
                     UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
@@ -1947,6 +1955,7 @@ Public Class MainForm
                            "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
                            "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
                            "HumanizeDates                       =    " & HumanizeDates & CrLf &
+                           "LockUnlockedVolumes                 =    " & LockUnlockedVolumes & CrLf &
                            "UseScratch                          =    " & UseScratch & CrLf &
                            "AutoScratch                         =    " & AutoScrDir & CrLf &
                            "ScratchDirLocation                  =    " & Quote & ScratchDir & Quote & CrLf &
@@ -4170,6 +4179,7 @@ Public Class MainForm
         settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
         settingsData("ImgOps").AddKey("PreventSystemFromSleeping", 1)
         settingsData("ImgOps").AddKey("HumanizeDates", 1)
+        settingsData("ImgOps").AddKey("LockUnlockedVolumes", 1)
         settingsData.Sections.AddSection("ScratchDir")
         settingsData("ScratchDir").AddKey("UseScratch", 0)
         settingsData("ScratchDir").AddKey("AutoScratch", 1)
@@ -4268,6 +4278,7 @@ Public Class MainForm
         ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PreventSystemFromSleeping", 1, RegistryValueKind.DWord)
         ImgOpKey.SetValue("HumanizeDates", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("LockUnlockedVolumes", 1, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4375,6 +4386,7 @@ Public Class MainForm
             settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
             settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
             settingsData("ImgOps").AddKey("HumanizeDates", If(HumanizeDates, 1, 0))
+            settingsData("ImgOps").AddKey("LockUnlockedVolumes", If(LockUnlockedVolumes, 1, 0))
             settingsData.Sections.AddSection("ScratchDir")
             settingsData("ScratchDir").AddKey("UseScratch", If(UseScratch, 1, 0))
             settingsData("ScratchDir").AddKey("AutoScratch", If(AutoScrDir, 1, 0))
@@ -4479,6 +4491,7 @@ Public Class MainForm
                 ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("HumanizeDates", HumanizeDates, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("LockUnlockedVolumes", LockUnlockedVolumes, RegistryValueKind.DWord)
                 ImgOpKey.Close()
                 DynaLog.LogMessage("Configuring scratch directory settings...")
                 Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
@@ -9246,7 +9259,6 @@ Public Class MainForm
                 Label44.Text = "(Installazione offline)"
         End Select
         Panel2.Visible = False
-        ManageOfflineInstallationToolStripMenuItem.Enabled = False
         DynaLog.LogMessage("Setting mount directory to disk...")
         MountDir = ImageDrive
         DynaLog.LogMessage("Beginning background processes...")
@@ -9398,11 +9410,14 @@ Public Class MainForm
         Button29.Enabled = True
         Panel2.Visible = True
         BGProcDetails.Hide()
-        ManageOfflineInstallationToolStripMenuItem.Enabled = True
         DynaLog.LogMessage("Clearing completion state of background processes...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
+        If LockUnlockedVolumes AndAlso InBitLockerMode Then
+            LockVolumeDialog.DriveLetter = drivePath
+            LockVolumeDialog.ShowDialog(Me)
+        End If
     End Sub
 
     Sub EndOnlineManagement()
@@ -14867,7 +14882,6 @@ Public Class MainForm
     End Sub
 
     Private Sub CreateDiscImageWithThisFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageWithThisFileToolStripMenuItem.Click
-        If ISOCreator.BackgroundWorker1.IsBusy Then Exit Sub
         DynaLog.LogMessage("Opening ISO creator...")
         ISOCreator.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
         If ISOCreator.Visible Then

@@ -1443,7 +1443,9 @@ Public Class ProgressPanel
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
         End Select
         ' Detect additional options and set CommandArgs
-        CommandArgs &= " /applydir=" & Quote & ApplicationDestDir & Quote
+        Dim DestinationIsRooted As Boolean = Path.GetPathRoot(ApplicationDestDir) = ApplicationDestDir
+        Dim DestinationPath As String = If(DestinationIsRooted, ApplicationDestDir, Quote & ApplicationDestDir & Quote)
+        CommandArgs &= " /applydir=" & DestinationPath
         If ApplicationCheckInt Then
             LogView.AppendText("- Verify image integrity? Yes" & CrLf)
             CommandArgs &= " /checkintegrity"

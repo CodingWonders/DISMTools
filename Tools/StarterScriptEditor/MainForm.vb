@@ -11,7 +11,7 @@ Public Class MainForm
     Private CurrentScript As StarterScript
     Private SupportedLanguageList As New List(Of String)
 
-    Private UserDataScriptFolder As String
+    Public UserDataScriptFolder As String
 
     Private Modified As Boolean
     Private SavedScriptPath As String
@@ -207,6 +207,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
+        AIResults.CheckBox1.Checked = False
         NotWillingToSave = False
         If Modified Then
             Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
@@ -222,6 +223,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
+        AIResults.CheckBox1.Checked = False
         If TextBox1.Text = "" Then
             MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             NotWillingToSave = True
@@ -264,11 +266,13 @@ Public Class MainForm
 #If VBC_VER < 10.0 Then
 #If Not Debug Then
         ToolStripButton9.Visible = False
+        ToolStripSeparator3.Visible = False
 #End If
 #End If
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
+        AIResults.CheckBox1.Checked = False
         NotWillingToSave = False
         If Modified Then
             Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
@@ -327,6 +331,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
+        AIResults.CheckBox1.Checked = False
 #If VBC_VER >= 9.0 Then
 #If DEBUG Then
         MsgBox(String.Format("DISMTools Starter Script Editor version {0} ({1}_DEBUG)" & CrLf & CrLf & "{2}", _
@@ -479,6 +484,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
+        AIResults.CheckBox1.Checked = False
         EnableWriteAccess()
     End Sub
 
@@ -498,6 +504,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton6.Click
+        AIResults.CheckBox1.Checked = False
         ScriptVersionChooser.RadioButton1.Checked = ScriptVer = ScriptVersion.Infinity
         ScriptVersionChooser.RadioButton2.Checked = ScriptVer = ScriptVersion.Seven
         If ScriptVersionChooser.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -510,6 +517,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
+        AIResults.CheckBox1.Checked = False
         EditorFD.Font = TextBox3.Font
         Dim fontConfigured As Boolean = False
         Do Until fontConfigured
@@ -548,6 +556,7 @@ Public Class MainForm
     End Function
 
     Private Sub ToolStripButton8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton8.Click
+        AIResults.CheckBox1.Checked = False
         If TextBox1.Text = "" Then
             MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             NotWillingToSave = True
@@ -582,5 +591,10 @@ Public Class MainForm
         InspectionProgressDialog.ShowDialog(Me)
         AIResults.Results = InspectionProgressDialog.InspectionResults
         AIResults.Show()
+    End Sub
+
+    Private Sub ToolStripButton11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton11.Click
+        AIResults.CheckBox1.Checked = False
+        AICustomRuleViewer.Show()
     End Sub
 End Class

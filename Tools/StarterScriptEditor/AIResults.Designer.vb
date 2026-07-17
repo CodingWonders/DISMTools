@@ -27,9 +27,6 @@ Partial Class AIResults
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
         Me.Label1 = New System.Windows.Forms.Label
         Me.DataGridView1 = New System.Windows.Forms.DataGridView
-        Me.ScannedRuleSeverityColumn = New System.Windows.Forms.DataGridViewImageColumn
-        Me.ScannedRuleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.AutoInspectionResultBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Label2 = New System.Windows.Forms.Label
         Me.DataGridViewImageColumn1 = New System.Windows.Forms.DataGridViewImageColumn
         Me.CheckBox1 = New System.Windows.Forms.CheckBox
@@ -38,9 +35,13 @@ Partial Class AIResults
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
         Me.cbLowViolations = New System.Windows.Forms.CheckBox
         Me.cbMediumViolations = New System.Windows.Forms.CheckBox
+        Me.CustomRulesButton = New System.Windows.Forms.Button
+        Me.ScannedRuleSeverityColumn = New System.Windows.Forms.DataGridViewImageColumn
+        Me.ScannedRuleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.AutoInspectionResultBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.AutoInspectionResultBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
+        CType(Me.AutoInspectionResultBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -74,28 +75,6 @@ Partial Class AIResults
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(992, 462)
         Me.DataGridView1.TabIndex = 1
-        '
-        'ScannedRuleSeverityColumn
-        '
-        Me.ScannedRuleSeverityColumn.DataPropertyName = "ScannedRule"
-        Me.ScannedRuleSeverityColumn.HeaderText = "Severity"
-        Me.ScannedRuleSeverityColumn.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
-        Me.ScannedRuleSeverityColumn.Name = "ScannedRuleSeverityColumn"
-        Me.ScannedRuleSeverityColumn.ReadOnly = True
-        Me.ScannedRuleSeverityColumn.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ScannedRuleSeverityColumn.Width = 64
-        '
-        'ScannedRuleDataGridViewTextBoxColumn
-        '
-        Me.ScannedRuleDataGridViewTextBoxColumn.DataPropertyName = "ScannedRule"
-        Me.ScannedRuleDataGridViewTextBoxColumn.HeaderText = "Scanned Rule"
-        Me.ScannedRuleDataGridViewTextBoxColumn.Name = "ScannedRuleDataGridViewTextBoxColumn"
-        Me.ScannedRuleDataGridViewTextBoxColumn.ReadOnly = True
-        Me.ScannedRuleDataGridViewTextBoxColumn.Width = 840
-        '
-        'AutoInspectionResultBindingSource
-        '
-        Me.AutoInspectionResultBindingSource.DataSource = GetType(StarterScriptEditor.Classes.AutoInspection.AutoInspectionResult)
         '
         'Label2
         '
@@ -211,11 +190,45 @@ Partial Class AIResults
         Me.cbMediumViolations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.cbMediumViolations.UseVisualStyleBackColor = True
         '
+        'CustomRulesButton
+        '
+        Me.CustomRulesButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CustomRulesButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CustomRulesButton.Location = New System.Drawing.Point(839, 8)
+        Me.CustomRulesButton.Name = "CustomRulesButton"
+        Me.CustomRulesButton.Size = New System.Drawing.Size(96, 23)
+        Me.CustomRulesButton.TabIndex = 7
+        Me.CustomRulesButton.Text = "Custom Rules..."
+        Me.CustomRulesButton.UseVisualStyleBackColor = True
+        '
+        'ScannedRuleSeverityColumn
+        '
+        Me.ScannedRuleSeverityColumn.DataPropertyName = "ScannedRule"
+        Me.ScannedRuleSeverityColumn.HeaderText = "Severity"
+        Me.ScannedRuleSeverityColumn.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
+        Me.ScannedRuleSeverityColumn.Name = "ScannedRuleSeverityColumn"
+        Me.ScannedRuleSeverityColumn.ReadOnly = True
+        Me.ScannedRuleSeverityColumn.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ScannedRuleSeverityColumn.Width = 64
+        '
+        'ScannedRuleDataGridViewTextBoxColumn
+        '
+        Me.ScannedRuleDataGridViewTextBoxColumn.DataPropertyName = "ScannedRule"
+        Me.ScannedRuleDataGridViewTextBoxColumn.HeaderText = "Scanned Rule"
+        Me.ScannedRuleDataGridViewTextBoxColumn.Name = "ScannedRuleDataGridViewTextBoxColumn"
+        Me.ScannedRuleDataGridViewTextBoxColumn.ReadOnly = True
+        Me.ScannedRuleDataGridViewTextBoxColumn.Width = 840
+        '
+        'AutoInspectionResultBindingSource
+        '
+        Me.AutoInspectionResultBindingSource.DataSource = GetType(StarterScriptEditor.Classes.AutoInspection.AutoInspectionResult)
+        '
         'AIResults
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1016, 573)
+        Me.Controls.Add(Me.CustomRulesButton)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Label2)
@@ -228,9 +241,9 @@ Partial Class AIResults
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Automated Inspection Results"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.AutoInspectionResultBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
+        CType(Me.AutoInspectionResultBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -248,4 +261,5 @@ Partial Class AIResults
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents cbLowViolations As System.Windows.Forms.CheckBox
     Friend WithEvents cbMediumViolations As System.Windows.Forms.CheckBox
+    Friend WithEvents CustomRulesButton As System.Windows.Forms.Button
 End Class

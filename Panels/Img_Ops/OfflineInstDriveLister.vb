@@ -9,10 +9,46 @@ Public Class OfflineInstDriveLister
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Try
             DynaLog.LogMessage("Selected drive: " & ListView1.FocusedItem.SubItems(0).Text)
+
+            Dim SelectedDrive As DriveInfo = DIList.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            If SelectedDrive Is Nothing Then Exit Sub
+
+            Dim IsEncryptedWithBitLocker As Boolean = GetDriveFSType(SelectedDrive) = "BITLOCKER"
+
+            ' If it is encrypted with BitLocker then we ask for the key
+            If IsEncryptedWithBitLocker Then
+                UnlockVolumeDialog.DriveLetter = SelectedDrive.Name
+                If UnlockVolumeDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+
+                ' We were able to unlock it; now to see if there's Windows in there.
+                If Not File.Exists(String.Format("{0}Windows\system32\ntoskrnl.exe", SelectedDrive.Name)) Then
+                    DynaLog.LogMessage("The selected drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
+                    LockVolumeDialog.DriveLetter = SelectedDrive.Name
+                    LockVolumeDialog.ShowDialog(Me)
+                    MainForm.InBitLockerMode = False
+                    Exit Sub
+                Else
+                    DynaLog.LogMessage("The selected drive contains ntoskrnl. Checking version...")
+                    ' Don't support Windows Vista (incl. betas) or anything older than Vista
+                    Dim sysVer As FileVersionInfo = FileVersionInfo.GetVersionInfo(String.Format("{0}Windows\system32\ntoskrnl.exe", SelectedDrive.Name))
+                    If sysVer.ProductMajorPart < 6 Or (sysVer.ProductMajorPart = 6 And sysVer.ProductMinorPart = 0) Then
+                        DynaLog.LogMessage("The specified drive contains Windows Vista or an earlier version of Windows.")
+                        LockVolumeDialog.DriveLetter = SelectedDrive.Name
+                        LockVolumeDialog.ShowDialog(Me)
+                        MainForm.InBitLockerMode = False
+                        Exit Sub
+                    End If
+                End If
+            End If
+
+            ' If we're already in offline installation management mode, leave it and enter it again
+            If MainForm.OfflineManagement Then MainForm.EndOfflineManagement()
+            MainForm.InBitLockerMode = IsEncryptedWithBitLocker
+
+            MainForm.drivePath = SelectedDrive.Name
         Catch ex As Exception
 
         End Try
-        MainForm.drivePath = ListView1.FocusedItem.SubItems(0).Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -172,19 +208,7 @@ Public Class OfflineInstDriveLister
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
-        DynaLog.LogMessage("Getting disks...")
-        ListView1.Items.Clear()
-        DIList.Clear()
-        DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
-                                                                                           DI.VolumeLabel,
-                                                                                           Casters.CastDriveType(DI.DriveType, True),
-                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
-                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
-                                                                                           DI.DriveFormat,
-                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
-                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
-                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
+        ListDisks()
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -200,45 +224,94 @@ Public Class OfflineInstDriveLister
         ColumnHeader8.Width = WindowHelper.ScaleLogical(104)
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub ListDisks()
+        DynaLog.LogMessage("Getting disks...")
         ListView1.Items.Clear()
         DIList.Clear()
-        DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
+        DIList = DriveInfo.GetDrives().Where(Function(disk) Not {DriveType.CDRom, DriveType.Unknown}.Contains(disk.DriveType)).ToList()
         ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
-                                                                                           DI.VolumeLabel,
+                                                                                           GetDriveVolumeLabel(DI),
                                                                                            Casters.CastDriveType(DI.DriveType, True),
-                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
-                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
-                                                                                           DI.DriveFormat,
-                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
-                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                           Converters.BytesToReadableSize(GetDriveTotalSpace(DI)),
+                                                                                           Converters.BytesToReadableSize(GetDriveFreeSpace(DI)),
+                                                                                           GetDriveFSType(DI),
+                                                                                           If(GetDriveFSType(DI) <> "BITLOCKER" AndAlso File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(GetDriveFSType(DI) <> "BITLOCKER" AndAlso File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
                                                                                               FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
     End Sub
 
+    Private Function GetDriveVolumeLabel(drInfo As DriveInfo) As String
+        Try
+            Return drInfo.VolumeLabel
+        Catch ex As Exception
+            Return ""
+        End Try
+    End Function
+
+    Private Function GetDriveFSType(drInfo As DriveInfo) As String
+        Try
+            Return drInfo.DriveFormat
+        Catch bitLockerEx As IOException When bitLockerEx.Message.IndexOf("bitlocker", StringComparison.OrdinalIgnoreCase) > -1
+            Return "BITLOCKER"
+        Catch ex As Exception
+            Return ""
+        End Try
+    End Function
+
+    Private Function GetDriveTotalSpace(drInfo As DriveInfo) As Long
+        Try
+            Return drInfo.TotalSize
+        Catch ex As Exception
+            Return 0
+        End Try
+    End Function
+
+    Private Function GetDriveFreeSpace(drInfo As DriveInfo) As Long
+        Try
+            Return drInfo.AvailableFreeSpace
+        Catch ex As Exception
+            Return 0
+        End Try
+    End Function
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        ListDisks()
+    End Sub
+
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        UnlockNoticeLabel.Visible = False
+
         If ListView1.SelectedItems.Count > 0 Then
             OK_Button.Enabled = True
-            For x = 0 To DIList.Count - 1
-                If DIList(x).Name = ListView1.FocusedItem.SubItems(0).Text Then
-                    If DIList(x).DriveFormat <> "NTFS" Then
-                        DynaLog.LogMessage("The selected drive is not formatted with NTFS.")
+            Dim SelectedDisk As DriveInfo = DIList.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            If SelectedDisk Is Nothing Then
+                OK_Button.Enabled = False
+                Exit Sub
+            End If
+
+            Try
+                If SelectedDisk.DriveFormat <> "NTFS" Then
+                    DynaLog.LogMessage("The selected drive is not formatted with NTFS.")
+                    OK_Button.Enabled = False
+                End If
+                If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
+                    DynaLog.LogMessage("The selected drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
+                    OK_Button.Enabled = False
+                Else
+                    DynaLog.LogMessage("The selected drive contains ntoskrnl. Checking version...")
+                    ' Don't support Windows Vista (incl. betas) or anything older than Vista
+                    Dim sysVer As FileVersionInfo = FileVersionInfo.GetVersionInfo(String.Format("{0}Windows\system32\ntoskrnl.exe", SelectedDisk.Name))
+                    If sysVer.ProductMajorPart < 6 Or (sysVer.ProductMajorPart = 6 And sysVer.ProductMinorPart = 0) Then
+                        DynaLog.LogMessage("The specified drive contains Windows Vista or an earlier version of Windows.")
                         OK_Button.Enabled = False
-                    End If
-                    If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
-                        DynaLog.LogMessage("The selected drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
-                        OK_Button.Enabled = False
-                    Else
-                        DynaLog.LogMessage("The selected drive contains ntoskrnl. Checking version...")
-                        ' Don't support Windows Vista (incl. betas) or anything older than Vista
-                        Dim sysVer As FileVersionInfo = FileVersionInfo.GetVersionInfo(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe")
-                        If sysVer.ProductMajorPart < 6 Or _
-                           (sysVer.ProductMajorPart = 6 And sysVer.ProductMinorPart = 0) Then
-                            DynaLog.LogMessage("The specified drive contains Windows Vista or an earlier version of Windows.")
-                            OK_Button.Enabled = False
-                        End If
                     End If
                 End If
-            Next
+            Catch bitlockerEx As IOException When bitlockerEx.Message.IndexOf("bitlocker", StringComparison.OrdinalIgnoreCase) > -1
+                ' leave it enabled for now; we'll ask the user to unlock it when we click OK
+                UnlockNoticeLabel.Visible = True
+            Catch ex As Exception
+                OK_Button.Enabled = False
+            End Try
         Else
             OK_Button.Enabled = False
         End If

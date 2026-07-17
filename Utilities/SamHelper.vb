@@ -21,7 +21,7 @@ Module SamHelper
         Try
             ' First, let's check our SAM profiles and map them
             DynaLog.LogMessage("Checking user profiles in system...")
-            Dim UserCollection As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT Name, SID FROM Win32_UserAccount WHERE LocalAccount = True AND Disabled = False")
+            Dim UserCollection As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT Name, SID FROM Win32_UserAccount WHERE Disabled = False")
             If UserCollection Is Nothing OrElse UserCollection.Count = 0 Then
                 Return ""
             End If
@@ -32,7 +32,11 @@ Module SamHelper
             ' Then we'll see the names of the pckgdeps for any matches
             DynaLog.LogMessage("Putting names to the pckgdeps...")
             For Each pckgdep In pckgdeps
+                If Not Path.GetFileNameWithoutExtension(pckgdep).StartsWith("S-1-5-", StringComparison.OrdinalIgnoreCase) Then Continue For
                 Dim fileName As String = Path.GetFileNameWithoutExtension(pckgdep)
+
+                If Not mappedUsers.ContainsKey(fileName) Then Continue For
+
                 Dim userName As String = mappedUsers(fileName)
                 If userName <> "" Then
                     DynaLog.LogMessage("We grabbed a user name.")

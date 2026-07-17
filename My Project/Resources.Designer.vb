@@ -2267,13 +2267,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
-        '''- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
-        '''- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
+        '''- Fixed issues with some image tasks targeting rooted paths
         '''
         '''New features:
         '''
-        '''- Unattended answer file conflict resolution has been p [resto de la cadena truncado]&quot;;.
+        '''- You can now create multiple ISO files at the same time
+        '''- The set of wallpapers for the Preinstallation Environment has been updated to reflect the 4th anniversary of the project
+        '''- Tooling for locking and unlocking BitLocker encrypted volumes has been introduced
+        '''- You can now unlock BitLocker encrypted volumes from the offline installation management mode
+        '''- You can now switch between offline installations more  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

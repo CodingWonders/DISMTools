@@ -48,6 +48,13 @@ Namespace Classes.AutoInspection
             End Set
         End Property
 
+        Public Sub New()
+            RuleName = ""
+            RuleDescription = ""
+            RuleExpression = ""
+            RuleSeverity = AutoInspectionRuleSeverity.Medium
+        End Sub
+
     End Class
 
     <XmlRoot("rules")> _
@@ -63,6 +70,14 @@ Namespace Classes.AutoInspection
                 _rules = value
             End Set
         End Property
+
+        Public Sub New()
+            Rules = New List(Of AutoInspectionRule)
+        End Sub
+
+        Public Sub New(ByVal inspectionRules As List(Of AutoInspectionRule))
+            Rules = inspectionRules
+        End Sub
 
     End Class
 
