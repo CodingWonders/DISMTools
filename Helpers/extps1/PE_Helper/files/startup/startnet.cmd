@@ -169,5 +169,7 @@ if %debug% lss 2 (
 	doskey bdemgr=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" $*
 	doskey bdelock=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" lock
 	doskey bdeunlock=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" unlock
+	doskey bdeencrypt=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" encrypt
+	doskey bdedecrypt=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" decrypt
 	exit /b
 )
