@@ -592,7 +592,7 @@ Public Class MainForm
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC" & CrLf &
-                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software.")
+                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software, DaleCooper.")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
