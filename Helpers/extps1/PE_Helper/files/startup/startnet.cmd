@@ -151,6 +151,8 @@ if %debug% lss 2 (
 	echo - To show hardware and software inventory, type "inv" and press ENTER
 	echo - To change the keyboard layout, type "keyboardchange" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
+	echo - To manage volumes encrypted with BitLocker, use one or more of the following aliases:
+	echo   Installed aliases: bdemgr bdelock bdeunlock bdeinfo bdeencrypt bdedecrypt
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
 	echo - To start the Driver Installation Module in case you need to load drivers, type "StartDim" and press ENTER
@@ -169,6 +171,7 @@ if %debug% lss 2 (
 	doskey bdemgr=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" $*
 	doskey bdelock=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" lock
 	doskey bdeunlock=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" unlock
+	doskey bdeinfo=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" info
 	doskey bdeencrypt=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" encrypt
 	doskey bdedecrypt=cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" decrypt
 	exit /b
