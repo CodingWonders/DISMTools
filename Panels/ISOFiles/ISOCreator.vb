@@ -1027,6 +1027,13 @@ Public Class ISOCreator
                 GroupBox1.Enabled = True
                 IdlePanel.Visible = True
                 ISOProgressPanel.Visible = False
+
+                ' Delete ISOTASKS
+                Try
+                    Directory.Delete(String.Format("{0}\ISOTASKS", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), True)
+                Catch ex As Exception
+
+                End Try
             End If
         End If
     End Sub
