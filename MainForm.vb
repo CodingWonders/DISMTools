@@ -681,7 +681,6 @@ Public Class MainForm
             End Try
         End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
-        Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
