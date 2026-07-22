@@ -279,15 +279,19 @@ Public Class ExportDrivers
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
-            Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
-            If SelectedClassInfo.Value IsNot Nothing Then SelectedClassNamesLB.Items.Add(SelectedClassInfo.Key)
-        Else
-            ' We are using a class name that is not in the default set; accept it anyway,
-            ' but don't show any notes because we don't know where these are, or whether
-            ' they are localized.
-            SelectedClassNamesLB.Items.Add(ComboBox1.SelectedItem)
-        End If
+        Try
+            If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
+                Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
+                If SelectedClassInfo.Value IsNot Nothing Then SelectedClassNamesLB.Items.Add(SelectedClassInfo.Key)
+            Else
+                ' We are using a class name that is not in the default set; accept it anyway,
+                ' but don't show any notes because we don't know where these are, or whether
+                ' they are localized.
+                SelectedClassNamesLB.Items.Add(ComboBox1.SelectedItem)
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
