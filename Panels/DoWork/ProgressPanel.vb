@@ -512,7 +512,8 @@ Public Class ProgressPanel
     ' OperationNum: 77
     Public drvExportTarget As String                        ' Path the drivers will be exported to
     Public drvExportAllDrvs As Boolean                      ' Determines whether to export all drivers, or drivers based on the class name
-    Public drvExportSpecificClassName As String             ' The class name that the drivers to export have set
+    Public drvExportSpecificClassNames As String()          ' The class name that the drivers to export have set
+    Public drvExportOrganizeClassNameExports As Boolean     ' Determines whether to organize exported drivers using folder named after class names
     Public drvExportWin7Mode As Boolean                     ' Run driver exports in Windows 7 mode
 
     ' OperationNum: 78
@@ -6028,7 +6029,7 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to export image drivers...")
         DynaLog.LogMessage("Export target: " & Quote & drvExportTarget & Quote)
         DynaLog.LogMessage("Export all drivers? " & If(drvExportAllDrvs, "Yes", "No"))
-        If Not drvExportAllDrvs Then DynaLog.LogMessage("Class name to use as filter for driver exports: " & Quote & drvExportSpecificClassName & Quote)
+        If Not drvExportAllDrvs Then DynaLog.LogMessage("Class names to use as filter for driver exports: " & drvExportSpecificClassNames.Count)
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -6067,7 +6068,8 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf &
                            "- Export target: " & Quote & drvExportTarget & Quote & CrLf &
                            "- Export all drivers, or just those with matching class names? " & If(drvExportAllDrvs, "All Drivers", "Drivers with matching class name") & CrLf &
-                           "- If not all drivers are exported, which class name is used for drivers that will be exported? " & drvExportSpecificClassName & CrLf)
+                           "- If not all drivers are exported, how many class names are being used? " & drvExportSpecificClassNames.Count & CrLf &
+                           "- On selective driver export, organize results? " & If(drvExportOrganizeClassNameExports, "Yes", "No") & CrLf)
         If drvExportAllDrvs Then
             If drvExportWin7Mode Then
                 Try
@@ -6255,7 +6257,7 @@ Public Class ProgressPanel
                     End Using
 
                     DynaLog.LogMessage("Filtering driver collection based on class name...")
-                    Dim driversToExport As IEnumerable(Of ImageDriver) = ImageDrivers.Where(Function(driver) driver.DriverClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                    Dim driversToExport As IEnumerable(Of ImageDriver) = ImageDrivers.Where(Function(driver) drvExportSpecificClassNames.Select(Function(cn) cn.ToLowerInvariant()).Contains(driver.DriverClassName.ToLowerInvariant()))
                     If driversToExport Is Nothing Then Exit Try
 
                     DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
@@ -6264,6 +6266,23 @@ Public Class ProgressPanel
                         LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
                         Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
                         Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+
+                        ' If we are supposed to organize them based on class name, we'll detect if such folders exist and, if they
+                        ' don't, we'll create them, so we have everything ready.
+                        If drvExportOrganizeClassNameExports Then
+                            Dim organizedDestinationDriverPath As String = Path.Combine(drvExportTarget, driverToExport.DriverClassName)
+                            If Not Directory.Exists(organizedDestinationDriverPath) Then
+                                Try
+                                    Directory.CreateDirectory(organizedDestinationDriverPath)
+                                    destinationDriverPath = Path.Combine(organizedDestinationDriverPath, drvName)
+                                Catch ex As Exception
+                                    DynaLog.LogMessage("Could not organize exported driver. Error message: " & ex.Message & ". Driver will be exported to destination path without organization.")
+                                End Try
+                            Else
+                                destinationDriverPath = Path.Combine(organizedDestinationDriverPath, drvName)
+                            End If
+                        End If
+
                         CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
                     Next
                 Catch ex As Exception
@@ -6279,7 +6298,7 @@ Public Class ProgressPanel
                         Dim driverPackages As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
                         If driverPackages Is Nothing Then Exit Try
                         DynaLog.LogMessage("Filtering driver collection based on class name...")
-                        Dim driversToExport As IEnumerable(Of DismDriverPackage) = driverPackages.Where(Function(driver) driver.ClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                        Dim driversToExport As IEnumerable(Of DismDriverPackage) = driverPackages.Where(Function(driver) drvExportSpecificClassNames.Select(Function(cn) cn.ToLowerInvariant()).Contains(driver.ClassName.ToLowerInvariant()))
                         If driversToExport Is Nothing Then Exit Try
 
                         DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
@@ -6288,6 +6307,23 @@ Public Class ProgressPanel
                             LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.OriginalFileName) & "...")
                             Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
                             Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+
+                            ' If we are supposed to organize them based on class name, we'll detect if such folders exist and, if they
+                            ' don't, we'll create them, so we have everything ready.
+                            If drvExportOrganizeClassNameExports Then
+                                Dim organizedDestinationDriverPath As String = Path.Combine(drvExportTarget, driverToExport.ClassName)
+                                If Not Directory.Exists(organizedDestinationDriverPath) Then
+                                    Try
+                                        Directory.CreateDirectory(organizedDestinationDriverPath)
+                                        destinationDriverPath = Path.Combine(organizedDestinationDriverPath, drvName)
+                                    Catch ex As Exception
+                                        DynaLog.LogMessage("Could not organize exported driver. Error message: " & ex.Message & ". Driver will be exported to destination path without organization.")
+                                    End Try
+                                Else
+                                    destinationDriverPath = Path.Combine(organizedDestinationDriverPath, drvName)
+                                End If
+                            End If
+
                             CopyRecursive(Path.GetDirectoryName(driverToExport.OriginalFileName), destinationDriverPath)
                         Next
                     End Using

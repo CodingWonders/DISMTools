@@ -5,8 +5,6 @@ Imports Microsoft.Dism
 
 Public Class ExportDrivers
 
-    Private SelectedClass As String
-
     Private DriverClassInfoDictionary As New Dictionary(Of String, String) From {
         {"AudioProcessingObject", "Includes Audio processing objects (APOs). For more info, see Windows Audio Processing Objects."},
         {"Battery", "Includes battery devices and UPS devices."},
@@ -103,12 +101,17 @@ Public Class ExportDrivers
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If RadioButton2.Checked AndAlso ComboBox1.SelectedItem = "-----------------" Then
-            MessageBox.Show("This class name is not valid.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+        If RadioButton2.Checked AndAlso SelectedClassNamesLB.Items.Count < 1 Then
+            MessageBox.Show("Please specify class names to export and try again.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Exit Sub
+        End If
+        If RadioButton2.Checked AndAlso SelectedClassNamesLB.Items.Contains("-----------------") Then
+            MessageBox.Show("One or more class names are not valid.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
         End If
         ProgressPanel.drvExportAllDrvs = RadioButton1.Checked
-        ProgressPanel.drvExportSpecificClassName = SelectedClass
+        ProgressPanel.drvExportSpecificClassNames = SelectedClassNamesLB.Items.Cast(Of String)().ToArray()
+        ProgressPanel.drvExportOrganizeClassNameExports = CheckBox1.Checked
         ProgressPanel.OperationNum = 77
         ' Windows 7 behaves differently from Windows 8 and later when getting drivers.
         ProgressPanel.drvExportWin7Mode = MainForm.CurrentImage.ImageVersion.Major = 6 AndAlso MainForm.CurrentImage.ImageVersion.Minor = 1
@@ -217,13 +220,14 @@ Public Class ExportDrivers
         TextBox1.ForeColor = ForeColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.ForeColor = ForeColor
+        SelectedClassNamesLB.BackColor = CurrentTheme.SectionBackgroundColor
+        SelectedClassNamesLB.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ComboBox1.Items.Clear()
         ComboBox1.Items.AddRange(DriverClassInfoDictionary.Keys.ToArray())
-        ComboBox1.SelectedItem = SelectedClass
         ImageTaskHeader1.HideWindowTitle(handle)
 
         Try
@@ -255,22 +259,47 @@ Public Class ExportDrivers
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        SelectedClassNamesLB.Enabled = Not RadioButton1.Checked
         TableLayoutPanel2.Enabled = Not RadioButton1.Checked
+        Button2.Enabled = Not RadioButton1.Checked
+        Button3.Enabled = Not RadioButton1.Checked
+        CheckBox1.Enabled = Not RadioButton1.Checked
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
             Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
-            If SelectedClassInfo.Value IsNot Nothing Then
-                Label5.Text = SelectedClassInfo.Value
-                SelectedClass = SelectedClassInfo.Key
-            End If
+            If SelectedClassInfo.Value IsNot Nothing Then Label5.Text = SelectedClassInfo.Value
         Else
             ' We are using a class name that is not in the default set; accept it anyway,
             ' but don't show any notes because we don't know where these are, or whether
             ' they are localized.
             Label5.Text = ""
-            SelectedClass = ComboBox1.SelectedItem
         End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
+            Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox1.SelectedIndex)
+            If SelectedClassInfo.Value IsNot Nothing Then SelectedClassNamesLB.Items.Add(SelectedClassInfo.Key)
+        Else
+            ' We are using a class name that is not in the default set; accept it anyway,
+            ' but don't show any notes because we don't know where these are, or whether
+            ' they are localized.
+            SelectedClassNamesLB.Items.Add(ComboBox1.SelectedItem)
+        End If
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Try
+            SelectedClassNamesLB.Items.Remove(SelectedClassNamesLB.SelectedItem)
+        Catch ex As Exception
+
+        End Try
+        Button3.Enabled = False
+    End Sub
+
+    Private Sub SelectedClassNamesLB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SelectedClassNamesLB.SelectedIndexChanged
+        Button3.Enabled = SelectedClassNamesLB.SelectedItems.Count = 1
     End Sub
 End Class
