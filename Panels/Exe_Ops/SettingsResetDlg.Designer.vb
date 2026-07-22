@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SettingsResetDlg
     Inherits System.Windows.Forms.Form
 
@@ -52,7 +52,7 @@ Partial Class SettingsResetDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "Yes"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.SettingsResetDlg")("Yes.Button")
         '
         'Cancel_Button
         '
@@ -63,7 +63,7 @@ Partial Class SettingsResetDlg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "No"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.SettingsResetDlg")("No.Button")
         '
         'Label1
         '
@@ -74,9 +74,7 @@ Partial Class SettingsResetDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(596, 64)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "If you proceed, the settings will be reset to their default values. Once this pro" & _
-    "cess is complete, you'll return to the main program window." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Do you want to pr" & _
-    "oceed?"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.SettingsResetDlg")("ProceedReset.Message")
         '
         'SettingsResetDlg
         '
@@ -94,7 +92,7 @@ Partial Class SettingsResetDlg
         Me.Name = "SettingsResetDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Reset preferences"
+        Me.Text = LocalizationService.ForSection("Designer.SettingsResetDlg")("Form.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

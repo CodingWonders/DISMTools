@@ -1,30 +1,75 @@
-if ($ghAction -ne "yes")
-{
-	$SolutionDir = "$((Get-Location).Path)\..\.."
-	$TargetDir = "$((Get-Location).Path)"
+$ErrorActionPreference = "Stop"
+
+function Get-NormalizedDirectoryPath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+
+    $fullPath = [System.IO.Path]::GetFullPath($Path)
+    if (-not $fullPath.EndsWith([System.IO.Path]::DirectorySeparatorChar)) {
+        $fullPath += [System.IO.Path]::DirectorySeparatorChar
+    }
+    return $fullPath
 }
 
-if (-not (Test-Path ".\bin\Debug"))
-{
-	New-Item "$($SolutionDir)bin\Debug" -ItemType Directory -Force
+if ($ghAction -ne "yes") {
+    $SolutionDir = "$((Get-Location).Path)\..\.."
+    $TargetDir = "$((Get-Location).Path)"
 }
 
-if (-not (Test-Path ".\bin\Debug\System.IO.dll" -PathType Leaf)) {
-	Copy-Item "$($SolutionDir)\packages\System.IO.4.3.0\lib\net462\System.IO.dll" "$($TargetDir)\System.IO.dll"
+if ([string]::IsNullOrWhiteSpace($SolutionDir)) {
+    $SolutionDir = (Get-Location).Path
 }
 
-if (-not (Test-Path ".\bin\Debug\System.Net.Http.dll" -PathType Leaf)) {
-	Copy-Item "$($SolutionDir)\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll" "$($TargetDir)\System.Net.Http.dll"
+if ([string]::IsNullOrWhiteSpace($TargetDir)) {
+    $TargetDir = Join-Path $SolutionDir "bin\Debug"
 }
 
-if (-not (Test-Path ".\bin\Debug\System.Runtime.dll" -PathType Leaf)) {
-	Copy-Item "$($SolutionDir)\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll" "$($TargetDir)\System.Runtime.dll"
+$SolutionDir = Get-NormalizedDirectoryPath -Path $SolutionDir
+$TargetDir = [System.IO.Path]::GetFullPath($TargetDir)
+$projectFile = Join-Path $SolutionDir "DISMTools.vbproj"
+
+if (-not (Test-Path -LiteralPath $projectFile)) {
+    throw "DISMTools.vbproj was not found: $projectFile"
 }
 
-if ((-not (Test-Path ".\bin\Debug\System.Security*.dll" -PathType Leaf)) -or ((Get-ChildItem ".\bin\Debug\System.Security*.dll").Count -lt 4)) {
-	Copy-Item "$($SolutionDir)\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll" "$($TargetDir)\System.Security.Cryptography.Algorithms.dll"
-	Copy-Item "$($SolutionDir)\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll" "$($TargetDir)\System.Security.Cryptography.Encoding.dll"
-	Copy-Item "$($SolutionDir)\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll" "$($TargetDir)\System.Security.Cryptography.Primitives.dll"
-	Copy-Item "$($SolutionDir)\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll" "$($TargetDir)\System.Security.Cryptography.X509Certificates.dll"
+New-Item -Path $TargetDir -ItemType Directory -Force | Out-Null
+
+[xml]$projectXml = Get-Content -LiteralPath $projectFile
+$namespaceManager = New-Object System.Xml.XmlNamespaceManager($projectXml.NameTable)
+$namespaceManager.AddNamespace("msb", "http://schemas.microsoft.com/developer/msbuild/2003")
+
+$hintPathNodes = $projectXml.SelectNodes("//msb:Reference/msb:HintPath", $namespaceManager)
+$missingFiles = New-Object System.Collections.Generic.List[string]
+$copiedFiles = New-Object System.Collections.Generic.List[string]
+
+foreach ($hintPathNode in $hintPathNodes) {
+    $relativeHintPath = $hintPathNode.InnerText.Trim()
+    if ([string]::IsNullOrWhiteSpace($relativeHintPath)) {
+        continue
+    }
+
+    if (-not $relativeHintPath.EndsWith(".dll", [System.StringComparison]::OrdinalIgnoreCase)) {
+        continue
+    }
+
+    $sourcePath = Join-Path $SolutionDir $relativeHintPath
+    if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+        $missingFiles.Add($relativeHintPath) | Out-Null
+        continue
+    }
+
+    $targetPath = Join-Path $TargetDir ([System.IO.Path]::GetFileName($sourcePath))
+    if (-not (Test-Path -LiteralPath $targetPath -PathType Leaf)) {
+        Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force
+        $copiedFiles.Add([System.IO.Path]::GetFileName($sourcePath)) | Out-Null
+    }
 }
 
+if ($missingFiles.Count -gt 0) {
+    $message = "The following referenced DLL files are missing after NuGet restore:" + [Environment]::NewLine + ($missingFiles -join [Environment]::NewLine)
+    throw $message
+}
+
+Write-Host "Checked referenced NuGet DLL files. Copied $($copiedFiles.Count) file(s) to $TargetDir"

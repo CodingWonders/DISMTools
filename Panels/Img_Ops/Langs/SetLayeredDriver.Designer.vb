@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SetLayeredDriverDialog
     Inherits System.Windows.Forms.Form
 
@@ -61,7 +61,7 @@ Partial Class SetLayeredDriverDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -72,7 +72,7 @@ Partial Class SetLayeredDriverDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("Cancel.Button")
         '
         'Label2
         '
@@ -83,7 +83,7 @@ Partial Class SetLayeredDriverDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(600, 32)
         Me.Label2.TabIndex = 9
-        Me.Label2.Text = resources.GetString("Label2.Text")
+        Me.Label2.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("Intro.Message")
         '
         'Label3
         '
@@ -93,7 +93,7 @@ Partial Class SetLayeredDriverDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(144, 38)
         Me.Label3.TabIndex = 10
-        Me.Label3.Text = "Current keyboard layered driver:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("CurrentDriver.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label4
@@ -112,7 +112,7 @@ Partial Class SetLayeredDriverDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(196, 13)
         Me.Label5.TabIndex = 12
-        Me.Label5.Text = "New keyboard layered driver:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("NewDriver.Label")
         '
         'ComboBox1
         '
@@ -130,7 +130,7 @@ Partial Class SetLayeredDriverDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(448, 13)
         Me.Label6.TabIndex = 12
-        Me.Label6.Text = "This driver has already been set"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("Driver.Already.Label")
         Me.Label6.Visible = False
         '
         'TableLayoutPanel2
@@ -182,7 +182,7 @@ Partial Class SetLayeredDriverDialog
         Me.Name = "SetLayeredDriverDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Set keyboard layered driver"
+        Me.Text = LocalizationService.ForSection("Designer.SetLayeredDriver")("Title")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)

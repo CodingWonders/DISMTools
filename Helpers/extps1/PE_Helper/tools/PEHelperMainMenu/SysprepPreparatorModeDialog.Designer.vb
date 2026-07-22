@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SysprepPreparatorModeDialog
     Inherits System.Windows.Forms.Form
 
@@ -46,7 +46,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(599, 157)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("Responsibility.Message")
         '
         'MainMenuPanel
         '
@@ -76,7 +76,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.LinkLabel3.Size = New System.Drawing.Size(220, 25)
         Me.LinkLabel3.TabIndex = 3
         Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "Cancel launch of this tool"
+        Me.LinkLabel3.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("Cancel.Link")
         '
         'LinkLabel2
         '
@@ -92,7 +92,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.LinkLabel2.Size = New System.Drawing.Size(305, 25)
         Me.LinkLabel2.TabIndex = 3
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Launch in Manual mode (advanced)"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("ManualMode.Link")
         '
         'LinkLabel1
         '
@@ -108,7 +108,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.LinkLabel1.Size = New System.Drawing.Size(364, 25)
         Me.LinkLabel1.TabIndex = 3
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Launch in Automatic mode (recommended)"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("AutomaticMode.Link")
         '
         'PictureBox3
         '
@@ -141,7 +141,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(245, 19)
         Me.CheckBox1.TabIndex = 6
-        Me.CheckBox1.Text = "Capture image after preparing the system"
+        Me.CheckBox1.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("CaptureImage.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -153,7 +153,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(367, 19)
         Me.CheckBox2.TabIndex = 6
-        Me.CheckBox2.Text = "Copy registry changes and other preferences to new user profiles"
+        Me.CheckBox2.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("CopyRegistry.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'SysprepPreparatorModeDialog
@@ -175,7 +175,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.Name = "SysprepPreparatorModeDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Prepare System for Image Capture"
+        Me.Text = LocalizationService.ForSection("PEHelper.Designer.Sysprep")("PrepareCapture.Label")
         Me.MainMenuPanel.ResumeLayout(False)
         Me.MainMenuPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()

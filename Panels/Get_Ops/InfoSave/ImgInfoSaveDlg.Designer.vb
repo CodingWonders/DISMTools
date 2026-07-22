@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgInfoSaveDlg
     Inherits System.Windows.Forms.Form
 
@@ -47,7 +47,7 @@ Partial Class ImgInfoSaveDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(640, 18)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Status"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Img.Save")("Status.Label")
         '
         'Label1
         '
@@ -58,8 +58,7 @@ Partial Class ImgInfoSaveDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(640, 55)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "Please wait while DISMTools saves the image information to a file. This can take " & _
-    "some time, depending on the tasks that are run."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.Img.Save")("Wait.Message")
         '
         'PictureBox1
         '
@@ -88,7 +87,7 @@ Partial Class ImgInfoSaveDlg
         Me.Name = "ImgInfoSaveDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Saving image information..."
+        Me.Text = LocalizationService.ForSection("Designer.Img.Save")("Saving.Image.Button")
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

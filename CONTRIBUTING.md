@@ -110,3 +110,18 @@ You can work on the following:
 ## Conclusion
 
 If you follow all these steps and rules, you'll achieve good pull requests, so go on and make your changes!
+
+## Installer language files
+
+Edit installer translations in `Installer\Languages`. Do not edit `Installer\Compiler\Default.isl` for DISMTools text. That file belongs to the bundled Inno Setup compiler runtime.
+
+## Application language files
+
+Application translations are edited in the root `language` folder. The application discovers available languages by reading all `*.ini` files in that folder.
+
+When adding a new language, copy an existing INI file and update `[LanguageFileInformation]` with `LanguageCode` and `LanguageName`. The file name can be chosen freely because the application identifies the language from the metadata inside the file. The application and every utility must keep using the shared `Utilities\Language\LocalizationService.vb` source file. Do not create project specific copies of the localization service.
+Keep utility interface sections scoped to the utility, for example `DynaViewer.Designer.Main` or `Updater.Designer.Main`. Do not place unrelated utility windows in the main application section `Designer.Main`.
+
+Keep section names and key names in English. Translate only the values after `=`.
+
+PE Helper localization is exported into a generated Windows installation ISO as one minimal INI for the selected `LanguageCode`. Keep `Helpers\extps1\PE_Helper\PE_Helper.ps1` in sync with the actual localization calls in `PEHelperMainMenu`. The localization validator checks this automatically. Do not copy a complete application language file into the ISO. HotInstall uses its own language files and must not reuse the application INI files.

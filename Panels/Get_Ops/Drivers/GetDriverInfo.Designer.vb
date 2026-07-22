@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class GetDriverInfo
     Inherits System.Windows.Forms.Form
 
@@ -190,7 +190,7 @@ Partial Class GetDriverInfo
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(241, 23)
         Me.Button9.TabIndex = 14
-        Me.Button9.Text = "View driver file information"
+        Me.Button9.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("View.Driver.File.Button")
         Me.Button9.UseVisualStyleBackColor = True
         '
         'Panel6
@@ -212,7 +212,7 @@ Partial Class GetDriverInfo
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 1
-        Me.Button7.Text = "Change"
+        Me.Button7.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Change.Button")
         Me.Button7.UseVisualStyleBackColor = True
         '
         'Label48
@@ -223,9 +223,7 @@ Partial Class GetDriverInfo
         Me.Label48.Name = "Label48"
         Me.Label48.Size = New System.Drawing.Size(863, 48)
         Me.Label48.TabIndex = 0
-        Me.Label48.Text = "You have configured the background processes to not show all drivers present in t" & _
-    "his image, which includes drivers part of the Windows distribution, so you may n" & _
-    "ot see the driver you're interested in."
+        Me.Label48.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Bg.Procs.Notice.Message")
         Me.Label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button8
@@ -236,7 +234,7 @@ Partial Class GetDriverInfo
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(96, 23)
         Me.Button8.TabIndex = 13
-        Me.Button8.Text = "Save..."
+        Me.Button8.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Save.Button")
         Me.Button8.UseVisualStyleBackColor = True
         '
         'Label5
@@ -247,7 +245,7 @@ Partial Class GetDriverInfo
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(38, 13)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Status"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Status.Label")
         '
         'DriverContainerPanel
         '
@@ -314,12 +312,12 @@ Partial Class GetDriverInfo
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Published name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("PublishedName.Column")
         Me.ColumnHeader1.Width = 188
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Original file name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Original.File.Name.Column")
         Me.ColumnHeader2.Width = 220
         '
         'SearchPanel
@@ -442,7 +440,7 @@ Partial Class GetDriverInfo
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(85, 13)
         Me.Label22.TabIndex = 0
-        Me.Label22.Text = "Published name:"
+        Me.Label22.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("PublishedName.Label")
         '
         'Label23
         '
@@ -453,7 +451,7 @@ Partial Class GetDriverInfo
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label23.Size = New System.Drawing.Size(38, 15)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = "Label8"
+        Me.Label23.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label23.UseMnemonic = False
         '
         'Label24
@@ -464,7 +462,7 @@ Partial Class GetDriverInfo
         Me.Label24.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label24.Size = New System.Drawing.Size(93, 17)
         Me.Label24.TabIndex = 0
-        Me.Label24.Text = "Original file name:"
+        Me.Label24.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Original.File.Name.Label")
         '
         'Label25
         '
@@ -475,7 +473,7 @@ Partial Class GetDriverInfo
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label25.Size = New System.Drawing.Size(38, 15)
         Me.Label25.TabIndex = 0
-        Me.Label25.Text = "Label8"
+        Me.Label25.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label25.UseMnemonic = False
         '
         'Label26
@@ -486,7 +484,7 @@ Partial Class GetDriverInfo
         Me.Label26.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label26.Size = New System.Drawing.Size(80, 17)
         Me.Label26.TabIndex = 0
-        Me.Label26.Text = "Provider name:"
+        Me.Label26.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("ProviderName.Label")
         '
         'Label35
         '
@@ -497,7 +495,7 @@ Partial Class GetDriverInfo
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label35.Size = New System.Drawing.Size(38, 15)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = "Label8"
+        Me.Label35.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label35.UseMnemonic = False
         '
         'Label31
@@ -508,7 +506,7 @@ Partial Class GetDriverInfo
         Me.Label31.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label31.Size = New System.Drawing.Size(65, 17)
         Me.Label31.TabIndex = 0
-        Me.Label31.Text = "Class name:"
+        Me.Label31.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("ClassName.Label")
         '
         'Label32
         '
@@ -519,7 +517,7 @@ Partial Class GetDriverInfo
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label32.Size = New System.Drawing.Size(38, 15)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = "Label8"
+        Me.Label32.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label32.UseMnemonic = False
         '
         'Label41
@@ -530,7 +528,7 @@ Partial Class GetDriverInfo
         Me.Label41.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label41.Size = New System.Drawing.Size(91, 17)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = "Class description:"
+        Me.Label41.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("ClassDescription.Label")
         '
         'Label40
         '
@@ -541,7 +539,7 @@ Partial Class GetDriverInfo
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label40.Size = New System.Drawing.Size(38, 15)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = "Label8"
+        Me.Label40.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label40.UseMnemonic = False
         '
         'Label43
@@ -552,7 +550,7 @@ Partial Class GetDriverInfo
         Me.Label43.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label43.Size = New System.Drawing.Size(64, 17)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = "Class GUID:"
+        Me.Label43.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("ClassGUID.Label")
         '
         'Label42
         '
@@ -563,7 +561,7 @@ Partial Class GetDriverInfo
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label42.Size = New System.Drawing.Size(38, 15)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = "Label8"
+        Me.Label42.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label42.UseMnemonic = False
         '
         'Label47
@@ -574,7 +572,7 @@ Partial Class GetDriverInfo
         Me.Label47.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label47.Size = New System.Drawing.Size(90, 17)
         Me.Label47.TabIndex = 0
-        Me.Label47.Text = "Catalog file path:"
+        Me.Label47.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Catalog.File.Path.Label")
         '
         'Label46
         '
@@ -585,7 +583,7 @@ Partial Class GetDriverInfo
         Me.Label46.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label46.Size = New System.Drawing.Size(38, 15)
         Me.Label46.TabIndex = 0
-        Me.Label46.Text = "Label8"
+        Me.Label46.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label46.UseMnemonic = False
         '
         'Label33
@@ -596,7 +594,7 @@ Partial Class GetDriverInfo
         Me.Label33.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label33.Size = New System.Drawing.Size(166, 17)
         Me.Label33.TabIndex = 0
-        Me.Label33.Text = "Part of the Windows distribution?"
+        Me.Label33.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Part.Windows.Label")
         '
         'Label34
         '
@@ -607,7 +605,7 @@ Partial Class GetDriverInfo
         Me.Label34.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label34.Size = New System.Drawing.Size(38, 15)
         Me.Label34.TabIndex = 0
-        Me.Label34.Text = "Label8"
+        Me.Label34.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label34.UseMnemonic = False
         '
         'Label28
@@ -618,7 +616,7 @@ Partial Class GetDriverInfo
         Me.Label28.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label28.Size = New System.Drawing.Size(151, 17)
         Me.Label28.TabIndex = 0
-        Me.Label28.Text = "Is critical to the boot process?"
+        Me.Label28.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Critical.Boot.Process.Label")
         '
         'Label27
         '
@@ -629,7 +627,7 @@ Partial Class GetDriverInfo
         Me.Label27.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label27.Size = New System.Drawing.Size(38, 15)
         Me.Label27.TabIndex = 0
-        Me.Label27.Text = "Label8"
+        Me.Label27.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label27.UseMnemonic = False
         '
         'Label30
@@ -640,7 +638,7 @@ Partial Class GetDriverInfo
         Me.Label30.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label30.Size = New System.Drawing.Size(46, 17)
         Me.Label30.TabIndex = 0
-        Me.Label30.Text = "Version:"
+        Me.Label30.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Version.Label")
         '
         'Label29
         '
@@ -651,7 +649,7 @@ Partial Class GetDriverInfo
         Me.Label29.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label29.Size = New System.Drawing.Size(38, 15)
         Me.Label29.TabIndex = 0
-        Me.Label29.Text = "Label8"
+        Me.Label29.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label29.UseMnemonic = False
         '
         'Label39
@@ -662,7 +660,7 @@ Partial Class GetDriverInfo
         Me.Label39.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label39.Size = New System.Drawing.Size(34, 17)
         Me.Label39.TabIndex = 0
-        Me.Label39.Text = "Date:"
+        Me.Label39.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Date.Label")
         '
         'Label38
         '
@@ -673,7 +671,7 @@ Partial Class GetDriverInfo
         Me.Label38.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label38.Size = New System.Drawing.Size(38, 15)
         Me.Label38.TabIndex = 0
-        Me.Label38.Text = "Label8"
+        Me.Label38.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label38.UseMnemonic = False
         '
         'Label45
@@ -684,7 +682,7 @@ Partial Class GetDriverInfo
         Me.Label45.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label45.Size = New System.Drawing.Size(121, 17)
         Me.Label45.TabIndex = 0
-        Me.Label45.Text = "Driver signature status:"
+        Me.Label45.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Driver.Signature.Label")
         '
         'Label44
         '
@@ -695,7 +693,7 @@ Partial Class GetDriverInfo
         Me.Label44.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label44.Size = New System.Drawing.Size(38, 15)
         Me.Label44.TabIndex = 0
-        Me.Label44.Text = "Label8"
+        Me.Label44.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label44.UseMnemonic = False
         '
         'Label55
@@ -726,7 +724,7 @@ Partial Class GetDriverInfo
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(436, 36)
         Me.Label36.TabIndex = 0
-        Me.Label36.Text = "Driver information"
+        Me.Label36.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DriverInfo.Label")
         Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -746,7 +744,7 @@ Partial Class GetDriverInfo
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(436, 364)
         Me.Label37.TabIndex = 0
-        Me.Label37.Text = "Select an installed driver to view its information here"
+        Me.Label37.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Installed.Driver.View.Label")
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel4
@@ -830,7 +828,7 @@ Partial Class GetDriverInfo
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(142, 22)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Remove all"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("RemoveAll.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -842,7 +840,7 @@ Partial Class GetDriverInfo
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(140, 22)
         Me.Button2.TabIndex = 1
-        Me.Button2.Text = "Remove selected"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("RemoveSelected.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -853,7 +851,7 @@ Partial Class GetDriverInfo
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(140, 22)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Add driver..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("AddDriver.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'DrvPackageContainerPanel
@@ -910,7 +908,7 @@ Partial Class GetDriverInfo
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(113, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Hardware description:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Hardware.Description.Label")
         '
         'Label9
         '
@@ -921,7 +919,7 @@ Partial Class GetDriverInfo
         Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label9.Size = New System.Drawing.Size(38, 15)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = "Label8"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label9.UseMnemonic = False
         '
         'Label10
@@ -932,7 +930,7 @@ Partial Class GetDriverInfo
         Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label10.Size = New System.Drawing.Size(72, 17)
         Me.Label10.TabIndex = 0
-        Me.Label10.Text = "Hardware ID:"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("HardwareID.Label")
         '
         'Label11
         '
@@ -943,7 +941,7 @@ Partial Class GetDriverInfo
         Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label11.Size = New System.Drawing.Size(38, 15)
         Me.Label11.TabIndex = 0
-        Me.Label11.Text = "Label8"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label11.UseMnemonic = False
         '
         'Label12
@@ -954,7 +952,7 @@ Partial Class GetDriverInfo
         Me.Label12.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label12.Size = New System.Drawing.Size(77, 17)
         Me.Label12.TabIndex = 0
-        Me.Label12.Text = "Additional IDs:"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("AdditionalIds.Label")
         '
         'Label13
         '
@@ -964,7 +962,7 @@ Partial Class GetDriverInfo
         Me.Label13.Padding = New System.Windows.Forms.Padding(12, 4, 0, 0)
         Me.Label13.Size = New System.Drawing.Size(95, 17)
         Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Compatible IDs:"
+        Me.Label13.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("CompatibleIds.Label")
         '
         'Label14
         '
@@ -975,7 +973,7 @@ Partial Class GetDriverInfo
         Me.Label14.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
         Me.Label14.Size = New System.Drawing.Size(50, 15)
         Me.Label14.TabIndex = 0
-        Me.Label14.Text = "Label8"
+        Me.Label14.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label14.UseMnemonic = False
         '
         'Label16
@@ -986,7 +984,7 @@ Partial Class GetDriverInfo
         Me.Label16.Padding = New System.Windows.Forms.Padding(12, 4, 0, 0)
         Me.Label16.Size = New System.Drawing.Size(79, 17)
         Me.Label16.TabIndex = 0
-        Me.Label16.Text = "Exclude IDs:"
+        Me.Label16.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("ExcludeIds.Label")
         '
         'Label15
         '
@@ -997,7 +995,7 @@ Partial Class GetDriverInfo
         Me.Label15.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
         Me.Label15.Size = New System.Drawing.Size(50, 15)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Label8"
+        Me.Label15.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label15.UseMnemonic = False
         '
         'Label17
@@ -1008,7 +1006,7 @@ Partial Class GetDriverInfo
         Me.Label17.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label17.Size = New System.Drawing.Size(126, 17)
         Me.Label17.TabIndex = 0
-        Me.Label17.Text = "Hardware manufacturer:"
+        Me.Label17.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Hardware.Manufacturer.Label")
         '
         'Label18
         '
@@ -1019,7 +1017,7 @@ Partial Class GetDriverInfo
         Me.Label18.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label18.Size = New System.Drawing.Size(38, 15)
         Me.Label18.TabIndex = 0
-        Me.Label18.Text = "Label8"
+        Me.Label18.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label18.UseMnemonic = False
         '
         'Label20
@@ -1030,7 +1028,7 @@ Partial Class GetDriverInfo
         Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label20.Size = New System.Drawing.Size(70, 17)
         Me.Label20.TabIndex = 0
-        Me.Label20.Text = "Architecture:"
+        Me.Label20.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Architecture.Label")
         '
         'Label19
         '
@@ -1041,7 +1039,7 @@ Partial Class GetDriverInfo
         Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label19.Size = New System.Drawing.Size(38, 15)
         Me.Label19.TabIndex = 0
-        Me.Label19.Text = "Label8"
+        Me.Label19.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("DynamicValue.Label")
         Me.Label19.UseMnemonic = False
         '
         'Label49
@@ -1097,7 +1095,7 @@ Partial Class GetDriverInfo
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(82, 13)
         Me.Label21.TabIndex = 1
-        Me.Label21.Text = "Jump to target:"
+        Me.Label21.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("JumpTarget.Label")
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Button6
@@ -1138,7 +1136,7 @@ Partial Class GetDriverInfo
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(257, 36)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Hardware targets"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("HardwareTargets.Label")
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'NoDrvPanel
@@ -1158,7 +1156,7 @@ Partial Class GetDriverInfo
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(436, 364)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Add or select a driver package to view its information here"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Add.DriverPackage.Label")
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel1
@@ -1179,7 +1177,7 @@ Partial Class GetDriverInfo
         Me.LinkLabel1.Size = New System.Drawing.Size(60, 13)
         Me.LinkLabel1.TabIndex = 2
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "<- Go back"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("GoBack.Link")
         '
         'MenuPanel
         '
@@ -1203,8 +1201,7 @@ Partial Class GetDriverInfo
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(791, 83)
         Me.Label4.TabIndex = 3
-        Me.Label4.Text = "Click here to get information about drivers that you want to add to the Windows i" & _
-    "mage you're servicing before proceeding with the driver addition process"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Help.AddDrivers.Message")
         '
         'Label3
         '
@@ -1213,8 +1210,7 @@ Partial Class GetDriverInfo
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(791, 83)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Click here to get information about drivers that you've installed or that came wi" & _
-    "th the Windows image you're servicing"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Get.Drivers.Message")
         '
         'PictureBox3
         '
@@ -1247,7 +1243,7 @@ Partial Class GetDriverInfo
         Me.InstalledDriverLink.Size = New System.Drawing.Size(352, 13)
         Me.InstalledDriverLink.TabIndex = 1
         Me.InstalledDriverLink.TabStop = True
-        Me.InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
+        Me.InstalledDriverLink.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("InstalledDriver.Link")
         '
         'DriverFileLink
         '
@@ -1260,7 +1256,7 @@ Partial Class GetDriverInfo
         Me.DriverFileLink.Size = New System.Drawing.Size(248, 13)
         Me.DriverFileLink.TabIndex = 1
         Me.DriverFileLink.TabStop = True
-        Me.DriverFileLink.Text = "I want to get information about driver files"
+        Me.DriverFileLink.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Iwant.Link")
         '
         'Label2
         '
@@ -1269,13 +1265,13 @@ Partial Class GetDriverInfo
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(221, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "What do you want to get information about?"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Get.Label")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Driver files|*.inf"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.GetDriverInfo")("Driver.Files.Inf.Filter")
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
-        Me.OpenFileDialog1.Title = "Locate driver files"
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.GetDriverInfo")("Locate.Driver.Files.Title")
         '
         'ImageTaskHeader1
         '
@@ -1305,7 +1301,7 @@ Partial Class GetDriverInfo
         Me.Name = "GetDriverInfo"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Get driver information"
+        Me.Text = LocalizationService.ForSection("Designer.GetDriverInfo")("Driver.Label")
         Me.DriverInfoContainerPanel.ResumeLayout(False)
         Me.DriverInfoPanel.ResumeLayout(False)
         Me.DriverInfoPanel.PerformLayout()

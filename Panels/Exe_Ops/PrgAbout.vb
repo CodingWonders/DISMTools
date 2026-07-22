@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Net
@@ -14,332 +14,39 @@ Public Class PrgAbout
 
     Private Sub PrgAbout_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not resized Then ResizeImage()
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "About this program"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
-                        Label3.Text = "These resources and components were used in the creation of this program:"
-                        Label4.Text = "Resources"
-                        Label5.Text = "Fluency"
-                        Label6.Text = "SQL Server icon (Color)"
-                        Label7.Text = "Utilities"
-                        Label8.Text = "7-Zip"
-                        Label10.Text = "Help documentation"
-                        Label11.Text = "Command Help source"
-                        Label13.Text = "Scintilla.NET (NuGet package)"
-                        If Not MainForm.dtBranch.Contains("pre") Then
-                            Label15.Text = "Built on " & RetrieveLinkerTimestamp() & " by msbuild"
-                            Label15.Visible = True
-                        End If
-                        Label16.Text = "ManagedDism (NuGet package)"
-                        Label17.Text = "Branding assets"
-                        Label18.Text = "Windows Home Server 2011"
-                        LinkLabel1.Text = "CREDITS"
-                        LinkLabel2.Text = "LICENSES"
-                        LinkLabel3.Text = "WHAT'S NEW"
-                        LinkLabel4.Text = "Icons8"
-                        LinkLabel5.Text = "Visit website"
-                        LinkLabel7.Text = "Microsoft"
-                        LinkLabel9.Text = "Visit website"
-                        LinkLabel10.Text = "Visit website"
-                        LinkLabel11.Text = "Microsoft"
-                        LinkLabel12.Text = "Visit website"
-                        OK_Button.Text = "OK"
-                    Case "ESN"
-                        Text = "Acerca de este programa"
-                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
-                        Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
-                        Label4.Text = "Recursos"
-                        Label5.Text = "Fluency"
-                        Label6.Text = "Icono de SQL Server (Color)"
-                        Label7.Text = "Utilidades"
-                        Label8.Text = "7-Zip"
-                        Label10.Text = "Documentación de ayuda"
-                        Label11.Text = "Fuente de ayuda de comandos"
-                        Label13.Text = "Scintilla.NET (paquete NuGet)"
-                        If Not MainForm.dtBranch.Contains("pre") Then
-                            Label15.Text = "Compilado el " & RetrieveLinkerTimestamp() & " por msbuild"
-                            Label15.Visible = True
-                        End If
-                        Label16.Text = "ManagedDism (paquete NuGet)"
-                        Label17.Text = "Recursos publicitarios"
-                        Label18.Text = "Windows Home Server 2011"
-                        LinkLabel1.Text = "CRÉDITOS"
-                        LinkLabel2.Text = "LICENCIAS"
-                        LinkLabel3.Text = "NOVEDADES"
-                        LinkLabel4.Text = "Icons8"
-                        LinkLabel5.Text = "Visitar sitio"
-                        LinkLabel7.Text = "Microsoft"
-                        LinkLabel9.Text = "Visitar sitio"
-                        LinkLabel10.Text = "Visitar sitio"
-                        LinkLabel11.Text = "Microsoft"
-                        LinkLabel12.Text = "Visitar sitio"
-                        OK_Button.Text = "Aceptar"
-                        UpdCheckBtn.Text = "Comprobar actualizaciones"
-                    Case "FRA"
-                        Text = "À propos de ce programme"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
-                        Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
-                        Label4.Text = "Ressources"
-                        Label5.Text = "Fluency"
-                        Label6.Text = "Icône SQL Server (Color)"
-                        Label7.Text = "Outils"
-                        Label8.Text = "7-Zip"
-                        Label10.Text = "Documentation d'aide"
-                        Label11.Text = "Source d'aide à la commande"
-                        Label13.Text = "Scintilla.NET (paquet NuGet)"
-                        If Not MainForm.dtBranch.Contains("pre") Then
-                            Label15.Text = "Construit le " & RetrieveLinkerTimestamp() & " par msbuild"
-                            Label15.Visible = True
-                        End If
-                        Label16.Text = "ManagedDism (paquet NuGet)"
-                        Label17.Text = "Les atouts de la marque"
-                        Label18.Text = "Windows Home Server 2011"
-                        LinkLabel1.Text = "CRÉDITS"
-                        LinkLabel2.Text = "LICENCES"
-                        LinkLabel3.Text = "QUOI DE NEUF"
-                        LinkLabel4.Text = "Icons8"
-                        LinkLabel5.Text = "Site web"
-                        LinkLabel7.Text = "Microsoft"
-                        LinkLabel9.Text = "Site web"
-                        LinkLabel10.Text = "Site web"
-                        LinkLabel11.Text = "Microsoft"
-                        LinkLabel12.Text = "Site web"
-                        OK_Button.Text = "OK"
-                        UpdCheckBtn.Text = "Vérifier les mises à jour"
-                    Case "PTB", "PTG"
-                        Text = "Acerca deste programa"
-                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
-                        Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
-                        Label4.Text = "Recursos"
-                        Label5.Text = "Fluency"
-                        Label6.Text = "Ícone do SQL Server (Cor)"
-                        Label7.Text = "Utilitários"
-                        Label8.Text = "7-Zip"
-                        Label10.Text = "Documentação de ajuda"
-                        Label11.Text = "Fonte da Ajuda do Comando"
-                        Label13.Text = "Scintilla.NET (pacote NuGet)"
-                        If Not MainForm.dtBranch.Contains("pre") Then
-                            Label15.Text = "Construído em " & RetrieveLinkerTimestamp() & " por msbuild"
-                            Label15.Visible = True
-                        End If
-                        Label16.Text = "ManagedDism (pacote NuGet)"
-                        Label17.Text = "Activos de marca"
-                        Label18.Text = "Windows Home Server 2011"
-                        LinkLabel1.Text = "CRÉDITOS"
-                        LinkLabel2.Text = "LICENÇAS"
-                        LinkLabel3.Text = "O QUE HÁ DE NOVO"
-                        LinkLabel4.Text = "Ícones8"
-                        LinkLabel5.Text = "Sítio Web"
-                        LinkLabel7.Text = "Microsoft"
-                        LinkLabel9.Text = "Sítio Web"
-                        LinkLabel10.Text = "Sítio Web"
-                        LinkLabel11.Text = "Microsoft"
-                        LinkLabel12.Text = "Sítio Web"
-                        OK_Button.Text = "OK"
-                        UpdCheckBtn.Text = "Verificar actualizações"
-                    Case "ITA"
-                        Text = "Informazioni su questo programma"
-                        Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie ad un'interfaccia grafica"
-                        Label3.Text = "Per la creazione di questo programma sono stati usate queste risorse e componenti:"
-                        Label4.Text = "Risorse"
-                        Label5.Text = "Fluency"
-                        Label6.Text = "Icona SQL Server (Color)"
-                        Label7.Text = "Utilità"
-                        Label8.Text = "7-Zip"
-                        Label10.Text = "Documentazione guida in linea"
-                        Label11.Text = "Sorgente guida comandi"
-                        Label13.Text = "Scintilla.NET (pacchetto NuGet)"
-                        If Not MainForm.dtBranch.Contains("pre") Then
-                            Label15.Text = "Creato con " & RetrieveLinkerTimestamp() & " da msbuild"
-                            Label15.Visible = True
-                        End If
-                        Label16.Text = "ManagedDism (pacchetto NuGet)"
-                        Label17.Text = "Risorse branding"
-                        Label18.Text = "Windows Home Server 2011"
-                        LinkLabel1.Text = "CREDITI"
-                        LinkLabel2.Text = "LICENZE"
-                        LinkLabel3.Text = "NOVITA'"
-                        LinkLabel4.Text = "Icons8"
-                        LinkLabel5.Text = "Sito web"
-                        LinkLabel7.Text = "Microsoft"
-                        LinkLabel9.Text = "Sito web"
-                        LinkLabel10.Text = "Sito web"
-                        LinkLabel11.Text = "Microsoft"
-                        LinkLabel12.Text = "Sito web"
-                        OK_Button.Text = "OK"
-                        UpdCheckBtn.Text = "Controlla aggiornamenti"
-                End Select
-            Case 1
-                Text = "About this program"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
-                Label3.Text = "These resources and components were used in the creation of this program:"
-                Label4.Text = "Resources"
-                Label5.Text = "Fluency"
-                Label6.Text = "SQL Server icon (Color)"
-                Label7.Text = "Utilities"
-                Label8.Text = "7-Zip"
-                Label10.Text = "Help documentation"
-                Label11.Text = "Command Help source"
-                Label13.Text = "Scintilla.NET (NuGet package)"
-                If Not MainForm.dtBranch.Contains("pre") Then
-                    Label15.Text = "Built on " & RetrieveLinkerTimestamp() & " by msbuild"
-                    Label15.Visible = True
-                End If
-                Label16.Text = "ManagedDism (NuGet package)"
-                Label17.Text = "Branding assets"
-                Label18.Text = "Windows Home Server 2011"
-                LinkLabel1.Text = "CREDITS"
-                LinkLabel2.Text = "LICENSES"
-                LinkLabel3.Text = "WHAT'S NEW"
-                LinkLabel4.Text = "Icons8"
-                LinkLabel5.Text = "Visit website"
-                LinkLabel7.Text = "Microsoft"
-                LinkLabel9.Text = "Visit website"
-                LinkLabel10.Text = "Visit website"
-                LinkLabel11.Text = "Microsoft"
-                LinkLabel12.Text = "Visit website"
-                OK_Button.Text = "OK"
-                UpdCheckBtn.Text = "Check for updates"
-            Case 2
-                Text = "Acerca de este programa"
-                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
-                Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
-                Label4.Text = "Recursos"
-                Label5.Text = "Fluency"
-                Label6.Text = "Icono de SQL Server (Color)"
-                Label7.Text = "Utilidades"
-                Label8.Text = "7-Zip"
-                Label10.Text = "Documentación de ayuda"
-                Label11.Text = "Fuente de ayuda de comandos"
-                Label13.Text = "Scintilla.NET (paquete NuGet)"
-                If Not MainForm.dtBranch.Contains("pre") Then
-                    Label15.Text = "Compilado el " & RetrieveLinkerTimestamp() & " por msbuild"
-                    Label15.Visible = True
-                End If
-                Label16.Text = "ManagedDism (paquete NuGet)"
-                Label17.Text = "Recursos publicitarios"
-                Label18.Text = "Windows Home Server 2011"
-                LinkLabel1.Text = "CRÉDITOS"
-                LinkLabel2.Text = "LICENCIAS"
-                LinkLabel3.Text = "NOVEDADES"
-                LinkLabel4.Text = "Icons8"
-                LinkLabel5.Text = "Visitar sitio"
-                LinkLabel7.Text = "Microsoft"
-                LinkLabel9.Text = "Visitar sitio"
-                LinkLabel10.Text = "Visitar sitio"
-                LinkLabel11.Text = "Microsoft"
-                LinkLabel12.Text = "Visitar sitio"
-                OK_Button.Text = "Aceptar"
-                UpdCheckBtn.Text = "Comprobar actualizaciones"
-            Case 3
-                Text = "À propos de ce programme"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
-                Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
-                Label4.Text = "Ressources"
-                Label5.Text = "Fluency"
-                Label6.Text = "Icône SQL Server (Color)"
-                Label7.Text = "Outils"
-                Label8.Text = "7-Zip"
-                Label10.Text = "Documentation d'aide"
-                Label11.Text = "Source d'aide à la commande"
-                Label13.Text = "Scintilla.NET (paquet NuGet)"
-                If Not MainForm.dtBranch.Contains("pre") Then
-                    Label15.Text = "Construit le " & RetrieveLinkerTimestamp() & " par msbuild"
-                    Label15.Visible = True
-                End If
-                Label16.Text = "ManagedDism (paquet NuGet)"
-                Label17.Text = "Les atouts de la marque"
-                Label18.Text = "Windows Home Server 2011"
-                LinkLabel1.Text = "CRÉDITS"
-                LinkLabel2.Text = "LICENCES"
-                LinkLabel3.Text = "QUOI DE NEUF"
-                LinkLabel4.Text = "Icons8"
-                LinkLabel5.Text = "Site web"
-                LinkLabel7.Text = "Microsoft"
-                LinkLabel9.Text = "Site web"
-                LinkLabel10.Text = "Site web"
-                LinkLabel11.Text = "Microsoft"
-                LinkLabel12.Text = "Site web"
-                OK_Button.Text = "OK"
-                UpdCheckBtn.Text = "Vérifier les mises à jour"
-            Case 4
-                Text = "Acerca deste programa"
-                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
-                Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
-                Label4.Text = "Recursos"
-                Label5.Text = "Fluency"
-                Label6.Text = "Ícone do SQL Server (Cor)"
-                Label7.Text = "Utilitários"
-                Label8.Text = "7-Zip"
-                Label10.Text = "Documentação de ajuda"
-                Label11.Text = "Fonte da Ajuda do Comando"
-                Label13.Text = "Scintilla.NET (pacote NuGet)"
-                If Not MainForm.dtBranch.Contains("pre") Then
-                    Label15.Text = "Construído em " & RetrieveLinkerTimestamp() & " por msbuild"
-                    Label15.Visible = True
-                End If
-                Label16.Text = "ManagedDism (pacote NuGet)"
-                Label17.Text = "Activos de marca"
-                Label18.Text = "Windows Home Server 2011"
-                LinkLabel1.Text = "CRÉDITOS"
-                LinkLabel2.Text = "LICENÇAS"
-                LinkLabel3.Text = "O QUE HÁ DE NOVO"
-                LinkLabel4.Text = "Ícones8"
-                LinkLabel5.Text = "Sítio Web"
-                LinkLabel7.Text = "Microsoft"
-                LinkLabel9.Text = "Sítio Web"
-                LinkLabel10.Text = "Sítio Web"
-                LinkLabel11.Text = "Microsoft"
-                LinkLabel12.Text = "Sítio Web"
-                OK_Button.Text = "OK"
-                UpdCheckBtn.Text = "Verificar actualizações"
-            Case 5
-                Text = "Informazioni su questo programma"
-                Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
-                Label3.Text = "Per la creazione di questo programma sono stati usate queste risorse e componenti:"
-                Label4.Text = "Risorse"
-                Label5.Text = "Fluency"
-                Label6.Text = "Icona SQL Server (Color)"
-                Label7.Text = "Utilità"
-                Label8.Text = "7-Zip"
-                Label10.Text = "Documentazione guida in linea"
-                Label11.Text = "Sorgente guida comandi"
-                Label13.Text = "Scintilla.NET (pacchetto NuGet)"
-                If Not MainForm.dtBranch.Contains("pre") Then
-                    Label15.Text = "Creato con " & RetrieveLinkerTimestamp() & " da msbuild"
-                    Label15.Visible = True
-                End If
-                Label16.Text = "ManagedDism (pacchetto NuGet)"
-                Label17.Text = "Risorse branding"
-                Label18.Text = "Windows Home Server 2011"
-                LinkLabel1.Text = "CREDITI"
-                LinkLabel2.Text = "LICENZE"
-                LinkLabel3.Text = "COSA C'È DI NUOVO"
-                LinkLabel4.Text = "Icons8"
-                LinkLabel5.Text = "Sito web"
-                LinkLabel7.Text = "Microsoft"
-                LinkLabel9.Text = "Sito web"
-                LinkLabel10.Text = "Sito web"
-                LinkLabel11.Text = "Microsoft"
-                LinkLabel12.Text = "Sito web"
-                OK_Button.Text = "OK"
-                UpdCheckBtn.Text = "Controlla aggiornamenti"
-        End Select
-        RichTextBox1.Text = My.Resources.LicenseOverview
-        RichTextBox2.Text = My.Resources.WhatsNew
+        Text = LocalizationService.ForSection("PrgAbout")("AboutProgram.Label")
+        Label1.Text = LocalizationService.ForSection("PrgAbout").Format("DISM.Tools.Version.Label", My.Application.Info.Version.ToString(), If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), ""))
+        Label2.Text = LocalizationService.ForSection("PrgAbout")("DISM.Tools.Lets.Label")
+        Label3.Text = LocalizationService.ForSection("PrgAbout")("ResourcesUsed.Label")
+        Label4.Text = LocalizationService.ForSection("PrgAbout")("Resources.Label")
+        Label5.Text = LocalizationService.ForSection("PrgAbout")("Fluency.Label")
+        Label6.Text = LocalizationService.ForSection("PrgAbout")("Sqlserver.Icon.Color.Label")
+        Label7.Text = LocalizationService.ForSection("PrgAbout")("Utilities.Label")
+        Label8.Text = LocalizationService.ForSection("PrgAbout")("Zip.Label")
+        Label10.Text = LocalizationService.ForSection("PrgAbout")("Help.Documentation.Label")
+        Label11.Text = LocalizationService.ForSection("PrgAbout")("Command.Help.Source.Label")
+        Label13.Text = LocalizationService.ForSection("PrgAbout")("Scintilla.Netnu.Get.Label")
+        If Not MainForm.dtBranch.Contains(LocalizationService.ForSection("PrgAbout")("Pre.Label")) Then
+            Label15.Text = LocalizationService.ForSection("PrgAbout").Format("BuiltMsbuild.Label", RetrieveLinkerTimestamp())
+            Label15.Visible = True
+        End If
+        Label16.Text = LocalizationService.ForSection("PrgAbout")("Managed.Dismnu.Get.Label")
+        Label17.Text = LocalizationService.ForSection("PrgAbout")("BrandingAssets.Label")
+        Label18.Text = LocalizationService.ForSection("PrgAbout")("Windows.Label")
+        LinkLabel1.Text = LocalizationService.ForSection("PrgAbout")("Credits.Link")
+        LinkLabel2.Text = LocalizationService.ForSection("PrgAbout")("Licenses.Link")
+        LinkLabel3.Text = LocalizationService.ForSection("PrgAbout")("Whatsnew.Link")
+        LinkLabel4.Text = LocalizationService.ForSection("PrgAbout")("Icons.Link")
+        LinkLabel5.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
+        LinkLabel7.Text = LocalizationService.ForSection("PrgAbout")("Microsoft.Link")
+        LinkLabel9.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
+        LinkLabel10.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
+        LinkLabel11.Text = LocalizationService.ForSection("PrgAbout")("Microsoft.Link")
+        LinkLabel12.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
+        OK_Button.Text = LocalizationService.ForSection("PrgAbout")("Ok.Button")
+        UpdCheckBtn.Text = LocalizationService.ForSection("PrgAbout")("CheckUpdates.Label")
+        RichTextBox1.Text = LocalizationService.ForSection("PrgAbout.Resources")("DISM.Tools.Free.Message")
+        RichTextBox2.Text = LocalizationService.ForSection("PrgAbout.Resources")("PreviewChanges.Message")
         ForeColor = Color.White
         Label15.ForeColor = Color.Black
         PictureBox1.Image = If(MainForm.dtBranch.Contains("pre"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
@@ -530,87 +237,15 @@ Public Class PrgAbout
     End Sub
 
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        WindowHelper.DisplayToolTip(sender, "Check out the project's repository on GitHub")
-                    Case "ESN"
-                        WindowHelper.DisplayToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
-                    Case "FRA"
-                        WindowHelper.DisplayToolTip(sender, "Consultez le dépôt du projet sur GitHub")
-                    Case "PTB", "PTG"
-                        WindowHelper.DisplayToolTip(sender, "Consulte o repositório do projeto no GitHub")
-                    Case "ITA"
-                        WindowHelper.DisplayToolTip(sender, "Controlla il repository del progetto su GitHub")
-                End Select
-            Case 1
-                WindowHelper.DisplayToolTip(sender, "Check out the project's repository on GitHub")
-            Case 2
-                WindowHelper.DisplayToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
-            Case 3
-                WindowHelper.DisplayToolTip(sender, "Consultez le dépôt du projet sur GitHub")
-            Case 4
-                WindowHelper.DisplayToolTip(sender, "Consulte o repositório do projeto no GitHub")
-            Case 5
-                WindowHelper.DisplayToolTip(sender, "Controlla il repository del progetto su GitHub")
-        End Select
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PrgAbout.Tooltip")("Project.GitHub.Label"))
     End Sub
 
     Private Sub PictureBox3_MouseHover(sender As Object, e As EventArgs) Handles PictureBox3.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        WindowHelper.DisplayToolTip(sender, "Check out the project's official subreddit")
-                    Case "ESN"
-                        WindowHelper.DisplayToolTip(sender, "Consulte el subreddit oficial del proyecto")
-                    Case "FRA"
-                        WindowHelper.DisplayToolTip(sender, "Consultez le subreddit officiel du projet")
-                    Case "PTB", "PTG"
-                        WindowHelper.DisplayToolTip(sender, "Consulte o subreddit oficial do projeto")
-                    Case "ITA"
-                        WindowHelper.DisplayToolTip(sender, "Controlla il subreddit ufficiale del progetto")
-                End Select
-            Case 1
-                WindowHelper.DisplayToolTip(sender, "Check out the project's official subreddit")
-            Case 2
-                WindowHelper.DisplayToolTip(sender, "Consulte el subreddit oficial del proyecto")
-            Case 3
-                WindowHelper.DisplayToolTip(sender, "Consultez le subreddit officiel du projet")
-            Case 4
-                WindowHelper.DisplayToolTip(sender, "Consulte o subreddit oficial do projeto")
-            Case 5
-                WindowHelper.DisplayToolTip(sender, "Controlla il subreddit ufficiale del progetto")
-        End Select
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PrgAbout.Tooltip")("Text1.Label"))
     End Sub
 
     Private Sub PictureBox4_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        WindowHelper.DisplayToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
-                    Case "ESN"
-                        WindowHelper.DisplayToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
-                    Case "FRA"
-                        WindowHelper.DisplayToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
-                    Case "PTB", "PTG"
-                        WindowHelper.DisplayToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
-                    Case "ITA"
-                        WindowHelper.DisplayToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
-                End Select
-            Case 1
-                WindowHelper.DisplayToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
-            Case 2
-                WindowHelper.DisplayToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
-            Case 3
-                WindowHelper.DisplayToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
-            Case 4
-                WindowHelper.DisplayToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
-            Case 5
-                WindowHelper.DisplayToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
-        End Select
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PrgAbout.Tooltip")("Project.MDL.Label"))
     End Sub
 
     Private Sub UpdCheckBtn_Click(sender As Object, e As EventArgs) Handles UpdCheckBtn.Click
@@ -626,62 +261,14 @@ Public Class PrgAbout
                 client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/stable/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
             End Using
         Catch ex As WebException
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                        Case "ESN"
-                            MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                        Case "FRA"
-                            MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                        Case "ITA"
-                            MsgBox("Non è stato possibile scaricare il programma di controllo degli aggiornamenti. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                    End Select
-                Case 1
-                    MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                Case 2
-                    MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                Case 3
-                    MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                Case 4
-                    MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-                Case 5
-                    MsgBox("Non è stato possibile scaricare il programma di controllo degli aggiornamenti. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
-            End Select
+            MsgBox(LocalizationService.ForSection("PrgAbout.UpdateCheck").Format("Couldn.Tdownload.Message", ex.Status.ToString()), vbOKOnly + vbCritical, UpdCheckBtn.Text)
             Exit Sub
         End Try
-        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id & " " & LocalizationService.GetLanguageCommandLineArgument())
     End Sub
 
     Private Sub PictureBox5_MouseHover(sender As Object, e As EventArgs) Handles PictureBox5.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        WindowHelper.DisplayToolTip(sender, "Join the CodingWonders Software Discord server")
-                    Case "ESN"
-                        WindowHelper.DisplayToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
-                    Case "FRA"
-                        WindowHelper.DisplayToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
-                    Case "PTB", "PTG"
-                        WindowHelper.DisplayToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
-                    Case "ITA"
-                        WindowHelper.DisplayToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
-                End Select
-            Case 1
-                WindowHelper.DisplayToolTip(sender, "Join the CodingWonders Software Discord server")
-            Case 2
-                WindowHelper.DisplayToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
-            Case 3
-                WindowHelper.DisplayToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
-            Case 4
-                WindowHelper.DisplayToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
-            Case 5
-                WindowHelper.DisplayToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
-        End Select
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PrgAbout.Tooltip")("Join.Coding.Wonders.Label"))
     End Sub
 
     Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click

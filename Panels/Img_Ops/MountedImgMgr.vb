@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Threading
 Imports Microsoft.Dism
 
@@ -7,151 +7,19 @@ Public Class MountedImgMgr
     Public ignoreRepeats As Boolean = False
 
     Private Sub MountedImgMgr_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Mounted image manager"
-                        Label1.Text = "Here is an overview of the images that have been mounted on this system. You can look up information about them, and perform some basic tasks. To fully perform image actions with this program though, you need to load the mount directory into a project:"
-                        ListView1.Columns(0).Text = "Image file"
-                        ListView1.Columns(1).Text = "Index"
-                        ListView1.Columns(2).Text = "Mount directory"
-                        ListView1.Columns(3).Text = "Status"
-                        ListView1.Columns(4).Text = "Read/write permissions?"
-                        Button1.Text = "Unmount image"
-                        Button2.Text = "Reload servicing"
-                        Button3.Text = "Enable write permissions"
-                        Button4.Text = "Open mount directory"
-                        Button5.Text = "Remove volume images..."
-                        Button6.Text = "Load into project"
-                    Case "ESN"
-                        Text = "Administrador de imágenes montadas"
-                        Label1.Text = "Este es un resumen de las imágenes que se han montado en este sistema. Puede consultar información sobre ellas, y realizar algunas tareas básicas. En cambio, si desea realizar todas las operaciones posibles con este programa, necesita cargar el directorio de montaje en un proyecto:"
-                        ListView1.Columns(0).Text = "Archivo de imagen"
-                        ListView1.Columns(1).Text = "Índice"
-                        ListView1.Columns(2).Text = "Directorio de montaje"
-                        ListView1.Columns(3).Text = "Estado"
-                        ListView1.Columns(4).Text = "¿Permisos de lectura y escritura?"
-                        Button1.Text = "Desmontar imagen"
-                        Button2.Text = "Recargar servicio"
-                        Button3.Text = "Habilitar escritura"
-                        Button4.Text = "Abrir directorio de montaje"
-                        Button5.Text = "Eliminar imágenes de volumen..."
-                        Button6.Text = "Cargar en proyecto"
-                    Case "FRA"
-                        Text = "Gestionnaire des images montées"
-                        Label1.Text = "Voici une vue d'ensemble des images qui ont été montées sur ce système. Vous pouvez rechercher des informations à leur sujet et effectuer quelques tâches de base. Cependant, pour effectuer des actions sur les images avec ce programme, vous devez charger le répertoire de montage dans un projet :"
-                        ListView1.Columns(0).Text = "Fichier image"
-                        ListView1.Columns(1).Text = "Index"
-                        ListView1.Columns(2).Text = "Répertoire de montage"
-                        ListView1.Columns(3).Text = "État"
-                        ListView1.Columns(4).Text = "Droits de lecture/écriture ?"
-                        Button1.Text = "Démonter l'image"
-                        Button2.Text = "Recharger le service"
-                        Button3.Text = "Activer les droits d'écriture"
-                        Button4.Text = "Ouvrir le répertoire de montage"
-                        Button5.Text = "Supprimer les images de volume..."
-                        Button6.Text = "Charger dans le projet"
-                    Case "PTB", "PTG"
-                        Text = "Gestor de imagens montadas"
-                        Label1.Text = "Aqui está uma visão geral das imagens que foram montadas neste sistema. Pode procurar informação sobre elas e executar algumas tarefas básicas. No entanto, para executar totalmente as acções de imagem com este programa, é necessário carregar o diretório de montagem para um projeto:"
-                        ListView1.Columns(0).Text = "Ficheiro de imagem"
-                        ListView1.Columns(1).Text = "Índice"
-                        ListView1.Columns(2).Text = "Diretório de montagem"
-                        ListView1.Columns(3).Text = "Estado"
-                        ListView1.Columns(4).Text = "Permissões de leitura/escrita?"
-                        Button1.Text = "Desmontar imagem"
-                        Button2.Text = "Recarregar a manutenção"
-                        Button3.Text = "Ativar permissões de escrita"
-                        Button4.Text = "Abrir diretório de montagem"
-                        Button5.Text = "Remover imagens de volume..."
-                        Button6.Text = "Carregar no projeto"
-                    Case "ITA"
-                        Text = "Gestione di immagini montate"
-                        Label1.Text = "Questa è una panoramica delle immagini che sono state montate su questo sistema. È possibile cercare informazioni su di esse ed eseguire alcune operazioni elementari. Per eseguire completamente le azioni sulle immagini con questo programma, tuttavia, è necessario caricare la directory di montaggio in un progetto:"
-                        ListView1.Columns(0).Text = "File immagine"
-                        ListView1.Columns(1).Text = "Indice"
-                        ListView1.Columns(2).Text = "Directory di montaggio"
-                        ListView1.Columns(3).Text = "Stato"
-                        ListView1.Columns(4).Text = "Permessi di lettura/scrittura?"
-                        Button1.Text = "Smontare l'immagine"
-                        Button2.Text = "Ricaricare l'assistenza"
-                        Button3.Text = "Abilitare i permessi di scrittura"
-                        Button4.Text = "Aprire la directory di montaggio"
-                        Button5.Text = "Rimuovere le immagini del volume..."
-                        Button6.Text = "Carica nel progetto"
-                End Select
-            Case 1
-                Text = "Mounted image manager"
-                Label1.Text = "Here is an overview of the images that have been mounted on this system. You can look up information about them, and perform some basic tasks. To fully perform image actions with this program though, you need to load the mount directory into a project:"
-                ListView1.Columns(0).Text = "Image file"
-                ListView1.Columns(1).Text = "Index"
-                ListView1.Columns(2).Text = "Mount directory"
-                ListView1.Columns(3).Text = "Status"
-                ListView1.Columns(4).Text = "Read/write permissions?"
-                Button1.Text = "Unmount image"
-                Button2.Text = "Reload servicing"
-                Button3.Text = "Enable write permissions"
-                Button4.Text = "Open mount directory"
-                Button5.Text = "Remove volume images..."
-                Button6.Text = "Load into project"
-            Case 2
-                Text = "Administrador de imágenes montadas"
-                Label1.Text = "Este es un resumen de las imágenes que se han montado en este sistema. Puede consultar información sobre ellas, y realizar algunas tareas básicas. En cambio, si desea realizar todas las operaciones posibles con este programa, necesita cargar el directorio de montaje en un proyecto:"
-                ListView1.Columns(0).Text = "Archivo de imagen"
-                ListView1.Columns(1).Text = "Índice"
-                ListView1.Columns(2).Text = "Directorio de montaje"
-                ListView1.Columns(4).Text = "¿Permisos de lectura y escritura?"
-                ListView1.Columns(5).Text = "Versión"
-                Button1.Text = "Desmontar imagen"
-                Button2.Text = "Recargar servicio"
-                Button3.Text = "Habilitar escritura"
-                Button4.Text = "Abrir directorio de montaje"
-                Button5.Text = "Eliminar imágenes de volumen..."
-                Button6.Text = "Cargar en proyecto"
-            Case 3
-                Text = "Gestionnaire des images montées"
-                Label1.Text = "Voici une vue d'ensemble des images qui ont été montées sur ce système. Vous pouvez rechercher des informations à leur sujet et effectuer quelques tâches de base. Cependant, pour effectuer des actions sur les images avec ce programme, vous devez charger le répertoire de montage dans un projet :"
-                ListView1.Columns(0).Text = "Fichier image"
-                ListView1.Columns(1).Text = "Index"
-                ListView1.Columns(2).Text = "Répertoire de montage"
-                ListView1.Columns(3).Text = "État"
-                ListView1.Columns(4).Text = "Droits de lecture/écriture ?"
-                Button1.Text = "Démonter l'image"
-                Button2.Text = "Recharger le service"
-                Button3.Text = "Activer les droits d'écriture"
-                Button4.Text = "Ouvrir le répertoire de montage"
-                Button5.Text = "Supprimer les images de volume..."
-                Button6.Text = "Charger dans le projet"
-            Case 4
-                Text = "Gestor de imagens montadas"
-                Label1.Text = "Aqui está uma visão geral das imagens que foram montadas neste sistema. Pode procurar informação sobre elas e executar algumas tarefas básicas. No entanto, para executar totalmente as acções de imagem com este programa, é necessário carregar o diretório de montagem para um projeto:"
-                ListView1.Columns(0).Text = "Ficheiro de imagem"
-                ListView1.Columns(1).Text = "Índice"
-                ListView1.Columns(2).Text = "Diretório de montagem"
-                ListView1.Columns(3).Text = "Estado"
-                ListView1.Columns(4).Text = "Permissões de leitura/escrita?"
-                Button1.Text = "Desmontar imagem"
-                Button2.Text = "Recarregar a manutenção"
-                Button3.Text = "Ativar permissões de escrita"
-                Button4.Text = "Abrir diretório de montagem"
-                Button5.Text = "Remover imagens de volume..."
-                Button6.Text = "Carregar no projeto"
-            Case 5
-                Text = "Gestione di immagini montate"
-                Label1.Text = "Questa è una panoramica delle immagini che sono state montate su questo sistema. È possibile cercare informazioni su di esse ed eseguire alcune operazioni elementari. Per eseguire completamente le azioni sulle immagini con questo programma, tuttavia, è necessario caricare la directory di montaggio in un progetto:"
-                ListView1.Columns(0).Text = "File immagine"
-                ListView1.Columns(1).Text = "Indice"
-                ListView1.Columns(2).Text = "Directory di montaggio"
-                ListView1.Columns(3).Text = "Stato"
-                ListView1.Columns(4).Text = "Permessi di lettura/scrittura?"
-                Button1.Text = "Smontare l'immagine"
-                Button2.Text = "Ricaricare l'assistenza"
-                Button3.Text = "Abilitare i permessi di scrittura"
-                Button4.Text = "Aprire la directory di montaggio"
-                Button5.Text = "Rimuovere le immagini del volume..."
-                Button6.Text = "Carica nel progetto"
-        End Select
+        Text = LocalizationService.ForSection("MountedImgMgr")("Image.Manager.Item")
+        Label1.Text = LocalizationService.ForSection("MountedImgMgr")("Overview.Images.Message")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("MountedImgMgr")("ImageFile.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("MountedImgMgr")("Index.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("MountedImgMgr")("MountDirectory.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("MountedImgMgr")("Status.Column")
+        ListView1.Columns(4).Text = LocalizationService.ForSection("MountedImgMgr")("Read.Write.Column")
+        Button1.Text = LocalizationService.ForSection("MountedImgMgr")("UnmountImage.Button")
+        Button2.Text = LocalizationService.ForSection("MountedImgMgr")("ReloadServicing.Button")
+        Button3.Text = LocalizationService.ForSection("MountedImgMgr")("Enable.Write.Button")
+        Button4.Text = LocalizationService.ForSection("MountedImgMgr")("Open.Mount.Dir.Button")
+        Button5.Text = LocalizationService.ForSection("MountedImgMgr")("Remove.VolumeImages.Button")
+        Button6.Text = LocalizationService.ForSection("MountedImgMgr")("LoadProject.Button")
         CheckForIllegalCrossThreadCalls = False
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -183,57 +51,9 @@ Public Class MountedImgMgr
                     Button2.Enabled = True
                     Select Case markedImage.ImageMountStatus
                         Case DismMountStatus.NeedsRemount
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Button2.Text = "Reload servicing"
-                                        Case "ESN"
-                                            Button2.Text = "Recargar servicio"
-                                        Case "FRA"
-                                            Button2.Text = "Recharger le service"
-                                        Case "PTB", "PTG"
-                                            Button2.Text = "Recarregar o serviço"
-                                        Case "ITA"
-                                            Button2.Text = "Ricarica servizio"
-                                    End Select
-                                Case 1
-                                    Button2.Text = "Reload servicing"
-                                Case 2
-                                    Button2.Text = "Recargar servicio"
-                                Case 3
-                                    Button2.Text = "Recharger le service"
-                                Case 4
-                                    Button2.Text = "Recarregar o serviço"
-                                Case 5
-                                    Button2.Text = "Ricarica servizio"
-                            End Select
+                            Button2.Text = LocalizationService.ForSection("MountedImgMgr")("ReloadServicing.Button")
                         Case DismMountStatus.Invalid
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Button2.Text = "Repair component store"
-                                        Case "ESN"
-                                            Button2.Text = "Reparar almacén de componentes"
-                                        Case "FRA"
-                                            Button2.Text = "Réparer le stock de composants"
-                                        Case "PTB", "PTG"
-                                            Button2.Text = "Reparação do armazém de componentes"
-                                        Case "ITA"
-                                            Button2.Text = "Ripara il magazzino dei componenti"
-                                    End Select
-                                Case 1
-                                    Button2.Text = "Repair component store"
-                                Case 2
-                                    Button2.Text = "Reparar almacén de componentes"
-                                Case 3
-                                    Button2.Text = "Réparer le stock de composants"
-                                Case 4
-                                    Button2.Text = "Reparação do armazém de componentes"
-                                Case 5
-                                    Button2.Text = "Ripara il magazzino dei componenti"
-                            End Select
+                            Button2.Text = LocalizationService.ForSection("MountedImgMgr")("Repair.Component.Store.Item")
                     End Select
                 Else
                     Button2.Enabled = False
@@ -298,7 +118,7 @@ Public Class MountedImgMgr
             MainForm.MountDir = ListView1.FocusedItem.SubItems(2).Text
             MainForm.ImgIndex = ListView1.FocusedItem.SubItems(1).Text
             MainForm.SourceImg = ListView1.FocusedItem.SubItems(0).Text
-            IIf(ListView1.FocusedItem.SubItems(4).Text = "Yes", MainForm.isReadOnly = False, MainForm.isReadOnly = True)
+            IIf(ListView1.FocusedItem.SubItems(4).Text = LocalizationService.ForSection("MountedImgMgr")("Yes.Button"), MainForm.isReadOnly = False, MainForm.isReadOnly = True)
             MainForm.UpdateProjProperties(True, If(MainForm.isReadOnly, True, False))
             MainForm.SaveDTProj()
         End If
@@ -378,7 +198,7 @@ Public Class MountedImgMgr
             Try
                 ListView1.Items.Clear()
                 For Each MountedImage In MainForm.MountedImageList
-                    ListView1.Items.Add(New ListViewItem(New String() {MountedImage.ImageFile, MountedImage.ImageIndex, MountedImage.ImageMountDirectory, MountedImage.MountStatusToString(MainForm.Language), MountedImage.MountModeToString(MainForm.Language)}))
+                    ListView1.Items.Add(New ListViewItem(New String() {MountedImage.ImageFile, MountedImage.ImageIndex, MountedImage.ImageMountDirectory, MountedImage.MountStatusToString(), MountedImage.MountModeToString()}))
                 Next
                 ignoreRepeats = True
             Catch ex As Exception

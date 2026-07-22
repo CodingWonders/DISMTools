@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 
 Public Class SplashForm
 
@@ -11,10 +11,10 @@ Public Class SplashForm
     Public TestBCD As Boolean = Environment.GetCommandLineArgs().Contains("/bcdtest")
 
     Sub ChangeLanguage(LanguageCode As String)
-        If Not File.Exists(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini")) Then
-            LanguageCode = "en"
-        End If
-        LoadLanguageFile(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini"))
+        Dim languageFile As String = GetInstallerLanguageFilePath(LanguageCode)
+        LoadLanguageFile(languageFile)
+        Text = GetValueFromLanguageData("SplashScreen.WindowTitle")
+        VersionLabel.Text = GetValueFromLanguageData("SplashScreen.VersionLabel")
         Label1.Text = GetValueFromLanguageData("SplashScreen.OSInstTitle")
         Label2.Text = GetValueFromLanguageData("SplashScreen.OSInstStatus_StartingUp")
     End Sub
@@ -25,7 +25,7 @@ Public Class SplashForm
             BackgroundPicture = Image.FromFile(Application.StartupPath & "\Resources\SplashScreen\background.jpg")
             ResizeImage()
         End If
-        ChangeLanguage(My.Computer.Info.InstalledUICulture.TwoLetterISOLanguageName)
+        ChangeLanguage(ResolveInstallerLanguageCode())
         ' Change status font size
         Dim ReferenceSize As Size = New Size(1024, 768)
         If Width <= ReferenceSize.Width AndAlso Height <= ReferenceSize.Height Then

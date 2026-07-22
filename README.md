@@ -307,3 +307,26 @@ Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for r
 ## Contribute to the help system
 
 We want your help to build a great help system for DISMTools. If you want to contribute to it, you can read more [here](https://github.com/CodingWonders/dt_help).
+
+## Installer localization layout
+
+Installer translations are edited in `Installer\Languages`. Each installer language has one `.isl` file there. The bundled Inno Setup compiler files are stored separately in `Installer\Compiler`. The `Default.isl` file inside `Installer\Compiler` is a compiler runtime dependency, not the place where DISMTools installer translations should be edited.
+
+## Application localization layout
+
+Application localization files are stored in the root `language` folder. The program reads all `*.ini` files from that folder and builds the language selector from the files it finds there.
+
+Each language file should include metadata like this:
+
+```ini
+[LanguageFileInformation]
+LanguageAuthor=Translator name
+LanguageCode=de-DE
+LanguageName=Deutsch
+```
+
+To add a new application language, copy an existing INI file into `language`, update the metadata, and translate the values. The file name is not used as the language identifier. `LanguageCode` and `LanguageName` inside the file are the source of truth. Section names and key names should stay in English. Only the values after `=` should be translated.
+
+The application uses only the string setting `LanguageCode`. English, `en-US`, is the default language when no saved value exists. The initial setup wizard and the normal settings window both save `LanguageCode`, and the application reads it on the next launch. The main application and its utilities compile the same shared `Utilities\Language\LocalizationService.vb` source file, so there is only one localization implementation.
+
+When the PE Helper creates a Windows installation ISO, it exports one minimal language file for `autorun.exe`. That file contains only the exact localization keys used by the PE Helper interface. The complete DISMTools language file is not copied into the ISO. HotInstall keeps its own language resources and receives the current `LanguageCode` when it is launched. If HotInstall does not provide that translation, it uses English.

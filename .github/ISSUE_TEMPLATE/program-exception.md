@@ -24,7 +24,7 @@ If you have run into an internal error (program exception), we would like to lea
 
 DISMTools 0.6.1 and later use DynaLog as a means to write diagnostic information to a log file that you can send to the developers. The log is stored in `<program directory>\Logs`:
 
-- If you are using an installed copy, go to `\Program Files\DISMTools\<Stable or Preview>\logs`
+- If you are using an installed copy, go to `\Program Files\DISMTools\logs` for stable builds or `\Program Files\DISMTools\Preview\logs` for preview builds
 - If you are using a portable copy, go to `<startup location>\logs`
 
 The file in question is `DT_DynaLog.log`. Attach this log by dropping it below:

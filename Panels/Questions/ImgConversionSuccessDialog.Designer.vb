@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgConversionSuccessDialog
     Inherits System.Windows.Forms.Form
 
@@ -40,7 +40,7 @@ Partial Class ImgConversionSuccessDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 87)
         Me.Label2.TabIndex = 9
-        Me.Label2.Text = resources.GetString("Label2.Text")
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ImageConvert")("Converted.Message")
         '
         'Label1
         '
@@ -50,7 +50,7 @@ Partial Class ImgConversionSuccessDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 8
-        Me.Label1.Text = "The image has been successfully converted"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.ImageConvert")("Converted.Label")
         '
         'Panel1
         '
@@ -85,7 +85,7 @@ Partial Class ImgConversionSuccessDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "Yes"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImageConvert")("Yes.Button")
         '
         'Cancel_Button
         '
@@ -96,7 +96,7 @@ Partial Class ImgConversionSuccessDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "No"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImageConvert")("No.Button")
         '
         'ImgConversionSuccessDialog
         '
@@ -115,7 +115,7 @@ Partial Class ImgConversionSuccessDialog
         Me.Name = "ImgConversionSuccessDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.ImageConvert")("AppName.Label")
         Me.Panel1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)

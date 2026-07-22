@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Build">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -809,10 +809,10 @@
     <Compile Include="Panels\Img_Ops\WinPE\SetTargetPath.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Internal\ProjectValueLoadForm.Designer.vb">
+    <Compile Include="Panels\internal\ProjectValueLoadForm.Designer.vb">
       <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\Internal\ProjectValueLoadForm.vb">
+    <Compile Include="Panels\internal\ProjectValueLoadForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\ISOFiles\ISOCreator.Designer.vb">
@@ -1005,7 +1005,8 @@
     <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
-    <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
+    <Compile Include="Utilities\Language\LanguageHelper.vb" />
+    <Compile Include="Utilities\Language\LocalizationService.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
@@ -1291,7 +1292,7 @@
     <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetTargetPath.resx">
       <DependentUpon>SetTargetPath.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Internal\ProjectValueLoadForm.resx">
+    <EmbeddedResource Include="Panels\internal\ProjectValueLoadForm.resx">
       <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\ISOFiles\ISOCreator.resx">
@@ -1573,10 +1574,26 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="language\en-US.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\es-ES.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\fr-FR.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\it-IT.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\pt-PT.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="settings.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
+    <None Include="Tools\DT_WinADK.reg" />
     <None Include="Tools\UnattendGen\UnattendGen-arm64-Linux.zip" />
     <None Include="Tools\UnattendGen\UnattendGen-arm64-MacOS.zip" />
     <None Include="Tools\UnattendGen\UnattendGen-x64-Linux.zip" />
@@ -2171,7 +2188,7 @@
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
-    <Folder Include="Utilities\LanguageUtilities\LanguageFiles\" />
+    <Folder Include="Utilities\Language\LanguageFiles\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
   <ItemGroup>
@@ -2190,7 +2207,6 @@
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
 SET ISPREVIEW="No"
-SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 SET CREATE_SAMPLE_USERDATA="Yes"
 ECHO Generating program structure...
@@ -2334,23 +2350,19 @@ IF EXIST "$(SolutionDir)Tools\AutoReloadService\out" (
 	IF NOT EXIST "AutoReload" MD "AutoReload"
 	copy /y "$(SolutionDir)Tools\AutoReloadService\out\*.*" "AutoReload"
 )
-IF %25GEN_INSTALLER%25=="Yes" (
-	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
-	:: Workaround for DLLs not copying
-	"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -noprofile -nologo -file "$(SolutionDir)CheckMissingDLLs.ps1"
-	echo Copying program files...
-	IF EXIST "$(SolutionDir)Installer\files" (rd "$(SolutionDir)Installer\files" /s /q)
-	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
-	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
-	IF EXIST "$(SolutionDir)Installer\files\VS*.tmp" (del "$(SolutionDir)Installer\files\VS*.tmp" /f /q)
-	IF EXIST "$(SolutionDir)Installer\iscc.exe" (
-		echo Building the installer...
-		"$(SolutionDir)Installer\iscc.exe" "$(SolutionDir)Installer\dt.iss"
-	) ELSE (
-		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
-		rd "$(SolutionDir)Installer\files" /s /q
-	)
-)</PostBuildEvent>
+
+:: Copy localization language files to the program directory
+IF EXIST "$(SolutionDir)language" (
+	echo Copying localization language files...
+	IF NOT EXIST "$(TargetDir)language" (md "$(TargetDir)language")
+	xcopy "$(SolutionDir)language\*.ini" "$(TargetDir)language" /cehyi
+) ELSE (
+	echo ERROR: Language directory was not found: $(SolutionDir)language
+	exit /b 1
+)
+
+:: Installer packaging is handled by tools\build\BuildInstaller.ps1 during release workflow.
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...
@@ -2388,13 +2400,7 @@ IF EXIST tools (
 
 IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  
   <Import Project="packages\Scintilla5.NET.6.1.2\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.1.2\build\scintilla5.net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

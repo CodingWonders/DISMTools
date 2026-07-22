@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class FfuOptimize
 
@@ -8,7 +8,7 @@ Public Class FfuOptimize
 
         If TextBox1.Text = "" OrElse Not File.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("The source image file has not been specified or it does not exist in the file system.")
-            MsgBox("Please specify the path of the image you want to optimize and try again. Also, make sure that that path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("FFU.Optimize.Messages")("Path.Image.Required.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
 

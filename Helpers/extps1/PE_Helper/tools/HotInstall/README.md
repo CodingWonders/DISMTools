@@ -23,6 +23,12 @@ HotInstall is included with the ISO files you create with DISMTools. To start th
 
 Then, follow the steps of the wizard.
 
+## Localization
+
+HotInstall discovers its own language files dynamically from the `Languages` folder. Each INI must contain `LanguageCode` and `LanguageName` in `[LanguageFileInformation]`. The file name is not used as the language identifier.
+
+The PE Helper passes the current DISMTools `LanguageCode` to HotInstall. HotInstall uses the matching translation when it exists and falls back to English, `en-US`, when it does not. Only translations that actually exist in the HotInstall package are included.
+
 > [!NOTE]
 > Make sure that you created your ISO file with the correct Windows image to test. You will be able to see some information about this image.
 >

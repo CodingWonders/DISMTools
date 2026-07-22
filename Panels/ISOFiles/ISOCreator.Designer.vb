@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ISOCreator
     Inherits System.Windows.Forms.Form
 
@@ -90,7 +90,7 @@ Partial Class ISOCreator
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(1240, 32)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = resources.GetString("Label2.Text")
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ISOCreator")("ISO.File.Message")
         '
         'GroupBox1
         '
@@ -118,7 +118,7 @@ Partial Class ISOCreator
         Me.GroupBox1.Size = New System.Drawing.Size(1238, 445)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Options"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ISOCreator")("Options.Group")
         '
         'CheckBox4
         '
@@ -128,7 +128,7 @@ Partial Class ISOCreator
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(224, 17)
         Me.CheckBox4.TabIndex = 12
-        Me.CheckBox4.Text = "Include essential drivers from this system"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ISOCreator")("Include.Essential.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'Button6
@@ -139,7 +139,7 @@ Partial Class ISOCreator
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(184, 23)
         Me.Button6.TabIndex = 11
-        Me.Button6.Text = "Customize Environment..."
+        Me.Button6.Text = LocalizationService.ForSection("Designer.ISOCreator")("Customize.Environment.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'ListView1
@@ -159,27 +159,27 @@ Partial Class ISOCreator
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "#"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ISOCreator")("Value.Column")
         Me.ColumnHeader1.Width = 29
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Image Name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.ISOCreator")("ImageName.Column")
         Me.ColumnHeader2.Width = 265
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Image Description"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.ISOCreator")("ImageDescription.Column")
         Me.ColumnHeader3.Width = 343
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Image Version"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.ISOCreator")("ImageVersion.Column")
         Me.ColumnHeader4.Width = 103
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Image Architecture"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.ISOCreator")("Image.Architecture.Column")
         Me.ColumnHeader5.Width = 130
         '
         'Panel2
@@ -202,7 +202,7 @@ Partial Class ISOCreator
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Browse..."
+        Me.Button5.Text = LocalizationService.ForSection("Designer.ISOCreator")("Browse.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'TextBox4
@@ -222,7 +222,7 @@ Partial Class ISOCreator
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(133, 17)
         Me.CheckBox2.TabIndex = 8
-        Me.CheckBox2.Text = "Copy to Ventoy drives"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ISOCreator")("Copy.Ventoy.Drives.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -233,7 +233,7 @@ Partial Class ISOCreator
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox1.TabIndex = 8
-        Me.CheckBox1.Text = "Unattended answer file:"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ISOCreator")("Unattended.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Panel1
@@ -265,7 +265,7 @@ Partial Class ISOCreator
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(105, 13)
         Me.Label6.TabIndex = 6
-        Me.Label6.Text = "Architecture:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.ISOCreator")("Architecture.Label")
         '
         'Button2
         '
@@ -275,7 +275,7 @@ Partial Class ISOCreator
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Pick..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.ISOCreator")("Pick.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button3
@@ -286,7 +286,7 @@ Partial Class ISOCreator
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Browse..."
+        Me.Button3.Text = LocalizationService.ForSection("Designer.ISOCreator")("Browse.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button1
@@ -297,7 +297,7 @@ Partial Class ISOCreator
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.ISOCreator")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox3
@@ -326,7 +326,7 @@ Partial Class ISOCreator
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Target ISO location:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.ISOCreator")("Target.Isolocation.Label")
         '
         'Label4
         '
@@ -335,7 +335,7 @@ Partial Class ISOCreator
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(143, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Image file to add to ISO file:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ISOCreator")("ImageFile.Add.Label")
         '
         'Button4
         '
@@ -345,7 +345,7 @@ Partial Class ISOCreator
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(156, 23)
         Me.Button4.TabIndex = 2
-        Me.Button4.Text = "Use mounted image"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.ISOCreator")("Mounted.Image.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -356,7 +356,7 @@ Partial Class ISOCreator
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(175, 17)
         Me.CheckBox3.TabIndex = 8
-        Me.CheckBox3.Text = "Use newly-signed boot binaries"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ISOCreator")("Newly.Signed.Boot.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'Cancel_Button
@@ -367,7 +367,7 @@ Partial Class ISOCreator
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 9
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ISOCreator")("Cancel.Button")
         Me.Cancel_Button.UseVisualStyleBackColor = True
         '
         'OK_Button
@@ -378,7 +378,7 @@ Partial Class ISOCreator
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(75, 23)
         Me.OK_Button.TabIndex = 9
-        Me.OK_Button.Text = "Create"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ISOCreator")("Create.Button")
         Me.OK_Button.UseVisualStyleBackColor = True
         '
         'GroupBox2
@@ -391,7 +391,7 @@ Partial Class ISOCreator
         Me.GroupBox2.Size = New System.Drawing.Size(1238, 98)
         Me.GroupBox2.TabIndex = 10
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Progress"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ISOCreator")("Progress.Group")
         '
         'ProgressContainer
         '
@@ -420,7 +420,7 @@ Partial Class ISOCreator
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(1232, 78)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Once you're ready, click the Create button."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ISOCreator")("Re.Ready.Create.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ISOProgressPanel
@@ -454,8 +454,7 @@ Partial Class ISOCreator
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(1204, 13)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = "You can do other things while the ISO is being created. Come back here anytime fo" & _
-    "r an updated status."
+        Me.Label9.Text = LocalizationService.ForSection("Designer.ISOCreator")("Other.Things.Message")
         '
         'Label8
         '
@@ -466,15 +465,15 @@ Partial Class ISOCreator
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(1204, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Status"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.ISOCreator")("Status.Label")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ISOCreator")("WIM.Files.Filter")
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "ISO files|*.iso"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.ISOCreator")("Isofiles.Filter")
         Me.SaveFileDialog1.OverwritePrompt = False
         '
         'LinkLabel1
@@ -488,11 +487,11 @@ Partial Class ISOCreator
         Me.LinkLabel1.Size = New System.Drawing.Size(343, 13)
         Me.LinkLabel1.TabIndex = 11
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Download the Windows ADK"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.ISOCreator")("Download.Windows.ADK.Link")
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = "Answer files|*.xml"
+        Me.OpenFileDialog2.Filter = LocalizationService.ForSection("Designer.ISOCreator")("Answer.Files.XML.Filter")
         '
         'ADKDownloaderBW
         '
@@ -531,7 +530,7 @@ Partial Class ISOCreator
         Me.Name = "ISOCreator"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Create an ISO file"
+        Me.Text = LocalizationService.ForSection("Designer.ISOCreator")("CreateIsofile.Label")
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.Panel2.ResumeLayout(False)

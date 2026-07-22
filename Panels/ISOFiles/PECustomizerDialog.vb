@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.Win32
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
@@ -141,7 +141,7 @@ Public Class PECustomizerDialog
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not SavePolicies() Then
-            MessageBox.Show(Me, "Policies could not be saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("PoliciesSaved.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -255,18 +255,18 @@ Public Class PECustomizerDialog
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" Then
             If Not File.Exists(TextBox1.Text) Then
-                MessageBox.Show(Me, "The specified wallpaper does not exist.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("Wallpaper.Exist.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 TextBox1.Text = ""
                 Exit Sub
             End If
 
             If Not Path.GetExtension(TextBox1.Text).Equals(".jpg", StringComparison.OrdinalIgnoreCase) Then
-                MessageBox.Show(Me, "The specified wallpaper is not supported. Only JPG files are supported.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("Wallpaper.Supported.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 TextBox1.Text = ""
                 Exit Sub
             End If
 
-            MessageBox.Show(Me, "By continuing with this wallpaper you will be overriding a background you may have already stored in your user data folder. That background will be reused the next time you launch DISMTools.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("WallpaperOverride.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
 
@@ -291,16 +291,15 @@ Public Class PECustomizerDialog
     End Sub
 
     Private Sub DefaultPolicySaveButton_MouseHover(sender As Object, e As EventArgs) Handles DefaultPolicySaveButton.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Default policies allow you to make the settings you specify here permanent." & Environment.NewLine &
-                                    "This also includes any wallpapers you specify here.")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PECustomizer.Tooltips")("DefaultPolicies.Message"))
     End Sub
 
     Private Sub DefaultPolicySaveButton_Click(sender As Object, e As EventArgs) Handles DefaultPolicySaveButton.Click
         If SaveDefaultPolicies() Then
             MainForm.WriteDefaultPEPolicy()
-            MessageBox.Show("Default policies have been saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("PECustomizer.Messages")("Default.Policies.Saved.Label"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            MessageBox.Show("Default policies could not be saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(LocalizationService.ForSection("PECustomizer.Messages")("Policies.SaveFailed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 

@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgCapture
     Inherits System.Windows.Forms.Form
 
@@ -85,7 +85,7 @@ Partial Class ImgCapture
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgCapture")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -96,7 +96,7 @@ Partial Class ImgCapture
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgCapture")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -111,7 +111,7 @@ Partial Class ImgCapture
         Me.GroupBox1.Size = New System.Drawing.Size(984, 91)
         Me.GroupBox1.TabIndex = 7
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Sources and destinations"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgCapture")("Sources.Destinations.Group")
         '
         'Button2
         '
@@ -121,7 +121,7 @@ Partial Class ImgCapture
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 10
-        Me.Button2.Text = "Browse..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgCapture")("Browse.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -140,7 +140,7 @@ Partial Class ImgCapture
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(119, 13)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Destination image file:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgCapture")("Destination.ImageFile.Label")
         '
         'Button1
         '
@@ -150,7 +150,7 @@ Partial Class ImgCapture
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 7
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgCapture")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -169,7 +169,7 @@ Partial Class ImgCapture
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(127, 13)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Source image directory:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgCapture")("Source.Image.Dir.Label")
         '
         'GroupBox2
         '
@@ -197,7 +197,7 @@ Partial Class ImgCapture
         Me.GroupBox2.Size = New System.Drawing.Size(984, 363)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Options"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ImgCapture")("Options.Group")
         '
         'Label8
         '
@@ -208,19 +208,19 @@ Partial Class ImgCapture
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(776, 13)
         Me.Label8.TabIndex = 13
-        Me.Label8.Text = "(Description goes here)"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.ImgCapture")("Description.Goes.Label")
         '
         'ComboBox1
         '
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"none", "fast", "maximum"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.ImgCapture")("None.Item"), LocalizationService.ForSection("Designer.ImgCapture")("Fast.Item"), LocalizationService.ForSection("Designer.ImgCapture")("Maximum.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(199, 126)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(776, 21)
         Me.ComboBox1.TabIndex = 12
-        Me.ComboBox1.Text = "fast"
+        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.ImgCapture")("Fast.Item")
         '
         'Button5
         '
@@ -231,7 +231,7 @@ Partial Class ImgCapture
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 10
-        Me.Button5.Text = "Create..."
+        Me.Button5.Text = LocalizationService.ForSection("Designer.ImgCapture")("Create.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button3
@@ -243,7 +243,7 @@ Partial Class ImgCapture
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 10
-        Me.Button3.Text = "Browse..."
+        Me.Button3.Text = LocalizationService.ForSection("Designer.ImgCapture")("Browse.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'TextBox5
@@ -264,7 +264,7 @@ Partial Class ImgCapture
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(135, 13)
         Me.Label6.TabIndex = 11
-        Me.Label6.Text = "Path of configuration file:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.ImgCapture")("Path.Config.File.Label")
         '
         'CheckBox5
         '
@@ -275,7 +275,7 @@ Partial Class ImgCapture
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox5.TabIndex = 10
-        Me.CheckBox5.Text = "Use the reparse point tag fix"
+        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.ImgCapture")("Reparse.Point.Tag.CheckBox")
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'CheckBox8
@@ -285,7 +285,7 @@ Partial Class ImgCapture
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(205, 17)
         Me.CheckBox8.TabIndex = 10
-        Me.CheckBox8.Text = "Mount destination image for later use"
+        Me.CheckBox8.Text = LocalizationService.ForSection("Designer.ImgCapture")("Mount.Dest.Image.CheckBox")
         Me.CheckBox8.UseVisualStyleBackColor = True
         '
         'CheckBox7
@@ -295,7 +295,7 @@ Partial Class ImgCapture
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox7.TabIndex = 10
-        Me.CheckBox7.Text = "Capture extended attributes"
+        Me.CheckBox7.Text = LocalizationService.ForSection("Designer.ImgCapture")("Extended.Attributes.CheckBox")
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'CheckBox6
@@ -305,7 +305,7 @@ Partial Class ImgCapture
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(199, 17)
         Me.CheckBox6.TabIndex = 10
-        Me.CheckBox6.Text = "Append with WIMBoot configuration"
+        Me.CheckBox6.Text = LocalizationService.ForSection("Designer.ImgCapture")("Append.WIM.Boot.CheckBox")
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -315,7 +315,7 @@ Partial Class ImgCapture
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(121, 17)
         Me.CheckBox4.TabIndex = 10
-        Me.CheckBox4.Text = "Check for file errors"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ImgCapture")("Check.File.Errors.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -325,7 +325,7 @@ Partial Class ImgCapture
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(128, 17)
         Me.CheckBox3.TabIndex = 10
-        Me.CheckBox3.Text = "Verify image integrity"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ImgCapture")("Verify.Image.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -335,7 +335,7 @@ Partial Class ImgCapture
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(219, 17)
         Me.CheckBox2.TabIndex = 10
-        Me.CheckBox2.Text = "Make image bootable (Windows PE only)"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ImgCapture")("Image.Bootable.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -345,7 +345,7 @@ Partial Class ImgCapture
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(299, 17)
         Me.CheckBox1.TabIndex = 10
-        Me.CheckBox1.Text = "Exclude certain files and directories for destination image"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgCapture")("Exclude.Files.Dirs.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'TextBox4
@@ -364,7 +364,7 @@ Partial Class ImgCapture
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(183, 13)
         Me.Label7.TabIndex = 8
-        Me.Label7.Text = "Destination image compression type:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.ImgCapture")("CompressionType.Label")
         '
         'Label4
         '
@@ -373,7 +373,7 @@ Partial Class ImgCapture
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(151, 13)
         Me.Label4.TabIndex = 8
-        Me.Label4.Text = "Destination image description:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgCapture")("Dest.Image.Description.Label")
         '
         'TextBox3
         '
@@ -391,16 +391,16 @@ Partial Class ImgCapture
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(131, 13)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Destination image name:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.ImgCapture")("Destination.Image.Name.Label")
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "WIM files|*.wim"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgCapture")("WIM.Files.Filter")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "WimScript.ini|WimScript.ini"
-        Me.OpenFileDialog1.Title = "Specify a WimScript.ini configuration file"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgCapture")("WimscriptIniwim.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.ImgCapture")("Wimscript.Ini.Title")
         '
         'ImageTaskHeader1
         '
@@ -434,7 +434,7 @@ Partial Class ImgCapture
         Me.Name = "ImgCapture"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Capture an image"
+        Me.Text = LocalizationService.ForSection("Designer.ImgCapture")("CaptureImage.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

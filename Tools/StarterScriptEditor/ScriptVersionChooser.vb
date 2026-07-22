@@ -1,5 +1,5 @@
 Imports System.Windows.Forms
-Imports StarterScriptEditor.Classes.ColorUtilities
+Imports StarterScript.Classes.ColorUtilities
 
 Public Class ScriptVersionChooser
 

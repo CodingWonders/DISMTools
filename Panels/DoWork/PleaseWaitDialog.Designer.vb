@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class PleaseWaitDialog
     Inherits System.Windows.Forms.Form
 
@@ -39,7 +39,7 @@ Partial Class PleaseWaitDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(295, 15)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Please wait..."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.Wait")("Wait.Label")
         '
         'Label2
         '
@@ -52,7 +52,7 @@ Partial Class PleaseWaitDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(295, 15)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Action"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Wait")("Action.Label")
         '
         'Panel1
         '
@@ -105,7 +105,7 @@ Partial Class PleaseWaitDialog
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Please wait..."
+        Me.Text = LocalizationService.ForSection("Designer.Wait")("Wait.Label")
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()

@@ -81,6 +81,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="..\..\Utilities\Language\LocalizationService.vb">
+      <Link>Utilities\LocalizationService.vb</Link>
+    </Compile>
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>

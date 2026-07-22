@@ -16,6 +16,28 @@ Public Class WindowHelper
         Public Shared Function EnableMenuItem(hMenu As IntPtr, uIDEnableItem As UInteger, uEnable As UInteger) As Boolean
         End Function
 
+        <DllImport("user32.dll")>
+        Public Shared Function SetForegroundWindow(hWnd As IntPtr) As Boolean
+        End Function
+
+        <DllImport("user32.dll")>
+        Public Shared Function GetForegroundWindow() As IntPtr
+        End Function
+
+        <DllImport("user32.dll", SetLastError:=True)>
+        Public Shared Function SetWindowPos(hWnd As IntPtr,
+                                            hWndInsertAfter As IntPtr,
+                                            x As Integer,
+                                            y As Integer,
+                                            cx As Integer,
+                                            cy As Integer,
+                                            flags As UInteger) As Boolean
+        End Function
+
+        <DllImport("user32.dll", SetLastError:=True)>
+        Public Shared Function GetWindowLong(hWnd As IntPtr, index As Integer) As Integer
+        End Function
+
         <DllImport("dwmapi.dll")>
         Public Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
         End Function
@@ -55,6 +77,13 @@ Public Class WindowHelper
     Const WS_EX_COMPOSITED As Integer = &H2000000
     Const GWL_EXSTYLE As Integer = -20
 
+    Private Shared ReadOnly HWND_TOPMOST As New IntPtr(-1)
+    Private Shared ReadOnly HWND_NOTOPMOST As New IntPtr(-2)
+    Private Const SWP_NOSIZE As UInteger = &H1UI
+    Private Const SWP_NOMOVE As UInteger = &H2UI
+    Private Const SWP_SHOWWINDOW As UInteger = &H40UI
+    Private Const WS_EX_TOPMOST As Integer = &H8
+
     Private Const LVM_FIRST As Integer = &H1000
     Private Const LVM_SETITEMSTATE As Integer = LVM_FIRST + 43
 
@@ -82,6 +111,43 @@ Public Class WindowHelper
 
     Public Shared Function GetWindowHandle(ctrl As Control) As IntPtr
         Return ctrl.Handle
+    End Function
+
+    Public Shared Function RequestForegroundWindow(wndHandle As IntPtr) As Boolean
+        If wndHandle.Equals(IntPtr.Zero) Then Return False
+        Return NativeMethods.SetForegroundWindow(wndHandle)
+    End Function
+
+    Public Shared Function RaiseWindowAndRestoreNormalZOrder(wndHandle As IntPtr,
+                                                              ByRef normalZOrderRestored As Boolean) As Boolean
+        normalZOrderRestored = False
+        If wndHandle.Equals(IntPtr.Zero) Then Return False
+
+        Dim flags As UInteger = SWP_NOMOVE Or SWP_NOSIZE Or SWP_SHOWWINDOW
+        Dim raisedAboveOtherWindows As Boolean = NativeMethods.SetWindowPos(wndHandle,
+                                                                            HWND_TOPMOST,
+                                                                            0,
+                                                                            0,
+                                                                            0,
+                                                                            0,
+                                                                            flags)
+        normalZOrderRestored = NativeMethods.SetWindowPos(wndHandle,
+                                                           HWND_NOTOPMOST,
+                                                           0,
+                                                           0,
+                                                           0,
+                                                           0,
+                                                           flags)
+        Return raisedAboveOtherWindows
+    End Function
+
+    Public Shared Function IsForegroundWindow(wndHandle As IntPtr) As Boolean
+        Return Not wndHandle.Equals(IntPtr.Zero) AndAlso NativeMethods.GetForegroundWindow().Equals(wndHandle)
+    End Function
+
+    Public Shared Function IsTopMostWindow(wndHandle As IntPtr) As Boolean
+        If wndHandle.Equals(IntPtr.Zero) Then Return False
+        Return (NativeMethods.GetWindowLong(wndHandle, GWL_EXSTYLE) And WS_EX_TOPMOST) = WS_EX_TOPMOST
     End Function
 
     Const DARKMODE_MINMAJOR As Integer = 10

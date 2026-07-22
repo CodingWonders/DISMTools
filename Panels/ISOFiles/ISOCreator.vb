@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
@@ -10,338 +10,44 @@ Public Class ISOCreator
 
     Dim ImageInfoCollection As DismImageInfoCollection
     Dim ISOMsg As String = ""
-    Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
+    Dim progressMessages() As String = New String(2) {"", "", ""}
     Dim success As Boolean
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
     Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/615540bc-be0b-433a-b91b-1f2b0642bb24/adk/adksetup.exe", "https://download.microsoft.com/download/2472e9a0-7c74-4ffd-a3e4-27ed1fa30d30/adkwinpeaddons/adkwinpesetup.exe"}
     Dim adkDownloadSuccess As Boolean
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        progressMessages(0) = "Status"
-                        progressMessages(1) = "Creating ISO file. This can take some time. Please wait..."
-                        progressMessages(2) = "The ISO file has been created"
-                        Text = "Create an ISO file"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
-                        Label3.Text = "Once you're ready, click the Create button."
-                        Label4.Text = "Image file to add to ISO file:"
-                        Label6.Text = "Architecture:"
-                        Label7.Text = "Target ISO location:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "You can do other things while the ISO is being created. Come back here anytime for an updated status."
-                        Button1.Text = "Browse..."
-                        Button2.Text = "Pick..."
-                        Button3.Text = "Browse..."
-                        Button4.Text = "Use mounted image"
-                        Button5.Text = "Browse..."
-                        Button6.Text = "Customize Environment..."
-                        OK_Button.Text = "Create"
-                        Cancel_Button.Text = "Cancel"
-                        GroupBox1.Text = "Options"
-                        GroupBox2.Text = "Progress"
-                        LinkLabel1.Text = "Download the Windows ADK"
-                        ColumnHeader2.Text = "Image Name"
-                        ColumnHeader3.Text = "Image Description"
-                        ColumnHeader4.Text = "Image Version"
-                        ColumnHeader5.Text = "Image Architecture"
-                        CheckBox1.Text = "Unattended answer file:"
-                        CheckBox2.Text = "Copy to Ventoy drives"
-                        CheckBox3.Text = "Use newly-signed boot binaries"
-                        CheckBox4.Text = "Include essential drivers from this system"
-                    Case "ESN"
-                        progressMessages(0) = "Estado"
-                        progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
-                        progressMessages(2) = "El archivo ISO ha sido creado"
-                        Text = "Crear un archivo ISO"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
-                        Label3.Text = "Cuando esté listo, haga clic en Crear."
-                        Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                        Label6.Text = "Arquitectura:"
-                        Label7.Text = "Ubicación del archivo ISO de destino:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "Puede hacer otras cosas mientras se crea el archivo ISO. Vuelva aquí para ver un estado actualizado."
-                        Button1.Text = "Examinar..."
-                        Button2.Text = "Escoger..."
-                        Button3.Text = "Examinar..."
-                        Button4.Text = "Usar imagen montada"
-                        Button5.Text = "Examinar..."
-                        Button6.Text = "Personalizar entorno..."
-                        OK_Button.Text = "Crear"
-                        Cancel_Button.Text = "Cancelar"
-                        GroupBox1.Text = "Opciones"
-                        GroupBox2.Text = "Progreso"
-                        LinkLabel1.Text = "Descargar el ADK de Windows"
-                        ColumnHeader2.Text = "Nombre de la imagen"
-                        ColumnHeader3.Text = "Descripción de la imagen"
-                        ColumnHeader4.Text = "Versión"
-                        ColumnHeader5.Text = "Arquitectura"
-                        CheckBox1.Text = "Archivo de respuesta:"
-                        CheckBox2.Text = "Copiar a discos Ventoy"
-                        CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
-                        CheckBox4.Text = "Incluir controladores esenciales de este sistema"
-                    Case "FRA"
-                        progressMessages(0) = "Statut"
-                        progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
-                        progressMessages(2) = "Le fichier ISO a été créé"
-                        Text = "Créer un fichier ISO"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
-                        Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
-                        Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                        Label6.Text = "Architecture :"
-                        Label7.Text = "Emplacement ISO cible :"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "Vous pouvez faire d'autres choses pendant la création de l'ISO. Revenez ici à tout moment pour obtenir une mise à jour de l'état."
-                        Button1.Text = "Parcourir..."
-                        Button2.Text = "Choisir..."
-                        Button3.Text = "Parcourir..."
-                        Button4.Text = "Utiliser une image montée"
-                        Button5.Text = "Parcourir..."
-                        Button6.Text = "Personnaliser l'environnement..."
-                        OK_Button.Text = "Créer"
-                        Cancel_Button.Text = "Annuler"
-                        GroupBox1.Text = "Paramètres"
-                        GroupBox2.Text = "Progrès"
-                        LinkLabel1.Text = "Télécharger l'ADK Windows"
-                        ColumnHeader2.Text = "Nom de l'image"
-                        ColumnHeader3.Text = "Description de l'image"
-                        ColumnHeader4.Text = "Version"
-                        ColumnHeader5.Text = "Architecture"
-                        CheckBox1.Text = "Fichier de réponse :"
-                        CheckBox2.Text = "Copier sur les lecteurs Ventoy"
-                        CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
-                        CheckBox4.Text = "Inclure les pilotes indispensables de ce système"
-                    Case "PTB", "PTG"
-                        progressMessages(0) = "Estado"
-                        progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
-                        progressMessages(2) = "O ficheiro ISO foi criado"
-                        Text = "Criar um ficheiro ISO"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
-                        Label3.Text = "Quando estiver pronto, clique no botão Criar."
-                        Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                        Label6.Text = "Arquitetura:"
-                        Label7.Text = "Localização ISO de destino:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "Pode fazer outras coisas enquanto o ISO está a ser criado. Volte aqui em qualquer altura para obter um estado atualizado."
-                        Button1.Text = "Procurar..."
-                        Button2.Text = "Escolher..."
-                        Button3.Text = "Procurar..."
-                        Button4.Text = "Utilizar imagem montada"
-                        Button5.Text = "Procurar..."
-                        Button6.Text = "Personalizar o ambiente..."
-                        OK_Button.Text = "Criar"
-                        Cancel_Button.Text = "Cancelar"
-                        GroupBox1.Text = "Configurações"
-                        GroupBox2.Text = "Progresso"
-                        LinkLabel1.Text = "Baixar o Windows ADK"
-                        ColumnHeader2.Text = "Nome da imagem"
-                        ColumnHeader3.Text = "Descrição da imagem"
-                        ColumnHeader4.Text = "Versão"
-                        ColumnHeader5.Text = "Arquitetura"
-                        CheckBox1.Text = "Ficheiro de resposta:"
-                        CheckBox2.Text = "Copiar para unidades Ventoy"
-                        CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
-                        CheckBox4.Text = "Incluir os controladores essenciais deste sistema"
-                    Case "ITA"
-                        progressMessages(0) = "Stato"
-                        progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
-                        progressMessages(2) = "Il file ISO è stato creato"
-                        Text = "Creare un file ISO"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
-                        Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
-                        Label4.Text = "File immagine da aggiungere al file ISO:"
-                        Label6.Text = "Architettura:"
-                        Label7.Text = "Posizione ISO di destinazione:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "È possibile fare altre cose mentre la ISO viene creata. Tornare qui in qualsiasi momento per uno stato aggiornato"
-                        Button1.Text = "Sfoglia..."
-                        Button2.Text = "Scegli..."
-                        Button3.Text = "Sfoglia..."
-                        Button4.Text = "Usa immagine montata"
-                        Button5.Text = "Sfoglia..."
-                        Button6.Text = "Personalizza l'ambiente..."
-                        OK_Button.Text = "Crea"
-                        Cancel_Button.Text = "Annulla"
-                        GroupBox1.Text = "Opzioni"
-                        GroupBox2.Text = "Avanzamento"
-                        LinkLabel1.Text = "Scarica l'ADK di Windows"
-                        ColumnHeader2.Text = "Nome dell'immagine"
-                        ColumnHeader3.Text = "Descrizione dell'immagine"
-                        ColumnHeader4.Text = "Versione"
-                        ColumnHeader5.Text = "Architettura"
-                        CheckBox1.Text = "File di risposta:"
-                        CheckBox2.Text = "Copia su unità Ventoy"
-                        CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
-                        CheckBox4.Text = "Includi i driver essenziali di questo sistema"
-                End Select
-            Case 1
-                progressMessages(0) = "Status"
-                progressMessages(1) = "Creating ISO file. This can take some time. Please wait..."
-                progressMessages(2) = "The ISO file has been created"
-                Text = "Create an ISO file"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
-                Label3.Text = "Once you're ready, click the Create button."
-                Label4.Text = "Image file to add to ISO file:"
-                Label6.Text = "Architecture:"
-                Label7.Text = "Target ISO location:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "You can do other things while the ISO is being created. Come back here anytime for an updated status."
-                Button1.Text = "Browse..."
-                Button2.Text = "Pick..."
-                Button3.Text = "Browse..."
-                Button4.Text = "Use mounted image"
-                Button5.Text = "Browse..."
-                Button6.Text = "Customize Environment..."
-                OK_Button.Text = "Create"
-                Cancel_Button.Text = "Cancel"
-                GroupBox1.Text = "Options"
-                GroupBox2.Text = "Progress"
-                LinkLabel1.Text = "Download the Windows ADK"
-                ColumnHeader2.Text = "Image Name"
-                ColumnHeader3.Text = "Image Description"
-                ColumnHeader4.Text = "Image Version"
-                ColumnHeader5.Text = "Image Architecture"
-                CheckBox1.Text = "Unattended answer file:"
-                CheckBox2.Text = "Copy to Ventoy drives"
-                CheckBox3.Text = "Use newly-signed boot binaries"
-                CheckBox4.Text = "Include essential drivers from this system"
-            Case 2
-                progressMessages(0) = "Estado"
-                progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
-                progressMessages(2) = "El archivo ISO ha sido creado"
-                Text = "Crear un archivo ISO"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
-                Label3.Text = "Cuando esté listo, haga clic en Crear."
-                Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                Label6.Text = "Arquitectura:"
-                Label7.Text = "Ubicación del archivo ISO de destino:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "Puede hacer otras cosas mientras se crea el archivo ISO. Vuelva aquí para ver un estado actualizado."
-                Button1.Text = "Examinar..."
-                Button2.Text = "Escoger..."
-                Button3.Text = "Examinar..."
-                Button4.Text = "Usar imagen montada"
-                Button5.Text = "Examinar..."
-                Button6.Text = "Personalizar entorno..."
-                OK_Button.Text = "Crear"
-                Cancel_Button.Text = "Cancelar"
-                GroupBox1.Text = "Opciones"
-                GroupBox2.Text = "Progreso"
-                LinkLabel1.Text = "Descargar el ADK de Windows"
-                ColumnHeader2.Text = "Nombre de la imagen"
-                ColumnHeader3.Text = "Descripción de la imagen"
-                ColumnHeader4.Text = "Versión"
-                ColumnHeader5.Text = "Arquitectura"
-                CheckBox1.Text = "Archivo de respuesta:"
-                CheckBox2.Text = "Copiar a discos Ventoy"
-                CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
-                CheckBox4.Text = "Incluir controladores esenciales de este sistema"
-            Case 3
-                progressMessages(0) = "Statut"
-                progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
-                progressMessages(2) = "Le fichier ISO a été créé"
-                Text = "Créer un fichier ISO"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
-                Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
-                Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                Label6.Text = "Architecture :"
-                Label7.Text = "Emplacement ISO cible :"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "Vous pouvez faire d'autres choses pendant la création de l'ISO. Revenez ici à tout moment pour obtenir une mise à jour de l'état."
-                Button1.Text = "Parcourir..."
-                Button2.Text = "Choisir..."
-                Button3.Text = "Parcourir..."
-                Button4.Text = "Utiliser une image montée"
-                Button5.Text = "Parcourir..."
-                Button6.Text = "Personnaliser l'environnement..."
-                OK_Button.Text = "Créer"
-                Cancel_Button.Text = "Annuler"
-                GroupBox1.Text = "Paramètres"
-                GroupBox2.Text = "Progrès"
-                LinkLabel1.Text = "Télécharger l'ADK Windows"
-                ColumnHeader2.Text = "Nom de l'image"
-                ColumnHeader3.Text = "Description de l'image"
-                ColumnHeader4.Text = "Version"
-                ColumnHeader5.Text = "Architecture"
-                CheckBox1.Text = "Fichier de réponse :"
-                CheckBox2.Text = "Copier sur les lecteurs Ventoy"
-                CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
-                CheckBox4.Text = "Inclure les pilotes indispensables de ce système"
-            Case 4
-                progressMessages(0) = "Estado"
-                progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
-                progressMessages(2) = "O ficheiro ISO foi criado"
-                Text = "Criar um ficheiro ISO"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
-                Label3.Text = "Quando estiver pronto, clique no botão Criar."
-                Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                Label6.Text = "Arquitetura:"
-                Label7.Text = "Localização ISO de destino:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "Pode fazer outras coisas enquanto o ISO está a ser criado. Volte aqui em qualquer altura para obter um estado atualizado."
-                Button1.Text = "Procurar..."
-                Button2.Text = "Escolher..."
-                Button3.Text = "Procurar..."
-                Button4.Text = "Utilizar imagem montada"
-                Button5.Text = "Procurar..."
-                Button6.Text = "Personalizar o ambiente..."
-                OK_Button.Text = "Criar"
-                Cancel_Button.Text = "Cancelar"
-                GroupBox1.Text = "Configurações"
-                GroupBox2.Text = "Progresso"
-                LinkLabel1.Text = "Baixar o Windows ADK"
-                ColumnHeader2.Text = "Nome da imagem"
-                ColumnHeader3.Text = "Descrição da imagem"
-                ColumnHeader4.Text = "Versão"
-                ColumnHeader5.Text = "Arquitetura"
-                CheckBox1.Text = "Ficheiro de resposta:"
-                CheckBox2.Text = "Copiar para unidades Ventoy"
-                CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
-                CheckBox4.Text = "Incluir os controladores essenciais deste sistema"
-            Case 5
-                progressMessages(0) = "Stato"
-                progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
-                progressMessages(2) = "Il file ISO è stato creato"
-                Text = "Creare un file ISO"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
-                Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
-                Label4.Text = "File immagine da aggiungere al file ISO:"
-                Label6.Text = "Architettura:"
-                Label7.Text = "Posizione ISO di destinazione:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "È possibile fare altre cose mentre la ISO viene creata. Tornare qui in qualsiasi momento per uno stato aggiornato"
-                Button1.Text = "Sfoglia..."
-                Button2.Text = "Scegli..."
-                Button3.Text = "Sfoglia..."
-                Button4.Text = "Usa immagine montata"
-                Button5.Text = "Sfoglia..."
-                Button6.Text = "Personalizza l'ambiente..."
-                OK_Button.Text = "Crea"
-                Cancel_Button.Text = "Annulla"
-                GroupBox1.Text = "Opzioni"
-                GroupBox2.Text = "Avanzamento"
-                LinkLabel1.Text = "Scarica l'ADK di Windows"
-                ColumnHeader2.Text = "Nome dell'immagine"
-                ColumnHeader3.Text = "Descrizione dell'immagine"
-                ColumnHeader4.Text = "Versione"
-                ColumnHeader5.Text = "Architettura"
-                CheckBox1.Text = "File di risposta:"
-                CheckBox2.Text = "Copia su unità Ventoy"
-                CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
-                CheckBox4.Text = "Includi i driver essenziali di questo sistema"
-        End Select
+        progressMessages(0) = LocalizationService.ForSection("ISOCreator")("Status.Message")
+        progressMessages(1) = LocalizationService.ForSection("ISOCreator")("Creating.ISO.Message")
+        progressMessages(2) = LocalizationService.ForSection("ISOCreator")("IsofileCreated.Message")
+        Text = LocalizationService.ForSection("ISOCreator")("CreateIsofile.Label")
+        ImageTaskHeader1.ItemText = Text
+        Label2.Text = LocalizationService.ForSection("ISOCreator")("ISO.File.Message")
+        Label3.Text = LocalizationService.ForSection("ISOCreator")("Re.Ready.Create.Label")
+        Label4.Text = LocalizationService.ForSection("ISOCreator")("ImageFile.Add.Label")
+        Label6.Text = LocalizationService.ForSection("ISOCreator")("Architecture.Label")
+        Label7.Text = LocalizationService.ForSection("ISOCreator")("Target.Isolocation.Label")
+        Label8.Text = progressMessages(0)
+        Label9.Text = LocalizationService.ForSection("ISOCreator")("Other.Things.Message")
+        Button1.Text = LocalizationService.ForSection("ISOCreator")("Browse.Button")
+        Button2.Text = LocalizationService.ForSection("ISOCreator")("Pick.Button")
+        Button3.Text = LocalizationService.ForSection("ISOCreator")("Browse.Button")
+        Button4.Text = LocalizationService.ForSection("ISOCreator")("Mounted.Image.Button")
+        Button5.Text = LocalizationService.ForSection("ISOCreator")("Browse.Button")
+        Button6.Text = LocalizationService.ForSection("ISOCreator")("Customize.Environment.Button")
+        OK_Button.Text = LocalizationService.ForSection("ISOCreator")("Create.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ISOCreator")("Cancel.Button")
+        GroupBox1.Text = LocalizationService.ForSection("ISOCreator")("Options.Group")
+        GroupBox2.Text = LocalizationService.ForSection("ISOCreator")("Progress.Group")
+        LinkLabel1.Text = LocalizationService.ForSection("ISOCreator")("Download.Windows.ADK.Link")
+        ColumnHeader2.Text = LocalizationService.ForSection("ISOCreator")("ImageName.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("ISOCreator")("ImageDescription.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("ISOCreator")("ImageVersion.Column")
+        ColumnHeader5.Text = LocalizationService.ForSection("ISOCreator")("Image.Architecture.Column")
+        CheckBox1.Text = LocalizationService.ForSection("ISOCreator")("Unattended.CheckBox")
+        CheckBox2.Text = LocalizationService.ForSection("ISOCreator")("Copy.Ventoy.Drives.CheckBox")
+        CheckBox3.Text = LocalizationService.ForSection("ISOCreator")("Newly.Signed.Boot.CheckBox")
+        CheckBox4.Text = LocalizationService.ForSection("ISOCreator")("Include.Essential.CheckBox")
         ImageTaskHeader1.SetColors()
         ImageTaskHeader1.HideWindowTitle(Me.Handle)
         BackColor = CurrentTheme.SectionBackgroundColor
@@ -380,7 +86,7 @@ Public Class ISOCreator
         ' Check ADK status
         If Not Directory.Exists(ADKPath) Then
             DynaLog.LogMessage("ADK installation directory " & Quote & ADKPath & Quote & " is not found in this system. Either it has not been installed or it has been installed somewhere else.")
-            If MsgBox("The Windows ADK was not found on your system. Do you want DISMTools to download and install the latest one for you? Note that you'll need around 4 GB on your system.", vbYesNo + vbQuestion, "") = MsgBoxResult.Yes Then
+            If MsgBox(LocalizationService.ForSection("ISOFiles.Creator.Messages")("Windows.Message"), vbYesNo + vbQuestion, "") = MsgBoxResult.Yes Then
                 Visible = True
                 ADKDownloaderBW.RunWorkerAsync()
                 Do Until Not ADKDownloaderBW.IsBusy
@@ -388,31 +94,7 @@ Public Class ISOCreator
                     Thread.Sleep(100)
                 Loop
                 If Not adkDownloadSuccess Then
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                                Case "ESN"
-                                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                                Case "FRA"
-                                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                                Case "PTB", "PTG"
-                                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                                Case "ITA"
-                                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
-                            End Select
-                        Case 1
-                            Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                        Case 2
-                            Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                        Case 3
-                            Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                        Case 4
-                            Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                        Case 5
-                            Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
-                    End Select
+                    Process.Start(LocalizationService.ForSection("ISOCreator")("Https.Learn.Message"))
                     Close()
                 End If
             Else
@@ -558,31 +240,7 @@ Public Class ISOCreator
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ESN"
-                            msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "FRA"
-                            msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "PTB", "PTG"
-                            msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ITA"
-                            msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                    End Select
-                Case 1
-                    msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 2
-                    msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 3
-                    msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 4
-                    msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 5
-                    msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-            End Select
+            msg = LocalizationService.ForSection("ISOCreator.GetImageInfo").Format("Gather.ImageFile.Message", ex.ToString(), ex.Message, Hex(ex.HResult))
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -606,119 +264,23 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Source image to add to ISO file: " & Quote & TextBox1.Text & Quote)
         DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
         If TextBox1.Text = "" OrElse Not File.Exists(TextBox1.Text) Then
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ISOMsg = "Either the source image file does not exist or you haven't provided any image file. Please specify a valid image file and try again."
-                        Case "ESN"
-                            ISOMsg = "El archivo de imagen de origen no existe o no ha especificado un archivo. Especifique un archivo de imagen válido e inténtelo de nuevo."
-                        Case "FRA"
-                            ISOMsg = "Soit le fichier image source n'existe pas, soit vous n'avez pas fourni de fichier image. Veuillez spécifier un fichier image valide et réessayer."
-                        Case "PTB", "PTG"
-                            ISOMsg = "Ou o ficheiro de imagem de origem não existe ou não forneceu qualquer ficheiro de imagem. Especifique um ficheiro de imagem válido e tente novamente."
-                        Case "ITA"
-                            ISOMsg = "Il file immagine di origine non esiste o non è stato fornito alcun file immagine. Specificare un file immagine valido e riprovare."
-                    End Select
-                Case 1
-                    ISOMsg = "Either the source image file does not exist or you haven't provided any image file. Please specify a valid image file and try again."
-                Case 2
-                    ISOMsg = "El archivo de imagen de origen no existe o no ha especificado un archivo. Especifique un archivo de imagen válido e inténtelo de nuevo."
-                Case 3
-                    ISOMsg = "Soit le fichier image source n'existe pas, soit vous n'avez pas fourni de fichier image. Veuillez spécifier un fichier image valide et réessayer."
-                Case 4
-                    ISOMsg = "Ou o ficheiro de imagem de origem não existe ou não forneceu qualquer ficheiro de imagem. Especifique um ficheiro de imagem válido e tente novamente."
-                Case 5
-                    ISOMsg = "Il file immagine di origine non esiste o non è stato fornito alcun file immagine. Specificare un file immagine valido e riprovare."
-            End Select
+            ISOMsg = LocalizationService.ForSection("ISOCreator.Validation")("Either.Source.Message")
             MsgBox(ISOMsg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox3.Text = "" Then
             If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                ISOMsg = "The target ISO hasn't been specified. Please specify a location for the ISO file and try again."
-                            Case "ESN"
-                                ISOMsg = "El archivo ISO de destino no se ha especificado. Especifique una ubicación para el archivo ISO e inténtelo de nuevo."
-                            Case "FRA"
-                                ISOMsg = "L'ISO cible n'a pas été spécifiée. Veuillez indiquer un emplacement pour le fichier ISO et réessayez."
-                            Case "PTB", "PTG"
-                                ISOMsg = "O ISO de destino não foi especificado. Especifique uma localização para o ficheiro ISO e tente novamente."
-                            Case "ITA"
-                                ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
-                        End Select
-                    Case 1
-                        ISOMsg = "The target ISO hasn't been specified. Please specify a location for the ISO file and try again."
-                    Case 2
-                        ISOMsg = "El archivo ISO de destino no se ha especificado. Especifique una ubicación para el archivo ISO e inténtelo de nuevo."
-                    Case 3
-                        ISOMsg = "L'ISO cible n'a pas été spécifiée. Veuillez indiquer un emplacement pour le fichier ISO et réessayez."
-                    Case 4
-                        ISOMsg = "O ISO de destino não foi especificado. Especifique uma localização para o ficheiro ISO e tente novamente."
-                    Case 5
-                        ISOMsg = "L'ISO di destinazione non è stata specificata. Specificare una posizione per il file ISO e riprovare."
-                End Select
+                ISOMsg = LocalizationService.ForSection("ISOCreator.Validation")("TargetISO.Required.Message")
                 MsgBox(ISOMsg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Exit Sub
             End If
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ISOMsg = "Make sure that you have saved all your changes before continuing." & CrLf & CrLf & "If you have not done so, click No, save your image, and start the process again. You don't have to close this window." & CrLf & CrLf & "Do you want to create an ISO with this file?"
-                    Case "ESN"
-                        ISOMsg = "Asegúrese de que haya guardado todos sus cambios antes de continuar." & CrLf & CrLf & "Si no lo ha hecho, haga clic en No, guarde su imagen, y comience el proceso de nuevo. No tiene que cerrar esta ventana." & CrLf & CrLf & "¿Desea crear un archivo ISO con esta imagen?"
-                    Case "FRA"
-                        ISOMsg = "Assurez-vous d'avoir enregistré toutes vos modifications avant de continuer." & CrLf & CrLf & "Si vous ne l'avez pas fait, cliquez sur Non, enregistrez votre image et recommencez le processus. Vous n'êtes pas obligé de fermer cette fenêtre." & CrLf & CrLf & "Voulez-vous créer une ISO avec ce fichier ?"
-                    Case "PTB", "PTG"
-                        ISOMsg = "Certifique-se de que guardou todas as suas alterações antes de continuar." & CrLf & CrLf & "Se ainda não o fez, clique em Não, guarde a sua imagem e comece o processo novamente. Não é necessário fechar esta janela." & CrLf & CrLf & "Deseja criar uma ISO com este ficheiro?"
-                    Case "ITA"
-                        ISOMsg = "Assicurarsi di aver salvato tutte le modifiche prima di continuare." & CrLf & CrLf & "Se non lo si è fatto, fare clic su No, salvare l'immagine e ricominciare il processo. Non è necessario chiudere questa finestra." & CrLf & CrLf & "Si desidera creare una ISO con questo file?"
-                End Select
-            Case 1
-                ISOMsg = "Make sure that you have saved all your changes before continuing." & CrLf & CrLf & "If you have not done so, click No, save your image, and start the process again. You don't have to close this window." & CrLf & CrLf & "Do you want to create an ISO with this file?"
-            Case 2
-                ISOMsg = "Asegúrese de que haya guardado todos sus cambios antes de continuar." & CrLf & CrLf & "Si no lo ha hecho, haga clic en No, guarde su imagen, y comience el proceso de nuevo. No tiene que cerrar esta ventana." & CrLf & CrLf & "¿Desea crear un archivo ISO con esta imagen?"
-            Case 3
-                ISOMsg = "Assurez-vous d'avoir enregistré toutes vos modifications avant de continuer." & CrLf & CrLf & "Si vous ne l'avez pas fait, cliquez sur Non, enregistrez votre image et recommencez le processus. Vous n'êtes pas obligé de fermer cette fenêtre." & CrLf & CrLf & "Voulez-vous créer une ISO avec ce fichier ?"
-            Case 4
-                ISOMsg = "Certifique-se de que guardou todas as suas alterações antes de continuar." & CrLf & CrLf & "Se ainda não o fez, clique em Não, guarde a sua imagem e comece o processo novamente. Não é necessário fechar esta janela." & CrLf & CrLf & "Deseja criar uma ISO com este ficheiro?"
-            Case 5
-                ISOMsg = "Assicurarsi di aver salvato tutte le modifiche prima di continuare." & CrLf & CrLf & "Se non lo si è fatto, fare clic su No, salvare l'immagine e ricominciare il processo. Non è necessario chiudere questa finestra." & CrLf & CrLf & "Si desidera creare una ISO con questo file?"
-        End Select
+        ISOMsg = LocalizationService.ForSection("ISOCreator.Validation")("Saved.Message")
         If MsgBox(ISOMsg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
             Exit Sub
         End If
         If File.Exists(TextBox3.Text) Then
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ISOMsg = "The target ISO already exists. Do you want to replace it?"
-                        Case "ESN"
-                            ISOMsg = "El archivo ISO ya existe. ¿Desea reemplazarlo?"
-                        Case "FRA"
-                            ISOMsg = "L'ISO cible existe déjà. Voulez-vous la remplacer ?"
-                        Case "PTB", "PTG"
-                            ISOMsg = "O ISO de destino já existe. Deseja substituí-la?"
-                        Case "ITA"
-                            ISOMsg = "L'ISO di destinazione esiste già. Si desidera sostituirla?"
-                    End Select
-                Case 1
-                    ISOMsg = "The target ISO already exists. Do you want to replace it?"
-                Case 2
-                    ISOMsg = "El archivo ISO ya existe. ¿Desea reemplazarlo?"
-                Case 3
-                    ISOMsg = "L'ISO cible existe déjà. Voulez-vous la remplacer ?"
-                Case 4
-                    ISOMsg = "O ISO de destino já existe. Deseja substituí-la?"
-                Case 5
-                    ISOMsg = "L'ISO di destinazione esiste già. Si desidera sostituirla?"
-            End Select
+            ISOMsg = LocalizationService.ForSection("ISOCreator.Validation")("Target.ISO.Message")
             If MsgBox(ISOMsg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                 Try
                     File.Delete(TextBox3.Text)
@@ -763,7 +325,12 @@ Public Class ISOCreator
 
         End Try
 
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & If(CheckBox2.Checked, " -copyToVentoy", "") & If(CheckBox3.Checked, " -bootex", "") & If(CheckBox4.Checked, " -includeSysDrivers", "")
+        Dim peLanguageFile As String = LocalizationService.GetLanguageFilePath(MainForm.LanguageCode)
+        If String.IsNullOrWhiteSpace(peLanguageFile) OrElse Not File.Exists(peLanguageFile) Then
+            Throw New FileNotFoundException("The selected localization file could not be found.", peLanguageFile)
+        End If
+
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & " -languageCode " & Quote & MainForm.LanguageCode & Quote & " -languageFile " & Quote & peLanguageFile & Quote & If(CheckBox2.Checked, " -copyToVentoy", "") & If(CheckBox3.Checked, " -bootex", "") & If(CheckBox4.Checked, " -includeSysDrivers", "")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
@@ -792,31 +359,7 @@ Public Class ISOCreator
         DynaLog.LogMessage("The PE Helper has finished.")
         DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
         Dim msg As String = ""
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        msg = If(success, "The ISO file has been created successfully", "Failed to create the ISO file")
-                    Case "ESN"
-                        msg = If(success, "El archivo ISO ha sido creado satisfactoriamente", "No pudimos crear el archivo ISO")
-                    Case "FRA"
-                        msg = If(success, "Le fichier ISO a été créé avec succès", "Le processus de création de l'ISO a échoué")
-                    Case "PTB", "PTG"
-                        msg = If(success, "O ficheiro ISO foi criado com êxito", "O processo de criação do ISO falhou")
-                    Case "ITA"
-                        msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
-                End Select
-            Case 1
-                msg = If(success, "The ISO file has been created successfully", "Failed to create the ISO file")
-            Case 2
-                msg = If(success, "El archivo ISO ha sido creado satisfactoriamente", "No pudimos crear el archivo ISO")
-            Case 3
-                msg = If(success, "Le fichier ISO a été créé avec succès", "Le processus de création de l'ISO a échoué")
-            Case 4
-                msg = If(success, "O ficheiro ISO foi criado com êxito", "O processo de criação do ISO falhou")
-            Case 5
-                msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
-        End Select
+        msg = If(success, LocalizationService.ForSection("ISOCreator.Background")("Isofile.Created.Done.Message"), LocalizationService.ForSection("ISOCreator.Background")("Failed.Create.Message"))
         WindowHelper.DisplayNotificationBalloon(If(success, ToolTipIcon.Info, ToolTipIcon.Warning), ImageTaskHeader1.ItemText, msg)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
@@ -870,31 +413,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                    Case "ESN"
-                        Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                    Case "FRA"
-                        Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                    Case "PTB", "PTG"
-                        Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                    Case "ITA"
-                        Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
-                End Select
-            Case 1
-                Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-            Case 2
-                Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-            Case 3
-                Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-            Case 4
-                Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-            Case 5
-                Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
-        End Select
+        Process.Start(LocalizationService.ForSection("ISOCreator.Links")("Https.Learn.Message"))
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
@@ -932,81 +451,9 @@ Public Class ISOCreator
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs)
         Dim uefiCA2023_Message As String = "", uefiCA2023_Title As String = "", uefiCA2023_NotSupportedOnCurrentSystemMessage As String = ""
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        uefiCA2023_Message = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
-                            "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
-                            "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
-                            "If you have any doubts, we recommend that you leave this option unchecked."
-                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "We have detected that, currently, this system does not support Windows UEFI CA 2023 boot binaries. If you continue with ISO creation, you may not be able to boot to the resulting ISO file on this system."
-                        uefiCA2023_Title = "Windows UEFI CA 2023 information"
-                    Case "ESN"
-                        uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
-                            "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
-                            "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
-                            "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
-                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Hemos detectado que, actualmente, su sistema no soporta archivos de arranque Windows UEFI CA 2023. Si continúa con la creación de archivos ISO, podría no ser capaz de arrancar a archivos ISO resultantes en este sistema."
-                        uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
-                    Case "FRA"
-                        uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
-                            "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
-                            "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
-                            "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
-                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Nous avons détecté que, actuellement, ce système ne prend pas en charge les binaires de démarrage Windows UEFI CA 2023. Si vous poursuivez la création de l'ISO, vous risquez de ne pas pouvoir démarrer à partir du fichier ISO obtenu sur ce système."
-                        uefiCA2023_Title = "Informations Windows UEFI CA 2023"
-                    Case "PTB", "PTG"
-                        uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
-                            "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
-                            "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
-                            "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
-                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Detetámos que, atualmente, este sistema não suporta binários de arranque Windows UEFI CA 2023. Se continuar com a criação da ISO, poderá não conseguir arrancar a partir do ficheiro ISO resultante neste sistema."
-                        uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
-                    Case "ITA"
-                        uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
-                            "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
-                            "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
-                            "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
-                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Abbiamo rilevato che, attualmente, questo sistema non supporta i file binari di avvio Windows UEFI CA 2023. Se si procede con la creazione dell'ISO, potrebbe non essere possibile avviare il file ISO risultante su questo sistema."
-                        uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
-                End Select
-            Case 1
-                uefiCA2023_Message = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
-                    "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
-                    "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
-                    "If you have any doubts, we recommend that you leave this option unchecked."
-                uefiCA2023_NotSupportedOnCurrentSystemMessage = "We have detected that, currently, this system does not support Windows UEFI CA 2023 boot binaries. If you continue with ISO creation, you may not be able to boot to the resulting ISO file on this system."
-                uefiCA2023_Title = "Windows UEFI CA 2023 information"
-            Case 2
-                uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
-                    "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
-                    "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
-                    "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
-                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Hemos detectado que, actualmente, su sistema no soporta archivos de arranque Windows UEFI CA 2023. Si continúa con la creación de archivos ISO, podría no ser capaz de arrancar a archivos ISO resultantes en este sistema."
-                uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
-            Case 3
-                uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
-                    "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
-                    "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
-                    "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
-                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Nous avons détecté que, actuellement, ce système ne prend pas en charge les binaires de démarrage Windows UEFI CA 2023. Si vous poursuivez la création de l'ISO, vous risquez de ne pas pouvoir démarrer à partir du fichier ISO obtenu sur ce système."
-                uefiCA2023_Title = "Informations Windows UEFI CA 2023"
-            Case 4
-                uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
-                    "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
-                    "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
-                    "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
-                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Detetámos que, atualmente, este sistema não suporta binários de arranque Windows UEFI CA 2023. Se continuar com a criação da ISO, poderá não conseguir arrancar a partir do ficheiro ISO resultante neste sistema."
-                uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
-            Case 5
-                uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
-                    "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
-                    "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
-                    "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
-                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Abbiamo rilevato che, attualmente, questo sistema non supporta i file binari di avvio Windows UEFI CA 2023. Se si procede con la creazione dell'ISO, potrebbe non essere possibile avviare il file ISO risultante su questo sistema."
-                uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
-        End Select
+        uefiCA2023_Message = LocalizationService.ForSection("ISOCreator")("Create.ISO.Message") & LocalizationService.ForSection("ISOCreator")("Computers.UEFI.Message") & CrLf & CrLf & LocalizationService.ForSection("ISOCreator")("Run.Power.Shell.Message") & CrLf & CrLf & LocalizationService.ForSection("ISOCreator")("Doubts.Recommend.Message")
+        uefiCA2023_NotSupportedOnCurrentSystemMessage = LocalizationService.ForSection("ISOCreator")("Have.Detected.Message")
+        uefiCA2023_Title = LocalizationService.ForSection("ISOCreator")("Windows.Title")
         If CheckBox3.Checked Then
             MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, uefiCA2023_Title)
 
@@ -1069,12 +516,10 @@ Public Class ISOCreator
     End Sub
 
     Private Sub CheckBox4_MouseHover(sender As Object, e As EventArgs) Handles CheckBox4.MouseHover
-        WindowHelper.DisplayToolTip(sender, "When you check this option, storage controllers and network adapter drivers from this machine will be included" & CrLf &
-                                            "in your ISO file. They will also be applied to the image file once deployed.")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ISOCreator")("Check.Option.Storage.Message"))
     End Sub
 
     Private Sub CheckBox3_MouseHover(sender As Object, e As EventArgs) Handles CheckBox3.MouseHover
-        WindowHelper.DisplayToolTip(sender, "If available in your installed Assessment and Deployment Kit, your ISO file will use boot binaries signed with Windows UEFI CA 2023." & CrLf &
-                                            "This option is designed for target systems that support Secure Boot and have the latest boot certificates in the allowlist database (DB).")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ISOCreator")("AvailableADK.Message"))
     End Sub
 End Class

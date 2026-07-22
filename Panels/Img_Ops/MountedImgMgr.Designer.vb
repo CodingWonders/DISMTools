@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MountedImgMgr
     Inherits System.Windows.Forms.Form
 
@@ -51,7 +51,7 @@ Partial Class MountedImgMgr
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(1239, 29)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Overview.Images.Message")
         '
         'TableLayoutPanel1
         '
@@ -86,26 +86,26 @@ Partial Class MountedImgMgr
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Image file"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("ImageFile.Column")
         Me.ColumnHeader1.Width = 480
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Index"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Index.Column")
         Me.ColumnHeader2.Width = 72
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Mount directory"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("MountDirectory.Column")
         Me.ColumnHeader3.Width = 420
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Status"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Status.Column")
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Read/write permissions?"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Read.Write.Column")
         Me.ColumnHeader5.Width = 147
         '
         'ActionsTLP
@@ -143,7 +143,7 @@ Partial Class MountedImgMgr
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(191, 23)
         Me.Button6.TabIndex = 7
-        Me.Button6.Text = "Load into project"
+        Me.Button6.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("LoadProject.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'Button7
@@ -156,7 +156,7 @@ Partial Class MountedImgMgr
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(42, 23)
         Me.Button7.TabIndex = 6
-        Me.Button7.Text = "..."
+        Me.Button7.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Value.Button")
         Me.Button7.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.Button7.UseVisualStyleBackColor = True
         '
@@ -169,7 +169,7 @@ Partial Class MountedImgMgr
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(191, 23)
         Me.Button4.TabIndex = 5
-        Me.Button4.Text = "Open mount directory"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Open.Mount.Dir.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button3
@@ -182,7 +182,7 @@ Partial Class MountedImgMgr
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(191, 23)
         Me.Button3.TabIndex = 3
-        Me.Button3.Text = "Enable write permissions"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Enable.Write.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -195,7 +195,7 @@ Partial Class MountedImgMgr
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(191, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Reload servicing"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("ReloadServicing.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button5
@@ -208,7 +208,7 @@ Partial Class MountedImgMgr
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(191, 23)
         Me.Button5.TabIndex = 1
-        Me.Button5.Text = "Remove volume images..."
+        Me.Button5.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Remove.VolumeImages.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button1
@@ -221,7 +221,7 @@ Partial Class MountedImgMgr
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(191, 23)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Unmount image"
+        Me.Button1.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("UnmountImage.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'MountedImgMgr
@@ -237,7 +237,7 @@ Partial Class MountedImgMgr
         Me.MinimumSize = New System.Drawing.Size(800, 600)
         Me.Name = "MountedImgMgr"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Mounted image manager"
+        Me.Text = LocalizationService.ForSection("Designer.MountedImgMgr")("Image.Manager.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ActionsTLP.ResumeLayout(False)
         Me.ResumeLayout(False)

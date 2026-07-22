@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ApplicationDriveSpecifier
     Inherits System.Windows.Forms.Form
 
@@ -60,7 +60,7 @@ Partial Class ApplicationDriveSpecifier
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AppDrive")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -71,7 +71,7 @@ Partial Class ApplicationDriveSpecifier
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AppDrive")("Cancel.Button")
         '
         'RichTextBox1
         '
@@ -109,7 +109,7 @@ Partial Class ApplicationDriveSpecifier
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(219, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Destination disk ID (\\.\PHYSICALDRIVE(n)):"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.AppDrive")("Destination.Disk.Id.Label")
         '
         'Button2
         '
@@ -118,7 +118,7 @@ Partial Class ApplicationDriveSpecifier
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Refresh"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.AppDrive")("Refresh.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'ListView1
@@ -138,22 +138,22 @@ Partial Class ApplicationDriveSpecifier
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Device ID"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.AppDrive")("DeviceID.Column")
         Me.ColumnHeader1.Width = 246
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Model"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.AppDrive")("Model.Column")
         Me.ColumnHeader2.Width = 347
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Partitions"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.AppDrive")("Partitions.Column")
         Me.ColumnHeader3.Width = 127
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Size"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.AppDrive")("Size.Column")
         Me.ColumnHeader4.Width = 179
         '
         'ApplicationDriveSpecifier
@@ -176,7 +176,7 @@ Partial Class ApplicationDriveSpecifier
         Me.Name = "ApplicationDriveSpecifier"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Specify target disk..."
+        Me.Text = LocalizationService.ForSection("Designer.AppDrive")("Target.Disk.Button")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

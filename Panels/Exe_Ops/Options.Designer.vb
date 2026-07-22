@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class Options
     Inherits System.Windows.Forms.Form
 
@@ -374,7 +374,7 @@ Partial Class Options
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.Options")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -385,17 +385,17 @@ Partial Class Options
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Options")("Cancel.Button")
         '
         'DismOFD
         '
         Me.DismOFD.FileName = "dism.exe"
-        Me.DismOFD.Filter = "DISM executable|dism.exe"
-        Me.DismOFD.Title = "Specify the DISM executable to use"
+        Me.DismOFD.Filter = LocalizationService.ForSection("Designer.Options")("DISM.Executable.Filter")
+        Me.DismOFD.Title = LocalizationService.ForSection("Designer.Options")("Dismexecutable.Title")
         '
         'ScratchFBD
         '
-        Me.ScratchFBD.Description = "Specify the scratch directory the program should use:"
+        Me.ScratchFBD.Description = LocalizationService.ForSection("Designer.Options")("ScratchDir.Description")
         Me.ScratchFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'CheckBox13
@@ -405,7 +405,7 @@ Partial Class Options
         Me.CheckBox13.Name = "CheckBox13"
         Me.CheckBox13.Size = New System.Drawing.Size(122, 19)
         Me.CheckBox13.TabIndex = 2
-        Me.CheckBox13.Text = "Check for updates"
+        Me.CheckBox13.Text = LocalizationService.ForSection("Designer.Options")("CheckUpdates.CheckBox")
         Me.CheckBox13.UseVisualStyleBackColor = True
         '
         'CheckBox12
@@ -415,7 +415,7 @@ Partial Class Options
         Me.CheckBox12.Name = "CheckBox12"
         Me.CheckBox12.Size = New System.Drawing.Size(360, 19)
         Me.CheckBox12.TabIndex = 2
-        Me.CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
+        Me.CheckBox12.Text = LocalizationService.ForSection("Designer.Options")("Remount.Mounted.CheckBox")
         Me.CheckBox12.UseVisualStyleBackColor = True
         '
         'Label43
@@ -425,7 +425,7 @@ Partial Class Options
         Me.Label43.Name = "Label43"
         Me.Label43.Size = New System.Drawing.Size(358, 15)
         Me.Label43.TabIndex = 1
-        Me.Label43.Text = "Set options you would like to perform when the program starts up:"
+        Me.Label43.Text = LocalizationService.ForSection("Designer.Options")("Behavior.OnStartup.Label")
         '
         'Panel3
         '
@@ -443,7 +443,7 @@ Partial Class Options
         Me.Label46.Name = "Label46"
         Me.Label46.Size = New System.Drawing.Size(682, 32)
         Me.Label46.TabIndex = 11
-        Me.Label46.Text = "These settings aren't applicable to non-portable installations"
+        Me.Label46.Text = LocalizationService.ForSection("Designer.Options")("Settings.Aren.Label")
         '
         'PictureBox8
         '
@@ -476,7 +476,7 @@ Partial Class Options
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(257, 19)
         Me.CheckBox11.TabIndex = 2
-        Me.CheckBox11.Text = "Set custom file icons for DISMTools projects"
+        Me.CheckBox11.Text = LocalizationService.ForSection("Designer.Options")("FileIcons.Projects.CheckBox")
         Me.CheckBox11.UseVisualStyleBackColor = True
         '
         'DTSSEditAssocCB
@@ -486,7 +486,7 @@ Partial Class Options
         Me.DTSSEditAssocCB.Name = "DTSSEditAssocCB"
         Me.DTSSEditAssocCB.Size = New System.Drawing.Size(278, 19)
         Me.DTSSEditAssocCB.TabIndex = 2
-        Me.DTSSEditAssocCB.Text = "Open starter scripts with the Starter Script Editor"
+        Me.DTSSEditAssocCB.Text = LocalizationService.ForSection("Designer.Options")("Open.Starter.Scripts.Label")
         Me.DTSSEditAssocCB.UseVisualStyleBackColor = True
         '
         'Button9
@@ -498,7 +498,7 @@ Partial Class Options
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(266, 28)
         Me.Button9.TabIndex = 1
-        Me.Button9.Text = "Set file associations"
+        Me.Button9.Text = LocalizationService.ForSection("Designer.Options")("Set.File.Assoc.Button")
         Me.Button9.UseVisualStyleBackColor = True
         '
         'DTProjAssocCB
@@ -508,7 +508,7 @@ Partial Class Options
         Me.DTProjAssocCB.Name = "DTProjAssocCB"
         Me.DTProjAssocCB.Size = New System.Drawing.Size(270, 19)
         Me.DTProjAssocCB.TabIndex = 2
-        Me.DTProjAssocCB.Text = "Open my projects with this copy of DISMTools"
+        Me.DTProjAssocCB.Text = LocalizationService.ForSection("Designer.Options")("Open.My.Projects.Label")
         Me.DTProjAssocCB.UseVisualStyleBackColor = True
         '
         'Label40
@@ -518,7 +518,7 @@ Partial Class Options
         Me.Label40.Name = "Label40"
         Me.Label40.Size = New System.Drawing.Size(705, 38)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = "Manage file associations for DISMTools components:"
+        Me.Label40.Text = LocalizationService.ForSection("Designer.Options")("Manage.File.Assoc.Label")
         '
         'Button10
         '
@@ -528,7 +528,7 @@ Partial Class Options
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(185, 23)
         Me.Button10.TabIndex = 7
-        Me.Button10.Text = "Advanced settings"
+        Me.Button10.Text = LocalizationService.ForSection("Designer.Options")("AdvancedSettings.Button")
         Me.Button10.UseVisualStyleBackColor = True
         '
         'LinkLabel2
@@ -541,7 +541,7 @@ Partial Class Options
         Me.LinkLabel2.Size = New System.Drawing.Size(222, 15)
         Me.LinkLabel2.TabIndex = 6
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Learn more about background processes"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("Designer.Options")("Learn.Background.Link")
         '
         'Label29
         '
@@ -551,20 +551,19 @@ Partial Class Options
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(688, 30)
         Me.Label29.TabIndex = 3
-        Me.Label29.Text = "The program uses background processes to gather complete image information, like " & _
-    "modification dates, installed packages, features present; and more"
+        Me.Label29.Text = LocalizationService.ForSection("Designer.Options")("Uses.Bg.Procs.Message")
         '
         'ComboBox6
         '
         Me.ComboBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox6.FormattingEnabled = True
-        Me.ComboBox6.Items.AddRange(New Object() {"Every time a project has been loaded successfully", "Once"})
+        Me.ComboBox6.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Options")("Every.Time.Project.Item"), LocalizationService.ForSection("Designer.Options")("Once.Item")})
         Me.ComboBox6.Location = New System.Drawing.Point(9, 31)
         Me.ComboBox6.Name = "ComboBox6"
         Me.ComboBox6.Size = New System.Drawing.Size(640, 23)
         Me.ComboBox6.TabIndex = 4
-        Me.ComboBox6.Text = "Every time a project has been loaded successfully"
+        Me.ComboBox6.Text = LocalizationService.ForSection("Designer.Options")("Every.Time.Project.Item")
         '
         'Label28
         '
@@ -575,7 +574,7 @@ Partial Class Options
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(640, 18)
         Me.Label28.TabIndex = 3
-        Me.Label28.Text = "When should the program notify you about background processes being started?"
+        Me.Label28.Text = LocalizationService.ForSection("Designer.Options")("Notify.Label")
         '
         'CheckBox6
         '
@@ -586,7 +585,7 @@ Partial Class Options
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(299, 19)
         Me.CheckBox6.TabIndex = 2
-        Me.CheckBox6.Text = "Notify me when background processes have started"
+        Me.CheckBox6.Text = LocalizationService.ForSection("Designer.Options")("Notify.Me.CheckBox")
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'PictureBox7
@@ -606,7 +605,7 @@ Partial Class Options
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(682, 32)
         Me.Label27.TabIndex = 9
-        Me.Label27.Text = "Some reports do not allow being shown as a table."
+        Me.Label27.Text = LocalizationService.ForSection("Designer.Options")("Reports.Allow.Shown.Label")
         '
         'TextBox4
         '
@@ -618,17 +617,17 @@ Partial Class Options
         Me.TextBox4.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox4.Size = New System.Drawing.Size(707, 240)
         Me.TextBox4.TabIndex = 5
-        Me.TextBox4.Text = resources.GetString("TextBox4.Text")
+        Me.TextBox4.Text = LocalizationService.ForSection("Designer.Options")("Image.Version.Message")
         '
         'ComboBox5
         '
         Me.ComboBox5.FormattingEnabled = True
-        Me.ComboBox5.Items.AddRange(New Object() {"list", "table"})
+        Me.ComboBox5.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Options")("List.Item"), LocalizationService.ForSection("Designer.Options")("Table.Item")})
         Me.ComboBox5.Location = New System.Drawing.Point(19, 35)
         Me.ComboBox5.Name = "ComboBox5"
         Me.ComboBox5.Size = New System.Drawing.Size(133, 23)
         Me.ComboBox5.TabIndex = 3
-        Me.ComboBox5.Text = "list"
+        Me.ComboBox5.Text = LocalizationService.ForSection("Designer.Options")("List.Item")
         '
         'Label26
         '
@@ -637,7 +636,7 @@ Partial Class Options
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(89, 15)
         Me.Label26.TabIndex = 2
-        Me.Label26.Text = "Example report:"
+        Me.Label26.Text = LocalizationService.ForSection("Designer.Options")("ExampleReport.Label")
         '
         'Label25
         '
@@ -646,7 +645,7 @@ Partial Class Options
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(57, 15)
         Me.Label25.TabIndex = 2
-        Me.Label25.Text = "Log view:"
+        Me.Label25.Text = LocalizationService.ForSection("Designer.Options")("LogView.Label")
         '
         'CheckBox5
         '
@@ -657,7 +656,7 @@ Partial Class Options
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(206, 19)
         Me.CheckBox5.TabIndex = 1
-        Me.CheckBox5.Text = "Show command output in English"
+        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.Options")("Show.Command.Output.CheckBox")
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'PictureBox6
@@ -678,7 +677,7 @@ Partial Class Options
         Me.RadioButton4.Name = "RadioButton4"
         Me.RadioButton4.Size = New System.Drawing.Size(205, 19)
         Me.RadioButton4.TabIndex = 12
-        Me.RadioButton4.Text = "Use the specified scratch directory"
+        Me.RadioButton4.Text = LocalizationService.ForSection("Designer.Options")("Custom.Scratch.RadioButton")
         Me.RadioButton4.UseVisualStyleBackColor = True
         '
         'RadioButton3
@@ -691,7 +690,7 @@ Partial Class Options
         Me.RadioButton3.Size = New System.Drawing.Size(258, 19)
         Me.RadioButton3.TabIndex = 12
         Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = "Use the project or program scratch directory"
+        Me.RadioButton3.Text = LocalizationService.ForSection("Designer.Options")("Project.Scratch.RadioButton")
         Me.RadioButton3.UseVisualStyleBackColor = True
         '
         'Label24
@@ -701,8 +700,7 @@ Partial Class Options
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(629, 32)
         Me.Label24.TabIndex = 11
-        Me.Label24.Text = "You may not have enough space on the selected scratch directory for some operatio" & _
-    "ns."
+        Me.Label24.Text = LocalizationService.ForSection("Designer.Options")("Enough.Space.Selected.Label")
         Me.Label24.Visible = False
         '
         'Label23
@@ -713,7 +711,7 @@ Partial Class Options
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(431, 25)
         Me.Label23.TabIndex = 4
-        Me.Label23.Text = "<scdir_space>"
+        Me.Label23.Text = LocalizationService.ForSection("Designer.Options")("ScdirSpace.Label")
         Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label22
@@ -724,7 +722,7 @@ Partial Class Options
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(232, 25)
         Me.Label22.TabIndex = 4
-        Me.Label22.Text = "Space left on selected scratch directory:"
+        Me.Label22.Text = LocalizationService.ForSection("Designer.Options")("Space.Left.Selected.Label")
         Me.Label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button4
@@ -735,7 +733,7 @@ Partial Class Options
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 23)
         Me.Button4.TabIndex = 3
-        Me.Button4.Text = "Browse..."
+        Me.Button4.Text = LocalizationService.ForSection("Designer.Options")("Browse.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'TextBox3
@@ -754,7 +752,7 @@ Partial Class Options
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(108, 23)
         Me.Label21.TabIndex = 1
-        Me.Label21.Text = "Scratch directory:"
+        Me.Label21.Text = LocalizationService.ForSection("Designer.Options")("ScratchDirectory.Label")
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label44
@@ -765,9 +763,7 @@ Partial Class Options
         Me.Label44.Name = "Label44"
         Me.Label44.Size = New System.Drawing.Size(654, 36)
         Me.Label44.TabIndex = 1
-        Me.Label44.Text = "The program will use the scratch directory provided by the project if one is load" & _
-    "ed. If you are in the online or offline installation management modes, the progr" & _
-    "am will use its scratch directory"
+        Me.Label44.Text = LocalizationService.ForSection("Designer.Options")("Scratch.Dir.Message")
         '
         'Label20
         '
@@ -777,7 +773,7 @@ Partial Class Options
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(360, 15)
         Me.Label20.TabIndex = 1
-        Me.Label20.Text = "Please specify the scratch directory to be used for DISM operations:"
+        Me.Label20.Text = LocalizationService.ForSection("Designer.Options")("Scratch.Dir.Required.Label")
         '
         'CheckBox4
         '
@@ -786,7 +782,7 @@ Partial Class Options
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(145, 19)
         Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = "Use a scratch directory"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.Options")("Scratch.Dir.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'PictureBox5
@@ -808,7 +804,7 @@ Partial Class Options
         Me.CheckBox14.Name = "CheckBox14"
         Me.CheckBox14.Size = New System.Drawing.Size(353, 19)
         Me.CheckBox14.TabIndex = 1
-        Me.CheckBox14.Text = "Always save complete information for the following elements:"
+        Me.CheckBox14.Text = LocalizationService.ForSection("Designer.Options")("Always.Save.CheckBox")
         Me.CheckBox14.UseVisualStyleBackColor = True
         '
         'Label48
@@ -818,7 +814,7 @@ Partial Class Options
         Me.Label48.Name = "Label48"
         Me.Label48.Size = New System.Drawing.Size(665, 26)
         Me.Label48.TabIndex = 0
-        Me.Label48.Text = "Choose the settings the program should consider when saving image information:"
+        Me.Label48.Text = LocalizationService.ForSection("Designer.Options")("SettingsConsider.Label")
         '
         'TableLayoutPanel2
         '
@@ -849,7 +845,7 @@ Partial Class Options
         Me.CheckBox15.Name = "CheckBox15"
         Me.CheckBox15.Size = New System.Drawing.Size(122, 19)
         Me.CheckBox15.TabIndex = 1
-        Me.CheckBox15.Text = "Installed packages"
+        Me.CheckBox15.Text = LocalizationService.ForSection("Designer.Options")("Installed.Packages.CheckBox")
         Me.CheckBox15.UseVisualStyleBackColor = True
         '
         'CheckBox19
@@ -861,7 +857,7 @@ Partial Class Options
         Me.CheckBox19.Name = "CheckBox19"
         Me.CheckBox19.Size = New System.Drawing.Size(108, 19)
         Me.CheckBox19.TabIndex = 1
-        Me.CheckBox19.Text = "Installed drivers"
+        Me.CheckBox19.Text = LocalizationService.ForSection("Designer.Options")("InstalledDrivers.CheckBox")
         Me.CheckBox19.UseVisualStyleBackColor = True
         '
         'CheckBox18
@@ -873,7 +869,7 @@ Partial Class Options
         Me.CheckBox18.Name = "CheckBox18"
         Me.CheckBox18.Size = New System.Drawing.Size(87, 19)
         Me.CheckBox18.TabIndex = 1
-        Me.CheckBox18.Text = "Capabilities"
+        Me.CheckBox18.Text = LocalizationService.ForSection("Designer.Options")("Capabilities.CheckBox")
         Me.CheckBox18.UseVisualStyleBackColor = True
         '
         'CheckBox16
@@ -885,7 +881,7 @@ Partial Class Options
         Me.CheckBox16.Name = "CheckBox16"
         Me.CheckBox16.Size = New System.Drawing.Size(70, 19)
         Me.CheckBox16.TabIndex = 1
-        Me.CheckBox16.Text = "Features"
+        Me.CheckBox16.Text = LocalizationService.ForSection("Designer.Options")("Features.CheckBox")
         Me.CheckBox16.UseVisualStyleBackColor = True
         '
         'CheckBox17
@@ -897,7 +893,7 @@ Partial Class Options
         Me.CheckBox17.Name = "CheckBox17"
         Me.CheckBox17.Size = New System.Drawing.Size(154, 19)
         Me.CheckBox17.TabIndex = 1
-        Me.CheckBox17.Text = "Installed AppX packages"
+        Me.CheckBox17.Text = LocalizationService.ForSection("Designer.Options")("Installed.AppX.CheckBox")
         Me.CheckBox17.UseVisualStyleBackColor = True
         '
         'Label19
@@ -907,8 +903,7 @@ Partial Class Options
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(687, 34)
         Me.Label19.TabIndex = 8
-        Me.Label19.Text = "When this option is checked, your computer will not restart automatically; even w" & _
-    "hen quietly performing operations."
+        Me.Label19.Text = LocalizationService.ForSection("Designer.Options")("Checked.Computer.Message")
         '
         'Label18
         '
@@ -917,7 +912,7 @@ Partial Class Options
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(680, 64)
         Me.Label18.TabIndex = 8
-        Me.Label18.Text = resources.GetString("Label18.Text")
+        Me.Label18.Text = LocalizationService.ForSection("Designer.Options")("QuietOperations.Message")
         '
         'CheckBox3
         '
@@ -926,7 +921,7 @@ Partial Class Options
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(124, 19)
         Me.CheckBox3.TabIndex = 6
-        Me.CheckBox3.Text = "Skip system restart"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.Options")("Skip.System.Restart.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -936,7 +931,7 @@ Partial Class Options
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(205, 19)
         Me.CheckBox2.TabIndex = 6
-        Me.CheckBox2.Text = "Quietly perform image operations"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.Options")("Quietly.Image.Ops.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'Panel1
@@ -957,8 +952,7 @@ Partial Class Options
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(577, 33)
         Me.Label16.TabIndex = 0
-        Me.Label16.Text = "The log file should display errors, warnings and information messages after perfo" & _
-    "rming an image operation."
+        Me.Label16.Text = LocalizationService.ForSection("Designer.Options")("Log.File.Display.Message")
         '
         'Label15
         '
@@ -968,7 +962,7 @@ Partial Class Options
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(315, 15)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Errors, warnings and information messages (Log level 3)"
+        Me.Label15.Text = LocalizationService.ForSection("Designer.Options")("Errors.Warnings.Label")
         '
         'TrackBar1
         '
@@ -991,8 +985,7 @@ Partial Class Options
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(664, 33)
         Me.Label13.TabIndex = 7
-        Me.Label13.Text = "When performing image operations in the command line, specify the ""/LogPath"" argu" & _
-    "ment to save the image operation log to the target log file."
+        Me.Label13.Text = LocalizationService.ForSection("Designer.Options")("Image.Ops.Message")
         '
         'Button3
         '
@@ -1003,7 +996,7 @@ Partial Class Options
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 5
-        Me.Button3.Text = "Browse..."
+        Me.Button3.Text = LocalizationService.ForSection("Designer.Options")("Browse.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -1024,7 +1017,7 @@ Partial Class Options
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(81, 15)
         Me.Label14.TabIndex = 3
-        Me.Label14.Text = "Log file level:"
+        Me.Label14.Text = LocalizationService.ForSection("Designer.Options")("Log.File.Level.Label")
         '
         'Label12
         '
@@ -1034,7 +1027,7 @@ Partial Class Options
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(123, 23)
         Me.Label12.TabIndex = 3
-        Me.Label12.Text = "Operation log file:"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.Options")("Operation.Log.File.Label")
         Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'CheckBox10
@@ -1046,7 +1039,7 @@ Partial Class Options
         Me.CheckBox10.Name = "CheckBox10"
         Me.CheckBox10.Size = New System.Drawing.Size(319, 19)
         Me.CheckBox10.TabIndex = 10
-        Me.CheckBox10.Text = "Automatically create logs for each operation performed"
+        Me.CheckBox10.Text = LocalizationService.ForSection("Designer.Options")("Auto.Create.Logs.CheckBox")
         Me.CheckBox10.UseVisualStyleBackColor = True
         '
         'PictureBox4
@@ -1076,7 +1069,7 @@ Partial Class Options
         Me.RadioButton6.Name = "RadioButton6"
         Me.RadioButton6.Size = New System.Drawing.Size(61, 19)
         Me.RadioButton6.TabIndex = 6
-        Me.RadioButton6.Text = "Classic"
+        Me.RadioButton6.Text = LocalizationService.ForSection("Designer.Options")("Classic.RadioButton")
         Me.RadioButton6.UseVisualStyleBackColor = True
         '
         'RadioButton5
@@ -1088,7 +1081,7 @@ Partial Class Options
         Me.RadioButton5.Size = New System.Drawing.Size(67, 19)
         Me.RadioButton5.TabIndex = 6
         Me.RadioButton5.TabStop = True
-        Me.RadioButton5.Text = "Modern"
+        Me.RadioButton5.Text = LocalizationService.ForSection("Designer.Options")("Modern.RadioButton")
         Me.RadioButton5.UseVisualStyleBackColor = True
         '
         'Label45
@@ -1098,7 +1091,7 @@ Partial Class Options
         Me.Label45.Name = "Label45"
         Me.Label45.Size = New System.Drawing.Size(330, 24)
         Me.Label45.TabIndex = 2
-        Me.Label45.Text = "Secondary progress panel style:"
+        Me.Label45.Text = LocalizationService.ForSection("Designer.Options")("Secondary.Progress.Label")
         Me.Label45.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Panel4
@@ -1118,8 +1111,7 @@ Partial Class Options
         Me.Label47.Name = "Label47"
         Me.Label47.Size = New System.Drawing.Size(641, 33)
         Me.Label47.TabIndex = 9
-        Me.Label47.Text = "This font may not be readable on log windows. While you can still use it, we reco" & _
-    "mmend monospaced fonts for increased readability."
+        Me.Label47.Text = LocalizationService.ForSection("Designer.Options")("Font.Readable.Log.Message")
         '
         'PictureBox9
         '
@@ -1164,7 +1156,7 @@ Partial Class Options
         Me.LogPreview.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.LogPreview.Size = New System.Drawing.Size(643, 182)
         Me.LogPreview.TabIndex = 4
-        Me.LogPreview.Text = resources.GetString("LogPreview.Text")
+        Me.LogPreview.Text = LocalizationService.ForSection("Options.LogPreview")("Packages.Add.Message")
         '
         'Label11
         '
@@ -1173,7 +1165,7 @@ Partial Class Options
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(51, 15)
         Me.Label11.TabIndex = 0
-        Me.Label11.Text = "Preview:"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.Options")("Preview.Label")
         '
         'Label10
         '
@@ -1182,7 +1174,7 @@ Partial Class Options
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(123, 24)
         Me.Label10.TabIndex = 2
-        Me.Label10.Text = "Log window font:"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.Options")("Log.Window.Font.Label")
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComboBox4
@@ -1201,7 +1193,7 @@ Partial Class Options
         Me.CheckBox9.Name = "CheckBox9"
         Me.CheckBox9.Size = New System.Drawing.Size(141, 19)
         Me.CheckBox9.TabIndex = 5
-        Me.CheckBox9.Text = "Use uppercase menus"
+        Me.CheckBox9.Text = LocalizationService.ForSection("Designer.Options")("Uppercase.Menus.CheckBox")
         Me.CheckBox9.UseVisualStyleBackColor = True
         '
         'ComboBox3
@@ -1209,24 +1201,22 @@ Partial Class Options
         Me.ComboBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Items.AddRange(New Object() {"Use system language", "English", "Spanish", "French", "Portuguese"})
         Me.ComboBox3.Location = New System.Drawing.Point(119, 42)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(592, 23)
         Me.ComboBox3.TabIndex = 3
-        Me.ComboBox3.Text = "English"
         '
         'ComboBox2
         '
         Me.ComboBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Items.AddRange(New Object() {"Use system setting", "Light mode", "Dark mode"})
+        Me.ComboBox2.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Options")("System.Setting.Item"), LocalizationService.ForSection("Designer.Options")("LightMode.Item"), LocalizationService.ForSection("Designer.Options")("DarkMode.Item")})
         Me.ComboBox2.Location = New System.Drawing.Point(119, 13)
         Me.ComboBox2.Name = "ComboBox2"
         Me.ComboBox2.Size = New System.Drawing.Size(592, 23)
         Me.ComboBox2.TabIndex = 3
-        Me.ComboBox2.Text = "Use system setting"
+        Me.ComboBox2.Text = LocalizationService.ForSection("Designer.Options")("System.Setting.Item")
         '
         'Label8
         '
@@ -1235,7 +1225,7 @@ Partial Class Options
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(95, 23)
         Me.Label8.TabIndex = 2
-        Me.Label8.Text = "Language:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.Options")("Language.Label")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label7
@@ -1245,18 +1235,18 @@ Partial Class Options
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(95, 23)
         Me.Label7.TabIndex = 2
-        Me.Label7.Text = "Color mode:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.Options")("ColorMode.Label")
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Settings file", "Registry"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Options")("SettingsFile.Item"), LocalizationService.ForSection("Designer.Options")("Registry.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(169, 14)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(556, 23)
         Me.ComboBox1.TabIndex = 5
-        Me.ComboBox1.Text = "Settings file"
+        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.Options")("SettingsFile.Item")
         '
         'LinkLabel1
         '
@@ -1268,9 +1258,7 @@ Partial Class Options
         Me.LinkLabel1.Size = New System.Drawing.Size(681, 54)
         Me.LinkLabel1.TabIndex = 4
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM ve" & _
-    "rsion supports. How is it going to affect my usage of this program, and which fe" & _
-    "atures will be disabled accordingly?"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.Options")("Enable.Disable.Message")
         Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'PictureBox2
@@ -1290,7 +1278,7 @@ Partial Class Options
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(257, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "View DISM component versions"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.Options")("View.DISM.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -1300,7 +1288,7 @@ Partial Class Options
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.Options")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -1317,7 +1305,7 @@ Partial Class Options
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(65, 15)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "<dismVer>"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.Options")("Dismver.Label")
         '
         'Label5
         '
@@ -1326,7 +1314,7 @@ Partial Class Options
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(145, 23)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Save settings on:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.Options")("SaveSettings.Label")
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label3
@@ -1336,7 +1324,7 @@ Partial Class Options
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(48, 15)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Version:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.Options")("Version.Label")
         '
         'Label2
         '
@@ -1345,7 +1333,7 @@ Partial Class Options
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(164, 23)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "DISM executable path:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Options")("Dismexecutable.Path.Label")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PrefReset
@@ -1356,13 +1344,13 @@ Partial Class Options
         Me.PrefReset.Name = "PrefReset"
         Me.PrefReset.Size = New System.Drawing.Size(168, 23)
         Me.PrefReset.TabIndex = 2
-        Me.PrefReset.Text = "Reset preferences"
+        Me.PrefReset.Text = LocalizationService.ForSection("Designer.Options")("ResetPreferences.Label")
         Me.PrefReset.UseVisualStyleBackColor = True
         '
         'LogSFD
         '
-        Me.LogSFD.Filter = "All files|*.*"
-        Me.LogSFD.Title = "Specify the location of the log file"
+        Me.LogSFD.Filter = LocalizationService.ForSection("Designer.Options")("LogSFD.Filter")
+        Me.LogSFD.Title = LocalizationService.ForSection("Designer.Options")("Location.Log.File.Title")
         '
         'btnPanel
         '
@@ -1450,7 +1438,7 @@ Partial Class Options
         Me.Label49.Name = "Label49"
         Me.Label49.Size = New System.Drawing.Size(53, 15)
         Me.Label49.TabIndex = 0
-        Me.Label49.Text = "Program"
+        Me.Label49.Text = LocalizationService.ForSection("Designer.Options")("Program.Label")
         '
         'PersonalizationSectionBtn
         '
@@ -1479,7 +1467,7 @@ Partial Class Options
         Me.Label50.Name = "Label50"
         Me.Label50.Size = New System.Drawing.Size(87, 15)
         Me.Label50.TabIndex = 0
-        Me.Label50.Text = "Personalization"
+        Me.Label50.Text = LocalizationService.ForSection("Designer.Options")("Personalization.Label")
         '
         'LogSectionBtn
         '
@@ -1508,7 +1496,7 @@ Partial Class Options
         Me.Label51.Name = "Label51"
         Me.Label51.Size = New System.Drawing.Size(32, 15)
         Me.Label51.TabIndex = 0
-        Me.Label51.Text = "Logs"
+        Me.Label51.Text = LocalizationService.ForSection("Designer.Options")("Logs.Label")
         '
         'ImgOpsSectionBtn
         '
@@ -1537,7 +1525,7 @@ Partial Class Options
         Me.Label52.Name = "Label52"
         Me.Label52.Size = New System.Drawing.Size(99, 15)
         Me.Label52.TabIndex = 0
-        Me.Label52.Text = "Image operations"
+        Me.Label52.Text = LocalizationService.ForSection("Designer.Options")("ImageOperations.Label")
         '
         'ScDirSectionBtn
         '
@@ -1566,7 +1554,7 @@ Partial Class Options
         Me.Label53.Name = "Label53"
         Me.Label53.Size = New System.Drawing.Size(96, 15)
         Me.Label53.TabIndex = 0
-        Me.Label53.Text = "Scratch directory"
+        Me.Label53.Text = LocalizationService.ForSection("Designer.Options")("Scratch.Dir.Label")
         '
         'OutputSectionBtn
         '
@@ -1595,7 +1583,7 @@ Partial Class Options
         Me.Label54.Name = "Label54"
         Me.Label54.Size = New System.Drawing.Size(92, 15)
         Me.Label54.TabIndex = 0
-        Me.Label54.Text = "Program output"
+        Me.Label54.Text = LocalizationService.ForSection("Designer.Options")("ProgramOutput.Label")
         '
         'BgProcsSectionBtn
         '
@@ -1624,7 +1612,7 @@ Partial Class Options
         Me.Label55.Name = "Label55"
         Me.Label55.Size = New System.Drawing.Size(125, 15)
         Me.Label55.TabIndex = 0
-        Me.Label55.Text = "Background processes"
+        Me.Label55.Text = LocalizationService.ForSection("Designer.Options")("BgProcesses.Label")
         '
         'AssocsSectionBtn
         '
@@ -1652,7 +1640,7 @@ Partial Class Options
         Me.Label57.Name = "Label57"
         Me.Label57.Size = New System.Drawing.Size(92, 15)
         Me.Label57.TabIndex = 0
-        Me.Label57.Text = "File associations"
+        Me.Label57.Text = LocalizationService.ForSection("Designer.Options")("FileAssociations.Label")
         '
         'StartupSectionBtn
         '
@@ -1680,7 +1668,7 @@ Partial Class Options
         Me.Label58.Name = "Label58"
         Me.Label58.Size = New System.Drawing.Size(88, 15)
         Me.Label58.TabIndex = 0
-        Me.Label58.Text = "Startup options"
+        Me.Label58.Text = LocalizationService.ForSection("Designer.Options")("StartupOptions.Label")
         '
         'ShutdownSectionBtn
         '
@@ -1708,7 +1696,7 @@ Partial Class Options
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(104, 15)
         Me.Label34.TabIndex = 0
-        Me.Label34.Text = "Shutdown options"
+        Me.Label34.Text = LocalizationService.ForSection("Designer.Options")("ShutdownOptions.Label")
         '
         'ValueContainer
         '
@@ -1782,7 +1770,7 @@ Partial Class Options
         Me.LinkLabel4.Size = New System.Drawing.Size(397, 15)
         Me.LinkLabel4.TabIndex = 12
         Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = "What is the difference between display names and friendly display names?"
+        Me.LinkLabel4.Text = LocalizationService.ForSection("Designer.Options")("Difference.Between.Link")
         '
         'TableLayoutPanel3
         '
@@ -1809,7 +1797,7 @@ Partial Class Options
         Me.Label72.Name = "Label72"
         Me.Label72.Size = New System.Drawing.Size(115, 20)
         Me.Label72.TabIndex = 9
-        Me.Label72.Text = "Package Name:"
+        Me.Label72.Text = LocalizationService.ForSection("Designer.Options")("PackageName.Label")
         Me.Label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label73
@@ -1820,7 +1808,7 @@ Partial Class Options
         Me.Label73.Name = "Label73"
         Me.Label73.Size = New System.Drawing.Size(505, 20)
         Me.Label73.TabIndex = 9
-        Me.Label73.Text = "UbisoftEntertainment.RaymanJungleRun_1.2.0.88_x86__dbgk1hhpxymar"
+        Me.Label73.Text = LocalizationService.ForSection("Designer.Options")("RaymanJungle.Label")
         Me.Label73.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label74
@@ -1831,7 +1819,7 @@ Partial Class Options
         Me.Label74.Name = "Label74"
         Me.Label74.Size = New System.Drawing.Size(115, 20)
         Me.Label74.TabIndex = 9
-        Me.Label74.Text = "Display Name:"
+        Me.Label74.Text = LocalizationService.ForSection("Designer.Options")("DisplayName.Label")
         Me.Label74.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label75
@@ -1847,7 +1835,7 @@ Partial Class Options
         'ComboBox8
         '
         Me.ComboBox8.FormattingEnabled = True
-        Me.ComboBox8.Items.AddRange(New Object() {"Display name only", "Display name, then friendly display name", "Friendly display name only"})
+        Me.ComboBox8.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Options")("Display.Name.Only.Item"), LocalizationService.ForSection("Designer.Options")("Display.Name.Friendly.Item"), LocalizationService.ForSection("Designer.Options")("Friendly.Display.Name.Item")})
         Me.ComboBox8.Location = New System.Drawing.Point(20, 330)
         Me.ComboBox8.Name = "ComboBox8"
         Me.ComboBox8.Size = New System.Drawing.Size(686, 23)
@@ -1860,7 +1848,7 @@ Partial Class Options
         Me.Label71.Name = "Label71"
         Me.Label71.Size = New System.Drawing.Size(54, 15)
         Me.Label71.TabIndex = 9
-        Me.Label71.Text = "Example:"
+        Me.Label71.Text = LocalizationService.ForSection("Designer.Options")("Example.Label")
         '
         'Label70
         '
@@ -1869,7 +1857,7 @@ Partial Class Options
         Me.Label70.Name = "Label70"
         Me.Label70.Size = New System.Drawing.Size(384, 15)
         Me.Label70.TabIndex = 9
-        Me.Label70.Text = "When removing AppX packages, show display names using this format:"
+        Me.Label70.Text = LocalizationService.ForSection("Designer.Options")("Remove.AppX.Label")
         '
         'Label32
         '
@@ -1878,7 +1866,7 @@ Partial Class Options
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(680, 51)
         Me.Label32.TabIndex = 8
-        Me.Label32.Text = resources.GetString("Label32.Text")
+        Me.Label32.Text = LocalizationService.ForSection("Designer.Options")("Only.Available.Message")
         '
         'CheckBox23
         '
@@ -1887,7 +1875,7 @@ Partial Class Options
         Me.CheckBox23.Name = "CheckBox23"
         Me.CheckBox23.Size = New System.Drawing.Size(346, 19)
         Me.CheckBox23.TabIndex = 6
-        Me.CheckBox23.Text = "Map system accounts to application registration information"
+        Me.CheckBox23.Text = LocalizationService.ForSection("Designer.Options")("Map.System.Accounts.CheckBox")
         Me.CheckBox23.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -1897,7 +1885,7 @@ Partial Class Options
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(238, 19)
         Me.CheckBox1.TabIndex = 13
-        Me.CheckBox1.Text = "Show dates in a human-readable format"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.Options")("Show.Dates.Human.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox8
@@ -1907,7 +1895,7 @@ Partial Class Options
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(400, 19)
         Me.CheckBox8.TabIndex = 13
-        Me.CheckBox8.Text = "Prevent the machine from sleeping while performing image operations"
+        Me.CheckBox8.Text = LocalizationService.ForSection("Designer.Options")("PreventSleep.CheckBox")
         Me.CheckBox8.UseVisualStyleBackColor = True
         '
         'Panel7
@@ -1930,7 +1918,7 @@ Partial Class Options
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(150, 15)
         Me.Label9.TabIndex = 3
-        Me.Label9.Text = "Saving image information"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.Options")("Saving.Image.Label")
         '
         'Panel21
         '
@@ -1957,12 +1945,12 @@ Partial Class Options
         Me.LinkLabel5.Size = New System.Drawing.Size(253, 15)
         Me.LinkLabel5.TabIndex = 12
         Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = "Help me understand AI feature tolerance levels"
+        Me.LinkLabel5.Text = LocalizationService.ForSection("Designer.Options")("Help.Me.Understand.Link")
         '
         'ComboBox9
         '
         Me.ComboBox9.FormattingEnabled = True
-        Me.ComboBox9.Items.AddRange(New Object() {"Turn off as many AI features in search engines as possible. I can't stand these", "Let me control the AI features in my search engine", "Turn on as many AI features in search engines as possible"})
+        Me.ComboBox9.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Options")("Turn.Off.Many.Item"), LocalizationService.ForSection("Designer.Options")("Me.Control.AI.Item"), LocalizationService.ForSection("Designer.Options")("Turn.Many.Aifeatures.Item")})
         Me.ComboBox9.Location = New System.Drawing.Point(43, 188)
         Me.ComboBox9.Name = "ComboBox9"
         Me.ComboBox9.Size = New System.Drawing.Size(480, 23)
@@ -1983,7 +1971,7 @@ Partial Class Options
         Me.Label76.Name = "Label76"
         Me.Label76.Size = New System.Drawing.Size(232, 15)
         Me.Label76.TabIndex = 4
-        Me.Label76.Text = "Artificial Intelligence (AI) feature tolerance:"
+        Me.Label76.Text = LocalizationService.ForSection("Designer.Options")("AIFeature.Label")
         '
         'Label69
         '
@@ -1992,7 +1980,7 @@ Partial Class Options
         Me.Label69.Name = "Label69"
         Me.Label69.Size = New System.Drawing.Size(210, 15)
         Me.Label69.TabIndex = 4
-        Me.Label69.Text = "Search Engine to use for web searches:"
+        Me.Label69.Text = LocalizationService.ForSection("Designer.Options")("Search.Engine.Web.Label")
         '
         'Label67
         '
@@ -2002,7 +1990,7 @@ Partial Class Options
         Me.Label67.Name = "Label67"
         Me.Label67.Size = New System.Drawing.Size(205, 15)
         Me.Label67.TabIndex = 3
-        Me.Label67.Text = "Searching image information online"
+        Me.Label67.Text = LocalizationService.ForSection("Designer.Options")("Searching.Image.Online.Label")
         '
         'Label68
         '
@@ -2011,8 +1999,7 @@ Partial Class Options
         Me.Label68.Name = "Label68"
         Me.Label68.Size = New System.Drawing.Size(665, 48)
         Me.Label68.TabIndex = 0
-        Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
-    "se the settings the program should consider for web searches:"
+        Me.Label68.Text = LocalizationService.ForSection("Designer.Options")("Learn.Message")
         '
         'Options_FileAssocs
         '
@@ -2073,7 +2060,7 @@ Partial Class Options
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(75, 23)
         Me.Button14.TabIndex = 3
-        Me.Button14.Text = "Run now"
+        Me.Button14.Text = LocalizationService.ForSection("Designer.Options")("RunNow.Button")
         Me.Button14.UseVisualStyleBackColor = True
         '
         'Label60
@@ -2083,7 +2070,7 @@ Partial Class Options
         Me.Label60.Name = "Label60"
         Me.Label60.Size = New System.Drawing.Size(345, 15)
         Me.Label60.TabIndex = 1
-        Me.Label60.Text = "Set options you would like to perform when the program closes:"
+        Me.Label60.Text = LocalizationService.ForSection("Designer.Options")("Behavior.OnClose.Label")
         '
         'CheckBox22
         '
@@ -2092,7 +2079,7 @@ Partial Class Options
         Me.CheckBox22.Name = "CheckBox22"
         Me.CheckBox22.Size = New System.Drawing.Size(380, 19)
         Me.CheckBox22.TabIndex = 2
-        Me.CheckBox22.Text = "Automatically clean up mount points (launches a separate process)"
+        Me.CheckBox22.Text = LocalizationService.ForSection("Designer.Options")("Automatically.Clean.CheckBox")
         Me.CheckBox22.UseVisualStyleBackColor = True
         '
         'Options_Startup
@@ -2168,7 +2155,7 @@ Partial Class Options
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(160, 26)
         Me.Button7.TabIndex = 0
-        Me.Button7.Text = "Install Service"
+        Me.Button7.Text = LocalizationService.ForSection("Designer.Options")("InstallService.Button")
         Me.Button7.UseVisualStyleBackColor = True
         '
         'Button11
@@ -2179,7 +2166,7 @@ Partial Class Options
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(160, 26)
         Me.Button11.TabIndex = 0
-        Me.Button11.Text = "Enable Service"
+        Me.Button11.Text = LocalizationService.ForSection("Designer.Options")("EnableService.Button")
         Me.Button11.UseVisualStyleBackColor = True
         '
         'Button12
@@ -2190,7 +2177,7 @@ Partial Class Options
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(160, 26)
         Me.Button12.TabIndex = 0
-        Me.Button12.Text = "Disable Service"
+        Me.Button12.Text = LocalizationService.ForSection("Designer.Options")("DisableService.Button")
         Me.Button12.UseVisualStyleBackColor = True
         '
         'Button13
@@ -2201,7 +2188,7 @@ Partial Class Options
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(160, 26)
         Me.Button13.TabIndex = 0
-        Me.Button13.Text = "Delete Service"
+        Me.Button13.Text = LocalizationService.ForSection("Designer.Options")("DeleteService.Button")
         Me.Button13.UseVisualStyleBackColor = True
         '
         'GroupBox2
@@ -2214,7 +2201,7 @@ Partial Class Options
         Me.GroupBox2.Size = New System.Drawing.Size(668, 84)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Service Status"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.Options")("ServiceStatus.Group")
         '
         'TableLayoutPanel4
         '
@@ -2242,7 +2229,7 @@ Partial Class Options
         Me.Label79.Name = "Label79"
         Me.Label79.Size = New System.Drawing.Size(130, 31)
         Me.Label79.TabIndex = 0
-        Me.Label79.Text = "Installed?"
+        Me.Label79.Text = LocalizationService.ForSection("Designer.Options")("Installed.Label")
         Me.Label79.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label80
@@ -2262,7 +2249,7 @@ Partial Class Options
         Me.Label81.Name = "Label81"
         Me.Label81.Size = New System.Drawing.Size(130, 31)
         Me.Label81.TabIndex = 0
-        Me.Label81.Text = "Installation Path:"
+        Me.Label81.Text = LocalizationService.ForSection("Designer.Options")("InstallationPath.Label")
         Me.Label81.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label82
@@ -2282,7 +2269,7 @@ Partial Class Options
         Me.Label77.Name = "Label77"
         Me.Label77.Size = New System.Drawing.Size(187, 15)
         Me.Label77.TabIndex = 3
-        Me.Label77.Text = "Automatic Image Reload service"
+        Me.Label77.Text = LocalizationService.ForSection("Designer.Options")("Automatic.Image.Reload.Label")
         '
         'Label83
         '
@@ -2291,9 +2278,7 @@ Partial Class Options
         Me.Label83.Name = "Label83"
         Me.Label83.Size = New System.Drawing.Size(665, 47)
         Me.Label83.TabIndex = 0
-        Me.Label83.Text = "You may still see the standard servicing session reload procedures from DISMTools" & _
-    " take place for images that the service could not reload the servicing sessions " & _
-    "for."
+        Me.Label83.Text = LocalizationService.ForSection("Designer.Options")("Still.See.Standard.Message")
         '
         'Label78
         '
@@ -2302,9 +2287,7 @@ Partial Class Options
         Me.Label78.Name = "Label78"
         Me.Label78.Size = New System.Drawing.Size(665, 47)
         Me.Label78.TabIndex = 0
-        Me.Label78.Text = "The Automatic Image Reload service can help you have your Windows images ready fo" & _
-    "r servicing by reloading their servicing sessions on system startup. You can con" & _
-    "trol the service here:"
+        Me.Label78.Text = LocalizationService.ForSection("Designer.Options")("Automatic.Image.Message")
         '
         'Options_Personalization
         '
@@ -2358,7 +2341,7 @@ Partial Class Options
         Me.GroupBox1.Size = New System.Drawing.Size(693, 139)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Color Themes"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.Options")("ColorThemes.Group")
         '
         'Button6
         '
@@ -2367,7 +2350,7 @@ Partial Class Options
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(193, 23)
         Me.Button6.TabIndex = 4
-        Me.Button6.Text = "Design your themes"
+        Me.Button6.Text = LocalizationService.ForSection("Designer.Options")("DesignThemes.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'Label30
@@ -2377,7 +2360,7 @@ Partial Class Options
         Me.Label30.Name = "Label30"
         Me.Label30.Size = New System.Drawing.Size(95, 23)
         Me.Label30.TabIndex = 2
-        Me.Label30.Text = "Light Mode:"
+        Me.Label30.Text = LocalizationService.ForSection("Designer.Options")("LightMode.Label")
         Me.Label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label33
@@ -2387,7 +2370,7 @@ Partial Class Options
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(406, 23)
         Me.Label33.TabIndex = 2
-        Me.Label33.Text = "You can also make your own themes."
+        Me.Label33.Text = LocalizationService.ForSection("Designer.Options")("Own.Themes.Label")
         Me.Label33.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label31
@@ -2397,8 +2380,7 @@ Partial Class Options
         Me.Label31.Name = "Label31"
         Me.Label31.Size = New System.Drawing.Size(671, 23)
         Me.Label31.TabIndex = 2
-        Me.Label31.Text = "You can have the program change the color theme according to your preferred color" & _
-    " mode."
+        Me.Label31.Text = LocalizationService.ForSection("Designer.Options")("Change.Color.Theme.Label")
         Me.Label31.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label17
@@ -2408,7 +2390,7 @@ Partial Class Options
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(95, 23)
         Me.Label17.TabIndex = 2
-        Me.Label17.Text = "Dark Mode:"
+        Me.Label17.Text = LocalizationService.ForSection("Designer.Options")("DarkMode.Label")
         Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LightThemesCB
@@ -2438,7 +2420,7 @@ Partial Class Options
         Me.CheckBox21.Name = "CheckBox21"
         Me.CheckBox21.Size = New System.Drawing.Size(235, 19)
         Me.CheckBox21.TabIndex = 5
-        Me.CheckBox21.Text = "Show date and time on the project view"
+        Me.CheckBox21.Text = LocalizationService.ForSection("Designer.Options")("Show.Date.Time.CheckBox")
         Me.CheckBox21.UseVisualStyleBackColor = True
         '
         'Panel17
@@ -2465,7 +2447,7 @@ Partial Class Options
         Me.Label59.Name = "Label59"
         Me.Label59.Size = New System.Drawing.Size(108, 15)
         Me.Label59.TabIndex = 0
-        Me.Label59.Text = "Log customization"
+        Me.Label59.Text = LocalizationService.ForSection("Designer.Options")("LogCustomization.Label")
         '
         'Panel18
         '
@@ -2497,7 +2479,7 @@ Partial Class Options
         Me.Label61.Name = "Label61"
         Me.Label61.Size = New System.Drawing.Size(690, 24)
         Me.Label61.TabIndex = 9
-        Me.Label61.Text = "Preview:"
+        Me.Label61.Text = LocalizationService.ForSection("Designer.Options")("Preview.Label")
         Me.Label61.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'CheckBox7
@@ -2507,7 +2489,7 @@ Partial Class Options
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(275, 19)
         Me.CheckBox7.TabIndex = 8
-        Me.CheckBox7.Text = "Show log view on the progress panel by default"
+        Me.CheckBox7.Text = LocalizationService.ForSection("Designer.Options")("Show.Log.View.CheckBox")
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'ProgressPanelPic
@@ -2638,7 +2620,7 @@ Partial Class Options
         Me.LinkLabel3.Size = New System.Drawing.Size(202, 15)
         Me.LinkLabel3.TabIndex = 9
         Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "Show me where these logs are stored"
+        Me.LinkLabel3.Text = LocalizationService.ForSection("Designer.Options")("Show.Me.Logs.Link")
         '
         'CheckBox20
         '
@@ -2649,7 +2631,7 @@ Partial Class Options
         Me.CheckBox20.Name = "CheckBox20"
         Me.CheckBox20.Size = New System.Drawing.Size(234, 25)
         Me.CheckBox20.TabIndex = 8
-        Me.CheckBox20.Text = "Disable DynaLog logging"
+        Me.CheckBox20.Text = LocalizationService.ForSection("Designer.Options")("Disable.Dyna.Log.CheckBox")
         Me.CheckBox20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox20.UseVisualStyleBackColor = True
         '
@@ -2661,7 +2643,7 @@ Partial Class Options
         Me.Label64.Name = "Label64"
         Me.Label64.Size = New System.Drawing.Size(142, 15)
         Me.Label64.TabIndex = 3
-        Me.Label64.Text = "DynaLog logging control"
+        Me.Label64.Text = LocalizationService.ForSection("Designer.Options")("Dyna.Log.Logging.Label")
         '
         'Label62
         '
@@ -2672,7 +2654,7 @@ Partial Class Options
         Me.Label62.Name = "Label62"
         Me.Label62.Size = New System.Drawing.Size(686, 122)
         Me.Label62.TabIndex = 7
-        Me.Label62.Text = resources.GetString("Label62.Text")
+        Me.Label62.Text = LocalizationService.ForSection("Designer.Options")("Dyna.Log.Logging.Message")
         '
         'Panel25
         '
@@ -2695,7 +2677,7 @@ Partial Class Options
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 9
-        Me.Button5.Text = "Browse..."
+        Me.Button5.Text = LocalizationService.ForSection("Designer.Options")("Browse.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'TextBox5
@@ -2715,7 +2697,7 @@ Partial Class Options
         Me.Label66.Name = "Label66"
         Me.Label66.Size = New System.Drawing.Size(84, 15)
         Me.Label66.TabIndex = 3
-        Me.Label66.Text = "System Editor"
+        Me.Label66.Text = LocalizationService.ForSection("Designer.Options")("SystemEditor.Label")
         '
         'Label65
         '
@@ -2726,7 +2708,7 @@ Partial Class Options
         Me.Label65.Name = "Label65"
         Me.Label65.Size = New System.Drawing.Size(155, 15)
         Me.Label65.TabIndex = 7
-        Me.Label65.Text = "Editor to open log files with:"
+        Me.Label65.Text = LocalizationService.ForSection("Designer.Options")("Editor.Open.Log.Label")
         '
         'Label63
         '
@@ -2737,9 +2719,7 @@ Partial Class Options
         Me.Label63.Name = "Label63"
         Me.Label63.Size = New System.Drawing.Size(686, 34)
         Me.Label63.TabIndex = 7
-        Me.Label63.Text = "By default, operation logs are opened with Notepad in the event of an operation e" & _
-    "rror. However, if you want to open them with a different program, specify it bel" & _
-    "ow:"
+        Me.Label63.Text = LocalizationService.ForSection("Designer.Options")("Default.Op.Logs.Message")
         '
         'Options_Scratch
         '
@@ -2872,8 +2852,8 @@ Partial Class Options
         '
         'EditorOFD
         '
-        Me.EditorOFD.Filter = "Programs|*.exe"
-        Me.EditorOFD.Title = "Specify the editor to use"
+        Me.EditorOFD.Filter = LocalizationService.ForSection("Designer.Options")("ProgramsEXE.Filter")
+        Me.EditorOFD.Title = LocalizationService.ForSection("Designer.Options")("Editor.Title")
         '
         'ImageTaskHeader1
         '
@@ -2896,7 +2876,7 @@ Partial Class Options
         Me.CheckBox24.Name = "CheckBox24"
         Me.CheckBox24.Size = New System.Drawing.Size(226, 19)
         Me.CheckBox24.TabIndex = 2
-        Me.CheckBox24.Text = "Set custom file icons for starter scripts"
+        Me.CheckBox24.Text = LocalizationService.ForSection("Designer.Options")("Set.Custom.CheckBox")
         Me.CheckBox24.UseVisualStyleBackColor = True
         '
         'Options
@@ -2916,7 +2896,7 @@ Partial Class Options
         Me.Name = "Options"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Options"
+        Me.Text = LocalizationService.ForSection("Designer.Options")("Options.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()

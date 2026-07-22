@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class IncompleteSetupDlg
     Inherits System.Windows.Forms.Form
 
@@ -52,7 +52,7 @@ Partial Class IncompleteSetupDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(78, 27)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "Yes"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.IncompleteSetupDlg")("Yes.Button")
         '
         'Cancel_Button
         '
@@ -63,7 +63,7 @@ Partial Class IncompleteSetupDlg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(78, 27)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "No"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.IncompleteSetupDlg")("No.Button")
         '
         'Label1
         '
@@ -74,8 +74,7 @@ Partial Class IncompleteSetupDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(597, 94)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Setup is not complete yet, and your custom settings will not be saved. Proceeding" & _
-    " will make the program use default settings." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Do you want to proceed?"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.IncompleteSetupDlg")("SetupIncomplete.Message")
         '
         'IncompleteSetupDlg
         '
@@ -93,7 +92,7 @@ Partial Class IncompleteSetupDlg
         Me.Name = "IncompleteSetupDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.IncompleteSetupDlg")("DISMTools.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

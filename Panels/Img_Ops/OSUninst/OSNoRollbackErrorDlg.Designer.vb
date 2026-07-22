@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class OSNoRollbackErrorDlg
     Inherits System.Windows.Forms.Form
 
@@ -63,7 +63,7 @@ Partial Class OSNoRollbackErrorDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.NoRollbackError")("Ok.Button")
         '
         'Label2
         '
@@ -72,7 +72,7 @@ Partial Class OSNoRollbackErrorDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 52)
         Me.Label2.TabIndex = 14
-        Me.Label2.Text = resources.GetString("Label2.Text")
+        Me.Label2.Text = LocalizationService.ForSection("Designer.NoRollbackError")("Old.Versions.None.Message")
         '
         'Label1
         '
@@ -82,7 +82,7 @@ Partial Class OSNoRollbackErrorDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 13
-        Me.Label1.Text = "You can't roll back to an older version"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.NoRollbackError")("Troll.Back.Older.Label")
         '
         'OSNoRollbackErrorDlg
         '
@@ -101,7 +101,7 @@ Partial Class OSNoRollbackErrorDlg
         Me.Name = "OSNoRollbackErrorDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.NoRollbackError")("DISMTools.Label")
         Me.Panel1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)

@@ -39,6 +39,8 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [switch]$bootex,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [switch]$includeSysDrivers,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 8)] [string]$scratchPath = "",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 9)] [string]$languageCode = "en-US",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 10)] [string]$languageFile = "",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -85,6 +87,120 @@ if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]:
 {
     Write-Host "You need to run this script as an administrator"
     exit 1
+}
+
+function Export-PEHelperLocalization {
+    param (
+        [Parameter(Mandatory = $true)] [string]$SourceFile,
+        [Parameter(Mandatory = $true)] [string]$DestinationDirectory,
+        [Parameter(Mandatory = $true)] [string]$CultureCode
+    )
+
+    if ([string]::IsNullOrWhiteSpace($SourceFile)) {
+        $currentDirectory = Get-Item -LiteralPath (Get-Location).Path
+        for ($depth = 0; $depth -le 8 -and $null -ne $currentDirectory; $depth++) {
+            $candidateDirectory = Join-Path $currentDirectory.FullName 'language'
+            if (Test-Path -LiteralPath $candidateDirectory -PathType Container) {
+                foreach ($candidateFile in Get-ChildItem -LiteralPath $candidateDirectory -Filter '*.ini' -File) {
+                    $candidateLines = Get-Content -LiteralPath $candidateFile.FullName -Encoding UTF8
+                    $inMetadata = $false
+                    foreach ($candidateLine in $candidateLines) {
+                        $candidateText = $candidateLine.Trim()
+                        if ($candidateText.StartsWith('[') -and $candidateText.EndsWith(']')) {
+                            $inMetadata = $candidateText.Equals('[LanguageFileInformation]', [System.StringComparison]::OrdinalIgnoreCase)
+                            continue
+                        }
+                        if ($inMetadata -and $candidateText.StartsWith('LanguageCode=', [System.StringComparison]::OrdinalIgnoreCase)) {
+                            $candidateCode = $candidateText.Substring($candidateText.IndexOf('=') + 1).Trim().Trim('"')
+                            if ($candidateCode.Equals($CultureCode, [System.StringComparison]::OrdinalIgnoreCase)) {
+                                $SourceFile = $candidateFile.FullName
+                                break
+                            }
+                        }
+                    }
+                    if (-not [string]::IsNullOrWhiteSpace($SourceFile)) { break }
+                }
+            }
+            if (-not [string]::IsNullOrWhiteSpace($SourceFile)) { break }
+            $currentDirectory = $currentDirectory.Parent
+        }
+    }
+
+    if (-not (Test-Path -LiteralPath $SourceFile -PathType Leaf)) {
+        throw "The selected localization file does not exist for language '$CultureCode': $SourceFile"
+    }
+
+    # Only strings read by autorun.exe are exported to the Windows installation ISO.
+    # The complete DISMTools language file is never copied into the image.
+    $requiredKeys = [ordered]@{
+        'PEHelper.Designer.Main' = @('Back.Button', 'Copy.Boot.Image.Link', 'Copy.Install.Image.Link', 'DISM.Tools.PE.Label', 'Exit.Button', 'Explore.Contents.Disc.Link', 'Install.Operating.Link', 'PE.Helper.Message', 'Prepare.System.Image.Link', 'Restart.Install.Media.Link', 'StartPXE.Label', 'StartPXE.Link', 'StartPXE.PXE.Windows.Link', 'StartPXE.PXEFOG.Link', 'WhatWant.Label')
+        'PEHelper.Designer.ServerPort' = @('Cancel.Button', 'Check.Button', 'Components.Disc.Rely.Message', 'Default.Button', 'Ok.Button', 'Port.Server.Label', 'ServerComponents.Label')
+        'PEHelper.Designer.Sysprep' = @('AutomaticMode.Link', 'Cancel.Link', 'CaptureImage.CheckBox', 'CopyRegistry.CheckBox', 'ManualMode.Link', 'PrepareCapture.Label', 'Responsibility.Message')
+        'PEHelper.Designer.WDSArch' = @('Architecture.Label', 'Architecture.Label.Label', 'CancelButton.Button', 'Okbutton.Button')
+        'PEHelper.Designer.WDSGroup' = @('Action.Choose.Label', 'Already.Exists.Label', 'Cancel.Button', 'CreateGroup.RadioButton', 'Ok.Button', 'Refresh.Button', 'SpecifyGroup.Button', 'Upload.RadioButton')
+        'PEHelper.Main' = @('Back.Button', 'Copy.Boot.Image.Link', 'Exit.Button', 'Explore.Contents.Disc.Link', 'Install.Operating.Link', 'Prepare.System.Image.Link', 'Restart.Install.Media.Link', 'StartServer.Fog.Link', 'StartServer.Label', 'StartServer.Network.Link', 'StartServer.Wds.Link', 'WhatWant.Label')
+        'PEHelper.Restart' = @('Warning.Message')
+        'PEHelper.Process' = @('ExitCode.Message')
+        'PEHelper.PXE' = @('ChangePort.Tooltip')
+        'PEHelper.ServerPort' = @('Already.Message', 'InvalidPort.Message')
+        'PEHelper.WDSImageGroup' = @('Action.Choose.Label', 'Already.Exists.Label', 'Cancel.Button', 'CreateFailed.Message', 'CreateGroup.RadioButton', 'LoadFailed.Message', 'Ok.Button', 'Refresh.Button', 'SpecifyGroup.Button', 'Upload.RadioButton')
+        'PEHelper.Sysprep' = @('AutomaticMode.Link', 'Cancel.Link', 'CaptureImage.CheckBox', 'CopyRegistry.CheckBox', 'ManualMode.Link', 'Responsibility.Message')
+    }
+
+    $sourceLines = Get-Content -LiteralPath $SourceFile -Encoding UTF8
+    $metadataLines = New-Object System.Collections.Generic.List[string]
+    $sourceValues = @{}
+    $currentSection = ''
+
+    foreach ($sourceLine in $sourceLines) {
+        $trimmedLine = $sourceLine.Trim()
+        if ($trimmedLine.StartsWith('[') -and $trimmedLine.EndsWith(']')) {
+            $currentSection = $trimmedLine.Substring(1, $trimmedLine.Length - 2).Trim()
+            continue
+        }
+        if ([string]::IsNullOrWhiteSpace($trimmedLine) -or $trimmedLine.StartsWith(';') -or $trimmedLine.StartsWith('#')) { continue }
+        $equalsIndex = $sourceLine.IndexOf('=')
+        if ($equalsIndex -le 0) { continue }
+
+        $keyName = $sourceLine.Substring(0, $equalsIndex).Trim()
+        if ($currentSection.Equals('LanguageFileInformation', [System.StringComparison]::OrdinalIgnoreCase)) {
+            $metadataLines.Add($sourceLine)
+        }
+        $lookupKey = $currentSection + [char]0 + $keyName
+        $sourceValues[$lookupKey] = $sourceLine
+    }
+
+    $metadataLookupKey = 'LanguageFileInformation' + [char]0 + 'LanguageCode'
+    if (-not $sourceValues.ContainsKey($metadataLookupKey)) {
+        throw "The localization file has no LanguageCode metadata: $SourceFile"
+    }
+    $metadataLine = [string]$sourceValues[$metadataLookupKey]
+    $metadataCode = $metadataLine.Substring($metadataLine.IndexOf('=') + 1).Trim().Trim('"')
+    if (-not $metadataCode.Equals($CultureCode, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "The requested language '$CultureCode' does not match LanguageCode '$metadataCode' in $SourceFile"
+    }
+
+    $outputLines = New-Object System.Collections.Generic.List[string]
+    $outputLines.Add('[LanguageFileInformation]')
+    foreach ($metadataEntry in $metadataLines) { $outputLines.Add($metadataEntry) }
+
+    foreach ($sectionEntry in $requiredKeys.GetEnumerator()) {
+        $outputLines.Add('')
+        $outputLines.Add('[' + $sectionEntry.Key + ']')
+        foreach ($requiredKey in $sectionEntry.Value) {
+            $lookupKey = [string]$sectionEntry.Key + [char]0 + [string]$requiredKey
+            if (-not $sourceValues.ContainsKey($lookupKey)) {
+                throw "The localization file is missing the PE Helper key [$($sectionEntry.Key)] $requiredKey"
+            }
+            $outputLines.Add([string]$sourceValues[$lookupKey])
+        }
+    }
+
+    New-Item -Path $DestinationDirectory -ItemType Directory -Force | Out-Null
+    $safeCultureCode = $metadataCode -replace '[^A-Za-z0-9._-]', '_'
+    $destinationFile = Join-Path $DestinationDirectory ($safeCultureCode + '.ini')
+    $outputLines | Set-Content -LiteralPath $destinationFile -Encoding UTF8 -Force
+    Write-Host "PE Helper localization exported: $destinationFile"
 }
 
 function Get-KitsRoot {
@@ -333,6 +449,7 @@ function Start-PEGeneration
                 if (Test-Path -Path "$((Get-Location).Path)\tools\MainMenu") {
                     Write-Host "The main menu has been detected. Adding to ISO file..."
                     Copy-Item -Path "$((Get-Location).Path)\tools\MainMenu\*.*" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -Recurse -Verbose
+                    Export-PEHelperLocalization -SourceFile $languageFile -DestinationDirectory "$((Get-Location).Path)\ISOTEMP\media\language" -CultureCode $languageCode
                     $autorunContents = @'
 
 [autorun]

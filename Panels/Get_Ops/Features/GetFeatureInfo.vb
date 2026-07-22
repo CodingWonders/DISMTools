@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
@@ -23,171 +23,21 @@ Public Class GetFeatureInfoDlg
         cPropValue.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, If(MainForm.LogFontIsBold, FontStyle.Bold, FontStyle.Regular))
         SearchPic.Image = GetGlyphResource("search")
         WizardBtn.Image = GetGlyphResource("assistant")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Get feature information"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Ready"
-                        Label22.Text = "Feature name:"
-                        Label24.Text = "Display name:"
-                        Label26.Text = "Feature description:"
-                        Label31.Text = "Is a restart required?"
-                        Label36.Text = "Feature information"
-                        Label37.Text = "Select an installed feature on the left to view its information here"
-                        Label41.Text = "Feature state:"
-                        Label43.Text = "Custom properties:"
-                        ListView1.Columns(0).Text = "Feature name"
-                        ListView1.Columns(1).Text = "Feature state"
-                        Button2.Text = "Save..."
-                        SearchBox1.cueBanner = "Type here to search for a feature..."
-                    Case "ESN"
-                        Text = "Obtener información de características"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Listo"
-                        Label22.Text = "Nombre de característica:"
-                        Label24.Text = "Nombre para mostrar:"
-                        Label26.Text = "Descripción de la característica:"
-                        Label31.Text = "¿Se requiere un reinicio?"
-                        Label36.Text = "Información de la característica"
-                        Label37.Text = "Seleccione una característica instalada en la izquierda para ver su información aquí"
-                        Label41.Text = "Estado de la característica"
-                        Label43.Text = "Propiedades personalizadas:"
-                        ListView1.Columns(0).Text = "Nombre de característica"
-                        ListView1.Columns(1).Text = "Estado"
-                        Button2.Text = "Guardar..."
-                        SearchBox1.cueBanner = "Escriba aquí para buscar una característica..."
-                    Case "FRA"
-                        Text = "Obtenir des informations sur les caractéristiques"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Prêt"
-                        Label22.Text = "Nom de la caractéristique :"
-                        Label24.Text = "Nom d'affichage :"
-                        Label26.Text = "Description de la caractéristique :"
-                        Label31.Text = "Un redémarrage est-il nécessaire ?"
-                        Label36.Text = "Information sur la caractéristique"
-                        Label37.Text = "Sélectionnez une caractéristique installée sur la gauche pour afficher ses informations ici"
-                        Label41.Text = "État de la caractéristique :"
-                        Label43.Text = "Propriétés personnalisées :"
-                        ListView1.Columns(0).Text = "Nom de la caractéristique"
-                        ListView1.Columns(1).Text = "État de la caractéristique"
-                        Button2.Text = "Sauvegarder..."
-                        SearchBox1.cueBanner = "Tapez ici pour rechercher une caractéristique..."
-                    Case "PTB", "PTG"
-                        Text = "Obter informações sobre a caraterística"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Pronto"
-                        Label22.Text = "Nome da caraterística:"
-                        Label24.Text = "Nome do ecrã:"
-                        Label26.Text = "Descrição da caraterística:"
-                        Label31.Text = "É necessário reiniciar?"
-                        Label36.Text = "Informação sobre a caraterística"
-                        Label37.Text = "Seleccione uma caraterística instalada à esquerda para ver as suas informações aqui"
-                        Label41.Text = "Estado da funcionalidade:"
-                        Label43.Text = "Propriedades personalizadas:"
-                        ListView1.Columns(0).Text = "Nome da caraterística"
-                        ListView1.Columns(1).Text = "Estado da caraterística"
-                        Button2.Text = "Guardar..."
-                        SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
-                    Case "ITA"
-                        Text = "Verifica informazioni funzionalità"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Pronto"
-                        Label22.Text = "Nome funzionalità:"
-                        Label24.Text = "Nome visualizzato:"
-                        Label26.Text = "Descrizione funzionalità:"
-                        Label31.Text = "È necessario un riavvio?"
-                        Label36.Text = "Informazioni funzionalità"
-                        Label37.Text = "Per visualizzarne qui le informazioni seleziona a sinistra una funzionalità installata"
-                        Label41.Text = "Stato funzionalità:"
-                        Label43.Text = "Proprietà personalizzate:"
-                        ListView1.Columns(0).Text = "Nome funzionalità"
-                        ListView1.Columns(1).Text = "Stato funzionalità"
-                        Button2.Text = "Salva..."
-                        SearchBox1.cueBanner = "Digita qui per cercare una funzionalità..."
-                End Select
-            Case 1
-                Text = "Get feature information"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Ready"
-                Label22.Text = "Feature name:"
-                Label24.Text = "Display name:"
-                Label26.Text = "Feature description:"
-                Label31.Text = "Is a restart required?"
-                Label36.Text = "Feature information"
-                Label37.Text = "Select an installed feature on the left to view its information here"
-                Label41.Text = "Feature state:"
-                Label43.Text = "Custom properties:"
-                ListView1.Columns(0).Text = "Feature name"
-                ListView1.Columns(1).Text = "Feature state"
-                Button2.Text = "Save..."
-                SearchBox1.cueBanner = "Type here to search for a feature..."
-            Case 2
-                Text = "Obtener información de características"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Listo"
-                Label22.Text = "Nombre de característica:"
-                Label24.Text = "Nombre para mostrar:"
-                Label26.Text = "Descripción de la característica:"
-                Label31.Text = "¿Se requiere un reinicio?"
-                Label36.Text = "Información de la característica"
-                Label37.Text = "Seleccione una característica instalada en la izquierda para ver su información aquí"
-                Label41.Text = "Estado de la característica"
-                Label43.Text = "Propiedades personalizadas:"
-                ListView1.Columns(0).Text = "Nombre de característica"
-                ListView1.Columns(1).Text = "Estado"
-                Button2.Text = "Guardar..."
-                SearchBox1.cueBanner = "Escriba aquí para buscar una característica..."
-            Case 3
-                Text = "Obtenir des informations sur les caractéristiques"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Prêt"
-                Label22.Text = "Nom de la caractéristique :"
-                Label24.Text = "Nom d'affichage :"
-                Label26.Text = "Description de la caractéristique :"
-                Label31.Text = "Un redémarrage est-il nécessaire ?"
-                Label36.Text = "Information sur la caractéristique"
-                Label37.Text = "Sélectionnez une caractéristique installée sur la gauche pour afficher ses informations ici"
-                Label41.Text = "État de la caractéristique :"
-                Label43.Text = "Propriétés personnalisées :"
-                ListView1.Columns(0).Text = "Nom de la caractéristique"
-                ListView1.Columns(1).Text = "État de la caractéristique"
-                Button2.Text = "Sauvegarder..."
-                SearchBox1.cueBanner = "Tapez ici pour rechercher une caractéristique..."
-            Case 4
-                Text = "Obter informações sobre a caraterística"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Pronto"
-                Label22.Text = "Nome da caraterística:"
-                Label24.Text = "Nome do ecrã:"
-                Label26.Text = "Descrição da caraterística:"
-                Label31.Text = "É necessário reiniciar?"
-                Label36.Text = "Informação sobre a caraterística"
-                Label37.Text = "Seleccione uma caraterística instalada à esquerda para ver as suas informações aqui"
-                Label41.Text = "Estado da funcionalidade:"
-                Label43.Text = "Propriedades personalizadas:"
-                ListView1.Columns(0).Text = "Nome da caraterística"
-                ListView1.Columns(1).Text = "Estado da caraterística"
-                Button2.Text = "Guardar..."
-                SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
-            Case 5
-                Text = "Verifica informazioni funzionalità"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Pronto"
-                Label22.Text = "Nome funzionalità:"
-                Label24.Text = "Nome visualizzato:"
-                Label26.Text = "Descrizione funzionalità:"
-                Label31.Text = "È necessario un riavvio?"
-                Label36.Text = "Informazioni sulla funzionalità"
-                Label37.Text = "Per visualizzarne qui le informazioni seleziona  a sinistra una funzionalità installata"
-                Label41.Text = "Stato funzionalità:"
-                Label43.Text = "Proprietà personalizzate:"
-                ListView1.Columns(0).Text = "Nome funzionalità"
-                ListView1.Columns(1).Text = "Stato funzionalità"
-                Button2.Text = "Salva..."
-                SearchBox1.cueBanner = "Digita qui per cercare una funzionalità..."
-        End Select
+        Text = LocalizationService.ForSection("GetFeatureInfo")("Get.Feature.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("GetFeatureInfo").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("GetFeatureInfo")("Ready.Label")
+        Label22.Text = LocalizationService.ForSection("GetFeatureInfo")("FeatureName.Label")
+        Label24.Text = LocalizationService.ForSection("GetFeatureInfo")("DisplayName.Label")
+        Label26.Text = LocalizationService.ForSection("GetFeatureInfo")("Description.Label")
+        Label31.Text = LocalizationService.ForSection("GetFeatureInfo")("RestartRequired.Label")
+        Label36.Text = LocalizationService.ForSection("GetFeatureInfo")("FeatureInfo.Label")
+        Label37.Text = LocalizationService.ForSection("GetFeatureInfo")("Installed.Left.Label")
+        Label41.Text = LocalizationService.ForSection("GetFeatureInfo")("FeatureState.Label")
+        Label43.Text = LocalizationService.ForSection("GetFeatureInfo")("CustomProps.Label")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("GetFeatureInfo")("FeatureName.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("GetFeatureInfo")("FeatureState.Column")
+        Button2.Text = LocalizationService.ForSection("GetFeatureInfo")("Save.Button")
+        SearchBox1.cueBanner = LocalizationService.ForSection("GetFeatureInfo")("Type.Search.Label")
         If SplitContainer2.SplitterDistance = 440 Then
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
@@ -222,57 +72,9 @@ Public Class GetFeatureInfoDlg
                 If MainForm.ImgBW.IsBusy Then
                     DynaLog.LogMessage("Background processes are busy. Stopping them...")
                     Dim msg As String = ""
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
-                                Case "ESN"
-                                    msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
-                                Case "FRA"
-                                    msg = "Les processus en plan doivent être terminés avant d'afficher les caractéristiques. Nous attendrons qu'ils soient terminés"
-                                Case "PTB", "PTG"
-                                    msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
-                                Case "ITA"
-                                    msg = "Prima di poter visualizzare le informazioni sulle funzionalità i processi in background devono essere stati completati. Attendi che siano stati completati."
-                            End Select
-                        Case 1
-                            msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
-                        Case 2
-                            msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
-                        Case 3
-                            msg = "Les processus en plan doivent être terminés avant d'afficher les caractéristiques. Nous attendrons qu'ils soient terminés"
-                        Case 4
-                            msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
-                        Case 5
-                            msg = "Prima di poter visualizzare le informazioni sulle funzionalità i processi in background devono essere stati completati. Attendi che siano stati completati."
-                    End Select
+                    msg = LocalizationService.ForSection("GetFeatureInfo")("Wait.Background.Message")
                     MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label2.Text = "Waiting for background processes to finish..."
-                                Case "ESN"
-                                    Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
-                                Case "FRA"
-                                    Label2.Text = "Attente de la fin des processus en arrière plan..."
-                                Case "PTB", "PTG"
-                                    Label2.Text = "À espera que os processos em segundo plano terminem..."
-                                Case "ITA"
-                                    Label2.Text = "In attesa che i processi in background siano stati completati..."
-                            End Select
-                        Case 1
-                            Label2.Text = "Waiting for background processes to finish..."
-                        Case 2
-                            Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
-                        Case 3
-                            Label2.Text = "Attente de la fin des processus en arrière plan..."
-                        Case 4
-                            Label2.Text = "À espera que os processos em segundo plano terminem..."
-                        Case 5
-                            Label2.Text = "In attesa che i processi in background siano stati completati..."
-                    End Select
+                    Label2.Text = LocalizationService.ForSection("GetFeatureInfo")("Waiting.Background.Label")
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
                         Thread.Sleep(500)
@@ -282,62 +84,14 @@ Public Class GetFeatureInfoDlg
                 cPropPathView.Nodes.Clear()
                 cPropName.Text = ""
                 cPropValue.Text = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label2.Text = "Preparing to get feature information..."
-                            Case "ESN"
-                                Label2.Text = "Preparándonos para obtener información de la característica..."
-                            Case "FRA"
-                                Label2.Text = "Préparation de l'obtention des informations de la caractéristique en cours..."
-                            Case "PTB", "PTG"
-                                Label2.Text = "Preparar-se para obter informações sobre a característica..."
-                            Case "ITA"
-                                Label2.Text = "Preparazione verifica informazioni funzionalità..."
-                        End Select
-                    Case 1
-                        Label2.Text = "Preparing to get feature information..."
-                    Case 2
-                        Label2.Text = "Preparándonos para obtener información de la característica..."
-                    Case 3
-                        Label2.Text = "Préparation de l'obtention des informations de la caractéristique en cours..."
-                    Case 4
-                        Label2.Text = "Preparar-se para obter informações sobre a característica..."
-                    Case 5
-                        Label2.Text = "Preparazione verifica informazioni funzionalità..."
-                End Select
+                Label2.Text = LocalizationService.ForSection("GetFeatureInfo")("Preparing.Item")
                 Application.DoEvents()
                 Try
                     DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
                     DynaLog.LogMessage("Creating session...")
                     Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                    Case "ESN"
-                                        Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                    Case "FRA"
-                                        Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
-                                    Case "PTB", "PTG"
-                                        Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                    Case "ITA"
-                                        Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                End Select
-                            Case 1
-                                Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                            Case 2
-                                Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                            Case 3
-                                Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
-                            Case 4
-                                Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                            Case 5
-                                Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                        End Select
+                        Label2.Text = LocalizationService.ForSection("GetFeatureInfo").Format("GettingInfo.Item", ListView1.FocusedItem.SubItems(0).Text)
                         DynaLog.LogMessage("Feature to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
                         Application.DoEvents()
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
@@ -357,58 +111,10 @@ Public Class GetFeatureInfoDlg
                                 cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                             Next
                             PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            cPropValue.Text = "Please select or expand an entry."
-                                        Case "ESN"
-                                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                        Case "FRA"
-                                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                        Case "PTB", "PTG"
-                                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                        Case "ITA"
-                                            cPropValue.Text = "Seleziona o espandi un elemento."
-                                    End Select
-                                Case 1
-                                    cPropValue.Text = "Please select or expand an entry."
-                                Case 2
-                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                Case 3
-                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                Case 4
-                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                Case 5
-                                    cPropValue.Text = "Seleziona o espandi un elemento."
-                            End Select
+                            cPropValue.Text = LocalizationService.ForSection("GetFeatureInfo")("Expand.Entry.Label")
                         Else
                             DynaLog.LogMessage("This feature does not have custom properties.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label42.Text = "None"
-                                        Case "ESN"
-                                            Label42.Text = "Ninguna"
-                                        Case "FRA"
-                                            Label42.Text = "Aucune"
-                                        Case "PTB", "PTG"
-                                            Label42.Text = "Nenhum"
-                                        Case "ITA"
-                                            Label42.Text = "Nessuno"
-                                    End Select
-                                Case 1
-                                    Label42.Text = "None"
-                                Case 2
-                                    Label42.Text = "Ninguna"
-                                Case 3
-                                    Label42.Text = "Aucune"
-                                Case 4
-                                    Label42.Text = "Nenhum"
-                                Case 5
-                                    Label42.Text = "Nessuno"
-                            End Select
+                            Label42.Text = LocalizationService.ForSection("GetFeatureInfo")("None.Label")
                             Label42.Visible = True
                             CPropViewer.Visible = False
                         End If
@@ -419,31 +125,7 @@ Public Class GetFeatureInfoDlg
                 Catch ex As Exception
                     DynaLog.LogMessage("Could not get feature information. Error message: " & ex.Message)
                     Dim msg As String = ""
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                                Case "ESN"
-                                    msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                                Case "FRA"
-                                    msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                                Case "PTB", "PTG"
-                                    msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                                Case "ITA"
-                                    msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                            End Select
-                        Case 1
-                            msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case 2
-                            msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case 3
-                            msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case 4
-                            msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case 5
-                            msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                    End Select
+                    msg = LocalizationService.ForSection("GetFeatureInfo").Format("Reason.Message", ex.ToString(), ex.Message, Hex(ex.HResult))
                     MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Finally
                     DynaLog.LogMessage("Shutting down API...")
@@ -453,31 +135,7 @@ Public Class GetFeatureInfoDlg
 
                     End Try
                 End Try
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label2.Text = "Ready"
-                            Case "ESN"
-                                Label2.Text = "Listo"
-                            Case "FRA"
-                                Label2.Text = "Prêt"
-                            Case "PTB", "PTG"
-                                Label2.Text = "Pronto"
-                            Case "ITA"
-                                Label2.Text = "Pronto"
-                        End Select
-                    Case 1
-                        Label2.Text = "Ready"
-                    Case 2
-                        Label2.Text = "Listo"
-                    Case 3
-                        Label2.Text = "Prêt"
-                    Case 4
-                        Label2.Text = "Pronto"
-                    Case 5
-                        Label2.Text = "Pronto"
-                End Select
+                Label2.Text = LocalizationService.ForSection("GetFeatureInfo")("Ready.Item")
                 Panel4.Visible = True
                 Panel7.Visible = False
             Else
@@ -542,31 +200,7 @@ Public Class GetFeatureInfoDlg
             DynaLog.LogMessage("Value of selected custom property: " & selectedNode.Tag.ToString())
             cPropValue.Text = selectedNode.Tag.ToString()
         Else
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
-                        Case "ESN"
-                            cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
-                        Case "FRA"
-                            cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
-                        Case "PTB", "PTG"
-                            cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
-                        Case "ITA"
-                            cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sotto voci, espandilo."
-                    End Select
-                Case 1
-                    cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
-                Case 2
-                    cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
-                Case 3
-                    cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
-                Case 4
-                    cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
-                Case 5
-                    cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sotto voci, espandilo."
-            End Select
+            cPropValue.Text = LocalizationService.ForSection("FeatureInfo.PathSelection")("SelectedValue.Message")
         End If
     End Sub
 
@@ -700,6 +334,6 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub WizardBtn_MouseHover(sender As Object, e As EventArgs) Handles WizardBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Build query with the Assistant...")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("GetFeatureInfo")("Build.Query.Assistant.Label"))
     End Sub
 End Class

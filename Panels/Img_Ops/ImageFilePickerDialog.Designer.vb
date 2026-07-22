@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImageFilePickerDialog
     Inherits System.Windows.Forms.Form
 
@@ -54,7 +54,7 @@ Partial Class ImageFilePickerDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImageFilePicker")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -65,7 +65,7 @@ Partial Class ImageFilePickerDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImageFilePicker")("Cancel.Button")
         '
         'Label1
         '
@@ -74,8 +74,7 @@ Partial Class ImageFilePickerDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(410, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Pick the Windows image file that you want to mount from the list below and click " & _
-    "OK:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.ImageFilePicker")("MountList.Prompt.Label")
         '
         'ListView1
         '
@@ -92,7 +91,7 @@ Partial Class ImageFilePickerDialog
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Image File"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ImageFilePicker")("ImageFile.Column")
         Me.ColumnHeader1.Width = 420
         '
         'ImageFilePickerDialog
@@ -112,7 +111,7 @@ Partial Class ImageFilePickerDialog
         Me.Name = "ImageFilePickerDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Pick Windows image file"
+        Me.Text = LocalizationService.ForSection("Designer.ImageFilePicker")("Pick.Windows.ImageFile.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -54,7 +54,7 @@ Partial Class EventProperties
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(413, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Information for event <event> of <numEvents>:"
+        Me.Label1.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("Num.Events.Label")
         '
         'Label2
         '
@@ -63,7 +63,7 @@ Partial Class EventProperties
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(93, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Event Timestamp:"
+        Me.Label2.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("EventTimestamp.Label")
         '
         'txtEventTimestamp
         '
@@ -90,7 +90,7 @@ Partial Class EventProperties
         Me.GroupBox1.Size = New System.Drawing.Size(396, 136)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Method Callers"
+        Me.GroupBox1.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("MethodCallers.Group")
         '
         'LinkLabel1
         '
@@ -100,7 +100,7 @@ Partial Class EventProperties
         Me.LinkLabel1.Size = New System.Drawing.Size(177, 13)
         Me.LinkLabel1.TabIndex = 4
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Why can the field above be empty?"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("Field.Empty.Link")
         '
         'Label4
         '
@@ -109,7 +109,7 @@ Partial Class EventProperties
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(342, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "The method/function described above was called by method/function:"
+        Me.Label4.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("Method.Function.Label")
         '
         'txtEventParentCaller
         '
@@ -128,7 +128,7 @@ Partial Class EventProperties
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(214, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "The event was logged by method/function:"
+        Me.Label3.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("Logged.Method.Function.Label")
         '
         'Label6
         '
@@ -137,7 +137,7 @@ Partial Class EventProperties
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(96, 13)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = "PID: "
+        Me.Label6.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("PID.Label")
         '
         'txtEventCaller
         '
@@ -182,7 +182,7 @@ Partial Class EventProperties
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(84, 13)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Event Message:"
+        Me.Label5.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("EventMessage.Label")
         '
         'TableLayoutPanel1
         '
@@ -208,7 +208,7 @@ Partial Class EventProperties
         Me.btnNextEvent.Name = "btnNextEvent"
         Me.btnNextEvent.Size = New System.Drawing.Size(201, 23)
         Me.btnNextEvent.TabIndex = 1
-        Me.btnNextEvent.Text = "&Next Event"
+        Me.btnNextEvent.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("NextEvent.Label")
         Me.btnNextEvent.UseVisualStyleBackColor = True
         '
         'btnPreviousEvent
@@ -219,7 +219,7 @@ Partial Class EventProperties
         Me.btnPreviousEvent.Name = "btnPreviousEvent"
         Me.btnPreviousEvent.Size = New System.Drawing.Size(201, 23)
         Me.btnPreviousEvent.TabIndex = 0
-        Me.btnPreviousEvent.Text = "&Previous Event"
+        Me.btnPreviousEvent.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("PreviousEvent.Label")
         Me.btnPreviousEvent.UseVisualStyleBackColor = True
         '
         'Panel2
@@ -247,7 +247,7 @@ Partial Class EventProperties
         Me.Name = "EventProperties"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Event Properties"
+        Me.Text = LocalizationService.ForSection("DynaViewer.Designer.EventProps")("EventProps.Label")
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.Panel1.ResumeLayout(False)

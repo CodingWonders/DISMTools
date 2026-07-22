@@ -1,0 +1,10 @@
+﻿Windows Registry Editor Version 5.00
+
+; Restore the Windows ADK KitsRoot10 registry values used by DISMTools and PE Helper detection.
+; The standard Windows ADK path on 64 bit Windows is under Program Files (x86).
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots]
+"KitsRoot10"="C:\\Program Files (x86)\\Windows Kits\\10\\"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots]
+"KitsRoot10"="C:\\Program Files (x86)\\Windows Kits\\10\\"

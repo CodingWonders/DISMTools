@@ -79,79 +79,78 @@ Partial Class MainForm
         'ToolStripButton1
         '
         Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = Global.StarterScriptEditor.My.Resources.Resources.newfile
+        Me.ToolStripButton1.Image = Global.StarterScript.My.Resources.Resources.newfile
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = "New Starter Script (Ctrl + N)"
+        Me.ToolStripButton1.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("New.StarterScript.Ctrl.Label")
         '
         'ToolStripButton2
         '
         Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = Global.StarterScriptEditor.My.Resources.Resources.openfile
+        Me.ToolStripButton2.Image = Global.StarterScript.My.Resources.Resources.openfile
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton2.Text = "Open Starter Script File... (Ctrl + O)"
+        Me.ToolStripButton2.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Open.StarterScript.Label")
         '
         'ToolStripButton3
         '
         Me.ToolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton3.Image = Global.StarterScriptEditor.My.Resources.Resources.savefile
+        Me.ToolStripButton3.Image = Global.StarterScript.My.Resources.Resources.savefile
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton3.Text = "Save Starter Script File... (Ctrl + S)"
-        Me.ToolStripButton3.ToolTipText = "Save Starter Script File... (Ctrl + S)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hold down SHIFT while clicking the icon t" & _
-    "o specify the target version for the starter script while saving."
+        Me.ToolStripButton3.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Save.StarterScript.Label")
+        Me.ToolStripButton3.ToolTipText = LocalizationService.ForSection("StarterScript.Designer.Main")("Save.StarterScript.Tooltip")
         '
         'ToolStripButton4
         '
         Me.ToolStripButton4.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton4.Image = Global.StarterScriptEditor.My.Resources.Resources.about
+        Me.ToolStripButton4.Image = Global.StarterScript.My.Resources.Resources.about
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton4.Text = "About..."
+        Me.ToolStripButton4.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("About.ToolButton")
         '
         'ColorModeTSDDB
         '
         Me.ColorModeTSDDB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ColorModeTSDDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ColorModeTSDDB.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LightCM_TSMI, Me.DarkCM_TSMI, Me.SystemCM_TSMI})
-        Me.ColorModeTSDDB.Image = Global.StarterScriptEditor.My.Resources.Resources.colormode
+        Me.ColorModeTSDDB.Image = Global.StarterScript.My.Resources.Resources.colormode
         Me.ColorModeTSDDB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ColorModeTSDDB.Name = "ColorModeTSDDB"
         Me.ColorModeTSDDB.Size = New System.Drawing.Size(29, 22)
-        Me.ColorModeTSDDB.Text = "Change Color Mode..."
+        Me.ColorModeTSDDB.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Change.Color.Mode.Button")
         '
         'LightCM_TSMI
         '
         Me.LightCM_TSMI.Name = "LightCM_TSMI"
         Me.LightCM_TSMI.Size = New System.Drawing.Size(112, 22)
-        Me.LightCM_TSMI.Text = "Light"
+        Me.LightCM_TSMI.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Light.Label")
         '
         'DarkCM_TSMI
         '
         Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
         Me.DarkCM_TSMI.Size = New System.Drawing.Size(112, 22)
-        Me.DarkCM_TSMI.Text = "Dark"
+        Me.DarkCM_TSMI.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Dark.Label")
         '
         'SystemCM_TSMI
         '
         Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
         Me.SystemCM_TSMI.Size = New System.Drawing.Size(112, 22)
-        Me.SystemCM_TSMI.Text = "System"
+        Me.SystemCM_TSMI.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("System.Label")
         '
         'ToolStripButton8
         '
         Me.ToolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton8.Image = Global.StarterScriptEditor.My.Resources.Resources.savefileas
+        Me.ToolStripButton8.Image = Global.StarterScript.My.Resources.Resources.savefileas
         Me.ToolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton8.Name = "ToolStripButton8"
         Me.ToolStripButton8.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton8.Text = "Save Starter Script File as... (Ctrl + Shift + S)"
+        Me.ToolStripButton8.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("SaveScript.Ctrl.Shift.Label")
         '
         'ToolStripSeparator1
         '
@@ -162,29 +161,29 @@ Partial Class MainForm
         '
         Me.ToolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton5.Enabled = False
-        Me.ToolStripButton5.Image = Global.StarterScriptEditor.My.Resources.Resources.writable
+        Me.ToolStripButton5.Image = Global.StarterScript.My.Resources.Resources.writable
         Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton5.Name = "ToolStripButton5"
         Me.ToolStripButton5.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton5.Text = "Enable write access..."
+        Me.ToolStripButton5.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Enable.Write.Access.Button")
         '
         'ToolStripButton6
         '
         Me.ToolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton6.Image = Global.StarterScriptEditor.My.Resources.Resources.targetversion
+        Me.ToolStripButton6.Image = Global.StarterScript.My.Resources.Resources.targetversion
         Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton6.Name = "ToolStripButton6"
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton6.Text = "Configure target script version..."
+        Me.ToolStripButton6.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Configure.Target.Button")
         '
         'ToolStripButton7
         '
         Me.ToolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton7.Image = Global.StarterScriptEditor.My.Resources.Resources.changefont
+        Me.ToolStripButton7.Image = Global.StarterScript.My.Resources.Resources.changefont
         Me.ToolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton7.Name = "ToolStripButton7"
         Me.ToolStripButton7.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton7.Text = "Change Editor Font..."
+        Me.ToolStripButton7.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Change.Editor.Font.Button")
         '
         'Button2
         '
@@ -194,7 +193,7 @@ Partial Class MainForm
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(128, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Normalize Spacing"
+        Me.Button2.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("NormalizeSpacing.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel1
@@ -220,7 +219,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(1227, 39)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Starter.Scripts.Message")
         '
         'TableLayoutPanel2
         '
@@ -290,7 +289,7 @@ Partial Class MainForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(78, 13)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Line, Column"
+        Me.Label6.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("LineColumn.Label")
         '
         'CheckBox1
         '
@@ -301,7 +300,7 @@ Partial Class MainForm
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(89, 23)
         Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "Word Wrap"
+        Me.CheckBox1.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("WordWrap.CheckBox")
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
@@ -313,7 +312,7 @@ Partial Class MainForm
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(200, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Import Existing Script..."
+        Me.Button1.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Import.Existing.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label5
@@ -325,7 +324,7 @@ Partial Class MainForm
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label5.Size = New System.Drawing.Size(186, 492)
         Me.Label5.TabIndex = 6
-        Me.Label5.Text = "Script Code:"
+        Me.Label5.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("ScriptCode.Label")
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label4
@@ -336,7 +335,7 @@ Partial Class MainForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(186, 26)
         Me.Label4.TabIndex = 4
-        Me.Label4.Text = "Script Language:"
+        Me.Label4.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("ScriptLanguage.Label")
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label3
@@ -347,7 +346,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(186, 27)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Script Description:"
+        Me.Label3.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("Script.Description.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'TextBox2
@@ -366,7 +365,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(186, 27)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Script Name:"
+        Me.Label2.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("ScriptName.Label")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'TextBox1
@@ -395,22 +394,21 @@ Partial Class MainForm
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(202, 17)
         Me.CheckBox2.TabIndex = 9
-        Me.CheckBox2.Text = "Script contains configurable options"
+        Me.CheckBox2.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("ScriptOptions.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Starter Scripts|*.dtss"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("StarterScript.Designer.Main")("Starter.Scripts.Dtss.Filter")
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "Starter Scripts|*.dtss"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("StarterScript.Designer.Main")("Starter.Scripts.Dtss.Filter")
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vb" & _
-    "s;*.vbe;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
-        Me.OpenFileDialog2.Title = "Import Existing Script"
+        Me.OpenFileDialog2.Filter = LocalizationService.ForSection("StarterScript.Designer.Main")("BatchScripts.Filter")
+        Me.OpenFileDialog2.Title = LocalizationService.ForSection("StarterScript.Designer.Main")("Import.Existing.Script.Title")
         '
         'MainForm
         '
@@ -425,7 +423,7 @@ Partial Class MainForm
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Starter Script Editor"
+        Me.Text = LocalizationService.ForSection("StarterScript.Designer.Main")("StarterScript.Editor.Label")
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)

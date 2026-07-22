@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class RegisteredServiceHostGroupsDialog
     Inherits System.Windows.Forms.Form
 
@@ -58,7 +58,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Ok.Button")
         '
         'Label1
         '
@@ -69,7 +69,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(679, 48)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Windows.Message")
         '
         'ServiceGroupDetailsLv
         '
@@ -86,12 +86,12 @@ Partial Class RegisteredServiceHostGroupsDialog
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Group Name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ServiceGroups")("GroupName.Column")
         Me.ColumnHeader1.Width = 274
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Services in group"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.ServiceGroups")("ServicesGroup.Column")
         Me.ColumnHeader2.Width = 233
         '
         'ServiceDetailsLv
@@ -110,17 +110,17 @@ Partial Class RegisteredServiceHostGroupsDialog
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Service Name"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.ServiceGroups")("ServiceName.Column")
         Me.ColumnHeader3.Width = 175
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Display Name"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.ServiceGroups")("DisplayName.Column")
         Me.ColumnHeader4.Width = 274
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Type"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Type.Column")
         Me.ColumnHeader5.Width = 192
         '
         'Label2
@@ -131,7 +131,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(31, 13)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Total"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Total.Label")
         '
         'RegisteredServiceHostGroupsDialog
         '
@@ -151,7 +151,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.Name = "RegisteredServiceHostGroupsDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Registered Service Host groups in image"
+        Me.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Registered.Svc.Host.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

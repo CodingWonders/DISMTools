@@ -1,0 +1,120 @@
+name: Build and publish release
+
+on:
+  push:
+    branches:
+      - dt_prerel_*
+      - dt_rel*
+    paths-ignore:
+      - '**/README.md'
+      - 'res/**'
+  workflow_dispatch:
+    inputs:
+      release_channel:
+        description: Release channel
+        required: true
+        default: stable
+        type: choice
+        options:
+          - stable
+          - preview
+      prerelease:
+        description: Mark the GitHub Release as prerelease
+        required: true
+        default: false
+        type: boolean
+      draft:
+        description: Create the GitHub Release as draft
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  build-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          lfs: false
+          fetch-depth: 0
+
+      - name: Set up MSBuild
+        uses: microsoft/Setup-MSBuild@v2
+
+      - name: Prepare NuGet packages
+        shell: pwsh
+        run: |
+          if (Test-Path .\tools\build\pkgsrc.bundle) { Get-Item .\tools\build\pkgsrc.bundle | Select-Object FullName, Length }
+          .\nugetpkgprep.bat
+
+      - name: Build application output
+        shell: pwsh
+        run: |
+          $ghAction = "yes"
+          $solutionDir = "$((Get-Location).Path)\"
+          $projectDir = "$((Get-Location).Path)\"
+          $targetDir = (Get-Location).Path + "\bin\Debug\"
+          iex "$($solutionDir)CheckMissingDlls.ps1"
+          msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
+
+      - name: Build installer output
+        shell: pwsh
+        run: |
+          .\tools\build\BuildInstaller.ps1 `
+            -BuildOutputPath "${{ github.workspace }}\bin\Debug" `
+            -CleanFilesDirectory
+
+      - name: Verify installer localization payload
+        shell: pwsh
+        run: .\tools\build\VerifyInstallerLocalization.ps1
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $releaseChannel = "${{ github.event.inputs.release_channel }}"
+          if ([string]::IsNullOrWhiteSpace($releaseChannel)) {
+            if ("${{ github.ref_name }}" -like "dt_prerel_*") {
+              $releaseChannel = "preview"
+            } else {
+              $releaseChannel = "stable"
+            }
+          }
+
+          $prereleaseInput = "${{ github.event.inputs.prerelease }}"
+          $isPrerelease = $false
+          if ($releaseChannel -eq "preview" -or $prereleaseInput -eq "true") {
+            $isPrerelease = $true
+          }
+
+          $draftInput = "${{ github.event.inputs.draft }}"
+          $isDraft = $false
+          if ($draftInput -eq "true") {
+            $isDraft = $true
+          }
+
+          .\tools\build\PublishReleaseAsset.ps1 `
+            -InstallerPath "${{ github.workspace }}\Installer\Output\dt_setup.exe" `
+            -PortableSourcePath "${{ github.workspace }}\bin\Debug" `
+            -BranchName "${{ github.ref_name }}" `
+            -RunNumber "${{ github.run_number }}" `
+            -RunAttempt "${{ github.run_attempt }}" `
+            -Sha "${{ github.sha }}" `
+            -ReleaseChannel $releaseChannel `
+            -AssetOutputDirectory "${{ github.workspace }}\artifacts\release" `
+            -Prerelease:$isPrerelease `
+            -Draft:$isDraft
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: ${{ github.workspace }}\artifacts\release\*

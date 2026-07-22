@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class FfuApply
     Inherits System.Windows.Forms.Form
 
@@ -83,7 +83,7 @@ Partial Class FfuApply
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.FFUApply")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -94,7 +94,7 @@ Partial Class FfuApply
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUApply")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -108,7 +108,7 @@ Partial Class FfuApply
         Me.GroupBox1.Size = New System.Drawing.Size(659, 81)
         Me.GroupBox1.TabIndex = 7
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Source"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.FFUApply")("Source.Group")
         '
         'Button1
         '
@@ -117,7 +117,7 @@ Partial Class FfuApply
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.FFUApply")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'UseMountedImgBtn
@@ -127,7 +127,7 @@ Partial Class FfuApply
         Me.UseMountedImgBtn.Name = "UseMountedImgBtn"
         Me.UseMountedImgBtn.Size = New System.Drawing.Size(114, 23)
         Me.UseMountedImgBtn.TabIndex = 2
-        Me.UseMountedImgBtn.Text = "Use mounted image"
+        Me.UseMountedImgBtn.Text = LocalizationService.ForSection("Designer.FFUApply")("Mounted.Image.Label")
         Me.UseMountedImgBtn.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -144,7 +144,7 @@ Partial Class FfuApply
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(92, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Source image file:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.FFUApply")("SourceImageFile.Label")
         '
         'GroupBox4
         '
@@ -154,7 +154,7 @@ Partial Class FfuApply
         Me.GroupBox4.Size = New System.Drawing.Size(319, 339)
         Me.GroupBox4.TabIndex = 8
         Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "SFU file pattern"
+        Me.GroupBox4.Text = LocalizationService.ForSection("Designer.FFUApply")("SfufilePattern.Group")
         '
         'SFUFilePanelContainer
         '
@@ -201,7 +201,7 @@ Partial Class FfuApply
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
         Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 17)
-        Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Text = LocalizationService.ForSection("Designer.FFUApply")("Status.InitialLabel")
         '
         'Panel1
         '
@@ -229,7 +229,7 @@ Partial Class FfuApply
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(145, 23)
         Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Scan pattern"
+        Me.Button5.Text = LocalizationService.ForSection("Designer.FFUApply")("ScanPattern.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button4
@@ -239,7 +239,7 @@ Partial Class FfuApply
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(145, 23)
         Me.Button4.TabIndex = 2
-        Me.Button4.Text = "Use name of the image"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.FFUApply")("Name.Image.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label4
@@ -249,7 +249,7 @@ Partial Class FfuApply
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(87, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Namimg pattern:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.FFUApply")("NamingPattern.Label")
         '
         'GroupBox3
         '
@@ -263,7 +263,7 @@ Partial Class FfuApply
         Me.GroupBox3.Size = New System.Drawing.Size(659, 252)
         Me.GroupBox3.TabIndex = 9
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Destination"
+        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.FFUApply")("Destination.Group")
         '
         'RichTextBox1
         '
@@ -287,7 +287,7 @@ Partial Class FfuApply
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(71, 13)
         Me.Label1.TabIndex = 4
-        Me.Label1.Text = "Drive Details:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.FFUApply")("DriveDetails.Label")
         '
         'Label5
         '
@@ -296,7 +296,7 @@ Partial Class FfuApply
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(92, 13)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Destination drive:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.FFUApply")("DestinationDrive.Label")
         '
         'Button2
         '
@@ -305,7 +305,7 @@ Partial Class FfuApply
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Specify..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.FFUApply")("Specify.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -317,8 +317,8 @@ Partial Class FfuApply
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Full Flash Utility files|*.ffu|Split FFU files|*.sfu"
-        Me.OpenFileDialog1.Title = "Please specify the source image to apply"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUApply")("Full.Flash.Utility.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.FFUApply")("Source.Image.Required.Title")
         '
         'ImageTaskHeader1
         '
@@ -341,7 +341,7 @@ Partial Class FfuApply
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(120, 17)
         Me.CheckBox4.TabIndex = 10
-        Me.CheckBox4.Text = "Reference SFU files"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.FFUApply")("Reference.Sfufiles.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'FfuApply
@@ -363,7 +363,7 @@ Partial Class FfuApply
         Me.Name = "FfuApply"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Apply a FFU file"
+        Me.Text = LocalizationService.ForSection("Designer.FFUApply")("File.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

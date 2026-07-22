@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class RemDrivers
     Inherits System.Windows.Forms.Form
 
@@ -64,7 +64,7 @@ Partial Class RemDrivers
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.RemDrivers")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -75,7 +75,7 @@ Partial Class RemDrivers
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.RemDrivers")("Cancel.Button")
         '
         'ListView1
         '
@@ -91,42 +91,42 @@ Partial Class RemDrivers
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Published name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.RemDrivers")("PublishedName.Column")
         Me.ColumnHeader1.Width = 89
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Original file name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.RemDrivers")("Original.File.Name.Column")
         Me.ColumnHeader2.Width = 160
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Provider name"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.RemDrivers")("ProviderName.Column")
         Me.ColumnHeader3.Width = 153
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Class name"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.RemDrivers")("ClassName.Column")
         Me.ColumnHeader4.Width = 86
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Part of the Windows distribution?"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.RemDrivers")("Part.Windows.Column")
         Me.ColumnHeader5.Width = 176
         '
         'ColumnHeader6
         '
-        Me.ColumnHeader6.Text = "Is boot-critical?"
+        Me.ColumnHeader6.Text = LocalizationService.ForSection("Designer.RemDrivers")("BootCritical.Column")
         Me.ColumnHeader6.Width = 96
         '
         'ColumnHeader7
         '
-        Me.ColumnHeader7.Text = "Version"
+        Me.ColumnHeader7.Text = LocalizationService.ForSection("Designer.RemDrivers")("Version.Column")
         Me.ColumnHeader7.Width = 71
         '
         'ColumnHeader8
         '
-        Me.ColumnHeader8.Text = "Date"
+        Me.ColumnHeader8.Text = LocalizationService.ForSection("Designer.RemDrivers")("Date.Column")
         Me.ColumnHeader8.Width = 67
         '
         'Label2
@@ -136,7 +136,7 @@ Partial Class RemDrivers
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(301, 13)
         Me.Label2.TabIndex = 9
-        Me.Label2.Text = "Specify the driver packages you wish to remove and click OK:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.RemDrivers")("DriverPackages.Wish.Label")
         '
         'CheckBox1
         '
@@ -147,7 +147,7 @@ Partial Class RemDrivers
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(142, 17)
         Me.CheckBox1.TabIndex = 10
-        Me.CheckBox1.Text = "Hide boot-critical drivers"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.RemDrivers")("Hide.Boot.Critical.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -159,7 +159,7 @@ Partial Class RemDrivers
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(240, 17)
         Me.CheckBox2.TabIndex = 10
-        Me.CheckBox2.Text = "Hide drivers part of the Windows distribution"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.RemDrivers")("Hide.Drivers.Part.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -196,7 +196,7 @@ Partial Class RemDrivers
         Me.Name = "RemDrivers"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Remove drivers"
+        Me.Text = LocalizationService.ForSection("Designer.RemDrivers")("RemoveDrivers.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

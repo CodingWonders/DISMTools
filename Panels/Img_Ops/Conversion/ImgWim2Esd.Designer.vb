@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgWim2Esd
     Inherits System.Windows.Forms.Form
 
@@ -77,7 +77,7 @@ Partial Class ImgWim2Esd
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.Img.WIM")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -88,7 +88,7 @@ Partial Class ImgWim2Esd
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Img.WIM")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -102,7 +102,7 @@ Partial Class ImgWim2Esd
         Me.GroupBox1.Size = New System.Drawing.Size(760, 88)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Source"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.Img.WIM")("Source.Group")
         '
         'Button1
         '
@@ -112,7 +112,7 @@ Partial Class ImgWim2Esd
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 5
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.Img.WIM")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -131,7 +131,7 @@ Partial Class ImgWim2Esd
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(92, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Source image file:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Img.WIM")("SourceImageFile.Label")
         '
         'GroupBox2
         '
@@ -148,7 +148,7 @@ Partial Class ImgWim2Esd
         Me.GroupBox2.Size = New System.Drawing.Size(760, 272)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Options"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.Img.WIM")("Options.Group")
         '
         'ListView1
         '
@@ -164,22 +164,22 @@ Partial Class ImgWim2Esd
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Index"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.Img.WIM")("Index.Column")
         Me.ColumnHeader1.Width = 44
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Image name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.Img.WIM")("ImageName.Column")
         Me.ColumnHeader2.Width = 256
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Image description"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.Img.WIM")("ImageDescription.Column")
         Me.ColumnHeader3.Width = 256
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Image version"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.Img.WIM")("ImageVersion.Column")
         Me.ColumnHeader4.Width = 128
         '
         'NumericUpDown1
@@ -198,7 +198,7 @@ Partial Class ImgWim2Esd
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(39, 13)
         Me.Label7.TabIndex = 5
-        Me.Label7.Text = "Index:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.Img.WIM")("Index.Label")
         '
         'ComboBox1
         '
@@ -217,7 +217,7 @@ Partial Class ImgWim2Esd
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(141, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Format of converted image:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.Img.WIM")("Format.Converted.Image.Label")
         '
         'LinkLabel1
         '
@@ -230,7 +230,7 @@ Partial Class ImgWim2Esd
         Me.LinkLabel1.Size = New System.Drawing.Size(299, 13)
         Me.LinkLabel1.TabIndex = 2
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Which format do I choose?"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.Img.WIM")("Format.Ichoose.Link")
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'GroupBox3
@@ -245,7 +245,7 @@ Partial Class ImgWim2Esd
         Me.GroupBox3.Size = New System.Drawing.Size(760, 88)
         Me.GroupBox3.TabIndex = 4
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Destination"
+        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.Img.WIM")("Destination.Group")
         '
         'Button2
         '
@@ -255,7 +255,7 @@ Partial Class ImgWim2Esd
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 5
-        Me.Button2.Text = "Browse..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.Img.WIM")("Browse.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label5
@@ -265,7 +265,7 @@ Partial Class ImgWim2Esd
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(113, 13)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Destination image file:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.Img.WIM")("Destination.ImageFile.Label")
         '
         'TextBox2
         '
@@ -278,12 +278,12 @@ Partial Class ImgWim2Esd
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "WIM files|*.wim|ESD files|*.esd"
-        Me.OpenFileDialog1.Title = "Specify the source image file you want to convert"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.Img.WIM")("OpenFile.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.Img.WIM")("Source.ImageFile.Title")
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Title = "Where will the target image be stored?"
+        Me.SaveFileDialog1.Title = LocalizationService.ForSection("Designer.Img.WIM")("Target.Image.Stored.Title")
         '
         'ImageTaskHeader1
         '
@@ -318,7 +318,7 @@ Partial Class ImgWim2Esd
         Me.Name = "ImgWim2Esd"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Convert image"
+        Me.Text = LocalizationService.ForSection("Designer.Img.WIM")("ConvertImage.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

@@ -1,4 +1,4 @@
-﻿Imports System.Net
+Imports System.Net
 Imports System.IO
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
@@ -48,7 +48,7 @@ Public Class MainForm
     Public DismExe As String
     Public SaveOnSettingsIni As Boolean
     Public ColorMode As Integer
-    Public Language As Integer
+    Public LanguageCode As String = LocalizationService.CurrentCultureCode
     Public LogFont As String
     Public LogFile As String
     Public LogLevel As Integer = 3
@@ -249,28 +249,7 @@ Public Class MainForm
         ElseIf args.Length = 2 And args(1) = "/?" Then
             DynaLog.LogMessage("Help has been requested by the user. Showing help message...")
             ' Show command-line argument help
-            MsgBox("You can pass command line arguments like this:" & CrLf & CrLf & _
-                   "    DISMTools.exe <arguments>" & CrLf & CrLf & _
-                   "The command line arguments that are available to you are the following:" & CrLf & CrLf & _
-                   "  /setup" & CrLf & _
-                   "      Shows the initial setup wizard and reconfigures the program" & CrLf & _
-                   "  /load=<path-to-project>" & CrLf & _
-                   "      Loads a project file. You need to provide an absolute path for a project file, like this:" & CrLf & _
-                   "      DISMTools.exe /load=" & Quote & "C:\foo\bar.dtproj" & Quote & CrLf & _
-                   "  /online" & CrLf & _
-                   "      Enters the online installation management mode" & CrLf & _
-                   "  /offline:<drive>" & CrLf & _
-                   "      Enters the offline installation management mode. You need to provide a drive, like this:" & CrLf & _
-                   "      DISMTools.exe /offline:E:\" & CrLf & _
-                   "  /migrate" & CrLf & _
-                   "      Forces setting migration. While you can use this parameter, it should be used by the update system" & CrLf & _
-                   "  /nomig" & CrLf & _
-                   "      Skips setting migration. This parameter speeds up testing" & CrLf & _
-                   "  /noupd" & CrLf & _
-                   "      Disables update checks. Don't use this parameter unless you're testing a change" & CrLf & _
-                   "  /exp" & CrLf & _
-                   "      Enables program experiments if there are any" & CrLf & CrLf & _
-                   "DISMTools will continue starting up after you close this help message.", vbOKOnly + vbInformation, "DISMTools command line arguments")
+            MsgBox(LocalizationService.ForSection("Main.CommandLineHelp")("Pass.Arguments.Message"), vbOKOnly + vbInformation, LocalizationService.ForSection("Main.CommandLineHelp")("DISM.Tools.Title"))
             DynaLog.LogMessage("User accepted the dialog. Continuing startup...")
         Else
             DynaLog.LogMessage("Parsing command-line arguments...")
@@ -282,36 +261,13 @@ Public Class MainForm
                     PrgSetup.ShowDialog()
                 ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Determining if specified project can be loaded...")
-                    If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
+                    Dim requestedProjectPath As String = arg.Substring(arg.IndexOf("="c) + 1).Trim().Trim(Quote)
+                    If File.Exists(requestedProjectPath) AndAlso Directory.Exists(Path.GetDirectoryName(requestedProjectPath)) Then
                         DynaLog.LogMessage("Specified project satisfies all requirements (projfile exists, dir exists). Passing to load...")
-                        argProjPath = arg.Replace("/load=", "").Trim()
+                        argProjPath = requestedProjectPath
                     Else
-                        DynaLog.LogMessage("Specified project does NOT satisfy all requirements (either projfile or dir doesn't exist). Cannot continue loading project")
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
-                                    Case "ESN"
-                                        MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
-                                    Case "FRA"
-                                        MsgBox("Un projet non valide a été spécifié", vbOKOnly + vbCritical, Text)
-                                    Case "PTB", "PTG"
-                                        MsgBox("Foi especificado um projeto inválido", vbOKOnly + vbCritical, Text)
-                                    Case "ITA"
-                                        MsgBox("È stato specificato un progetto non valido", vbOKOnly + vbCritical, Text)
-                                End Select
-                            Case 1
-                                MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
-                            Case 2
-                                MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
-                            Case 3
-                                MsgBox("Un projet non valide a été spécifié", vbOKOnly + vbCritical, Text)
-                            Case 4
-                                MsgBox("Foi especificado um projeto inválido", vbOKOnly + vbCritical, Text)
-                            Case 5
-                                MsgBox("È stato specificato un progetto non valido", vbOKOnly + vbCritical, Text)
-                        End Select
+                        DynaLog.LogMessage("Specified project does NOT satisfy all requirements (either projfile or dir doesn't exist). Cannot continue loading project. Path: " & Quote & requestedProjectPath & Quote)
+                        MsgBox(LocalizationService.ForSection("Main.GetArguments").Format("Project.Message", requestedProjectPath), vbOKOnly + vbCritical, Text)
                     End If
                 ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Detecting if no projects had been passed by the /load flag...")
@@ -507,10 +463,20 @@ Public Class MainForm
             Return Adk10KitsRoot
         End If
 
+        Dim kitsRootRegistryPath As String = String.Format("SOFTWARE{0}\Microsoft\Windows Kits\Installed Roots", If(IsWOW6432Environment, "\WOW6432Node", ""))
+
         Try
-            Dim KitsRootRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("SOFTWARE{0}\Microsoft\Windows Kits\Installed Roots", If(IsWOW6432Environment, "\WOW6432Node", "")), False)
-            Adk10KitsRoot = KitsRootRk.GetValue("KitsRoot10", "")
-            KitsRootRk.Close()
+            Using KitsRootRk As RegistryKey = Registry.LocalMachine.OpenSubKey(kitsRootRegistryPath, False)
+                If KitsRootRk Is Nothing Then
+                    DynaLog.LogMessage("ADK kits root registry key was not found: HKLM\" & kitsRootRegistryPath)
+                    Return Adk10KitsRoot
+                End If
+
+                Dim kitsRootValue As Object = KitsRootRk.GetValue("KitsRoot10")
+                If kitsRootValue IsNot Nothing Then
+                    Adk10KitsRoot = kitsRootValue.ToString()
+                End If
+            End Using
         Catch ex As Exception
             DynaLog.LogMessage("Could not check kits root. Error message: " & ex.Message)
         End Try
@@ -617,6 +583,28 @@ Public Class MainForm
         DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
     End Sub
 
+    Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        ' The Load handler performs asynchronous startup work. Request foreground activation only
+        ' after WinForms has actually displayed the main window for the first time.
+        BeginInvoke(New MethodInvoker(AddressOf ActivateMainWindowAfterShown))
+    End Sub
+
+    Private Sub ActivateMainWindowAfterShown()
+        If IsDisposed OrElse Not Visible Then Exit Sub
+
+        DynaLog.LogMessage("The main program window has been shown. Requesting foreground activation...")
+        BringToFront()
+        Dim normalZOrderRestored As Boolean = False
+        Dim raisedAboveOtherWindows As Boolean = WindowHelper.RaiseWindowAndRestoreNormalZOrder(Handle, normalZOrderRestored)
+        Dim foregroundRequested As Boolean = WindowHelper.RequestForegroundWindow(Handle)
+        Activate()
+        DynaLog.LogMessage("One-time window raise succeeded: " & raisedAboveOtherWindows &
+                           "; normal z-order restored: " & normalZOrderRestored &
+                           "; foreground activation request succeeded: " & foregroundRequested &
+                           "; main window is foreground: " & WindowHelper.IsForegroundWindow(Handle) &
+                           "; main window remains topmost: " & WindowHelper.IsTopMostWindow(Handle))
+    End Sub
+
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
 
@@ -629,7 +617,7 @@ Public Class MainForm
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
             DynaLog.LogMessage("Windows 7 or an earlier version has been detected on this system. Program incompatible -- aborting any future procedures!")
             SplashScreen.Hide()
-            MsgBox("This program is incompatible with Windows 7 and Server 2008 R2." & CrLf & "This program uses the DISM API, which requires files from the Assessment and Deployment Kit (ADK). However, support for Windows 7 is not included." & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
+            MsgBox(LocalizationService.ForSection("Main.Messages")("Incompatible.Win7.Message"), vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
         ' Detect .NET Framework version, as the program somehow runs without it
@@ -643,7 +631,7 @@ Public Class MainForm
             If NDPReleaseInt < 528040 Then
                 DynaLog.LogMessage(NDPReleaseInt & " < 528040 - Incompatible .NET Framework Release -- aborting any future procedures!")
                 SplashScreen.Hide()
-                MsgBox("This program requires .NET Framework 4.8 to function." & CrLf & "You can download it from: dotnet.microsoft.com. Install the framework and run the program again. You may need to restart your system" & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
+                MsgBox(LocalizationService.ForSection("Main.Messages")("Requires.NET.Message"), vbOKOnly + vbCritical, "DISMTools")
                 Environment.Exit(1)
             End If
         Catch ex As Exception
@@ -675,7 +663,7 @@ Public Class MainForm
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
             SplashScreen.Hide()
-            MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
+            MsgBox(LocalizationService.ForSection("Main.Messages")("Run.Admin.Message"), vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
         Visible = False
@@ -721,8 +709,8 @@ Public Class MainForm
         End If
         If Environment.GetCommandLineArgs().Contains("/english") Then
             DynaLog.LogMessage("DISMTools is forced to use English as its language because /english has been passed. Changing language...")
-            Language = 1
-            ChangeLangs(Language)
+            LanguageCode = LocalizationService.DefaultCultureCode
+            ApplyLanguage(LanguageCode)
         End If
         UnblockPSHelpers()
         If StartupRemount Then RemountOrphanedImages() Else HasRemounted = True
@@ -755,6 +743,7 @@ Public Class MainForm
             ' Center form
             Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
         End If
+        DynaLog.LogMessage("Showing the main program window...")
         Visible = True
         If argProjPath <> "" Then
             DynaLog.LogMessage("A project path has been specified with /load. Loading project...")
@@ -860,41 +849,8 @@ Public Class MainForm
                 DynaLog.LogMessage("A custom theme has been detected. There may be visual issues with DISMTools")
                 Dim msg As String = ""
                 Dim titleMsg As String = ""
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                titleMsg = "Beware of custom themes"
-                                msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
-                            Case "ESN"
-                                titleMsg = "Cuidado con temas personalizados"
-                                msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
-                            Case "FRA"
-                                titleMsg = "Attention aux thèmes personnalisés"
-                                msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
-                            Case "PTB", "PTG"
-                                titleMsg = "Cuidado com os temas personalizados"
-                                msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
-                            Case "ITA"
-                                titleMsg = "Attenzione ai temi personalizzati"
-                                msg = "DISMTools ha rilevato che in questo sistema è stato impostato un tema personalizzato. Alcuni temi personalizzati fanno sì che il programma non abbia un aspetto corretto, quindi si consiglia di passare al tema predefinito."
-                        End Select
-                    Case 1
-                        titleMsg = "Beware of custom themes"
-                        msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
-                    Case 2
-                        titleMsg = "Cuidado con temas personalizados"
-                        msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
-                    Case 3
-                        titleMsg = "Attention aux thèmes personnalisés"
-                        msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
-                    Case 4
-                        titleMsg = "Cuidado com os temas personalizados"
-                        msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
-                    Case 5
-                        titleMsg = "Attenzione ai temi personalizzati"
-                        msg = "DISMTools ha rilevato che in questo sistema è stato impostato un tema personalizzato. Alcuni temi personalizzati fanno sì che il programma non abbia un aspetto corretto, quindi si consiglia di passare al tema predefinito."
-                End Select
+                        titleMsg = LocalizationService.ForSection("Main.InitDynaLog")("Beware.Custom.Themes.Title")
+                        msg = LocalizationService.ForSection("Main.InitDynaLog")("DISM.Tools.Detected.Message")
                 MsgBox(msg, vbOKOnly + vbExclamation, titleMsg)
             Else
                 DynaLog.LogMessage("System Theme and PrePolicy Theme are the same.")
@@ -923,9 +879,8 @@ Public Class MainForm
             ' about this.
             If dx > 120 Or dy > 120 Then
                 DynaLog.LogMessage("Display scaling is over 125%. The program may not look correctly...")
-                MsgBox("DISMTools has detected that a higher display scaling setting has been set. This can make the program look incorrectly." & CrLf & CrLf &
-                       "We recommend that you lower your scaling setting to 125% (120 DPI) or less, unless you have a small display panel set to a large resolution.",
-                       vbOKOnly + vbInformation, "Higher display scaling setting detected")
+                MsgBox(LocalizationService.ForSection("Main.Messages")("DISM.Tools.Detected.Message"),
+                       vbOKOnly + vbInformation, LocalizationService.ForSection("Main.Messages")("Higher.Display.Scaling.Title"))
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not check DPI settings. Error message: " & ex.Message)
@@ -934,8 +889,8 @@ Public Class MainForm
         If DetectPossibleADKs() = 1 Then
             DynaLog.LogMessage("An ADK has been installed but is not detected by DISMTools")
             Dim msg As String = ""
-            msg = "DISMTools has found a possible Assessment and Deployment Kit installed on your system. However, it is not being detected. Do you want to fix it?"
-            If MsgBox(msg, vbYesNo + vbQuestion, "Possible ADK installed on your system") = MsgBoxResult.Yes Then
+            msg = LocalizationService.ForSection("Main.Messages")("DISM.Tools.Found.Message")
+            If MsgBox(msg, vbYesNo + vbQuestion, LocalizationService.ForSection("Main.Messages")("Possible.ADK.Title")) = MsgBoxResult.Yes Then
                 Try
                     DynaLog.LogMessage("Creating keys...")
                     Dim AdkProc As New Process()
@@ -955,50 +910,20 @@ Public Class MainForm
         DynaLog.LogMessage(SystemInformation.BootMode)
         If SystemInformation.BootMode <> BootMode.Normal Then
             DynaLog.LogMessage("This system is in limp home mode. Offering choice to enter online installation management mode...")
-            Dim safeModeMessage As String = "This computer has booted into Safe Mode. This mode is designed for live operating system recovery." & CrLf & CrLf &
-                "DISMTools can automatically load the online installation management mode so that you can start attempting repairs." & CrLf & CrLf &
-                "Do you want to load the online installation management mode?"
-            If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
+            Dim safeModeMessage As String = LocalizationService.ForSection("Main.Messages")("SafeMode.Prompt")
+            If MsgBox(safeModeMessage, vbYesNo + vbQuestion, LocalizationService.ForSection("Main.Messages")("Windows.Title")) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
                 BeginOnlineManagement(False)
             End If
         End If
 
         If IsFirstTime Then
-            Dim tourMessage As String = "Is this your first time using DISMTools? If so, we can help you get started with the Tour." & CrLf & CrLf &
-                "With the Tour, you can make your first Windows image and test it afterwards. You can follow the tour at any pace you prefer, and you can access it at any time by going to the Help menu." & CrLf & CrLf &
-                "Do you want to launch the Tour now?"
-            If MsgBox(tourMessage, vbYesNo + vbQuestion, "Getting Started with DISMTools") = MsgBoxResult.Yes Then
+            Dim tourMessage As String = LocalizationService.ForSection("Main.Messages")("Tour.Prompt")
+            If MsgBox(tourMessage, vbYesNo + vbQuestion, LocalizationService.ForSection("Main.Messages")("Getting.Started.DISM.Title")) = MsgBoxResult.Yes Then
                 If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
                     DynaLog.LogMessage("Tour directory exists. Starting the tour!")
 
-                    Dim languageCode As String = "en"
-
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    languageCode = "en"
-                                Case "ESN"
-                                    languageCode = "es"
-                                Case "FRA"
-                                    languageCode = "fr"
-                                Case "PTB", "PTG"
-                                    languageCode = "pt"
-                                Case "ITA"
-                                    languageCode = "it"
-                            End Select
-                        Case 1
-                            languageCode = "en"
-                        Case 2
-                            languageCode = "es"
-                        Case 3
-                            languageCode = "fr"
-                        Case 4
-                            languageCode = "pt"
-                        Case 5
-                            languageCode = "it"
-                    End Select
+                    Dim languageCode As String = LocalizationService.GetDocumentationLanguageCode()
 
                     tourServer.StartServer()
                     If tourServer.IsListenerAlive() Then
@@ -1026,8 +951,8 @@ Public Class MainForm
         ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
 
         If InstallationType.Equals("Server Core", StringComparison.InvariantCultureIgnoreCase) Then
-            MessageBox.Show("DISMTools has detected that it is running on a Windows Server Core system. Some functionality may not work as expected.",
-                            "Windows Server Core detected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(LocalizationService.ForSection("Main.Messages")("DISM.Tools.Running.Message"),
+                            LocalizationService.ForSection("Main.Messages")("ServerCore.Title"), MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
         ' If the window size is lower than 720p (1280x720), then we'll make it 1280x720, since,
@@ -1102,121 +1027,16 @@ Public Class MainForm
                 ManualIPStr As String = "",
                 DHCPStr As String = ""
 
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            BuildStr = "build"
-                            SysMemStr = "of system memory"
-                            CurDiskStr = "used out of"
-                            NoDomStr = "Not part of a domain"
-                            DomainStr = "Part of a domain"
-                            BDCStr = "Backup domain controller"
-                            PDCStr = "Primary domain controller"
-                            NoIPStr = "Not connected to a network"
-                            ManualIPStr = "Manual"
-                            DHCPStr = "Automatic (assigned by DHCP)"
-                        Case "ESN"
-                            BuildStr = "compilación"
-                            SysMemStr = "de memoria de sistema"
-                            CurDiskStr = "usados de"
-                            NoDomStr = "No es parte de un dominio"
-                            DomainStr = "Es parte de un dominio"
-                            BDCStr = "Controlador de dominio secundario"
-                            PDCStr = "Controlador de dominio primario"
-                            NoIPStr = "No conectado a una red"
-                            ManualIPStr = "Manual"
-                            DHCPStr = "Automática (asignada por DHCP)"
-                        Case "FRA"
-                            BuildStr = "build"
-                            SysMemStr = "de la mémoire système"
-                            CurDiskStr = "utilisé sur"
-                            NoDomStr = "N'appartient pas à un domaine"
-                            DomainStr = "Appartient à un domaine"
-                            BDCStr = "Contrôleur de domaine de secours"
-                            PDCStr = "Contrôleur de domaine principal"
-                            NoIPStr = "Non connecté à un réseau"
-                            ManualIPStr = "Manuel"
-                            DHCPStr = "Automatique (attribué par DHCP)"
-                        Case "PTB", "PTG"
-                            BuildStr = "compilação"
-                            SysMemStr = "da memória do sistema"
-                            CurDiskStr = "utilizada de"
-                            NoDomStr = "Não faz parte de um domínio"
-                            DomainStr = "Faz parte de um domínio"
-                            BDCStr = "Controlador de domínio de backup"
-                            PDCStr = "Controlador de domínio primário"
-                            NoIPStr = "Não está ligado a uma rede"
-                            ManualIPStr = "Manual"
-                            DHCPStr = "Automático (atribuído por DHCP)"
-                        Case "ITA"
-                            BuildStr = "build"
-                            SysMemStr = "della memoria di sistema"
-                            CurDiskStr = "utilizzata su"
-                            NoDomStr = "Non fa parte di un dominio"
-                            DomainStr = "Fa parte di un dominio"
-                            BDCStr = "Controller di dominio di backup"
-                            PDCStr = "Controller di dominio primario"
-                            NoIPStr = "Non connesso a una rete"
-                            ManualIPStr = "Manuale"
-                            DHCPStr = "Automatico (assegnato da DHCP)"
-                    End Select
-                Case 1
-                    BuildStr = "build"
-                    SysMemStr = "of system memory"
-                    CurDiskStr = "used out of"
-                    NoDomStr = "Not part of a domain"
-                    DomainStr = "Part of a domain"
-                    BDCStr = "Backup domain controller"
-                    PDCStr = "Primary domain controller"
-                    NoIPStr = "Not connected to a network"
-                    ManualIPStr = "Manual"
-                    DHCPStr = "Automatic (assigned by DHCP)"
-                Case 2
-                    BuildStr = "compilación"
-                    SysMemStr = "de memoria de sistema"
-                    CurDiskStr = "usados de"
-                    NoDomStr = "No es parte de un dominio"
-                    DomainStr = "Es parte de un dominio"
-                    BDCStr = "Controlador de dominio secundario"
-                    PDCStr = "Controlador de dominio primario"
-                    NoIPStr = "No conectado a una red"
-                    ManualIPStr = "Manual"
-                    DHCPStr = "Automática (asignada por DHCP)"
-                Case 3
-                    BuildStr = "build"
-                    SysMemStr = "de la mémoire système"
-                    CurDiskStr = "utilisé sur"
-                    NoDomStr = "N'appartient pas à un domaine"
-                    DomainStr = "Appartient à un domaine"
-                    BDCStr = "Contrôleur de domaine de secours"
-                    PDCStr = "Contrôleur de domaine principal"
-                    NoIPStr = "Non connecté à un réseau"
-                    ManualIPStr = "Manuel"
-                    DHCPStr = "Automatique (attribué par DHCP)"
-                Case 4
-                    BuildStr = "compilação"
-                    SysMemStr = "da memória do sistema"
-                    CurDiskStr = "utilizada de"
-                    NoDomStr = "Não faz parte de um domínio"
-                    DomainStr = "Faz parte de um domínio"
-                    BDCStr = "Controlador de domínio de backup"
-                    PDCStr = "Controlador de domínio primário"
-                    NoIPStr = "Não está ligado a uma rede"
-                    ManualIPStr = "Manual"
-                    DHCPStr = "Automático (atribuído por DHCP)"
-                Case 5
-                    BuildStr = "build"
-                    SysMemStr = "della memoria di sistema"
-                    CurDiskStr = "utilizzata su"
-                    NoDomStr = "Non fa parte di un dominio"
-                    DomainStr = "Fa parte di un dominio"
-                    BDCStr = "Controller di dominio di backup"
-                    PDCStr = "Controller di dominio primario"
-                    NoIPStr = "Non connesso a una rete"
-                    ManualIPStr = "Manuale"
-                    DHCPStr = "Automatico (assegnato da DHCP)"
-            End Select
+            BuildStr = LocalizationService.ForSection("Main.ComputerInfo")("Build.Label")
+            SysMemStr = LocalizationService.ForSection("Main.ComputerInfo")("SystemMemory.Label")
+            CurDiskStr = LocalizationService.ForSection("Main.ComputerInfo")("UsedOut.Label")
+            NoDomStr = LocalizationService.ForSection("Main.ComputerInfo")("Part.Domain.Label")
+            DomainStr = LocalizationService.ForSection("Main.ComputerInfo")("PartDomain.Label")
+            BDCStr = LocalizationService.ForSection("Main.ComputerInfo")("Backup.Domain.Label")
+            PDCStr = LocalizationService.ForSection("Main.ComputerInfo")("Primary.Domain.Label")
+            NoIPStr = LocalizationService.ForSection("Main.ComputerInfo")("ConnectedNetwork.Label")
+            ManualIPStr = LocalizationService.ForSection("Main.ComputerInfo")("Manual.Label")
+            DHCPStr = LocalizationService.ForSection("Main.ComputerInfo")("Automatic.Assigned.Label")
 
             ' Computer Information
             ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build)
@@ -1228,7 +1048,7 @@ Public Class MainForm
             ComputerModelLabel.Text = ComputerSystemProps("Model")
             ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
             ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
-                                                                                               (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3), SysMemStr)
+                                                                                               LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)), SysMemStr)
             Try
                 Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
                     DiskCapacity As Long = CurrentVolProps("Capacity"),
@@ -1237,9 +1057,9 @@ Public Class MainForm
                     DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
                     DiskLabel As String = CurrentVolProps("Label")
                 ComputerStorageLabel.Text = String.Format("{0}\{1}: {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", String.Format(" ({0})", DiskLabel), ""),
-                                                                                            Converters.BytesToReadableSize(DiskUsedSpace, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            Converters.BytesToReadableSize(DiskUsedSpace, LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)),
                                                                                             CurDiskStr,
-                                                                                            Converters.BytesToReadableSize(DiskCapacity, (Language = 0 AndAlso My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "FRA") OrElse Language = 3),
+                                                                                            Converters.BytesToReadableSize(DiskCapacity, LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)),
                                                                                             Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
             Catch ex As Exception
                 DynaLog.LogMessage("Could not display disk information: " & ex.Message)
@@ -1375,31 +1195,7 @@ Public Class MainForm
     Sub CheckForUpdates(branch As String)
         DynaLog.LogMessage("Checking for program updates...")
         UpdateLink.LinkArea = New LinkArea(0, 0)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        UpdateLink.Text = "Checking for updates..."
-                    Case "ESN"
-                        UpdateLink.Text = "Comprobando actualizaciones..."
-                    Case "FRA"
-                        UpdateLink.Text = "Vérification des mises à jour en cours..."
-                    Case "PTB", "PTG"
-                        UpdateLink.Text = "Verificar actualizações..."
-                    Case "ITA"
-                        UpdateLink.Text = "Verifica aggiornamenti..."
-                End Select
-            Case 1
-                UpdateLink.Text = "Checking for updates..."
-            Case 2
-                UpdateLink.Text = "Comprobando actualizaciones..."
-            Case 3
-                UpdateLink.Text = "Vérification des mises à jour en cours..."
-            Case 4
-                UpdateLink.Text = "Verificar actualizações..."
-            Case 5
-                UpdateLink.Text = "Verifica aggiornamenti..."
-        End Select
+                UpdateLink.Text = LocalizationService.ForSection("Main.CheckForUpdates")("CheckingUpdates.Link")
         Dim latestVer As String = ""
         Using client As New WebClient()
             DynaLog.LogMessage("Downloading update information from DISMTools repository...")
@@ -1429,41 +1225,8 @@ Public Class MainForm
                     UpdatePanel.Visible = False
                 Else
                     DynaLog.LogMessage("The program is outdated. Recommending the user to update in a subtle way...")
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
-                                    UpdateLink.LinkArea = New LinkArea(58, 24)
-                                Case "ESN"
-                                    UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
-                                    UpdateLink.LinkArea = New LinkArea(65, 29)
-                                Case "FRA"
-                                    UpdateLink.Text = "Une nouvelle version est disponible pour le téléchargement et l'installation. Cliquez ici pour en savoir plus"
-                                    UpdateLink.LinkArea = New LinkArea(78, 31)
-                                Case "PTB", "PTG"
-                                    UpdateLink.Text = "Está disponível uma nova versão para transferência e instalação. Clique aqui para saber mais"
-                                    UpdateLink.LinkArea = New LinkArea(65, 27)
-                                Case "ITA"
-                                    UpdateLink.Text = "È disponibile una nuova versione da scaricare e installare. Fare clic qui per saperne di più"
-                                    UpdateLink.LinkArea = New LinkArea(60, 32)
-                            End Select
-                        Case 1
-                            UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
-                            UpdateLink.LinkArea = New LinkArea(58, 24)
-                        Case 2
-                            UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
-                            UpdateLink.LinkArea = New LinkArea(65, 29)
-                        Case 3
-                            UpdateLink.Text = "Une nouvelle version est disponible pour le téléchargement et l'installation. Cliquez ici pour en savoir plus"
-                            UpdateLink.LinkArea = New LinkArea(78, 31)
-                        Case 4
-                            UpdateLink.Text = "Está disponível uma nova versão para transferência e instalação. Clique aqui para saber mais"
-                            UpdateLink.LinkArea = New LinkArea(65, 27)
-                        Case 5
-                            UpdateLink.Text = "È disponibile una nuova versione da scaricare e installare. Fai clic qui per saperne di più"
-                            UpdateLink.LinkArea = New LinkArea(60, 32)
-                    End Select
+                    UpdateLink.Text = LocalizationService.ForSection("Main.CheckForUpdates")("NewVersion.Available.Link")
+                    UpdateLink.LinkArea = LocalizationService.GetLinkArea(UpdateLink.Text, LocalizationService.ForSection("Main.CheckForUpdates")("Learn.Link"))
                     UpdatePanel.Visible = True
                 End If
             End If
@@ -1484,59 +1247,11 @@ Public Class MainForm
         DynaLog.LogMessage("Determining if an image is mounted in the project. This is also run at startup...")
         If imgStatus = 0 Then
             DynaLog.LogMessage("Nothing/Zero/Zilch/Nada. Report so")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label50.Text = "No"
-                        Case "ESN"
-                            Label50.Text = "No"
-                        Case "FRA"
-                            Label50.Text = "Non"
-                        Case "PTB", "PTG"
-                            Label50.Text = "Não"
-                        Case "ITA"
-                            Label50.Text = "No"
-                    End Select
-                Case 1
-                    Label50.Text = "No"
-                Case 2
-                    Label50.Text = "No"
-                Case 3
-                    Label50.Text = "Non"
-                Case 4
-                    Label50.Text = "Não"
-                Case 5
-                    Label50.Text = "No"
-            End Select
+                    Label50.Text = LocalizationService.ForSection("Main.ChangeImgStatus")("No.Button")
             LinkLabel14.Visible = True
         Else
             DynaLog.LogMessage("Yes, we have an image mounted here...")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label50.Text = "Yes"
-                        Case "ESN"
-                            Label50.Text = "Sí"
-                        Case "FRA"
-                            Label50.Text = "Oui"
-                        Case "PTB", "PTG"
-                            Label50.Text = "Sim"
-                        Case "ITA"
-                            Label50.Text = "Sì"
-                    End Select
-                Case 1
-                    Label50.Text = "Yes"
-                Case 2
-                    Label50.Text = "Sí"
-                Case 3
-                    Label50.Text = "Oui"
-                Case 4
-                    Label50.Text = "Sim"
-                Case 5
-                    Label50.Text = "Sì"
-            End Select
+                    Label50.Text = LocalizationService.ForSection("Main.ChangeImgStatus")("Yes.Button")
             LinkLabel14.Visible = False
         End If
     End Sub
@@ -1565,7 +1280,7 @@ Public Class MainForm
                 ColorMode = PersKey.GetValue("ColorMode")
                 DarkThemeIndex = PersKey.GetValue("ColorTheme_Dark")
                 LightThemeIndex = PersKey.GetValue("ColorTheme_Light")
-                Language = PersKey.GetValue("Language")
+                LanguageCode = LocalizationService.ResolveStartupCultureCode(PersKey.GetValue("LanguageCode", LocalizationService.DefaultCultureCode))
                 LogFont = PersKey.GetValue("LogFont").ToString()
                 LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
@@ -1661,7 +1376,7 @@ Public Class MainForm
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
                 ' Apply language settings immediately
-                ChangeLangs(Language)
+                ApplyLanguage(LanguageCode)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not grab settings from registry: " & ex.Message & ". Loading from INI File...")
                 LoadDTSettings(1, True)
@@ -1684,10 +1399,13 @@ Public Class MainForm
                     ColorMode = CInt(settingData("Personalization")("ColorMode"))
                     If ColorMode < 0 Then ColorMode = 0
                     If ColorMode > 2 Then ColorMode = 2
-                    Language = CInt(settingData("Personalization")("Language"))
-                    If Language < 0 Then Language = 0
-                    If Language > 5 Then Language = 5
-                    ChangeLangs(Language)
+                    Dim rawLanguageSetting As String = ""
+                    Try
+                        rawLanguageSetting = settingData("Personalization")("LanguageCode")
+                    Catch
+                    End Try
+                    LanguageCode = LocalizationService.ResolveStartupCultureCode(rawLanguageSetting)
+                    ApplyLanguage(LanguageCode)
                     LightThemeIndex = CInt(settingData("Personalization")("ColorTheme_Light"))
                     DarkThemeIndex = CInt(settingData("Personalization")("ColorTheme_Dark"))
                     ChangePrgColors(ColorMode)
@@ -1917,7 +1635,7 @@ Public Class MainForm
                            "ColorMode                           =    " & ColorMode & CrLf &
                            "ColorTheme_Light                    =    " & LightThemeIndex & CrLf &
                            "ColorTheme_Dark                     =    " & DarkThemeIndex & CrLf &
-                           "Language                            =    " & Language & CrLf &
+                           "LanguageCode                        =    " & Quote & LanguageCode & Quote & CrLf &
                            "LogFont                             =    " & Quote & LogFont & Quote & CrLf &
                            "LogFontSi                           =    " & LogFontSize & CrLf &
                            "LogFontBold                         =    " & LogFontIsBold & CrLf &
@@ -2090,59 +1808,11 @@ Public Class MainForm
         End Select
         DynaLog.LogMessage("Amount of steps: " & pbOpNums)
         If pbOpNums > 1 Then progressDivs = 100 / pbOpNums Else progressDivs = 0
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        progressLabel = "Running processes"
-                    Case "ESN"
-                        progressLabel = "Ejecutando procesos"
-                    Case "FRA"
-                        progressLabel = "Processus en cours"
-                    Case "PTB", "PTG"
-                        progressLabel = "Processos em curso"
-                    Case "ITA"
-                        progressLabel = "Processi in corso"
-                End Select
-            Case 1
-                progressLabel = "Running processes"
-            Case 2
-                progressLabel = "Ejecutando procesos"
-            Case 3
-                progressLabel = "Processus en cours"
-            Case 4
-                progressLabel = "Processos em curso"
-            Case 5
-                progressLabel = "Processi in corso"
-        End Select
+        progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("RunningProcesses.Label")
         ImgBW.ReportProgress(0)
         If GatherBasicInfo Then
             DynaLog.LogMessage("Beginning background process work by getting standard image info...")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            progressLabel = "Getting basic image information..."
-                        Case "ESN"
-                            progressLabel = "Obteniendo información básica de la imagen..."
-                        Case "FRA"
-                            progressLabel = "Obtention des informations basiques sur l'image en cours..."
-                        Case "PTB", "PTG"
-                            progressLabel = "Obter informações básicas sobre a imagem..."
-                        Case "ITA"
-                            progressLabel = "Verifica informazioni elementari immagine..."
-                    End Select
-                Case 1
-                    progressLabel = "Getting basic image information..."
-                Case 2
-                    progressLabel = "Obteniendo información básica de la imagen..."
-                Case 3
-                    progressLabel = "Obtention des informations basiques sur l'image en cours..."
-                Case 4
-                    progressLabel = "Obter informações básicas sobre a imagem..."
-                Case 5
-                    progressLabel = "Verifica informazioni principali dell'immagine..."
-            End Select
+            progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Basic.Image.Label")
             ImgBW.ReportProgress(progressMin + progressDivs)
             GetBasicImageInfo(OnlineMode, OfflineMode)
             If isOrphaned Then
@@ -2162,31 +1832,7 @@ Public Class MainForm
             If Not IsCompatible Then Exit Sub
             If GatherAdvancedInfo Then
                 DynaLog.LogMessage("Getting the remaining bits of information...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting advanced image information..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo información avanzada de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des informations avancées sur l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter informações avançadas sobre a imagem..."
-                            Case "ITA"
-                                progressLabel = "Verifica informazioni avanzate immagine..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting advanced image information..."
-                    Case 2
-                        progressLabel = "Obteniendo información avanzada de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des informations avancées sur l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter informações avançadas sobre a imagem..."
-                    Case 5
-                        progressLabel = "Verifica informazioni dettagliate dell'immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("AdvancedImageInfo.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetAdvancedImageInfo(OnlineMode, OfflineMode)
             End If
@@ -2251,31 +1897,7 @@ Public Class MainForm
         progressMin = 20
         Select Case bgProcOptn
             Case 0
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting image packages..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo paquetes de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des paquets de l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter pacotes de imagem..."
-                            Case "ITA"
-                                progressLabel = "Verifica pacchetti immagine..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting image packages..."
-                    Case 2
-                        progressLabel = "Obteniendo paquetes de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des paquets de l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter pacotes de imagem..."
-                    Case 5
-                        progressLabel = "Ricerca pacchetti immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Packages.Label")
                 ImgBW.ReportProgress(20)
                 GetImagePackages(OnlineMode)
                 If ImgBW.CancellationPending Then
@@ -2283,31 +1905,7 @@ Public Class MainForm
                     If session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting image features..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo características de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des caractéristiques de l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter características de imagem..."
-                            Case "ITA"
-                                progressLabel = "Verifica funzionalità immagini..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting image features..."
-                    Case 2
-                        progressLabel = "Obteniendo características de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des caractéristiques de l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter características de imagem..."
-                    Case 5
-                        progressLabel = "Verifica funzionalità immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Features.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(OnlineMode)
                 If ImgBW.CancellationPending Then
@@ -2319,31 +1917,7 @@ Public Class MainForm
                     If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
                         DynaLog.LogMessage("Windows 8 or later")
                         pbOpNums += 1
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                                    Case "ESN"
-                                        progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                                    Case "FRA"
-                                        progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
-                                    Case "PTB", "PTG"
-                                        progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
-                                    Case "ITA"
-                                        progressLabel = "Verifica pacchetti AppX immagine (applicazioni in stile Metro)..."
-                                End Select
-                            Case 1
-                                progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                            Case 2
-                                progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                            Case 3
-                                progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
-                            Case 4
-                                progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
-                            Case 5
-                                progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
-                        End Select
+                        progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Get.Image.Provisioned.Label")
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageAppxPackages(OnlineMode)
                         If ImgBW.CancellationPending Then
@@ -2361,31 +1935,7 @@ Public Class MainForm
                     If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not CurrentImage.ImageInstallationType.Contains("Nano") Then
                         DynaLog.LogMessage("Windows 10 or later")
                         pbOpNums += 1
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        progressLabel = "Getting image Features on Demand (capabilities)..."
-                                    Case "ESN"
-                                        progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                                    Case "FRA"
-                                        progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
-                                    Case "PTB", "PTG"
-                                        progressLabel = "Obter capacidades de imagem..."
-                                    Case "ITA"
-                                        progressLabel = "Verifica funzionalità su richiesta dell'immagine (capacità)..."
-                                End Select
-                            Case 1
-                                progressLabel = "Getting image Features on Demand (capabilities)..."
-                            Case 2
-                                progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                            Case 3
-                                progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
-                            Case 4
-                                progressLabel = "Obter capacidades de imagem..."
-                            Case 5
-                                progressLabel = "Verifica funzionalità su richiesta dell'immagine (capacità)..."
-                        End Select
+                        progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Get.Image.Features.Label")
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageCapabilities(OnlineMode)
                         If ImgBW.CancellationPending Then
@@ -2399,31 +1949,7 @@ Public Class MainForm
                 Else
                     DynaLog.LogMessage("Not Windows 10 or later")
                 End If
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting image drivers..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo controladores de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des pilotes de l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter controladores de imagem..."
-                            Case "ITA"
-                                progressLabel = "Verifica driver dispositivo immagine..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting image drivers..."
-                    Case 2
-                        progressLabel = "Obteniendo controladores de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des pilotes de l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter controladores de imagem..."
-                    Case 5
-                        progressLabel = "Ricerca driver immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Drivers.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(OnlineMode)
                 If ImgBW.CancellationPending Then
@@ -2433,60 +1959,12 @@ Public Class MainForm
                 End If
             Case 1
                 DynaLog.LogMessage("Updating recorded OS package information...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting image packages..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo paquetes de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des paquets de l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter pacotes de imagem..."
-                            Case "ITA"
-                                progressLabel = "Verifica pacchetti immagine..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting image packages..."
-                    Case 2
-                        progressLabel = "Obteniendo paquetes de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des paquets de l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter pacotes de imagem..."
-                    Case 5
-                        progressLabel = "Ricerca pacchetti immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Packages.Label")
                 ImgBW.ReportProgress(20)
                 GetImagePackages(OnlineMode)
             Case 2
                 DynaLog.LogMessage("Updating recorded feature information...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting image features..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo características de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des caractéristiques de l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter características de imagem..."
-                            Case "ITA"
-                                progressLabel = "Verifica funzionalità immagini..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting image features..."
-                    Case 2
-                        progressLabel = "Obteniendo características de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des caractéristiques de l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter características de imagem..."
-                    Case 5
-                        progressLabel = "Verifica funzionalità immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Features.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(OnlineMode)
             Case 3
@@ -2494,31 +1972,7 @@ Public Class MainForm
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     DynaLog.LogMessage("Windows 8 or later")
                     pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                                Case "FRA"
-                                    progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
-                                Case "PTB", "PTG"
-                                    progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
-                                Case "ITA"
-                                    progressLabel = "Verifica pacchetti AppX immagine (applicazioni in stile Metro)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                        Case 2
-                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                        Case 3
-                            progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
-                        Case 4
-                            progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
-                        Case 5
-                            progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
-                    End Select
+                    progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Get.Image.Provisioned.Label")
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages(OnlineMode)
                 Else
@@ -2530,31 +1984,7 @@ Public Class MainForm
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     DynaLog.LogMessage("Windows 10 or later")
                     pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    progressLabel = "Getting image Features on Demand (capabilities)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                                Case "FRA"
-                                    progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
-                                Case "PTB", "PTG"
-                                    progressLabel = "Obter capacidades de imagem..."
-                                Case "ITA"
-                                    progressLabel = "Verifica funzionalità su richiesta immagine (capacità)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image Features on Demand (capabilities)..."
-                        Case 2
-                            progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                        Case 3
-                            progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
-                        Case 4
-                            progressLabel = "Obter capacidades de imagem..."
-                        Case 5
-                            progressLabel = "Verifica funzionalità su richiesta immagine (capacità)..."
-                    End Select
+                    progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Get.Image.Features.Label")
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageCapabilities(OnlineMode)
                 Else
@@ -2563,61 +1993,13 @@ Public Class MainForm
                 End If
             Case 5
                 DynaLog.LogMessage("Updating recorded driver information...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                progressLabel = "Getting image drivers..."
-                            Case "ESN"
-                                progressLabel = "Obteniendo controladores de la imagen..."
-                            Case "FRA"
-                                progressLabel = "Obtention des pilotes de l'image en cours..."
-                            Case "PTB", "PTG"
-                                progressLabel = "Obter controladores de imagem..."
-                            Case "ITA"
-                                progressLabel = "Ricerca driver immagine..."
-                        End Select
-                    Case 1
-                        progressLabel = "Getting image drivers..."
-                    Case 2
-                        progressLabel = "Obteniendo controladores de la imagen..."
-                    Case 3
-                        progressLabel = "Obtention des pilotes de l'image en cours..."
-                    Case 4
-                        progressLabel = "Obter controladores de imagem..."
-                    Case 5
-                        progressLabel = "Ricerca driver immagine..."
-                End Select
+                progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Drivers.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(OnlineMode)
         End Select
         If bgProcOptn <> 0 And PendingTasks.Contains(True) Then
             DynaLog.LogMessage("Some tasks need to be finished before we're happy. Finishing them...")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            progressLabel = "Running pending tasks. This may take some time..."
-                        Case "ESN"
-                            progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
-                        Case "FRA"
-                            progressLabel = "Exécution des tâches en cours. Cela peut prendre un certain temps ..."
-                        Case "PTB", "PTG"
-                            progressLabel = "Execução de tarefas pendentes. Isto pode demorar algum tempo..."
-                        Case "ITA"
-                            progressLabel = "Esecuzione di attività in sospeso. Questa operazione potrebbe richiedere del tempo..."
-                    End Select
-                Case 1
-                    progressLabel = "Running pending tasks. This may take some time..."
-                Case 2
-                    progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
-                Case 3
-                    progressLabel = "Exécution des tâches en cours. Cela peut prendre un certain temps ..."
-                Case 4
-                    progressLabel = "Execução de tarefas pendentes. Isto pode demorar algum tempo..."
-                Case 5
-                    progressLabel = "Esecuzione di attività in sospeso. Questa operazione potrebbe richiedere del tempo..."
-            End Select
+            progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Running.Pending.Tasks.Label")
             ImgBW.ReportProgress(99)
             DynaLog.LogMessage("Determining whether or not OS package information processes remain. Do them if they do remain...")
             If PendingTasks(0) Then GetImagePackages(OnlineMode)
@@ -2678,51 +2060,9 @@ Public Class MainForm
 
             Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber
             CurrentImage.ImageVersion = Environment.OSVersion.Version
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label41.Text = "(Online installation)"
-                            Label47.Text = "(Online installation)"
-                            Label49.Text = "(Online installation)"
-                        Case "ESN"
-                            Label41.Text = "(Instalación activa)"
-                            Label47.Text = "(Instalación activa)"
-                            Label49.Text = "(Instalación activa)"
-                        Case "FRA"
-                            Label41.Text = "(Installation en ligne)"
-                            Label47.Text = "(Installation en ligne)"
-                            Label49.Text = "(Installation en ligne)"
-                        Case "PTB", "PTG"
-                            Label41.Text = "(Instalação em linha)"
-                            Label47.Text = "(Instalação em linha)"
-                            Label49.Text = "(Instalação em linha)"
-                        Case "ITA"
-                            Label41.Text = "(Installazione attiva)"
-                            Label47.Text = "(Installazione attiva)"
-                            Label49.Text = "(Installazione attiva)"
-                    End Select
-                Case 1
-                    Label41.Text = "(Online installation)"
-                    Label47.Text = "(Online installation)"
-                    Label49.Text = "(Online installation)"
-                Case 2
-                    Label41.Text = "(Instalación activa)"
-                    Label47.Text = "(Instalación activa)"
-                    Label49.Text = "(Instalación activa)"
-                Case 3
-                    Label41.Text = "(Installation en ligne)"
-                    Label47.Text = "(Installation en ligne)"
-                    Label49.Text = "(Installation en ligne)"
-                Case 4
-                    Label41.Text = "(Instalação em linha)"
-                    Label47.Text = "(Instalação em linha)"
-                    Label49.Text = "(Instalação em linha)"
-                Case 5
-                    Label41.Text = "(Installazione attiva)"
-                    Label47.Text = "(Installazione attiva)"
-                    Label49.Text = "(Installazione attiva)"
-            End Select
+                    Label41.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
+                    Label47.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
+                    Label49.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
             Label46.Text = My.Computer.Info.OSFullName
             Label44.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
             Label52.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
@@ -2742,61 +2082,10 @@ Public Class MainForm
             DynaLog.LogMessage("Getting information about the offline installation...")
             Label48.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
             CurrentImage.ImageVersion = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label41.Text = "(Offline installation)"
-                            Label46.Text = "(Offline installation)"
-                            Label47.Text = "(Offline installation)"
-                            Label49.Text = "(Offline installation)"
-                        Case "ESN"
-                            Label41.Text = "(Instalación fuera de línea)"
-                            Label46.Text = "(Instalación fuera de línea)"
-                            Label47.Text = "(Instalación fuera de línea)"
-                            Label49.Text = "(Instalación fuera de línea)"
-                        Case "FRA"
-                            Label41.Text = "(Installation hors ligne)"
-                            Label46.Text = "(Installation hors ligne)"
-                            Label47.Text = "(Installation hors ligne)"
-                            Label49.Text = "(Installation hors ligne)"
-                        Case "PTB", "PTG"
-                            Label41.Text = "(Instalação offline)"
-                            Label46.Text = "(Instalação offline)"
-                            Label47.Text = "(Instalação offline)"
-                            Label49.Text = "(Instalação offline)"
-                        Case "ITA"
-                            Label41.Text = "(Installazione offline)"
-                            Label46.Text = "(Installazione offline)"
-                            Label47.Text = "(Installazione offline)"
-                            Label49.Text = "(Installazione offline)"
-                    End Select
-                Case 1
-                    Label41.Text = "(Offline installation)"
-                    Label46.Text = "(Offline installation)"
-                    Label47.Text = "(Offline installation)"
-                    Label49.Text = "(Offline installation)"
-                Case 2
-                    Label41.Text = "(Instalación fuera de línea)"
-                    Label46.Text = "(Instalación fuera de línea)"
-                    Label47.Text = "(Instalación fuera de línea)"
-                    Label49.Text = "(Instalación fuera de línea)"
-                Case 3
-                    Label41.Text = "(Installation hors ligne)"
-                    Label46.Text = "(Installation hors ligne)"
-                    Label47.Text = "(Installation hors ligne)"
-                    Label49.Text = "(Installation hors ligne)"
-                Case 4
-                    Label41.Text = "(Instalação offline)"
-                    Label46.Text = "(Instalação offline)"
-                    Label47.Text = "(Instalação offline)"
-                    Label49.Text = "(Instalação offline)"
-                Case 5
-                    Label41.Text = "(Installazione offline)"
-                    Label46.Text = "(Installazione offline)"
-                    Label47.Text = "(Installazione offline)"
-                    Label49.Text = "(Installazione offline)"
-            End Select
+                    Label41.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
+                    Label46.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Label")
+                    Label47.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
+                    Label49.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
             Label41.Text = MountDir
             Label44.Text = MountDir
             Label52.Text = MountDir
@@ -4141,7 +3430,7 @@ Public Class MainForm
         End Try
         settingsData("Personalization").AddKey("ColorTheme_Light", 1)
         settingsData("Personalization").AddKey("ColorTheme_Dark", 0)
-        settingsData("Personalization").AddKey("Language", 0)
+        settingsData("Personalization").AddKey("LanguageCode", Quote & LocalizationService.CurrentCultureCode & Quote)
         settingsData("Personalization").AddKey("LogFont", Quote & "Consolas" & Quote)
         settingsData("Personalization").AddKey("LogFontSi", 11)
         settingsData("Personalization").AddKey("LogFontBold", 0)
@@ -4236,7 +3525,7 @@ Public Class MainForm
         End Try
         PersKey.SetValue("ColorTheme_Light", 1, RegistryValueKind.DWord)
         PersKey.SetValue("ColorTheme_Dark", 0, RegistryValueKind.DWord)
-        PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("LanguageCode", LocalizationService.DefaultCultureCode, RegistryValueKind.String)
         PersKey.SetValue("LogFont", "Consolas", RegistryValueKind.String)
         PersKey.SetValue("LogFontSi", 11, RegistryValueKind.DWord)
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
@@ -4345,7 +3634,8 @@ Public Class MainForm
             settingsData("Personalization").AddKey("ColorMode", ColorMode)
             settingsData("Personalization").AddKey("ColorTheme_Light", LightThemeIndex)
             settingsData("Personalization").AddKey("ColorTheme_Dark", DarkThemeIndex)
-            settingsData("Personalization").AddKey("Language", Language)
+            LanguageCode = LocalizationService.NormalizeCultureCode(LanguageCode)
+            settingsData("Personalization").AddKey("LanguageCode", Quote & LanguageCode & Quote)
             settingsData("Personalization").AddKey("LogFont", Quote & LogFont & Quote)
             settingsData("Personalization").AddKey("LogFontSi", LogFontSize)
             settingsData("Personalization").AddKey("LogFontBold", If(LogFontIsBold, 1, 0))
@@ -4445,7 +3735,8 @@ Public Class MainForm
                 PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
                 PersKey.SetValue("ColorTheme_Light", LightThemeIndex, RegistryValueKind.DWord)
                 PersKey.SetValue("ColorTheme_Dark", DarkThemeIndex, RegistryValueKind.DWord)
-                PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
+                LanguageCode = LocalizationService.NormalizeCultureCode(LanguageCode)
+                PersKey.SetValue("LanguageCode", LanguageCode, RegistryValueKind.String)
                 PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
                 PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
                 PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
@@ -4750,3401 +4041,353 @@ Public Class MainForm
         Next
     End Sub
 
-    Sub ChangeLangs(LangCode As Integer)
-        DynaLog.LogMessage("Changing program language... (language code: " & LangCode & ")")
-        Select Case LangCode
-            Case 0
-                DynaLog.LogMessage("Language code is 0. Getting language from host system (may give inaccurate results on systems with multiple MUI packs)...")
-                DynaLog.LogMessage("Host System language in 3 letters: " & My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName)
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ' Top-level menu items
-                        FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
-                        ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Project".ToUpper(), "&Project")
-                        CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&mands".ToUpper(), "Com&mands")
-                        ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Tools".ToUpper(), "&Tools")
-                        HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Help".ToUpper(), "&Help")
-                        InvalidSettingsTSMI.Text = "Invalid settings have been detected"
-                        ' Submenu items
-                        ' Menu - File
-                        NewProjectToolStripMenuItem.Text = "&New project..."
-                        OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
-                        ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
-                        ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
-                        RecentProjectsListMenu.Text = "Recent projects"
-                        SaveProjectToolStripMenuItem.Text = "&Save project..."
-                        SaveProjectasToolStripMenuItem.Text = "Save project &as..."
-                        ExitToolStripMenuItem.Text = "E&xit"
-                        ' Menu - Project
-                        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
-                        UnloadProjectToolStripMenuItem.Text = "Unload project..."
-                        SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
-                        ProjectPropertiesToolStripMenuItem.Text = "Project properties"
-                        ImagePropertiesToolStripMenuItem.Text = "Image properties"
-                        ' Menu - Commands
-                        ImageManagementToolStripMenuItem.Text = "Image management"
-                        OSPackagesToolStripMenuItem.Text = "OS packages"
-                        ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                        AppPackagesToolStripMenuItem.Text = "AppX packages"
-                        AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
-                        DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
-                        LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
-                        CapabilitiesToolStripMenuItem.Text = "Capabilities"
-                        WindowsEditionsToolStripMenuItem.Text = "Windows editions"
-                        DriversToolStripMenuItem.Text = "Drivers"
-                        UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
-                        WindowsPEServicingToolStripMenuItem.Text = "Windows PE servicing"
-                        OSUninstallToolStripMenuItem.Text = "OS uninstall"
-                        ReservedStorageToolStripMenuItem.Text = "Reserved storage"
-                        ' Menu - Commands - Image management
-                        AppendImage.Text = "Append capture directory to image..."
-                        ApplyFFU.Text = "Apply FFU or SFU file..."
-                        ApplyImage.Text = "Apply WIM or SWM file..."
-                        CaptureCustomImage.Text = "Capture incremental changes to file..."
-                        CaptureFFU.Text = "Capture partitions to FFU file..."
-                        CaptureImage.Text = "Capture image of a drive to WIM file..."
-                        CleanupMountpoints.Text = "Delete resources from corrupted image..."
-                        CommitImage.Text = "Apply changes to image..."
-                        DeleteImage.Text = "Delete volume images from WIM file..."
-                        ExportImage.Text = "Export image..."
-                        GetImageInfo.Text = "Get image information..."
-                        GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
-                        ListImage.Text = "List files and directories in image..."
-                        MountImage.Text = "Mount image..."
-                        OptimizeFFU.Text = "Optimize FFU file..."
-                        OptimizeImage.Text = "Optimize image..."
-                        RemountImage.Text = "Remount image for servicing..."
-                        SplitFFU.Text = "Split FFU file into SFU files..."
-                        SplitImage.Text = "Split WIM file into SWM files..."
-                        UnmountImage.Text = "Unmount image..."
-                        UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
-                        ApplySiloedPackage.Text = "Apply siloed provisioning package..."
-                        ' Menu - Commands - OS packages
-                        GetPackages.Text = "Get package information..."
-                        AddPackage.Text = "Add package..."
-                        RemovePackage.Text = "Remove package..."
-                        GetFeatures.Text = "Get feature information..."
-                        EnableFeature.Text = "Enable feature..."
-                        DisableFeature.Text = "Disable feature..."
-                        CleanupImage.Text = "Perform cleanup or recovery operations..."
-                        SaveImageInformationToolStripMenuItem.Text = "Save image information..."
-                        ' Menu - Commands - Provisioning packages
-                        AddProvisioningPackage.Text = "Add provisioning package..."
-                        GetProvisioningPackageInfo.Text = "Get provisioning package information..."
-                        ApplyCustomDataImage.Text = "Apply custom data image..."
-                        ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Get AppX package information..."
-                        AddProvisionedAppxPackage.Text = "Add provisioned AppX package..."
-                        RemoveProvisionedAppxPackage.Text = "Remove provisioning for AppX package..."
-                        OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
-                        SetProvisionedAppxDataFile.Text = "Add custom data file into AppX package..."
-                        ' Menu - Commands - App (MSP) servicing
-                        CheckAppPatch.Text = "Get application patch information..."
-                        GetAppPatchInfo.Text = "Get detailed application patch information..."
-                        GetAppPatches.Text = "Get basic installed application patch information..."
-                        GetAppInfo.Text = "Get detailed Windows Installer (*.msi) application information..."
-                        GetApps.Text = "Get basic Windows Installer (*.msi) application information..."
-                        ' Menu - Commands - Default app associations
-                        ExportDefaultAppAssociations.Text = "Export default application associations..."
-                        GetDefaultAppAssociations.Text = "Get default application association information..."
-                        ImportDefaultAppAssociations.Text = "Import default application associations..."
-                        RemoveDefaultAppAssociations.Text = "Remove default application associations..."
-                        ' Menu - Commands - Languages and regional settings
-                        GetIntl.Text = "Get international settings and languages..."
-                        SetUILang.Text = "Set UI language..."
-                        SetUILangFallback.Text = "Set default UI fallback language..."
-                        SetSysUILang.Text = "Set system preferred UI language..."
-                        SetSysLocale.Text = "Set system locale..."
-                        SetUserLocale.Text = "Set user locale..."
-                        SetInputLocale.Text = "Set input locale..."
-                        SetAllIntl.Text = "Set UI language and locales..."
-                        SetTimeZone.Text = "Set default time zone..."
-                        SetSKUIntlDefaults.Text = "Set default languages and locales..."
-                        SetLayeredDriver.Text = "Set layered driver..."
-                        GenLangINI.Text = "Generate Lang.ini file..."
-                        SetSetupUILang.Text = "Set default Setup language..."
-                        ' Menu - Commands - Capabilities
-                        AddCapability.Text = "Add capability..."
-                        ExportSource.Text = "Export capabilities into repository..."
-                        GetCapabilities.Text = "Get capability information..."
-                        RemoveCapability.Text = "Remove capability..."
-                        ' Menu - Commands - Windows editions
-                        GetCurrentEdition.Text = "Get current edition..."
-                        GetTargetEditions.Text = "Get upgrade targets..."
-                        SetEdition.Text = "Upgrade image..."
-                        SetProductKey.Text = "Set product key..."
-                        ' Menu - Commands - Drivers
-                        GetDrivers.Text = "Get driver information..."
-                        AddDriver.Text = "Add driver..."
-                        RemoveDriver.Text = "Remove driver..."
-                        ExportDriver.Text = "Export driver packages..."
-                        ImportDriver.Text = "Import driver packages..."
-                        ' Menu - Commands - Unattended answer files
-                        ApplyUnattend.Text = "Apply unattended answer file..."
-                        ' Menu - Commands - Windows PE servicing
-                        GetPESettings.Text = "Get settings..."
-                        SetScratchSpace.Text = "Set scratch space..."
-                        SetTargetPath.Text = "Set target path..."
-                        ' Menu - Commands - OS uninstall
-                        GetOSUninstallWindow.Text = "Get uninstall window..."
-                        InitiateOSUninstall.Text = "Initiate uninstall..."
-                        RemoveOSUninstall.Text = "Remove roll back ability..."
-                        SetOSUninstallWindow.Text = "Set uninstall window..."
-                        ' Menu - Commands - Reserved storage
-                        SetReservedStorageState.Text = "Set reserved storage state..."
-                        GetReservedStorageState.Text = "Get reserved storage state..."
-                        ' Menu - Commands - Microsoft Edge
-                        AddEdge.Text = "Add Edge..."
-                        AddEdgeBrowser.Text = "Add Edge browser..."
-                        AddEdgeWebView.Text = "Add Edge WebView..."
-                        ' Menu - Tools
-                        ImageConversionToolStripMenuItem.Text = "Image conversion"
-                        MergeSWM.Text = "Merge SWM files..."
-                        RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
-                        CommandShellToolStripMenuItem.Text = "Command Console"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
-                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
-                        RegCplToolStripMenuItem.Text = "Manage image registry hives..."
-                        WebResourcesToolStripMenuItem.Text = "Web Resources"
-                        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Download Languages and Optional Features ISOs..."
-                        LanguagesAndFODWin10ToolStripMenuItem.Text = "Download Languages and FOD discs for Windows 10..."
-                        ReportManagerToolStripMenuItem.Text = "Report manager"
-                        MountedImageManagerTSMI.Text = "Mounted image manager"
-                        CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
-                        CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
-                        WimScriptEditorCommand.Text = "Configuration list editor"
-                        OptionsToolStripMenuItem.Text = "Options"
-                        ' Menu - Help
-                        HelpTopicsToolStripMenuItem.Text = "Help Topics"
-                        AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
-                        ' Menu - Invalid settings
-                        ISFix.Text = "More information"
-                        ISHelp.Text = "What's this?"
-                        ' Menu - DevState
-                        ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
-                        ' Menu - Contributions
-                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
-                        ' Menu - Tour Server
-                        TourActionsTSMI.Text = "Tour Actions"
-                        ServerStatusTSMI.Text = String.Format("Tour Server is active on port {0}", tourServer.GetTcpPort())
-                        RestartDTTourTSMI.Text = "Restart Tour"
-                        StopDTTourServerTSMI.Text = "Stop Tour Server"
-                        ' Start Panel
-                        LabelHeader1.Text = "Begin"
-                        Label10.Text = "Recent projects"
-                        NewProjLink.Text = "New project..."
-                        ExistingProjLink.Text = "Open existing project..."
-                        OnlineInstMgmt.Text = "Manage online installation"
-                        OfflineInstMgmt.Text = "Manage offline installation..."
-                        RecentRemoveLink.Text = "Remove entry"
-                        ' ToolStrip buttons
-                        ToolStripButton1.Text = "Close tab"
-                        ToolStripButton2.Text = "Save project"
-                        ToolStripButton3.Text = "Unload project"
-                        ToolStripButton3.ToolTipText = "Unload project from this program"
-                        ToolStripButton4.Text = "Show progress window"
-                        RefreshViewTSB.Text = "Refresh view"
-                        ExpandCollapseTSB.Text = "Expand"
-                        UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
-                        UpdateLink.LinkArea = New LinkArea(58, 24)
-                        ' Pop-up context menus
-                        PkgBasicInfo.Text = "Get basic information (all packages)"
-                        PkgDetailedInfo.Text = "Get detailed information (specific package)"
-                        CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
-                        DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
-                        UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
-                        ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
-                        GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
-                        SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
-                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
-                        ' OpenFileDialogs and FolderBrowsers
-                        OpenFileDialog1.Title = "Specify the project file to load"
-                        LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
-                        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                            BGProcDetails.Label2.Text = "Image processes have completed"
-                        End If
-                        MenuDesc.Text = "Ready"
-                        ' Tree view context menu
-                        AccessDirectoryToolStripMenuItem.Text = "Access directory"
-                        UnloadProjectToolStripMenuItem1.Text = "Unload project"
-                        CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
-                        OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
-                        OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
-                        ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
-                        ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
-                        ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
-                        ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
-                        ImageOperationsToolStripMenuItem.Text = "Image operations"
-                        MountImageToolStripMenuItem.Text = "Mount image..."
-                        UnmountImageToolStripMenuItem.Text = "Unmount image..."
-                        RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
-                        SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
-                        UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
-                        ManageToolStripMenuItem.Text = "Manage"
-                        CreationWizardToolStripMenuItem.Text = "Create"
-                        ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
-                        ManageReportsToolStripMenuItem.Text = "Manage reports"
-                        AddToolStripMenuItem.Text = "Add"
-                        NewFileToolStripMenuItem.Text = "New file..."
-                        ExistingFileToolStripMenuItem.Text = "Existing file..."
-                        ' Context menu of AppX information dialog
-                        SaveResourceToolStripMenuItem.Text = "Save resource..."
-                        CopyToolStripMenuItem.Text = "Copy resource"
-                        ' Context menu of AppX addition dialog
-                        MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
-                        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
-                        AppxDownloadHelpToolStripMenuItem.Text = "How do I get applications?"
-                        ' New design
-                        GreetingLabel.Text = "Welcome to this servicing session"
-                        LinkLabel12.Text = "PROJECT"
-                        LinkLabel13.Text = "IMAGE"
-                        Label54.Text = "Name:"
-                        Label51.Text = "Location:"
-                        Label53.Text = "Images mounted?"
-                        LinkLabel14.Text = "Click here to mount an image"
-                        Label55.Text = "Project Tasks"
-                        LinkLabel15.Text = "View project properties"
-                        LinkLabel16.Text = "Open in File Explorer"
-                        LinkLabel17.Text = "Unload project"
-                        Label59.Text = "No image has been mounted"
-                        Label58.Text = "You need to mount an image in order to view its information"
-                        Label57.Text = "Choices"
-                        LinkLabel21.Text = "Mount an image..."
-                        LinkLabel18.Text = "Pick a mounted image..."
-                        Label39.Text = "Image index:"
-                        Label43.Text = "Mount point:"
-                        Label45.Text = "Version:"
-                        Label42.Text = "Name:"
-                        Label40.Text = "Description:"
-                        Label56.Text = "Image Tasks"
-                        LinkLabel20.Text = "View image properties"
-                        LinkLabel19.Text = "Unmount image"
-                        GroupBox4.Text = "Image operations"
-                        Button26.Text = "Mount image..."
-                        Button27.Text = "Commit current changes"
-                        Button28.Text = "Commit and unmount image"
-                        Button29.Text = "Unmount image discarding changes"
-                        Button25.Text = "Reload servicing session"
-                        Button24.Text = "Switch image indexes..."
-                        Button30.Text = "Apply image..."
-                        Button31.Text = "Capture image..."
-                        Button32.Text = "Remove volume images..."
-                        Button33.Text = "Save complete image information..."
-                        GroupBox5.Text = "Package operations"
-                        Button36.Text = "Add package..."
-                        Button34.Text = "Get package information..."
-                        Button38.Text = "Save installed package information..."
-                        Button35.Text = "Remove package..."
-                        Button37.Text = "Perform component store maintenance and cleanup..."
-                        GroupBox6.Text = "Feature operations"
-                        Button41.Text = "Enable feature..."
-                        Button39.Text = "Get feature information..."
-                        Button42.Text = "Save feature information..."
-                        Button40.Text = "Disable feature..."
-                        GroupBox7.Text = "AppX package operations"
-                        Button44.Text = "Add AppX package..."
-                        Button45.Text = "Get app information..."
-                        Button46.Text = "Save installed AppX package information..."
-                        Button43.Text = "Remove AppX package..."
-                        GroupBox8.Text = "Capability operations"
-                        Button48.Text = "Add capability..."
-                        Button49.Text = "Get capability information..."
-                        Button50.Text = "Save capability information..."
-                        Button47.Text = "Remove capability..."
-                        GroupBox9.Text = "Driver operations"
-                        Button53.Text = "Add driver package..."
-                        Button52.Text = "Get driver information..."
-                        Button54.Text = "Save installed driver information..."
-                        Button51.Text = "Remove driver..."
-                        GroupBox10.Text = "Windows PE operations"
-                        Button55.Text = "Get configuration"
-                        Button56.Text = "Save configuration..."
-                        Button57.Text = "Set target path..."
-                        Button58.Text = "Set scratch space..."
-                    Case "ESN"
-                        ' Top-level menu items
-                        FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
-                        ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Proyecto".ToUpper(), "&Proyecto")
-                        CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Co&mandos".ToUpper(), "Co&mandos")
-                        ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Her&ramientas".ToUpper(), "Her&ramientas")
-                        HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Ay&uda".ToUpper(), "Ay&uda")
-                        InvalidSettingsTSMI.Text = "Se han detectado configuraciones inválidas"
-                        ' Submenu items
-                        ' Menu - File
-                        NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
-                        OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
-                        ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
-                        ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
-                        RecentProjectsListMenu.Text = "Proyectos recientes"
-                        SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
-                        SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
-                        ExitToolStripMenuItem.Text = "Sa&lir"
-                        ' Menu - Project
-                        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Ver archivos del proyecto en el Explorador de archivos"
-                        UnloadProjectToolStripMenuItem.Text = "Descargar proyecto..."
-                        SwitchImageIndexesToolStripMenuItem.Text = "Cambiar índices de imagen..."
-                        ProjectPropertiesToolStripMenuItem.Text = "Propiedades del proyecto"
-                        ImagePropertiesToolStripMenuItem.Text = "Propiedades de la imagen"
-                        ' Menu - Commands
-                        ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
-                        OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
-                        ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                        AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
-                        AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
-                        DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
-                        LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
-                        CapabilitiesToolStripMenuItem.Text = "Funcionalidades"
-                        WindowsEditionsToolStripMenuItem.Text = "Ediciones de Windows"
-                        DriversToolStripMenuItem.Text = "Controladores"
-                        UnattendedAnswerFilesToolStripMenuItem.Text = "Archivos de respuesta desatendida"
-                        WindowsPEServicingToolStripMenuItem.Text = "Servicio de Windows PE"
-                        OSUninstallToolStripMenuItem.Text = "Desinstalación del sistema operativo"
-                        ReservedStorageToolStripMenuItem.Text = "Almacenamiento reservado"
-                        ' Menu - Commands - Image management
-                        AppendImage.Text = "Anexar directorio de captura a imagen..."
-                        ApplyFFU.Text = "Aplicar archivo FFU o SFU..."
-                        ApplyImage.Text = "Aplicar archivo WIM o SWM..."
-                        CaptureCustomImage.Text = "Capturar cambios incrementales a un archivo..."
-                        CaptureFFU.Text = "Capturar particiones a un archivo FFU..."
-                        CaptureImage.Text = "Capturar imagen de un disco a un archivo WIM..."
-                        CleanupMountpoints.Text = "Eliminar recursos de una imagen corrupta..."
-                        CommitImage.Text = "Aplicar cambios a la imagen..."
-                        DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
-                        ExportImage.Text = "Exportar imagen..."
-                        GetImageInfo.Text = "Obtener información de imagen..."
-                        GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
-                        ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
-                        MountImage.Text = "Montar imagen..."
-                        OptimizeFFU.Text = "Optimizar archivo FFU..."
-                        OptimizeImage.Text = "Optimizar imagen..."
-                        RemountImage.Text = "Remontar imagen para su servicio..."
-                        SplitFFU.Text = "Dividir archivo FFU en archivos SFU..."
-                        SplitImage.Text = "Dividir archivo WIM en archivos SWM..."
-                        UnmountImage.Text = "Desmontar imagen..."
-                        UpdateWIMBootEntry.Text = "Actualizar entradas de configuración WIMBoot..."
-                        ApplySiloedPackage.Text = "Aplicar paquete de aprovisionamiento en silos..."
-                        SaveImageInformationToolStripMenuItem.Text = "Guardar información de la imagen..."
-                        ' Menu - Commands - OS packages
-                        GetPackages.Text = "Obtener información de paquetes..."
-                        AddPackage.Text = "Añadir paquete..."
-                        RemovePackage.Text = "Eliminar paquete..."
-                        GetFeatures.Text = "Obtener información de características..."
-                        EnableFeature.Text = "Habilitar característica..."
-                        DisableFeature.Text = "Deshabilitar característica..."
-                        CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
-                        ' Menu - Commands - Provisioning packages
-                        AddProvisioningPackage.Text = "Añadir paquete de aprovisionamiento..."
-                        GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
-                        ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
-                        ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
-                        AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionado..."
-                        RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
-                        OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                        SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
-                        ' Menu - Commands - App (MSP) servicing
-                        CheckAppPatch.Text = "Obtener información de parche de aplicación..."
-                        GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
-                        GetAppPatches.Text = "Obtener información básica de parches de aplicación instalados..."
-                        GetAppInfo.Text = "Obtener información detallada de aplicaciones de Windows Installer (*.msi)..."
-                        GetApps.Text = "Obtener información básica de aplicaciones de Windows Installer (*.msi)..."
-                        ' Menu - Commands - Default app associations
-                        ExportDefaultAppAssociations.Text = "Exportar asociaciones de aplicaciones predeterminadas..."
-                        GetDefaultAppAssociations.Text = "Obtener información de asociaciones de aplicaciones predeterminadas..."
-                        ImportDefaultAppAssociations.Text = "Importar asociaciones de aplicaciones predeterminadas..."
-                        RemoveDefaultAppAssociations.Text = "Eliminar asociaciones de aplicaciones predeterminadas..."
-                        ' Menu - Commands - Languages and regional settings
-                        GetIntl.Text = "Obtener configuraciones e idiomas internacionales..."
-                        SetUILang.Text = "Establecer idioma de la interfaz de usuario..."
-                        SetUILangFallback.Text = "Establecer idioma predeterminado de la interfaz de usuario de último recurso..."
-                        SetSysUILang.Text = "Estabñecer idioma de la interfaz de usuario preferido para el sistema..."
-                        SetSysLocale.Text = "Establecer zona del sistema..."
-                        SetUserLocale.Text = "Establecer zona del usuario..."
-                        SetInputLocale.Text = "Establecer zona de entrada..."
-                        SetAllIntl.Text = "Establecer idioma de la interfaz de usuario y zonas..."
-                        SetTimeZone.Text = "Establecer zona horaria predeterminada..."
-                        SetSKUIntlDefaults.Text = "Establecer lenguajes y zonas predeterminadas..."
-                        SetLayeredDriver.Text = "Establecer controlador en capas..."
-                        GenLangINI.Text = "Generar archivo Lang.ini..."
-                        SetSetupUILang.Text = "Establecer idioma predeterminado del programa de instalación..."
-                        ' Menu - Commands - Capabilities
-                        AddCapability.Text = "Añadir funcionalidad..."
-                        ExportSource.Text = "Exportar funcionalidades en un repositorio..."
-                        GetCapabilities.Text = "Obtener información de funcionalidades..."
-                        RemoveCapability.Text = "Eliminar funcionalidad..."
-                        ' Menu - Commands - Windows editions
-                        GetCurrentEdition.Text = "Obtener edición actual..."
-                        GetTargetEditions.Text = "Obtener destinos de actualización..."
-                        SetEdition.Text = "Actualizar imagen..."
-                        SetProductKey.Text = "Establecer clave de producto..."
-                        ' Menu - Commands - Drivers
-                        GetDrivers.Text = "Obtener información de controladores..."
-                        AddDriver.Text = "Añadir controlador..."
-                        RemoveDriver.Text = "Eliminar controlador..."
-                        ExportDriver.Text = "Exportar paquetes de controlador..."
-                        ImportDriver.Text = "Importar paquetes de controlador..."
-                        ' Menu - Commands - Unattended answer files
-                        ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
-                        ' Menu - Commands - Windows PE servicing
-                        GetPESettings.Text = "Obtener configuración..."
-                        SetScratchSpace.Text = "Establecer espacio temporal..."
-                        SetTargetPath.Text = "Establecer ruta de destino..."
-                        ' Menu - Commands - OS uninstall
-                        GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
-                        InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                        RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
-                        SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
-                        ' Menu - Commands - Reserved storage
-                        SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
-                        GetReservedStorageState.Text = "Obtener estado de almacenamiento reservado..."
-                        ' Menu - Commands - Microsoft Edge
-                        AddEdge.Text = "Añadir Edge..."
-                        AddEdgeBrowser.Text = "Añadir navegador Edge..."
-                        AddEdgeWebView.Text = "Añadir Edge WebView..."
-                        ' Menu - Tools
-                        ImageConversionToolStripMenuItem.Text = "Conversión de imágenes"
-                        MergeSWM.Text = "Combinar archivos SWM..."
-                        RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
-                        CommandShellToolStripMenuItem.Text = "Consola de comandos"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
-                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
-                        RegCplToolStripMenuItem.Text = "Administrar subárboles del registro de la imagen..."
-                        WebResourcesToolStripMenuItem.Text = "Recursos web"
-                        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Descargar archivos ISO de idiomas y características opcionales..."
-                        LanguagesAndFODWin10ToolStripMenuItem.Text = "Descargar discos de idiomas y características opcionales para Windows 10..."
-                        ReportManagerToolStripMenuItem.Text = "Administrador de informes"
-                        MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
-                        CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
-                        CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
-                        WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
-                        OptionsToolStripMenuItem.Text = "Opciones"
-                        ' Menu - Help
-                        HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
-                        AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
-                        ' Menu - Invalid settings
-                        ISFix.Text = "Más información"
-                        ISHelp.Text = "¿Qué es esto?"
-                        ' Menu - DevState
-                        ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
-                        ' Menu - Contributions
-                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir al sistema de ayuda"
-                        ' Menu - Tour Server
-                        TourActionsTSMI.Text = "Acciones del tour"
-                        ServerStatusTSMI.Text = String.Format("El servidor del tour está activo en el puerto {0}", tourServer.GetTcpPort())
-                        RestartDTTourTSMI.Text = "Reiniciar tour"
-                        StopDTTourServerTSMI.Text = "Detener servidor del tour"
-                        ' Start Panel
-                        LabelHeader1.Text = "Comenzar"
-                        Label10.Text = "Proyectos recientes"
-                        NewProjLink.Text = "Nuevo proyecto..."
-                        ExistingProjLink.Text = "Abrir proyecto existente..."
-                        OnlineInstMgmt.Text = "Administrar instalación activa"
-                        OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
-                        RecentRemoveLink.Text = "Eliminar entrada"
-                        ' ToolStrip buttons
-                        ToolStripButton1.Text = "Cerrar pestaña"
-                        ToolStripButton2.Text = "Guardar proyecto"
-                        ToolStripButton3.Text = "Descargar proyecto"
-                        ToolStripButton3.ToolTipText = "Descargar proyecto de este programa"
-                        ToolStripButton4.Text = "Mostrar ventana de progreso"
-                        RefreshViewTSB.Text = "Actualizar vista"
-                        ExpandCollapseTSB.Text = "Expandir"
-                        UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
-                        UpdateLink.LinkArea = New LinkArea(65, 29)
-                        ' Pop-up context menus
-                        PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
-                        PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
-                        CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
-                        DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
-                        UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
-                        ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
-                        GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
-                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
-                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crear archivo de disco con este archivo..."
-                        ' OpenFileDialogs and FolderBrowsers
-                        OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
-                        LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
-                        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                            BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
-                        End If
-                        MenuDesc.Text = "Listo"
-                        ' Tree view context menu
-                        AccessDirectoryToolStripMenuItem.Text = "Acceder directorio"
-                        UnloadProjectToolStripMenuItem1.Text = "Descargar proyecto"
-                        CopyDeploymentToolsToolStripMenuItem.Text = "Copiar herramientas de implementación"
-                        OfAllArchitecturesToolStripMenuItem.Text = "De todas las arquitecturas"
-                        OfSelectedArchitectureToolStripMenuItem.Text = "De la arquitectura seleccionada"
-                        ForX86ArchitectureToolStripMenuItem.Text = "Para arquitectura x86"
-                        ForAmd64ArchitectureToolStripMenuItem.Text = "Para arquitectura AMD64"
-                        ForARMArchitectureToolStripMenuItem.Text = "Para arquitectura ARM"
-                        ForARM64ArchitectureToolStripMenuItem.Text = "Para arquitectura ARM64"
-                        ImageOperationsToolStripMenuItem.Text = "Operaciones de la imagen"
-                        MountImageToolStripMenuItem.Text = "Montar imagen..."
-                        UnmountImageToolStripMenuItem.Text = "Desmontar imagen..."
-                        RemoveVolumeImagesToolStripMenuItem.Text = "Eliminar imágenes de volumen..."
-                        SwitchImageIndexesToolStripMenuItem1.Text = "Cambiar índices de imagen..."
-                        UnattendedAnswerFilesToolStripMenuItem1.Text = "Archivos de respuesta desatendida"
-                        ManageToolStripMenuItem.Text = "Administrar"
-                        CreationWizardToolStripMenuItem.Text = "Crear"
-                        ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar directorio temporal"
-                        ManageReportsToolStripMenuItem.Text = "Administrar informes"
-                        AddToolStripMenuItem.Text = "Añadir"
-                        NewFileToolStripMenuItem.Text = "Nuevo archivo..."
-                        ExistingFileToolStripMenuItem.Text = "Archivo existente..."
-                        ' Context menu of AppX information dialog
-                        SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
-                        CopyToolStripMenuItem.Text = "Copiar recurso"
-                        ' Context menu of AppX addition dialog
-                        MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
-                        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
-                        AppxDownloadHelpToolStripMenuItem.Text = "¿Cómo puedo obtener aplicaciones?"
-                        ' New design
-                        GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
-                        LinkLabel12.Text = "PROYECTO"
-                        LinkLabel13.Text = "IMAGEN"
-                        Label54.Text = "Nombre:"
-                        Label51.Text = "Ubicación:"
-                        Label53.Text = "¿Hay imágenes montadas?"
-                        LinkLabel14.Text = "Haga clic aquí para montar una imagen"
-                        Label55.Text = "Tareas del proyecto"
-                        LinkLabel15.Text = "Ver propiedades del proyecto"
-                        LinkLabel16.Text = "Abrir en el Explorador de Archivos"
-                        LinkLabel17.Text = "Descargar proyecto"
-                        Label59.Text = "No se ha montado una imagen"
-                        Label58.Text = "Debe montar una imagen para poder ver su información"
-                        Label57.Text = "Elecciones"
-                        LinkLabel21.Text = "Montar una imagen..."
-                        LinkLabel18.Text = "Escoger una imagen montada..."
-                        Label39.Text = "Índice de la imagen:"
-                        Label43.Text = "Punto de montaje:"
-                        Label45.Text = "Versión:"
-                        Label42.Text = "Nombre:"
-                        Label40.Text = "Descripción:"
-                        Label56.Text = "Tareas de la imagen"
-                        LinkLabel20.Text = "Ver propiedades de la imagen"
-                        LinkLabel19.Text = "Desmontar imagen"
-                        GroupBox4.Text = "Operaciones de la imagen"
-                        Button26.Text = "Montar imagen..."
-                        Button27.Text = "Guardar cambios actuales"
-                        Button28.Text = "Guardar cambios y desmontar imagen"
-                        Button29.Text = "Desmontar imagen descartando cambios"
-                        Button25.Text = "Recargar sesión de servicio"
-                        Button24.Text = "Cambiar índices de la imagen..."
-                        Button30.Text = "Aplicar imagen..."
-                        Button31.Text = "Capturar imagen..."
-                        Button32.Text = "Eliminar imágenes de volumen..."
-                        Button33.Text = "Guardar información completa de la imagen..."
-                        GroupBox5.Text = "Operaciones de paquetes"
-                        Button36.Text = "Añadir paquete..."
-                        Button34.Text = "Obtener información de paquetes..."
-                        Button38.Text = "Guardar información de paquetes instalados..."
-                        Button35.Text = "Eliminar paquete..."
-                        Button37.Text = "Realizar mantenimiento y limpieza del almacén de componentes..."
-                        GroupBox6.Text = "Operaciones de características"
-                        Button41.Text = "Habilitar característica..."
-                        Button39.Text = "Obtener información de características..."
-                        Button42.Text = "Guardar información de características..."
-                        Button40.Text = "Deshabilitar característica..."
-                        GroupBox7.Text = "Operaciones de paquetes AppX"
-                        Button44.Text = "Añadir paquete AppX..."
-                        Button45.Text = "Obtener información de aplicaciones..."
-                        Button46.Text = "Guardar información de paquetes AppX instalados..."
-                        Button43.Text = "Eliminar paquete AppX..."
-                        GroupBox8.Text = "Operaciones de funcionalidades"
-                        Button48.Text = "Añadir funcionalidad..."
-                        Button49.Text = "Obtener información de funcionalidades..."
-                        Button50.Text = "Guardar información de funcionalidades..."
-                        Button47.Text = "Eliminar funcionalidades..."
-                        GroupBox9.Text = "Operaciones de controladores"
-                        Button53.Text = "Añadir controlador..."
-                        Button52.Text = "Obtener información de controladores..."
-                        Button54.Text = "Guardar información de controladores instalados..."
-                        Button51.Text = "Eliminar controlador..."
-                        GroupBox10.Text = "Operaciones de Windows PE"
-                        Button55.Text = "Obtener configuración"
-                        Button56.Text = "Guardar configuración..."
-                        Button57.Text = "Establecer ruta de destino..."
-                        Button58.Text = "Establecer espacio temporal..."
-                    Case "FRA"
-                        ' Top-level menu items
-                        FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
-                        ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Projet".ToUpper(), "&Projet")
-                        CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&mandes".ToUpper(), "Com&mandes")
-                        ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Ou&tils".ToUpper(), "Ou&tils")
-                        HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Aide".ToUpper(), "&Aide")
-                        InvalidSettingsTSMI.Text = "Des paramètres non valides ont été détectés"
-                        ' Submenu items
-                        ' Menu - File
-                        NewProjectToolStripMenuItem.Text = "&Nouveau projet..."
-                        OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
-                        ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
-                        ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
-                        RecentProjectsListMenu.Text = "Projets récents"
-                        SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
-                        SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
-                        ExitToolStripMenuItem.Text = "Sor&tir"
-                        ' Menu - Project
-                        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Visualiser les fichiers du projet dans l'explorateur de fichiers"
-                        UnloadProjectToolStripMenuItem.Text = "Décharget le projet..."
-                        SwitchImageIndexesToolStripMenuItem.Text = "Changer d'index de l'image..."
-                        ProjectPropertiesToolStripMenuItem.Text = "Propriétés du projet"
-                        ImagePropertiesToolStripMenuItem.Text = "Propriétés de l'image"
-                        ' Menu - Commands
-                        ImageManagementToolStripMenuItem.Text = "Gestion des images"
-                        OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
-                        ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                        AppPackagesToolStripMenuItem.Text = "Paquets AppX"
-                        AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
-                        DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
-                        LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
-                        CapabilitiesToolStripMenuItem.Text = "Capacités"
-                        WindowsEditionsToolStripMenuItem.Text = "Éditions Windows"
-                        DriversToolStripMenuItem.Text = "Pilotes"
-                        UnattendedAnswerFilesToolStripMenuItem.Text = "Fichiers de réponse non surveillés"
-                        WindowsPEServicingToolStripMenuItem.Text = "Maintenance de Windows PE"
-                        OSUninstallToolStripMenuItem.Text = "Désinstallation du système d'exploitation"
-                        ReservedStorageToolStripMenuItem.Text = "Stockage réservé"
-                        ' Menu - Commands - Image management
-                        AppendImage.Text = "Ajouter le répertoire de capture à l'image..."
-                        ApplyFFU.Text = "Appliquer le fichier FFU ou SFU..."
-                        ApplyImage.Text = "Appliquer le fichier WIM ou SWM..."
-                        CaptureCustomImage.Text = "Capturer les modifications incrémentales d'un fichier..."
-                        CaptureFFU.Text = "Capturer des partitions dans un fichier FFU..."
-                        CaptureImage.Text = "Capturer l'image d'un lecteur dans un fichier WIM..."
-                        CleanupMountpoints.Text = "Supprimer les resources d'une image corrompue..."
-                        CommitImage.Text = "Appliquer les modifications à l'image..."
-                        DeleteImage.Text = "Supprimer les images de volume du fichier WIM..."
-                        ExportImage.Text = "Exporter l'image..."
-                        GetImageInfo.Text = "Obtenir des informations sur l'image..."
-                        GetWIMBootEntry.Text = "Obtenir les entrées de configuration WIMBoot..."
-                        ListImage.Text = "Lister des fichiers et répertoires dans l'image..."
-                        MountImage.Text = "Monter l'image..."
-                        OptimizeFFU.Text = "Optimiser le fichier FFU..."
-                        OptimizeImage.Text = "Optimiser l'image..."
-                        RemountImage.Text = "Remonter l'image pour la maintenance..."
-                        SplitFFU.Text = "Diviser un fichier FFU en fichiers SFU..."
-                        SplitImage.Text = "Diviser un fichier WIM en fichiers SWM..."
-                        UnmountImage.Text = "Démonter l'image..."
-                        UpdateWIMBootEntry.Text = "Mettre à jour de l'entrée de configuration de WIMBoot..."
-                        ApplySiloedPackage.Text = "Appliquer un package de provisionnement en silo..."
-                        SaveImageInformationToolStripMenuItem.Text = "Sauvegarder les informations de l'image..."
-                        ' Menu - Commands - OS packages
-                        GetPackages.Text = "Obtenir des informations sur le paquet..."
-                        AddPackage.Text = "Ajouter un paquet..."
-                        RemovePackage.Text = "Supprimer le paquet..."
-                        GetFeatures.Text = "Obtenir des informations sur les caractéristiques..."
-                        EnableFeature.Text = "Activer la caractéristique..."
-                        DisableFeature.Text = "Désactiver la caractéristique..."
-                        CleanupImage.Text = "Effectuer des opérations de nettoyage ou de récupération..."
-                        ' Menu - Commands - Provisioning packages
-                        AddProvisioningPackage.Text = "Ajouter un paquet de provisionnement..."
-                        GetProvisioningPackageInfo.Text = "Obtenir des informations sur le paquet de provisionnement..."
-                        ApplyCustomDataImage.Text = "Appliquer une image de données personnalisée..."
-                        ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obtenir des informations sur le paquet d'applications..."
-                        AddProvisionedAppxPackage.Text = "Ajouter un paquet d'applications provisionnées..."
-                        RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
-                        OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
-                        SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans le paquet d'applications..."
-                        ' Menu - Commands - App (MSP) servicing
-                        CheckAppPatch.Text = "Obtenir des informations sur les correctifs de l'application..."
-                        GetAppPatchInfo.Text = "Obtenir des informations détaillées sur les correctifs des applications..."
-                        GetAppPatches.Text = "Obtenir des informations basiques sur les correctifs des applications installées..."
-                        GetAppInfo.Text = "Obtenir des informations détaillées sur l'application Windows Installer (*.msi)..."
-                        GetApps.Text = "Obtenir des informations basiques sur l'application Windows Installer (*.msi)..."
-                        ' Menu - Commands - Default app associations
-                        ExportDefaultAppAssociations.Text = "Exporter les associations d'applications par défaut..."
-                        GetDefaultAppAssociations.Text = "Obtenir des informations sur l'association d'applications par défaut..."
-                        ImportDefaultAppAssociations.Text = "Importer les associations d'applications par défaut..."
-                        RemoveDefaultAppAssociations.Text = "Supprimer les associations d'applications par défaut..."
-                        ' Menu - Commands - Languages and regional settings
-                        GetIntl.Text = "Obtenir des paramètres et des langues internationaux..."
-                        SetUILang.Text = "Définir la langue de l'interface utilisateur..."
-                        SetUILangFallback.Text = "Définir la langue par défaut de l'interface utilisateur..."
-                        SetSysUILang.Text = "Définir la langue préférée de l'interface utilisateur du système..."
-                        SetSysLocale.Text = "Définir les paramètres linguistiques du système..."
-                        SetUserLocale.Text = "Définir les paramètres linguistiques de l'utilisateur..."
-                        SetInputLocale.Text = "Définir la langue d'entrée..."
-                        SetAllIntl.Text = "Définir la langue de l'interface utilisateur et les paramètres locaux..."
-                        SetTimeZone.Text = "Définir le fuseau horaire par défaut..."
-                        SetSKUIntlDefaults.Text = "Définir les langues et les locales par défaut..."
-                        SetLayeredDriver.Text = "Régler le pilote en couches..."
-                        GenLangINI.Text = "Générer le fichier Lang.ini..."
-                        SetSetupUILang.Text = "Définir la langue d'installation par défaut..."
-                        ' Menu - Commands - Capabilities
-                        AddCapability.Text = "Ajouter une capacité..."
-                        ExportSource.Text = "Exporter les capacités dans le référentiel..."
-                        GetCapabilities.Text = "Obtenir des informations sur les capacités..."
-                        RemoveCapability.Text = "Supprimer la capacité..."
-                        ' Menu - Commands - Windows editions
-                        GetCurrentEdition.Text = "Obtenir l'édition actuelle..."
-                        GetTargetEditions.Text = "Obtenir des objectifs de mise à niveau..."
-                        SetEdition.Text = "Mettre à jour l'image..."
-                        SetProductKey.Text = "Définir la clé de produit..."
-                        ' Menu - Commands - Drivers
-                        GetDrivers.Text = "Obtenir des informations sur le pilote..."
-                        AddDriver.Text = "Ajouter un pilote..."
-                        RemoveDriver.Text = "Retirer le pilote..."
-                        ExportDriver.Text = "Exporter des paquets de pilotes..."
-                        ImportDriver.Text = "Importer des paquets de pilotes..."
-                        ' Menu - Commands - Unattended answer files
-                        ApplyUnattend.Text = "Appliquer un fichier de réponse non surveillé..."
-                        ' Menu - Commands - Windows PE servicing
-                        GetPESettings.Text = "Obtenir des paramètres..."
-                        SetScratchSpace.Text = "Définir l'espace temporaire..."
-                        SetTargetPath.Text = "Définir le chemin cible..."
-                        ' Menu - Commands - OS uninstall
-                        GetOSUninstallWindow.Text = "Obtenir la créneau de désinstallation..."
-                        InitiateOSUninstall.Text = "Démarrer la désinstallation..."
-                        RemoveOSUninstall.Text = "Supprimer la possibilité de revenir en arrière..."
-                        SetOSUninstallWindow.Text = "Définir la créneau de désinstallation..."
-                        ' Menu - Commands - Reserved storage
-                        SetReservedStorageState.Text = "Définir l'état du stockage réservé..."
-                        GetReservedStorageState.Text = "Obtenir l'état du stockage réservé..."
-                        ' Menu - Commands - Microsoft Edge
-                        AddEdge.Text = "Ajouter Edge..."
-                        AddEdgeBrowser.Text = "Ajouter le navigateur Edge..."
-                        AddEdgeWebView.Text = "Ajouter Edge WebView..."
-                        ' Menu - Tools
-                        ImageConversionToolStripMenuItem.Text = "Conversion des images"
-                        MergeSWM.Text = "Fusionner des fichiers SWM..."
-                        RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remonter l'image avec les droits d'écriture"
-                        CommandShellToolStripMenuItem.Text = "Console de commande"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
-                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
-                        RegCplToolStripMenuItem.Text = "Gérer les ruches du registre de l'image..."
-                        WebResourcesToolStripMenuItem.Text = "Ressources Web"
-                        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Télécharger les ISO de langues et de fonctionnalités optionnelles..."
-                        LanguagesAndFODWin10ToolStripMenuItem.Text = "Télécharger les langues et les disques FOD pour Windows 10..."
-                        ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
-                        MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
-                        CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
-                        CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
-                        WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
-                        OptionsToolStripMenuItem.Text = "Paramètres"
-                        ' Menu - Help
-                        HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
-                        AboutDISMToolsToolStripMenuItem.Text = "À propos de DISMTools"
-                        ' Menu - Invalid settings
-                        ISFix.Text = "Plus d'informations"
-                        ISHelp.Text = "Qu'est-ce que c'est ?"
-                        ' Menu - DevState
-                        ReportFeedbackToolStripMenuItem.Text = "Rapport de rétroaction (s'ouvre dans un navigateur web)"
-                        ' Menu - Contributions
-                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuer au système d'aide"
-                        ' Menu - Tour Server
-                        TourActionsTSMI.Text = "Actions de visite guidée"
-                        ServerStatusTSMI.Text = String.Format("Le serveur de visite guidée est actif sur le port {0}", tourServer.GetTcpPort())
-                        RestartDTTourTSMI.Text = "Redémarrer la visite guidée"
-                        StopDTTourServerTSMI.Text = "Arrêter le serveur de visite guidée"
-                        ' Start Panel
-                        LabelHeader1.Text = "Commencer"
-                        Label10.Text = "Projets récents"
-                        NewProjLink.Text = "Nouveau projet..."
-                        ExistingProjLink.Text = "Ouvrir un projet existant..."
-                        OnlineInstMgmt.Text = "Gérer l'installation en ligne"
-                        OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
-                        RecentRemoveLink.Text = "Supprimer entrée"
-                        ' ToolStrip buttons
-                        ToolStripButton1.Text = "Fermer l'onglet"
-                        ToolStripButton2.Text = "Sauvegarder le projet"
-                        ToolStripButton3.Text = "Décharger le projet"
-                        ToolStripButton3.ToolTipText = "Décharger le projet de ce programme"
-                        ToolStripButton4.Text = "Afficher la fenêtre de progression"
-                        RefreshViewTSB.Text = "Rafraîchir la vue"
-                        ExpandCollapseTSB.Text = "Élargir"
-                        UpdateLink.Text = "Une nouvelle version est disponible pour le téléchargement et l'installation. Cliquez ici pour en savoir plus"
-                        ' Pop-up context menus
-                        PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
-                        PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
-                        CommitAndUnmountTSMI.Text = "Valider les modifications et démonter l'image"
-                        DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
-                        UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
-                        ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
-                        GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
-                        SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
-                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Créer une image disque avec ce fichier..."
-                        ' OpenFileDialogs and FolderBrowsers
-                        OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
-                        LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
-                        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                            BGProcDetails.Label2.Text = "Les processus de l'image sont terminés"
-                        End If
-                        MenuDesc.Text = "Prêt"
-                        ' Tree view context menu
-                        AccessDirectoryToolStripMenuItem.Text = "Accéder à ce répertoire"
-                        UnloadProjectToolStripMenuItem1.Text = "Décharger le projet"
-                        CopyDeploymentToolsToolStripMenuItem.Text = "Copier les outils de déploiement"
-                        OfAllArchitecturesToolStripMenuItem.Text = "De toutes les architectures"
-                        OfSelectedArchitectureToolStripMenuItem.Text = "De l'architecture sélectionnée"
-                        ForX86ArchitectureToolStripMenuItem.Text = "Pour l'architecture x86"
-                        ForAmd64ArchitectureToolStripMenuItem.Text = "Pour l'architecture AMD64"
-                        ForARMArchitectureToolStripMenuItem.Text = "Pour l'architecture ARM"
-                        ForARM64ArchitectureToolStripMenuItem.Text = "Pour l'architecture ARM64"
-                        ImageOperationsToolStripMenuItem.Text = "Opérations sur les images"
-                        MountImageToolStripMenuItem.Text = "Monter l'image..."
-                        UnmountImageToolStripMenuItem.Text = "Démonter l'image..."
-                        RemoveVolumeImagesToolStripMenuItem.Text = "Supprimer les images de volume..."
-                        SwitchImageIndexesToolStripMenuItem1.Text = "Changer d'index de l'image..."
-                        UnattendedAnswerFilesToolStripMenuItem1.Text = "Fichiers de réponse non surveillés"
-                        ManageToolStripMenuItem.Text = "Gérer"
-                        CreationWizardToolStripMenuItem.Text = "Créer"
-                        ScratchDirectorySettingsToolStripMenuItem.Text = "Configurer le répertoire temporaire"
-                        ManageReportsToolStripMenuItem.Text = "Gérer les rapports"
-                        AddToolStripMenuItem.Text = "Ajouter"
-                        NewFileToolStripMenuItem.Text = "Nouveau fichier..."
-                        ExistingFileToolStripMenuItem.Text = "Fichier existant..."
-                        ' Context menu of AppX information dialog
-                        SaveResourceToolStripMenuItem.Text = "Sauvegarder les ressources..."
-                        CopyToolStripMenuItem.Text = "Copier la ressource"
-                        ' Context menu of AppX addition dialog
-                        MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
-                        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
-                        AppxDownloadHelpToolStripMenuItem.Text = "Comment puis-je obtenir des applications ?"
-                        ' New design
-                        GreetingLabel.Text = "Bienvenue à cette session de service"
-                        LinkLabel12.Text = "PROJET"
-                        LinkLabel13.Text = "IMAGE"
-                        Label54.Text = "Nom :"
-                        Label51.Text = "Lieu :"
-                        Label53.Text = "Images montées ?"
-                        LinkLabel14.Text = "Cliquez ici pour monter une image"
-                        Label55.Text = "Tâches du projet"
-                        LinkLabel15.Text = "Voir les propriétés du projet"
-                        LinkLabel16.Text = "Ouvrir dans l'explorateur de fichiers"
-                        LinkLabel17.Text = "Décharger le projet"
-                        Label59.Text = "Aucune image n'a été montée"
-                        Label58.Text = "Vous devez monter une image pour pouvoir consulter ses informations."
-                        Label57.Text = "Choix"
-                        LinkLabel21.Text = "Monter une image..."
-                        LinkLabel18.Text = "Choisir une image montée..."
-                        Label39.Text = "Index de l'image :"
-                        Label43.Text = "Répertoire de montage :"
-                        Label45.Text = "Version :"
-                        Label42.Text = "Nom :"
-                        Label40.Text = "Description :"
-                        Label56.Text = "Tâches de l'image"
-                        LinkLabel20.Text = "Voir les propriétés de l'image"
-                        LinkLabel19.Text = "Démonter l'image"
-                        GroupBox4.Text = "Opérations sur les images"
-                        Button26.Text = "Monter une image..."
-                        Button27.Text = "Sauvegarder les modifications pendants"
-                        Button28.Text = "Sauvegarder modifications et démonter l'image"
-                        Button29.Text = "Démonter l'image en supprimant les modifications"
-                        Button25.Text = "Recharger la session de service"
-                        Button24.Text = "Changer d'index de l'image..."
-                        Button30.Text = "Appliquer l'image..."
-                        Button31.Text = "Capturer image..."
-                        Button32.Text = "Supprimer les images de volume..."
-                        Button33.Text = "Sauvegarder les informations complètes de l'image..."
-                        GroupBox5.Text = "Opérations sur les paquets"
-                        Button36.Text = "Ajouter des paquets..."
-                        Button34.Text = "Obtenir des informations sur le paquet..."
-                        Button38.Text = "Sauvegarder les informations sur les paquets installés..."
-                        Button35.Text = "Supprimer des paquets..."
-                        Button37.Text = "Effectuer la maintenance et le nettoyage du stock de composants..."
-                        GroupBox6.Text = "Opérations sur les caractéristiques"
-                        Button41.Text = "Activer des caractéristiques..."
-                        Button39.Text = "Obtenir des informations sur les caractéristiques..."
-                        Button42.Text = "Sauvegarder les caractéristiques..."
-                        Button40.Text = "Désactiver des caractéristiques..."
-                        GroupBox7.Text = "Opérations sur les paquets AppX"
-                        Button44.Text = "Ajouter des paquets AppX..."
-                        Button45.Text = "Obtenir des informations sur les applications..."
-                        Button46.Text = "Sauvegarder les informations sur les paquets AppX installés..."
-                        Button43.Text = "Supprimer des paquets AppX..."
-                        GroupBox8.Text = "Opérations sur les capacités"
-                        Button48.Text = "Ajouter des capacités..."
-                        Button49.Text = "Obtenir des informations sur les capacités..."
-                        Button50.Text = "Sauvegarder les informations sur les capacités..."
-                        Button47.Text = "Supprimer des capacités..."
-                        GroupBox9.Text = "Opérations sur les pilotes"
-                        Button53.Text = "Ajouter des paquets de pilotes..."
-                        Button52.Text = "Obtenir des informations sur les pilotes..."
-                        Button54.Text = "Sauvegarder les informations sur les pilotes installés..."
-                        Button51.Text = "Supprimer des pilotes..."
-                        GroupBox10.Text = "Opérations de Windows PE"
-                        Button55.Text = "Obtenir des paramètres..."
-                        Button56.Text = "Sauvegarder les paramètres..."
-                        Button57.Text = "Configurer le chemin d'accès..."
-                        Button58.Text = "Configurer l'espace temporaire..."
-                    Case "PTB", "PTG"
-                        ' Top-level menu items
-                        FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
-                        ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Projeto".ToUpper(), "&Projeto")
-                        CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Co&mandos".ToUpper(), "Co&mandos")
-                        ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ferramentas".ToUpper(), "&Ferramentas")
-                        HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ajuda".ToUpper(), "&Ajuda")
-                        InvalidSettingsTSMI.Text = "Foram detectadas configurações inválidas"
-                        ' Submenu items
-                        ' Menu - File
-                        NewProjectToolStripMenuItem.Text = "&Novo projeto..."
-                        OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
-                        ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
-                        ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
-                        RecentProjectsListMenu.Text = "Projectos recentes"
-                        SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
-                        SaveProjectasToolStripMenuItem.Text = "Save project &como..."
-                        ExitToolStripMenuItem.Text = "Sa&ir"
-                        ' Menu - Project
-                        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Ver ficheiros de projeto no Explorador de Ficheiros"
-                        UnloadProjectToolStripMenuItem.Text = "Descarregar o projeto..."
-                        SwitchImageIndexesToolStripMenuItem.Text = "Alternar os índices de imagem..."
-                        ProjectPropertiesToolStripMenuItem.Text = "Propriedades do projeto"
-                        ImagePropertiesToolStripMenuItem.Text = "Propriedades da imagem"
-                        ' Menu - Commands
-                        ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
-                        OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
-                        ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                        AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
-                        AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
-                        DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
-                        LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
-                        CapabilitiesToolStripMenuItem.Text = "Capacidades"
-                        WindowsEditionsToolStripMenuItem.Text = "Edições do Windows"
-                        DriversToolStripMenuItem.Text = "Controladores de dispositivos"
-                        UnattendedAnswerFilesToolStripMenuItem.Text = "Ficheiros de resposta não assistidos"
-                        WindowsPEServicingToolStripMenuItem.Text = "Manutenção do Windows PE"
-                        OSUninstallToolStripMenuItem.Text = "Desinstalação do sistema operativo"
-                        ReservedStorageToolStripMenuItem.Text = "Armazenamento reservado"
-                        ' Menu - Commands - Image management
-                        AppendImage.Text = "Anexar o diretório de captura à imagem..."
-                        ApplyFFU.Text = "Aplicar o ficheiro FFU ou SFU..."
-                        ApplyImage.Text = "Aplicar ficheiro WIM ou SWM..."
-                        CaptureCustomImage.Text = "Capturar alterações incrementais no ficheiro..."
-                        CaptureFFU.Text = "Capturar partições para o ficheiro FFU..."
-                        CaptureImage.Text = "Capturar imagem de uma unidade para um ficheiro WIM..."
-                        CleanupMountpoints.Text = "Eliminar recursos de uma imagem corrompida..."
-                        CommitImage.Text = "Aplicar alterações à imagem..."
-                        DeleteImage.Text = "Eliminar imagens de volume do ficheiro WIM..."
-                        ExportImage.Text = "Exportar imagem..."
-                        GetImageInfo.Text = "Obter informações sobre a imagem..."
-                        GetWIMBootEntry.Text = "Obter entradas de configuração do WIMBoot..."
-                        ListImage.Text = "Listar ficheiros e directórios na imagem..."
-                        MountImage.Text = "Montar imagem..."
-                        OptimizeFFU.Text = "Otimizar ficheiro FFU..."
-                        OptimizeImage.Text = "Otimizar imagem..."
-                        RemountImage.Text = "Remontar imagem para manutenção..."
-                        SplitFFU.Text = "Dividir o arquivo FFU em arquivos SFU..."
-                        SplitImage.Text = "Dividir ficheiro WIM em ficheiros SWM..."
-                        UnmountImage.Text = "Desmontar imagem..."
-                        UpdateWIMBootEntry.Text = "Atualizar a entrada de configuração WIMBoot..."
-                        ApplySiloedPackage.Text = "Aplicar pacote de provisionamento em silo..."
-                        ' Menu - Commands - OS packages
-                        GetPackages.Text = "Obter informações sobre os pacotes..."
-                        AddPackage.Text = "Adicionar pacotes..."
-                        RemovePackage.Text = "Remove package..."
-                        GetFeatures.Text = "Obter informações sobre as características..."
-                        EnableFeature.Text = "Ativar características..."
-                        DisableFeature.Text = "Desativar funcionalidades..."
-                        CleanupImage.Text = "Efetuar operações de limpeza ou de recuperação..."
-                        SaveImageInformationToolStripMenuItem.Text = "Guardar informações da imagem..."
-                        ' Menu - Commands - Provisioning packages
-                        AddProvisioningPackage.Text = "Adicionar pacote de aprovisionamento..."
-                        GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
-                        ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
-                        ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
-                        AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
-                        RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
-                        OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                        SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
-                        ' Menu - Commands - App (MSP) servicing
-                        CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
-                        GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
-                        GetAppPatches.Text = "Obter informações básicas sobre patches de aplicações instaladas..."
-                        GetAppInfo.Text = "Obter informações detalhadas sobre a aplicação Windows Installer (*.msi)..."
-                        GetApps.Text = "Obter informações básicas sobre a aplicação Windows Installer (*.msi)..."
-                        ' Menu - Commands - Default app associations
-                        ExportDefaultAppAssociations.Text = "Exportar associações de aplicações predefinidas..."
-                        GetDefaultAppAssociations.Text = "Obter informações de associação de aplicações predefinidas..."
-                        ImportDefaultAppAssociations.Text = "Importar associações de aplicações predefinidas..."
-                        RemoveDefaultAppAssociations.Text = "Remover associações de aplicações predefinidas..."
-                        ' Menu - Commands - Languages and regional settings
-                        GetIntl.Text = "Obter definições e línguas internacionais..."
-                        SetUILang.Text = "Definir o idioma da IU..."
-                        SetUILangFallback.Text = "Definir o idioma de recurso predefinido da IU..."
-                        SetSysUILang.Text = "Definir o idioma preferido da IU do sistema..."
-                        SetSysLocale.Text = "Definir a localidade do sistema..."
-                        SetUserLocale.Text = "Definir a localidade do utilizador..."
-                        SetInputLocale.Text = "Definir localidade de entrada..."
-                        SetAllIntl.Text = "Definir o idioma e as localidades da IU..."
-                        SetTimeZone.Text = "Definir o fuso horário predefinido..."
-                        SetSKUIntlDefaults.Text = "Definir idiomas e localidades predefinidos..."
-                        SetLayeredDriver.Text = "Definir driver em camadas..."
-                        GenLangINI.Text = "Gerar ficheiro Lang.ini..."
-                        SetSetupUILang.Text = "Definir idioma de configuração padrão..."
-                        ' Menu - Commands - Capabilities
-                        AddCapability.Text = "Adicionar capacidade..."
-                        ExportSource.Text = "Exportar capacidades para o repositório..."
-                        GetCapabilities.Text = "Obter informações sobre a capacidade..."
-                        RemoveCapability.Text = "Remover capacidade..."
-                        ' Menu - Commands - Windows editions
-                        GetCurrentEdition.Text = "Obter a edição atual..."
-                        GetTargetEditions.Text = "Obter objectivos de atualização..."
-                        SetEdition.Text = "Atualizar a imagem..."
-                        SetProductKey.Text = "Definir a chave do produto..."
-                        ' Menu - Commands - Drivers
-                        GetDrivers.Text = "Obter informações sobre o controlador..."
-                        AddDriver.Text = "Adicionar controlador..."
-                        RemoveDriver.Text = "Remover controlador..."
-                        ExportDriver.Text = "Exportar pacotes de controladores..."
-                        ImportDriver.Text = "Importar pacotes de controladores..."
-                        ' Menu - Commands - Unattended answer files
-                        ApplyUnattend.Text = "Aplicar ficheiro de resposta não assistida..."
-                        ' Menu - Commands - Windows PE servicing
-                        GetPESettings.Text = "Obter definições..."
-                        SetScratchSpace.Text = "Definir espaço de temporário..."
-                        SetTargetPath.Text = "Definir caminho de destino..."
-                        ' Menu - Commands - OS uninstall
-                        GetOSUninstallWindow.Text = "Obter janela de desinstalação..."
-                        InitiateOSUninstall.Text = "Iniciar a desinstalação..."
-                        RemoveOSUninstall.Text = "Remover a capacidade de reversão..."
-                        SetOSUninstallWindow.Text = "Definir janela de desinstalação..."
-                        ' Menu - Commands - Reserved storage
-                        SetReservedStorageState.Text = "Definir estado de armazenamento reservado..."
-                        GetReservedStorageState.Text = "Obter estado de armazenamento reservado..."
-                        ' Menu - Commands - Microsoft Edge
-                        AddEdge.Text = "Adicionar Edge..."
-                        AddEdgeBrowser.Text = "Adicionar navegador do Edge..."
-                        AddEdgeWebView.Text = "Adicionar Edge WebView..."
-                        ' Menu - Tools
-                        ImageConversionToolStripMenuItem.Text = "Conversão de imagens"
-                        MergeSWM.Text = "Fundir ficheiros SWM..."
-                        RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagem com permissões de escrita"
-                        CommandShellToolStripMenuItem.Text = "Consola de comandos"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
-                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
-                        RegCplToolStripMenuItem.Text = "Gerir as colmeias do registo de imagens..."
-                        WebResourcesToolStripMenuItem.Text = "Recursos da Web"
-                        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = " Descarregar ISOs de idiomas e caraterísticas opcionais..."
-                        LanguagesAndFODWin10ToolStripMenuItem.Text = "Descarregar discos de idiomas e FOD para o Windows 10..."
-                        ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
-                        MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
-                        CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
-                        CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
-                        WimScriptEditorCommand.Text = "Editor de listas de configuração"
-                        OptionsToolStripMenuItem.Text = "Opções"
-                        ' Menu - Help
-                        HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
-                        AboutDISMToolsToolStripMenuItem.Text = "Acerca do DISMTools"
-                        ' Menu - Invalid settings
-                        ISFix.Text = "Mais informações"
-                        ISHelp.Text = "O que é isto?"
-                        ' Menu - DevState
-                        ReportFeedbackToolStripMenuItem.Text = "Comunicar comentários (abre no navegador Web)"
-                        ' Menu - Contributions
-                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir para o sistema de ajuda"
-                        ' Menu - Tour Server
-                        TourActionsTSMI.Text = "Ações do Tour"
-                        ServerStatusTSMI.Text = String.Format("O servidor de tour está ativo na porta {0}", tourServer.GetTcpPort())
-                        RestartDTTourTSMI.Text = "Reiniciar Tour"
-                        StopDTTourServerTSMI.Text = "Parar Servidor de Tour"
-                        ' Start Panel
-                        LabelHeader1.Text = "Início"
-                        Label10.Text = "Projectos recentes"
-                        NewProjLink.Text = "Novo projeto..."
-                        ExistingProjLink.Text = "Abrir projeto existente..."
-                        OnlineInstMgmt.Text = "Gerir a instalação online"
-                        OfflineInstMgmt.Text = "Gerir a instalação offline..."
-                        ' ToolStrip buttons
-                        ToolStripButton1.Text = "Fechar separador"
-                        ToolStripButton2.Text = "Guardar projeto"
-                        ToolStripButton3.Text = "Descarregar projeto"
-                        ToolStripButton3.ToolTipText = "Descarregar projeto a partir deste programa"
-                        ToolStripButton4.Text = "Mostrar janela de progresso"
-                        RefreshViewTSB.Text = "Atualizar vista"
-                        ExpandCollapseTSB.Text = "Expandir"
-                        UpdateLink.Text = "Está disponível uma nova versão para transferência e instalação. Clique aqui para saber mais"
-                        UpdateLink.LinkArea = New LinkArea(65, 27)
-                        ' Pop-up context menus
-                        PkgBasicInfo.Text = "Obter informações básicas (todos os pacotes)"
-                        PkgDetailedInfo.Text = "Obter informações detalhadas (pacote específico)"
-                        CommitAndUnmountTSMI.Text = "Confirmar alterações e desmontar imagem"
-                        DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
-                        UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
-                        ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
-                        GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
-                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
-                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Criar imagem de disco com este ficheiro..."
-                        ' OpenFileDialogs and FolderBrowsers
-                        OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
-                        LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
-                        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                            BGProcDetails.Label2.Text = "Os processos de imagem foram concluídos"
-                        End If
-                        MenuDesc.Text = "Pronto"
-                        ' Tree view context menu
-                        AccessDirectoryToolStripMenuItem.Text = "Aceder ao diretório"
-                        UnloadProjectToolStripMenuItem1.Text = "Descarregar projeto"
-                        CopyDeploymentToolsToolStripMenuItem.Text = "Copiar ferramentas de implementação"
-                        OfAllArchitecturesToolStripMenuItem.Text = "De todas as arquitecturas"
-                        OfSelectedArchitectureToolStripMenuItem.Text = "Da arquitetura selecionada"
-                        ForX86ArchitectureToolStripMenuItem.Text = "Para a arquitetura x86"
-                        ForAmd64ArchitectureToolStripMenuItem.Text = "Para a arquitetura AMD64"
-                        ForARMArchitectureToolStripMenuItem.Text = "Para a arquitetura ARM"
-                        ForARM64ArchitectureToolStripMenuItem.Text = "Para a arquitetura ARM64"
-                        ImageOperationsToolStripMenuItem.Text = "Operações de imagem"
-                        MountImageToolStripMenuItem.Text = "Montar imagem..."
-                        UnmountImageToolStripMenuItem.Text = "Desmontar imagem..."
-                        RemoveVolumeImagesToolStripMenuItem.Text = "Remover imagens de volume..."
-                        SwitchImageIndexesToolStripMenuItem1.Text = "Mudar os índices de imagem..."
-                        UnattendedAnswerFilesToolStripMenuItem1.Text = "Ficheiros de resposta não assistidos"
-                        ManageToolStripMenuItem.Text = "Gerir"
-                        CreationWizardToolStripMenuItem.Text = "Criar"
-                        ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar o diretório de temporário"
-                        ManageReportsToolStripMenuItem.Text = "Gerir relatórios"
-                        AddToolStripMenuItem.Text = "Adicionar"
-                        NewFileToolStripMenuItem.Text = "Novo ficheiro..."
-                        ExistingFileToolStripMenuItem.Text = "Ficheiro existente..."
-                        ' Context menu of AppX information dialog
-                        SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
-                        CopyToolStripMenuItem.Text = "Copiar recurso"
-                        ' Context menu of AppX addition dialog
-                        MicrosoftAppsToolStripMenuItem.Text = "Visite o sítio Web das Aplicações Microsoft"
-                        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visite o Web site do Projeto de Geração da Microsoft Store"
-                        AppxDownloadHelpToolStripMenuItem.Text = "Como é que obtenho aplicações?"
-                        ' New design
-                        GreetingLabel.Text = "Bem-vindo a esta sessão de manutenção"
-                        LinkLabel12.Text = "PROJECTO"
-                        LinkLabel13.Text = "IMAGEM"
-                        Label54.Text = "Nome:"
-                        Label51.Text = "Localização:"
-                        Label53.Text = "Imagens montadas?"
-                        LinkLabel14.Text = "Clique aqui para montar uma imagem"
-                        Label55.Text = "Tarefas do projeto"
-                        LinkLabel15.Text = "Ver propriedades do projeto"
-                        LinkLabel16.Text = "Abrir no Explorador de Ficheiros"
-                        LinkLabel17.Text = "Descarregar projeto"
-                        Label59.Text = "Não foi montada nenhuma imagem"
-                        Label58.Text = "É necessário montar uma imagem para ver a sua informação"
-                        Label57.Text = "Escolhas"
-                        LinkLabel21.Text = "Montar uma imagem..."
-                        LinkLabel18.Text = "Escolher uma imagem montada..."
-                        Label39.Text = "Índice da imagem:"
-                        Label43.Text = "Ponto de montagem:"
-                        Label45.Text = "Versão:"
-                        Label42.Text = "Nome:"
-                        Label40.Text = "Descrição:"
-                        Label56.Text = "Tarefas de imagem"
-                        LinkLabel20.Text = "Ver propriedades da imagem"
-                        LinkLabel19.Text = "Desmontar imagem"
-                        GroupBox4.Text = "Operações de imagem"
-                        Button26.Text = "Montar imagem..."
-                        Button27.Text = "Confirmar alterações actuais"
-                        Button28.Text = "Confirmar e desmontar a imagem"
-                        Button29.Text = "Desmontar imagem, descartando alterações"
-                        Button25.Text = "Recarregar sessão de manutenção"
-                        Button24.Text = "Mudar os índices de imagem..."
-                        Button30.Text = "Aplicar imagem..."
-                        Button31.Text = "Capturar imagem..."
-                        Button32.Text = "Remover imagens de volume..."
-                        Button33.Text = "Guardar informações completas da imagem..."
-                        GroupBox5.Text = "Operações do pacote"
-                        Button36.Text = "Adicionar pacote..."
-                        Button34.Text = "Obter informações sobre o pacote..."
-                        Button38.Text = "Guardar informações do pacote instalado..."
-                        Button35.Text = "Remover pacote..."
-                        Button37.Text = "Executar manutenção e limpeza do arquivo de componentes..."
-                        GroupBox6.Text = "Operações de funcionalidades"
-                        Button41.Text = "Ativar caraterística..."
-                        Button39.Text = "Obter informações sobre a caraterística..."
-                        Button42.Text = "Guardar informação da caraterística..."
-                        Button40.Text = "Desativar caraterística..."
-                        GroupBox7.Text = "Operações do pacote AppX"
-                        Button44.Text = "Adicionar pacote AppX..."
-                        Button45.Text = "Obter informações sobre a aplicação..."
-                        Button46.Text = "Guardar informações do pacote AppX instalado..."
-                        Button43.Text = "Remover pacote AppX..."
-                        GroupBox8.Text = "Operações de capacidade"
-                        Button48.Text = "Adicionar capacidade..."
-                        Button49.Text = "Obter informações de capacidade..."
-                        Button50.Text = "Guardar informações de capacidade..."
-                        Button47.Text = "Remover capacidade..."
-                        GroupBox9.Text = "Operações do controlador"
-                        Button53.Text = "Adicionar pacote de controlador..."
-                        Button52.Text = "Obter informações do controlador..."
-                        Button54.Text = "Guardar informações do controlador instalado..."
-                        Button51.Text = "Remover controlador..."
-                        GroupBox10.Text = "Operações do Windows PE"
-                        Button55.Text = "Obter configuração"
-                        Button56.Text = "Guardar configuração..."
-                        Button57.Text = "Definir caminho de destino..."
-                        Button58.Text = "Definir espaço temporário..."
-                    Case "ITA"
-                        ' Top-level menu items
-                        FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
-                        ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Progetto".ToUpper(), "&Progetto")
-                        CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&andi".ToUpper(), "Com&andi")
-                        ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Strumenti".ToUpper(), "&Strumenti")
-                        HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Aiuto".ToUpper(), "&Aiuto")
-                        InvalidSettingsTSMI.Text = "Sono state rilevate impostazioni non valide"
-                        ' Submenu items
-                        ' Menu - File
-                        NewProjectToolStripMenuItem.Text = "&Nuovo progetto..."
-                        OpenExistingProjectToolStripMenuItem.Text = "&Apri progetto esistente"
-                        ManageOnlineInstallationToolStripMenuItem.Text = "&Gestisci installazione online..."
-                        ManageOfflineInstallationToolStripMenuItem.Text = "Gestisci installazione &offline..."
-                        RecentProjectsListMenu.Text = "Progetti recenti"
-                        SaveProjectToolStripMenuItem.Text = "&Salva progetto..."
-                        SaveProjectasToolStripMenuItem.Text = "Salva progetto &come..."
-                        ExitToolStripMenuItem.Text = "E&sci"
-                        ' Menu - Project
-                        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Visualizza file progetto in Esplora file"
-                        UnloadProjectToolStripMenuItem.Text = "Download progetto..."
-                        SwitchImageIndexesToolStripMenuItem.Text = "Modifica indici immagini..."
-                        ProjectPropertiesToolStripMenuItem.Text = "Proprietà progetto"
-                        ImagePropertiesToolStripMenuItem.Text = "Proprietà immagine"
-                        ' Menu - Commands
-                        ImageManagementToolStripMenuItem.Text = "Gestisci immagini"
-                        OSPackagesToolStripMenuItem.Text = "Pacchetti SO"
-                        ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti provisioning"
-                        AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
-                        AppPatchesToolStripMenuItem.Text = "Assistenza app (MSP)"
-                        DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
-                        LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue ed impostazioni regionali"
-                        CapabilitiesToolStripMenuItem.Text = "Capacità"
-                        WindowsEditionsToolStripMenuItem.Text = "Edizioni Windows"
-                        DriversToolStripMenuItem.Text = "Driver"
-                        UnattendedAnswerFilesToolStripMenuItem.Text = "File risposte non presidiate"
-                        WindowsPEServicingToolStripMenuItem.Text = "Assistenza Windows PE"
-                        OSUninstallToolStripMenuItem.Text = "Disinstallazione sistema operativo"
-                        ReservedStorageToolStripMenuItem.Text = "Archiviazione riservata"
-                        ' Menu - Commands - Image management
-                        AppendImage.Text = "Aggiungi cartella cattura all'immagine..."
-                        ApplyFFU.Text = "Applica file FFU o SFU..."
-                        ApplyImage.Text = "Applica file WIM o SWM..."
-                        CaptureCustomImage.Text = "Cattura modifiche incrementali al file..."
-                        CaptureFFU.Text = "Cattura partizioni nel file FFU..."
-                        CaptureImage.Text = "Cattura immagine di un'unità in un file WIM..."
-                        CleanupMountpoints.Text = "Elimina risorse dall'immagine danneggiata..."
-                        CommitImage.Text = "Applica modifiche all'immagine..."
-                        DeleteImage.Text = "Cancella immagini volume dal file WIM..."
-                        ExportImage.Text = "Esporta immagine..."
-                        GetImageInfo.Text = "Verifica informazioni immagine..."
-                        GetWIMBootEntry.Text = "Verifica voci configurazione WIMBoot..."
-                        ListImage.Text = "Elenca file/cartelle nell'immagine..."
-                        MountImage.Text = "Monta immagine..."
-                        OptimizeFFU.Text = "Ottimizza file FFU..."
-                        OptimizeImage.Text = "Ottimizza immagine..."
-                        RemountImage.Text = "Rimonta immagine per la manutenzione..."
-                        SplitFFU.Text = "Dividi file FFU in file SFU..."
-                        SplitImage.Text = "Dividi file WIM in file SWM..."
-                        UnmountImage.Text = "Smonta immagine..."
-                        UpdateWIMBootEntry.Text = "Aggiorna voce configurazione WIMBoot..."
-                        ApplySiloedPackage.Text = "Applica pacchetto provisioning a silo..."
-                        ' Menu - Commands - OS packages
-                        GetPackages.Text = "Verifica informazioni pacchetti..."
-                        AddPackage.Text = "Aggiungi pacchetto..."
-                        RemovePackage.Text = "Rimuovi pacchetto..."
-                        GetFeatures.Text = "Verifica informazioni funzionalità..."
-                        EnableFeature.Text = "Abilita funzionalità..."
-                        DisableFeature.Text = "Disabilita funzionalità..."
-                        CleanupImage.Text = "Esegui operazioni pulizia/ripristino..."
-                        SaveImageInformationToolStripMenuItem.Text = "Salva informazioni immagine..."
-                        ' Menu - Commands - Provisioning packages
-                        AddProvisioningPackage.Text = "Aggiungi pacchetto provisioning..."
-                        GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
-                        ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
-                        ' Menu - Commands - App packages
-                        GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
-                        AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
-                        RemoveProvisionedAppxPackage.Text = "Rimuovi provisioning del pacchetto AppX..."
-                        OptimizeProvisionedAppxPackages.Text = "Ottimizza pacchetti in provisioning..."
-                        SetProvisionedAppxDataFile.Text = "Aggiungi file dati personalizzato al pacchetto AppX..."
-                        ' Menu - Commands - App (MSP) servicing
-                        CheckAppPatch.Text = "Verifica informazioni sulle patch applicazione..."
-                        GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
-                        GetAppPatches.Text = "Verifica informazioni basi patch applicazioni installate..."
-                        GetAppInfo.Text = "Verifica informazioni dettagliate applicazione Windows Installer (*.msi)..."
-                        GetApps.Text = "Verifica informazioni basi applicazione Windows Installer (*.msi)..."
-                        ' Menu - Commands - Default app associations
-                        ExportDefaultAppAssociations.Text = "Esporta associazioni predefinite applicazioni..."
-                        GetDefaultAppAssociations.Text = "Verifica informazioni associazioni predefinite applicazioni..."
-                        ImportDefaultAppAssociations.Text = "Importa associazioni predefinite applicazioni..."
-                        RemoveDefaultAppAssociations.Text = "Rimuovi associazioni predefinite applicazioni..."
-                        ' Menu - Commands - Languages and regional settings
-                        GetIntl.Text = "Verifica impostazioni e lingue internazionali..."
-                        SetUILang.Text = "Imposta lingua interfaccia utente..."
-                        SetUILangFallback.Text = "Imposta lingua fallback predefinita interfaccia utente..."
-                        SetSysUILang.Text = "Imposta lingua interfaccia utente preferita sistema..."
-                        SetSysLocale.Text = "Imposta locale sistema..."
-                        SetUserLocale.Text = "Imposta locale utente..."
-                        SetInputLocale.Text = "Imposta locale input..."
-                        SetAllIntl.Text = "Imposta la lingua interfaccia utente e locali..."
-                        SetTimeZone.Text = "Imposta il fuso orario predefinito..."
-                        SetSKUIntlDefaults.Text = "Imposta le lingue e i locali predefiniti..."
-                        SetLayeredDriver.Text = "Imposta driver a livelli..."
-                        GenLangINI.Text = "Genera file Lang.ini..."
-                        SetSetupUILang.Text = "Imposta lingua predefinita programma installazione..."
-                        ' Menu - Commands - Capabilities
-                        AddCapability.Text = "Aggiungi capacità..."
-                        ExportSource.Text = "Esporta capacità nel repository..."
-                        GetCapabilities.Text = "Verifica informazioni capacità..."
-                        RemoveCapability.Text = "Rimuovi capacità..."
-                        ' Menu - Commands - Windows editions
-                        GetCurrentEdition.Text = "Verifica edizione attuale..."
-                        GetTargetEditions.Text = "Verifica obiettivi aggiornamento..."
-                        SetEdition.Text = "Aggiorna immagine..."
-                        SetProductKey.Text = "Imposta chiave prodotto..."
-                        ' Menu - Commands - Drivers
-                        GetDrivers.Text = "Verifica informazioni driver..."
-                        AddDriver.Text = "Aggiungi driver..."
-                        RemoveDriver.Text = "Rimuovi driver..."
-                        ExportDriver.Text = "Esporta pacchetti driver..."
-                        ImportDriver.Text = "Importa pacchetti driver..."
-                        ' Menu - Commands - Unattended answer files
-                        ApplyUnattend.Text = "Applica file di risposte non presidiate..."
-                        ' Menu - Commands - Windows PE servicing
-                        GetPESettings.Text = "Verifica impostazioni..."
-                        SetScratchSpace.Text = "Imposta spazio per lo scratch..."
-                        SetTargetPath.Text = "Imposta percorso destinazione..."
-                        ' Menu - Commands - OS uninstall
-                        GetOSUninstallWindow.Text = "Verifica finestra disinstallazione..."
-                        InitiateOSUninstall.Text = "Avvia disinstallazione..."
-                        RemoveOSUninstall.Text = "Rimuovi opzione rollback..."
-                        SetOSUninstallWindow.Text = "Imposta finestra disinstallazione..."
-                        ' Menu - Commands - Reserved storage
-                        SetReservedStorageState.Text = "Imposta stato archiviazione riservato..."
-                        GetReservedStorageState.Text = "Verifica stato archiviazione riservato..."
-                        ' Menu - Commands - Microsoft Edge
-                        AddEdge.Text = "Aggiungi Edge..."
-                        AddEdgeBrowser.Text = "Aggiungi browser Edge..."
-                        AddEdgeWebView.Text = "Aggiungi WebView Edge..."
-                        ' Menu - Tools
-                        ImageConversionToolStripMenuItem.Text = "Conversione immagine"
-                        MergeSWM.Text = "Unisci file SWM..."
-                        RemountImageWithWritePermissionsToolStripMenuItem.Text = "Rimonta l'immagine con i permessi di scrittura"
-                        CommandShellToolStripMenuItem.Text = "Console comandi"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestisci file risposte non presidiate"
-                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Crea file risposte non presidiate"
-                        RegCplToolStripMenuItem.Text = "Gestisci struttura registro immagini..."
-                        WebResourcesToolStripMenuItem.Text = "Risorse web"
-                        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Download ISO lingue/funzionalità opzionali..."
-                        LanguagesAndFODWin10ToolStripMenuItem.Text = "Download lingue/dischi FOD per Windows 10..."
-                        ReportManagerToolStripMenuItem.Text = "Gestisci rapporti"
-                        MountedImageManagerTSMI.Text = "Gestisci immagini montate"
-                        CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
-                        CreateTestingEnvironmentToolStripMenuItem.Text = "Crea ambiente test..."
-                        WimScriptEditorCommand.Text = "Editor elenco configurazione"
-                        OptionsToolStripMenuItem.Text = "Opzioni"
-                        ' Menu - Help
-                        HelpTopicsToolStripMenuItem.Text = "Argomenti guida in linea"
-                        AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
-                        ' Menu - Invalid settings
-                        ISFix.Text = "Altre informazioni"
-                        ISHelp.Text = "Che cos'è questo?"
-                        ' Menu - DevState
-                        ReportFeedbackToolStripMenuItem.Text = "Invia feedback (si apre nel browser web)"
-                        ' Menu - Contributions
-                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuisci al supporto del programma"
-                        ' Menu - Tour Server
-                        TourActionsTSMI.Text = "Azioni tour"
-                        ServerStatusTSMI.Text = String.Format("Il server tour è attivo sulla porta {0}", tourServer.GetTcpPort())
-                        RestartDTTourTSMI.Text = "Riavvia tour"
-                        StopDTTourServerTSMI.Text = "Interrompi server tour"
-                        ' Start Panel
-                        LabelHeader1.Text = "Inizia"
-                        Label10.Text = "Progetti recenti"
-                        NewProjLink.Text = "Nuovo progetto..."
-                        ExistingProjLink.Text = "Apri progetto esistente..."
-                        OnlineInstMgmt.Text = "Gestisci installazione online..."
-                        OfflineInstMgmt.Text = "Gestisci installazione offline..."
-                        RecentRemoveLink.Text = "Rimuovi elemento"
-                        ' ToolStrip buttons
-                        ToolStripButton1.Text = "Chiudi scheda"
-                        ToolStripButton2.Text = "Salva progetto"
-                        ToolStripButton3.Text = "Download progetto"
-                        ToolStripButton3.ToolTipText = "Rimuovi progetto da questo programma"
-                        ToolStripButton4.Text = "Visualizza finestra avanzamento"
-                        RefreshViewTSB.Text = "Aggiorna vista"
-                        ExpandCollapseTSB.Text = "Espandi"
-                        UpdateLink.Text = "È disponibile una nuova versione da scaricare ed installare. Fai clic qui per maggiori informazioni."
-                        UpdateLink.LinkArea = New LinkArea(60, 32)
-                        ' Pop-up context menus
-                        PkgBasicInfo.Text = "Verifica informazioni di base (tutti i pacchetti)"
-                        PkgDetailedInfo.Text = "Verifica informazioni dettagliate (pacchetto specifico)"
-                        CommitAndUnmountTSMI.Text = "Applica modifiche e smonta immagine"
-                        DiscardAndUnmountTSMI.Text = "Scarta modifiche e smonta immagine"
-                        UnmountSettingsToolStripMenuItem.Text = "Impostazioni smontaggio..."
-                        ViewPackageDirectoryToolStripMenuItem.Text = "Visualizza cartella pacchetti"
-                        GetImageFileInformationToolStripMenuItem.Text = "Verifica informazioni immagine..."
-                        SaveCompleteImageInformationToolStripMenuItem.Text = "Salva informazioni complete immagine..."
-                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crea immagine disco con questo file..."
-                        ' OpenFileDialogs and FolderBrowsers
-                        OpenFileDialog1.Title = "Specifica il file progetto da caricare"
-                        LocalMountDirFBD.Description = "Specifica la cartella di montaggio che vuoi caricare in questo progetto:"
-                        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                            BGProcDetails.Label2.Text = "I processi dell'immagine sono stati completati"
-                        End If
-                        MenuDesc.Text = "Pronto"
-                        ' Tree view context menu
-                        AccessDirectoryToolStripMenuItem.Text = "Accesso alla cartella"
-                        UnloadProjectToolStripMenuItem1.Text = "Rimuovi progetto"
-                        CopyDeploymentToolsToolStripMenuItem.Text = "Copia strumenti distribuzione"
-                        OfAllArchitecturesToolStripMenuItem.Text = "Per tutte le architetture"
-                        OfSelectedArchitectureToolStripMenuItem.Text = "Per l'architettura selezionata"
-                        ForX86ArchitectureToolStripMenuItem.Text = "Per l'architettura x86"
-                        ForAmd64ArchitectureToolStripMenuItem.Text = "Per l'architettura AMD64"
-                        ForARMArchitectureToolStripMenuItem.Text = "Per architettura ARM"
-                        ForARM64ArchitectureToolStripMenuItem.Text = "Per l'architettura ARM64"
-                        ImageOperationsToolStripMenuItem.Text = "Operazioni immagini"
-                        MountImageToolStripMenuItem.Text = "Monta immagine..."
-                        UnmountImageToolStripMenuItem.Text = "Smonta immagine..."
-                        RemoveVolumeImagesToolStripMenuItem.Text = "Rimuovi immagini volume..."
-                        SwitchImageIndexesToolStripMenuItem1.Text = "Modifica indici immagine..."
-                        UnattendedAnswerFilesToolStripMenuItem1.Text = "File risposte non presidiate"
-                        ManageToolStripMenuItem.Text = "Gestisci"
-                        CreationWizardToolStripMenuItem.Text = "Crea"
-                        ScratchDirectorySettingsToolStripMenuItem.Text = "Imposta cartella temporanea"
-                        ManageReportsToolStripMenuItem.Text = "Gestisci rapporti"
-                        AddToolStripMenuItem.Text = "Aggiungi"
-                        NewFileToolStripMenuItem.Text = "Nuovo file..."
-                        ExistingFileToolStripMenuItem.Text = "File esistente..."
-                        ' Context menu of AppX information dialog
-                        SaveResourceToolStripMenuItem.Text = "Salva risorsa..."
-                        CopyToolStripMenuItem.Text = "Copia risorsa"
-                        ' Context menu of AppX addition dialog
-                        MicrosoftAppsToolStripMenuItem.Text = "Visita il sito web Microsoft Apps"
-                        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visita il sito web Microsoft Store Generation Project"
-                        AppxDownloadHelpToolStripMenuItem.Text = "Come si ottengono le applicazioni?"
-                        ' New design
-                        GreetingLabel.Text = "Benvenuto in questa sessione di assistenza"
-                        LinkLabel12.Text = "PROGETTO"
-                        LinkLabel13.Text = "IMMAGINE"
-                        Label54.Text = "Nome:"
-                        Label51.Text = "Percorso:"
-                        Label53.Text = "Immagini montate?"
-                        LinkLabel14.Text = "Fai clic qui per montare un'immagine"
-                        Label55.Text = "Attività progetto"
-                        LinkLabel15.Text = "Visualizza proprietà progetto"
-                        LinkLabel16.Text = "Apri in Esplora file"
-                        LinkLabel17.Text = "Rimuovi progetto"
-                        Label59.Text = "Non è stata montata alcuna immagine"
-                        Label58.Text = "Per visualizzare le informazioni sull'immagine è necessario montarla"
-                        Label57.Text = "Scelte"
-                        LinkLabel21.Text = "Monta immagine..."
-                        LinkLabel18.Text = "Scegli immagine montata..."
-                        Label39.Text = "Indice immagine:"
-                        Label43.Text = "Punto montaggio:"
-                        Label45.Text = "Versione:"
-                        Label42.Text = "Nome:"
-                        Label40.Text = "Descrizione:"
-                        Label56.Text = "Attività immagine"
-                        LinkLabel20.Text = "Visualizza proprietà immagine"
-                        LinkLabel19.Text = "Smonta immagine"
-                        GroupBox4.Text = "Operazioni immagine"
-                        Button26.Text = "Monta immagine..."
-                        Button27.Text = "Applica modifiche attuali"
-                        Button28.Text = "Applica e smonta immagine"
-                        Button29.Text = "Smonta immagine eliminando le modifiche"
-                        Button25.Text = "Ricarica sessione assistenza"
-                        Button24.Text = "Modifica indici immagine..."
-                        Button30.Text = "Applica immagine..."
-                        Button31.Text = "Cattura immagine..."
-                        Button32.Text = "Rimuovi immagini volume..."
-                        Button33.Text = "Salva informazioni complete immagine..."
-                        GroupBox5.Text = "Operazioni pacchetto"
-                        Button36.Text = "Aggiungi pacchetto..."
-                        Button34.Text = "Verifica informazioni pacchetto..."
-                        Button38.Text = "Salva informazioni pacchetto installato..."
-                        Button35.Text = "Rimuovi pacchetto..."
-                        Button37.Text = "Esegui la manutenzione/pulizia archivio componenti..."
-                        GroupBox6.Text = "Operazioni funzionalutà"
-                        Button41.Text = "Attiva funzionalità..."
-                        Button39.Text = "Verifica informazioni funzionalità..."
-                        Button42.Text = "Salva informazioni funzionalità..."
-                        Button40.Text = "Disattiva funzionalità..."
-                        GroupBox7.Text = "Operazioni pacchetto AppX"
-                        Button44.Text = "Aggiungi pacchetto AppX..."
-                        Button45.Text = "Verifica informazioni applicazione..."
-                        Button46.Text = "Salva informazioni pacchetto AppX installato..."
-                        Button43.Text = "Rimuovi pacchetto AppX..."
-                        GroupBox8.Text = "Operazioni capacità"
-                        Button48.Text = "Aggiungi capacità..."
-                        Button49.Text = "Verifica informazioni capacità..."
-                        Button50.Text = "Salva informazioni capacità..."
-                        Button47.Text = "Rimuovi capacità..."
-                        GroupBox9.Text = "Operazioni driver dispositivo"
-                        Button53.Text = "Aggiungi pacchetto driver..."
-                        Button52.Text = "Verifica informazioni driver..."
-                        Button54.Text = "Salva informazioni driver installato..."
-                        Button51.Text = "Rimuovi driver..."
-                        GroupBox10.Text = "Operazioni Windows PE"
-                        Button55.Text = "Verifica configurazione"
-                        Button56.Text = "Salva configurazione..."
-                        Button57.Text = "Imposta percorso destinazione..."
-                        Button58.Text = "Imposta spazio temporaneo..."
-                    Case Else
-                        Language = 1
-                        ChangeLangs(Language)
-                        Exit Sub
-                End Select
-            Case 1
-                DynaLog.LogMessage("Language code is 1. Switching to English...")
-                ' Top-level menu items
-                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
-                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Project".ToUpper(), "&Project")
-                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&mands".ToUpper(), "Com&mands")
-                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Tools".ToUpper(), "&Tools")
-                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Help".ToUpper(), "&Help")
-                InvalidSettingsTSMI.Text = "Invalid settings have been detected"
-                ' Submenu items
-                ' Menu - File
-                NewProjectToolStripMenuItem.Text = "&New project..."
-                OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
-                ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
-                ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
-                RecentProjectsListMenu.Text = "Recent projects"
-                SaveProjectToolStripMenuItem.Text = "&Save project..."
-                SaveProjectasToolStripMenuItem.Text = "Save project &as..."
-                ExitToolStripMenuItem.Text = "E&xit"
-                ' Menu - Project
-                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
-                UnloadProjectToolStripMenuItem.Text = "Unload project..."
-                SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
-                ProjectPropertiesToolStripMenuItem.Text = "Project properties"
-                ImagePropertiesToolStripMenuItem.Text = "Image properties"
-                ' Menu - Commands
-                ImageManagementToolStripMenuItem.Text = "Image management"
-                OSPackagesToolStripMenuItem.Text = "OS packages"
-                ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
-                AppPackagesToolStripMenuItem.Text = "AppX packages"
-                AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
-                DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
-                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
-                CapabilitiesToolStripMenuItem.Text = "Capabilities"
-                WindowsEditionsToolStripMenuItem.Text = "Windows editions"
-                DriversToolStripMenuItem.Text = "Drivers"
-                UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
-                WindowsPEServicingToolStripMenuItem.Text = "Windows PE servicing"
-                OSUninstallToolStripMenuItem.Text = "OS uninstall"
-                ReservedStorageToolStripMenuItem.Text = "Reserved storage"
-                ' Menu - Commands - Image management
-                AppendImage.Text = "Append capture directory to image..."
-                ApplyFFU.Text = "Apply FFU or SFU file..."
-                ApplyImage.Text = "Apply WIM or SWM file..."
-                CaptureCustomImage.Text = "Capture incremental changes to file..."
-                CaptureFFU.Text = "Capture partitions to FFU file..."
-                CaptureImage.Text = "Capture image of a drive to WIM file..."
-                CleanupMountpoints.Text = "Delete resources from corrupted image..."
-                CommitImage.Text = "Apply changes to image..."
-                DeleteImage.Text = "Delete volume images from WIM file..."
-                ExportImage.Text = "Export image..."
-                GetImageInfo.Text = "Get image information..."
-                GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
-                ListImage.Text = "List files and directories in image..."
-                MountImage.Text = "Mount image..."
-                OptimizeFFU.Text = "Optimize FFU file..."
-                OptimizeImage.Text = "Optimize image..."
-                RemountImage.Text = "Remount image for servicing..."
-                SplitFFU.Text = "Split FFU file into SFU files..."
-                SplitImage.Text = "Split WIM file into SWM files..."
-                UnmountImage.Text = "Unmount image..."
-                UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
-                ApplySiloedPackage.Text = "Apply siloed provisioning package..."
-                SaveImageInformationToolStripMenuItem.Text = "Save image information..."
-                ' Menu - Commands - OS packages
-                GetPackages.Text = "Get package information..."
-                AddPackage.Text = "Add package..."
-                RemovePackage.Text = "Remove package..."
-                GetFeatures.Text = "Get feature information..."
-                EnableFeature.Text = "Enable feature..."
-                DisableFeature.Text = "Disable feature..."
-                CleanupImage.Text = "Perform cleanup or recovery operations..."
-                ' Menu - Commands - Provisioning packages
-                AddProvisioningPackage.Text = "Add provisioning package..."
-                GetProvisioningPackageInfo.Text = "Get provisioning package information..."
-                ApplyCustomDataImage.Text = "Apply custom data image..."
-                ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Get app package information..."
-                AddProvisionedAppxPackage.Text = "Add provisioned app package..."
-                RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
-                OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
-                SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
-                ' Menu - Commands - App (MSP) servicing
-                CheckAppPatch.Text = "Get application patch information..."
-                GetAppPatchInfo.Text = "Get detailed application patch information..."
-                GetAppPatches.Text = "Get basic installed application patch information..."
-                GetAppInfo.Text = "Get detailed Windows Installer (*.msi) application information..."
-                GetApps.Text = "Get basic Windows Installer (*.msi) application information..."
-                ' Menu - Commands - Default app associations
-                ExportDefaultAppAssociations.Text = "Export default application associations..."
-                GetDefaultAppAssociations.Text = "Get default application association information..."
-                ImportDefaultAppAssociations.Text = "Import default application associations..."
-                RemoveDefaultAppAssociations.Text = "Remove default application associations..."
-                ' Menu - Commands - Languages and regional settings
-                GetIntl.Text = "Get international settings and languages..."
-                SetUILang.Text = "Set UI language..."
-                SetUILangFallback.Text = "Set default UI fallback language..."
-                SetSysUILang.Text = "Set system preferred UI language..."
-                SetSysLocale.Text = "Set system locale..."
-                SetUserLocale.Text = "Set user locale..."
-                SetInputLocale.Text = "Set input locale..."
-                SetAllIntl.Text = "Set UI language and locales..."
-                SetTimeZone.Text = "Set default time zone..."
-                SetSKUIntlDefaults.Text = "Set default languages and locales..."
-                SetLayeredDriver.Text = "Set layered driver..."
-                GenLangINI.Text = "Generate Lang.ini file..."
-                SetSetupUILang.Text = "Set default Setup language..."
-                ' Menu - Commands - Capabilities
-                AddCapability.Text = "Add capability..."
-                ExportSource.Text = "Export capabilities into repository..."
-                GetCapabilities.Text = "Get capability information..."
-                RemoveCapability.Text = "Remove capability..."
-                ' Menu - Commands - Windows editions
-                GetCurrentEdition.Text = "Get current edition..."
-                GetTargetEditions.Text = "Get upgrade targets..."
-                SetEdition.Text = "Upgrade image..."
-                SetProductKey.Text = "Set product key..."
-                ' Menu - Commands - Drivers
-                GetDrivers.Text = "Get driver information..."
-                AddDriver.Text = "Add driver..."
-                RemoveDriver.Text = "Remove driver..."
-                ExportDriver.Text = "Export driver packages..."
-                ImportDriver.Text = "Import driver packages..."
-                ' Menu - Commands - Unattended answer files
-                ApplyUnattend.Text = "Apply unattended answer file..."
-                ' Menu - Commands - Windows PE servicing
-                GetPESettings.Text = "Get settings..."
-                SetScratchSpace.Text = "Set scratch space..."
-                SetTargetPath.Text = "Set target path..."
-                ' Menu - Commands - OS uninstall
-                GetOSUninstallWindow.Text = "Get uninstall window..."
-                InitiateOSUninstall.Text = "Initiate uninstall..."
-                RemoveOSUninstall.Text = "Remove roll back ability..."
-                SetOSUninstallWindow.Text = "Set uninstall window..."
-                ' Menu - Commands - Reserved storage
-                SetReservedStorageState.Text = "Set reserved storage state..."
-                GetReservedStorageState.Text = "Get reserved storage state..."
-                ' Menu - Commands - Microsoft Edge
-                AddEdge.Text = "Add Edge..."
-                AddEdgeBrowser.Text = "Add Edge browser..."
-                AddEdgeWebView.Text = "Add Edge WebView..."
-                ' Menu - Tools
-                ImageConversionToolStripMenuItem.Text = "Image conversion"
-                MergeSWM.Text = "Merge SWM files..."
-                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
-                CommandShellToolStripMenuItem.Text = "Command Console"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
-                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
-                RegCplToolStripMenuItem.Text = "Manage image registry hives..."
-                WebResourcesToolStripMenuItem.Text = "Web Resources"
-                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Download Languages and Optional Features ISOs..."
-                LanguagesAndFODWin10ToolStripMenuItem.Text = "Download Languages and FOD discs for Windows 10..."
-                ReportManagerToolStripMenuItem.Text = "Report manager"
-                MountedImageManagerTSMI.Text = "Mounted image manager"
-                CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
-                CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
-                WimScriptEditorCommand.Text = "Configuration list editor"
-                OptionsToolStripMenuItem.Text = "Options"
-                ' Menu - Help
-                HelpTopicsToolStripMenuItem.Text = "Help Topics"
-                AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
-                ' Menu - Invalid settings
-                ISFix.Text = "More information"
-                ISHelp.Text = "What's this?"
-                ' Menu - DevState
-                ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
-                ' Menu - Contributions
-                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
-                ' Menu - Tour Server
-                TourActionsTSMI.Text = "Tour Actions"
-                ServerStatusTSMI.Text = String.Format("Tour Server is active on port {0}", tourServer.GetTcpPort())
-                RestartDTTourTSMI.Text = "Restart Tour"
-                StopDTTourServerTSMI.Text = "Stop Tour Server"
-                ' Start Panel
-                LabelHeader1.Text = "Begin"
-                Label10.Text = "Recent projects"
-                NewProjLink.Text = "New project..."
-                ExistingProjLink.Text = "Open existing project..."
-                OnlineInstMgmt.Text = "Manage online installation"
-                OfflineInstMgmt.Text = "Manage offline installation..."
-                RecentRemoveLink.Text = "Remove entry"
-                ' ToolStrip buttons
-                ToolStripButton1.Text = "Close tab"
-                ToolStripButton2.Text = "Save project"
-                ToolStripButton3.Text = "Unload project"
-                ToolStripButton3.ToolTipText = "Unload project from this program"
-                ToolStripButton4.Text = "Show progress window"
-                RefreshViewTSB.Text = "Refresh view"
-                ExpandCollapseTSB.Text = "Expand"
-                UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
-                UpdateLink.LinkArea = New LinkArea(58, 24)
-                ' Pop-up context menus
-                PkgBasicInfo.Text = "Get basic information (all packages)"
-                PkgDetailedInfo.Text = "Get detailed information (specific package)"
-                CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
-                DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
-                UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
-                ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
-                GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
-                SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
-                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
-                ' OpenFileDialogs and FolderBrowsers
-                OpenFileDialog1.Title = "Specify the project file to load"
-                LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
-                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                    BGProcDetails.Label2.Text = "Image processes have completed"
-                End If
-                MenuDesc.Text = "Ready"
-                ' Tree view context menu
-                AccessDirectoryToolStripMenuItem.Text = "Access directory"
-                UnloadProjectToolStripMenuItem1.Text = "Unload project"
-                CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
-                OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
-                OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
-                ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
-                ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
-                ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
-                ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
-                ImageOperationsToolStripMenuItem.Text = "Image operations"
-                MountImageToolStripMenuItem.Text = "Mount image..."
-                UnmountImageToolStripMenuItem.Text = "Unmount image..."
-                RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
-                SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
-                UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
-                ManageToolStripMenuItem.Text = "Manage"
-                CreationWizardToolStripMenuItem.Text = "Create"
-                ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
-                ManageReportsToolStripMenuItem.Text = "Manage reports"
-                AddToolStripMenuItem.Text = "Add"
-                NewFileToolStripMenuItem.Text = "New file..."
-                ExistingFileToolStripMenuItem.Text = "Existing file..."
-                ' Context menu of AppX information dialog
-                SaveResourceToolStripMenuItem.Text = "Save resource..."
-                CopyToolStripMenuItem.Text = "Copy resource"
-                ' Context menu of AppX addition dialog
-                MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
-                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
-                AppxDownloadHelpToolStripMenuItem.Text = "How do I get applications?"
-                ' New design
-                GreetingLabel.Text = "Welcome to this servicing session"
-                LinkLabel12.Text = "PROJECT"
-                LinkLabel13.Text = "IMAGE"
-                Label54.Text = "Name:"
-                Label51.Text = "Location:"
-                Label53.Text = "Images mounted?"
-                LinkLabel14.Text = "Click here to mount an image"
-                Label55.Text = "Project Tasks"
-                LinkLabel15.Text = "View project properties"
-                LinkLabel16.Text = "Open in File Explorer"
-                LinkLabel17.Text = "Unload project"
-                Label59.Text = "No image has been mounted"
-                Label58.Text = "You need to mount an image in order to view its information"
-                Label57.Text = "Choices"
-                LinkLabel21.Text = "Mount an image..."
-                LinkLabel18.Text = "Pick a mounted image..."
-                Label39.Text = "Image index:"
-                Label43.Text = "Mount point:"
-                Label45.Text = "Version:"
-                Label42.Text = "Name:"
-                Label40.Text = "Description:"
-                Label56.Text = "Image Tasks"
-                LinkLabel20.Text = "View image properties"
-                LinkLabel19.Text = "Unmount image"
-                GroupBox4.Text = "Image operations"
-                Button26.Text = "Mount image..."
-                Button27.Text = "Commit current changes"
-                Button28.Text = "Commit and unmount image"
-                Button29.Text = "Unmount image discarding changes"
-                Button25.Text = "Reload servicing session"
-                Button24.Text = "Switch image indexes..."
-                Button30.Text = "Apply image..."
-                Button31.Text = "Capture image..."
-                Button32.Text = "Remove volume images..."
-                Button33.Text = "Save complete image information..."
-                GroupBox5.Text = "Package operations"
-                Button36.Text = "Add package..."
-                Button34.Text = "Get package information..."
-                Button38.Text = "Save installed package information..."
-                Button35.Text = "Remove package..."
-                Button37.Text = "Perform component store maintenance and cleanup..."
-                GroupBox6.Text = "Feature operations"
-                Button41.Text = "Enable feature..."
-                Button39.Text = "Get feature information..."
-                Button42.Text = "Save feature information..."
-                Button40.Text = "Disable feature..."
-                GroupBox7.Text = "AppX package operations"
-                Button44.Text = "Add AppX package..."
-                Button45.Text = "Get app information..."
-                Button46.Text = "Save installed AppX package information..."
-                Button43.Text = "Remove AppX package..."
-                GroupBox8.Text = "Capability operations"
-                Button48.Text = "Add capability..."
-                Button49.Text = "Get capability information..."
-                Button50.Text = "Save capability information..."
-                Button47.Text = "Remove capability..."
-                GroupBox9.Text = "Driver operations"
-                Button53.Text = "Add driver package..."
-                Button52.Text = "Get driver information..."
-                Button54.Text = "Save installed driver information..."
-                Button51.Text = "Remove driver..."
-                GroupBox10.Text = "Windows PE operations"
-                Button55.Text = "Get configuration"
-                Button56.Text = "Save configuration..."
-                Button57.Text = "Set target path..."
-                Button58.Text = "Set scratch space..."
-            Case 2
-                DynaLog.LogMessage("Language code is 2. Switching to Spanish...")
-                ' Top-level menu items
-                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
-                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Proyecto".ToUpper(), "&Proyecto")
-                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Co&mandos".ToUpper(), "Co&mandos")
-                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Her&ramientas".ToUpper(), "Her&ramientas")
-                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Ay&uda".ToUpper(), "Ay&uda")
-                InvalidSettingsTSMI.Text = "Se han detectado configuraciones inválidas"
-                ' Submenu items
-                ' Menu - File
-                NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
-                OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
-                ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
-                ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
-                RecentProjectsListMenu.Text = "Proyectos recientes"
-                SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
-                SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
-                ExitToolStripMenuItem.Text = "Sa&lir"
-                ' Menu - Project
-                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Ver archivos del proyecto en el Explorador de archivos"
-                UnloadProjectToolStripMenuItem.Text = "Descargar proyecto..."
-                SwitchImageIndexesToolStripMenuItem.Text = "Cambiar índices de imagen..."
-                ProjectPropertiesToolStripMenuItem.Text = "Propiedades del proyecto"
-                ImagePropertiesToolStripMenuItem.Text = "Propiedades de la imagen"
-                ' Menu - Commands
-                ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
-                OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
-                ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
-                AppPackagesToolStripMenuItem.Text = "Paquetes AppX"
-                AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
-                DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
-                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
-                CapabilitiesToolStripMenuItem.Text = "Funcionalidades"
-                WindowsEditionsToolStripMenuItem.Text = "Ediciones de Windows"
-                DriversToolStripMenuItem.Text = "Controladores"
-                UnattendedAnswerFilesToolStripMenuItem.Text = "Archivos de respuesta desatendida"
-                WindowsPEServicingToolStripMenuItem.Text = "Servicio de Windows PE"
-                OSUninstallToolStripMenuItem.Text = "Desinstalación del sistema operativo"
-                ReservedStorageToolStripMenuItem.Text = "Almacenamiento reservado"
-                ' Menu - Commands - Image management
-                AppendImage.Text = "Anexar directorio de captura a imagen..."
-                ApplyFFU.Text = "Aplicar archivo FFU o SFU..."
-                ApplyImage.Text = "Aplicar archivo WIM o SWM..."
-                CaptureCustomImage.Text = "Capturar cambios incrementales a un archivo..."
-                CaptureFFU.Text = "Capturar particiones a un archivo FFU..."
-                CaptureImage.Text = "Capturar imagen de un disco a un archivo WIM..."
-                CleanupMountpoints.Text = "Eliminar recursos de una imagen corrupta..."
-                CommitImage.Text = "Aplicar cambios a la imagen..."
-                DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
-                ExportImage.Text = "Exportar imagen..."
-                GetImageInfo.Text = "Obtener información de imagen..."
-                GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
-                ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
-                MountImage.Text = "Montar imagen..."
-                OptimizeFFU.Text = "Optimizar archivo FFU..."
-                OptimizeImage.Text = "Optimizar imagen..."
-                RemountImage.Text = "Remontar imagen para su servicio..."
-                SplitFFU.Text = "Dividir archivo FFU en archivos SFU..."
-                SplitImage.Text = "Dividir archivo WIM en archivos SWM..."
-                UnmountImage.Text = "Desmontar imagen..."
-                UpdateWIMBootEntry.Text = "Actualizar entradas de configuración WIMBoot..."
-                ApplySiloedPackage.Text = "Aplicar paquete de aprovisionamiento en silos..."
-                SaveImageInformationToolStripMenuItem.Text = "Guardar información de la imagen..."
-                ' Menu - Commands - OS packages
-                GetPackages.Text = "Obtener información de paquetes..."
-                AddPackage.Text = "Añadir paquete..."
-                RemovePackage.Text = "Eliminar paquete..."
-                GetFeatures.Text = "Obtener información de características..."
-                EnableFeature.Text = "Habilitar característica..."
-                DisableFeature.Text = "Deshabilitar característica..."
-                CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
-                ' Menu - Commands - Provisioning packages
-                AddProvisioningPackage.Text = "Añadir paquete de aprovisionamiento..."
-                GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
-                ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
-                ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtener información de paquete AppX..."
-                AddProvisionedAppxPackage.Text = "Añadir paquete AppX aprovisionada..."
-                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete AppX..."
-                OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
-                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete AppX..."
-                ' Menu - Commands - App (MSP) servicing
-                CheckAppPatch.Text = "Obtener información de parche de aplicación..."
-                GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
-                GetAppPatches.Text = "Obtener información básica de parches de aplicación instalados..."
-                GetAppInfo.Text = "Obtener información detallada de aplicaciones de Windows Installer (*.msi)..."
-                GetApps.Text = "Obtener información básica de aplicaciones de Windows Installer (*.msi)..."
-                ' Menu - Commands - Default app associations
-                ExportDefaultAppAssociations.Text = "Exportar asociaciones de aplicaciones predeterminadas..."
-                GetDefaultAppAssociations.Text = "Obtener información de asociaciones de aplicaciones predeterminadas..."
-                ImportDefaultAppAssociations.Text = "Importar asociaciones de aplicaciones predeterminadas..."
-                RemoveDefaultAppAssociations.Text = "Eliminar asociaciones de aplicaciones predeterminadas..."
-                ' Menu - Commands - Languages and regional settings
-                GetIntl.Text = "Obtener configuraciones e idiomas internacionales..."
-                SetUILang.Text = "Establecer idioma de la interfaz de usuario..."
-                SetUILangFallback.Text = "Establecer idioma predeterminado de la interfaz de usuario de último recurso..."
-                SetSysUILang.Text = "Estabñecer idioma de la interfaz de usuario preferido para el sistema..."
-                SetSysLocale.Text = "Establecer zona del sistema..."
-                SetUserLocale.Text = "Establecer zona del usuario..."
-                SetInputLocale.Text = "Establecer zona de entrada..."
-                SetAllIntl.Text = "Establecer idioma de la interfaz de usuario y zonas..."
-                SetTimeZone.Text = "Establecer zona horaria predeterminada..."
-                SetSKUIntlDefaults.Text = "Establecer lenguajes y zonas predeterminadas..."
-                SetLayeredDriver.Text = "Establecer controlador en capas..."
-                GenLangINI.Text = "Generar archivo Lang.ini..."
-                SetSetupUILang.Text = "Establecer idioma predeterminado del programa de instalación..."
-                ' Menu - Commands - Capabilities
-                AddCapability.Text = "Añadir funcionalidad..."
-                ExportSource.Text = "Exportar funcionalidades en un repositorio..."
-                GetCapabilities.Text = "Obtener información de funcionalidades..."
-                RemoveCapability.Text = "Eliminar funcionalidad..."
-                ' Menu - Commands - Windows editions
-                GetCurrentEdition.Text = "Obtener edición actual..."
-                GetTargetEditions.Text = "Obtener destinos de actualización..."
-                SetEdition.Text = "Actualizar imagen..."
-                SetProductKey.Text = "Establecer clave de producto..."
-                ' Menu - Commands - Drivers
-                GetDrivers.Text = "Obtener información de controladores..."
-                AddDriver.Text = "Añadir controlador..."
-                RemoveDriver.Text = "Eliminar controlador..."
-                ExportDriver.Text = "Exportar paquetes de controlador..."
-                ImportDriver.Text = "Importar paquetes de controlador..."
-                ' Menu - Commands - Unattended answer files
-                ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
-                ' Menu - Commands - Windows PE servicing
-                GetPESettings.Text = "Obtener configuración..."
-                SetScratchSpace.Text = "Establecer espacio temporal..."
-                SetTargetPath.Text = "Establecer ruta de destino..."
-                ' Menu - Commands - OS uninstall
-                GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
-                InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
-                SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
-                ' Menu - Commands - Reserved storage
-                SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
-                GetReservedStorageState.Text = "Obtener estado de almacenamiento reservado..."
-                ' Menu - Commands - Microsoft Edge
-                AddEdge.Text = "Añadir Edge..."
-                AddEdgeBrowser.Text = "Añadir navegador Edge..."
-                AddEdgeWebView.Text = "Añadir Edge WebView..."
-                ' Menu - Tools
-                ImageConversionToolStripMenuItem.Text = "Conversión de imágenes"
-                MergeSWM.Text = "Combinar archivos SWM..."
-                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
-                CommandShellToolStripMenuItem.Text = "Consola de comandos"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
-                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
-                RegCplToolStripMenuItem.Text = "Administrar subárboles del registro de la imagen..."
-                WebResourcesToolStripMenuItem.Text = "Recursos web"
-                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Descargar archivos ISO de idiomas y características opcionales..."
-                LanguagesAndFODWin10ToolStripMenuItem.Text = "Descargar discos de idiomas y características opcionales para Windows 10..."
-                ReportManagerToolStripMenuItem.Text = "Administrador de informes"
-                MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
-                CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
-                CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
-                WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
-                OptionsToolStripMenuItem.Text = "Opciones"
-                ' Menu - Help
-                HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
-                AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
-                ' Menu - Invalid settings
-                ISFix.Text = "Más información"
-                ISHelp.Text = "¿Qué es esto?"
-                ' Menu - DevState
-                ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
-                ' Menu - Contributions
-                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir al sistema de ayuda"
-                ' Menu - Tour Server
-                TourActionsTSMI.Text = "Acciones del tour"
-                ServerStatusTSMI.Text = String.Format("El servidor del tour está activo en el puerto {0}", tourServer.GetTcpPort())
-                RestartDTTourTSMI.Text = "Reiniciar tour"
-                StopDTTourServerTSMI.Text = "Detener servidor del tour"
-                ' Start Panel
-                LabelHeader1.Text = "Comenzar"
-                Label10.Text = "Proyectos recientes"
-                NewProjLink.Text = "Nuevo proyecto..."
-                ExistingProjLink.Text = "Abrir proyecto existente..."
-                OnlineInstMgmt.Text = "Administrar instalación activa"
-                OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
-                RecentRemoveLink.Text = "Eliminar entrada"
-                ' ToolStrip buttons
-                ToolStripButton1.Text = "Cerrar pestaña"
-                ToolStripButton2.Text = "Guardar proyecto"
-                ToolStripButton3.Text = "Descargar proyecto"
-                ToolStripButton3.ToolTipText = "Descargar proyecto de este programa"
-                ToolStripButton4.Text = "Mostrar ventana de progreso"
-                RefreshViewTSB.Text = "Actualizar vista"
-                ExpandCollapseTSB.Text = "Expandir"
-                UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
-                UpdateLink.LinkArea = New LinkArea(65, 29)
-                ' Pop-up context menus
-                PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
-                PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
-                CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
-                DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
-                UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
-                ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
-                GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
-                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
-                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crear archivo de disco con este archivo..."
-                ' OpenFileDialogs and FolderBrowsers
-                OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
-                LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
-                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                    BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
-                End If
-                MenuDesc.Text = "Listo"
-                ' Tree view context menu
-                AccessDirectoryToolStripMenuItem.Text = "Acceder directorio"
-                UnloadProjectToolStripMenuItem1.Text = "Descargar proyecto"
-                CopyDeploymentToolsToolStripMenuItem.Text = "Copiar herramientas de implementación"
-                OfAllArchitecturesToolStripMenuItem.Text = "De todas las arquitecturas"
-                OfSelectedArchitectureToolStripMenuItem.Text = "De la arquitectura seleccionada"
-                ForX86ArchitectureToolStripMenuItem.Text = "Para arquitectura x86"
-                ForAmd64ArchitectureToolStripMenuItem.Text = "Para arquitectura AMD64"
-                ForARMArchitectureToolStripMenuItem.Text = "Para arquitectura ARM"
-                ForARM64ArchitectureToolStripMenuItem.Text = "Para arquitectura ARM64"
-                ImageOperationsToolStripMenuItem.Text = "Operaciones de la imagen"
-                MountImageToolStripMenuItem.Text = "Montar imagen..."
-                UnmountImageToolStripMenuItem.Text = "Desmontar imagen..."
-                RemoveVolumeImagesToolStripMenuItem.Text = "Eliminar imágenes de volumen..."
-                SwitchImageIndexesToolStripMenuItem1.Text = "Cambiar índices de imagen..."
-                UnattendedAnswerFilesToolStripMenuItem1.Text = "Archivos de respuesta desatendida"
-                ManageToolStripMenuItem.Text = "Administrar"
-                CreationWizardToolStripMenuItem.Text = "Crear"
-                ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar directorio temporal"
-                ManageReportsToolStripMenuItem.Text = "Administrar informes"
-                AddToolStripMenuItem.Text = "Añadir"
-                NewFileToolStripMenuItem.Text = "Nuevo archivo..."
-                ExistingFileToolStripMenuItem.Text = "Archivo existente..."
-                SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
-                CopyToolStripMenuItem.Text = "Copiar recurso"
-                ' Context menu of AppX addition dialog
-                MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
-                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
-                AppxDownloadHelpToolStripMenuItem.Text = "¿Cómo puedo obtener aplicaciones?"
-                ' New design
-                GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
-                LinkLabel12.Text = "PROYECTO"
-                LinkLabel13.Text = "IMAGEN"
-                Label54.Text = "Nombre:"
-                Label51.Text = "Ubicación:"
-                Label53.Text = "¿Hay imágenes montadas?"
-                LinkLabel14.Text = "Haga clic aquí para montar una imagen"
-                Label55.Text = "Tareas del proyecto"
-                LinkLabel15.Text = "Ver propiedades del proyecto"
-                LinkLabel16.Text = "Abrir en el Explorador de Archivos"
-                LinkLabel17.Text = "Descargar proyecto"
-                Label59.Text = "No se ha montado una imagen"
-                Label58.Text = "Debe montar una imagen para poder ver su información"
-                Label57.Text = "Elecciones"
-                LinkLabel21.Text = "Montar una imagen..."
-                LinkLabel18.Text = "Escoger una imagen montada..."
-                Label39.Text = "Índice de la imagen:"
-                Label43.Text = "Punto de montaje:"
-                Label45.Text = "Versión:"
-                Label42.Text = "Nombre:"
-                Label40.Text = "Descripción:"
-                Label56.Text = "Tareas de la imagen"
-                LinkLabel20.Text = "Ver propiedades de la imagen"
-                LinkLabel19.Text = "Desmontar imagen"
-                GroupBox4.Text = "Operaciones de la imagen"
-                Button26.Text = "Montar imagen..."
-                Button27.Text = "Guardar cambios actuales"
-                Button28.Text = "Guardar cambios y desmontar imagen"
-                Button29.Text = "Desmontar imagen descartando cambios"
-                Button25.Text = "Recargar sesión de servicio"
-                Button24.Text = "Cambiar índices de la imagen..."
-                Button30.Text = "Aplicar imagen..."
-                Button31.Text = "Capturar imagen..."
-                Button32.Text = "Eliminar imágenes de volumen..."
-                Button33.Text = "Guardar información completa de la imagen..."
-                GroupBox5.Text = "Operaciones de paquetes"
-                Button36.Text = "Añadir paquete..."
-                Button34.Text = "Obtener información de paquetes..."
-                Button38.Text = "Guardar información de paquetes instalados..."
-                Button35.Text = "Eliminar paquete..."
-                Button37.Text = "Realizar mantenimiento y limpieza del almacén de componentes..."
-                GroupBox6.Text = "Operaciones de características"
-                Button41.Text = "Habilitar característica..."
-                Button39.Text = "Obtener información de características..."
-                Button42.Text = "Guardar información de características..."
-                Button40.Text = "Deshabilitar característica..."
-                GroupBox7.Text = "Operaciones de paquetes AppX"
-                Button44.Text = "Añadir paquete AppX..."
-                Button45.Text = "Obtener información de aplicaciones..."
-                Button46.Text = "Guardar información de paquetes AppX instalados..."
-                Button43.Text = "Eliminar paquete AppX..."
-                GroupBox8.Text = "Operaciones de funcionalidades"
-                Button48.Text = "Añadir funcionalidad..."
-                Button49.Text = "Obtener información de funcionalidades..."
-                Button50.Text = "Guardar información de funcionalidades..."
-                Button47.Text = "Eliminar funcionalidades..."
-                GroupBox9.Text = "Operaciones de controladores"
-                Button53.Text = "Añadir controlador..."
-                Button52.Text = "Obtener información de controladores..."
-                Button54.Text = "Guardar información de controladores instalados..."
-                Button51.Text = "Eliminar controlador..."
-                GroupBox10.Text = "Operaciones de Windows PE"
-                Button55.Text = "Obtener configuración"
-                Button56.Text = "Guardar configuración..."
-                Button57.Text = "Establecer ruta de destino..."
-                Button58.Text = "Establecer espacio temporal..."
-            Case 3
-                DynaLog.LogMessage("Language code is 3. Switching to French...")
-                ' Top-level menu items
-                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
-                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Projet".ToUpper(), "&Projet")
-                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&mandes".ToUpper(), "Com&mandes")
-                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Ou&tils".ToUpper(), "Ou&tils")
-                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Aide".ToUpper(), "&Aide")
-                InvalidSettingsTSMI.Text = "Des paramètres non valides ont été détectés"
-                ' Submenu items
-                ' Menu - File
-                NewProjectToolStripMenuItem.Text = "&Nouveau projet..."
-                OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
-                ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
-                ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
-                RecentProjectsListMenu.Text = "Projets récents"
-                SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
-                SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
-                ExitToolStripMenuItem.Text = "Sor&tir"
-                ' Menu - Project
-                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Visualiser les fichiers du projet dans l'explorateur de fichiers"
-                UnloadProjectToolStripMenuItem.Text = "Décharget le projet..."
-                SwitchImageIndexesToolStripMenuItem.Text = "Changer d'index de l'image..."
-                ProjectPropertiesToolStripMenuItem.Text = "Propriétés du projet"
-                ImagePropertiesToolStripMenuItem.Text = "Propriétés de l'image"
-                ' Menu - Commands
-                ImageManagementToolStripMenuItem.Text = "Gestion des images"
-                OSPackagesToolStripMenuItem.Text = "Paquets de systèmes d'exploitation"
-                ProvisioningPackagesToolStripMenuItem.Text = "Paquets de provisionnement"
-                AppPackagesToolStripMenuItem.Text = "Paquets AppX"
-                AppPatchesToolStripMenuItem.Text = "Maintenance des applications (MSP)"
-                DefaultAppAssociationsToolStripMenuItem.Text = "Associations d'applications par défaut"
-                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Langues et paramètres régionaux"
-                CapabilitiesToolStripMenuItem.Text = "Capacités"
-                WindowsEditionsToolStripMenuItem.Text = "Éditions Windows"
-                DriversToolStripMenuItem.Text = "Pilotes"
-                UnattendedAnswerFilesToolStripMenuItem.Text = "Fichiers de réponse non surveillés"
-                WindowsPEServicingToolStripMenuItem.Text = "Maintenance de Windows PE"
-                OSUninstallToolStripMenuItem.Text = "Désinstallation du système d'exploitation"
-                ReservedStorageToolStripMenuItem.Text = "Stockage réservé"
-                ' Menu - Commands - Image management
-                AppendImage.Text = "Ajouter le répertoire de capture à l'image..."
-                ApplyFFU.Text = "Appliquer le fichier FFU ou SFU..."
-                ApplyImage.Text = "Appliquer le fichier WIM ou SWM..."
-                CaptureCustomImage.Text = "Capturer les modifications incrémentales d'un fichier..."
-                CaptureFFU.Text = "Capturer des partitions dans un fichier FFU..."
-                CaptureImage.Text = "Capturer l'image d'un lecteur dans un fichier WIM..."
-                CleanupMountpoints.Text = "Supprimer les resources d'une image corrompue..."
-                CommitImage.Text = "Appliquer les modifications à l'image..."
-                DeleteImage.Text = "Supprimer les images de volume du fichier WIM..."
-                ExportImage.Text = "Exporter l'image..."
-                GetImageInfo.Text = "Obtenir des informations sur l'image..."
-                GetWIMBootEntry.Text = "Obtenir les entrées de configuration WIMBoot..."
-                ListImage.Text = "Lister des fichiers et répertoires dans l'image..."
-                MountImage.Text = "Monter l'image..."
-                OptimizeFFU.Text = "Optimiser le fichier FFU..."
-                OptimizeImage.Text = "Optimiser l'image..."
-                RemountImage.Text = "Remonter l'image pour la maintenance..."
-                SplitFFU.Text = "Diviser un fichier FFU en fichiers SFU..."
-                SplitImage.Text = "Diviser un fichier WIM en fichiers SWM..."
-                UnmountImage.Text = "Démonter l'image..."
-                UpdateWIMBootEntry.Text = "Mettre à jour de l'entrée de configuration de WIMBoot..."
-                ApplySiloedPackage.Text = "Appliquer un package de provisionnement en silo..."
-                SaveImageInformationToolStripMenuItem.Text = "Sauvegarder les informations de l'image..."
-                ' Menu - Commands - OS packages
-                GetPackages.Text = "Obtenir des informations sur le paquet..."
-                AddPackage.Text = "Ajouter un paquet..."
-                RemovePackage.Text = "Supprimer le paquet..."
-                GetFeatures.Text = "Obtenir des informations sur les caractéristiques..."
-                EnableFeature.Text = "Activer la caractéristique..."
-                DisableFeature.Text = "Désactiver la caractéristique..."
-                CleanupImage.Text = "Effectuer des opérations de nettoyage ou de récupération..."
-                ' Menu - Commands - Provisioning packages
-                AddProvisioningPackage.Text = "Ajouter un paquet de provisionnement..."
-                GetProvisioningPackageInfo.Text = "Obtenir des informations sur le paquet de provisionnement..."
-                ApplyCustomDataImage.Text = "Appliquer une image de données personnalisée..."
-                ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obtenir des informations sur les paquets AppX..."
-                AddProvisionedAppxPackage.Text = "Ajouter les paquets AppX provisionnées..."
-                RemoveProvisionedAppxPackage.Text = "Supprimer le provisionnement pour les paquets AppX..."
-                OptimizeProvisionedAppxPackages.Text = "Optimiser les paquets provisionnés..."
-                SetProvisionedAppxDataFile.Text = "Ajouter un fichier de données personnalisé dans les paquets AppX..."
-                ' Menu - Commands - App (MSP) servicing
-                CheckAppPatch.Text = "Obtenir des informations sur les correctifs de l'application..."
-                GetAppPatchInfo.Text = "Obtenir des informations détaillées sur les correctifs des applications..."
-                GetAppPatches.Text = "Obtenir des informations basiques sur les correctifs des applications installées..."
-                GetAppInfo.Text = "Obtenir des informations détaillées sur l'application Windows Installer (*.msi)..."
-                GetApps.Text = "Obtenir des informations basiques sur l'application Windows Installer (*.msi)..."
-                ' Menu - Commands - Default app associations
-                ExportDefaultAppAssociations.Text = "Exporter les associations d'applications par défaut..."
-                GetDefaultAppAssociations.Text = "Obtenir des informations sur l'association d'applications par défaut..."
-                ImportDefaultAppAssociations.Text = "Importer les associations d'applications par défaut..."
-                RemoveDefaultAppAssociations.Text = "Supprimer les associations d'applications par défaut..."
-                ' Menu - Commands - Languages and regional settings
-                GetIntl.Text = "Obtenir des paramètres et des langues internationaux..."
-                SetUILang.Text = "Définir la langue de l'interface utilisateur..."
-                SetUILangFallback.Text = "Définir la langue par défaut de l'interface utilisateur..."
-                SetSysUILang.Text = "Définir la langue préférée de l'interface utilisateur du système..."
-                SetSysLocale.Text = "Définir les paramètres linguistiques du système..."
-                SetUserLocale.Text = "Définir les paramètres linguistiques de l'utilisateur..."
-                SetInputLocale.Text = "Définir la langue d'entrée..."
-                SetAllIntl.Text = "Définir la langue de l'interface utilisateur et les paramètres locaux..."
-                SetTimeZone.Text = "Définir le fuseau horaire par défaut..."
-                SetSKUIntlDefaults.Text = "Définir les langues et les locales par défaut..."
-                SetLayeredDriver.Text = "Régler le pilote en couches..."
-                GenLangINI.Text = "Générer le fichier Lang.ini..."
-                SetSetupUILang.Text = "Définir la langue d'installation par défaut..."
-                ' Menu - Commands - Capabilities
-                AddCapability.Text = "Ajouter une capacité..."
-                ExportSource.Text = "Exporter les capacités dans le référentiel..."
-                GetCapabilities.Text = "Obtenir des informations sur les capacités..."
-                RemoveCapability.Text = "Supprimer la capacité..."
-                ' Menu - Commands - Windows editions
-                GetCurrentEdition.Text = "Obtenir l'édition actuelle..."
-                GetTargetEditions.Text = "Obtenir des objectifs de mise à niveau..."
-                SetEdition.Text = "Mettre à jour l'image..."
-                SetProductKey.Text = "Définir la clé de produit..."
-                ' Menu - Commands - Drivers
-                GetDrivers.Text = "Obtenir des informations sur le pilote..."
-                AddDriver.Text = "Ajouter un pilote..."
-                RemoveDriver.Text = "Retirer le pilote..."
-                ExportDriver.Text = "Exporter des paquets de pilotes..."
-                ImportDriver.Text = "Importer des paquets de pilotes..."
-                ' Menu - Commands - Unattended answer files
-                ApplyUnattend.Text = "Appliquer un fichier de réponse non surveillé..."
-                ' Menu - Commands - Windows PE servicing
-                GetPESettings.Text = "Obtenir des paramètres..."
-                SetScratchSpace.Text = "Définir l'espace temporaire..."
-                SetTargetPath.Text = "Définir le chemin cible..."
-                ' Menu - Commands - OS uninstall
-                GetOSUninstallWindow.Text = "Obtenir la créneau de désinstallation..."
-                InitiateOSUninstall.Text = "Démarrer la désinstallation..."
-                RemoveOSUninstall.Text = "Supprimer la possibilité de revenir en arrière..."
-                SetOSUninstallWindow.Text = "Définir la créneau de désinstallation..."
-                ' Menu - Commands - Reserved storage
-                SetReservedStorageState.Text = "Définir l'état du stockage réservé..."
-                GetReservedStorageState.Text = "Obtenir l'état du stockage réservé..."
-                ' Menu - Commands - Microsoft Edge
-                AddEdge.Text = "Ajouter Edge..."
-                AddEdgeBrowser.Text = "Ajouter le navigateur Edge..."
-                AddEdgeWebView.Text = "Ajouter Edge WebView..."
-                ' Menu - Tools
-                ImageConversionToolStripMenuItem.Text = "Conversion des images"
-                MergeSWM.Text = "Fusionner des fichiers SWM..."
-                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remonter l'image avec les droits d'écriture"
-                CommandShellToolStripMenuItem.Text = "Console de commande"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
-                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
-                RegCplToolStripMenuItem.Text = "Gérer les ruches du registre de l'image..."
-                WebResourcesToolStripMenuItem.Text = "Ressources Web"
-                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Télécharger les ISO de langues et de fonctionnalités optionnelles..."
-                LanguagesAndFODWin10ToolStripMenuItem.Text = "Télécharger les langues et les disques FOD pour Windows 10..."
-                ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
-                MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
-                CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
-                CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
-                WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
-                OptionsToolStripMenuItem.Text = "Paramètres"
-                ' Menu - Help
-                HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
-                AboutDISMToolsToolStripMenuItem.Text = "À propos de DISMTools"
-                ' Menu - Invalid settings
-                ISFix.Text = "Plus d'informations"
-                ISHelp.Text = "Qu'est-ce que c'est ?"
-                ' Menu - DevState
-                ReportFeedbackToolStripMenuItem.Text = "Rapport de rétroaction (s'ouvre dans un navigateur web)"
-                ' Menu - Contributions
-                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuer au système d'aide"
-                ' Menu - Tour Server
-                TourActionsTSMI.Text = "Actions de visite guidée"
-                ServerStatusTSMI.Text = String.Format("Le serveur de visite guidée est actif sur le port {0}", tourServer.GetTcpPort())
-                RestartDTTourTSMI.Text = "Redémarrer la visite guidée"
-                StopDTTourServerTSMI.Text = "Arrêter le serveur de visite guidée"
-                ' Start Panel
-                LabelHeader1.Text = "Commencer"
-                Label10.Text = "Projets récents"
-                NewProjLink.Text = "Nouveau projet..."
-                ExistingProjLink.Text = "Ouvrir un projet existant..."
-                OnlineInstMgmt.Text = "Gérer l'installation en ligne"
-                OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
-                RecentRemoveLink.Text = "Supprimer entrée"
-                ' ToolStrip buttons
-                ToolStripButton1.Text = "Fermer l'onglet"
-                ToolStripButton2.Text = "Sauvegarder le projet"
-                ToolStripButton3.Text = "Décharger le projet"
-                ToolStripButton3.ToolTipText = "Décharger le projet de ce programme"
-                ToolStripButton4.Text = "Afficher la fenêtre de progression"
-                RefreshViewTSB.Text = "Rafraîchir la vue"
-                ExpandCollapseTSB.Text = "Élargir"
-                UpdateLink.Text = "Une nouvelle version est disponible pour le téléchargement et l'installation. Cliquez ici pour en savoir plus"
-                UpdateLink.LinkArea = New LinkArea(78, 31)
-                ' Pop-up context menus
-                PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
-                PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
-                CommitAndUnmountTSMI.Text = "Valider les modifications et démonter l'image"
-                DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
-                UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
-                ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
-                GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
-                SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
-                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Créer une image disque avec ce fichier..."
-                ' OpenFileDialogs and FolderBrowsers
-                OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
-                LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
-                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                    BGProcDetails.Label2.Text = "Les processus de l'image sont terminés"
-                End If
-                MenuDesc.Text = "Prêt"
-                ' Tree view context menu
-                AccessDirectoryToolStripMenuItem.Text = "Accéder à ce répertoire"
-                UnloadProjectToolStripMenuItem1.Text = "Décharger le projet"
-                CopyDeploymentToolsToolStripMenuItem.Text = "Copier les outils de déploiement"
-                OfAllArchitecturesToolStripMenuItem.Text = "De toutes les architectures"
-                OfSelectedArchitectureToolStripMenuItem.Text = "De l'architecture sélectionnée"
-                ForX86ArchitectureToolStripMenuItem.Text = "Pour l'architecture x86"
-                ForAmd64ArchitectureToolStripMenuItem.Text = "Pour l'architecture AMD64"
-                ForARMArchitectureToolStripMenuItem.Text = "Pour l'architecture ARM"
-                ForARM64ArchitectureToolStripMenuItem.Text = "Pour l'architecture ARM64"
-                ImageOperationsToolStripMenuItem.Text = "Opérations sur les images"
-                MountImageToolStripMenuItem.Text = "Monter l'image..."
-                UnmountImageToolStripMenuItem.Text = "Démonter l'image..."
-                RemoveVolumeImagesToolStripMenuItem.Text = "Supprimer les images de volume..."
-                SwitchImageIndexesToolStripMenuItem1.Text = "Changer d'index de l'image..."
-                UnattendedAnswerFilesToolStripMenuItem1.Text = "Fichiers de réponse non surveillés"
-                ManageToolStripMenuItem.Text = "Gérer"
-                CreationWizardToolStripMenuItem.Text = "Créer"
-                ScratchDirectorySettingsToolStripMenuItem.Text = "Configurer le répertoire temporaire"
-                ManageReportsToolStripMenuItem.Text = "Gérer les rapports"
-                AddToolStripMenuItem.Text = "Ajouter"
-                NewFileToolStripMenuItem.Text = "Nouveau fichier..."
-                ExistingFileToolStripMenuItem.Text = "Fichier existant..."
-                ' Context menu of AppX information dialog
-                SaveResourceToolStripMenuItem.Text = "Sauvegarder les ressources..."
-                CopyToolStripMenuItem.Text = "Copier la ressource"
-                ' Context menu of AppX addition dialog
-                MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
-                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
-                AppxDownloadHelpToolStripMenuItem.Text = "Comment puis-je obtenir des applications ?"
-                ' New design
-                GreetingLabel.Text = "Bienvenue à cette session de service"
-                LinkLabel12.Text = "PROJET"
-                LinkLabel13.Text = "IMAGE"
-                Label54.Text = "Nom :"
-                Label51.Text = "Lieu :"
-                Label53.Text = "Images montées ?"
-                LinkLabel14.Text = "Cliquez ici pour monter une image"
-                Label55.Text = "Tâches du projet"
-                LinkLabel15.Text = "Voir les propriétés du projet"
-                LinkLabel16.Text = "Ouvrir dans l'explorateur de fichiers"
-                LinkLabel17.Text = "Décharger le projet"
-                Label59.Text = "Aucune image n'a été montée"
-                Label58.Text = "Vous devez monter une image pour pouvoir consulter ses informations."
-                Label57.Text = "Choix"
-                LinkLabel21.Text = "Monter une image..."
-                LinkLabel18.Text = "Choisir une image montée..."
-                Label39.Text = "Index de l'image :"
-                Label43.Text = "Répertoire de montage :"
-                Label45.Text = "Version :"
-                Label42.Text = "Nom :"
-                Label40.Text = "Description :"
-                Label56.Text = "Tâches de l'image"
-                LinkLabel20.Text = "Voir les propriétés de l'image"
-                LinkLabel19.Text = "Démonter l'image"
-                GroupBox4.Text = "Opérations sur les images"
-                Button26.Text = "Monter une image..."
-                Button27.Text = "Sauvegarder les modifications pendants"
-                Button28.Text = "Sauvegarder modifications et démonter l'image"
-                Button29.Text = "Démonter l'image en supprimant les modifications"
-                Button25.Text = "Recharger la session de service"
-                Button24.Text = "Changer d'index de l'image..."
-                Button30.Text = "Appliquer l'image..."
-                Button31.Text = "Capturer image..."
-                Button32.Text = "Supprimer les images de volume..."
-                Button33.Text = "Sauvegarder les informations complètes de l'image..."
-                GroupBox5.Text = "Opérations sur les paquets"
-                Button36.Text = "Ajouter des paquets..."
-                Button34.Text = "Obtenir des informations sur le paquet..."
-                Button38.Text = "Sauvegarder les informations sur les paquets installés..."
-                Button35.Text = "Supprimer des paquets..."
-                Button37.Text = "Effectuer la maintenance et le nettoyage du stock de composants..."
-                GroupBox6.Text = "Opérations sur les caractéristiques"
-                Button41.Text = "Activer des caractéristiques..."
-                Button39.Text = "Obtenir des informations sur les caractéristiques..."
-                Button42.Text = "Sauvegarder les caractéristiques..."
-                Button40.Text = "Désactiver des caractéristiques..."
-                GroupBox7.Text = "Opérations sur les paquets AppX"
-                Button44.Text = "Ajouter des paquets AppX..."
-                Button45.Text = "Obtenir des informations sur les applications..."
-                Button46.Text = "Sauvegarder les informations sur les paquets AppX installés..."
-                Button43.Text = "Supprimer des paquets AppX..."
-                GroupBox8.Text = "Opérations sur les capacités"
-                Button48.Text = "Ajouter des capacités..."
-                Button49.Text = "Obtenir des informations sur les capacités..."
-                Button50.Text = "Sauvegarder les informations sur les capacités..."
-                Button47.Text = "Supprimer des capacités..."
-                GroupBox9.Text = "Opérations sur les pilotes"
-                Button53.Text = "Ajouter des paquets de pilotes..."
-                Button52.Text = "Obtenir des informations sur les pilotes..."
-                Button54.Text = "Sauvegarder les informations sur les pilotes installés..."
-                Button51.Text = "Supprimer des pilotes..."
-                GroupBox10.Text = "Opérations de Windows PE"
-                Button55.Text = "Obtenir des paramètres..."
-                Button56.Text = "Sauvegarder les paramètres..."
-                Button57.Text = "Configurer le chemin d'accès..."
-                Button58.Text = "Configurer l'espace temporaire..."
-            Case 4
-                DynaLog.LogMessage("Language code is 4. Switching to Portuguese...")
-                ' Top-level menu items
-                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
-                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Projeto".ToUpper(), "&Projeto")
-                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Co&mandos".ToUpper(), "Co&mandos")
-                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ferramentas".ToUpper(), "&Ferramentas")
-                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ajuda".ToUpper(), "&Ajuda")
-                InvalidSettingsTSMI.Text = "Foram detectadas configurações inválidas"
-                ' Submenu items
-                ' Menu - File
-                NewProjectToolStripMenuItem.Text = "&Novo projeto..."
-                OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
-                ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
-                ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
-                RecentProjectsListMenu.Text = "Projectos recentes"
-                SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
-                SaveProjectasToolStripMenuItem.Text = "Save project &como..."
-                ExitToolStripMenuItem.Text = "Sa&ir"
-                ' Menu - Project
-                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Ver ficheiros de projeto no Explorador de Ficheiros"
-                UnloadProjectToolStripMenuItem.Text = "Descarregar o projeto..."
-                SwitchImageIndexesToolStripMenuItem.Text = "Alternar os índices de imagem..."
-                ProjectPropertiesToolStripMenuItem.Text = "Propriedades do projeto"
-                ImagePropertiesToolStripMenuItem.Text = "Propriedades da imagem"
-                ' Menu - Commands
-                ImageManagementToolStripMenuItem.Text = "Gestão de imagens"
-                OSPackagesToolStripMenuItem.Text = "Pacotes do sistema operativo"
-                ProvisioningPackagesToolStripMenuItem.Text = "Pacotes de provisionamento"
-                AppPackagesToolStripMenuItem.Text = "Pacotes AppX"
-                AppPatchesToolStripMenuItem.Text = "Serviço de aplicações (MSP)"
-                DefaultAppAssociationsToolStripMenuItem.Text = "Associações de aplicações predefinidas"
-                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Línguas e definições regionais"
-                CapabilitiesToolStripMenuItem.Text = "Capacidades"
-                WindowsEditionsToolStripMenuItem.Text = "Edições do Windows"
-                DriversToolStripMenuItem.Text = "Controladores de dispositivos"
-                UnattendedAnswerFilesToolStripMenuItem.Text = "Ficheiros de resposta não assistidos"
-                WindowsPEServicingToolStripMenuItem.Text = "Manutenção do Windows PE"
-                OSUninstallToolStripMenuItem.Text = "Desinstalação do sistema operativo"
-                ReservedStorageToolStripMenuItem.Text = "Armazenamento reservado"
-                ' Menu - Commands - Image management
-                AppendImage.Text = "Anexar o diretório de captura à imagem..."
-                ApplyFFU.Text = "Aplicar o ficheiro FFU ou SFU..."
-                ApplyImage.Text = "Aplicar ficheiro WIM ou SWM..."
-                CaptureCustomImage.Text = "Capturar alterações incrementais no ficheiro..."
-                CaptureFFU.Text = "Capturar partições para o ficheiro FFU..."
-                CaptureImage.Text = "Capturar imagem de uma unidade para um ficheiro WIM..."
-                CleanupMountpoints.Text = "Eliminar recursos de uma imagem corrompida..."
-                CommitImage.Text = "Aplicar alterações à imagem..."
-                DeleteImage.Text = "Eliminar imagens de volume do ficheiro WIM..."
-                ExportImage.Text = "Exportar imagem..."
-                GetImageInfo.Text = "Obter informações sobre a imagem..."
-                GetWIMBootEntry.Text = "Obter entradas de configuração do WIMBoot..."
-                ListImage.Text = "Listar ficheiros e directórios na imagem..."
-                MountImage.Text = "Montar imagem..."
-                OptimizeFFU.Text = "Otimizar ficheiro FFU..."
-                OptimizeImage.Text = "Otimizar imagem..."
-                RemountImage.Text = "Remontar imagem para manutenção..."
-                SplitFFU.Text = "Dividir o arquivo FFU em arquivos SFU..."
-                SplitImage.Text = "Dividir ficheiro WIM em ficheiros SWM..."
-                UnmountImage.Text = "Desmontar imagem..."
-                UpdateWIMBootEntry.Text = "Atualizar a entrada de configuração WIMBoot..."
-                ApplySiloedPackage.Text = "Aplicar pacote de provisionamento em silo..."
-                ' Menu - Commands - OS packages
-                GetPackages.Text = "Obter informações sobre os pacotes..."
-                AddPackage.Text = "Adicionar pacotes..."
-                RemovePackage.Text = "Remove package..."
-                GetFeatures.Text = "Obter informações sobre as características..."
-                EnableFeature.Text = "Ativar características..."
-                DisableFeature.Text = "Desativar funcionalidades..."
-                CleanupImage.Text = "Efetuar operações de limpeza ou de recuperação..."
-                SaveImageInformationToolStripMenuItem.Text = "Guardar informações da imagem..."
-                ' Menu - Commands - Provisioning packages
-                AddProvisioningPackage.Text = "Adicionar pacote de aprovisionamento..."
-                GetProvisioningPackageInfo.Text = "Obter informações sobre o pacote de aprovisionamento..."
-                ApplyCustomDataImage.Text = "Aplicar imagens de dados personalizadas..."
-                ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Obter informações sobre o pacote AppX..."
-                AddProvisionedAppxPackage.Text = "Adicionar pacote AppX provisionado..."
-                RemoveProvisionedAppxPackage.Text = "Remover o aprovisionamento do pacote AppX..."
-                OptimizeProvisionedAppxPackages.Text = "Otimizar os pacotes provisionados..."
-                SetProvisionedAppxDataFile.Text = "Adicionar ficheiro de dados personalizado ao pacote AppX..."
-                ' Menu - Commands - App (MSP) servicing
-                CheckAppPatch.Text = "Obter informações sobre patches de aplicações..."
-                GetAppPatchInfo.Text = "Obter informações detalhadas sobre patches de aplicações..."
-                GetAppPatches.Text = "Obter informações básicas sobre patches de aplicações instaladas..."
-                GetAppInfo.Text = "Obter informações detalhadas sobre a aplicação Windows Installer (*.msi)..."
-                GetApps.Text = "Obter informações básicas sobre a aplicação Windows Installer (*.msi)..."
-                ' Menu - Commands - Default app associations
-                ExportDefaultAppAssociations.Text = "Exportar associações de aplicações predefinidas..."
-                GetDefaultAppAssociations.Text = "Obter informações de associação de aplicações predefinidas..."
-                ImportDefaultAppAssociations.Text = "Importar associações de aplicações predefinidas..."
-                RemoveDefaultAppAssociations.Text = "Remover associações de aplicações predefinidas..."
-                ' Menu - Commands - Languages and regional settings
-                GetIntl.Text = "Obter definições e línguas internacionais..."
-                SetUILang.Text = "Definir o idioma da IU..."
-                SetUILangFallback.Text = "Definir o idioma de recurso predefinido da IU..."
-                SetSysUILang.Text = "Definir o idioma preferido da IU do sistema..."
-                SetSysLocale.Text = "Definir a localidade do sistema..."
-                SetUserLocale.Text = "Definir a localidade do utilizador..."
-                SetInputLocale.Text = "Definir localidade de entrada..."
-                SetAllIntl.Text = "Definir o idioma e as localidades da IU..."
-                SetTimeZone.Text = "Definir o fuso horário predefinido..."
-                SetSKUIntlDefaults.Text = "Definir idiomas e localidades predefinidos..."
-                SetLayeredDriver.Text = "Definir driver em camadas..."
-                GenLangINI.Text = "Gerar ficheiro Lang.ini..."
-                SetSetupUILang.Text = "Definir idioma de configuração padrão..."
-                ' Menu - Commands - Capabilities
-                AddCapability.Text = "Adicionar capacidade..."
-                ExportSource.Text = "Exportar capacidades para o repositório..."
-                GetCapabilities.Text = "Obter informações sobre a capacidade..."
-                RemoveCapability.Text = "Remover capacidade..."
-                ' Menu - Commands - Windows editions
-                GetCurrentEdition.Text = "Obter a edição atual..."
-                GetTargetEditions.Text = "Obter objectivos de atualização..."
-                SetEdition.Text = "Atualizar a imagem..."
-                SetProductKey.Text = "Definir a chave do produto..."
-                ' Menu - Commands - Drivers
-                GetDrivers.Text = "Obter informações sobre o controlador..."
-                AddDriver.Text = "Adicionar controlador..."
-                RemoveDriver.Text = "Remover controlador..."
-                ExportDriver.Text = "Exportar pacotes de controladores..."
-                ImportDriver.Text = "Importar pacotes de controladores..."
-                ' Menu - Commands - Unattended answer files
-                ApplyUnattend.Text = "Aplicar ficheiro de resposta não assistida..."
-                ' Menu - Commands - Windows PE servicing
-                GetPESettings.Text = "Obter definições..."
-                SetScratchSpace.Text = "Definir espaço de temporário..."
-                SetTargetPath.Text = "Definir caminho de destino..."
-                ' Menu - Commands - OS uninstall
-                GetOSUninstallWindow.Text = "Obter janela de desinstalação..."
-                InitiateOSUninstall.Text = "Iniciar a desinstalação..."
-                RemoveOSUninstall.Text = "Remover a capacidade de reversão..."
-                SetOSUninstallWindow.Text = "Definir janela de desinstalação..."
-                ' Menu - Commands - Reserved storage
-                SetReservedStorageState.Text = "Definir estado de armazenamento reservado..."
-                GetReservedStorageState.Text = "Obter estado de armazenamento reservado..."
-                ' Menu - Commands - Microsoft Edge
-                AddEdge.Text = "Adicionar Edge..."
-                AddEdgeBrowser.Text = "Adicionar navegador do Edge..."
-                AddEdgeWebView.Text = "Adicionar Edge WebView..."
-                ' Menu - Tools
-                ImageConversionToolStripMenuItem.Text = "Conversão de imagens"
-                MergeSWM.Text = "Fundir ficheiros SWM..."
-                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagem com permissões de escrita"
-                CommandShellToolStripMenuItem.Text = "Consola de comandos"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
-                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
-                RegCplToolStripMenuItem.Text = "Gerir as colmeias do registo de imagens..."
-                WebResourcesToolStripMenuItem.Text = "Recursos da Web"
-                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = " Descarregar ISOs de idiomas e caraterísticas opcionais..."
-                LanguagesAndFODWin10ToolStripMenuItem.Text = "Descarregar discos de idiomas e FOD para o Windows 10..."
-                ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
-                MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
-                CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
-                CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
-                WimScriptEditorCommand.Text = "Editor de listas de configuração"
-                OptionsToolStripMenuItem.Text = "Opções"
-                ' Menu - Help
-                HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
-                AboutDISMToolsToolStripMenuItem.Text = "Acerca do DISMTools"
-                ' Menu - Invalid settings
-                ISFix.Text = "Mais informações"
-                ISHelp.Text = "O que é isto?"
-                ' Menu - DevState
-                ReportFeedbackToolStripMenuItem.Text = "Comunicar comentários (abre no navegador Web)"
-                ' Menu - Contributions
-                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir para o sistema de ajuda"
-                ' Menu - Tour Server
-                TourActionsTSMI.Text = "Ações do Tour"
-                ServerStatusTSMI.Text = String.Format("O servidor de tour está ativo na porta {0}", tourServer.GetTcpPort())
-                RestartDTTourTSMI.Text = "Reiniciar Tour"
-                StopDTTourServerTSMI.Text = "Parar Servidor de Tour"
-                ' Start Panel
-                LabelHeader1.Text = "Início"
-                Label10.Text = "Projectos recentes"
-                NewProjLink.Text = "Novo projeto..."
-                ExistingProjLink.Text = "Abrir projeto existente..."
-                OnlineInstMgmt.Text = "Gerir a instalação online"
-                OfflineInstMgmt.Text = "Gerir a instalação offline..."
-                ' ToolStrip buttons
-                ToolStripButton1.Text = "Fechar separador"
-                ToolStripButton2.Text = "Guardar projeto"
-                ToolStripButton3.Text = "Descarregar projeto"
-                ToolStripButton3.ToolTipText = "Descarregar projeto a partir deste programa"
-                ToolStripButton4.Text = "Mostrar janela de progresso"
-                RefreshViewTSB.Text = "Atualizar vista"
-                ExpandCollapseTSB.Text = "Expandir"
-                UpdateLink.Text = "Está disponível uma nova versão para transferência e instalação. Clique aqui para saber mais"
-                UpdateLink.LinkArea = New LinkArea(65, 27)
-                ' Pop-up context menus
-                PkgBasicInfo.Text = "Obter informações básicas (todos os pacotes)"
-                PkgDetailedInfo.Text = "Obter informações detalhadas (pacote específico)"
-                CommitAndUnmountTSMI.Text = "Confirmar alterações e desmontar imagem"
-                DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
-                UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
-                ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
-                GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
-                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
-                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Criar imagem de disco com este ficheiro..."
-                ' OpenFileDialogs and FolderBrowsers
-                OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
-                LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
-                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                    BGProcDetails.Label2.Text = "Os processos de imagem foram concluídos"
-                End If
-                MenuDesc.Text = "Pronto"
-                ' Tree view context menu
-                AccessDirectoryToolStripMenuItem.Text = "Aceder ao diretório"
-                UnloadProjectToolStripMenuItem1.Text = "Descarregar projeto"
-                CopyDeploymentToolsToolStripMenuItem.Text = "Copiar ferramentas de implementação"
-                OfAllArchitecturesToolStripMenuItem.Text = "De todas as arquitecturas"
-                OfSelectedArchitectureToolStripMenuItem.Text = "Da arquitetura selecionada"
-                ForX86ArchitectureToolStripMenuItem.Text = "Para a arquitetura x86"
-                ForAmd64ArchitectureToolStripMenuItem.Text = "Para a arquitetura AMD64"
-                ForARMArchitectureToolStripMenuItem.Text = "Para a arquitetura ARM"
-                ForARM64ArchitectureToolStripMenuItem.Text = "Para a arquitetura ARM64"
-                ImageOperationsToolStripMenuItem.Text = "Operações de imagem"
-                MountImageToolStripMenuItem.Text = "Montar imagem..."
-                UnmountImageToolStripMenuItem.Text = "Desmontar imagem..."
-                RemoveVolumeImagesToolStripMenuItem.Text = "Remover imagens de volume..."
-                SwitchImageIndexesToolStripMenuItem1.Text = "Mudar os índices de imagem..."
-                UnattendedAnswerFilesToolStripMenuItem1.Text = "Ficheiros de resposta não assistidos"
-                ManageToolStripMenuItem.Text = "Gerir"
-                CreationWizardToolStripMenuItem.Text = "Criar"
-                ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar o diretório de temporário"
-                ManageReportsToolStripMenuItem.Text = "Gerir relatórios"
-                AddToolStripMenuItem.Text = "Adicionar"
-                NewFileToolStripMenuItem.Text = "Novo ficheiro..."
-                ExistingFileToolStripMenuItem.Text = "Ficheiro existente..."
-                ' Context menu of AppX information dialog
-                SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
-                CopyToolStripMenuItem.Text = "Copiar recurso"
-                ' Context menu of AppX addition dialog
-                MicrosoftAppsToolStripMenuItem.Text = "Visite o sítio Web das Aplicações Microsoft"
-                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visite o Web site do Projeto de Geração da Microsoft Store"
-                AppxDownloadHelpToolStripMenuItem.Text = "Como é que obtenho aplicações?"
-                ' New design
-                GreetingLabel.Text = "Bem-vindo a esta sessão de manutenção"
-                LinkLabel12.Text = "PROJECTO"
-                LinkLabel13.Text = "IMAGEM"
-                Label54.Text = "Nome:"
-                Label51.Text = "Localização:"
-                Label53.Text = "Imagens montadas?"
-                LinkLabel14.Text = "Clique aqui para montar uma imagem"
-                Label55.Text = "Tarefas do projeto"
-                LinkLabel15.Text = "Ver propriedades do projeto"
-                LinkLabel16.Text = "Abrir no Explorador de Ficheiros"
-                LinkLabel17.Text = "Descarregar projeto"
-                Label59.Text = "Não foi montada nenhuma imagem"
-                Label58.Text = "É necessário montar uma imagem para ver a sua informação"
-                Label57.Text = "Escolhas"
-                LinkLabel21.Text = "Montar uma imagem..."
-                LinkLabel18.Text = "Escolher uma imagem montada..."
-                Label39.Text = "Índice da imagem:"
-                Label43.Text = "Ponto de montagem:"
-                Label45.Text = "Versão:"
-                Label42.Text = "Nome:"
-                Label40.Text = "Descrição:"
-                Label56.Text = "Tarefas de imagem"
-                LinkLabel20.Text = "Ver propriedades da imagem"
-                LinkLabel19.Text = "Desmontar imagem"
-                GroupBox4.Text = "Operações de imagem"
-                Button26.Text = "Montar imagem..."
-                Button27.Text = "Confirmar alterações actuais"
-                Button28.Text = "Confirmar e desmontar a imagem"
-                Button29.Text = "Desmontar imagem, descartando alterações"
-                Button25.Text = "Recarregar sessão de manutenção"
-                Button24.Text = "Mudar os índices de imagem..."
-                Button30.Text = "Aplicar imagem..."
-                Button31.Text = "Capturar imagem..."
-                Button32.Text = "Remover imagens de volume..."
-                Button33.Text = "Guardar informações completas da imagem..."
-                GroupBox5.Text = "Operações do pacote"
-                Button36.Text = "Adicionar pacote..."
-                Button34.Text = "Obter informações sobre o pacote..."
-                Button38.Text = "Guardar informações do pacote instalado..."
-                Button35.Text = "Remover pacote..."
-                Button37.Text = "Executar manutenção e limpeza do arquivo de componentes..."
-                GroupBox6.Text = "Operações de funcionalidades"
-                Button41.Text = "Ativar caraterística..."
-                Button39.Text = "Obter informações sobre a caraterística..."
-                Button42.Text = "Guardar informação da caraterística..."
-                Button40.Text = "Desativar caraterística..."
-                GroupBox7.Text = "Operações do pacote AppX"
-                Button44.Text = "Adicionar pacote AppX..."
-                Button45.Text = "Obter informações sobre a aplicação..."
-                Button46.Text = "Guardar informações do pacote AppX instalado..."
-                Button43.Text = "Remover pacote AppX..."
-                GroupBox8.Text = "Operações de capacidade"
-                Button48.Text = "Adicionar capacidade..."
-                Button49.Text = "Obter informações de capacidade..."
-                Button50.Text = "Guardar informações de capacidade..."
-                Button47.Text = "Remover capacidade..."
-                GroupBox9.Text = "Operações do controlador"
-                Button53.Text = "Adicionar pacote de controlador..."
-                Button52.Text = "Obter informações do controlador..."
-                Button54.Text = "Guardar informações do controlador instalado..."
-                Button51.Text = "Remover controlador..."
-                GroupBox10.Text = "Operações do Windows PE"
-                Button55.Text = "Obter configuração"
-                Button56.Text = "Guardar configuração..."
-                Button57.Text = "Definir caminho de destino..."
-                Button58.Text = "Definir espaço temporário..."
-            Case 5
-                DynaLog.LogMessage("Language code is 5. Switching to Italian...")
-                ' Top-level menu items
-                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
-                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Progetto".ToUpper(), "&Progetto")
-                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&andi".ToUpper(), "Com&andi")
-                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Strumenti".ToUpper(), "&Strumenti")
-                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Aiuto".ToUpper(), "&Aiuto")
-                InvalidSettingsTSMI.Text = "Sono state rilevate impostazioni non valide"
-                ' Submenu items
-                ' Menu - File
-                NewProjectToolStripMenuItem.Text = "&Nuovo progetto..."
-                OpenExistingProjectToolStripMenuItem.Text = "&Apri progetto esistente"
-                ManageOnlineInstallationToolStripMenuItem.Text = "&Gestisci installazione online..."
-                ManageOfflineInstallationToolStripMenuItem.Text = "Gestisci installazione &offline..."
-                RecentProjectsListMenu.Text = "Progetti recenti"
-                SaveProjectToolStripMenuItem.Text = "&Salva progetto..."
-                SaveProjectasToolStripMenuItem.Text = "Salva progetto &come..."
-                ExitToolStripMenuItem.Text = "E&sci"
-                ' Menu - Project
-                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Visualizza i file del progetto in Esplora file"
-                UnloadProjectToolStripMenuItem.Text = "Scarica il progetto..."
-                SwitchImageIndexesToolStripMenuItem.Text = "Cambia gli indici delle immagini..."
-                ProjectPropertiesToolStripMenuItem.Text = "Proprietà del progetto"
-                ImagePropertiesToolStripMenuItem.Text = "Proprietà dell'immagine"
-                ' Menu - Commands
-                ImageManagementToolStripMenuItem.Text = "Gestione delle immagini"
-                OSPackagesToolStripMenuItem.Text = "Pacchetti OS"
-                ProvisioningPackagesToolStripMenuItem.Text = "Pacchetti di provisioning"
-                AppPackagesToolStripMenuItem.Text = "Pacchetti AppX"
-                AppPatchesToolStripMenuItem.Text = "Assistenza per le app (MSP)"
-                DefaultAppAssociationsToolStripMenuItem.Text = "Associazioni app predefinite"
-                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Lingue e impostazioni regionali"
-                CapabilitiesToolStripMenuItem.Text = "Capacità"
-                WindowsEditionsToolStripMenuItem.Text = "Edizioni di Windows"
-                DriversToolStripMenuItem.Text = "Driver"
-                UnattendedAnswerFilesToolStripMenuItem.Text = "File di risposte non presidiati"
-                WindowsPEServicingToolStripMenuItem.Text = "Assistenza Windows PE"
-                OSUninstallToolStripMenuItem.Text = "Disinstallazione del sistema operativo"
-                ReservedStorageToolStripMenuItem.Text = "Archiviazione riservata"
-                ' Menu - Commands - Image management
-                AppendImage.Text = "Applica la directory di acquisizione all'immagine..."
-                ApplyFFU.Text = "Applicare file FFU o SFU..."
-                ApplyImage.Text = "Applica file WIM o SWM..."
-                CaptureCustomImage.Text = "Cattura modifiche incrementali al file..."
-                CaptureFFU.Text = "Cattura partizioni nel file FFU..."
-                CaptureImage.Text = "Cattura l'immagine di un'unità in un file WIM..."
-                CleanupMountpoints.Text = "Elimina le risorse dall'immagine danneggiata..."
-                CommitImage.Text = "Applica le modifiche all'immagine..."
-                DeleteImage.Text = "Cancellare le immagini del volume dal file WIM..."
-                ExportImage.Text = "Esportazione dell'immagine..."
-                GetImageInfo.Text = "Verifica informazioni immagine..."
-                GetWIMBootEntry.Text = "Verifica voci configurazione WIMBoot..."
-                ListImage.Text = "Elenca file e cartelle nell'immagine..."
-                MountImage.Text = "Monta immagine..."
-                OptimizeFFU.Text = "Ottimizzare il file FFU..."
-                OptimizeImage.Text = "Ottimizzare l'immagine..."
-                RemountImage.Text = "Rimonta l'immagine per la manutenzione..."
-                SplitFFU.Text = "Dividere il file FFU in file SFU..."
-                SplitImage.Text = "Dividere il file WIM in file SWM..."
-                UnmountImage.Text = "Smontare l'immagine..."
-                UpdateWIMBootEntry.Text = "Aggiornare la voce di configurazione di WIMBoot..."
-                ApplySiloedPackage.Text = "Applica il pacchetto di provisioning a silo..."
-                ' Menu - Commands - OS packages
-                GetPackages.Text = "Verifica informazioni pacchetti..."
-                AddPackage.Text = "Aggiungi pacchetto..."
-                RemovePackage.Text = "Rimuovi pacchetto..."
-                GetFeatures.Text = "Verifica informazioni funzionalità..."
-                EnableFeature.Text = "Abilita funzionalità..."
-                DisableFeature.Text = "Disabilita la funzionalità..."
-                CleanupImage.Text = "Eseguire operazioni di pulizia o ripristino..."
-                SaveImageInformationToolStripMenuItem.Text = "Salva informazioni sull'immagine..."
-                ' Menu - Commands - Provisioning packages
-                AddProvisioningPackage.Text = "Aggiungi pacchetto di provisioning..."
-                GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
-                ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
-                ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto AppX..."
-                AddProvisionedAppxPackage.Text = "Aggiungi pacchetto AppX in provisioning..."
-                RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto AppX..."
-                OptimizeProvisionedAppxPackages.Text = "Ottimizzare i pacchetti in provisioning..."
-                SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto AppX..."
-                ' Menu - Commands - App (MSP) servicing
-                CheckAppPatch.Text = "Verifica informazioni patch applicazione..."
-                GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
-                GetAppPatches.Text = "Verifica informazioni di base patch applicazioni installate..."
-                GetAppInfo.Text = "Verifica informazioni dettagliate applicazione Windows Installer (*.msi)..."
-                GetApps.Text = "Verifica informazioni di base applicazione Windows Installer (*.msi)..."
-                ' Menu - Commands - Default app associations
-                ExportDefaultAppAssociations.Text = "Esporta associazioni predefinite applicazioni..."
-                GetDefaultAppAssociations.Text = "Verifica informazioni associazioni predefinite delle applicazioni..."
-                ImportDefaultAppAssociations.Text = "Importa associazioni predefinite applicazioni..."
-                RemoveDefaultAppAssociations.Text = "Rimuovi associazioni predefinite applicazioni..."
-                ' Menu - Commands - Languages and regional settings
-                GetIntl.Text = "Verifica impostazioni e lingue internazionali..."
-                SetUILang.Text = "Imposta lingua interfaccia utente..."
-                SetUILangFallback.Text = "Imposta lingua di fallback predefinita interfaccia utente..."
-                SetSysUILang.Text = "Imposta lingua interfaccia utente preferita dal sistema..."
-                SetSysLocale.Text = "Imposta il locale del sistema..."
-                SetUserLocale.Text = "Imposta il locale dell'utente..."
-                SetInputLocale.Text = "Imposta il locale di input..."
-                SetAllIntl.Text = "Imposta la lingua e i locali dell'interfaccia utente..."
-                SetTimeZone.Text = "Imposta il fuso orario predefinito..."
-                SetSKUIntlDefaults.Text = "Imposta le lingue e i locali predefiniti..."
-                SetLayeredDriver.Text = "Imposta driver a strati..."
-                GenLangINI.Text = "Generare il file Lang.ini..."
-                SetSetupUILang.Text = "Imposta la lingua predefinita del programma di installazione..."
-                ' Menu - Commands - Capabilities
-                AddCapability.Text = "Aggiungi capacità..."
-                ExportSource.Text = "Esportazione capacità nel repository..."
-                GetCapabilities.Text = "Verifica informazioni capacità..."
-                RemoveCapability.Text = "Rimuovi capacità..."
-                ' Menu - Commands - Windows editions
-                GetCurrentEdition.Text = "Verifica edizione attuale..."
-                GetTargetEditions.Text = "Verifica obiettivi aggiornamento..."
-                SetEdition.Text = "Aggiorna immagine..."
-                SetProductKey.Text = "Imposta chiave prodotto..."
-                ' Menu - Commands - Drivers
-                GetDrivers.Text = "Verifica informazioni driver..."
-                AddDriver.Text = "Aggiungi driver..."
-                RemoveDriver.Text = "Rimuovi driver..."
-                ExportDriver.Text = "Esporta i pacchetti di driver..."
-                ImportDriver.Text = "Importa pacchetti di driver..."
-                ' Menu - Commands - Unattended answer files
-                ApplyUnattend.Text = "Applica il file di risposta non presidiato..."
-                ' Menu - Commands - Windows PE servicing
-                GetPESettings.Text = "Verifica impostazioni..."
-                SetScratchSpace.Text = "Imposta spazio per lo scratch..."
-                SetTargetPath.Text = "Imposta percorso destinazione..."
-                ' Menu - Commands - OS uninstall
-                GetOSUninstallWindow.Text = "Verifica finestra disinstallazione..."
-                InitiateOSUninstall.Text = "Avvia disinstallazione..."
-                RemoveOSUninstall.Text = "Rimuovi opzione fallback..."
-                SetOSUninstallWindow.Text = "Imposta finestra di disinstallazione..."
-                ' Menu - Commands - Reserved storage
-                SetReservedStorageState.Text = "Imposta stato archiviazione riservato..."
-                GetReservedStorageState.Text = "Verifica stato archiviazione riservato..."
-                ' Menu - Commands - Microsoft Edge
-                AddEdge.Text = "Aggiungi Edge..."
-                AddEdgeBrowser.Text = "Aggiungi browser Edge..."
-                AddEdgeWebView.Text = "Aggiungi WebView Edge..."
-                ' Menu - Tools
-                ImageConversionToolStripMenuItem.Text = "Conversione di immagini"
-                MergeSWM.Text = "Unire i file SWM..."
-                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Rimonta l'immagine con i permessi di scrittura"
-                CommandShellToolStripMenuItem.Text = "Console dei comandi"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
-                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
-                RegCplToolStripMenuItem.Text = "Gestire gli alveari del registro delle immagini..."
-                WebResourcesToolStripMenuItem.Text = "Risorse Web"
-                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Scarica le ISO delle lingue e delle funzionalità opzionali..."
-                LanguagesAndFODWin10ToolStripMenuItem.Text = "Scarica le lingue e i dischi FOD per Windows 10..."
-                ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
-                MountedImageManagerTSMI.Text = "Gestore di immagini montate"
-                CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
-                CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
-                WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
-                OptionsToolStripMenuItem.Text = "Opzioni"
-                ' Menu - Help
-                HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
-                AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
-                ' Menu - Tour Server
-                TourActionsTSMI.Text = "Azioni tour"
-                ServerStatusTSMI.Text = String.Format("Il server tour è attivo sulla porta {0}", tourServer.GetTcpPort())
-                RestartDTTourTSMI.Text = "Riavvia tour"
-                StopDTTourServerTSMI.Text = "Interrompi server tour"
-                ' Menu - Invalid settings
-                ISFix.Text = "Ulteriori informazioni"
-                ISHelp.Text = "Che cos'è questo?"
-                ' Menu - DevState
-                ReportFeedbackToolStripMenuItem.Text = "Segnala feedback (si apre nel browser web)"
-                ' Menu - Contributions
-                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuisci al sistema di assistenza"
-                ' Start Panel
-                LabelHeader1.Text = "Iniziare"
-                Label10.Text = "Progetti recenti"
-                NewProjLink.Text = "Nuovo progetto..."
-                ExistingProjLink.Text = "Aprire progetto esistente..."
-                OnlineInstMgmt.Text = "Gestione dell'installazione online"
-                OfflineInstMgmt.Text = "Gestione dell'installazione offline..."
-                RecentRemoveLink.Text = "Rimuovi elemento"
-                ' ToolStrip buttons
-                ToolStripButton1.Text = "Chiudi la scheda"
-                ToolStripButton2.Text = "Salva il progetto"
-                ToolStripButton3.Text = "Scarica il progetto"
-                ToolStripButton3.ToolTipText = "Scarica il progetto da questo programma"
-                ToolStripButton4.Text = "Mostra la finestra di avanzamento"
-                RefreshViewTSB.Text = "Aggiorna vista"
-                ExpandCollapseTSB.Text = "Espandi"
-                UpdateLink.Text = "È disponibile una nuova versione da scaricare e installare. Fare clic qui per saperne di più"
-                UpdateLink.LinkArea = New LinkArea(60, 32)
-                ' Pop-up context menus
-                PkgBasicInfo.Text = "Verifica informazioni elementari (tutti i pacchetti)"
-                PkgDetailedInfo.Text = "Verifica informazioni dettagliate (pacchetto specifico)"
-                CommitAndUnmountTSMI.Text = "Applica le modifiche e smonta l'immagine"
-                DiscardAndUnmountTSMI.Text = "Scarta le modifiche e smonta l'immagine"
-                UnmountSettingsToolStripMenuItem.Text = "Smontare le impostazioni..."
-                ViewPackageDirectoryToolStripMenuItem.Text = "Visualizza la directory dei pacchetti"
-                GetImageFileInformationToolStripMenuItem.Text = "Verifica informazioni immagine..."
-                SaveCompleteImageInformationToolStripMenuItem.Text = "Salva informazioni complete sull'immagine..."
-                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crea l'immagine del disco con questo file..."
-                ' OpenFileDialogs and FolderBrowsers
-                OpenFileDialog1.Title = "Specificare il file del progetto da caricare"
-                LocalMountDirFBD.Description = "Specificare la directory di montaggio che si desidera caricare in questo progetto:"
-                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-                    BGProcDetails.Label2.Text = "I processi dell'immagine sono stati completati"
-                End If
-                MenuDesc.Text = "Pronto"
-                ' Tree view context menu
-                AccessDirectoryToolStripMenuItem.Text = "Accesso alla directory"
-                UnloadProjectToolStripMenuItem1.Text = "Scarica il progetto"
-                CopyDeploymentToolsToolStripMenuItem.Text = "Copia strumenti distribuzione"
-                OfAllArchitecturesToolStripMenuItem.Text = "Di tutte le architetture"
-                OfSelectedArchitectureToolStripMenuItem.Text = "Dell'architettura selezionata"
-                ForX86ArchitectureToolStripMenuItem.Text = "Per l'architettura x86"
-                ForAmd64ArchitectureToolStripMenuItem.Text = "Per l'architettura AMD64"
-                ForARMArchitectureToolStripMenuItem.Text = "Per architettura ARM"
-                ForARM64ArchitectureToolStripMenuItem.Text = "Per l'architettura ARM64"
-                ImageOperationsToolStripMenuItem.Text = "Operazioni con le immagini"
-                MountImageToolStripMenuItem.Text = "Monta immagine..."
-                UnmountImageToolStripMenuItem.Text = "Smontaggio immagine..."
-                RemoveVolumeImagesToolStripMenuItem.Text = "Rimuovere le immagini del volume..."
-                SwitchImageIndexesToolStripMenuItem1.Text = "Cambia gli indici dell'immagine..."
-                UnattendedAnswerFilesToolStripMenuItem1.Text = "File di risposta non presidiati"
-                ManageToolStripMenuItem.Text = "Gestione"
-                CreationWizardToolStripMenuItem.Text = "Creare"
-                ScratchDirectorySettingsToolStripMenuItem.Text = "Configura la directory temporanea"
-                ManageReportsToolStripMenuItem.Text = "Gestisci rapporti"
-                AddToolStripMenuItem.Text = "Aggiungere"
-                NewFileToolStripMenuItem.Text = "Nuovo file..."
-                ExistingFileToolStripMenuItem.Text = "File esistente..."
-                ' Context menu of AppX information dialog
-                SaveResourceToolStripMenuItem.Text = "Salva risorsa..."
-                CopyToolStripMenuItem.Text = "Copia risorsa"
-                ' Context menu of AppX addition dialog
-                MicrosoftAppsToolStripMenuItem.Text = "Visita il sito Web di Microsoft Apps"
-                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visita il sito Web di Microsoft Store Generation Project"
-                AppxDownloadHelpToolStripMenuItem.Text = "Come si ottengono le applicazioni?"
-                ' New design
-                GreetingLabel.Text = "Ti diamo il benvenuto in questa sessione di assistenza"
-                LinkLabel12.Text = "PROGETTO"
-                LinkLabel13.Text = "IMMAGINE"
-                Label54.Text = "Nome:"
-                Label51.Text = "Posizione:"
-                Label53.Text = "Immagini montate?"
-                LinkLabel14.Text = "Fai clic qui per montare un'immagine"
-                Label55.Text = "Attività progetto"
-                LinkLabel15.Text = "Visualizza proprietà progetto"
-                LinkLabel16.Text = "Apri in Esplora file"
-                LinkLabel17.Text = "Scarica il progetto"
-                Label59.Text = "Non è stata montata alcuna immagine"
-                Label58.Text = "Per visualizzare le informazioni sull'immagine è necessario montarla"
-                Label57.Text = "Scelte"
-                LinkLabel21.Text = "Monta immagine..."
-                LinkLabel18.Text = "Scegli immagine montata..."
-                Label39.Text = "Indice immagine:"
-                Label43.Text = "Punto di montaggio:"
-                Label45.Text = "Versione:"
-                Label42.Text = "Nome:"
-                Label40.Text = "Descrizione:"
-                Label56.Text = "Attività immagine"
-                LinkLabel20.Text = "Visualizza proprietà immagine"
-                LinkLabel19.Text = "Smonta immagine"
-                GroupBox4.Text = "Operazioni immagine"
-                Button26.Text = "Monta immagine..."
-                Button27.Text = "Applica modifiche attuali"
-                Button28.Text = "Applica e smonta l'immagine"
-                Button29.Text = "Smonta immagine eliminando le modifiche"
-                Button25.Text = "Ricarica la sessione di assistenza"
-                Button24.Text = "Cambia gli indici dell'immagine..."
-                Button30.Text = "Applica immagine..."
-                Button31.Text = "Cattura immagine..."
-                Button32.Text = "Rimuovi immagini volume..."
-                Button33.Text = "Salva informazioni complete immagine..."
-                GroupBox5.Text = "Operazioni pacchetto"
-                Button36.Text = "Aggiungi pacchetto..."
-                Button34.Text = "Verifica informazioni pacchetto..."
-                Button38.Text = "Salva informazioni pacchetto installato..."
-                Button35.Text = "Rimuovi pacchetto..."
-                Button37.Text = "Esegui la manutenzione e la pulizia dell'archivio componenti..."
-                GroupBox6.Text = "Operazioni funzionali"
-                Button41.Text = "Attiva funzionalità..."
-                Button39.Text = "Verifica informazioni funzionalità..."
-                Button42.Text = "Salva informazioni funzionalità..."
-                Button40.Text = "Disattiva funzionalità..."
-                GroupBox7.Text = "Operazioni pacchetto AppX"
-                Button44.Text = "Aggiungi pacchetto AppX..."
-                Button45.Text = "Verifica informazioni applicazione..."
-                Button46.Text = "Salva informazioni pacchetto AppX installato..."
-                Button43.Text = "Rimuovi pacchetto AppX..."
-                GroupBox8.Text = "Operazioni funzionalità"
-                Button48.Text = "Aggiungi capacità..."
-                Button49.Text = "Verifica informazioni capacità..."
-                Button50.Text = "Salva informazioni capacità..."
-                Button47.Text = "Rimuovi capacità..."
-                GroupBox9.Text = "Operazioni driver dispositivo"
-                Button53.Text = "Aggiungi pacchetto driver..."
-                Button52.Text = "Verifica informazioni driver..."
-                Button54.Text = "Salva informazioni sul driver installato..."
-                Button51.Text = "Rimuovi driver..."
-                GroupBox10.Text = "Operazioni di Windows PE"
-                Button55.Text = "Verifica configurazione"
-                Button56.Text = "Salva configurazione..."
-                Button57.Text = "Imposta percorso destinazione..."
-                Button58.Text = "Imposta spazio temporaneo..."
-        End Select
-
-        If OnlineManagement Then
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label50.Text = If(IsImageMounted, "Yes", "No")
-                            Text = "Online installation - DISMTools"
-                            Label41.Text = "(Online installation)"
-                            Label47.Text = "(Online installation)"
-                            Label49.Text = "(Online installation)"
-                        Case "ESN"
-                            Label50.Text = If(IsImageMounted, "Sí", "No")
-                            Text = "Instalación activa - DISMTools"
-                            Label41.Text = "(Instalación activa)"
-                            Label47.Text = "(Instalación activa)"
-                            Label49.Text = "(Instalación activa)"
-                        Case "FRA"
-                            Label50.Text = If(IsImageMounted, "Oui", "Non")
-                            Text = "Installation en ligne - DISMTools"
-                            Label41.Text = "(Installation en ligne)"
-                            Label47.Text = "(Installation en ligne)"
-                            Label49.Text = "(Installation en ligne)"
-                        Case "PTB", "PTG"
-                            Label50.Text = If(IsImageMounted, "Sim", "Não")
-                            Text = "Instalação em linha - DISMTools"
-                            Label41.Text = "(Instalação em linha)"
-                            Label47.Text = "(Instalação em linha)"
-                            Label49.Text = "(Instalação em linha)"
-                        Case "ITA"
-                            Label50.Text = If(IsImageMounted, "Sì", "No")
-                            Text = "Installazione online - DISMTools"
-                            Label41.Text = "(Installazione online)"
-                            Label47.Text = "(Installazione online)"
-                            Label49.Text = "(Installazione online)"
-                    End Select
-                Case 1
-                    Label50.Text = If(IsImageMounted, "Yes", "No")
-                    Text = "Online installation - DISMTools"
-                    Label41.Text = "(Online installation)"
-                    Label47.Text = "(Online installation)"
-                    Label49.Text = "(Online installation)"
-                Case 2
-                    Label50.Text = If(IsImageMounted, "Sí", "No")
-                    Text = "Instalación activa - DISMTools"
-                    Label41.Text = "(Instalación activa)"
-                    Label47.Text = "(Instalación activa)"
-                    Label49.Text = "(Instalación activa)"
-                Case 3
-                    Label50.Text = If(IsImageMounted, "Oui", "Non")
-                    Text = "Installation en ligne - DISMTools"
-                    Label41.Text = "(Installation en ligne)"
-                    Label47.Text = "(Installation en ligne)"
-                    Label49.Text = "(Installation en ligne)"
-                Case 4
-                    Label50.Text = If(IsImageMounted, "Sim", "Não")
-                    Text = "Instalação em linha - DISMTools"
-                    Label41.Text = "(Instalação em linha)"
-                    Label47.Text = "(Instalação em linha)"
-                    Label49.Text = "(Instalação em linha)"
-                Case 5
-                    Label50.Text = If(IsImageMounted, "Sì", "No")
-                    Text = "Installazione online - DISMTools"
-                    Label41.Text = "(Installazione online)"
-                    Label47.Text = "(Installazione online)"
-                    Label49.Text = "(Installazione online)"
-            End Select
-        ElseIf OfflineManagement Then
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label50.Text = If(IsImageMounted, "Yes", "No")
-                            Text = "Offline installation - DISMTools"
-                            Label41.Text = "(Offline installation)"
-                            Label46.Text = "(Offline installation)"
-                            Label47.Text = "(Offline installation)"
-                            Label49.Text = "(Offline installation)"
-                        Case "ESN"
-                            Label50.Text = If(IsImageMounted, "Sí", "No")
-                            Text = "Instalación fuera de línea - DISMTools"
-                            Label41.Text = "(Instalación fuera de línea)"
-                            Label46.Text = "(Instalación fuera de línea)"
-                            Label47.Text = "(Instalación fuera de línea)"
-                            Label49.Text = "(Instalación fuera de línea)"
-                        Case "FRA"
-                            Label50.Text = If(IsImageMounted, "Oui", "Non")
-                            Text = "Installation hors ligne - DISMTools"
-                            Label41.Text = "(Installation hors ligne)"
-                            Label46.Text = "(Installation hors ligne)"
-                            Label47.Text = "(Installation hors ligne)"
-                            Label49.Text = "(Installation hors ligne)"
-                        Case "PTB", "PTG"
-                            Label50.Text = If(IsImageMounted, "Sim", "Não")
-                            Text = "Instalação offline - DISMTools"
-                            Label41.Text = "(Instalação offline)"
-                            Label46.Text = "(Instalação offline)"
-                            Label47.Text = "(Instalação offline)"
-                            Label49.Text = "(Instalação offline)"
-                        Case "ITA"
-                            Label50.Text = If(IsImageMounted, "Sì", "No")
-                            Text = "Installazione offline - DISMTools"
-                            Label41.Text = "(Installazione offline)"
-                            Label46.Text = "(Installazione offline)"
-                            Label47.Text = "(Installazione offline)"
-                            Label49.Text = "(Installazione offline)"
-                    End Select
-                Case 1
-                    Label50.Text = If(IsImageMounted, "Yes", "No")
-                    Text = "Online installation - DISMTools"
-                    Label41.Text = "(Offline installation)"
-                    Label46.Text = "(Offline installation)"
-                    Label47.Text = "(Offline installation)"
-                    Label49.Text = "(Offline installation)"
-                Case 2
-                    Label50.Text = If(IsImageMounted, "Sí", "No")
-                    Text = "Instalación fuera de línea - DISMTools"
-                    Label41.Text = "(Instalación fuera de línea)"
-                    Label46.Text = "(Instalación fuera de línea)"
-                    Label47.Text = "(Instalación fuera de línea)"
-                    Label49.Text = "(Instalación fuera de línea)"
-                Case 3
-                    Label50.Text = If(IsImageMounted, "Oui", "Non")
-                    Text = "Installation hors ligne - DISMTools"
-                    Label41.Text = "(Installation hors ligne)"
-                    Label46.Text = "(Installation hors ligne)"
-                    Label47.Text = "(Installation hors ligne)"
-                    Label49.Text = "(Installation hors ligne)"
-                Case 4
-                    Label50.Text = If(IsImageMounted, "Sim", "Não")
-                    Text = "Instalação offline - DISMTools"
-                    Label41.Text = "(Instalação offline)"
-                    Label46.Text = "(Instalação offline)"
-                    Label47.Text = "(Instalação offline)"
-                    Label49.Text = "(Instalação offline)"
-                Case 5
-                    Label50.Text = If(IsImageMounted, "Sì", "No")
-                    Text = "Installazione offline - DISMTools"
-                    Label41.Text = "(Installazione offline)"
-                    Label46.Text = "(Installazione offline)"
-                    Label47.Text = "(Installazione offline)"
-                    Label49.Text = "(Installazione offline)"
-            End Select
+    Sub ApplyLanguage(cultureCode As String)
+        Dim requestedCultureCode As String = LocalizationService.NormalizeCultureCode(cultureCode)
+        Dim validationMessage As String = ""
+        If Not LocalizationService.ValidateLanguage(requestedCultureCode, validationMessage) Then
+            DynaLog.LogMessage("The requested language file failed validation. Keeping the default language.")
+            MessageBox.Show(validationMessage,
+                            "Incompatible or invalid DISMTools language file",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
+            requestedCultureCode = LocalizationService.DefaultCultureCode
         End If
 
-        ' Infinity Home -- don't refresh computer information
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ChangeComputerNameLink.Text = "Rename"
-                        Label1.Text = "Domain Membership:"
-                        Label2.Text = "Workgroup/Domain:"
-                        Label3.Text = "IP Address Configuration:"
-                        Label4.Text = "Explore and get started"
-                        Label5.Text = "Stay up-to-date"
-                        Label9.Text = "Fact of the day"
-                        LinkLabel27.Text = "Learn what's new in this release"
-                        LinkLabel28.Text = "Get started with DISMTools and image servicing"
-                        LinkLabel29.Text = "Manage your current installation"
-                        LinkLabel30.Text = "Manage external Windows installations"
-                        Label12.Text = "Learn by watching videos"
-                        Label6.Text = "Video content could not be loaded."
-                        Label7.Text = "The news feed could not be loaded."
-                        LinkLabel31.Text = "Learn more"
-                        LinkLabel32.Text = "Retry"
-                        LinkLabel33.Text = "Retry"
-                        LinkLabel34.Text = "Learn more"
-                    Case "ESN"
-                        ChangeComputerNameLink.Text = "Cambiar nombre"
-                        Label1.Text = "Membresía de dominio:"
-                        Label2.Text = "Grupo de trabajo/dominio:"
-                        Label3.Text = "Configuración de dirección IP:"
-                        Label4.Text = "Explore y comience"
-                        Label5.Text = "Manténgase informado"
-                        Label9.Text = "Dato del día"
-                        LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
-                        LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
-                        LinkLabel29.Text = "Administre su instalación actual"
-                        LinkLabel30.Text = "Administre instalaciones externas"
-                        Label12.Text = "Aprenda viendo vídeos (en inglés)"
-                        Label6.Text = "No se han podido cargar los vídeos."
-                        Label7.Text = "No se han podido cargar las noticias."
-                        LinkLabel31.Text = "Saber más"
-                        LinkLabel32.Text = "Intentarlo de nuevo"
-                        LinkLabel33.Text = "Intentarlo de nuevo"
-                        LinkLabel34.Text = "Saber más"
-                    Case "FRA"
-                        ChangeComputerNameLink.Text = "Renommer"
-                        Label1.Text = "Appartenance au domaine :"
-                        Label2.Text = "Groupe de travail/Domaine :"
-                        Label3.Text = "Configuration de l'adresse IP :"
-                        Label4.Text = "Découvrir et commencer"
-                        Label5.Text = "Rester à jour"
-                        Label9.Text = "Le fait du jour"
-                        LinkLabel27.Text = "Découvrez les nouveautés de cette version"
-                        LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
-                        LinkLabel29.Text = "Gérer votre installation actuelle"
-                        LinkLabel30.Text = "Gérer les installations Windows externes"
-                        Label12.Text = "Apprendre en regardant des vidéos (en anglais)"
-                        Label6.Text = "Impossible de charger le contenu vidéo."
-                        Label7.Text = "Impossible de charger le fil d'actualité."
-                        LinkLabel31.Text = "En savoir plus"
-                        LinkLabel32.Text = "Réessayer"
-                        LinkLabel33.Text = "Réessayer"
-                        LinkLabel34.Text = "En savoir plus"
-                    Case "PTB", "PTG"
-                        ChangeComputerNameLink.Text = "Renomear"
-                        Label1.Text = "Pertença a um domínio:"
-                        Label2.Text = "Grupo de trabalho/Domínio:"
-                        Label3.Text = "Configuração do endereço IP:"
-                        Label4.Text = "Explorar e começar"
-                        Label5.Text = "Manter-se atualizado"
-                        Label9.Text = "Curiosidade do dia"
-                        LinkLabel27.Text = "Descubra as novidades desta versão"
-                        LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
-                        LinkLabel29.Text = "Gerir a sua instalação atual"
-                        LinkLabel30.Text = "Gerir instalações externas do Windows"
-                        Label12.Text = "Aprenda assistindo a vídeos (em inglês)"
-                        Label6.Text = "Não foi possível carregar o conteúdo de vídeo."
-                        Label7.Text = "Não foi possível carregar o feed de notícias."
-                        LinkLabel31.Text = "Saiba mais"
-                        LinkLabel32.Text = "Tentar novamente"
-                        LinkLabel33.Text = "Tentar novamente"
-                        LinkLabel34.Text = "Saiba mais"
-                    Case "ITA"
-                        ChangeComputerNameLink.Text = "Rinomina"
-                        Label1.Text = "Appartenenza al dominio:"
-                        Label2.Text = "Gruppo di lavoro/Dominio:"
-                        Label3.Text = "Configurazione dell'indirizzo IP:"
-                        Label4.Text = "Esplora e inizia"
-                        Label5.Text = "Rimani aggiornato"
-                        Label9.Text = "Curiosità del giorno"
-                        LinkLabel27.Text = "Scopri le novità di questa versione"
-                        LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
-                        LinkLabel29.Text = "Gestisci la tua installazione attuale"
-                        LinkLabel30.Text = "Gestisci installazioni Windows esterne"
-                        Label12.Text = "Impara guardando i video (in inglese)"
-                        Label6.Text = "Impossibile caricare il contenuto video."
-                        Label7.Text = "Impossibile caricare il feed delle notizie."
-                        LinkLabel31.Text = "Ulteriori informazioni"
-                        LinkLabel32.Text = "Riprova"
-                        LinkLabel33.Text = "Riprova"
-                        LinkLabel34.Text = "Ulteriori informazioni"
-                End Select
-            Case 1
-                ChangeComputerNameLink.Text = "Rename"
-                Label1.Text = "Domain Membership:"
-                Label2.Text = "Workgroup/Domain:"
-                Label3.Text = "IP Address Configuration:"
-                Label4.Text = "Explore and get started"
-                Label5.Text = "Stay up-to-date"
-                Label9.Text = "Fact of the day"
-                LinkLabel27.Text = "Learn what's new in this release"
-                LinkLabel28.Text = "Get started with DISMTools and image servicing"
-                LinkLabel29.Text = "Manage your current installation"
-                LinkLabel30.Text = "Manage external Windows installations"
-                Label12.Text = "Learn by watching videos"
-                Label6.Text = "Video content could not be loaded."
-                Label7.Text = "The news feed could not be loaded."
-                LinkLabel31.Text = "Learn more"
-                LinkLabel32.Text = "Retry"
-                LinkLabel33.Text = "Retry"
-                LinkLabel34.Text = "Learn more"
-            Case 2
-                ChangeComputerNameLink.Text = "Cambiar nombre"
-                Label1.Text = "Membresía de dominio:"
-                Label2.Text = "Grupo de trabajo/dominio:"
-                Label3.Text = "Configuración de dirección IP:"
-                Label4.Text = "Explore y comience"
-                Label5.Text = "Manténgase informado"
-                Label9.Text = "Dato del día"
-                LinkLabel27.Text = "Aprenda qué hay de nuevo en esta versión"
-                LinkLabel28.Text = "Comience con DISMTools y con el servicio de imágenes"
-                LinkLabel29.Text = "Administre su instalación actual"
-                LinkLabel30.Text = "Administre instalaciones externas"
-                Label12.Text = "Aprenda viendo vídeos (en inglés)"
-                Label6.Text = "No se han podido cargar los vídeos."
-                Label7.Text = "No se han podido cargar las noticias."
-                LinkLabel31.Text = "Saber más"
-                LinkLabel32.Text = "Intentarlo de nuevo"
-                LinkLabel33.Text = "Intentarlo de nuevo"
-                LinkLabel34.Text = "Saber más"
-            Case 3
-                ChangeComputerNameLink.Text = "Renommer"
-                Label1.Text = "Appartenance au domaine :"
-                Label2.Text = "Groupe de travail/Domaine :"
-                Label3.Text = "Configuration de l'adresse IP :"
-                Label4.Text = "Découvrir et commencer"
-                Label5.Text = "Rester à jour"
-                Label9.Text = "Le fait du jour"
-                LinkLabel27.Text = "Découvrez les nouveautés de cette version"
-                LinkLabel28.Text = "Commencer avec DISMTools et la gestion des images"
-                LinkLabel29.Text = "Gérer votre installation actuelle"
-                LinkLabel30.Text = "Gérer les installations Windows externes"
-                Label12.Text = "Apprendre en regardant des vidéos (en anglais)"
-                Label6.Text = "Impossible de charger le contenu vidéo."
-                Label7.Text = "Impossible de charger le fil d'actualité."
-                LinkLabel31.Text = "En savoir plus"
-                LinkLabel32.Text = "Réessayer"
-                LinkLabel33.Text = "Réessayer"
-                LinkLabel34.Text = "En savoir plus"
-            Case 4
-                ChangeComputerNameLink.Text = "Renomear"
-                Label1.Text = "Pertença a um domínio:"
-                Label2.Text = "Grupo de trabalho/Domínio:"
-                Label3.Text = "Configuração do endereço IP:"
-                Label4.Text = "Explorar e começar"
-                Label5.Text = "Manter-se atualizado"
-                Label9.Text = "Curiosidade do dia"
-                LinkLabel27.Text = "Descubra as novidades desta versão"
-                LinkLabel28.Text = "Começar a utilizar o DISMTools e a manutenção de imagens"
-                LinkLabel29.Text = "Gerir a sua instalação atual"
-                LinkLabel30.Text = "Gerir instalações externas do Windows"
-                Label12.Text = "Aprenda assistindo a vídeos (em inglês)"
-                Label6.Text = "Não foi possível carregar o conteúdo de vídeo."
-                Label7.Text = "Não foi possível carregar o feed de notícias."
-                LinkLabel31.Text = "Saiba mais"
-                LinkLabel32.Text = "Tentar novamente"
-                LinkLabel33.Text = "Tentar novamente"
-                LinkLabel34.Text = "Saiba mais"
-            Case 5
-                ChangeComputerNameLink.Text = "Rinomina"
-                Label1.Text = "Appartenenza al dominio:"
-                Label2.Text = "Gruppo di lavoro/Dominio:"
-                Label3.Text = "Configurazione dell'indirizzo IP:"
-                Label4.Text = "Esplora e inizia"
-                Label5.Text = "Rimani aggiornato"
-                Label9.Text = "Curiosità del giorno"
-                LinkLabel27.Text = "Scopri le novità di questa versione"
-                LinkLabel28.Text = "Inizia a utilizzare DISMTools e la gestione delle immagini"
-                LinkLabel29.Text = "Gestisci la tua installazione attuale"
-                LinkLabel30.Text = "Gestisci installazioni Windows esterne"
-                Label12.Text = "Impara guardando i video (in inglese)"
-                Label6.Text = "Impossibile caricare il contenuto video."
-                Label7.Text = "Impossibile caricare il feed delle notizie."
-                LinkLabel31.Text = "Ulteriori informazioni"
-                LinkLabel32.Text = "Riprova"
-                LinkLabel33.Text = "Riprova"
-                LinkLabel34.Text = "Ulteriori informazioni"
-        End Select
+        LanguageCode = requestedCultureCode
+        LocalizationService.SetLanguageByCultureCode(LanguageCode)
+        DynaLog.LogMessage("Changing program language... (culture code: " & LanguageCode & ")")
+        DynaLog.LogMessage("Language culture is " & LanguageCode & ". Applying localization resources...")
+        FileToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface").Upper("File.Label", AllCaps)
+        ProjectToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface").Upper("Project.Label", AllCaps)
+        CommandsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface").Upper("Commands.Label", AllCaps)
+        ToolsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface").Upper("Tools.Label", AllCaps)
+        HelpToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface").Upper("Help.Label", AllCaps)
+        InvalidSettingsTSMI.Text = LocalizationService.ForSection("Main.Interface")("Settings.Detected.Label")
+        NewProjectToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("NewProject.Button")
+        OpenExistingProjectToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Open.Existing.Project.Label")
+        ManageOnlineInstallationToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Manage.Online.Install.Label")
+        ManageOfflineInstallationToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Manage.Ffline.Button")
+        RecentProjectsListMenu.Text = LocalizationService.ForSection("Main.Interface")("RecentProjects.Label")
+        SaveProjectToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("SaveProject.Button")
+        SaveProjectasToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("SaveProjectas.Button")
+        ExitToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Exit.Label")
+        ViewProjectFilesInFileExplorerToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("View.Project.Files.Label")
+        UnloadProjectToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("UnloadProject.Button")
+        SwitchImageIndexesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Switch.Image.Indexes.Button")
+        ProjectPropertiesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ProjectProps.Label")
+        ImagePropertiesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ImageProps.Label")
+        ImageManagementToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ImageManagement.Label")
+        OSPackagesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("OSPackages.Label")
+        ProvisioningPackagesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ProvPackages.Label")
+        AppPackagesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("AppxPackages.Label")
+        AppPatchesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("AppMspservicing.Label")
+        DefaultAppAssociationsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("DefaultApp.Assoc.Label")
+        LanguagesAndRegionSettingsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Languages.Regional.Label")
+        CapabilitiesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Capabilities.Label")
+        WindowsEditionsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Windows.Label")
+        DriversToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Drivers.Label")
+        UnattendedAnswerFilesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Unattended.Answer.Label")
+        WindowsPEServicingToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("WindowsPE.Label")
+        OSUninstallToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("OSUninstall.Label")
+        ReservedStorageToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ReservedStorage.Label")
+        AppendImage.Text = LocalizationService.ForSection("Main.Interface")("Append.Capture.Dir.Button")
+        ApplyFFU.Text = LocalizationService.ForSection("Main.Interface")("ApplyFfusfufile.Button")
+        ApplyImage.Text = LocalizationService.ForSection("Main.Interface")("ApplyWimswmfile.Button")
+        CaptureCustomImage.Text = LocalizationService.ForSection("Main.Interface")("Capture.Incremental.Button")
+        CaptureFFU.Text = LocalizationService.ForSection("Main.Interface")("Capture.Partitions.Button")
+        CaptureImage.Text = LocalizationService.ForSection("Main.Interface")("Capture.Image.Drive.Button")
+        CleanupMountpoints.Text = LocalizationService.ForSection("Main.Interface")("Delete.Resources.Button")
+        CommitImage.Text = LocalizationService.ForSection("Main.Interface")("Apply.Changes.Image.Button")
+        DeleteImage.Text = LocalizationService.ForSection("Main.Interface")("Delete.VolumeImages.Button")
+        ExportImage.Text = LocalizationService.ForSection("Main.Interface")("ExportImage.Button")
+        GetImageInfo.Text = LocalizationService.ForSection("Main.Interface")("Get.Image.Button")
+        GetWIMBootEntry.Text = LocalizationService.ForSection("Main.Interface")("Get.WIM.Boot.Button")
+        ListImage.Text = LocalizationService.ForSection("Main.Interface")("List.Files.Dirs.Button")
+        MountImage.Text = LocalizationService.ForSection("Main.Interface")("MountImage.Button")
+        OptimizeFFU.Text = LocalizationService.ForSection("Main.Interface")("Optimize.FFU.File.Button")
+        OptimizeImage.Text = LocalizationService.ForSection("Main.Interface")("OptimizeImage.Button")
+        RemountImage.Text = LocalizationService.ForSection("Main.Interface")("Remount.Image.Button")
+        SplitFFU.Text = LocalizationService.ForSection("Main.Interface")("Split.FFU.File.Button")
+        SplitImage.Text = LocalizationService.ForSection("Main.Interface")("Split.WIM.File.Button")
+        UnmountImage.Text = LocalizationService.ForSection("Main.Interface")("UnmountImage.Button")
+        UpdateWIMBootEntry.Text = LocalizationService.ForSection("Main.Interface")("Update.WIM.Boot.Button")
+        ApplySiloedPackage.Text = LocalizationService.ForSection("Main.Interface")("Apply.Siloed.Prov.Button")
+        SaveImageInformationToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Save.Image.Button")
+        GetPackages.Text = LocalizationService.ForSection("Main.Interface")("GetPackages.Button")
+        AddPackage.Text = LocalizationService.ForSection("Main.Interface")("AddPackage.Button")
+        RemovePackage.Text = LocalizationService.ForSection("Main.Interface")("RemovePackage.Button")
+        GetFeatures.Text = LocalizationService.ForSection("Main.Interface")("GetFeatures.Button")
+        EnableFeature.Text = LocalizationService.ForSection("Main.Interface")("EnableFeature.Button")
+        DisableFeature.Text = LocalizationService.ForSection("Main.Interface")("DisableFeature.Button")
+        CleanupImage.Text = LocalizationService.ForSection("Main.Interface")("CleanupRecovery.Button")
+        AddProvisioningPackage.Text = LocalizationService.ForSection("Main.Interface")("Add.Prov.Package.Button")
+        GetProvisioningPackageInfo.Text = LocalizationService.ForSection("Main.Interface")("Get.Prov.Package.Button")
+        ApplyCustomDataImage.Text = LocalizationService.ForSection("Main.Interface")("Apply.CustomData.Button")
+        GetProvisionedAppxPackages.Text = LocalizationService.ForSection("Main.Interface")("Get.App.Package.Button")
+        AddProvisionedAppxPackage.Text = LocalizationService.ForSection("Main.Interface")("Add.Provisioned.App.Button")
+        RemoveProvisionedAppxPackage.Text = LocalizationService.ForSection("Main.Interface")("Remove.Prov.App.Button")
+        OptimizeProvisionedAppxPackages.Text = LocalizationService.ForSection("Main.Interface")("Optimize.Provisioned.Button")
+        SetProvisionedAppxDataFile.Text = LocalizationService.ForSection("Main.Interface")("Add.CustomData.File.Button")
+        CheckAppPatch.Text = LocalizationService.ForSection("Main.Interface")("Get.App.Patch.Button")
+        GetAppPatchInfo.Text = LocalizationService.ForSection("Main.Interface")("Detailed.App.Patch.Button")
+        GetAppPatches.Text = LocalizationService.ForSection("Main.Interface")("Basic.Installed.App.Button")
+        GetAppInfo.Text = LocalizationService.ForSection("Main.Interface")("Get.Detailed.Button")
+        GetApps.Text = LocalizationService.ForSection("Main.Interface")("Get.Basic.Windows.Button")
+        ExportDefaultAppAssociations.Text = LocalizationService.ForSection("Main.Interface")("Export.Default.Button")
+        GetDefaultAppAssociations.Text = LocalizationService.ForSection("Main.Interface")("DefaultApp.Assoc.Button")
+        ImportDefaultAppAssociations.Text = LocalizationService.ForSection("Main.Interface")("Import.Default.Button")
+        RemoveDefaultAppAssociations.Text = LocalizationService.ForSection("Main.Interface")("Remove.Default.Button")
+        GetIntl.Text = LocalizationService.ForSection("Main.Interface")("Intl.Settings.Button")
+        SetUILang.Text = LocalizationService.ForSection("Main.Interface")("SetUilanguage.Button")
+        SetUILangFallback.Text = LocalizationService.ForSection("Main.Interface")("Set.Default.Button")
+        SetSysUILang.Text = LocalizationService.ForSection("Main.Interface")("Set.System.Preferred.Button")
+        SetSysLocale.Text = LocalizationService.ForSection("Main.Interface")("Set.System.Locale.Button")
+        SetUserLocale.Text = LocalizationService.ForSection("Main.Interface")("Set.User.Locale.Button")
+        SetInputLocale.Text = LocalizationService.ForSection("Main.Interface")("Set.Input.Locale.Button")
+        SetAllIntl.Text = LocalizationService.ForSection("Main.Interface")("Set.UI.Button")
+        SetTimeZone.Text = LocalizationService.ForSection("Main.Interface")("Set.Default.Time.Button")
+        SetSKUIntlDefaults.Text = LocalizationService.ForSection("Main.Interface")("Set.Default.Languages.Button")
+        SetLayeredDriver.Text = LocalizationService.ForSection("Main.Interface")("Set.Layered.Driver.Button")
+        GenLangINI.Text = LocalizationService.ForSection("Main.Interface")("Generate.Lang.Ini.Button")
+        SetSetupUILang.Text = LocalizationService.ForSection("Main.Interface")("Set.Default.Setup.Button")
+        AddCapability.Text = LocalizationService.ForSection("Main.Interface")("AddCapability.Button")
+        ExportSource.Text = LocalizationService.ForSection("Main.Interface")("Export.Capabilities.Button")
+        GetCapabilities.Text = LocalizationService.ForSection("Main.Interface")("GetCapabilities.Button")
+        RemoveCapability.Text = LocalizationService.ForSection("Main.Interface")("RemoveCapability.Button")
+        GetCurrentEdition.Text = LocalizationService.ForSection("Main.Interface")("Get.Edition.Button")
+        GetTargetEditions.Text = LocalizationService.ForSection("Main.Interface")("Get.Upgrade.Targets.Button")
+        SetEdition.Text = LocalizationService.ForSection("Main.Interface")("UpgradeImage.Button")
+        SetProductKey.Text = LocalizationService.ForSection("Main.Interface")("SetProductKey.Button")
+        GetDrivers.Text = LocalizationService.ForSection("Main.Interface")("GetDrivers.Button")
+        AddDriver.Text = LocalizationService.ForSection("Main.Interface")("AddDriver.Button")
+        RemoveDriver.Text = LocalizationService.ForSection("Main.Interface")("RemoveDriver.Button")
+        ExportDriver.Text = LocalizationService.ForSection("Main.Interface")("Export.DriverPackages.Button")
+        ImportDriver.Text = LocalizationService.ForSection("Main.Interface")("Import.DriverPackages.Button")
+        ApplyUnattend.Text = LocalizationService.ForSection("Main.Interface")("Apply.Unattended.Button")
+        GetPESettings.Text = LocalizationService.ForSection("Main.Interface")("GetSettings.Button")
+        SetScratchSpace.Text = LocalizationService.ForSection("Main.Interface")("SetScratchSpace.Button")
+        SetTargetPath.Text = LocalizationService.ForSection("Main.Interface")("Set.Target.Path.Button")
+        GetOSUninstallWindow.Text = LocalizationService.ForSection("Main.Interface")("Get.Uninstall.Window.Button")
+        InitiateOSUninstall.Text = LocalizationService.ForSection("Main.Interface")("Initiate.Uninstall.Button")
+        RemoveOSUninstall.Text = LocalizationService.ForSection("Main.Interface")("Remove.Roll.Back.Button")
+        SetOSUninstallWindow.Text = LocalizationService.ForSection("Main.Interface")("Set.Uninstall.Window.Button")
+        SetReservedStorageState.Text = LocalizationService.ForSection("Main.Interface")("Set.Reserved.Storage.Button")
+        GetReservedStorageState.Text = LocalizationService.ForSection("Main.Interface")("Get.Reserved.Storage.Button")
+        AddEdge.Text = LocalizationService.ForSection("Main.Interface")("AddEdge.Button")
+        AddEdgeBrowser.Text = LocalizationService.ForSection("Main.Interface")("Add.Edge.Browser.Button")
+        AddEdgeWebView.Text = LocalizationService.ForSection("Main.Interface")("Add.Edge.Web.Button")
+        ImageConversionToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ImageConversion.Label")
+        MergeSWM.Text = LocalizationService.ForSection("Main.Interface")("MergeSwmfiles.Button")
+        RemountImageWithWritePermissionsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Remount.Image.Write.Label")
+        CommandShellToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("CommandConsole.Label")
+        UnattendedAnswerFileManagerToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Unattended.AnswerFile.Label")
+        UnattendedAnswerFileCreatorToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Unattended.Creator.Label")
+        RegCplToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Manage.Image.Registry.Button")
+        WebResourcesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("WebResources.Label")
+        LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Download.Languages.Button")
+        LanguagesAndFODWin10ToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Download.FOD.Button")
+        ReportManagerToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ReportManager.Label")
+        MountedImageManagerTSMI.Text = LocalizationService.ForSection("Main.Interface")("Mounted.Image.Manager.Label")
+        CreateDiscImageToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Create.Disc.Image.Button")
+        CreateTestingEnvironmentToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Create.Testing.Button")
+        WimScriptEditorCommand.Text = LocalizationService.ForSection("Main.Interface")("Config.List.Editor.Label")
+        OptionsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Options.Label")
+        HelpTopicsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("HelpTopics.Label")
+        AboutDISMToolsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("DISM.Tools.Label")
+        ISFix.Text = LocalizationService.ForSection("Main.Interface")("MoreInfo.Label")
+        ISHelp.Text = LocalizationService.ForSection("Main.Interface")("WhatsThis.Label")
+        ReportFeedbackToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Report.Feedback.Opens.Label")
+        ContributeToTheHelpSystemToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Contribute.Help.System.Label")
+        TourActionsTSMI.Text = LocalizationService.ForSection("Main.Interface")("TourActions.Label")
+        ServerStatusTSMI.Text = LocalizationService.ForSection("Main.Interface").Format("Tour.Server.Active.Label", tourServer.GetTcpPort())
+        RestartDTTourTSMI.Text = LocalizationService.ForSection("Main.Interface")("RestartTour.Label")
+        StopDTTourServerTSMI.Text = LocalizationService.ForSection("Main.Interface")("Stop.Tour.Server.Label")
+        LabelHeader1.Text = LocalizationService.ForSection("Main.Interface")("Begin.Label")
+        Label10.Text = LocalizationService.ForSection("Main.Interface")("RecentProjects.Label")
+        NewProjLink.Text = LocalizationService.ForSection("Main.Interface")("NewProject.Link")
+        ExistingProjLink.Text = LocalizationService.ForSection("Main.Interface")("Open.Existing.Project.Link")
+        OnlineInstMgmt.Text = LocalizationService.ForSection("Main.Interface")("Manage.Online.Install.Link")
+        OfflineInstMgmt.Text = LocalizationService.ForSection("Main.Interface")("Manage.Offline.Button.Button")
+        RecentRemoveLink.Text = LocalizationService.ForSection("Main.Interface")("RemoveEntry.Link")
+        ToolStripButton1.Text = LocalizationService.ForSection("Main.Interface")("CloseTab.Label")
+        ToolStripButton2.Text = LocalizationService.ForSection("Main.Interface")("SaveProject.Label")
+        ToolStripButton3.Text = LocalizationService.ForSection("Main.Interface")("UnloadProject.Label")
+        ToolStripButton3.ToolTipText = LocalizationService.ForSection("Main.Interface")("Unload.Project.Tooltip")
+        ToolStripButton4.Text = LocalizationService.ForSection("Main.Interface")("Show.Progress.Window.Label")
+        RefreshViewTSB.Text = LocalizationService.ForSection("Main.Interface")("RefreshView.Label")
+        ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.Interface")("Expand.Label")
+        UpdateLink.Text = LocalizationService.ForSection("Main.Interface")("NewVersion.Available.Link")
+        UpdateLink.LinkArea = LocalizationService.GetLinkArea(UpdateLink.Text, LocalizationService.ForSection("Main.CheckForUpdates")("Learn.Link"))
+        PkgBasicInfo.Text = LocalizationService.ForSection("Main.Interface")("Get.Basic.Label")
+        PkgDetailedInfo.Text = LocalizationService.ForSection("Main.Interface")("Get.Detailed.Specific.Label")
+        CommitAndUnmountTSMI.Text = LocalizationService.ForSection("Main.Interface")("CommitImage.Label")
+        DiscardAndUnmountTSMI.Text = LocalizationService.ForSection("Main.Interface")("Discard.Changes.Label")
+        UnmountSettingsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("UnmountSettings.Button")
+        ViewPackageDirectoryToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("View.Package.Dir.Label")
+        GetImageFileInformationToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Get.ImageFile.Button")
+        SaveCompleteImageInformationToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Save.Complete.Image.Button")
+        CreateDiscImageWithThisFileToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Create.Disc.ImageFile.Button")
+        OpenFileDialog1.Title = LocalizationService.ForSection("Main.Interface")("Project.File.Load.Title")
+        LocalMountDirFBD.Description = LocalizationService.ForSection("Main.Interface")("MountDir.Description")
+        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
+            BGProcDetails.Label2.Text = LocalizationService.ForSection("Main.Interface")("Image.Processes.Label")
+        End If
+        MenuDesc.Text = LocalizationService.ForSection("Main.Interface")("Ready.Label")
+        AccessDirectoryToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("AccessDirectory.Label")
+        UnloadProjectToolStripMenuItem1.Text = LocalizationService.ForSection("Main.Interface")("UnloadProject.Label")
+        CopyDeploymentToolsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Copy.Deployment.Tools.Label")
+        OfAllArchitecturesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("AllArchitectures.Label")
+        OfSelectedArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Selected.Architecture.Label")
+        ForX86ArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Xarchitecture.Label")
+        ForAmd64ArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Amarkdown.Architecture.Label")
+        ForARMArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ARM.Label")
+        ForARM64ArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ARM64.Label")
+        ImageOperationsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ImageOperations.Label")
+        MountImageToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("MountImage.Button")
+        UnmountImageToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("UnmountImage.Button")
+        RemoveVolumeImagesToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Remove.VolumeImages.Button")
+        SwitchImageIndexesToolStripMenuItem1.Text = LocalizationService.ForSection("Main.Interface")("Switch.Image.Indexes.Button")
+        UnattendedAnswerFilesToolStripMenuItem1.Text = LocalizationService.ForSection("Main.Interface")("Unattended.Answer.Label")
+        ManageToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Manage.Label")
+        CreationWizardToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Create.Label")
+        ScratchDirectorySettingsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Configure.Scratch.Dir.Label")
+        ManageReportsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ManageReports.Label")
+        AddToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Add.Button")
+        NewFileToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("NewFile.Button")
+        ExistingFileToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("ExistingFile.Button")
+        SaveResourceToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("SaveResource.Button")
+        CopyToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("CopyResource.Label")
+        MicrosoftAppsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Visit.Microsoft.Apps.Label")
+        MicrosoftStoreGenerationProjectToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Visit.Microsoft.Label")
+        AppxDownloadHelpToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Iget.Apps.Label")
+        GreetingLabel.Text = LocalizationService.ForSection("Main.Interface")("Welcome.Servicing.Label")
+        LinkLabel12.Text = LocalizationService.ForSection("Main.Interface")("Project.Link")
+        LinkLabel13.Text = LocalizationService.ForSection("Main.Interface")("Image.Link")
+        Label54.Text = LocalizationService.ForSection("Main.Interface")("Name.Label")
+        Label51.Text = LocalizationService.ForSection("Main.Interface")("Location.Label")
+        Label53.Text = LocalizationService.ForSection("Main.Interface")("ImagesMounted.Label")
+        LinkLabel14.Text = LocalizationService.ForSection("Main.Interface")("Mount.Image.Link")
+        Label55.Text = LocalizationService.ForSection("Main.Interface")("ProjectTasks.Label")
+        LinkLabel15.Text = LocalizationService.ForSection("Main.Interface")("View.Project.Props.Link")
+        LinkLabel16.Text = LocalizationService.ForSection("Main.Interface")("Open.File.Explorer.Link")
+        LinkLabel17.Text = LocalizationService.ForSection("Main.Interface")("UnloadProject.Link")
+        Label59.Text = LocalizationService.ForSection("Main.Interface")("ImageMounted.Label")
+        Label58.Text = LocalizationService.ForSection("Main.Interface")("Mount.Image.Order.Label")
+        Label57.Text = LocalizationService.ForSection("Main.Interface")("Choices.Label")
+        LinkLabel21.Text = LocalizationService.ForSection("Main.Interface")("MountImage.Link")
+        LinkLabel18.Text = LocalizationService.ForSection("Main.Interface")("Pick.Mounted.Image.Link")
+        Label39.Text = LocalizationService.ForSection("Main.Interface")("ImageIndex.Label")
+        Label43.Text = LocalizationService.ForSection("Main.Interface")("MountPoint.Label")
+        Label45.Text = LocalizationService.ForSection("Main.Interface")("Version.Label")
+        Label42.Text = LocalizationService.ForSection("Main.Interface")("Name.Label")
+        Label40.Text = LocalizationService.ForSection("Main.Interface")("Description.Label")
+        Label56.Text = LocalizationService.ForSection("Main.Interface")("ImageTasks.Label")
+        LinkLabel20.Text = LocalizationService.ForSection("Main.Interface")("View.Image.Props.Link")
+        LinkLabel19.Text = LocalizationService.ForSection("Main.Interface")("UnmountImage.Link")
+        GroupBox4.Text = LocalizationService.ForSection("Main.Interface")("ImageOperations.Group")
+        Button26.Text = LocalizationService.ForSection("Main.Interface")("MountImage.Button")
+        Button27.Text = LocalizationService.ForSection("Main.Interface")("Commit.Changes.Button")
+        Button28.Text = LocalizationService.ForSection("Main.Interface")("CommitImage.Button")
+        Button29.Text = LocalizationService.ForSection("Main.Interface")("Unmount.Image.Button")
+        Button25.Text = LocalizationService.ForSection("Main.Interface")("Reload.Servicing.Button")
+        Button24.Text = LocalizationService.ForSection("Main.Interface")("Switch.Image.Indexes.Button")
+        Button30.Text = LocalizationService.ForSection("Main.Interface")("ApplyImage.Button")
+        Button31.Text = LocalizationService.ForSection("Main.Interface")("CaptureImage.Button")
+        Button32.Text = LocalizationService.ForSection("Main.Interface")("Remove.VolumeImages.Button")
+        Button33.Text = LocalizationService.ForSection("Main.Interface")("Save.Complete.Image.Button")
+        GroupBox5.Text = LocalizationService.ForSection("Main.Interface")("Package.Operations.Group")
+        Button36.Text = LocalizationService.ForSection("Main.Interface")("AddPackage.Button")
+        Button34.Text = LocalizationService.ForSection("Main.Interface")("Get.Package.Button")
+        Button38.Text = LocalizationService.ForSection("Main.Interface")("Save.Installed.Button")
+        Button35.Text = LocalizationService.ForSection("Main.Interface")("RemovePackage.Button")
+        Button37.Text = LocalizationService.ForSection("Main.Interface")("Component.Store.Maint.Button")
+        GroupBox6.Text = LocalizationService.ForSection("Main.Interface")("Feature.Operations.Group")
+        Button41.Text = LocalizationService.ForSection("Main.Interface")("EnableFeature.Button")
+        Button39.Text = LocalizationService.ForSection("Main.Interface")("Get.Feature.Button")
+        Button42.Text = LocalizationService.ForSection("Main.Interface")("Save.Feature.Button")
+        Button40.Text = LocalizationService.ForSection("Main.Interface")("DisableFeature.Button")
+        GroupBox7.Text = LocalizationService.ForSection("Main.Interface")("AppX.Package.Operations")
+        Button44.Text = LocalizationService.ForSection("Main.Interface")("Add.AppX.Package.Button")
+        Button45.Text = LocalizationService.ForSection("Main.Interface")("Get.App.Button")
+        Button46.Text = LocalizationService.ForSection("Main.Interface")("Save.Installed.AppX.Button")
+        Button43.Text = LocalizationService.ForSection("Main.Interface")("Remove.AppX.Package.Button")
+        GroupBox8.Text = LocalizationService.ForSection("Main.Interface")("Capability.Operations.Group")
+        Button48.Text = LocalizationService.ForSection("Main.Interface")("AddCapability.Button")
+        Button49.Text = LocalizationService.ForSection("Main.Interface")("Get.Capability.Button")
+        Button50.Text = LocalizationService.ForSection("Main.Interface")("Save.Capability.Button")
+        Button47.Text = LocalizationService.ForSection("Main.Interface")("RemoveCapability.Button")
+        GroupBox9.Text = LocalizationService.ForSection("Main.Interface")("DriverOperations.Group")
+        Button53.Text = LocalizationService.ForSection("Main.Interface")("AddDriverPackage.Button")
+        Button52.Text = LocalizationService.ForSection("Main.Interface")("Get.Driver.Button")
+        Button54.Text = LocalizationService.ForSection("Main.Interface")("Save.Installed.Driver.Button")
+        Button51.Text = LocalizationService.ForSection("Main.Interface")("RemoveDriver.Button")
+        GroupBox10.Text = LocalizationService.ForSection("Main.Interface")("Windows.Group")
+        Button55.Text = LocalizationService.ForSection("Main.Interface")("GetConfig.Button")
+        Button56.Text = LocalizationService.ForSection("Main.Interface")("SaveConfig.Button")
+        Button57.Text = LocalizationService.ForSection("Main.Interface")("Set.Target.Path.Button")
+        Button58.Text = LocalizationService.ForSection("Main.Interface")("SetScratchSpace.Button")
+
+        If OnlineManagement Then
+            Dim onlineMountedText As String = LocalizationService.ForSection("Main.Interface")("Yes.Button")
+            Dim onlineNotMountedText As String = LocalizationService.ForSection("Main.Interface")("No.Button")
+            Label50.Text = If(IsImageMounted, onlineMountedText, onlineNotMountedText)
+            Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.DISM.Tools.Label")
+            Label41.Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.Label")
+            Label47.Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.Label")
+            Label49.Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.Label")
+        ElseIf OfflineManagement Then
+            Dim offlineMountedText As String = LocalizationService.ForSection("Main.Interface")("Offline.Management.Button")
+            Dim offlineNotMountedText As String = LocalizationService.ForSection("Main.Interface")("No.Button")
+            Label50.Text = If(IsImageMounted, offlineMountedText, offlineNotMountedText)
+            Text = LocalizationService.ForSection("Main.OfflineManagement")("OfflineInstall.Label")
+            Label41.Text = LocalizationService.ForSection("Main.OfflineManagement")("Install.Label")
+            Label46.Text = LocalizationService.ForSection("Main.OfflineManagement")("Install.Label")
+            Label47.Text = LocalizationService.ForSection("Main.OfflineManagement")("Install.Label")
+            Label49.Text = LocalizationService.ForSection("Main.OfflineManagement")("Install.Label")
+        End If
+
+        ' Infinity Home
+                ChangeComputerNameLink.Text = LocalizationService.ForSection("Main.Interface")("Rename.Link")
+                Label1.Text = LocalizationService.ForSection("Main.Interface")("DomainMembership.Label")
+                Label2.Text = LocalizationService.ForSection("Main.Interface")("WorkgroupDomain.Label")
+                Label3.Text = LocalizationService.ForSection("Main.Interface")("IP.Address.Config.Label")
+                Label4.Text = LocalizationService.ForSection("Main.Interface")("Explore.Get.Started.Label")
+                Label5.Text = LocalizationService.ForSection("Main.Interface")("Stay.Up.Date.Label")
+                Label9.Text = LocalizationService.ForSection("Main.Interface")("FactDay.Label")
+                LinkLabel27.Text = LocalizationService.ForSection("Main.Interface")("Learn.Snew.Link")
+                LinkLabel28.Text = LocalizationService.ForSection("Main.Interface")("Get.Started.DISM.Link")
+                LinkLabel29.Text = LocalizationService.ForSection("Main.Interface")("Manage.Install.Link")
+                LinkLabel30.Text = LocalizationService.ForSection("Main.Interface")("Manage.External.Link")
+                Label12.Text = LocalizationService.ForSection("Main.Interface")("Learn.Watching.Videos.Label")
+                Label6.Text = LocalizationService.ForSection("Main.Interface")("Video.Content.Loaded.Label")
+                Label7.Text = LocalizationService.ForSection("Main.Interface")("News.Feed.Loaded.Label")
+                LinkLabel31.Text = LocalizationService.ForSection("Main.Interface")("LearnMore.Link")
+                LinkLabel32.Text = LocalizationService.ForSection("Main.Interface")("Retry.Button")
+                LinkLabel33.Text = LocalizationService.ForSection("Main.News.Load")("Retry.Button")
+                LinkLabel34.Text = LocalizationService.ForSection("Main.News")("LearnMore.Link")
+
+        RefreshInfinityHomeLocalizedInformation()
+        RefreshNewsFeedLocalizedInformation()
+    End Sub
+
+    Private Sub RefreshNewsFeedLocalizedInformation()
+        If Not IsHandleCreated Then Exit Sub
+
+        Try
+            If HasFeedItems(FeedContents) Then RenderNewsFeed()
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not refresh localized news feed information: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub RefreshInfinityHomeLocalizedInformation()
+        If Not IsHandleCreated Then Exit Sub
+
+        Try
+            DisplayInfinityComputerInformation()
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not refresh Infinity Home localized information: " & ex.Message)
+        End Try
     End Sub
 
     Sub CheckDTProjHeaders(DTFileName As String)
@@ -8171,31 +4414,7 @@ Public Class MainForm
             If RegistryControlPanel.Visible Then
                 DynaLog.LogMessage("Second check determined the image registry control panel is still open. Cannot continue loading project until it's closed")
                 Dim msg As String = ""
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "The image registry control panel needs to be closed before loading projects."
-                            Case "ESN"
-                                msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar proyectos."
-                            Case "FRA"
-                                msg = "Le panneau de contrôle du registre des images doit être fermé avant le chargement des projets."
-                            Case "PTB", "PTG"
-                                msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar projectos."
-                            Case "ITA"
-                                msg = "Prima di caricare i progetti il pannello di controllo del registro immagini deve essere chiuso."
-                        End Select
-                    Case 1
-                        msg = "The image registry control panel needs to be closed before loading projects."
-                    Case 2
-                        msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar proyectos."
-                    Case 3
-                        msg = "Le panneau de contrôle du registre des images doit être fermé avant le chargement des projets."
-                    Case 4
-                        msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar projectos."
-                    Case 5
-                        msg = "Il pannello di controllo del registro immagini deve essere chiuso prima di caricare i progetti."
-                End Select
+                        msg = LocalizationService.ForSection("Main.Project.Load.Guard")("Image.Registry.Message")
                 MsgBox(msg, vbOKOnly + vbExclamation, Text)
                 Exit Sub
             End If
@@ -8206,7 +4425,7 @@ Public Class MainForm
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
                 DynaLog.LogMessage("We are dealing with a SQL Server Data Tools project. Cancelling project load...")
-                MessageBox.Show("The specified project is not a DISMTools project.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(LocalizationService.ForSection("Main.Messages")("Project.DISM.Tools.Label"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
             SaveProjectToolStripMenuItem.Enabled = True
@@ -8219,31 +4438,7 @@ Public Class MainForm
                     Text &= " (debug mode)"
                 End If
                 DynaLog.LogMessage("Project name: " & prjName)
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
-                            Case "ESN"
-                                PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
-                            Case "FRA"
-                                PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                            Case "PTB", "PTG"
-                                PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
-                            Case "ITA"
-                                PleaseWaitDialog.Label2.Text = "Caricamento progetto: " & Quote & prjName & Quote
-                        End Select
-                    Case 1
-                        PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
-                    Case 2
-                        PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
-                    Case 3
-                        PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                    Case 4
-                        PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
-                    Case 5
-                        PleaseWaitDialog.Label2.Text = "Caricamento progetto: " & Quote & prjName & Quote
-                End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.Project.Load").Format("LoadingProject.Label", prjName)
                 PleaseWaitDialog.ShowDialog(Me)
                 Label49.Text = prjName
                 Label52.Text = DTProjPath
@@ -8326,31 +4521,7 @@ Public Class MainForm
                         projPath = DTProjPath
                         projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                         DynaLog.LogMessage("Project name: " & prjName)
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
-                                    Case "ESN"
-                                        PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
-                                    Case "FRA"
-                                        PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                                    Case "PTB", "PTG"
-                                        PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
-                                    Case "ITA"
-                                        PleaseWaitDialog.Label2.Text = "Caricamento progetto: " & Quote & prjName & Quote
-                                End Select
-                            Case 1
-                                PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
-                            Case 2
-                                PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
-                            Case 3
-                                PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                            Case 4
-                                PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
-                            Case 5
-                                PleaseWaitDialog.Label2.Text = "Caricamento progetto: " & Quote & prjName & Quote
-                        End Select
+                        PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.Project.Load").Format("LoadingProject.Label", prjName)
                         PleaseWaitDialog.ShowDialog(Me)
                         Label49.Text = prjName
                         DynaLog.LogMessage("Detecting if images are mounted here...")
@@ -8496,31 +4667,7 @@ Public Class MainForm
                     projPath = DTProjPath
                     projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                     DynaLog.LogMessage("Project name: " & prjName)
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
-                                Case "ESN"
-                                    PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
-                                Case "FRA"
-                                    PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                                Case "PTB", "PTG"
-                                    PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
-                                Case "ITA"
-                                    PleaseWaitDialog.Label2.Text = "Caricamento progetto: " & Quote & prjName & Quote
-                            End Select
-                        Case 1
-                            PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
-                        Case 2
-                            PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
-                        Case 3
-                            PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                        Case 4
-                            PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
-                        Case 5
-                            PleaseWaitDialog.Label2.Text = "Caricamento progetto: " & Quote & prjName & Quote
-                    End Select
+                    PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.Project.Load").Format("LoadingProject.Label", prjName)
                     PleaseWaitDialog.ShowDialog(Me)
                     Label49.Text = prjName
                     DynaLog.LogMessage("Detecting if images are mounted here...")
@@ -8674,7 +4821,7 @@ Public Class MainForm
             BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
         Else
             DynaLog.LogMessage("Project file doesn't exist.")
-            MessageBox.Show("Cannot load the project. Reason: the project was not found. It may have been moved or its folder may have been deleted.", "Project load error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
+            MessageBox.Show(LocalizationService.ForSection("Main.Messages.Validation")("Cannot.Load.Project.Message"), LocalizationService.ForSection("Main.Messages.Validation")("Project.Load.Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
             If DialogResult.OK Then
                 Exit Sub
             End If
@@ -8758,8 +4905,8 @@ Public Class MainForm
             ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
             ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
         Catch ex As Exception
-            ProjectValueLoadForm.EpochRTB2.Text = "Not available"
-            ProjectValueLoadForm.EpochRTB3.Text = "Not available"
+            ProjectValueLoadForm.EpochRTB2.Text = LocalizationService.ForSection("Wait")("NotAvailable.Label")
+            ProjectValueLoadForm.EpochRTB3.Text = LocalizationService.ForSection("Wait")("ProjectValue.Label")
         End Try
         DynaLog.LogMessage("Configured project settings:" & CrLf & ProjectValueLoadForm.RichTextBox26.Text)
         If Debugger.IsAttached Then
@@ -8788,31 +4935,7 @@ Public Class MainForm
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Background processes are still gathering information about this image. Do you want to cancel them?"
-                        Case "ESN"
-                            msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
-                        Case "FRA"
-                            msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                        Case "PTB", "PTG"
-                            msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
-                        Case "ITA"
-                            msg = "I processi in background stanno ancora raccogliendo informazioni sull'immagine. Vuoi annullarli?"
-                    End Select
-                Case 1
-                    msg = "Background processes are still gathering information about this image. Do you want to cancel them?"
-                Case 2
-                    msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
-                Case 3
-                    msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                Case 4
-                    msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
-                Case 5
-                    msg = "I processi in background stanno ancora raccogliendo informazioni sull'immagine. Si desidera annullarli?"
-            End Select
+                    msg = LocalizationService.ForSection("Main.Project.Unload")("Bg.Procs.Still.Message")
             If MsgBox(msg, vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("Cancelling background processes...")
                 ImgBW.CancelAsync()
@@ -8820,62 +4943,14 @@ Public Class MainForm
                 DynaLog.LogMessage("User decided not to cancel background processes. Exiting procedure...")
                 Exit Sub
             End If
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Cancelling background processes. Please wait..."
-                        Case "ESN"
-                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                        Case "FRA"
-                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                        Case "ITA"
-                            MenuDesc.Text = "Annullamento dei processi in background..."
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Cancelling background processes. Please wait..."
-                Case 2
-                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                Case 3
-                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                Case 4
-                    MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                Case 5
-                    MenuDesc.Text = "Annullamento dei processi in backround..."
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.Project.Unload")("Cancelling.Bg.Procs.Button")
             While ImgBW.IsBusy()
                 ToolStripButton3.Enabled = False
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
             ToolStripButton3.Enabled = True
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Ready"
-                        Case "ESN"
-                            MenuDesc.Text = "Listo"
-                        Case "FRA"
-                            MenuDesc.Text = "Prêt"
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Pronto"
-                        Case "ITA"
-                            MenuDesc.Text = "Pronto"
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Ready"
-                Case 2
-                    MenuDesc.Text = "Listo"
-                Case 3
-                    MenuDesc.Text = "Prêt"
-                Case 4
-                    MenuDesc.Text = "Pronto"
-                Case 5
-                    MenuDesc.Text = "Pronto"
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.Project.Unload")("Ready.Item")
         End If
         bwBackgroundProcessAction = 0
         bwGetImageInfo = True
@@ -8982,61 +5057,13 @@ Public Class MainForm
         End If
         IsImageMounted = True
         isProjectLoaded = True
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Online installation - DISMTools"
-                    Case "ESN"
-                        Text = "Instalación activa - DISMTools"
-                    Case "FRA"
-                        Text = "Installation en ligne - DISMTools"
-                    Case "PTB", "PTG"
-                        Text = "Instalação em linha - DISMTools"
-                    Case "ITA"
-                        Text = "Installazione online - DISMTools"
-                End Select
-            Case 1
-                Text = "Online installation - DISMTools"
-            Case 2
-                Text = "Instalación activa - DISMTools"
-            Case 3
-                Text = "Installation en ligne - DISMTools"
-            Case 4
-                Text = "Instalação em linha - DISMTools"
-            Case 5
-                Text = "Installazione attiva - DISMTools"
-        End Select
+                Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.DISM.Tools.Label")
         OnlineManagement = True
         ' Initialize background processes
         bwGetImageInfo = True
         bwGetAdvImgInfo = True
         bwBackgroundProcessAction = 0
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label50.Text = "Yes"
-                    Case "ESN"
-                        Label50.Text = "Sí"
-                    Case "FRA"
-                        Label50.Text = "Oui"
-                    Case "PTB", "PTG"
-                        Label50.Text = "Sim"
-                    Case "ITA"
-                        Label50.Text = "Sì"
-                End Select
-            Case 1
-                Label50.Text = "Yes"
-            Case 2
-                Label50.Text = "Sí"
-            Case 3
-                Label50.Text = "Oui"
-            Case 4
-                Label50.Text = "Sim"
-            Case 5
-                Label50.Text = "Sì"
-        End Select
+                Label50.Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Yes.Button")
         DynaLog.LogMessage("Clearing items in project tree. We don't need them")
         UnpopulateProjectTree()
         HomePanel.Visible = False
@@ -9051,41 +5078,8 @@ Public Class MainForm
         Refresh()
         ' Saving a project is not possible in online mode
         ToolStripButton2.Enabled = False
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label41.Text = "(Online installation)"
-                        Label44.Text = "(Online installation)"
-                    Case "ESN"
-                        Label41.Text = "(Instalación activa)"
-                        Label44.Text = "(Instalación activa)"
-                    Case "FRA"
-                        Label41.Text = "(Installation en ligne)"
-                        Label44.Text = "(Installation en ligne)"
-                    Case "PTB", "PTG"
-                        Label41.Text = "(Instalação em linha)"
-                        Label44.Text = "(Instalação em linha)"
-                    Case "ITA"
-                        Label41.Text = "(Installazione online)"
-                        Label44.Text = "(Installazione online)"
-                End Select
-            Case 1
-                Label41.Text = "(Online installation)"
-                Label44.Text = "(Online installation)"
-            Case 2
-                Label41.Text = "(Instalación activa)"
-                Label44.Text = "(Instalación activa)"
-            Case 3
-                Label41.Text = "(Installation en ligne)"
-                Label44.Text = "(Installation en ligne)"
-            Case 4
-                Label41.Text = "(Instalação em linha)"
-                Label44.Text = "(Instalação em linha)"
-            Case 5
-                Label41.Text = "(Installazione online)"
-                Label44.Text = "(Installazione online)"
-        End Select
+                Label41.Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.Label")
+                Label44.Text = LocalizationService.ForSection("Main.OnlineManagement.Start")("Install.Label")
         Panel2.Visible = False
         ManageOnlineInstallationToolStripMenuItem.Enabled = False
         DynaLog.LogMessage("Setting mount directory to disk root...")
@@ -9104,31 +5098,7 @@ Public Class MainForm
             If RegistryControlPanel.Visible Then
                 DynaLog.LogMessage("Second check determined the image registry control panel is still open. Cannot continue loading project until it's closed")
                 Dim msg As String = ""
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "The image registry control panel needs to be closed before loading this mode."
-                            Case "ESN"
-                                msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar este modo."
-                            Case "FRA"
-                                msg = "Le panneau de contrôle du registre des images doit être fermé avant de charger ce mode."
-                            Case "PTB", "PTG"
-                                msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar este modo."
-                            Case "ITA"
-                                msg = "Prima di caricare questa modalità il pannello di controllo del registro immagini deve essere chiuso."
-                        End Select
-                    Case 1
-                        msg = "The image registry control panel needs to be closed before loading this mode."
-                    Case 2
-                        msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar este modo."
-                    Case 3
-                        msg = "Le panneau de contrôle du registre des images doit être fermé avant de charger ce mode."
-                    Case 4
-                        msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar este modo."
-                    Case 5
-                        msg = "Prima di caricare questa modalità Il pannello di controllo del registro immagini deve essere chiuso."
-                End Select
+                        msg = LocalizationService.ForSection("Main.OfflineManagement")("Image.Registry.Message")
                 MsgBox(msg, vbOKOnly + vbExclamation, Text)
                 Exit Sub
             End If
@@ -9136,61 +5106,13 @@ Public Class MainForm
         DynaLog.LogMessage("Either the control panel was closed successfully or wasn't opened in the first place. Continuing project load...")
         IsImageMounted = True
         isProjectLoaded = True
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Offline installation - DISMTools"
-                    Case "ESN"
-                        Text = "Instalación fuera de línea - DISMTools"
-                    Case "FRA"
-                        Text = "Installation hors ligne - DISMTools"
-                    Case "PTB", "PTG"
-                        Text = "Instalação offline - DISMTools"
-                    Case "ITA"
-                        Text = "Installazione offline - DISMTools"
-                End Select
-            Case 1
-                Text = "Offline installation - DISMTools"
-            Case 2
-                Text = "Instalación fuera de línea - DISMTools"
-            Case 3
-                Text = "Installation hors ligne - DISMTools"
-            Case 4
-                Text = "Instalação offline - DISMTools"
-            Case 5
-                Text = "Installazione offline - DISMTools"
-        End Select
+                Text = LocalizationService.ForSection("Main.OfflineManagement")("OfflineInstall.Label")
         OfflineManagement = True
         ' Initialize background processes
         bwGetImageInfo = True
         bwGetAdvImgInfo = True
         bwBackgroundProcessAction = 0
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label50.Text = "Yes"
-                    Case "ESN"
-                        Label50.Text = "Sí"
-                    Case "FRA"
-                        Label50.Text = "Oui"
-                    Case "PTB", "PTG"
-                        Label50.Text = "Sim"
-                    Case "ITA"
-                        Label50.Text = "Sì"
-                End Select
-            Case 1
-                Label50.Text = "Yes"
-            Case 2
-                Label50.Text = "Sí"
-            Case 3
-                Label50.Text = "Oui"
-            Case 4
-                Label50.Text = "Sim"
-            Case 5
-                Label50.Text = "Sì"
-        End Select
+                Label50.Text = LocalizationService.ForSection("Main.OfflineManagement")("Yes.Button")
         DynaLog.LogMessage("Clearing items in project tree. We don't need them")
         UnpopulateProjectTree()
         HomePanel.Visible = False
@@ -9205,41 +5127,8 @@ Public Class MainForm
         Refresh()
         ' Saving a project is not possible in offline mode either
         ToolStripButton2.Enabled = False
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label41.Text = "(Offline installation)"
-                        Label44.Text = "(Offline installation)"
-                    Case "ESN"
-                        Label41.Text = "(Instalación fuera de línea)"
-                        Label44.Text = "(Instalación fuera de línea)"
-                    Case "FRA"
-                        Label41.Text = "(Installation hors ligne)"
-                        Label44.Text = "(Installation hors ligne)"
-                    Case "PTB", "PTG"
-                        Label41.Text = "(Instalação offline)"
-                        Label44.Text = "(Instalação offline)"
-                    Case "ITA"
-                        Label41.Text = "(Installazione offline)"
-                        Label44.Text = "(Installazione offline)"
-                End Select
-            Case 1
-                Label41.Text = "(Offline installation)"
-                Label44.Text = "(Offline installation)"
-            Case 2
-                Label41.Text = "(Instalación fuera de línea)"
-                Label44.Text = "(Instalación fuera de línea)"
-            Case 3
-                Label41.Text = "(Installation hors ligne)"
-                Label44.Text = "(Installation hors ligne)"
-            Case 4
-                Label41.Text = "(Instalação offline)"
-                Label44.Text = "(Instalação offline)"
-            Case 5
-                Label41.Text = "(Installazione offline)"
-                Label44.Text = "(Installazione offline)"
-        End Select
+                Label41.Text = LocalizationService.ForSection("Main.OfflineManagement")("Install.Label")
+                Label44.Text = LocalizationService.ForSection("Main.OfflineManagement")("Install.Label")
         Panel2.Visible = False
         ManageOfflineInstallationToolStripMenuItem.Enabled = False
         DynaLog.LogMessage("Setting mount directory to disk...")
@@ -9253,31 +5142,7 @@ Public Class MainForm
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Background processes are still gathering information about this image. Do you want to cancel them?"
-                        Case "ESN"
-                            msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
-                        Case "FRA"
-                            msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                        Case "PTB", "PTG"
-                            msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
-                        Case "ITA"
-                            msg = "I processi in background stanno ancora raccogliendo informazioni sull'immagine. Vuoi annullarli?"
-                    End Select
-                Case 1
-                    msg = "Background processes are still gathering information about this image. Do you want to cancel them?"
-                Case 2
-                    msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
-                Case 3
-                    msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                Case 4
-                    msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
-                Case 5
-                    msg = "I processi in background stanno ancora raccogliendo informazioni sull'immagine. Vuoi annullarli?"
-            End Select
+                    msg = LocalizationService.ForSection("Main.EndOfflineMgmt")("Bg.Procs.Still.Message")
             If MsgBox(msg, vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("Cancelling background processes...")
                 ImgBW.CancelAsync()
@@ -9285,62 +5150,14 @@ Public Class MainForm
                 DynaLog.LogMessage("User decided not to cancel background processes. Exiting procedure...")
                 Exit Sub
             End If
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Cancelling background processes. Please wait..."
-                        Case "ESN"
-                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                        Case "FRA"
-                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                        Case "ITA"
-                            MenuDesc.Text = "Annullamento dei processi in background..."
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Cancelling background processes. Please wait..."
-                Case 2
-                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                Case 3
-                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                Case 4
-                    MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                Case 5
-                    MenuDesc.Text = "Annullamento dei processi in background..."
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.EndOfflineMgmt")("Cancelling.Bg.Procs.Button")
             While ImgBW.IsBusy()
                 ToolStripButton3.Enabled = False
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
             ToolStripButton3.Enabled = True
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Ready"
-                        Case "ESN"
-                            MenuDesc.Text = "Listo"
-                        Case "FRA"
-                            MenuDesc.Text = "Prêt"
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Pronto"
-                        Case "ITA"
-                            MenuDesc.Text = "Pronto"
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Ready"
-                Case 2
-                    MenuDesc.Text = "Listo"
-                Case 3
-                    MenuDesc.Text = "Prêt"
-                Case 4
-                    MenuDesc.Text = "Pronto"
-                Case 5
-                    MenuDesc.Text = "Pronto"
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.EndOffline")("Ready.Item")
         End If
         bwBackgroundProcessAction = 0
         bwGetImageInfo = True
@@ -9349,31 +5166,7 @@ Public Class MainForm
         isProjectLoaded = False
         Text = "DISMTools"
         OfflineManagement = False
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label50.Text = "Yes"
-                    Case "ESN"
-                        Label50.Text = "Sí"
-                    Case "FRA"
-                        Label50.Text = "Oui"
-                    Case "PTB", "PTG"
-                        Label50.Text = "Sim"
-                    Case "ITA"
-                        Label50.Text = "Sì"
-                End Select
-            Case 1
-                Label50.Text = "Yes"
-            Case 2
-                Label50.Text = "Sí"
-            Case 3
-                Label50.Text = "Oui"
-            Case 4
-                Label50.Text = "Sim"
-            Case 5
-                Label50.Text = "Sì"
-        End Select
+                Label50.Text = LocalizationService.ForSection("Main.EndOffline")("Yes.Button")
         HomePanel.Visible = True
         PrjPanel.Visible = False
         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
@@ -9404,31 +5197,7 @@ Public Class MainForm
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Background processes are still gathering information about this image. Do you want to cancel them?"
-                        Case "ESN"
-                            msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
-                        Case "FRA"
-                            msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                        Case "PTB", "PTG"
-                            msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
-                        Case "ITA"
-                            msg = "I processi in background stanno ancora raccogliendo informazioni sull'immagine. Vuoi annullarli?"
-                    End Select
-                Case 1
-                    msg = "Background processes are still gathering information about this image. Do you want to cancel them?"
-                Case 2
-                    msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
-                Case 3
-                    msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                Case 4
-                    msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
-                Case 5
-                    msg = "I processi in background stanno ancora raccogliendo informazioni sull'immagine. Vuoi annullarli?"
-            End Select
+                    msg = LocalizationService.ForSection("Main.EndOnlineMgmt")("Bg.Procs.Still.Message")
             If MsgBox(msg, vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("Cancelling background processes...")
                 ImgBW.CancelAsync()
@@ -9436,62 +5205,14 @@ Public Class MainForm
                 DynaLog.LogMessage("User decided not to cancel background processes. Exiting procedure...")
                 Exit Sub
             End If
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Cancelling background processes. Please wait..."
-                        Case "ESN"
-                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                        Case "FRA"
-                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                        Case "ITA"
-                            MenuDesc.Text = "Annullamento dei processi in background..."
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Cancelling background processes. Please wait..."
-                Case 2
-                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                Case 3
-                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                Case 4
-                    MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                Case 5
-                    MenuDesc.Text = "Annullamento dei processi in background..."
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.EndOnlineMgmt")("Cancelling.Bg.Procs.Button")
             While ImgBW.IsBusy()
                 ToolStripButton3.Enabled = False
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
             ToolStripButton3.Enabled = True
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Ready"
-                        Case "ESN"
-                            MenuDesc.Text = "Listo"
-                        Case "FRA"
-                            MenuDesc.Text = "Prêt"
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Pronto"
-                        Case "ITA"
-                            MenuDesc.Text = "Pronto"
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Ready"
-                Case 2
-                    MenuDesc.Text = "Listo"
-                Case 3
-                    MenuDesc.Text = "Prêt"
-                Case 4
-                    MenuDesc.Text = "Pronto"
-                Case 5
-                    MenuDesc.Text = "Pronto"
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.EndOnline")("Ready.Item")
         End If
         bwBackgroundProcessAction = 0
         bwGetImageInfo = True
@@ -9500,31 +5221,7 @@ Public Class MainForm
         isProjectLoaded = False
         Text = "DISMTools"
         OnlineManagement = False
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label50.Text = "Yes"
-                    Case "ESN"
-                        Label50.Text = "Sí"
-                    Case "FRA"
-                        Label50.Text = "Oui"
-                    Case "PTB", "PTG"
-                        Label50.Text = "Sim"
-                    Case "ITA"
-                        Label50.Text = "Sì"
-                End Select
-            Case 1
-                Label50.Text = "Yes"
-            Case 2
-                Label50.Text = "Sí"
-            Case 3
-                Label50.Text = "Oui"
-            Case 4
-                Label50.Text = "Sim"
-            Case 5
-                Label50.Text = "Sì"
-        End Select
+                Label50.Text = LocalizationService.ForSection("Main.EndOnline")("Yes.Button")
         HomePanel.Visible = True
         PrjPanel.Visible = False
         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
@@ -9557,37 +5254,13 @@ Public Class MainForm
         DynaLog.LogMessage("- Is the mounted image read-only? " & If(IsReadOnly, "Yes", "No"))
         DynaLog.LogMessage("- Skip background processes? " & If(SkipBGProcs, "Yes", "No"))
         If WasImageMounted Then
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label50.Text = "Yes"
-                        Case "ESN"
-                            Label50.Text = "Sí"
-                        Case "FRA"
-                            Label50.Text = "Oui"
-                        Case "PTB", "PTG"
-                            Label50.Text = "Sim"
-                        Case "ITA"
-                            Label50.Text = "Sì"
-                    End Select
-                Case 1
-                    Label50.Text = "Yes"
-                Case 2
-                    Label50.Text = "Sí"
-                Case 3
-                    Label50.Text = "Oui"
-                Case 4
-                    Label50.Text = "Sim"
-                Case 5
-                    Label50.Text = "Sì"
-            End Select
+                    Label50.Text = LocalizationService.ForSection("Main.UpdateProjProps")("Yes.Button")
             LinkLabel14.Visible = False
             ImageView_NoImage.Visible = False
             ImageView_BasicInfo.Visible = True
             IsImageMounted = True
         Else
-            Label50.Text = "No"
+            Label50.Text = LocalizationService.ForSection("Main.UpdateProjProps")("No.Button")
             LinkLabel14.Visible = True
             ImageView_NoImage.Visible = True
             ImageView_BasicInfo.Visible = False
@@ -9654,121 +5327,16 @@ Public Class MainForm
         prjTreeStatus.Visible = True
         DynaLog.LogMessage("Adding tree nodes...")
         Try
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Deployment Tools")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Deployment Tools (x86)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Deployment Tools (AMD64)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Deployment Tools (ARM)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Deployment Tools (ARM64)")
-                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Mount point")
-                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Unattended answer files")
-                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Scratch directory")
-                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
-                        Case "ESN"
-                            prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación (ARM64)")
-                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto de montaje")
-                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Archivos de respuesta desatendida")
-                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directorio temporal")
-                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Informes del proyecto")
-                        Case "FRA"
-                            prjTreeView.Nodes.Add("parent", "Projet: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Outils de déploiement ADK")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Outils de déploiement (x86)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Outils de déploiement (AMD64)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Outils de déploiement (ARM)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Outils de déploiement (ARM64)")
-                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Point de montage")
-                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Fichiers de réponse non surveillés")
-                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Répertoire temporaire")
-                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapports de projet")
-                        Case "PTB", "PTG"
-                            prjTreeView.Nodes.Add("parent", "Projeto: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Ferramentas de implantação do ADK")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Ferramentas de implementação (x86)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Ferramentas de implementação (AMD64)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Ferramentas de implementação (ARM)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Ferramentas de implementação (ARM64)")
-                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Ponto de montagem")
-                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Ficheiros de resposta não assistidos")
-                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Diretório temporário")
-                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Relatórios de projectos")
-                        Case "ITA"
-                            prjTreeView.Nodes.Add("parent", "Progetto: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Strumenti implementazione ADK")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Strumenti implementazione (x86)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Strumenti implementazione (AMD64)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Strumenti implementazione (ARM)")
-                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Strumenti installazione (ARM64)")
-                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto montaggio")
-                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "File risposte non presidiate")
-                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Cartella temporanea")
-                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapporti progetto")
-                    End Select
-                Case 1
-                    prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Deployment Tools")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Deployment Tools (x86)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Deployment Tools (AMD64)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Deployment Tools (ARM)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Deployment Tools (ARM64)")
-                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Mount point")
-                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Unattended answer files")
-                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Scratch directory")
-                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
-                Case 2
-                    prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación (ARM64)")
-                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto de montaje")
-                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Archivos de respuesta desatendida")
-                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directorio temporal")
-                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Informes del proyecto")
-                Case 3
-                    prjTreeView.Nodes.Add("parent", "Projet: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Outils de déploiement ADK")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Outils de déploiement (x86)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Outils de déploiement (AMD64)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Outils de déploiement (ARM)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Outils de déploiement (ARM64)")
-                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Point de montage")
-                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Fichiers de réponse non surveillés")
-                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Répertoire temporaire")
-                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapports de projet")
-                Case 4
-                    prjTreeView.Nodes.Add("parent", "Projeto: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Ferramentas de implantação do ADK")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Ferramentas de implementação (x86)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Ferramentas de implementação (AMD64)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Ferramentas de implementação (ARM)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Ferramentas de implementação (ARM64)")
-                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Ponto de montagem")
-                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Ficheiros de resposta não assistidos")
-                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Diretório temporário")
-                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Relatórios de projectos")
-                Case 5
-                    prjTreeView.Nodes.Add("parent", "Progetto: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Strumenti di implementazione ADK")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Strumenti di implementazione (x86)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Strumenti di implementazione (AMD64)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Strumenti di implementazione (ARM)")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Strumenti di installazione (ARM64)")
-                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto di montaggio")
-                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "File di risposta non presidiati")
-                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directory temporanea")
-                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapporti del progetto")
-            End Select
+            prjTreeView.Nodes.Add("parent", LocalizationService.ForSection("Main.Project.Load").Format("Project.Label", MainProjNameNode))
+            prjTreeView.Nodes("parent").Nodes.Add("dandi", LocalizationService.ForSection("Main.Project.Load")("Adkdeployment.Tools.Label"))
+            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", LocalizationService.ForSection("Main.Project.Load")("DeploymentTools.X86.Label"))
+            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", LocalizationService.ForSection("Main.Project.Load")("Deployment.Tools.Label"))
+            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", LocalizationService.ForSection("Main.Project.Load")("DeploymentTools.ARM.Label"))
+            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", LocalizationService.ForSection("Main.Project.Load")("DeploymentTools.ARM64.Label"))
+            prjTreeView.Nodes("parent").Nodes.Add("mount", LocalizationService.ForSection("Main.Project.Load")("MountPoint.Label"))
+            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", LocalizationService.ForSection("Main.Project.Load")("Unattended.Answer.Label"))
+            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", LocalizationService.ForSection("Main.Project.Load")("ScratchDirectory.Label"))
+            prjTreeView.Nodes("parent").Nodes.Add("reports", LocalizationService.ForSection("Main.Project.Load")("ProjectReports.Label"))
             prjTreeView.ExpandAll()
         Catch ex As Exception
 
@@ -9785,15 +5353,15 @@ Public Class MainForm
     Sub ShowParentDesc(ParentDescMode As Integer)
         Select Case ParentDescMode
             Case 1
-                MenuDesc.Text = "View options related to files, like creating or opening projects"
+                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Related.Item")
             Case 2
-                MenuDesc.Text = "View options related to this project, like viewing its properties"
+                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Project.Item")
             Case 3
-                MenuDesc.Text = "View options related to image management, deployment and/or servicing"
+                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Image.Item")
             Case 4
-                MenuDesc.Text = "View options related to additional tools, like the Command Console"
+                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Additional.Item")
             Case 5
-                MenuDesc.Text = "View options related to help topics, glossary, command help and product information"
+                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Help.Item")
             Case Else
                 ' Do not show anything
         End Select
@@ -9805,349 +5373,253 @@ Public Class MainForm
             ' ChildDescMode follows the same style as ProgressPanel.OperationNum
             Select Case CommandDescriptionInt
                 Case 1
-                    MenuDesc.Text = "Adds an additional image to a .wim file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Additional.Item")
                 Case 2
-                    MenuDesc.Text = "Applies a Full Flash Utility or split FFU to a physical drive"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Full.Flash.Item")
                 Case 3
-                    MenuDesc.Text = "Applies a Windows image or split WIM to a partition"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Windows.Image.Item")
                 Case 4
-                    MenuDesc.Text = "Captures incremental file changes on the specific WIM file to " & Quote & "custom.wim" & Quote
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Incremen.File.Item")
                 Case 5
-                    MenuDesc.Text = "Captures an image of a drive's partitions to a new FFU file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Image.Drive.Item")
                 Case 6
-                    MenuDesc.Text = "Captures an image of a drive to a new WIM file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Image.New.Item")
                 Case 7
-                    MenuDesc.Text = "Deletes all resources associated with a corrupted mounted image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Deletes.Resources.Item")
                 Case 8
-                    MenuDesc.Text = "Applies the changes made to the mounted image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Changes.Made.Item")
                 Case 9
-                    MenuDesc.Text = "Deletes a volume image from a WIM file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Deletes.Volume.Image.Item")
                 Case 10
-                    MenuDesc.Text = "Exports a copy of the image to another file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Copy.Image.Item")
                 Case 11
-                    MenuDesc.Text = "Displays information about the images contained in a WIM, FFU, VHD or VHDX file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Images.Item")
                 Case 12
-                    MenuDesc.Text = "Displays a list of WIM, FFU, VHD or VHDX images that are currently mounted"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Wimffu.Item")
                 Case 13
-                    MenuDesc.Text = "Displays WIMBoot configuration entries for the specified disk volume"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.WIM.Boot.Item")
                 Case 14
-                    MenuDesc.Text = "Displays a list of files and folders in an image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Files.Item")
                 Case 15
-                    MenuDesc.Text = "Mounts an image from a WIM, FFU, VHD or VHDX to make it available for servicing"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Mounts.Image.Wimffu.Item")
                 Case 16
-                    MenuDesc.Text = "Optimizes a FFU image to make it faster to deploy"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Ffuimage.Item")
                 Case 17
-                    MenuDesc.Text = "Optimizes an image to make it faster to deploy"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Image.Faster.Item")
                 Case 18
-                    MenuDesc.Text = "Remounts a mounted image that is inaccessible to make it available for servicing"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Remounts.Mounted.Image.Item")
                 Case 19
-                    MenuDesc.Text = "Splits a Full Flash Utility (FFU) file into read-only split FFU (.sfu) files"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Splits.Full.Flash.Item")
                 Case 20
-                    MenuDesc.Text = "Splits an existing WIM file into read-only split WIM (.swm) files"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Splits.Existing.WIM.Item")
                 Case 21
-                    MenuDesc.Text = "Unmounts the WIM, FFU, VHD or VHDX file and either commits or discards its changes"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Unmounts.Wimffuvhd.Item")
                 Case 22
-                    MenuDesc.Text = "Updates the WIMBoot configuration entry"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Updates.WIM.Boot.Item")
                 Case 23
-                    MenuDesc.Text = "Applies siloed provisioning packages to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Siloed.Prov.Item")
                 Case 24
-                    MenuDesc.Text = "Displays information about all packages in the image or in the installation or any package file you want to add"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Message")
                 Case 26
-                    MenuDesc.Text = "Installs a .cab or .msu package in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Installs.Cabmsu.Package.Item")
                 Case 27
-                    MenuDesc.Text = "Removes a .cab file package from the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Cabfile.Package.Item")
                 Case 28
-                    MenuDesc.Text = "Displays information about the installed features in an image or an online installation"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Installed.Item")
                 Case 30
-                    MenuDesc.Text = "Enables or updates the specified feature in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Enables.Updates.Feature.Item")
                 Case 31
-                    MenuDesc.Text = "Disables the specified feature in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Disables.Feature.Image.Item")
                 Case 32
-                    MenuDesc.Text = "Performs cleanup or recovery operations on the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Performs.Cleanup.Item")
                 Case 33
-                    MenuDesc.Text = "Adds an applicable payload of a provisioning package to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Applicable.Item")
                 Case 34
-                    MenuDesc.Text = "Gets infomation of a provisioning package"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Infomation.Prov.Item")
                 Case 35
-                    MenuDesc.Text = "Dehydrates files contained in the custom data image to save space"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Dehydrat.Files.Containe.Item")
                 Case 36
-                    MenuDesc.Text = "Displays information about app packages in an image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.App.Item")
                 Case 37
-                    MenuDesc.Text = "Adds one or more app packages to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addsone.App.Item")
                 Case 38
-                    MenuDesc.Text = "Removes provisioning for app packages from the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Prov.App.Item")
                 Case 39
-                    MenuDesc.Text = "Optimizes the total size of provisioned app packages on the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Total.Size.Item")
                 Case 40
-                    MenuDesc.Text = "Adds a custom data file into the specified app package"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addscustom.Data.File.Item")
                 Case 41
-                    MenuDesc.Text = "Displays information of MSP patches applicable to the offline image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Msppatches.Item")
                 Case 42
-                    MenuDesc.Text = "Displays information about installed MSP patches"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Command42.Item")
                 Case 43
-                    MenuDesc.Text = "Displays information about all applied MSP patches for all applications installed on the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Item")
                 Case 44
-                    MenuDesc.Text = "Displays information about a specific installed Windows Installer application"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Specific.Item")
                 Case 45
-                    MenuDesc.Text = "Displays information about all Windows Installer applications in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Command45.Item")
                 Case 46
-                    MenuDesc.Text = "Exports default application associations from a running OS to an XML file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Default.Item")
                 Case 47
-                    MenuDesc.Text = "Displays the list of default application associations set in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Item")
                 Case 48
-                    MenuDesc.Text = "Imports a set of default application associations from an XML file to an image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Imports.Set.DefaultApp.Item")
                 Case 49
-                    MenuDesc.Text = "Removes default application associations from the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Default.Item")
                 Case 50
-                    MenuDesc.Text = "Displays information about international settings and languages"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Intl.Item")
                 Case 51
-                    MenuDesc.Text = "Sets the default UI language"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Uilanguage.Item")
                 Case 52
-                    MenuDesc.Text = "Sets the fallback default language for the system UI"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Fallback.Default.Item")
                 Case 53
-                    MenuDesc.Text = "Sets the " & Quote & "System Preferred" & Quote & " UI language"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.System.Preferred.Item")
                 Case 54
-                    MenuDesc.Text = "Sets the language for non-Unicode programs and font settings in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Language.Non.Item")
                 Case 55
-                    MenuDesc.Text = "Sets the " & Quote & "standards and formats" & Quote & " language (user locale) in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Standards.Formats.Item")
                 Case 56
-                    MenuDesc.Text = "Sets the input locales and keyboard layouts to use in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Input.Locales.Item")
                 Case 57
-                    MenuDesc.Text = "Sets the default system UI language, the language for non-Unicode programs, the user locale, and the keyboard layouts to the language in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.System.Message")
                 Case 58
-                    MenuDesc.Text = "Sets the default time zone in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Time.Item")
                 Case 59
-                    MenuDesc.Text = "Sets the default language for the UI and non-Unicode programs, locales for the user and input, keyboard layouts and time zone values in the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Message")
                 Case 60
-                    MenuDesc.Text = "Specifies a keyboard driver for Japanese and Korean keyboards"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Specifies.Keyboard.Item")
                 Case 61
-                    MenuDesc.Text = "Generates a Lang.ini file, used by Setup to define the language packs inside the image and out"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Generates.Lang.Ini.Item")
                 Case 62
-                    MenuDesc.Text = "Defines the default language that will be used by Setup"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Defines.Default.Item")
                 Case 63
-                    MenuDesc.Text = "Adds a capability to an image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addscapability.Image.Item")
                 Case 64
-                    MenuDesc.Text = "Exports a set of capabilities into a new repository"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Set.Caps.Item")
                 Case 65
-                    MenuDesc.Text = "Gets information about the installed capabilities of an image or an active installation"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Installed.Item")
                 Case 67
-                    MenuDesc.Text = "Removes a capability from the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Capability.Item")
                 Case 68
-                    MenuDesc.Text = "Displays the edition of the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Edition.Image.Item")
                 Case 69
-                    MenuDesc.Text = "Displays the editions the image can be upgraded to"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Editions.Image.Item")
                 Case 70
-                    MenuDesc.Text = "Changes an image to a higher edition"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Changes.Image.Higher.Item")
                 Case 71
-                    MenuDesc.Text = "Enters the product key for the current edition"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Enters.ProductKey.Item")
                 Case 72
-                    MenuDesc.Text = "Displays information about the driver packages you specify or the installed drivers in the image or in the installation"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Driver.Message")
                 Case 74
-                    MenuDesc.Text = "Adds third-party driver packages to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addsthird.Party.Driver.Item")
                 Case 75
-                    MenuDesc.Text = "Removes third-party drivers from the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.ThirdParty.Item")
                 Case 76
-                    MenuDesc.Text = "Exports all third-party driver packages from the image to a destination path"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.ThirdParty.Item")
                 Case 77
-                    MenuDesc.Text = "Imports all third-party drivers from a specified source to this image to provide the same hardware compatibility"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Imports.ThirdParty.Message")
                 Case 78
-                    MenuDesc.Text = "Applies an Unattend.xml file to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Unattend.Item")
                 Case 79
-                    MenuDesc.Text = "Displays a list of Windows PE settings in the WinPE image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Windows.Item")
                 Case 80
-                    MenuDesc.Text = "Retrieves the configured amount of the Windows PE system volume scratch space"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Retrieves.Configured.Item")
                 Case 81
-                    MenuDesc.Text = "Retrieves the target path of the Windows PE image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Retrieves.Target.Path.Item")
                 Case 82
-                    MenuDesc.Text = "Sets the available scratch space (in MB)"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Available.Item")
                 Case 83
-                    MenuDesc.Text = "Sets the location of the WinPE image on the disk (for hard disk boot scenarios)"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Location.Win.Item")
                 Case 84
-                    MenuDesc.Text = "Gets the number of days an uninstall can be initiated after an upgrade"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Number.Days.Item")
                 Case 85
-                    MenuDesc.Text = "Reverts a PC to a previous installation"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Reverts.PC.Item")
                 Case 86
-                    MenuDesc.Text = "Removes the ability to roll back a PC to a previous installation"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Ability.Roll.Item")
                 Case 87
-                    MenuDesc.Text = "Sets the number of days an uninstall can be initiated after an upgrade"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Number.Days.Item")
                 Case 88
-                    MenuDesc.Text = "Gets the current state of reserved storage"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.State.Reserved.Item")
                 Case 89
-                    MenuDesc.Text = "Sets the state of reserved storage"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.State.Reserved.Item")
                 Case 90             ' Edge can also be deployed
-                    MenuDesc.Text = "Adds the Microsoft Edge Browser and WebView2 component to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Microsoft.Item")
                 Case 91
-                    MenuDesc.Text = "Adds the Microsoft Edge Browser to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Command91.Item")
                 Case 92
-                    MenuDesc.Text = "Adds the Microsoft Edge WebView2 component to the image"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addsmicrosoft.Edge.Web.Item")
                 Case 93
-                    MenuDesc.Text = "Saves complete image information to the file you want. Depending on the settings you had specified, you may be asked some questions during the process"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Complete.Image.Message")
                 Case Else
                     ' Do not show anything
             End Select
         Else
             Select Case ChildDescMode
                 Case 1
-                    MenuDesc.Text = "Creates a new DISMTools project. The current project will be unloaded after creating it"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Creates.New.DISM.Item")
                 Case 2
-                    MenuDesc.Text = "Opens an existing DISMTools project. The current project will be unloaded"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Existing.DISM.Item")
                 Case 3
-                    MenuDesc.Text = "Enters online installation management mode"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Enters.Online.Install.Item")
                 Case 4
-                    MenuDesc.Text = "Saves the changes of this project"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Changes.Project.Item")
                 Case 5
-                    MenuDesc.Text = "Saves this project on another location"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Project.Another.Item")
                 Case 6
-                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Closes.Project.Message")
                 Case 7
-                    MenuDesc.Text = "Opens the File Explorer to view the project files"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.File.Explorer.Item")
                 Case 8
-                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Unloads.Project.Message")
                 Case 9
-                    MenuDesc.Text = "Switches the mounted image index"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Switches.Mounted.Image.Item")
                 Case 10
-                    MenuDesc.Text = "Launches the project section of the project properties dialog"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Launches.Project.Item")
                 Case 11
-                    MenuDesc.Text = "Launches the image section of the project properties dialog"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Launches.Image.Section.Item")
                 Case 12
-                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("ImageFormat.Item")
                 Case 13
-                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Merges.Two.SWM.Item")
                 Case 14
-                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Remounts.Image.Read.Item")
                 Case 15
-                    MenuDesc.Text = "Opens the Command Console"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Command.Console.Item")
                 Case 16
-                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Manage.Item")
                 Case 17
-                    MenuDesc.Text = "Lets you manage project reports"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Manage.Project.Item")
                 Case 18
-                    MenuDesc.Text = "Shows an overview of the mounted images"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Overview.Mounted.Item")
                 Case 19
-                    MenuDesc.Text = "Configures settings for the program"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Configures.Settings.Item")
                 Case 20
-                    MenuDesc.Text = "Opens the help topics for this program"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Help.Topics.Item")
                 Case 21
-                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Glossary.Don.Item")
                 Case 22
-                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Command.Help.Item")
                 Case 23
-                    MenuDesc.Text = "Shows program information"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Item")
                 Case 24
-                    MenuDesc.Text = "Lets you report feedback through a new GitHub issue (a GitHub account is needed)"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Report.Feedback.Item")
                 Case 25
-                    MenuDesc.Text = "Opens the GitHub repository containing the help documentation contents, to which you can contribute (a GitHub account is needed)"
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Git.Hub.Message")
             End Select
         End If
     End Sub
 
     Sub HideParentDesc()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        MenuDesc.Text = "Ready"
-                    Case "ESN"
-                        MenuDesc.Text = "Listo"
-                    Case "FRA"
-                        MenuDesc.Text = "Prêt"
-                    Case "PTB", "PTG"
-                        MenuDesc.Text = "Pronto"
-                    Case "ITA"
-                        MenuDesc.Text = "Pronto"
-                End Select
-            Case 1
-                MenuDesc.Text = "Ready"
-            Case 2
-                MenuDesc.Text = "Listo"
-            Case 3
-                MenuDesc.Text = "Prêt"
-            Case 4
-                MenuDesc.Text = "Pronto"
-            Case 5
-                MenuDesc.Text = "Pronto"
-        End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.HideParentDesc")("Ready.Label")
         If ImgBW.CancellationPending Then
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Cancelling background processes. Please wait..."
-                        Case "ESN"
-                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                        Case "FRA"
-                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                        Case "ITA"
-                            MenuDesc.Text = "Annullamento dei processi in background..."
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Cancelling background processes. Please wait..."
-                Case 2
-                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                Case 3
-                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                Case 4
-                    MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                Case 5
-                    MenuDesc.Text = "Annullamento dei processi in background..."
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.HideParentDesc")("Cancelling.Bg.Procs.Item")
         End If
     End Sub
 
     Sub HideChildDescs()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        MenuDesc.Text = "Ready"
-                    Case "ESN"
-                        MenuDesc.Text = "Listo"
-                    Case "FRA"
-                        MenuDesc.Text = "Prêt"
-                    Case "PTB", "PTG"
-                        MenuDesc.Text = "Pronto"
-                    Case "ITA"
-                        MenuDesc.Text = "Pronto"
-                End Select
-            Case 1
-                MenuDesc.Text = "Ready"
-            Case 2
-                MenuDesc.Text = "Listo"
-            Case 3
-                MenuDesc.Text = "Prêt"
-            Case 4
-                MenuDesc.Text = "Pronto"
-            Case 5
-                MenuDesc.Text = "Pronto"
-        End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.HideChildDescs")("Ready.Label")
         If ImgBW.CancellationPending Then
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Cancelling background processes. Please wait..."
-                        Case "ESN"
-                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                        Case "FRA"
-                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                        Case "ITA"
-                            MenuDesc.Text = "Annullamento dei processi in background..."
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Cancelling background processes. Please wait..."
-                Case 2
-                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
-                Case 3
-                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                Case 4
-                    MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
-                Case 5
-                    MenuDesc.Text = "Annullamento dei processi in background..."
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.HideChildDescs")("Cancelling.Bg.Procs.Item")
         End If
     End Sub
 
@@ -10727,31 +6199,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-                    Case "ESN"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-                    Case "FRA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-                    Case "PTB", "PTG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-                    Case "ITA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-                End Select
-            Case 1
-                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-            Case 2
-                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-            Case 3
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-            Case 4
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-            Case 5
-                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-        End Select
+                ProjProperties.ImageTaskHeader1.ItemText = LocalizationService.ForSection("Main")("Props.Label")
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
@@ -10763,31 +6211,7 @@ Public Class MainForm
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
 
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-                    Case "ESN"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-                    Case "FRA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-                    Case "PTB", "PTG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-                    Case "ITA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-                End Select
-            Case 1
-                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-            Case 2
-                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-            Case 3
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-            Case 4
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-            Case 5
-                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-        End Select
+                ProjProperties.ImageTaskHeader1.ItemText = LocalizationService.ForSection("Main")("ProjProps.Label")
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
@@ -10990,78 +6414,12 @@ Public Class MainForm
     Private Sub prjTreeView_AfterExpand(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterExpand
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                ExpandCollapseTSB.Text = "Collapse"
-                                ExpandToolStripMenuItem.Text = "Collapse item"
-                            Case "ESN"
-                                ExpandCollapseTSB.Text = "Contraer"
-                                ExpandToolStripMenuItem.Text = "Contraer objeto"
-                            Case "FRA"
-                                ExpandCollapseTSB.Text = "Réduire"
-                                ExpandToolStripMenuItem.Text = "Réduire élément"
-                            Case "PTB", "PTG"
-                                ExpandCollapseTSB.Text = "Recolher"
-                                ExpandToolStripMenuItem.Text = "Recolher item"
-                            Case "ITA"
-                                ExpandCollapseTSB.Text = "Minimizza"
-                                ExpandToolStripMenuItem.Text = "Minimizza elemento"
-                        End Select
-                    Case 1
-                        ExpandCollapseTSB.Text = "Collapse"
-                        ExpandToolStripMenuItem.Text = "Collapse item"
-                    Case 2
-                        ExpandCollapseTSB.Text = "Contraer"
-                        ExpandToolStripMenuItem.Text = "Contraer objeto"
-                    Case 3
-                        ExpandCollapseTSB.Text = "Réduire"
-                        ExpandToolStripMenuItem.Text = "Réduire élément"
-                    Case 4
-                        ExpandCollapseTSB.Text = "Recolher"
-                        ExpandToolStripMenuItem.Text = "Recolher item"
-                    Case 5
-                        ExpandCollapseTSB.Text = "Minimizza"
-                        ExpandToolStripMenuItem.Text = "Minimizza elemento"
-                End Select
+                        ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterExpand")("Collapse.Label")
+                        ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterExpand")("CollapseItem.Label")
                 ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
             Else
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                ExpandCollapseTSB.Text = "Expand"
-                                ExpandToolStripMenuItem.Text = "Expand item"
-                            Case "ESN"
-                                ExpandCollapseTSB.Text = "Expandir"
-                                ExpandToolStripMenuItem.Text = "Expandir objeto"
-                            Case "FRA"
-                                ExpandCollapseTSB.Text = "Agrandir"
-                                ExpandToolStripMenuItem.Text = "Agrandir élément"
-                            Case "PTB", "PTG"
-                                ExpandCollapseTSB.Text = "Expandir"
-                                ExpandToolStripMenuItem.Text = "Expandir item"
-                            Case "ITA"
-                                ExpandCollapseTSB.Text = "Espandi"
-                                ExpandToolStripMenuItem.Text = "Espandi elemento"
-                        End Select
-                    Case 1
-                        ExpandCollapseTSB.Text = "Expand"
-                        ExpandToolStripMenuItem.Text = "Expand item"
-                    Case 2
-                        ExpandCollapseTSB.Text = "Expandir"
-                        ExpandToolStripMenuItem.Text = "Expandir objeto"
-                    Case 3
-                        ExpandCollapseTSB.Text = "Agrandir"
-                        ExpandToolStripMenuItem.Text = "Agrandir élément"
-                    Case 4
-                        ExpandCollapseTSB.Text = "Expandir"
-                        ExpandToolStripMenuItem.Text = "Expandir item"
-                    Case 5
-                        ExpandCollapseTSB.Text = "Espandi"
-                        ExpandToolStripMenuItem.Text = "Espandi elemento"
-                End Select
+                        ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterExpand")("Expand.Item")
+                        ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterExpand")("ExpandItem")
                 ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
             End If
         Catch ex As Exception
@@ -11073,194 +6431,29 @@ Public Class MainForm
     Private Sub prjTreeView_AfterCollapse(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterCollapse
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                ExpandCollapseTSB.Text = "Collapse"
-                                ExpandToolStripMenuItem.Text = "Collapse item"
-                            Case "ESN"
-                                ExpandCollapseTSB.Text = "Contraer"
-                                ExpandToolStripMenuItem.Text = "Contraer objeto"
-                            Case "FRA"
-                                ExpandCollapseTSB.Text = "Réduire"
-                                ExpandToolStripMenuItem.Text = "Réduire élément"
-                            Case "PTB", "PTG"
-                                ExpandCollapseTSB.Text = "Recolher"
-                                ExpandToolStripMenuItem.Text = "Recolher item"
-                            Case "ITA"
-                                ExpandCollapseTSB.Text = "Minimizza"
-                                ExpandToolStripMenuItem.Text = "Minimizza elemento"
-                        End Select
-                    Case 1
-                        ExpandCollapseTSB.Text = "Collapse"
-                        ExpandToolStripMenuItem.Text = "Collapse item"
-                    Case 2
-                        ExpandCollapseTSB.Text = "Contraer"
-                        ExpandToolStripMenuItem.Text = "Contraer objeto"
-                    Case 3
-                        ExpandCollapseTSB.Text = "Réduire"
-                        ExpandToolStripMenuItem.Text = "Réduire élément"
-                    Case 4
-                        ExpandCollapseTSB.Text = "Recolher"
-                        ExpandToolStripMenuItem.Text = "Recolher item"
-                    Case 5
-                        ExpandCollapseTSB.Text = "Minimizza"
-                        ExpandToolStripMenuItem.Text = "Minimizza elemento"
-                End Select
+                        ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterCollapse")("Collapse.Label")
+                        ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterCollapse")("CollapseItem.Label")
                 ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
             Else
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                ExpandCollapseTSB.Text = "Expand"
-                                ExpandToolStripMenuItem.Text = "Expand item"
-                            Case "ESN"
-                                ExpandCollapseTSB.Text = "Expandir"
-                                ExpandToolStripMenuItem.Text = "Expandir objeto"
-                            Case "FRA"
-                                ExpandCollapseTSB.Text = "Agrandir"
-                                ExpandToolStripMenuItem.Text = "Agrandir élément"
-                            Case "PTB", "PTG"
-                                ExpandCollapseTSB.Text = "Expandir"
-                                ExpandToolStripMenuItem.Text = "Expandir item"
-                            Case "ITA"
-                                ExpandCollapseTSB.Text = "Espandi"
-                                ExpandToolStripMenuItem.Text = "Espandi elemento"
-                        End Select
-                    Case 1
-                        ExpandCollapseTSB.Text = "Expand"
-                        ExpandToolStripMenuItem.Text = "Expand item"
-                    Case 2
-                        ExpandCollapseTSB.Text = "Expandir"
-                        ExpandToolStripMenuItem.Text = "Expandir objeto"
-                    Case 3
-                        ExpandCollapseTSB.Text = "Agrandir"
-                        ExpandToolStripMenuItem.Text = "Agrandir élément"
-                    Case 4
-                        ExpandCollapseTSB.Text = "Expandir"
-                        ExpandToolStripMenuItem.Text = "Expandir item"
-                    Case 5
-                        ExpandCollapseTSB.Text = "Espandi"
-                        ExpandToolStripMenuItem.Text = "Espandi elemento"
-                End Select
+                        ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterCollapse")("Expand.Item")
+                        ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterCollapse")("ExpandItem")
                 ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
             End If
         Catch ex As Exception
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ExpandCollapseTSB.Text = "Expand"
-                            ExpandToolStripMenuItem.Text = "Expand item"
-                        Case "ESN"
-                            ExpandCollapseTSB.Text = "Expandir"
-                            ExpandToolStripMenuItem.Text = "Expandir objeto"
-                        Case "FRA"
-                            ExpandCollapseTSB.Text = "Agrandir"
-                            ExpandToolStripMenuItem.Text = "Agrandir élément"
-                        Case "PTB", "PTG"
-                            ExpandCollapseTSB.Text = "Expandir"
-                            ExpandToolStripMenuItem.Text = "Expandir item"
-                        Case "ITA"
-                            ExpandCollapseTSB.Text = "Espandi"
-                            ExpandToolStripMenuItem.Text = "Espandi elemento"
-                    End Select
-                Case 1
-                    ExpandCollapseTSB.Text = "Expand"
-                    ExpandToolStripMenuItem.Text = "Expand item"
-                Case 2
-                    ExpandCollapseTSB.Text = "Expandir"
-                    ExpandToolStripMenuItem.Text = "Expandir objeto"
-                Case 3
-                    ExpandCollapseTSB.Text = "Agrandir"
-                    ExpandToolStripMenuItem.Text = "Agrandir élément"
-                Case 4
-                    ExpandCollapseTSB.Text = "Expandir"
-                    ExpandToolStripMenuItem.Text = "Expandir item"
-                Case 5
-                    ExpandCollapseTSB.Text = "Espandi"
-                    ExpandToolStripMenuItem.Text = "Espandi elemento"
-            End Select
+                    ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterCollapse")("ExpandCollapse.Item")
+                    ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterCollapse")("ExpandTool.ExpandItem")
             ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
         End Try
     End Sub
 
     Private Sub prjTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterSelect
         If prjTreeView.SelectedNode.IsExpanded Then
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ExpandCollapseTSB.Text = "Collapse"
-                            ExpandToolStripMenuItem.Text = "Collapse item"
-                        Case "ESN"
-                            ExpandCollapseTSB.Text = "Contraer"
-                            ExpandToolStripMenuItem.Text = "Contraer objeto"
-                        Case "FRA"
-                            ExpandCollapseTSB.Text = "Réduire"
-                            ExpandToolStripMenuItem.Text = "Réduire élément"
-                        Case "PTB", "PTG"
-                            ExpandCollapseTSB.Text = "Recolher"
-                            ExpandToolStripMenuItem.Text = "Recolher item"
-                        Case "ITA"
-                            ExpandCollapseTSB.Text = "Minimizzae"
-                            ExpandToolStripMenuItem.Text = "Minimizza elemento"
-                    End Select
-                Case 1
-                    ExpandCollapseTSB.Text = "Collapse"
-                    ExpandToolStripMenuItem.Text = "Collapse item"
-                Case 2
-                    ExpandCollapseTSB.Text = "Contraer"
-                    ExpandToolStripMenuItem.Text = "Contraer objeto"
-                Case 3
-                    ExpandCollapseTSB.Text = "Réduire"
-                    ExpandToolStripMenuItem.Text = "Réduire élément"
-                Case 4
-                    ExpandCollapseTSB.Text = "Recolher"
-                    ExpandToolStripMenuItem.Text = "Recolher item"
-                Case 5
-                    ExpandCollapseTSB.Text = "Minimizza"
-                    ExpandToolStripMenuItem.Text = "Minimizza elemento"
-            End Select
+                    ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterSelect")("Collapse.Label")
+                    ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterSelect")("CollapseItem.Label")
             ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
         Else
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ExpandCollapseTSB.Text = "Expand"
-                            ExpandToolStripMenuItem.Text = "Expand item"
-                        Case "ESN"
-                            ExpandCollapseTSB.Text = "Expandir"
-                            ExpandToolStripMenuItem.Text = "Expandir objeto"
-                        Case "FRA"
-                            ExpandCollapseTSB.Text = "Agrandir"
-                            ExpandToolStripMenuItem.Text = "Agrandir élément"
-                        Case "PTB", "PTG"
-                            ExpandCollapseTSB.Text = "Expandir"
-                            ExpandToolStripMenuItem.Text = "Expandir item"
-                        Case "ITA"
-                            ExpandCollapseTSB.Text = "Espandi"
-                            ExpandToolStripMenuItem.Text = "Espandi elemento"
-                    End Select
-                Case 1
-                    ExpandCollapseTSB.Text = "Expand"
-                    ExpandToolStripMenuItem.Text = "Expand item"
-                Case 2
-                    ExpandCollapseTSB.Text = "Expandir"
-                    ExpandToolStripMenuItem.Text = "Expandir objeto"
-                Case 3
-                    ExpandCollapseTSB.Text = "Agrandir"
-                    ExpandToolStripMenuItem.Text = "Agrandir élément"
-                Case 4
-                    ExpandCollapseTSB.Text = "Expandir"
-                    ExpandToolStripMenuItem.Text = "Expandir item"
-                Case 5
-                    ExpandCollapseTSB.Text = "Espandi"
-                    ExpandToolStripMenuItem.Text = "Espandi elemento"
-            End Select
+                    ExpandCollapseTSB.Text = LocalizationService.ForSection("Main.ProjectTree.AfterSelect")("Expand.Item")
+                    ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Main.ProjectTree.AfterSelect")("ExpandItem")
             ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
         End If
         If prjTreeView.SelectedNode.Nodes.Count = 0 Then
@@ -11273,19 +6466,23 @@ Public Class MainForm
     End Sub
 
     Private Sub ExpandCollapseTSB_Click(sender As Object, e As EventArgs) Handles ExpandCollapseTSB.Click
-        If ExpandCollapseTSB.Text = "Expand" Or ExpandCollapseTSB.Text = "Expandir" Or ExpandCollapseTSB.Text = "Agrandir" Or ExpandCollapseTSB.Text = "Espandi" Then
-            Try
-                prjTreeView.SelectedNode.Expand()
-            Catch ex As Exception
-
-            End Try
-        ElseIf ExpandCollapseTSB.Text = "Collapse" Or ExpandCollapseTSB.Text = "Contraer" Or ExpandCollapseTSB.Text = "Réduire" Or ExpandCollapseTSB.Text = "Recolher" Or ExpandCollapseTSB.Text = "Collassare" Then
-            Try
+        If prjTreeView.SelectedNode Is Nothing Then Exit Sub
+        Try
+            If prjTreeView.SelectedNode.IsExpanded Then
                 prjTreeView.SelectedNode.Collapse()
-            Catch ex As Exception
+            Else
+                prjTreeView.SelectedNode.Expand()
+            End If
+        Catch ex As Exception
 
-            End Try
-        End If
+        End Try
+    End Sub
+
+    Private Sub RefreshViewTSB_Click(sender As Object, e As EventArgs) Handles RefreshViewTSB.Click
+        If Not isProjectLoaded Then Exit Sub
+        DynaLog.LogMessage("Refreshing the project tree...")
+        UnpopulateProjectTree()
+        PopulateProjectTree(prjName)
     End Sub
 
     Private Sub AddPackage_Click(sender As Object, e As EventArgs) Handles AddPackage.Click
@@ -11322,6 +6519,126 @@ Public Class MainForm
         DynaLog.LogMessage("Saving project...")
         SaveDTProj()
     End Sub
+
+    Private Sub SaveProjectasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.Click
+        DynaLog.LogMessage("Save Project As menu command received." & CrLf &
+                           "- Is a project loaded? " & If(isProjectLoaded, "Yes", "No") & CrLf &
+                           "- Online management mode? " & If(OnlineManagement, "Yes", "No") & CrLf &
+                           "- Offline management mode? " & If(OfflineManagement, "Yes", "No") & CrLf &
+                           "- Project path: " & Quote & projPath & Quote)
+        If Not isProjectLoaded OrElse OnlineManagement OrElse OfflineManagement Then
+            DynaLog.LogMessage("Save Project As cannot continue because no regular DISMTools project is loaded.")
+            MessageBox.Show(LocalizationService.ForSection("Main.SaveProjectAs")("Unavailable.Message"),
+                            LocalizationService.ForSection("Main.SaveProjectAs")("Error.Title"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information)
+            Exit Sub
+        End If
+
+        Dim sourceParent As DirectoryInfo = Directory.GetParent(Path.GetFullPath(projPath))
+        Using saveAsDialog As New NewProj()
+            saveAsDialog.SaveAsMode = True
+            saveAsDialog.TextBox1.Text = prjName & " - Copy"
+            saveAsDialog.TextBox2.Text = If(sourceParent Is Nothing, projPath, sourceParent.FullName)
+            DynaLog.LogMessage("Opening the Save Project As dialog...")
+            Dim saveAsResult = saveAsDialog.ShowDialog(Me)
+            DynaLog.LogMessage("The Save Project As dialog returned: " & saveAsResult.ToString())
+            If saveAsResult <> Windows.Forms.DialogResult.OK Then Exit Sub
+
+            DynaLog.LogMessage("The user confirmed Save Project As. Beginning the copy operation...")
+            SaveProjectAsCopy(saveAsDialog.TextBox1.Text.Trim(), saveAsDialog.TextBox2.Text.Trim())
+        End Using
+    End Sub
+
+    Private Sub SaveProjectAsCopy(newProjectName As String, destinationParent As String)
+        Dim targetRoot As String = destinationParent
+
+        Try
+            Dim sourceRoot = Path.GetFullPath(projPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            Dim destinationRoot = Path.GetFullPath(destinationParent).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            targetRoot = Path.GetFullPath(Path.Combine(destinationRoot, newProjectName)).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            DynaLog.LogMessage("Preparing to save the project as a copy." & CrLf &
+                               "- Source: " & Quote & sourceRoot & Quote & CrLf &
+                               "- Destination: " & Quote & targetRoot & Quote)
+
+            If targetRoot.Equals(sourceRoot, StringComparison.OrdinalIgnoreCase) OrElse
+               targetRoot.StartsWith(sourceRoot & Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) Then
+                MessageBox.Show(LocalizationService.ForSection("Main.SaveProjectAs")("InvalidDestination.Message"), LocalizationService.ForSection("Main.SaveProjectAs")("Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+            If Directory.Exists(targetRoot) AndAlso Directory.GetFileSystemEntries(targetRoot).Length > 0 Then
+                MessageBox.Show(LocalizationService.ForSection("Main.SaveProjectAs").Format("DestinationExists.Message", targetRoot), LocalizationService.ForSection("Main.SaveProjectAs")("Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+
+            SaveDTProj()
+            CopyProjectDirectory(sourceRoot, targetRoot, sourceRoot)
+
+            Dim targetSettingsPath = Path.Combine(targetRoot, "settings", "project.ini")
+            Dim settingsLines = File.ReadAllLines(targetSettingsPath, ASCII)
+            For lineIndex = 0 To settingsLines.Length - 1
+                If settingsLines(lineIndex).StartsWith("Name=", StringComparison.OrdinalIgnoreCase) Then
+                    settingsLines(lineIndex) = "Name=" & Quote & newProjectName & Quote
+                ElseIf settingsLines(lineIndex).StartsWith("Location=", StringComparison.OrdinalIgnoreCase) Then
+                    settingsLines(lineIndex) = "Location=" & destinationRoot
+                End If
+            Next
+            File.WriteAllLines(targetSettingsPath, settingsLines, ASCII)
+
+            Dim targetProjectFile = Path.Combine(targetRoot, newProjectName & ".dtproj")
+            File.WriteAllText(targetProjectFile,
+                              "# DISMTools project file. File version: 0.1" & CrLf &
+                              "[Settings]" & CrLf &
+                              "SettingsInclude=\settings\project.ini" & CrLf & CrLf &
+                              "[Project]" & CrLf &
+                              "ProjName=" & newProjectName & CrLf &
+                              "ProjGuid=" & Guid.NewGuid().ToString(), ASCII)
+
+            Dim previousCommitOperation = imgCommitOperation
+            Try
+                imgCommitOperation = -1
+                UnloadDTProj(False, False)
+            Finally
+                imgCommitOperation = previousCommitOperation
+            End Try
+
+            ProgressPanel.OperationNum = 990
+            LoadDTProj(targetProjectFile, newProjectName, True, False)
+            If Not isProjectLoaded OrElse
+               Not Path.GetFullPath(projPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Equals(targetRoot, StringComparison.OrdinalIgnoreCase) Then
+                Throw New InvalidOperationException(LocalizationService.ForSection("Main.SaveProjectAs").Format("OpenCopyFailed.Message", targetProjectFile))
+            End If
+            DynaLog.LogMessage("Save Project As completed successfully. The copied project is loaded.")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not save the project as a copy. Error message: " & ex.Message)
+            MessageBox.Show(LocalizationService.ForSection("Main.SaveProjectAs").Format("Error.Message", targetRoot, ex.Message), LocalizationService.ForSection("Main.SaveProjectAs")("Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub CopyProjectDirectory(sourceDirectory As String, targetDirectory As String, sourceRoot As String)
+        Directory.CreateDirectory(targetDirectory)
+
+        For Each sourceFile In Directory.GetFiles(sourceDirectory)
+            If sourceDirectory.Equals(sourceRoot, StringComparison.OrdinalIgnoreCase) AndAlso
+               Path.GetExtension(sourceFile).Equals(".dtproj", StringComparison.OrdinalIgnoreCase) Then Continue For
+            File.Copy(sourceFile, Path.Combine(targetDirectory, Path.GetFileName(sourceFile)), True)
+        Next
+
+        For Each sourceChildDirectory In Directory.GetDirectories(sourceDirectory)
+            Dim relativePath = sourceChildDirectory.Substring(sourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            Dim targetChildDirectory = Path.Combine(targetDirectory, Path.GetFileName(sourceChildDirectory))
+            Directory.CreateDirectory(targetChildDirectory)
+            If IsTemporaryProjectPath(relativePath) Then Continue For
+            CopyProjectDirectory(sourceChildDirectory, targetChildDirectory, sourceRoot)
+        Next
+    End Sub
+
+    Private Function IsTemporaryProjectPath(relativePath As String) As Boolean
+        Dim pathParts = relativePath.Split({Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries)
+        If pathParts.Length = 0 Then Return False
+        Return pathParts(0).Equals("mount", StringComparison.OrdinalIgnoreCase) OrElse
+               pathParts(0).Equals("scr_temp", StringComparison.OrdinalIgnoreCase)
+    End Function
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
         DynaLog.LogMessage("Preparing background processes...")
@@ -11403,31 +6720,7 @@ Public Class MainForm
         WatcherTimer.Enabled = True
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        progressLabel = "Image processes have completed"
-                    Case "ESN"
-                        progressLabel = "Los procesos de la imagen han completado"
-                    Case "FRA"
-                        progressLabel = "Les processus de l'image sont terminés"
-                    Case "PTB", "PTG"
-                        progressLabel = "Os processos de imagem foram concluídos"
-                    Case "ITA"
-                        progressLabel = "I processi dell'immagine sono stati completati"
-                End Select
-            Case 1
-                progressLabel = "Image processes have completed"
-            Case 2
-                progressLabel = "Los procesos de la imagen han completado"
-            Case 3
-                progressLabel = "Les processus de l'image sont terminés"
-            Case 4
-                progressLabel = "Os processos de imagem foram concluídos"
-            Case 5
-                progressLabel = "I processi dell'immagine sono stati completati"
-        End Select
+        progressLabel = LocalizationService.ForSection("Main.BgProcesses")("ImageCompleted.Label")
         BGProcDetails.Label2.Text = progressLabel
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
@@ -11612,6 +6905,30 @@ Public Class MainForm
         Else
             MountedImgMgr.Show()
         End If
+    End Sub
+
+    Private Sub ReportManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.Click, ManageReportsToolStripMenuItem.Click
+        If Not isProjectLoaded OrElse OnlineManagement OrElse OfflineManagement OrElse String.IsNullOrWhiteSpace(projPath) Then
+            DynaLog.LogMessage("The report manager cannot be opened because no DISMTools project is loaded.")
+            MessageBox.Show(LocalizationService.ForSection("Main.ReportManager")("ProjectRequired.Message"),
+                            LocalizationService.ForSection("Main.ReportManager")("Error.Title"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information)
+            Exit Sub
+        End If
+
+        Dim reportsPath As String = Path.Combine(projPath, "reports")
+        Try
+            If Not Directory.Exists(reportsPath) Then Directory.CreateDirectory(reportsPath)
+            DynaLog.LogMessage("Opening project reports directory: " & Quote & reportsPath & Quote)
+            Process.Start(reportsPath)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not open the project reports directory. Path: " & Quote & reportsPath & Quote & "; reason: " & ex.Message)
+            MessageBox.Show(LocalizationService.ForSection("Main.ReportManager").Format("OpenFailed.Message", reportsPath, ex.Message),
+                            LocalizationService.ForSection("Main.ReportManager")("Error.Title"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub ReportFeedbackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.Click
@@ -11985,37 +7302,13 @@ Public Class MainForm
             End Using
         Catch ex As WebException
             DynaLog.LogMessage("Could not get updater. Error message: " & ex.Status.ToString())
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
-                        Case "ESN"
-                            MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
-                        Case "FRA"
-                            MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Vérifier les mises à jour du programme")
-                        Case "PTB", "PTG"
-                            MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verificar actualizações")
-                        Case "ITA"
-                            MsgBox("Non è stato possibile scaricare il programma di controllo degli aggiornamenti. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verifica aggiornamenti")
-                    End Select
-                Case 1
-                    MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
-                Case 2
-                    MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
-                Case 3
-                    MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Vérifier les mises à jour du programme")
-                Case 4
-                    MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verificar actualizações")
-                Case 5
-                    MsgBox("Non è stato possibile scaricare il programma di controllo degli aggiornamenti. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verifica aggiornamenti")
-            End Select
+            MsgBox(LocalizationService.ForSection("Main.UpdateChecker").Format("Couldn.Tdownload.Message", ex.Status.ToString()), vbOKOnly + vbCritical, LocalizationService.ForSection("Main.UpdateChecker")("CheckUpdates.Title"))
             Exit Sub
         End Try
         DynaLog.LogMessage("Information to pass to updater:")
         DynaLog.LogMessage("- Branch: " & dtBranch)
         DynaLog.LogMessage("- Process ID (PID): " & Process.GetCurrentProcess().Id)
-        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch & " /pid=" & Process.GetCurrentProcess().Id & " " & LocalizationService.GetLanguageCommandLineArgument())
     End Sub
 
     Private Sub prjTreeView_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles prjTreeView.NodeMouseClick
@@ -12088,31 +7381,7 @@ Public Class MainForm
                                     ' Count files
                                     fileCount = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories).Count
                                     DynaLog.LogMessage("Count of ADK files for " & currentArch & ": " & fileCount)
-                                    Select Case Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                                Case "ESN"
-                                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                                Case "FRA"
-                                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                                Case "PTB", "PTG"
-                                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                                Case "ITA"
-                                                    MenuDesc.Text = "Preparazione copia strumenti implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                                            End Select
-                                        Case 1
-                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                        Case 2
-                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                        Case 3
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                        Case 4
-                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                        Case 5
-                                            MenuDesc.Text = "Preparazione alla copia degli strumenti di implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                                    End Select
+                                    MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
                                     CurrentFileInt = 0
                                     For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
                                         Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), projPath & "\DandI\" & arches(x)))
@@ -12129,31 +7398,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for x86...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            Select Case Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                        Case "ESN"
-                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                        Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                        Case "PTB", "PTG"
-                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                        Case "ITA"
-                                            MenuDesc.Text = "Preparazione copia strumenti implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                                    End Select
-                                Case 1
-                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                Case 2
-                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                Case 4
-                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                Case 5
-                                    MenuDesc.Text = "Preparazione alla copia degli strumenti di implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                            End Select
+                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", projPath & "\DandI\x86"))
@@ -12168,31 +7413,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for AMD64...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            Select Case Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                        Case "ESN"
-                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                        Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                        Case "PTB", "PTG"
-                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                        Case "ITA"
-                                            MenuDesc.Text = "Preparazione copia strumenti implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                                    End Select
-                                Case 1
-                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                Case 2
-                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                Case 4
-                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                Case 5
-                                    MenuDesc.Text = "Preparazione alla copia degli strumenti di implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                            End Select
+                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", projPath & "\DandI\amd64"))
@@ -12207,31 +7428,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for ARM...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            Select Case Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                        Case "ESN"
-                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                        Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                        Case "PTB", "PTG"
-                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                        Case "ITA"
-                                            MenuDesc.Text = "Preparazione copia strumenti implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                                    End Select
-                                Case 1
-                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                Case 2
-                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                Case 4
-                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                Case 5
-                                    MenuDesc.Text = "Preparazione alla copia degli strumenti di implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                            End Select
+                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", projPath & "\DandI\arm"))
@@ -12246,31 +7443,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for ARM64...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            Select Case Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                        Case "ESN"
-                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                        Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                        Case "PTB", "PTG"
-                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                        Case "ITA"
-                                            MenuDesc.Text = "Preparazione copia strumenti implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                                    End Select
-                                Case 1
-                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
-                                Case 2
-                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
-                                Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
-                                Case 4
-                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
-                                Case 5
-                                    MenuDesc.Text = "Preparazione alla copia degli strumenti di implementazione..." & If(adkCopyArg = 0, " (architettura " & archIntg & " di 4)", "")
-                            End Select
+                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", projPath & "\DandI\arm64"))
@@ -12331,84 +7504,12 @@ Public Class MainForm
         Try
             ' Detect if ADKs are present
             If DetectPossibleADKs() = 2 Then
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Deployment tools were copied to the project successfully"
-                            Case "ESN"
-                                MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
-                            Case "FRA"
-                                MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "As ferramentas de implementação foram copiadas para o projeto com sucesso"
-                            Case "ITA"
-                                MenuDesc.Text = "Copia strumenti di distribuzione nel progetto completata"
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Deployment tools were copied to the project successfully"
-                    Case 2
-                        MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
-                    Case 3
-                        MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
-                    Case 4
-                        MenuDesc.Text = "As ferramentas de implementação foram copiadas para o projeto com sucesso"
-                    Case 5
-                        MenuDesc.Text = "Copia strumenti di distribuzione nel progetto completata"
-                End Select
+                        MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopierBW.Background")("ToolsCopied.Label")
             Else
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Deployment tools aren't present on this system"
-                            Case "ESN"
-                                MenuDesc.Text = "Las herramientas de implementación no están presentes en este sistema"
-                            Case "FRA"
-                                MenuDesc.Text = "Les outils de déploiement ne sont pas présents sur ce système."
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "As ferramentas de implantação não estão presentes neste sistema"
-                            Case "ITA"
-                                MenuDesc.Text = "In questo sistema non sono presenti gli strumenti di implementazione"
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Deployment tools aren't present on this system"
-                    Case 2
-                        MenuDesc.Text = "Las herramientas de implementación no están presentes en este sistema"
-                    Case 3
-                        MenuDesc.Text = "Les outils de déploiement ne sont pas présents sur ce système."
-                    Case 4
-                        MenuDesc.Text = "As ferramentas de implantação não estão presentes neste sistema"
-                    Case 5
-                        MenuDesc.Text = "In questo sistema non sono presenti gli strumenti di implementazione"
-                End Select
+                        MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopierBW.Background")("Deployment.Tools.Aren.Item")
             End If
         Catch ex As Exception
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MenuDesc.Text = "Deployment tools could not be copied"
-                        Case "ESN"
-                            MenuDesc.Text = "Las herramientas de implementación no pudieron ser copiadas"
-                        Case "FRA"
-                            MenuDesc.Text = "Les outils de déploiement n'ont pas pu être copiés."
-                        Case "PTB", "PTG"
-                            MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
-                        Case "ITA"
-                            MenuDesc.Text = "Non è stato possibile copiare gli strumenti di implementazione"
-                    End Select
-                Case 1
-                    MenuDesc.Text = "Deployment tools could not be copied"
-                Case 2
-                    MenuDesc.Text = "Las herramientas de implementación no pudieron ser copiadas"
-                Case 3
-                    MenuDesc.Text = "Les outils de déploiement n'ont pas pu être copiés."
-                Case 4
-                    MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
-                Case 5
-                    MenuDesc.Text = "Non è stato possibile copiare gli strumenti di implementazione"
-            End Select
+                    MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopierBW.Background")("Deployment.Tools.Copied.Item")
             If AdkCopyEx IsNot Nothing Then
                 MenuDesc.Text &= " (" & AdkCopyEx.Message & ")"
             End If
@@ -12418,135 +7519,15 @@ Public Class MainForm
     Private Sub ADKCopierBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKCopierBW.ProgressChanged
         Select Case adkCopyArg
             Case 0
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                            Case "ESN"
-                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                            Case "FRA"
-                                MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                            Case "ITA"
-                                MenuDesc.Text = "Copia strumenti implementazione per l'architettura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                    Case 2
-                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                    Case 3
-                        MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                    Case 4
-                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                    Case 5
-                        MenuDesc.Text = "Copia strumenti implementazione per l'architettura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Copying.Deployment.Label", currentArch, e.ProgressPercentage, If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Progress.Architecture.Label", archIntg), ""))
             Case 1
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Copying deployment tools for architecture (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                            Case "ESN"
-                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                            Case "FRA"
-                                MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (x86," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                            Case "ITA"
-                                MenuDesc.Text = "Copia strumenti implementazione per l'architettura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Copying deployment tools for architecture (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                    Case 2
-                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                    Case 3
-                        MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (x86," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                    Case 4
-                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                    Case 5
-                        MenuDesc.Text = "Copia strumenti implementazione per l'architettura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Copying.Deployment.Label", "x86", e.ProgressPercentage, If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Progress.Architecture.Label", archIntg), ""))
             Case 2
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                            Case "ESN"
-                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                            Case "FRA"
-                                MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (amd64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                            Case "ITA"
-                                MenuDesc.Text = "Copia strumenti implementazione per l'architettura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                    Case 2
-                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                    Case 3
-                        MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (amd64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                    Case 4
-                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                    Case 5
-                        MenuDesc.Text = "Copia strumenti implementazione per l'architettura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Copying.Deployment.Label", "amd64", e.ProgressPercentage, If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Progress.Architecture.Label", archIntg), ""))
             Case 3
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Copying deployment tools for architecture (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                            Case "ESN"
-                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                            Case "FRA"
-                                MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                            Case "ITA"
-                                MenuDesc.Text = "Copia strumenti implementazione per l'architettura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Copying deployment tools for architecture (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                    Case 2
-                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                    Case 3
-                        MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                    Case 4
-                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                    Case 5
-                        MenuDesc.Text = "Copia strumenti implementazione per l'architettura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Copying.Deployment.Label", "arm", e.ProgressPercentage, If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Progress.Architecture.Label", archIntg), ""))
             Case 4
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                            Case "ESN"
-                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                            Case "FRA"
-                                MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                            Case "PTB", "PTG"
-                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                            Case "ITA"
-                                MenuDesc.Text = "Copia strumenti implementazione per l'architettura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                        End Select
-                    Case 1
-                        MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
-                    Case 2
-                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
-                    Case 3
-                        MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
-                    Case 4
-                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
-                    Case 5
-                        MenuDesc.Text = "Copia strumenti implementazione per l'architettura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architettura " & archIntg & " di 4)...", ")...")
-                End Select
+                MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Copying.Deployment.Label", "arm64", e.ProgressPercentage, If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Progress.Architecture.Label", archIntg), ""))
         End Select
     End Sub
 
@@ -12628,7 +7609,7 @@ Public Class MainForm
         ImgIndexDelete.ShowDialog(Me)
     End Sub
 
-    Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
+    Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click, SwitchImageIndexesToolStripMenuItem.Click
         ImgIndexSwitch.ShowDialog(Me)
     End Sub
 
@@ -12728,31 +7709,7 @@ Public Class MainForm
     Private Sub GetDrivers_Click(sender As Object, e As EventArgs) Handles GetDrivers.Click
         DynaLog.LogMessage("Opening driver information dialog...")
         ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica pacchetti driver installati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica pacchetti driver installati..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.GetDrivers")("Loading.DriverPackages.Label")
         If Not CompletedTasks(4) Then
             DynaLog.LogMessage("Device driver background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -12787,31 +7744,7 @@ Public Class MainForm
         If Not IsImageMounted Then Exit Sub
         DynaLog.LogMessage("Opening feature information dialog...")
         ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.GetFeatures")("Getting.Feature.Names.Label")
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -12825,61 +7758,13 @@ Public Class MainForm
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.GetCapabilities.Actions")("UnsupportedImage.Message"), vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         DynaLog.LogMessage("Opening capability information dialog...")
         ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi capacità e relativo stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi capacità e relativo stato..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.GetCapabilities")("Cap.Names.Their.Label")
         If Not CompletedTasks(3) Then
             DynaLog.LogMessage("Capability background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -12892,31 +7777,7 @@ Public Class MainForm
     Private Sub GetPackages_Click(sender As Object, e As EventArgs) Handles GetPackages.Click
         DynaLog.LogMessage("Opening OS package information dialog...")
         ProgressPanel.OperationNum = 993
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.GetPackages")("Getting.Package.Names.Label")
         If Not CompletedTasks(0) Then
             DynaLog.LogMessage("OS package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -12930,61 +7791,13 @@ Public Class MainForm
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.ProvAppx")("UnsupportedImage.Message"), vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         DynaLog.LogMessage("Opening AppX package information dialog...")
         ProgressPanel.OperationNum = 993
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main.GetProvAppx")("Getting.Package.Names.Label")
         If Not CompletedTasks(2) Then
             DynaLog.LogMessage("AppX package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -13007,41 +7820,8 @@ Public Class MainForm
             GetAppxPkgInfoDlg.PictureBox2.Image.Save(AppxResSFD.FileName, Imaging.ImageFormat.Png)
             Notifications.Visible = True
             Notifications.Icon = Icon
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Notifications.BalloonTipText = "The asset has been saved to the location you specified"
-                            Notifications.BalloonTipTitle = "Save successful"
-                        Case "ESN"
-                            Notifications.BalloonTipText = "El recurso ha sido guardado en la ubicación que especificó"
-                            Notifications.BalloonTipTitle = "Guardado satisfactorio"
-                        Case "FRA"
-                            Notifications.BalloonTipText = "Le fichier a été sauvegardé à l'emplacement que vous avez spécifié."
-                            Notifications.BalloonTipTitle = "Sauvegarde du fichier réussie"
-                        Case "PTB", "PTG"
-                            Notifications.BalloonTipText = "O recurso foi guardado no local indicado"
-                            Notifications.BalloonTipTitle = "Guardado com sucesso"
-                        Case "ITA"
-                            Notifications.BalloonTipText = "La risorsa è stata salvata nella posizione specificata"
-                            Notifications.BalloonTipTitle = "Il salvataggio è stato completato correttamente"
-                    End Select
-                Case 1
-                    Notifications.BalloonTipText = "The asset has been saved to the location you specified"
-                    Notifications.BalloonTipTitle = "Save successful"
-                Case 2
-                    Notifications.BalloonTipText = "El recurso ha sido guardado en la ubicación que especificó"
-                    Notifications.BalloonTipTitle = "Guardado satisfactorio"
-                Case 3
-                    Notifications.BalloonTipText = "Le fichier a été sauvegardé à l'emplacement que vous avez spécifié."
-                    Notifications.BalloonTipTitle = "Sauvegarde du fichier réussie"
-                Case 4
-                    Notifications.BalloonTipText = "O recurso foi guardado no local indicado"
-                    Notifications.BalloonTipTitle = "Guardado com sucesso"
-                Case 5
-                    Notifications.BalloonTipText = "La risorsa è stata salvata nella posizione specificata"
-                    Notifications.BalloonTipTitle = "Il salvataggio è è stato completato correttamente"
-            End Select
+            Notifications.BalloonTipText = LocalizationService.ForSection("Main.SaveAsset")("Saved.Location.Label")
+            Notifications.BalloonTipTitle = LocalizationService.ForSection("Main.SaveAsset")("SaveSuccessful.Title")
             Notifications.ShowBalloonTip(3000)
         Catch ex As Exception
             DynaLog.LogMessage("Could not save logo asset. Error message: " & ex.Message)
@@ -13056,41 +7836,8 @@ Public Class MainForm
             Clipboard.SetDataObject(data, True)
             Notifications.Visible = True
             Notifications.Icon = Icon
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Notifications.BalloonTipText = "The asset has been copied to the clipboard"
-                            Notifications.BalloonTipTitle = "Copy successful"
-                        Case "ESN"
-                            Notifications.BalloonTipText = "El recurso ha sido copiado al portapapeles"
-                            Notifications.BalloonTipTitle = "Copia satisfactoria"
-                        Case "FRA"
-                            Notifications.BalloonTipText = "Le fichier a été copié dans le presse-papiers."
-                            Notifications.BalloonTipTitle = "Copie du fichier réussie"
-                        Case "PTB", "PTG"
-                            Notifications.BalloonTipText = "O recurso foi copiado para a área de transferência"
-                            Notifications.BalloonTipTitle = "Cópia com sucesso"
-                        Case "ITA"
-                            Notifications.BalloonTipText = "La risorsa è stata copiata negli appunti"
-                            Notifications.BalloonTipTitle = "Copia completata"
-                    End Select
-                Case 1
-                    Notifications.BalloonTipText = "The asset has been copied to the clipboard"
-                    Notifications.BalloonTipTitle = "Copy successful"
-                Case 2
-                    Notifications.BalloonTipText = "El recurso ha sido copiado al portapapeles"
-                    Notifications.BalloonTipTitle = "Copia satisfactoria"
-                Case 3
-                    Notifications.BalloonTipText = "Le fichier a été copié dans le presse-papiers."
-                    Notifications.BalloonTipTitle = "Copie du fichier réussie"
-                Case 4
-                    Notifications.BalloonTipText = "O recurso foi copiado para a área de transferência"
-                    Notifications.BalloonTipTitle = "Cópia com sucesso"
-                Case 5
-                    Notifications.BalloonTipText = "La risorsa è stata copiata negli appunti"
-                    Notifications.BalloonTipTitle = "Copia riuscita"
-            End Select
+            Notifications.BalloonTipText = LocalizationService.ForSection("Main.CopyAsset")("Copied.Clipboard.Label")
+            Notifications.BalloonTipTitle = LocalizationService.ForSection("Main.CopyAsset")("CopySuccessful.Title")
             Notifications.ShowBalloonTip(3000)
         Catch ex As Exception
             DynaLog.LogMessage("Could not copy logo asset. Error message: " & ex.Message)
@@ -13211,32 +7958,12 @@ Public Class MainForm
 
 #Region "Task Links"
 
+    Private Sub LinkLabel14_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel14.LinkClicked
+        Button26.PerformClick()
+    End Sub
+
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-                    Case "ESN"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-                    Case "FRA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-                    Case "PTB", "PTG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-                    Case "ITA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-                End Select
-            Case 1
-                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-            Case 2
-                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-            Case 3
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-            Case 4
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-            Case 5
-                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-        End Select
+                ProjProperties.ImageTaskHeader1.ItemText = LocalizationService.ForSection("Main.Links")("Props.Label")
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
@@ -13294,31 +8021,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-                    Case "ESN"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-                    Case "FRA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-                    Case "PTB", "PTG"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-                    Case "ITA"
-                        ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-                End Select
-            Case 1
-                ProjProperties.ImageTaskHeader1.ItemText = "Properties"
-            Case 2
-                ProjProperties.ImageTaskHeader1.ItemText = "Propiedades"
-            Case 3
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriétés"
-            Case 4
-                ProjProperties.ImageTaskHeader1.ItemText = "Propriedades"
-            Case 5
-                ProjProperties.ImageTaskHeader1.ItemText = "Proprietà"
-        End Select
+                ProjProperties.ImageTaskHeader1.ItemText = LocalizationService.ForSection("Main.Links")("ProjProps.Label")
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
@@ -13473,31 +8176,7 @@ Public Class MainForm
     Private Sub Button34_Click(sender As Object, e As EventArgs) Handles Button34.Click
         DynaLog.LogMessage("Opening OS package information dialog...")
         ProgressPanel.OperationNum = 993
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main")("Getting.Package.Names.Label")
         If Not CompletedTasks(0) Then
             DynaLog.LogMessage("OS package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -13544,31 +8223,7 @@ Public Class MainForm
         If Not IsImageMounted Then Exit Sub
         DynaLog.LogMessage("Opening feature information dialog...")
         ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main")("Getting.Feature.Names.Label")
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -13617,61 +8272,13 @@ Public Class MainForm
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.Actions")("UnsupportedImage.Message"), vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         DynaLog.LogMessage("Opening AppX package information dialog...")
         ProgressPanel.OperationNum = 993
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main")("Wait.Label")
         If Not CompletedTasks(2) Then
             DynaLog.LogMessage("AppX package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -13711,61 +8318,13 @@ Public Class MainForm
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("In questa immagine questa azione non è supportata", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.Actions")("UnsupportedImage.Message"), vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         DynaLog.LogMessage("Opening capability information dialog...")
         ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi capacità e relativo stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi capacità e relativo stato..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main")("Get.Cap.Names.Label")
         If Not CompletedTasks(3) Then
             DynaLog.LogMessage("Capability background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -13801,31 +8360,7 @@ Public Class MainForm
     Private Sub Button52_Click(sender As Object, e As EventArgs) Handles Button52.Click
         DynaLog.LogMessage("Opening driver information dialog...")
         ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica pacchetti driver installati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica pacchetti driver installati..."
-        End Select
+                PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("Main")("Loading.DriverPackages.Label")
         If Not CompletedTasks(4) Then
             DynaLog.LogMessage("Device driver background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
@@ -13892,29 +8427,124 @@ Public Class MainForm
 
 #End Region
 
-    Sub GetFeedNews()
-        NewsLastUpdateDate = Date.Now
-        DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
-        FeedContents = New SyndicationFeed()
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-        Try
-            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
-            Dim rssContent As String = ""
-            Using client As New WebClient()
-                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-                rssContent = client.DownloadString(rssUrl)
-            End Using
-            If Not String.IsNullOrWhiteSpace(rssContent) Then
-                DynaLog.LogMessage("RSS Feed Content is not nothing. Attempting to create XML reader from content...")
-                Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
-                DynaLog.LogMessage("Loading reader...")
-                FeedContents = SyndicationFeed.Load(reader)
-                reader.Close()
+    Private Function LoadNewsFeedFromUrl(rssUrl As String) As SyndicationFeed
+        Dim rssContent As String = ""
+
+        Using client As New WebClient()
+            client.Headers(HttpRequestHeader.UserAgent) = "DISMTools/0.8 (+https://github.com/CodingWonders/DISMTools)"
+            client.Headers(HttpRequestHeader.Accept) = "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.7"
+            client.Headers(HttpRequestHeader.AcceptLanguage) = "en-US,en;q=0.9"
+            rssContent = client.DownloadString(rssUrl)
+        End Using
+
+        If String.IsNullOrWhiteSpace(rssContent) Then Throw New InvalidDataException("The feed response was empty.")
+
+        DynaLog.LogMessage("RSS Feed Content is not nothing. Attempting to create XML reader from content...")
+        Using reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
+            DynaLog.LogMessage("Loading reader...")
+            Return SyndicationFeed.Load(reader)
+        End Using
+    End Function
+
+    Private Function HasFeedItems(feed As SyndicationFeed) As Boolean
+        Return feed IsNot Nothing AndAlso feed.Items IsNot Nothing AndAlso feed.Items.Any()
+    End Function
+
+    Private Function GetNewsLastUpdatedText() As String
+        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+        Dim dateText As String = If(HumanizeDates,
+                                    String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
+                                                              NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
+                                    NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss"))
+
+        Dim lastUpdatedPrefix As String = LocalizationService.ForSection("Main.News")("Last.Updated.Label")
+
+        Return String.Format("{0} {1}", lastUpdatedPrefix.TrimEnd(), dateText)
+    End Function
+
+    Private Sub RenderNewsFeed()
+        DynaLog.LogMessage("Refreshing news feed...")
+
+        If HasFeedItems(FeedContents) Then
+            Label8.Text = GetNewsLastUpdatedText()
+            NewsItemCardContainerPanel.Controls.Clear()
+            FeedLinks.Clear()
+
+            Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+                PreviousTop As Integer
+            Dim FirstCard As Boolean = True
+            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
+            Dim ItemCardControls As New List(Of NewsFeedItemCard)
+
+            For Each Article In sortedArticles
+                Dim newsCard As New NewsFeedItemCard()
+                newsCard.SetColors()
+                newsCard.FeedItemText = Article.Title.Text
+                newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
+                newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
+                newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                newsCard.Left = WindowHelper.ScaleLogical(8)
+                newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
+                newsCard.Width = NewsItemCardContainerPanel.Width - 32
+                FirstCard = False
+                PreviousTop = newsCard.Top
+                AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
+                ItemCardControls.Add(newsCard)
+            Next
+
+            NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
+            Panel12.Visible = False
+        Else
+            If FeedEx IsNot Nothing Then
+                DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
+            Else
+                DynaLog.LogMessage("Could not get feed news. No feed items were returned.")
             End If
-        Catch ex As Exception
-            DynaLog.LogMessage("Failed to get feed news. Error message: " & ex.Message)
-            FeedEx = ex
-        End Try
+            Panel12.Visible = True
+        End If
+    End Sub
+
+    Sub GetFeedNews()
+        DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+        FeedEx = Nothing
+
+        Dim previousFeed As SyndicationFeed = FeedContents
+        Dim feedUrls() As String = {
+            "https://www.reddit.com/r/DISMTools/.rss",
+            "https://old.reddit.com/r/DISMTools/.rss",
+            "https://reddit.com/r/DISMTools.rss"
+        }
+        Dim feedErrors As New List(Of String)
+        Dim lastException As Exception = Nothing
+
+        For Each rssUrl As String In feedUrls
+            Try
+                DynaLog.LogMessage("Trying news feed URL: " & rssUrl)
+                Dim loadedFeed As SyndicationFeed = LoadNewsFeedFromUrl(rssUrl)
+                If HasFeedItems(loadedFeed) Then
+                    FeedContents = loadedFeed
+                    NewsLastUpdateDate = Date.Now
+                    DynaLog.LogMessage("News feed loaded successfully from: " & rssUrl)
+                    Return
+                End If
+                Dim emptyFeedException As New InvalidDataException("The feed did not contain any items.")
+                lastException = emptyFeedException
+                feedErrors.Add(String.Format("{0}: {1}", rssUrl, emptyFeedException.Message))
+                DynaLog.LogMessage("News feed URL returned no items: " & rssUrl)
+            Catch ex As Exception
+                lastException = ex
+                feedErrors.Add(String.Format("{0}: {1}", rssUrl, ex.Message))
+                DynaLog.LogMessage("News feed URL failed: " & rssUrl & ". Error message: " & ex.Message)
+            End Try
+        Next
+
+        If HasFeedItems(previousFeed) Then FeedContents = previousFeed Else FeedContents = New SyndicationFeed()
+
+        Dim errorDetails As String = If(feedErrors.Any(), String.Join(" | ", feedErrors), "No feed URL returned usable content.")
+        FeedEx = New Exception("Could not load DISMTools news feed. " & errorDetails, lastException)
+        DynaLog.LogMessage("Failed to get feed news. Error message: " & FeedEx.Message)
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
@@ -13960,7 +8590,7 @@ Public Class MainForm
         If FeedWorker.CancellationPending Then Exit Sub
         DynaLog.LogMessage("Getting feed news...")
         GetFeedNews()
-        DynaLog.LogMessage("Reporting progress to UI. We got feeds!!!")
+        DynaLog.LogMessage("Reporting feed result to UI.")
         FeedWorker.ReportProgress(0)
         If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
     End Sub
@@ -14029,46 +8659,12 @@ Public Class MainForm
     End Sub
 
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
-        DynaLog.LogMessage("Refreshing news feed...")
-        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
-        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
-                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
-                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
-        NewsItemCardContainerPanel.Controls.Clear()
-        FeedLinks.Clear()
         Try
-            DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
-            If FeedContents.Items.Count > 0 Then
-                Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
-                    PreviousTop As Integer
-                Dim FirstCard As Boolean = True
-
-                Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-                Dim ItemCardControls As New List(Of NewsFeedItemCard)
-                For Each Article In sortedArticles
-                    Dim newsCard As New NewsFeedItemCard()
-                    newsCard.SetColors()
-                    newsCard.FeedItemText = Article.Title.Text
-                    newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
-                    newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
-                    newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
-                    newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-                    newsCard.Left = WindowHelper.ScaleLogical(8)
-                    newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
-                    newsCard.Width = NewsItemCardContainerPanel.Width - 32
-                    FirstCard = False
-                    PreviousTop = newsCard.Top
-                    AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
-                    ItemCardControls.Add(newsCard)
-                Next
-                NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
-            Else
-                DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
-            End If
-            Panel12.Visible = Not FeedContents.Items.Any()
+            DynaLog.LogMessage("Items in feed: " & If(FeedContents IsNot Nothing AndAlso FeedContents.Items IsNot Nothing, FeedContents.Items.Count(), 0))
+            RenderNewsFeed()
         Catch ex As Exception
             DynaLog.LogMessage("Could not get feed news. Error message: " & ex.Message)
+            FeedEx = ex
             Panel12.Visible = True
         End Try
     End Sub
@@ -14194,92 +8790,14 @@ Public Class MainForm
                 osUninstReg.Close()
                 DynaLog.LogMessage("OS Uninstallation Window: " & RollbackDays & " day(s)")
                 Dim msg As String = ""
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf &
-                                      "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf &
-                                      "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf &
-                                      "- To remove the ability to revert to the old version, go to Commands -> OS uninstall -> Remove roll back ability..."
-                            Case "ESN"
-                                msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf &
-                                      "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf &
-                                      "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf &
-                                      "- Para eliminar la habilidad de revertir a la versión anterior, vaya a Comandos -> Desinstalación del sistema operativo -> Eliminar habilidad de desinstalación..."
-                            Case "FRA"
-                                msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf &
-                                      "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf &
-                                      "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf &
-                                      "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
-                            Case "PTB", "PTG"
-                                msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf &
-                                      "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf &
-                                      "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf &
-                                      "- Para remover a capacidade de reverter para a versão antiga, vá para Comandos -> Desinstalação do sistema operacional -> Remover capacidade de reversão..."
-                            Case "ITA"
-                                msg = "Hai a disposizione " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf &
-                                      "- Per aumentare o diminuire questa finestra di disinstallazione, vai su Comandi -> Disinstallazione del sistema operativo -> Imposta finestra disinstallazione..." & CrLf &
-                                      "- Per avviare il rollback del sistema operativo, vai su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf &
-                                      "- Per rimuovere la possibilità di tornare alla vecchia versione, vai su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di fallback..."
-                        End Select
-                    Case 1
-                        msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf &
-                              "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf &
-                              "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf &
-                              "- To remove the ability to revert to the old version, go to Commands -> OS uninstall -> Remove roll back ability..."
-                    Case 2
-                        msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf &
-                              "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf &
-                              "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf &
-                              "- Para eliminar la habilidad de revertir a la versión anterior, vaya a Comandos -> Desinstalación del sistema operativo -> Eliminar habilidad de desinstalación..."
-                    Case 3
-                        msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf &
-                              "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf &
-                              "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf &
-                              "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
-                    Case 4
-                        msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf &
-                              "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf &
-                              "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf &
-                              "- Para remover a capacidade de reverter para a versão antiga, vá para Comandos -> Desinstalação do sistema operacional -> Remover capacidade de reversão..."
-                    Case 5
-                        msg = "Hai a disposizione " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf &
-                              "- Per aumentare o diminuire questa finestra di disinstallazione, vai su Comandi -> Disinstallazione del sistema operativo -> Imposta finestra di disinstallazione..." & CrLf &
-                              "- Per avviare il rollback del sistema operativo, vai su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf &
-                              "- Per rimuovere la possibilità di tornare alla vecchia versione, vai su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di fallback..."
-                End Select
+                msg = LocalizationService.ForSection("Main.Get.OS").Format("Days.Go.Back.Message", RollbackDays)
                 MsgBox(msg, vbOKOnly + vbInformation, Text)
             Catch ex As Exception
                 Exit Sub
             End Try
         Else
             DynaLog.LogMessage("The active installation is not being managed right now.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione è supportata solo in installazioni online", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.OSUninstallWindow")("OnlineOnly.Message"), vbOKOnly + vbCritical, Text)
         End If
     End Sub
 
@@ -14293,71 +8811,7 @@ Public Class MainForm
                     Exit Sub
                 End If
                 Dim msg As String = ""
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
-                                      "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf &
-                                      "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf &
-                                      "Finally, thanks for trying this version of Windows." & CrLf & CrLf &
-                                      "Do you want to start the rollback process?"
-                            Case "ESN"
-                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
-                                      "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf &
-                                      "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf &
-                                      "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf &
-                                      "¿Desea iniciar el proceso de desinstalación?"
-                            Case "FRA"
-                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
-                                      "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf &
-                                      "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf &
-                                      "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf &
-                                      "Souhaitez-vous démarrer le processus de retour en arrière ?"
-                            Case "PTB", "PTG"
-                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
-                                      "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf &
-                                      "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf &
-                                      "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf &
-                                      "Pretende iniciar o processo de reversão?"
-                            Case "ITA"
-                                msg = Environment.UserName & ", prima di procedere leggi attentamente questo messaggio." & CrLf & CrLf &
-                                      "Se sono stati installati dei programmi dopo l'aggiornamento, procedere con il processo di rollback potrebbe rimuoverli. Nel caso in cui sia necessario reinstallarli in seguito assicurati di aver eseguito il backup delle impostazioni. Inoltre, nel caso in cui siano interessati dal processo di rollback esegui il backup dei file." & CrLf & CrLf &
-                                      "Poi, non rimanete chiusi fuori. Se è stata impostata una password per l'utente attuale, assicurati di conoscerla. In caso contrario, potresti non essere in grado di accedere" & CrLf & CrLf &
-                                      "Infine, grazie per aver provato questa versione di Windows." & CrLf & CrLf &
-                                      "Vuoi avviare il processo di rollback?"
-                        End Select
-                    Case 1
-                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
-                              "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf &
-                              "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf &
-                              "Finally, thanks for trying this version of Windows." & CrLf & CrLf &
-                              "Do you want to start the rollback process?"
-                    Case 2
-                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
-                              "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf &
-                              "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf &
-                              "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf &
-                              "¿Desea iniciar el proceso de desinstalación?"
-                    Case 3
-                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
-                              "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf &
-                              "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf &
-                              "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf &
-                              "Souhaitez-vous démarrer le processus de retour en arrière ?"
-                    Case 4
-                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
-                              "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf &
-                              "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf &
-                              "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf &
-                              "Pretende iniciar o processo de reversão?"
-                    Case 5
-                        msg = Environment.UserName & ", prima di procedere leggi attentamente questo messaggio." & CrLf & CrLf &
-                              "Se sono stati installati dei programmi dopo l'aggiornamento, procedere con il processo di rollback potrebbe rimuoverli. Nel caso in cui sia necessario reinstallarli in seguito assicurati di aver eseguito il backup delle impostazioni. Inoltre,nel caso in cui siano interessati dal processo di rollback esegui il backup dei file." & CrLf & CrLf &
-                              "Poi, non rimanete chiusi fuori. Se è stata impostata una password per l'utente attuale, assicurati di conoscerla. In caso contrario, potresti non essere in grado di accedere" & CrLf & CrLf &
-                              "Infine, grazie per aver provato questa versione di Windows." & CrLf & CrLf &
-                              "Vuoi avviare il processo di rollback?"
-                End Select
+                msg = LocalizationService.ForSection("Main.StartOSUninstall").Format("ReadCarefully.Message", Environment.UserName)
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
                     DynaLog.LogMessage("User accepted the question. Proceeding with OS uninstallation...")
                     If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -14374,31 +8828,7 @@ Public Class MainForm
             End Try
         Else
             DynaLog.LogMessage("The active installation is not being managed right now.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione è supportata solo in installazioni online", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione è supportata solo in installazioni online", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.OSUninstall")("OnlineOnly.Message"), vbOKOnly + vbCritical, Text)
         End If
     End Sub
 
@@ -14412,61 +8842,7 @@ Public Class MainForm
                     Exit Sub
                 End If
                 Dim msg As String = ""
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
-                                      "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf &
-                                      "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf &
-                                      "Do you want to remove the ability to roll back to an older version of Windows?"
-                            Case "ESN"
-                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
-                                      "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf &
-                                      "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf &
-                                      "¿Desea eliminar la habilidad para revertir a una versión anterior de Windows?"
-                            Case "FRA"
-                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
-                                      "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf &
-                                      "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf &
-                                      "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
-                            Case "PTB", "PTG"
-                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
-                                      "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf &
-                                      "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf &
-                                      "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
-                            Case "ITA"
-                                msg = Environment.UserName & ", prima di procedere leggi attentamente questo messaggio." & CrLf & CrLf &
-                                      "Se si usa la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ripristino." & CrLf & CrLf &
-                                      "Questa operazione non cancellerà i file della vecchia installazione, quindi se vuoi liberare un po' di spazio è necessario usare Pulizia disco (cleanmgr)." & CrLf & CrLf &
-                                      "Vuoi rimuovere la possibilità di tornare a una versione precedente di Windows?"
-                        End Select
-                    Case 1
-                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
-                              "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf &
-                              "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf &
-                              "Do you want to remove the ability to roll back to an older version of Windows?"
-                    Case 2
-                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
-                              "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf &
-                              "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf &
-                              "¿Desea eliminar la habilidad para revertir a una versión anterior de Windows?"
-                    Case 3
-                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
-                              "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf &
-                              "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf &
-                              "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
-                    Case 4
-                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
-                              "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf &
-                              "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf &
-                              "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
-                    Case 5
-                        msg = Environment.UserName & ", prima di procedere leggi attentamente questo messaggio." & CrLf & CrLf &
-                              "Se si usa la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ripristino." & CrLf & CrLf &
-                              "Questa operazione non cancellerà i file della vecchia installazione, quindi se vuoi liberare un po' di spazio è necessario utilizzare Pulizia disco (cleanmgr)." & CrLf & CrLf &
-                              "Vuoi rimuovere la possibilità di tornare a una versione precedente di Windows?"
-                End Select
+                msg = LocalizationService.ForSection("Main.RemoveOSUninstall").Format("ReadCarefully.Message", Environment.UserName)
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
                     DynaLog.LogMessage("User accepted the question. Proceeding with removal of OS uninstallation capability...")
                     If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -14482,31 +8858,7 @@ Public Class MainForm
             End Try
         Else
             DynaLog.LogMessage("The active installation is not being managed right now.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione è supportata solo in installazioni online", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione è supportata solo in installazioni online", vbOKOnly + vbCritical, Text)
-            End Select
+                    MsgBox(LocalizationService.ForSection("Main.RemoveOSUninstall")("OnlineOnly.Message"), vbOKOnly + vbCritical, Text)
         End If
     End Sub
 
@@ -14674,14 +9026,14 @@ Public Class MainForm
                     DynaLog.LogMessage("Browser emulation setting level < 11001 (IE 11+Edge). Setting value...")
                     IECompatRk.SetValue("DISMTools.exe", 11001, RegistryValueKind.DWord)
                     DynaLog.LogMessage("Value set. A program restart is necessary.")
-                    MsgBox("Modified Internet Explorer emulation settings for DISMTools. You will need to restart DISMTools in order to start video playback", vbOKOnly + vbInformation, "DISMTools")
+                    MsgBox(LocalizationService.ForSection("Main.Messages")("IE.Emulation.Changed.Message"), vbOKOnly + vbInformation, "DISMTools")
                     IECompatRk.Close()
                     Exit Sub
                 End If
                 IECompatRk.Close()
             Catch ex As Exception
                 DynaLog.LogMessage("Could not detect/modify IE browser emulation settings. Error message: " & ex.Message)
-                MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
+                MsgBox(LocalizationService.ForSection("Main.Messages")("DISM.Tools.Modify.Message"), vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
             If Not videoServer.IsListenerAlive Then videoServer.StartServer()
@@ -14728,7 +9080,7 @@ Public Class MainForm
         DynaLog.LogMessage("Items in recents list: " & RecentList.Count)
         If RecentList.Count <= 0 Then
             DynaLog.LogMessage("No items are present in the recents list. Exiting...")
-            MsgBox("No items are present in the Recents list.")
+            MsgBox(LocalizationService.ForSection("Main.Messages")("Items.Present.None.Label"))
             Exit Sub
         End If
         If (itemOrder + 1) > RecentList.Count Then
@@ -14903,7 +9255,7 @@ Public Class MainForm
                     contents = WIMExpClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/WIM-Explorer/main/DISMTools-Install.ps1")
                 Catch ex As WebException
                     DynaLog.LogMessage("Could not download WIM Explorer Setup. Error message: " & ex.Status.ToString())
-                    MessageBox.Show("We couldn't download WIM Explorer Setup. Reason:" & CrLf & ex.Status.ToString())
+                    MessageBox.Show(LocalizationService.ForSection("Main.Messages").Format("DownloadFailed.Label", ex.Status.ToString()))
                     Exit Sub
                 End Try
                 If contents <> "" Then
@@ -14940,7 +9292,7 @@ Public Class MainForm
                 WimExplorer.Start()
             End If
         Catch ex As Exception
-            MessageBox.Show("We couldn't prepare WIM Explorer Setup. Reason:" & CrLf & ex.Message)
+            MessageBox.Show(LocalizationService.ForSection("Main.Messages").Format("PrepareFailed.Label", ex.Message))
             Exit Sub
         End Try
     End Sub
@@ -15076,60 +9428,12 @@ Public Class MainForm
                 RegistryControlPanel.Show()
             ElseIf IsImageMounted And OnlineManagement Then
                 DynaLog.LogMessage("The active installation is being managed right now. The image is not supported.")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "This control panel is not available on active installations."
-                            Case "ESN"
-                                msg = "Este panel de control no está disponible en instalaciones activas."
-                            Case "FRA"
-                                msg = "Ce panneau de contrôle n'est pas disponible sur les installations actives."
-                            Case "PTB", "PTG"
-                                msg = "Este painel de controlo não está disponível em instalações activas."
-                            Case "ITA"
-                                msg = "Questo pannello di controllo non è disponibile nelle installazioni attive."
-                        End Select
-                    Case 1
-                        msg = "This control panel is not available on active installations."
-                    Case 2
-                        msg = "Este panel de control no está disponible en instalaciones activas."
-                    Case 3
-                        msg = "Ce panneau de contrôle n'est pas disponible sur les installations actives."
-                    Case 4
-                        msg = "Este painel de controlo não está disponível em instalações activas."
-                    Case 5
-                        msg = "Questo pannello di controllo non è disponibile nelle installazioni attive."
-                End Select
+                        msg = LocalizationService.ForSection("Main.RegistryPanel")("Control.Active.Message")
                 MsgBox(msg, vbOKOnly + vbCritical, Text)
             End If
         Else
             DynaLog.LogMessage("No project has been loaded.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "You need to load a project or mode to manage registry hives."
-                        Case "ESN"
-                            msg = "Debe cargar un proyecto o modo para administrar subárboles del registro."
-                        Case "FRA"
-                            msg = "Vous devez charger un projet ou un mode pour gérer les ruches du registre."
-                        Case "PTB", "PTG"
-                            msg = "É necessário carregar um projeto ou modo para gerir as colmeias de registo."
-                        Case "ITA"
-                            msg = "Per gestire la struttura del registro è necessario caricare un progetto o una modalità."
-                    End Select
-                Case 1
-                    msg = "You need to load a project or mode to manage registry hives."
-                Case 2
-                    msg = "Debe cargar un proyecto o modo para administrar subárboles del registro."
-                Case 3
-                    msg = "Vous devez charger un projet ou un mode pour gérer les ruches du registre."
-                Case 4
-                    msg = "É necessário carregar um projeto ou modo para gerir as colmeias de registo."
-                Case 5
-                    msg = "Per gestire la struttura del registro è necessario caricare un progetto o una modalità."
-            End Select
+                    msg = LocalizationService.ForSection("Main.Registry.Actions")("Load.Project.Mode.Message")
             MsgBox(msg, vbOKOnly + vbExclamation, Text)
         End If
     End Sub
@@ -15157,59 +9461,11 @@ Public Class MainForm
     End Sub
 
     Private Sub LanguagesAndOptionalFeaturesISOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndOptionalFeaturesISOToolStripMenuItem.Click
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-                    Case "ESN"
-                        Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-                    Case "FRA"
-                        Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-                    Case "PTB", "PTG"
-                        Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-                    Case "ITA"
-                        Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-                End Select
-            Case 1
-                Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-            Case 2
-                Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-            Case 3
-                Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-            Case 4
-                Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-            Case 5
-                Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
-        End Select
+        Process.Start(String.Format("https://learn.microsoft.com/{0}/azure/virtual-desktop/windows-11-language-packs#prerequisites", LocalizationService.GetMicrosoftLearnCultureCode()))
     End Sub
 
     Private Sub LanguagesAndFODWin10ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndFODWin10ToolStripMenuItem.Click
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/language-packs#prerequisites")
-                    Case "ESN"
-                        Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/language-packs#prerequisites")
-                    Case "FRA"
-                        Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/language-packs#prerequisites")
-                    Case "PTB", "PTG"
-                        Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/language-packs#prerequisites")
-                    Case "ITA"
-                        Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/language-packs#prerequisites")
-                End Select
-            Case 1
-                Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/language-packs#prerequisites")
-            Case 2
-                Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/language-packs#prerequisites")
-            Case 3
-                Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/language-packs#prerequisites")
-            Case 4
-                Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/language-packs#prerequisites")
-            Case 5
-                Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/language-packs#prerequisites")
-        End Select
+        Process.Start(String.Format("https://learn.microsoft.com/{0}/azure/virtual-desktop/language-packs#prerequisites", LocalizationService.GetMicrosoftLearnCultureCode()))
     End Sub
 
     Private Sub GetCurrentEdition_Click(sender As Object, e As EventArgs) Handles GetCurrentEdition.Click
@@ -15218,85 +9474,13 @@ Public Class MainForm
         If CurrentImage.ImageEditionId <> "" Then
             DynaLog.LogMessage("Image edition field has been populated. Showing and checking...")
             Dim msg As String = ""
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "The current edition is " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                        Case "ESN"
-                            msg = "La edición actual es " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                        Case "FRA"
-                            msg = "L'édition actuelle est " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                        Case "PTB", "PTG"
-                            msg = "A edição atual é " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                        Case "ITA"
-                            msg = "L'edizione attuale è " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                    End Select
-                Case 1
-                    msg = "The current edition is " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                Case 2
-                    msg = "La edición actual es " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                Case 3
-                    msg = "L'édition actuelle est " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                Case 4
-                    msg = "A edição atual é " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-                Case 5
-                    msg = "L'edizione attuale è " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
-            End Select
+            msg = LocalizationService.ForSection("Main.GetTargetEditions").Format("CurrentEdition.Message", CurrentImage.ImageEditionId)
             If CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise Then
                 DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg &= CrLf & "Windows PE images cannot be upgraded to higher editions."
-                            Case "ESN"
-                                msg &= CrLf & "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                            Case "FRA"
-                                msg &= CrLf & "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                            Case "PTB", "PTG"
-                                msg &= CrLf & "As imagens do Windows PE não podem ser atualizadas para edições superiores."
-                            Case "ITA"
-                                msg &= CrLf & "Le immagini Windows PE non possono essere aggiornate a edizioni superiori."
-                        End Select
-                    Case 1
-                        msg &= CrLf & "Windows PE images cannot be upgraded to higher editions."
-                    Case 2
-                        msg &= CrLf & "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                    Case 3
-                        msg &= CrLf & "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                    Case 4
-                        msg &= CrLf & "As imagens do Windows PE não podem ser atualizadas para edições superiores."
-                    Case 5
-                        msg &= CrLf & "Le immagini Windows PE non possono essere aggiornate a edizioni superiori."
-                End Select
+                msg &= CrLf & LocalizationService.ForSection("Main.GetTargetEditions")("Windows.Message")
             Else
                 DynaLog.LogMessage("Image edition is not WindowsPE. This is not a Windows PE image.")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg &= CrLf & "If you have a product key, you may be able to upgrade this Windows image to a higher edition."
-                            Case "ESN"
-                                msg &= CrLf & "Si cuenta con una clave de producto, podrá actualizar esta imagen de Windows a una edición superior."
-                            Case "FRA"
-                                msg &= CrLf & "Si vous disposez d'une clé de produit, vous pourrez peut-être mettre à niveau cette image Windows vers une édition supérieure."
-                            Case "PTB", "PTG"
-                                msg &= CrLf & "Se tiver uma chave de produto, poderá atualizar esta imagem do Windows para uma edição superior."
-                            Case "ITA"
-                                msg &= CrLf & "Se disponi di un codice prodotto, è possibile aggiornare questa immagine di Windows ad un'edizione superiore."
-                        End Select
-                    Case 1
-                        msg &= CrLf & "If you have a product key, you may be able to upgrade this Windows image to a higher edition."
-                    Case 2
-                        msg &= CrLf & "Si cuenta con una clave de producto, podrá actualizar esta imagen de Windows a una edición superior."
-                    Case 3
-                        msg &= CrLf & "Si vous disposez d'une clé de produit, vous pourrez peut-être mettre à niveau cette image Windows vers une édition supérieure."
-                    Case 4
-                        msg &= CrLf & "Se tiver uma chave de produto, poderá atualizar esta imagem do Windows para uma edição superior."
-                    Case 5
-                        msg &= CrLf & "Se disponi di un codice prodotto, è possibile aggiornare questa immagine di Windows ad un'edizione superiore."
-                End Select
+                msg &= CrLf & LocalizationService.ForSection("Main.GetTargetEditions")("ProductKey.Upgrade.Message")
             End If
             MsgBox(msg, vbOKOnly + vbInformation, Text)
         End If
@@ -15319,62 +9503,14 @@ Public Class MainForm
                 If targetEditions.Count > 0 Then
                     ' This image hasn't been upgraded to its highest edition
                     DynaLog.LogMessage("There are target editions. This image can give a little more")
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "If you have a suitable product key, you can upgrade this Windows image to one of the following editions:" & CrLf & CrLf
-                                Case "ESN"
-                                    msg = "Si cuenta con una clave de producto apropiada, puede actualizar esta imagen de Windows a una de las siguientes ediciones:" & CrLf & CrLf
-                                Case "FRA"
-                                    msg = "Si vous disposez d'une clé de produit appropriée, vous pouvez mettre à niveau cette image Windows vers l'une des éditions suivantes :" & CrLf & CrLf
-                                Case "PTB", "PTG"
-                                    msg = "Se tiver uma chave de produto adequada, pode atualizar esta imagem do Windows para uma das seguintes edições:" & CrLf & CrLf
-                                Case "ITA"
-                                    msg = "Se disponi di un codice prodotto adeguato, è possibile aggiornare questa immagine di Windows ad una delle seguenti edizioni:" & CrLf & CrLf
-                            End Select
-                        Case 1
-                            msg = "If you have a suitable product key, you can upgrade this Windows image to one of the following editions:" & CrLf & CrLf
-                        Case 2
-                            msg = "Si cuenta con una clave de producto apropiada, puede actualizar esta imagen de Windows a una de las siguientes ediciones:" & CrLf & CrLf
-                        Case 3
-                            msg = "Si vous disposez d'une clé de produit appropriée, vous pouvez mettre à niveau cette image Windows vers l'une des éditions suivantes :" & CrLf & CrLf
-                        Case 4
-                            msg = "Se tiver uma chave de produto adequada, pode atualizar esta imagem do Windows para uma das seguintes edições:" & CrLf & CrLf
-                        Case 5
-                            msg = "Se disponi di un codice prodotto adeguato, è possibile aggiornare questa immagine di Windows ad una delle seguenti edizioni:" & CrLf & CrLf
-                    End Select
+                            msg = LocalizationService.ForSection("Main.GetTargetEditions")("Suitable.ProductKey.Message")
                     For Each targetEdition In targetEditions
                         msg &= "- " & targetEdition & CrLf
                     Next
                 Else
                     ' This image has been upgraded to its highest edition
                     DynaLog.LogMessage("There are no target editions. This image is already rocking the best edition")
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
-                                Case "ESN"
-                                    msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
-                                Case "FRA"
-                                    msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
-                                Case "PTB", "PTG"
-                                    msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
-                                Case "ITA"
-                                    msg = "Questa immagine non può essere aggiornata ad edizioni superiori perché è già l'edizione più alta"
-                            End Select
-                        Case 1
-                            msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
-                        Case 2
-                            msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
-                        Case 3
-                            msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
-                        Case 4
-                            msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
-                        Case 5
-                            msg = "Questa immagine non può essere aggiornata ad edizioni superiori perché è già  l'edizione più alta"
-                    End Select
+                            msg = LocalizationService.ForSection("Main.GetTargetEditions")("Image.Cannot.Message")
                 End If
             End Using
         Catch ex As Exception
@@ -15382,31 +9518,7 @@ Public Class MainForm
             msgSuccess = False
             If CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise Then
                 DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "Windows PE images cannot be upgraded to higher editions."
-                            Case "ESN"
-                                msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                            Case "FRA"
-                                msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                            Case "PTB", "PTG"
-                                msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
-                            Case "ITA"
-                                msg = "Le immagini di Windows PE non possono essere aggiornate ad edizioni superiori."
-                        End Select
-                    Case 1
-                        msg = "Windows PE images cannot be upgraded to higher editions."
-                    Case 2
-                        msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                    Case 3
-                        msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                    Case 4
-                        msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
-                    Case 5
-                        msg = "Le immagini di Windows PE non possono essere aggiornate ad edizioni superiori."
-                End Select
+                        msg = LocalizationService.ForSection("Main.GetTargetEditions")("Windows.Message")
             Else
                 msg = ex.ToString()
             End If
@@ -15485,33 +9597,7 @@ Public Class MainForm
         If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
             DynaLog.LogMessage("Tour directory exists. Starting the tour!")
 
-            Dim languageCode As String = "en"
-
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            languageCode = "en"
-                        Case "ESN"
-                            languageCode = "es"
-                        Case "FRA"
-                            languageCode = "fr"
-                        Case "PTB", "PTG"
-                            languageCode = "pt"
-                        Case "ITA"
-                            languageCode = "it"
-                    End Select
-                Case 1
-                    languageCode = "en"
-                Case 2
-                    languageCode = "es"
-                Case 3
-                    languageCode = "fr"
-                Case 4
-                    languageCode = "pt"
-                Case 5
-                    languageCode = "it"
-            End Select
+            Dim languageCode As String = LocalizationService.GetDocumentationLanguageCode()
 
             tourServer.StartServer()
             If tourServer.IsListenerAlive() Then
@@ -15538,7 +9624,7 @@ Public Class MainForm
             If nonExistentFiles >= 2 Then
                 Throw New Exception("No answer files have been detected in the mounted image.")
             End If
-            MsgBox("Answer file removed successfully.", vbOKOnly + vbInformation, "")
+            MsgBox(LocalizationService.ForSection("Main.Messages")("AnswerFile.Removed.Label"), vbOKOnly + vbInformation, "")
         Catch ex As Exception
             DynaLog.LogMessage("Could not remove answer files. Reason: " & ex.Message)
             MsgBox(ex.Message, vbOKOnly + vbExclamation, "")
@@ -15559,10 +9645,10 @@ Public Class MainForm
     End Sub
 
     Private Sub OpenDiagnosticLogsInLogViewerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenDiagnosticLogsInLogViewerToolStripMenuItem.Click
-        If File.Exists(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe")) Then
-            Process.Start(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe"),
-                          Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
-        End If
+        Dim viewerPath As String = Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe")
+        TryLaunchExternalTool(viewerPath,
+                              OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text,
+                              Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote & " " & LocalizationService.GetLanguageCommandLineArgument())
     End Sub
 
     Private Sub ManageSystemServicesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageSystemServicesToolStripMenuItem.Click
@@ -15576,7 +9662,7 @@ Public Class MainForm
             Exit Sub
         End If
         If ImgBW.IsBusy Then
-            MsgBox("Background processes need to finish before loading the service manager.", vbOKOnly + vbExclamation)
+            MsgBox(LocalizationService.ForSection("Main.Messages")("BackgroundBusy.Message"), vbOKOnly + vbExclamation)
             Exit Sub
         End If
         ServiceManagementForm.Show()
@@ -15593,7 +9679,7 @@ Public Class MainForm
             Exit Sub
         End If
         If ImgBW.IsBusy Then
-            MsgBox("Background processes need to finish before loading the environment variable manager.", vbOKOnly + vbExclamation)
+            MsgBox(LocalizationService.ForSection("Main.Messages")("Background.Finish.Message"), vbOKOnly + vbExclamation)
             Exit Sub
         End If
         EnvVarManagementForm.Show()
@@ -15605,33 +9691,7 @@ Public Class MainForm
     End Sub
 
     Private Sub RestartDTTourTSMI_Click(sender As Object, e As EventArgs) Handles RestartDTTourTSMI.Click
-        Dim languageCode As String = "en"
-
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        languageCode = "en"
-                    Case "ESN"
-                        languageCode = "es"
-                    Case "FRA"
-                        languageCode = "fr"
-                    Case "PTB", "PTG"
-                        languageCode = "pt"
-                    Case "ITA"
-                        languageCode = "it"
-                End Select
-            Case 1
-                languageCode = "en"
-            Case 2
-                languageCode = "es"
-            Case 3
-                languageCode = "fr"
-            Case 4
-                languageCode = "pt"
-            Case 5
-                languageCode = "it"
-        End Select
+        Dim languageCode As String = LocalizationService.GetDocumentationLanguageCode()
 
         Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
     End Sub
@@ -15720,7 +9780,7 @@ Public Class MainForm
             DynaLog.LogMessage("State of SecureBoot: " & SecureBootEnabled)
 
             If Not SecureBootEnabled Then
-                MessageBox.Show("Secure Boot is not enabled on this machine.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(LocalizationService.ForSection("Main.Messages")("Secure.Boot.Enabled.Label"), LocalizationService.ForSection("Main.Messages")("Secure.Boot.Status.Title"), MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Exit Try
             End If
 
@@ -15746,13 +9806,13 @@ Public Class MainForm
 
             Select Case SecureBootStatus
                 Case SecureBootCA23Status.NotAvailable
-                    MessageBox.Show("Secure Boot is enabled on this machine but does not contain Windows UEFI CA 2023 in its database. Make sure your computer receives the Secure Boot updates before Microsoft Windows Production PCA 2011 certificates expire in June 2026.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    MessageBox.Show(LocalizationService.ForSection("Main.Messages")("Secure.Boot"), LocalizationService.ForSection("Main.Messages")("Secure.Boot.Status.Title"), MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Case SecureBootCA23Status.InProgress
-                    MessageBox.Show("An update to Secure Boot to support Windows UEFI CA 2023 is in progress.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show(LocalizationService.ForSection("Main.Messages")("Update.Secure.Boot.Message"), LocalizationService.ForSection("Main.Messages")("Secure.Boot.Status.Title"), MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Case SecureBootCA23Status.Available, SecureBootCA23Status.AvailableEnforced
-                    MessageBox.Show("Secure Boot is enabled on this machine and contains Windows UEFI CA 2023 in its database.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show(LocalizationService.ForSection("Main.Messages")("Secure.Enabled"), LocalizationService.ForSection("Main.Messages")("Secure.Boot.Status.Title"), MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Case SecureBootCA23Status.Unknown
-                    MessageBox.Show("We could not determine the status of the Windows UEFI CA 2023 update.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show(LocalizationService.ForSection("Main.Messages")("Determine.Status.Label"), LocalizationService.ForSection("Main.Messages")("Secure.Boot.Status.Title"), MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Select
         Catch ex As Exception
 
@@ -15845,8 +9905,9 @@ Public Class MainForm
 
     Private Sub SSE_TSMI_Click(sender As Object, e As EventArgs) Handles SSE_TSMI.Click
         Dim SSEPath As String = Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")
-        If File.Exists(SSEPath) Then
-            Process.Start(SSEPath, String.Format("/userdata={0}", Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & Quote))
+        If TryLaunchExternalTool(SSEPath,
+                                 SSE_TSMI.Text,
+                                 String.Format("/userdata={0} {1}", Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & Quote, LocalizationService.GetLanguageCommandLineArgument())) Then
             SSETimer.Enabled = True
         End If
     End Sub
@@ -15860,11 +9921,41 @@ Public Class MainForm
 
     Private Sub ThemeDesigner_TSMI_Click(sender As Object, e As EventArgs) Handles ThemeDesigner_TSMI.Click
         Dim TDPath As String = Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")
-        If File.Exists(TDPath) Then
-            Process.Start(TDPath, String.Format("/userdata={0}", Quote & Path.Combine(Application.StartupPath, "userdata", "themes") & Quote))
+        If TryLaunchExternalTool(TDPath,
+                                 ThemeDesigner_TSMI.Text,
+                                 String.Format("/userdata={0} {1}", Quote & Path.Combine(Application.StartupPath, "userdata", "themes") & Quote, LocalizationService.GetLanguageCommandLineArgument())) Then
             ThemeDesignerTimer.Enabled = True
         End If
     End Sub
+
+    Public Function TryLaunchExternalTool(executablePath As String, displayName As String, Optional arguments As String = "") As Boolean
+        Dim resolvedDisplayName As String = If(String.IsNullOrWhiteSpace(displayName), Path.GetFileNameWithoutExtension(executablePath), displayName.Replace("&", "").Trim())
+
+        If Not File.Exists(executablePath) Then
+            DynaLog.LogMessage("Could not start external tool because its executable was not found. Tool: " & resolvedDisplayName & "; path: " & Quote & executablePath & Quote)
+            MessageBox.Show(LocalizationService.ForSection("Main.ExternalTools").Format("NotFound.Message", resolvedDisplayName, executablePath),
+                            LocalizationService.ForSection("Main.ExternalTools")("Error.Title"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
+            Return False
+        End If
+
+        Try
+            If String.IsNullOrWhiteSpace(arguments) Then
+                Process.Start(executablePath)
+            Else
+                Process.Start(executablePath, arguments)
+            End If
+            Return True
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not start external tool. Tool: " & resolvedDisplayName & "; path: " & Quote & executablePath & Quote & "; reason: " & ex.Message)
+            MessageBox.Show(LocalizationService.ForSection("Main.ExternalTools").Format("StartFailed.Message", resolvedDisplayName, ex.Message),
+                            LocalizationService.ForSection("Main.ExternalTools")("Error.Title"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
+            Return False
+        End Try
+    End Function
 
     Private Sub ThemeDesignerTimer_Tick(sender As Object, e As EventArgs) Handles ThemeDesignerTimer.Tick
         If Not Process.GetProcessesByName("DT_ThemeDesigner").Any() Then
@@ -15910,19 +10001,19 @@ Public Class MainForm
     End Sub
 
     Private Sub RefreshComputerInfoBtn_MouseHover(sender As Object, e As EventArgs) Handles RefreshComputerInfoBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Refresh information")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Main.Tooltips")("RefreshInfo.Label"))
     End Sub
 
     Private Sub ChangeNetworkConfigBtn_MouseHover(sender As Object, e As EventArgs) Handles ChangeNetworkConfigBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Change network configuration")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Main.Tooltips")("Change.Network.Config.Label"))
     End Sub
 
     Private Sub AdminToolsBtn_MouseHover(sender As Object, e As EventArgs) Handles AdminToolsBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Other Windows administrative tools")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Main.Tooltips")("Other.Win.Administ.Label"))
     End Sub
 
     Private Sub ComputerWallpaperPB_MouseHover(sender As Object, e As EventArgs) Handles ComputerWallpaperPB.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Click here to change your wallpaper")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Main.Tooltips")("Change.Wallpaper.Label"))
     End Sub
 
     Private Sub ComputerWallpaperPB_Click(sender As Object, e As EventArgs) Handles ComputerWallpaperPB.Click
@@ -16012,43 +10103,9 @@ Public Class MainForm
 
     Private Sub LinkLabel33_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel33.LinkClicked
         DynaLog.LogMessage("Refreshing news feed...")
-        NewsItemCardContainerPanel.Controls.Clear()
-        FeedLinks.Clear()
         GetFeedNews()
-        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
-        Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
-        Label8.Text = String.Format("News last updated: {0}", If(HumanizeDates,
-                                                                 String.Format("{0}, {1}", NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                                                           NewsLastUpdateDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture)),
-                                                                 NewsLastUpdateDate.ToString("MM/dd/yyyy HH:mm:ss")))
-        Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
-        If FeedContents.Items.Count > 0 Then
-            Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
-                PreviousTop As Integer
-            Dim FirstCard As Boolean = True
-
-            Dim ItemCardControls As New List(Of NewsFeedItemCard)
-            For Each Article In sortedArticles
-                Dim newsCard As New NewsFeedItemCard()
-                newsCard.SetColors()
-                newsCard.FeedItemText = Article.Title.Text
-                newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
-                newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
-                newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
-                newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-                newsCard.Left = WindowHelper.ScaleLogical(8)
-                newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
-                newsCard.Width = NewsItemCardContainerPanel.Width - 32
-                FirstCard = False
-                PreviousTop = newsCard.Top
-                AddHandler newsCard.LinkContentsEvent, AddressOf DisplayFeedItemCardContent
-                ItemCardControls.Add(newsCard)
-            Next
-            NewsItemCardContainerPanel.Controls.AddRange(ItemCardControls.ToArray())
-        Else
-            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
-        End If
-        Panel12.Visible = Not FeedContents.Items.Any()
+        DynaLog.LogMessage("Items in feed: " & If(FeedContents IsNot Nothing AndAlso FeedContents.Items IsNot Nothing, FeedContents.Items.Count(), 0))
+        RenderNewsFeed()
     End Sub
 
     Private Sub LinkLabel31_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel31.LinkClicked
@@ -16056,11 +10113,18 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel34_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel34.LinkClicked
-        MessageBox.Show(FeedEx.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Dim feedErrorMessage As String = ""
+        If FeedEx IsNot Nothing Then feedErrorMessage = FeedEx.Message
+
+        If String.IsNullOrWhiteSpace(feedErrorMessage) Then
+            feedErrorMessage = LocalizationService.ForSection("Main.News.Error")("NoDetails.Message")
+        End If
+
+        MessageBox.Show(feedErrorMessage, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Sub
 
     Private Sub ComputerNameLabel_MouseHover(sender As Object, e As EventArgs) Handles ComputerNameLabel.MouseHover
-        WindowHelper.DisplayToolTip(sender, String.Format("NetBIOS name: {0}", My.Computer.Name))
+        WindowHelper.DisplayToolTip(sender, String.Format(LocalizationService.ForSection("Main.Tooltips")("NetBiosname.Label"), My.Computer.Name))
     End Sub
 
     Private Sub NewsFeedCloseBtn_Click(sender As Object, e As EventArgs) Handles NewsFeedCloseBtn.Click
@@ -16075,6 +10139,6 @@ Public Class MainForm
     End Sub
 
     Private Sub RefreshFactButton_MouseHover(sender As Object, e As EventArgs) Handles RefreshFactButton.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Show a new fact")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Main.Tooltips")("Show.New.Fact.Label"))
     End Sub
 End Class

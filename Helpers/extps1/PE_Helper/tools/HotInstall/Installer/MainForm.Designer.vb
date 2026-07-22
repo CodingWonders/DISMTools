@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -153,7 +153,7 @@ Partial Class MainForm
         Me.GetImgInfoBtn.Name = "GetImgInfoBtn"
         Me.GetImgInfoBtn.Size = New System.Drawing.Size(230, 23)
         Me.GetImgInfoBtn.TabIndex = 1
-        Me.GetImgInfoBtn.Text = "Get image information"
+        Me.GetImgInfoBtn.Text = GetValueFromLanguageData("MainForm.GetImageInformationButton")
         Me.GetImgInfoBtn.UseVisualStyleBackColor = True
         Me.GetImgInfoBtn.Visible = False
         '
@@ -165,7 +165,7 @@ Partial Class MainForm
         Me.ExportDrvsBtn.Name = "ExportDrvsBtn"
         Me.ExportDrvsBtn.Size = New System.Drawing.Size(230, 23)
         Me.ExportDrvsBtn.TabIndex = 1
-        Me.ExportDrvsBtn.Text = "Export system drivers..."
+        Me.ExportDrvsBtn.Text = GetValueFromLanguageData("MainForm.ExportDriversButton")
         Me.ExportDrvsBtn.UseVisualStyleBackColor = True
         Me.ExportDrvsBtn.Visible = False
         '
@@ -178,7 +178,7 @@ Partial Class MainForm
         Me.BackButton.Name = "BackButton"
         Me.BackButton.Size = New System.Drawing.Size(75, 23)
         Me.BackButton.TabIndex = 0
-        Me.BackButton.Text = "Back"
+        Me.BackButton.Text = GetValueFromLanguageData("MainForm.NavigationBackButtonText")
         Me.BackButton.UseVisualStyleBackColor = True
         '
         'NextButton
@@ -189,7 +189,7 @@ Partial Class MainForm
         Me.NextButton.Name = "NextButton"
         Me.NextButton.Size = New System.Drawing.Size(75, 23)
         Me.NextButton.TabIndex = 0
-        Me.NextButton.Text = "Next"
+        Me.NextButton.Text = GetValueFromLanguageData("MainForm.NavigationNextButtonText")
         Me.NextButton.UseVisualStyleBackColor = True
         '
         'ExitButton
@@ -200,7 +200,7 @@ Partial Class MainForm
         Me.ExitButton.Name = "ExitButton"
         Me.ExitButton.Size = New System.Drawing.Size(75, 23)
         Me.ExitButton.TabIndex = 0
-        Me.ExitButton.Text = "Exit"
+        Me.ExitButton.Text = GetValueFromLanguageData("MainForm.NavigationExitButtonText")
         Me.ExitButton.UseVisualStyleBackColor = True
         '
         'PageContainerPanel
@@ -251,7 +251,7 @@ Partial Class MainForm
         Me.Label38.Name = "Label38"
         Me.Label38.Size = New System.Drawing.Size(758, 72)
         Me.Label38.TabIndex = 8
-        Me.Label38.Text = resources.GetString("Label38.Text")
+        Me.Label38.Text = GetValueFromLanguageData("MainForm.ErrorPanel_PossibleFixes")
         '
         'Label37
         '
@@ -261,9 +261,7 @@ Partial Class MainForm
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(758, 72)
         Me.Label37.TabIndex = 8
-        Me.Label37.Text = "Your computer could not be prepared to boot to the next stage of operating system" & _
-    " installation. Any changes made to your computer will be undone." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "See below fo" & _
-    "r reasons why this process has failed:"
+        Me.Label37.Text = GetValueFromLanguageData("MainForm.ErrorPanel_Description")
         '
         'Label36
         '
@@ -273,7 +271,7 @@ Partial Class MainForm
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(165, 21)
         Me.Label36.TabIndex = 7
-        Me.Label36.Text = "We ran into a problem"
+        Me.Label36.Text = GetValueFromLanguageData("MainForm.ErrorPanel_Header")
         '
         'FinishPanel
         '
@@ -307,7 +305,7 @@ Partial Class MainForm
         Me.RestartButton.Name = "RestartButton"
         Me.RestartButton.Size = New System.Drawing.Size(128, 34)
         Me.RestartButton.TabIndex = 8
-        Me.RestartButton.Text = "Restart Now"
+        Me.RestartButton.Text = GetValueFromLanguageData("MainForm.FinishPanel_RestartNow")
         Me.RestartButton.UseVisualStyleBackColor = True
         '
         'Label32
@@ -318,7 +316,7 @@ Partial Class MainForm
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(758, 120)
         Me.Label32.TabIndex = 7
-        Me.Label32.Text = resources.GetString("Label32.Text")
+        Me.Label32.Text = GetValueFromLanguageData("MainForm.FinishPanel_Description")
         '
         'Label35
         '
@@ -330,7 +328,7 @@ Partial Class MainForm
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(751, 21)
         Me.Label35.TabIndex = 6
-        Me.Label35.Text = "Your computer will restart in 10 seconds..."
+        Me.Label35.Text = GetValueFromLanguageData("MainForm.FinishPanel_RestartTimer_Beginning")
         Me.Label35.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label33
@@ -341,7 +339,7 @@ Partial Class MainForm
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(225, 21)
         Me.Label33.TabIndex = 6
-        Me.Label33.Text = "Your computer needs to restart"
+        Me.Label33.Text = GetValueFromLanguageData("MainForm.FinishPanel_Header")
         '
         'InstallationPanel
         '
@@ -440,7 +438,7 @@ Partial Class MainForm
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(201, 235)
         Me.Label20.TabIndex = 4
-        Me.Label20.Text = "In your system boot manager, select ""<entry>"" and press ENTER"
+        Me.Label20.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Step1")
         '
         'DTPEStep
         '
@@ -505,8 +503,7 @@ Partial Class MainForm
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(201, 235)
         Me.Label27.TabIndex = 9
-        Me.Label27.Text = "Specify the target disk and partition, and the index to apply." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "We will take it" & _
-    " from there"
+        Me.Label27.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Step2")
         '
         'WindowsStep
         '
@@ -571,8 +568,7 @@ Partial Class MainForm
         Me.Label31.Name = "Label31"
         Me.Label31.Size = New System.Drawing.Size(201, 235)
         Me.Label31.TabIndex = 9
-        Me.Label31.Text = "Verify that the target operating system works the way you want." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "If the customi" & _
-    "zations were successful, go ahead and perform a bigger-scale deployment."
+        Me.Label31.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Step3")
         '
         'Label34
         '
@@ -583,7 +579,7 @@ Partial Class MainForm
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(279, 15)
         Me.Label34.TabIndex = 5
-        Me.Label34.Text = "API Progress: 0"
+        Me.Label34.Text = String.Format(GetValueFromLanguageData("MainForm.PreparationPanel_ApiProgress"), 0)
         Me.Label34.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.Label34.Visible = False
         '
@@ -596,7 +592,7 @@ Partial Class MainForm
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(55, 15)
         Me.Label19.TabIndex = 5
-        Me.Label19.Text = "Progress:"
+        Me.Label19.Text = GetValueFromLanguageData("MainForm.PreparationPanel_GenericProgress")
         '
         'Label17
         '
@@ -606,7 +602,7 @@ Partial Class MainForm
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(758, 72)
         Me.Label17.TabIndex = 5
-        Me.Label17.Text = resources.GetString("Label17.Text")
+        Me.Label17.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Description")
         '
         'Label18
         '
@@ -616,7 +612,7 @@ Partial Class MainForm
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(298, 21)
         Me.Label18.TabIndex = 4
-        Me.Label18.Text = "Preparing your computer for installation..."
+        Me.Label18.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Header")
         '
         'ExplanationPanel
         '
@@ -637,7 +633,7 @@ Partial Class MainForm
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(758, 206)
         Me.Label15.TabIndex = 5
-        Me.Label15.Text = resources.GetString("Label15.Text")
+        Me.Label15.Text = GetValueFromLanguageData("MainForm.ExplanationPanel_Description")
         '
         'Label16
         '
@@ -647,7 +643,7 @@ Partial Class MainForm
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(215, 21)
         Me.Label16.TabIndex = 4
-        Me.Label16.Text = "About the installation process"
+        Me.Label16.Text = GetValueFromLanguageData("MainForm.ExplanationPanel_Header")
         '
         'ImageInfoPanel
         '
@@ -674,7 +670,7 @@ Partial Class MainForm
         Me.GroupBox2.Size = New System.Drawing.Size(755, 176)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Information of installation image"
+        Me.GroupBox2.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageInfoGroup")
         '
         'ListView1
         '
@@ -693,27 +689,27 @@ Partial Class MainForm
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "#"
+        Me.ColumnHeader1.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_IndexColumnHeader")
         Me.ColumnHeader1.Width = 26
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Image name"
+        Me.ColumnHeader2.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageName")
         Me.ColumnHeader2.Width = 188
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Image description"
+        Me.ColumnHeader3.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageDescription")
         Me.ColumnHeader3.Width = 211
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Image version"
+        Me.ColumnHeader4.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageVersion")
         Me.ColumnHeader4.Width = 152
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Image architecture"
+        Me.ColumnHeader5.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageArchitecture")
         Me.ColumnHeader5.Width = 141
         '
         'GroupBox1
@@ -729,7 +725,7 @@ Partial Class MainForm
         Me.GroupBox1.Size = New System.Drawing.Size(755, 100)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Information of boot image"
+        Me.GroupBox1.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageInfoGroup")
         '
         'Label10
         '
@@ -740,7 +736,7 @@ Partial Class MainForm
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(109, 15)
         Me.Label10.TabIndex = 3
-        Me.Label10.Text = "Image architecture:"
+        Me.Label10.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageArchitecture")
         '
         'Label9
         '
@@ -751,7 +747,7 @@ Partial Class MainForm
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(84, 15)
         Me.Label9.TabIndex = 3
-        Me.Label9.Text = "Image version:"
+        Me.Label9.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageVersion")
         '
         'Label13
         '
@@ -762,7 +758,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(46, 15)
         Me.Label13.TabIndex = 3
-        Me.Label13.Text = "<arch>"
+        Me.Label13.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageArchitecturePlaceholder")
         '
         'Label12
         '
@@ -773,7 +769,7 @@ Partial Class MainForm
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(61, 15)
         Me.Label12.TabIndex = 3
-        Me.Label12.Text = "<version>"
+        Me.Label12.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageVersionPlaceholder")
         '
         'Label11
         '
@@ -784,7 +780,7 @@ Partial Class MainForm
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(53, 15)
         Me.Label11.TabIndex = 3
-        Me.Label11.Text = "<name>"
+        Me.Label11.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageNamePlaceholder")
         '
         'Label8
         '
@@ -795,7 +791,7 @@ Partial Class MainForm
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(76, 15)
         Me.Label8.TabIndex = 3
-        Me.Label8.Text = "Image name:"
+        Me.Label8.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageName")
         '
         'Label6
         '
@@ -806,7 +802,7 @@ Partial Class MainForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(46, 15)
         Me.Label6.TabIndex = 3
-        Me.Label6.Text = "<arch>"
+        Me.Label6.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_ComputerArchitecturePlaceholder")
         '
         'Label7
         '
@@ -817,7 +813,7 @@ Partial Class MainForm
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(471, 15)
         Me.Label7.TabIndex = 3
-        Me.Label7.Text = "The architectures of the boot image and your computer are incompatible"
+        Me.Label7.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_ImageArchitectureMismatchError")
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.Label7.Visible = False
         '
@@ -830,7 +826,7 @@ Partial Class MainForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(130, 15)
         Me.Label5.TabIndex = 3
-        Me.Label5.Text = "Computer architecture:"
+        Me.Label5.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_ComputerArchitecture")
         '
         'Label14
         '
@@ -840,7 +836,7 @@ Partial Class MainForm
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(758, 83)
         Me.Label14.TabIndex = 3
-        Me.Label14.Text = resources.GetString("Label14.Text")
+        Me.Label14.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_DIM_Notice")
         '
         'Label3
         '
@@ -850,8 +846,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(758, 47)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Check if this disc image contains the Windows image you want to test and click Ne" & _
-    "xt"
+        Me.Label3.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_Description")
         '
         'Label4
         '
@@ -861,7 +856,7 @@ Partial Class MainForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(218, 21)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = "Review image file information"
+        Me.Label4.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_Header")
         '
         'DisclaimerPanel
         '
@@ -882,7 +877,7 @@ Partial Class MainForm
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(210, 19)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = "I agree to the disclaimers in all tabs"
+        Me.CheckBox1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_DisclaimerCheck")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'TabControl1
@@ -904,7 +899,7 @@ Partial Class MainForm
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(747, 369)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Warranty disclaimers"
+        Me.TabPage1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_ContentTabTitle1")
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -919,7 +914,7 @@ Partial Class MainForm
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox1.Size = New System.Drawing.Size(741, 363)
         Me.TextBox1.TabIndex = 0
-        Me.TextBox1.Text = resources.GetString("TextBox1.Text")
+        Me.TextBox1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Warranties")
         '
         'TabPage2
         '
@@ -929,7 +924,7 @@ Partial Class MainForm
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(747, 369)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Use of this disc image"
+        Me.TabPage2.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_ContentTabTitle2")
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -944,7 +939,7 @@ Partial Class MainForm
         Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox2.Size = New System.Drawing.Size(741, 363)
         Me.TextBox2.TabIndex = 1
-        Me.TextBox2.Text = resources.GetString("TextBox2.Text")
+        Me.TextBox2.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_UseOfDiscImages")
         '
         'TabPage3
         '
@@ -953,7 +948,7 @@ Partial Class MainForm
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Size = New System.Drawing.Size(747, 369)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Licenses"
+        Me.TabPage3.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_ContentTabTitle3")
         Me.TabPage3.UseVisualStyleBackColor = True
         '
         'TextBox3
@@ -977,8 +972,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(758, 47)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Please read these notes and agree to them before continuing with OS installation." & _
-    " Switch tabs to read specific information and click Next"
+        Me.Label2.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Description")
         '
         'Label1
         '
@@ -988,7 +982,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(246, 21)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Disclaimers and important notices"
+        Me.Label1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Header")
         '
         'SlideshowTimer
         '
@@ -1019,7 +1013,7 @@ Partial Class MainForm
         '
         'ExportDrvsFBD
         '
-        Me.ExportDrvsFBD.Description = "Specify the path to export drivers to:"
+        Me.ExportDrvsFBD.Description = GetValueFromLanguageData("MainForm.ExportDriversFolderDialog")
         Me.ExportDrvsFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'ExportDrvsBW

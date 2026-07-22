@@ -13,6 +13,7 @@ Module FileAssociationHelper
 
     Private Const SHCNE_ASSOCCHANGED As Integer = &H8000000
     Private Const SHCNF_IDLIST As Integer = 0
+    Private Const UserClassesRegistryPath As String = "Software\Classes"
 
     Private Sub RefreshAfterAssociationChange()
         NativeMethods.SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, IntPtr.Zero, IntPtr.Zero)
@@ -22,44 +23,44 @@ Module FileAssociationHelper
         If String.IsNullOrEmpty(FileExtension) Then Throw New ArgumentNullException(FileExtension)
         If String.IsNullOrEmpty(FileType) Then Throw New ArgumentNullException(FileType)
         If String.IsNullOrEmpty(AssociationCommand) Then Throw New ArgumentNullException(AssociationCommand)
+        If Not String.IsNullOrWhiteSpace(AssociationIconPath) AndAlso Not File.Exists(AssociationIconPath) Then
+            DynaLog.LogMessage("The requested association icon does not exist: " & AssociationIconPath)
+            Return False
+        End If
 
-        Using cmdProc As New Process() With {
-            .StartInfo = New ProcessStartInfo() With {
-                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                .CreateNoWindow = Not Debugger.IsAttached,
-                .WindowStyle = If(Debugger.IsAttached, ProcessWindowStyle.Normal, ProcessWindowStyle.Hidden)
-            }
-        }
-            cmdProc.StartInfo.Arguments = String.Format("/c assoc {0}={1}", FileExtension, FileType)
-            cmdProc.Start()
-            cmdProc.WaitForExit()
-            If cmdProc.ExitCode <> 0 Then Return False
+        Try
+            DynaLog.LogMessage("Registering per-user file association for extension " & FileExtension & "...")
+            Using userClasses As RegistryKey = Registry.CurrentUser.CreateSubKey(UserClassesRegistryPath)
+                Using extensionKey As RegistryKey = userClasses.CreateSubKey(FileExtension)
+                    extensionKey.SetValue(Nothing, FileType, RegistryValueKind.String)
+                    Using openWithKey As RegistryKey = extensionKey.CreateSubKey("OpenWithProgids")
+                        openWithKey.SetValue(FileType, "", RegistryValueKind.String)
+                    End Using
+                End Using
 
-            ' Set the file type itself
-            cmdProc.StartInfo.Arguments = String.Format("/c ftype {0}={1}", FileType, AssociationCommand)
-            cmdProc.Start()
-            cmdProc.WaitForExit()
-            If cmdProc.ExitCode <> 0 Then Return False
+                Using fileTypeKey As RegistryKey = userClasses.CreateSubKey(FileType)
+                    fileTypeKey.SetValue(Nothing, AssociationDescription, RegistryValueKind.String)
+                    Using commandKey As RegistryKey = fileTypeKey.CreateSubKey("Shell\Open\Command")
+                        commandKey.SetValue(Nothing, AssociationCommand, RegistryValueKind.String)
+                    End Using
 
-            ' Set the description for the association
-            Try
-                Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey(FileType, True)
-                AssocRk.SetValue(Nothing, AssociationDescription, RegistryValueKind.String)
-                If (AssociationIconPath <> "" AndAlso File.Exists(AssociationIconPath)) OrElse ForceIconReset Then
-                    ' We have defined an icon for this association; use it or else we'll have a default file icon.
-                    Dim DefaultAssociationIcon As RegistryKey = AssocRk.OpenSubKey("DefaultIcon", True)
-                    DefaultAssociationIcon.SetValue(Nothing, AssociationIconPath, RegistryValueKind.String)
-                    DefaultAssociationIcon.Close()
-                End If
-                AssocRk.Close()
-            Catch ex As Exception
+                    If Not String.IsNullOrWhiteSpace(AssociationIconPath) Then
+                        Using iconKey As RegistryKey = fileTypeKey.CreateSubKey("DefaultIcon")
+                            iconKey.SetValue(Nothing, AssociationIconPath, RegistryValueKind.String)
+                        End Using
+                    ElseIf ForceIconReset Then
+                        fileTypeKey.DeleteSubKeyTree("DefaultIcon", False)
+                    End If
+                End Using
+            End Using
 
-            End Try
-
-            ' Force a refresh of the icons
             RefreshAfterAssociationChange()
-        End Using
-        Return True
+            DynaLog.LogMessage("The per-user file association was registered successfully.")
+            Return True
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not register the per-user file association. Error message: " & ex.Message)
+            Return False
+        End Try
     End Function
 
     Public Function SetFileAssociation(Extension As String, Type As String, Command As String, Description As String) As Boolean
@@ -74,30 +75,40 @@ Module FileAssociationHelper
         If String.IsNullOrEmpty(FileExtension) Then Throw New ArgumentNullException(FileExtension)
         If String.IsNullOrEmpty(FileType) Then Throw New ArgumentNullException(FileType)
 
-        Using cmdProc As New Process() With {
-            .StartInfo = New ProcessStartInfo() With {
-                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                .CreateNoWindow = Not Debugger.IsAttached,
-                .WindowStyle = If(Debugger.IsAttached, ProcessWindowStyle.Normal, ProcessWindowStyle.Hidden)
-            }
-        }
-            cmdProc.StartInfo.Arguments = String.Format("/c assoc {0}=", FileExtension)
-            cmdProc.Start()
-            cmdProc.WaitForExit()
-            If cmdProc.ExitCode <> 0 Then Return False
+        Try
+            DynaLog.LogMessage("Removing per-user file association for extension " & FileExtension & "...")
+            Using userClasses As RegistryKey = Registry.CurrentUser.CreateSubKey(UserClassesRegistryPath)
+                Dim removeEmptyExtensionKey As Boolean = False
+                Using extensionKey As RegistryKey = userClasses.OpenSubKey(FileExtension, True)
+                    If extensionKey IsNot Nothing Then
+                        Dim registeredType As Object = extensionKey.GetValue(Nothing)
+                        If registeredType IsNot Nothing AndAlso registeredType.ToString().Equals(FileType, StringComparison.OrdinalIgnoreCase) Then
+                            extensionKey.DeleteValue("", False)
+                        End If
+                        Using openWithKey As RegistryKey = extensionKey.OpenSubKey("OpenWithProgids", True)
+                            If openWithKey IsNot Nothing Then
+                                openWithKey.DeleteValue(FileType, False)
+                                If openWithKey.GetValueNames().Length = 0 AndAlso openWithKey.GetSubKeyNames().Length = 0 Then
+                                    openWithKey.Close()
+                                    extensionKey.DeleteSubKeyTree("OpenWithProgids", False)
+                                End If
+                            End If
+                        End Using
+                        removeEmptyExtensionKey = extensionKey.GetValueNames().Length = 0 AndAlso
+                                                  extensionKey.GetSubKeyNames().Length = 0
+                    End If
+                End Using
+                If removeEmptyExtensionKey Then userClasses.DeleteSubKeyTree(FileExtension, False)
+                userClasses.DeleteSubKeyTree(FileType, False)
+            End Using
 
-            ' Set the file type itself
-            cmdProc.StartInfo.Arguments = String.Format("/c ftype {0}=", FileType)
-            cmdProc.Start()
-            cmdProc.WaitForExit()
-            If cmdProc.ExitCode <> 0 Then Return False
-
-            RegistryHelper.RemoveRegistryItem(String.Format("HKCR\{0}", FileType), "/f")
-
-            ' Force a refresh of the icons
             RefreshAfterAssociationChange()
-        End Using
-        Return True
+            DynaLog.LogMessage("The per-user file association was removed successfully.")
+            Return True
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not remove the per-user file association. Error message: " & ex.Message)
+            Return False
+        End Try
     End Function
 
     Public Function RemoveFileAssociation(Extension As String, Type As String) As Boolean
@@ -105,30 +116,52 @@ Module FileAssociationHelper
     End Function
 
     Public Function GetFileAssociationCmdline(FileType As String) As String
-        Dim assocRk As RegistryKey = Nothing
+        If String.IsNullOrWhiteSpace(FileType) Then Return ""
+
+        Dim associationRegistryPath As String = String.Format("{0}\Shell\Open\Command", FileType)
         Dim cmdline As String = ""
+
         Try
-            assocRk = Registry.ClassesRoot.OpenSubKey(String.Format("{0}\Shell\Open\Command", FileType), False)
-            cmdline = assocRk.GetValue(Nothing, "")
+            Using assocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey(associationRegistryPath, False)
+                If assocRk Is Nothing Then
+                    DynaLog.LogMessage("File association command registry key was not found: HKCR\" & associationRegistryPath)
+                    Return cmdline
+                End If
+
+                Dim cmdlineValue As Object = assocRk.GetValue(Nothing)
+                If cmdlineValue IsNot Nothing Then
+                    cmdline = cmdlineValue.ToString()
+                End If
+            End Using
         Catch ex As Exception
             DynaLog.LogMessage("Could not get association. Error message: " & ex.Message)
-        Finally
-            If assocRk IsNot Nothing Then assocRk.Close()
         End Try
+
         Return cmdline
     End Function
 
     Public Function GetFileAssociationIconPath(FileType As String) As String
-        Dim defIconRk As RegistryKey = Nothing
+        If String.IsNullOrWhiteSpace(FileType) Then Return ""
+
+        Dim associationIconRegistryPath As String = String.Format("{0}\DefaultIcon", FileType)
         Dim iconPath As String = ""
+
         Try
-            defIconRk = Registry.ClassesRoot.OpenSubKey(String.Format("{0}\DefaultIcon", FileType), False)
-            iconPath = defIconRk.GetValue(Nothing, "")
+            Using defIconRk As RegistryKey = Registry.ClassesRoot.OpenSubKey(associationIconRegistryPath, False)
+                If defIconRk Is Nothing Then
+                    DynaLog.LogMessage("File association icon registry key was not found: HKCR\" & associationIconRegistryPath)
+                    Return iconPath
+                End If
+
+                Dim iconPathValue As Object = defIconRk.GetValue(Nothing)
+                If iconPathValue IsNot Nothing Then
+                    iconPath = iconPathValue.ToString()
+                End If
+            End Using
         Catch ex As Exception
-            DynaLog.LogMessage("Could not get association. Error message: " & ex.Message)
-        Finally
-            If defIconRk IsNot Nothing Then defIconRk.Close()
+            DynaLog.LogMessage("Could not get association icon. Error message: " & ex.Message)
         End Try
+
         Return iconPath
     End Function
 

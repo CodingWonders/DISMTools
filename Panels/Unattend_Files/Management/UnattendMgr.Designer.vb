@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class UnattendMgr
     Inherits System.Windows.Forms.Form
 
@@ -46,7 +46,7 @@ Partial Class UnattendMgr
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(119, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Project path:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.UnattendMgr")("ProjectPath.Label")
         '
         'TextBox1
         '
@@ -65,7 +65,7 @@ Partial Class UnattendMgr
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.UnattendMgr")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'ListView1
@@ -84,22 +84,22 @@ Partial Class UnattendMgr
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "File name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.UnattendMgr")("FileName.Column")
         Me.ColumnHeader1.Width = 431
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Created"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.UnattendMgr")("Created.Column")
         Me.ColumnHeader2.Width = 168
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Last modified"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.UnattendMgr")("LastModified.Column")
         Me.ColumnHeader3.Width = 144
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Last accessed"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.UnattendMgr")("LastAccessed.Column")
         Me.ColumnHeader4.Width = 145
         '
         'ActionsTLP
@@ -130,7 +130,7 @@ Partial Class UnattendMgr
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(322, 23)
         Me.Button4.TabIndex = 3
-        Me.Button4.Text = "Apply to image..."
+        Me.Button4.Text = LocalizationService.ForSection("Designer.UnattendMgr")("ApplyImage.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button3
@@ -142,7 +142,7 @@ Partial Class UnattendMgr
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(322, 23)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Open file location"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.UnattendMgr")("Open.File.Location.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -154,7 +154,7 @@ Partial Class UnattendMgr
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(322, 23)
         Me.Button2.TabIndex = 0
-        Me.Button2.Text = "Open file"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.UnattendMgr")("OpenFile.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
@@ -176,7 +176,7 @@ Partial Class UnattendMgr
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "UnattendMgr"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Unattended answer file manager"
+        Me.Text = LocalizationService.ForSection("Designer.UnattendMgr")("Unattended.AnswerFile.Label")
         Me.ActionsTLP.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

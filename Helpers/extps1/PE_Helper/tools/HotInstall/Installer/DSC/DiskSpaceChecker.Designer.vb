@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DiskSpaceChecker
     Inherits System.Windows.Forms.Form
 
@@ -37,8 +37,7 @@ Partial Class DiskSpaceChecker
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(599, 36)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Please wait while the installer checks the size of disc image files and the capac" & _
-    "ity of the drives in your computer. This can take some time."
+        Me.Label1.Text = GetValueFromLanguageData("DiskSpaceChecker.WndDesc")
         '
         'Label2
         '
@@ -49,7 +48,7 @@ Partial Class DiskSpaceChecker
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(55, 15)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Progress:"
+        Me.Label2.Text = GetValueFromLanguageData("DiskSpaceChecker.DSC_GenericProgress")
         '
         'ProgressBar1
         '
@@ -79,7 +78,7 @@ Partial Class DiskSpaceChecker
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Disk Space Checker"
+        Me.Text = GetValueFromLanguageData("DiskSpaceChecker.WndTitle")
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

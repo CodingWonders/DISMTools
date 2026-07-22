@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SetPEScratchSpace
     Inherits System.Windows.Forms.Form
 
@@ -57,7 +57,7 @@ Partial Class SetPEScratchSpace
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.Scratch")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -68,7 +68,7 @@ Partial Class SetPEScratchSpace
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Scratch")("Cancel.Button")
         '
         'Label3
         '
@@ -77,7 +77,7 @@ Partial Class SetPEScratchSpace
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(128, 13)
         Me.Label3.TabIndex = 11
-        Me.Label3.Text = "Scratch space:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.Scratch")("ScratchSpace.Label")
         '
         'Label2
         '
@@ -88,9 +88,7 @@ Partial Class SetPEScratchSpace
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 28)
         Me.Label2.TabIndex = 10
-        Me.Label2.Text = "The scratch space is the amount of writable space available on the Windows PE sys" & _
-    "tem volume when its contents are copied to memory. Please specify a scratch spac" & _
-    "e amount and click OK."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Scratch")("AmountWritable.Message")
         '
         'ComboBox1
         '
@@ -108,7 +106,7 @@ Partial Class SetPEScratchSpace
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(21, 13)
         Me.Label4.TabIndex = 13
-        Me.Label4.Text = "MB"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.Scratch")("MB.Label")
         '
         'Label5
         '
@@ -117,7 +115,7 @@ Partial Class SetPEScratchSpace
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(254, 13)
         Me.Label5.TabIndex = 14
-        Me.Label5.Text = "An invalid scratch space amount has been detected"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.Scratch")("ScratchSpace.Amount.Label")
         Me.Label5.Visible = False
         '
         'ImageTaskHeader1
@@ -155,7 +153,7 @@ Partial Class SetPEScratchSpace
         Me.Name = "SetPEScratchSpace"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Set Windows PE scratch space"
+        Me.Text = LocalizationService.ForSection("Designer.Scratch")("Set.Windows.Pescratch.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

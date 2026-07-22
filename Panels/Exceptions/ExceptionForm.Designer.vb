@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ExceptionForm
     Inherits System.Windows.Forms.Form
 
@@ -46,9 +46,7 @@ Partial Class ExceptionForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(666, 57)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "We are sorry for the inconvenience, but DISMTools has run into an error that it c" & _
-    "ouldn't handle and we need your help in order to continue." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Here is the error " & _
-    "information if you need it:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Sorry.Inconvenience.Message")
         '
         'PictureBox1
         '
@@ -82,7 +80,7 @@ Partial Class ExceptionForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(461, 32)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Please help us fix this issue"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Help.Us.Fix.Label")
         '
         'Label3
         '
@@ -93,9 +91,7 @@ Partial Class ExceptionForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(502, 42)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "In order to prevent this problem from happening again, we would like to know more" & _
-    " about it by reporting an issue on the GitHub repository. You will need a GitHub" & _
-    " account to report feedback."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Problem.Prevention.Message")
         '
         'Issue_Btn
         '
@@ -105,7 +101,7 @@ Partial Class ExceptionForm
         Me.Issue_Btn.Name = "Issue_Btn"
         Me.Issue_Btn.Size = New System.Drawing.Size(197, 32)
         Me.Issue_Btn.TabIndex = 3
-        Me.Issue_Btn.Text = "Report this issue"
+        Me.Issue_Btn.Text = LocalizationService.ForSection("Designer.ExceptionForm")("ReportIssue.Label")
         Me.Issue_Btn.UseVisualStyleBackColor = True
         '
         'Label5
@@ -117,7 +113,7 @@ Partial Class ExceptionForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(502, 65)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = resources.GetString("Label5.Text")
+        Me.Label5.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Continue.Running.Message")
         '
         'Label4
         '
@@ -129,9 +125,7 @@ Partial Class ExceptionForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(502, 42)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "When reporting this issue, PLEASE paste the exception information on the left. Ot" & _
-    "herwise, standard closure policies will be applied which imply closing your issu" & _
-    "e after (at least) 4 hours."
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Reporting.Issue.Message")
         '
         'LinkLabel1
         '
@@ -144,7 +138,7 @@ Partial Class ExceptionForm
         Me.LinkLabel1.Size = New System.Drawing.Size(56, 15)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Continue"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Continue.Button")
         '
         'LinkLabel2
         '
@@ -157,7 +151,7 @@ Partial Class ExceptionForm
         Me.LinkLabel2.Size = New System.Drawing.Size(25, 15)
         Me.LinkLabel2.TabIndex = 5
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Exit"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Exit.Button")
         '
         'DynaViewer_Button
         '
@@ -167,7 +161,7 @@ Partial Class ExceptionForm
         Me.DynaViewer_Button.Name = "DynaViewer_Button"
         Me.DynaViewer_Button.Size = New System.Drawing.Size(197, 32)
         Me.DynaViewer_Button.TabIndex = 3
-        Me.DynaViewer_Button.Text = "Copy and Inspect Logs"
+        Me.DynaViewer_Button.Text = LocalizationService.ForSection("Designer.ExceptionForm")("Copy.Inspect.Logs.Button")
         Me.DynaViewer_Button.UseVisualStyleBackColor = True
         '
         'ExceptionForm
@@ -193,7 +187,7 @@ Partial Class ExceptionForm
         Me.MinimizeBox = False
         Me.Name = "ExceptionForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools - Internal Error"
+        Me.Text = LocalizationService.ForSection("Designer.ExceptionForm")("DISM.Tools.Internal.Label")
         Me.TopMost = True
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

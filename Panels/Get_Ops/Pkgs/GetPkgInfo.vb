@@ -26,631 +26,67 @@ Public Class GetPkgInfoDlg
         cPropPathView.ForeColor = ForeColor
         cPropValue.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Get package information"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "What do you want to get information about?"
-                        Label3.Text = "Click here to get information about packages that you've installed or that came with the Windows image you're servicing"
-                        Label4.Text = "Click here to get information about packages that you want to add to the Windows image you're servicing before proceeding with the package addition process"
-                        Label5.Text = "Ready"
-                        Label6.Text = "Add or select a package file to view its information here"
-                        Label7.Text = "Package information"
-                        Label8.Text = "Package name:"
-                        Label10.Text = "Is package applicable?"
-                        Label12.Text = "Copyright:"
-                        Label14.Text = "Product version:"
-                        Label16.Text = "Release type:"
-                        Label18.Text = "Company:"
-                        Label20.Text = "Creation time:"
-                        Label22.Text = "Package name:"
-                        Label24.Text = "Is package applicable?"
-                        Label26.Text = "Copyright:"
-                        Label28.Text = "Install time:"
-                        Label30.Text = "Last update time:"
-                        Label31.Text = "Company:"
-                        Label33.Text = "Install package name:"
-                        Label36.Text = "Package information"
-                        Label37.Text = "Select an installed package to view its information here"
-                        Label39.Text = "Display name:"
-                        Label41.Text = "Creation time:"
-                        Label43.Text = "Description:"
-                        Label45.Text = "Product name:"
-                        Label47.Text = "Install client:"
-                        Label48.Text = "Is a restart required?"
-                        Label50.Text = "Support information:"
-                        Label52.Text = "State:"
-                        Label54.Text = "Is a boot up required for full installation?"
-                        Label58.Text = "Custom properties:"
-                        Label60.Text = "Features:"
-                        Label61.Text = "Capability identity:"
-                        Label63.Text = "Description:"
-                        Label65.Text = "Install client:"
-                        Label67.Text = "Install package name:"
-                        Label69.Text = "Install time:"
-                        Label71.Text = "Last update time:"
-                        Label73.Text = "Display name:"
-                        Label75.Text = "Product name:"
-                        Label77.Text = "Product version:"
-                        Label79.Text = "Release type:"
-                        Label81.Text = "Is a restart required?"
-                        Label83.Text = "Support information:"
-                        Label85.Text = "State:"
-                        Label87.Text = "Is a boot up required for full installation?"
-                        Label89.Text = "Capability identity:"
-                        Label91.Text = "Custom properties:"
-                        Label93.Text = "Features:"
-                        LinkLabel1.Text = "<- Go back"
-                        Button1.Text = "Add package..."
-                        Button2.Text = "Remove selected"
-                        Button3.Text = "Remove all"
-                        Button4.Text = "Save..."
-                        InstalledPackageLink.Text = "I want to get information about installed packages in the image"
-                        PackageFileLink.Text = "I want to get information about package files"
-                        OpenFileDialog1.Title = "Locate package files"
-                        SearchBox1.cueBanner = "Type here to search for a package..."
-                    Case "ESN"
-                        Text = "Obtener información de paquetes"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "¿Acerca de qué le gustaría obtener información?"
-                        Label3.Text = "Haga clic aquí para obtener información de paquetes que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
-                        Label4.Text = "Haga clic aquí para obtener información de paquetes que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de paquetes"
-                        Label5.Text = "Listo"
-                        Label6.Text = "Añada o seleccione un archivo de paquete para ver su información aquí"
-                        Label7.Text = "Información de paquete"
-                        Label8.Text = "Nombre de paquete:"
-                        Label10.Text = "¿El paquete es aplicable?"
-                        Label12.Text = "Copyright:"
-                        Label14.Text = "Versión de producto:"
-                        Label16.Text = "Tipo de paquete:"
-                        Label18.Text = "Compañía:"
-                        Label20.Text = "Tiempo de creación:"
-                        Label22.Text = "Nombre de paquete:"
-                        Label24.Text = "¿El paquete es aplicable?"
-                        Label26.Text = "Copyright:"
-                        Label28.Text = "Tiempo de instalación:"
-                        Label30.Text = "Último tiempo de actualización:"
-                        Label31.Text = "Compañía:"
-                        Label33.Text = "Nombre del paquete de instalación:"
-                        Label36.Text = "Información de paquete"
-                        Label37.Text = "Seleccione un paquete instalado para ver su información aquí"
-                        Label39.Text = "Nombre a mostrar:"
-                        Label41.Text = "Tiempo de creación:"
-                        Label43.Text = "Descripción:"
-                        Label45.Text = "Nombre de producto:"
-                        Label47.Text = "Cliente de instalación:"
-                        Label48.Text = "¿Se requiere un reinicio?"
-                        Label50.Text = "Información de soporte:"
-                        Label52.Text = "Estado:"
-                        Label54.Text = "¿Se requiere un arranque para una instalación completa?"
-                        Label58.Text = "Propiedades personalizadas:"
-                        Label60.Text = "Características:"
-                        Label61.Text = "Identidad de funcionalidad:"
-                        Label63.Text = "Descripción:"
-                        Label65.Text = "Cliente de instalación:"
-                        Label67.Text = "Nombre del paquete de instalación:"
-                        Label69.Text = "Tiempo de instalación:"
-                        Label71.Text = "Último tiempo de actualización:"
-                        Label73.Text = "Nombre a mostrar:"
-                        Label75.Text = "Nombre de producto:"
-                        Label77.Text = "Versión de producto:"
-                        Label79.Text = "Tipo de paquete:"
-                        Label81.Text = "¿Se requiere un reinicio?"
-                        Label83.Text = "Información de soporte:"
-                        Label85.Text = "Estado:"
-                        Label87.Text = "¿Se requiere un arranque para una instalación completa?"
-                        Label89.Text = "Identidad de funcionalidad:"
-                        Label91.Text = "Propiedades personalizadas:"
-                        Label93.Text = "Características:"
-                        LinkLabel1.Text = "<- Atrás"
-                        Button1.Text = "Añadir paquete..."
-                        Button2.Text = "Eliminar selección"
-                        Button3.Text = "Eliminar todo"
-                        Button4.Text = "Guardar..."
-                        InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
-                        PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
-                        OpenFileDialog1.Title = "Ubique los archivos de paquetes"
-                        SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
-                    Case "FRA"
-                        Text = "Obtenir des informations sur les paquets"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
-                        Label3.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance."
-                        Label4.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous souhaitez ajouter à l'image Windows que vous maintenez avant de procéder à l'ajout de paquets."
-                        Label5.Text = "Prêt"
-                        Label6.Text = "Ajoutez ou sélectionnez un fichier de paquet pour afficher son information ici"
-                        Label7.Text = "Information sur le paquet"
-                        Label8.Text = "Nom du paquet :"
-                        Label10.Text = "Le paquet est-il applicable ?"
-                        Label12.Text = "Copyright :"
-                        Label14.Text = "Version du produit :"
-                        Label16.Text = "Type de publication :"
-                        Label18.Text = "Enterprise :"
-                        Label20.Text = "Temps de création :"
-                        Label22.Text = "Nom du paquet :"
-                        Label24.Text = "Le paquet est-il applicable ?"
-                        Label26.Text = "Copyright :"
-                        Label28.Text = "Temps d'installation :"
-                        Label30.Text = "Dernière heure de mise à jour :"
-                        Label31.Text = "Enterprise :"
-                        Label33.Text = "Nom du paquet d'installation :"
-                        Label36.Text = "Information sur le paquet"
-                        Label37.Text = "Sélectionnez un paquet installé pour afficher son information ici"
-                        Label39.Text = "Nom d'affichage:"
-                        Label41.Text = "Temps de création :"
-                        Label43.Text = "Description :"
-                        Label45.Text = "Nom du produit :"
-                        Label47.Text = "Client d'installation :"
-                        Label48.Text = "Un redémarrage est-il nécessaire ?"
-                        Label50.Text = "Information de support :"
-                        Label52.Text = "État :"
-                        Label54.Text = "L'installation complète nécessite-t-elle un démarrage ?"
-                        Label58.Text = "Propriétés personnalisées :"
-                        Label60.Text = "Caractéristiques :"
-                        Label61.Text = "Identité de la capacité :"
-                        Label63.Text = "Description :"
-                        Label65.Text = "Client d'installation :"
-                        Label67.Text = "Nom du paquet d'installation :"
-                        Label69.Text = "Temps d'installation :"
-                        Label71.Text = "Dernière heure de mise à jour :"
-                        Label73.Text = "Nom d'affichage :"
-                        Label75.Text = "Nom du produit :"
-                        Label77.Text = "Version du produit :"
-                        Label79.Text = "Type de publication :"
-                        Label81.Text = "Un redémarrage est-il nécessaire ?"
-                        Label83.Text = "Information de support :"
-                        Label85.Text = "État:"
-                        Label87.Text = "L'installation complète nécessite-t-elle un démarrage ?"
-                        Label89.Text = "Identité de la capacité :"
-                        Label91.Text = "Propriétés personnalisées :"
-                        Label93.Text = "Caractéristiques :"
-                        LinkLabel1.Text = "<- Retour"
-                        Button1.Text = "Ajouter un paquet..."
-                        Button2.Text = "Supprimer la sélection"
-                        Button3.Text = "Supprimer tout"
-                        Button4.Text = "Sauvegarder..."
-                        InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
-                        PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
-                        OpenFileDialog1.Title = "Localiser les fichiers des paquets"
-                        SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
-                    Case "PTB", "PTG"
-                        Text = "Obter informações sobre o pacote"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Sobre o que é que pretende obter informações?"
-                        Label3.Text = "Clique aqui para obter informações sobre os pacotes que instalou ou que vieram com a imagem do Windows que está a reparar"
-                        Label4.Text = "Clique aqui para obter informações sobre os pacotes que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de pacotes"
-                        Label5.Text = "Pronto"
-                        Label6.Text = "Adicione ou seleccione um ficheiro de pacote para ver as suas informações aqui"
-                        Label7.Text = "Informações do pacote"
-                        Label8.Text = "Nome do pacote:"
-                        Label10.Text = "O pacote é aplicável?"
-                        Label12.Text = "Direitos de autor:"
-                        Label14.Text = "Versão do produto:"
-                        Label16.Text = "Tipo de versão:"
-                        Label18.Text = "Empresa:"
-                        Label20.Text = "Hora de criação:"
-                        Label22.Text = "Nome do pacote:"
-                        Label24.Text = "O pacote é aplicável?"
-                        Label26.Text = "Direitos de autor:"
-                        Label28.Text = "Hora de instalação:"
-                        Label30.Text = "Hora da última atualização:"
-                        Label31.Text = "Empresa:"
-                        Label33.Text = "Nome do pacote de instalação:"
-                        Label36.Text = "Informações do pacote"
-                        Label37.Text = "Seleccione um pacote instalado para ver as suas informações aqui"
-                        Label39.Text = "Nome de apresentação:"
-                        Label41.Text = "Hora de criação:"
-                        Label43.Text = "Descrição:"
-                        Label45.Text = "Nome do produto:"
-                        Label47.Text = "Instalar cliente:"
-                        Label48.Text = "É necessário reiniciar?"
-                        Label50.Text = "Informações de suporte:"
-                        Label52.Text = "Estado:"
-                        Label54.Text = "É necessário um arranque para a instalação completa?"
-                        Label58.Text = "Propriedades personalizadas:"
-                        Label60.Text = "Características:"
-                        Label61.Text = "Identidade da capacidade:"
-                        Label63.Text = "Descrição:"
-                        Label65.Text = "Instalar cliente:"
-                        Label67.Text = "Nome do pacote de instalação:"
-                        Label69.Text = "Hora da instalação:"
-                        Label71.Text = "Hora da última atualização:"
-                        Label73.Text = "Nome do ecrã:"
-                        Label75.Text = "Nome do produto:"
-                        Label77.Text = "Versão do produto:"
-                        Label79.Text = "Tipo de versão:"
-                        Label81.Text = "É necessário reiniciar o sistema?"
-                        Label83.Text = "Informações de suporte:"
-                        Label85.Text = "Estado:"
-                        Label87.Text = "É necessário um arranque para uma instalação completa?"
-                        Label89.Text = "Identidade da capacidade:"
-                        Label91.Text = "Propriedades personalizadas:"
-                        Label93.Text = "Características:"
-                        LinkLabel1.Text = "<- Voltar atrás"
-                        Button1.Text = "Adicionar pacote..."
-                        Button2.Text = "Remover selecionado"
-                        Button3.Text = "Remover tudo"
-                        Button4.Text = "Guardar..."
-                        InstalledPackageLink.Text = "Pretendo obter informações sobre os pacotes instalados na imagem"
-                        PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
-                        OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
-                        SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
-                    Case "ITA"
-                        Text = "Ottieni informazioni sui pacchetti"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Su cosa vuoi ottenere informazioni?"
-                        Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
-                        Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
-                        Label5.Text = "Pronto"
-                        Label6.Text = "Aggiungere o selezionare un file di pacchetto per visualizzarne le informazioni"
-                        Label7.Text = "Informazioni sul pacchetto"
-                        Label8.Text = "Nome del pacchetto:"
-                        Label10.Text = "Il pacchetto è applicabile?"
-                        Label12.Text = "Copyright:"
-                        Label14.Text = "Versione del prodotto:"
-                        Label16.Text = "Tipo di rilascio:"
-                        Label18.Text = "Azienda:"
-                        Label20.Text = "Tempo di creazione:"
-                        Label22.Text = "Nome del pacchetto:"
-                        Label24.Text = "Il pacchetto è applicabile?"
-                        Label26.Text = "Copyright:"
-                        Label28.Text = "Tempo di installazione:"
-                        Label30.Text = "Ora ultimo aggiornamento:"
-                        Label31.Text = "Azienda:"
-                        Label33.Text = "Nome del pacchetto di installazione:"
-                        Label36.Text = "Informazioni sul pacchetto"
-                        Label37.Text = "Selezionare un pacchetto installato per visualizzarne le informazioni"
-                        Label39.Text = "Nome visualizzato:"
-                        Label41.Text = "Ora di creazione:"
-                        Label43.Text = "Descrizione:"
-                        Label45.Text = "Nome del prodotto:"
-                        Label47.Text = "Client di installazione:"
-                        Label48.Text = "È necessario un riavvio?"
-                        Label50.Text = "Informazioni di supporto:"
-                        Label52.Text = "Stato:"
-                        Label54.Text = "È richiesto un avvio per l'installazione completa?"
-                        Label58.Text = "Proprietà personalizzate:"
-                        Label60.Text = "Caratteristiche:"
-                        Label61.Text = "Identità della capacità:"
-                        Label63.Text = "Descrizione:"
-                        Label65.Text = "Installa client:"
-                        Label67.Text = "Nome pacchetto di installazione:"
-                        Label69.Text = "Tempo di installazione:"
-                        Label71.Text = "Ora ultimo aggiornamento:"
-                        Label73.Text = "Nome del display:"
-                        Label75.Text = "Nome prodotto:"
-                        Label77.Text = "Versione del prodotto:"
-                        Label79.Text = "Tipo di rilascio:"
-                        Label81.Text = "È necessario un riavvio?"
-                        Label83.Text = "Informazioni di supporto:"
-                        Label85.Text = "Stato:"
-                        Label87.Text = "È richiesto un avvio per l'installazione completa?"
-                        Label89.Text = "Identità di capacità:"
-                        Label91.Text = "Proprietà personalizzate:"
-                        Label93.Text = "Caratteristiche:"
-                        LinkLabel1.Text = "<- Indietro"
-                        Button1.Text = "Aggiungi pacchetto..."
-                        Button2.Text = "Rimuovi selezionati"
-                        Button3.Text = "Rimuovi tutti"
-                        Button4.Text = "Salva..."
-                        InstalledPackageLink.Text = "Voglio ottenere informazioni sui pacchetti installati nell'immagine"
-                        PackageFileLink.Text = "Voglio ottenere informazioni sui file dei pacchetti"
-                        OpenFileDialog1.Title = "Individuare i file dei pacchetti"
-                        SearchBox1.cueBanner = "Digitare qui per cercare un pacchetto..."
-                End Select
-            Case 1
-                Text = "Get package information"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "What do you want to get information about?"
-                Label3.Text = "Click here to get information about packages that you've installed or that came with the Windows image you're servicing"
-                Label4.Text = "Click here to get information about packages that you want to add to the Windows image you're servicing before proceeding with the package addition process"
-                Label5.Text = "Ready"
-                Label6.Text = "Add or select a package file to view its information here"
-                Label7.Text = "Package information"
-                Label8.Text = "Package name:"
-                Label10.Text = "Is package applicable?"
-                Label12.Text = "Copyright:"
-                Label14.Text = "Product version:"
-                Label16.Text = "Release type:"
-                Label18.Text = "Company:"
-                Label20.Text = "Creation time:"
-                Label22.Text = "Package name:"
-                Label24.Text = "Is package applicable?"
-                Label26.Text = "Copyright:"
-                Label28.Text = "Install time:"
-                Label30.Text = "Last update time:"
-                Label31.Text = "Company:"
-                Label33.Text = "Install package name:"
-                Label36.Text = "Package information"
-                Label37.Text = "Select an installed package to view its information here"
-                Label39.Text = "Display name:"
-                Label41.Text = "Creation time:"
-                Label43.Text = "Description:"
-                Label45.Text = "Product name:"
-                Label47.Text = "Install client:"
-                Label48.Text = "Is a restart required?"
-                Label50.Text = "Support information:"
-                Label52.Text = "State:"
-                Label54.Text = "Is a boot up required for full installation?"
-                Label58.Text = "Custom properties:"
-                Label60.Text = "Features:"
-                Label61.Text = "Capability identity:"
-                Label63.Text = "Description:"
-                Label65.Text = "Install client:"
-                Label67.Text = "Install package name:"
-                Label69.Text = "Install time:"
-                Label71.Text = "Last update time:"
-                Label73.Text = "Display name:"
-                Label75.Text = "Product name:"
-                Label77.Text = "Product version:"
-                Label79.Text = "Release type:"
-                Label81.Text = "Is a restart required?"
-                Label83.Text = "Support information:"
-                Label85.Text = "State:"
-                Label87.Text = "Is a boot up required for full installation?"
-                Label89.Text = "Capability identity:"
-                Label91.Text = "Custom properties:"
-                Label93.Text = "Features:"
-                LinkLabel1.Text = "<- Go back"
-                Button1.Text = "Add package..."
-                Button2.Text = "Remove selected"
-                Button3.Text = "Remove all"
-                Button4.Text = "Save..."
-                InstalledPackageLink.Text = "I want to get information about installed packages in the image"
-                PackageFileLink.Text = "I want to get information about package files"
-                OpenFileDialog1.Title = "Locate package files"
-                SearchBox1.cueBanner = "Type here to search for a package..."
-            Case 2
-                Text = "Obtener información de paquetes"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "¿Acerca de qué le gustaría obtener información?"
-                Label3.Text = "Haga clic aquí para obtener información de paquetes que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
-                Label4.Text = "Haga clic aquí para obtener información de paquetes que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de paquetes"
-                Label5.Text = "Listo"
-                Label6.Text = "Añada o seleccione un archivo de paquete para ver su información aquí"
-                Label7.Text = "Información de paquete"
-                Label8.Text = "Nombre de paquete:"
-                Label10.Text = "¿El paquete es aplicable?"
-                Label12.Text = "Copyright:"
-                Label14.Text = "Versión de producto:"
-                Label16.Text = "Tipo de paquete:"
-                Label18.Text = "Compañía:"
-                Label20.Text = "Tiempo de creación:"
-                Label22.Text = "Nombre de paquete:"
-                Label24.Text = "¿El paquete es aplicable?"
-                Label26.Text = "Copyright:"
-                Label28.Text = "Tiempo de instalación:"
-                Label30.Text = "Último tiempo de actualización:"
-                Label31.Text = "Compañía:"
-                Label33.Text = "Nombre del paquete de instalación:"
-                Label36.Text = "Información de paquete"
-                Label37.Text = "Seleccione un paquete instalado para ver su información aquí"
-                Label39.Text = "Nombre a mostrar:"
-                Label41.Text = "Tiempo de creación:"
-                Label43.Text = "Descripción:"
-                Label45.Text = "Nombre de producto:"
-                Label47.Text = "Cliente de instalación:"
-                Label48.Text = "¿Se requiere un reinicio?"
-                Label50.Text = "Información de soporte:"
-                Label52.Text = "Estado:"
-                Label54.Text = "¿Se requiere un arranque para una instalación completa?"
-                Label58.Text = "Propiedades personalizadas:"
-                Label60.Text = "Características:"
-                Label61.Text = "Identidad de funcionalidad:"
-                Label63.Text = "Descripción:"
-                Label65.Text = "Cliente de instalación:"
-                Label67.Text = "Nombre del paquete de instalación:"
-                Label69.Text = "Tiempo de instalación:"
-                Label71.Text = "Último tiempo de actualización:"
-                Label73.Text = "Nombre a mostrar:"
-                Label75.Text = "Nombre de producto:"
-                Label77.Text = "Versión de producto:"
-                Label79.Text = "Tipo de paquete:"
-                Label81.Text = "¿Se requiere un reinicio?"
-                Label83.Text = "Información de soporte:"
-                Label85.Text = "Estado:"
-                Label87.Text = "¿Se requiere un arranque para una instalación completa?"
-                Label89.Text = "Identidad de funcionalidad:"
-                Label91.Text = "Propiedades personalizadas:"
-                Label93.Text = "Características:"
-                LinkLabel1.Text = "<- Atrás"
-                Button1.Text = "Añadir paquete..."
-                Button2.Text = "Eliminar selección"
-                Button3.Text = "Eliminar todo"
-                Button4.Text = "Guardar..."
-                InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
-                PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
-                OpenFileDialog1.Title = "Ubique los archivos de paquetes"
-                SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
-            Case 3
-                Text = "Obtenir des informations sur les paquets"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Sur quoi souhaitez-vous obtenir des informations ?"
-                Label3.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous avez installés ou qui sont fournis avec l'image Windows dont vous assurez la maintenance."
-                Label4.Text = "Cliquez ici pour obtenir des informations sur les paquets que vous souhaitez ajouter à l'image Windows que vous maintenez avant de procéder à l'ajout de paquets."
-                Label5.Text = "Prêt"
-                Label6.Text = "Ajoutez ou sélectionnez un fichier de paquet pour afficher son information ici"
-                Label7.Text = "Information sur le paquet"
-                Label8.Text = "Nom du paquet :"
-                Label10.Text = "Le paquet est-il applicable ?"
-                Label12.Text = "Copyright :"
-                Label14.Text = "Version du produit :"
-                Label16.Text = "Type de publication :"
-                Label18.Text = "Enterprise :"
-                Label20.Text = "Temps de création :"
-                Label22.Text = "Nom du paquet :"
-                Label24.Text = "Le paquet est-il applicable ?"
-                Label26.Text = "Copyright :"
-                Label28.Text = "Temps d'installation :"
-                Label30.Text = "Dernière heure de mise à jour :"
-                Label31.Text = "Enterprise :"
-                Label33.Text = "Nom du paquet d'installation :"
-                Label36.Text = "Information sur le paquet"
-                Label37.Text = "Sélectionnez un paquet installé pour afficher son information ici"
-                Label39.Text = "Nom d'affichage:"
-                Label41.Text = "Temps de création :"
-                Label43.Text = "Description :"
-                Label45.Text = "Nom du produit :"
-                Label47.Text = "Client d'installation :"
-                Label48.Text = "Un redémarrage est-il nécessaire ?"
-                Label50.Text = "Information de support :"
-                Label52.Text = "État :"
-                Label54.Text = "L'installation complète nécessite-t-elle un démarrage ?"
-                Label58.Text = "Propriétés personnalisées :"
-                Label60.Text = "Caractéristiques :"
-                Label61.Text = "Identité de la capacité :"
-                Label63.Text = "Description :"
-                Label65.Text = "Client d'installation :"
-                Label67.Text = "Nom du paquet d'installation :"
-                Label69.Text = "Temps d'installation :"
-                Label71.Text = "Dernière heure de mise à jour :"
-                Label73.Text = "Nom d'affichage :"
-                Label75.Text = "Nom du produit :"
-                Label77.Text = "Version du produit :"
-                Label79.Text = "Type de publication :"
-                Label81.Text = "Un redémarrage est-il nécessaire ?"
-                Label83.Text = "Information de support :"
-                Label85.Text = "État:"
-                Label87.Text = "L'installation complète nécessite-t-elle un démarrage ?"
-                Label89.Text = "Identité de la capacité :"
-                Label91.Text = "Propriétés personnalisées :"
-                Label93.Text = "Caractéristiques :"
-                LinkLabel1.Text = "<- Retour"
-                Button1.Text = "Ajouter un paquet..."
-                Button2.Text = "Supprimer la sélection"
-                Button3.Text = "Supprimer tout"
-                Button4.Text = "Sauvegarder..."
-                InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
-                PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
-                OpenFileDialog1.Title = "Localiser les fichiers des paquets"
-                SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
-            Case 4
-                Text = "Obter informações sobre o pacote"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Sobre o que é que pretende obter informações?"
-                Label3.Text = "Clique aqui para obter informações sobre os pacotes que instalou ou que vieram com a imagem do Windows que está a reparar"
-                Label4.Text = "Clique aqui para obter informações sobre os pacotes que pretende adicionar à imagem do Windows que está a reparar antes de prosseguir com o processo de adição de pacotes"
-                Label5.Text = "Pronto"
-                Label6.Text = "Adicione ou seleccione um ficheiro de pacote para ver as suas informações aqui"
-                Label7.Text = "Informações do pacote"
-                Label8.Text = "Nome do pacote:"
-                Label10.Text = "O pacote é aplicável?"
-                Label12.Text = "Direitos de autor:"
-                Label14.Text = "Versão do produto:"
-                Label16.Text = "Tipo de versão:"
-                Label18.Text = "Empresa:"
-                Label20.Text = "Hora de criação:"
-                Label22.Text = "Nome do pacote:"
-                Label24.Text = "O pacote é aplicável?"
-                Label26.Text = "Direitos de autor:"
-                Label28.Text = "Hora de instalação:"
-                Label30.Text = "Hora da última atualização:"
-                Label31.Text = "Empresa:"
-                Label33.Text = "Nome do pacote de instalação:"
-                Label36.Text = "Informações do pacote"
-                Label37.Text = "Seleccione um pacote instalado para ver as suas informações aqui"
-                Label39.Text = "Nome de apresentação:"
-                Label41.Text = "Hora de criação:"
-                Label43.Text = "Descrição:"
-                Label45.Text = "Nome do produto:"
-                Label47.Text = "Instalar cliente:"
-                Label48.Text = "É necessário reiniciar?"
-                Label50.Text = "Informações de suporte:"
-                Label52.Text = "Estado:"
-                Label54.Text = "É necessário um arranque para a instalação completa?"
-                Label58.Text = "Propriedades personalizadas:"
-                Label60.Text = "Características:"
-                Label61.Text = "Identidade da capacidade:"
-                Label63.Text = "Descrição:"
-                Label65.Text = "Instalar cliente:"
-                Label67.Text = "Nome do pacote de instalação:"
-                Label69.Text = "Hora da instalação:"
-                Label71.Text = "Hora da última atualização:"
-                Label73.Text = "Nome do ecrã:"
-                Label75.Text = "Nome do produto:"
-                Label77.Text = "Versão do produto:"
-                Label79.Text = "Tipo de versão:"
-                Label81.Text = "É necessário reiniciar o sistema?"
-                Label83.Text = "Informações de suporte:"
-                Label85.Text = "Estado:"
-                Label87.Text = "É necessário um arranque para uma instalação completa?"
-                Label89.Text = "Identidade da capacidade:"
-                Label91.Text = "Propriedades personalizadas:"
-                Label93.Text = "Características:"
-                LinkLabel1.Text = "<- Voltar atrás"
-                Button1.Text = "Adicionar pacote..."
-                Button2.Text = "Remover selecionado"
-                Button3.Text = "Remover tudo"
-                Button4.Text = "Guardar..."
-                InstalledPackageLink.Text = "Pretendo obter informações sobre os pacotes instalados na imagem"
-                PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
-                OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
-                SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
-            Case 5
-                Text = "Ottieni informazioni sui pacchetti"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Su cosa vuoi ottenere informazioni?"
-                Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
-                Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
-                Label5.Text = "Pronto"
-                Label6.Text = "Aggiungere o selezionare un file di pacchetto per visualizzarne le informazioni"
-                Label7.Text = "Informazioni sul pacchetto"
-                Label8.Text = "Nome del pacchetto:"
-                Label10.Text = "Il pacchetto è applicabile?"
-                Label12.Text = "Copyright:"
-                Label14.Text = "Versione del prodotto:"
-                Label16.Text = "Tipo di rilascio:"
-                Label18.Text = "Azienda:"
-                Label20.Text = "Tempo di creazione:"
-                Label22.Text = "Nome del pacchetto:"
-                Label24.Text = "Il pacchetto è applicabile?"
-                Label26.Text = "Copyright:"
-                Label28.Text = "Tempo di installazione:"
-                Label30.Text = "Ora ultimo aggiornamento:"
-                Label31.Text = "Azienda:"
-                Label33.Text = "Nome del pacchetto di installazione:"
-                Label36.Text = "Informazioni sul pacchetto"
-                Label37.Text = "Selezionare un pacchetto installato per visualizzarne le informazioni"
-                Label39.Text = "Nome visualizzato:"
-                Label41.Text = "Ora di creazione:"
-                Label43.Text = "Descrizione:"
-                Label45.Text = "Nome del prodotto:"
-                Label47.Text = "Client di installazione:"
-                Label48.Text = "È necessario un riavvio?"
-                Label50.Text = "Informazioni di supporto:"
-                Label52.Text = "Stato:"
-                Label54.Text = "È richiesto un avvio per l'installazione completa?"
-                Label58.Text = "Proprietà personalizzate:"
-                Label60.Text = "Caratteristiche:"
-                Label61.Text = "Identità della capacità:"
-                Label63.Text = "Descrizione:"
-                Label65.Text = "Installa client:"
-                Label67.Text = "Nome pacchetto di installazione:"
-                Label69.Text = "Tempo di installazione:"
-                Label71.Text = "Ora ultimo aggiornamento:"
-                Label73.Text = "Nome del display:"
-                Label75.Text = "Nome prodotto:"
-                Label77.Text = "Versione del prodotto:"
-                Label79.Text = "Tipo di rilascio:"
-                Label81.Text = "È necessario un riavvio?"
-                Label83.Text = "Informazioni di supporto:"
-                Label85.Text = "Stato:"
-                Label87.Text = "È richiesto un avvio per l'installazione completa?"
-                Label89.Text = "Identità di capacità:"
-                Label91.Text = "Proprietà personalizzate:"
-                Label93.Text = "Caratteristiche:"
-                LinkLabel1.Text = "<- Indietro"
-                Button1.Text = "Aggiungi pacchetto..."
-                Button2.Text = "Rimuovi selezionati"
-                Button3.Text = "Rimuovi tutti"
-                Button4.Text = "Salva..."
-                InstalledPackageLink.Text = "Voglio ottenere informazioni sui pacchetti installati nell'immagine"
-                PackageFileLink.Text = "Voglio ottenere informazioni sui file dei pacchetti"
-                OpenFileDialog1.Title = "Individuare i file dei pacchetti"
-                SearchBox1.cueBanner = "Digitare qui per cercare un pacchetto..."
-        End Select
+        Text = LocalizationService.ForSection("GetPkgInfo")("Package.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("GetPkgInfo").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("GetPkgInfo")("Get.Label")
+        Label3.Text = LocalizationService.ForSection("GetPkgInfo")("Get.Packages.Message")
+        Label4.Text = LocalizationService.ForSection("GetPkgInfo")("AddPackages.Help.Message")
+        Label5.Text = LocalizationService.ForSection("GetPkgInfo")("Ready.Label")
+        Label6.Text = LocalizationService.ForSection("GetPkgInfo")("Add.Package.File.Label")
+        Label7.Text = LocalizationService.ForSection("GetPkgInfo")("PackageInfo.Label")
+        Label8.Text = LocalizationService.ForSection("GetPkgInfo")("PackageName.Label")
+        Label10.Text = LocalizationService.ForSection("GetPkgInfo")("Package.Applicable.Label")
+        Label12.Text = LocalizationService.ForSection("GetPkgInfo")("Copyright.Label")
+        Label14.Text = LocalizationService.ForSection("GetPkgInfo")("ProductVersion.Label")
+        Label16.Text = LocalizationService.ForSection("GetPkgInfo")("ReleaseType.Label")
+        Label18.Text = LocalizationService.ForSection("GetPkgInfo")("Company.Label")
+        Label20.Text = LocalizationService.ForSection("GetPkgInfo")("CreationTime.Label")
+        Label22.Text = LocalizationService.ForSection("GetPkgInfo")("PackageName.Label")
+        Label24.Text = LocalizationService.ForSection("GetPkgInfo")("Package.Applicable.Label")
+        Label26.Text = LocalizationService.ForSection("GetPkgInfo")("Copyright.Label")
+        Label28.Text = LocalizationService.ForSection("GetPkgInfo")("InstallTime.Label")
+        Label30.Text = LocalizationService.ForSection("GetPkgInfo")("Last.Update.Time.Label")
+        Label31.Text = LocalizationService.ForSection("GetPkgInfo")("Company.Label")
+        Label33.Text = LocalizationService.ForSection("GetPkgInfo")("Install.Package.Name.Label")
+        Label36.Text = LocalizationService.ForSection("GetPkgInfo")("PackageInfo.Label")
+        Label37.Text = LocalizationService.ForSection("GetPkgInfo")("Installed.Package.View.Label")
+        Label39.Text = LocalizationService.ForSection("GetPkgInfo")("DisplayName.Label")
+        Label41.Text = LocalizationService.ForSection("GetPkgInfo")("CreationTime.Label")
+        Label43.Text = LocalizationService.ForSection("GetPkgInfo")("Description.Label")
+        Label45.Text = LocalizationService.ForSection("GetPkgInfo")("ProductName.Label")
+        Label47.Text = LocalizationService.ForSection("GetPkgInfo")("InstallClient.Label")
+        Label48.Text = LocalizationService.ForSection("GetPkgInfo")("RestartRequired.Label")
+        Label50.Text = LocalizationService.ForSection("GetPkgInfo")("SupportInfo.Label")
+        Label52.Text = LocalizationService.ForSection("GetPkgInfo")("State.Label")
+        Label54.Text = LocalizationService.ForSection("GetPkgInfo")("Boot.Up.Required.Label")
+        Label58.Text = LocalizationService.ForSection("GetPkgInfo")("CustomProps.Label")
+        Label60.Text = LocalizationService.ForSection("GetPkgInfo")("Features.Label")
+        Label61.Text = LocalizationService.ForSection("GetPkgInfo")("Capability.Identity.Label")
+        Label63.Text = LocalizationService.ForSection("GetPkgInfo")("Description.Label")
+        Label65.Text = LocalizationService.ForSection("GetPkgInfo")("InstallClient.Label")
+        Label67.Text = LocalizationService.ForSection("GetPkgInfo")("Install.Package.Name.Label")
+        Label69.Text = LocalizationService.ForSection("GetPkgInfo")("InstallTime.Label")
+        Label71.Text = LocalizationService.ForSection("GetPkgInfo")("Last.Update.Time.Label")
+        Label73.Text = LocalizationService.ForSection("GetPkgInfo")("DisplayName.Label")
+        Label75.Text = LocalizationService.ForSection("GetPkgInfo")("ProductName.Label")
+        Label77.Text = LocalizationService.ForSection("GetPkgInfo")("ProductVersion.Label")
+        Label79.Text = LocalizationService.ForSection("GetPkgInfo")("ReleaseType.Label")
+        Label81.Text = LocalizationService.ForSection("GetPkgInfo")("RestartRequired.Label")
+        Label83.Text = LocalizationService.ForSection("GetPkgInfo")("SupportInfo.Label")
+        Label85.Text = LocalizationService.ForSection("GetPkgInfo")("State.Label")
+        Label87.Text = LocalizationService.ForSection("GetPkgInfo")("Boot.Up.Required.Label")
+        Label89.Text = LocalizationService.ForSection("GetPkgInfo")("Capability.Identity.Label")
+        Label91.Text = LocalizationService.ForSection("GetPkgInfo")("CustomProps.Label")
+        Label93.Text = LocalizationService.ForSection("GetPkgInfo")("Features.Label")
+        LinkLabel1.Text = LocalizationService.ForSection("GetPkgInfo")("GoBack.Link")
+        Button1.Text = LocalizationService.ForSection("GetPkgInfo")("AddPackage.Button")
+        Button2.Text = LocalizationService.ForSection("GetPkgInfo")("RemoveSelected.Button")
+        Button3.Text = LocalizationService.ForSection("GetPkgInfo")("RemoveAll.Button")
+        Button4.Text = LocalizationService.ForSection("GetPkgInfo")("Save.Button")
+        InstalledPackageLink.Text = LocalizationService.ForSection("GetPkgInfo")("Iwant.Link")
+        PackageFileLink.Text = LocalizationService.ForSection("GetPkgInfo")("PackageFile.Link")
+        OpenFileDialog1.Title = LocalizationService.ForSection("GetPkgInfo")("Locate.Package.Files.Title")
+        SearchBox1.cueBanner = LocalizationService.ForSection("GetPkgInfo")("Type.Search.Package.Label")
         ListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
         If SplitContainer1.SplitterDistance = 440 Then
@@ -710,57 +146,9 @@ Public Class GetPkgInfoDlg
                 If MainForm.ImgBW.IsBusy Then
                     DynaLog.LogMessage("Background processes are busy. Stopping them...")
                     Dim msg As String = ""
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
-                                Case "ESN"
-                                    msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
-                                Case "FRA"
-                                    msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
-                                Case "PTB", "PTG"
-                                    msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
-                                Case "ITA"
-                                    msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
-                            End Select
-                        Case 1
-                            msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
-                        Case 2
-                            msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
-                        Case 3
-                            msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
-                        Case 4
-                            msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
-                        Case 5
-                            msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
-                    End Select
+                    msg = LocalizationService.ForSection("GetPkgInfo.PackageList")("Wait.Background.Message")
                     MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label5.Text = "Waiting for background processes to finish..."
-                                Case "ESN"
-                                    Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
-                                Case "FRA"
-                                    Label5.Text = "Attente de la fin des processus en arrière plan..."
-                                Case "PTB", "PTG"
-                                    Label5.Text = "À espera que os processos em segundo plano terminem..."
-                                Case "ITA"
-                                    Label5.Text = "In attesa che i processi in secondo piano finiscano..."
-                            End Select
-                        Case 1
-                            Label5.Text = "Waiting for background processes to finish..."
-                        Case 2
-                            Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
-                        Case 3
-                            Label5.Text = "Attente de la fin des processus en arrière plan..."
-                        Case 4
-                            Label5.Text = "À espera que os processos em segundo plano terminem..."
-                        Case 5
-                            Label5.Text = "In attesa che i processi in secondo piano finiscano..."
-                    End Select
+                    Label5.Text = LocalizationService.ForSection("GetPkgInfo.PackageList")("Waiting.Background.Label")
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
                         Thread.Sleep(500)
@@ -770,31 +158,7 @@ Public Class GetPkgInfoDlg
                 cPropPathView.Nodes.Clear()
                 cPropName.Text = ""
                 cPropValue.Text = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label5.Text = "Preparing to get package information..."
-                            Case "ESN"
-                                Label5.Text = "Preparándonos para obtener información del paquete..."
-                            Case "FRA"
-                                Label5.Text = "Préparation de l'obtention des informations du paquet en cours..."
-                            Case "PTB", "PTG"
-                                Label5.Text = "Preparar-se para obter informações sobre o pacote..."
-                            Case "ITA"
-                                Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
-                        End Select
-                    Case 1
-                        Label5.Text = "Preparing to get package information..."
-                    Case 2
-                        Label5.Text = "Preparándonos para obtener información del paquete..."
-                    Case 3
-                        Label5.Text = "Préparation de l'obtention des informations du paquet en cours..."
-                    Case 4
-                        Label5.Text = "Preparar-se para obter informações sobre o pacote..."
-                    Case 5
-                        Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
-                End Select
+                Label5.Text = LocalizationService.ForSection("GetPkgInfo.PackageList")("Preparing.Package.Item")
                 Application.DoEvents()
                 Try
                     DynaLog.LogMessage("Initializing API...")
@@ -802,31 +166,7 @@ Public Class GetPkgInfoDlg
                     DynaLog.LogMessage("Creating session...")
                     Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                         DynaLog.LogMessage("Package to get information about: " & Quote & ListBox2.SelectedItem & Quote)
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                    Case "ESN"
-                                        Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                    Case "FRA"
-                                        Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
-                                    Case "PTB", "PTG"
-                                        Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                    Case "ITA"
-                                        Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                End Select
-                            Case 1
-                                Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
-                            Case 2
-                                Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                            Case 3
-                                Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
-                            Case 4
-                                Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                            Case 5
-                                Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
-                        End Select
+                        Label5.Text = LocalizationService.ForSection("GetPkgInfo.PackageList").Format("GettingInfo.Item", ListBox2.SelectedItem)
                         Dim PkgInfoEx As DismPackageInfoEx = Nothing
                         Dim PkgInfo As DismPackageInfo = Nothing
                         ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
@@ -840,7 +180,7 @@ Public Class GetPkgInfoDlg
                             PkgInfo = DismApi.GetPackageInfoByName(imgSession, ListBox2.SelectedItem)
                         End If
                         Label23.Text = If(OSVer.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
-                        Label25.Text = Casters.CastDismApplicabilityStatus(If(OSVer.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
+                        Label25.Text = Casters.Applicability(If(OSVer.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
                         Label35.Text = If(OSVer.Major >= 10, PkgInfoEx.Copyright, PkgInfo.Copyright)
                         Label32.Text = If(OSVer.Major >= 10, PkgInfoEx.Company, PkgInfo.Company)
                         Label40.Text = If(OSVer.Major >= 10, PkgInfoEx.CreationTime, PkgInfo.CreationTime)
@@ -870,7 +210,7 @@ Public Class GetPkgInfoDlg
                         Label13.Text = Casters.CastDismRestartType(If(OSVer.Major >= 10, PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
                         Label49.Text = If(OSVer.Major >= 10, PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
                         Label51.Text = Casters.CastDismPackageState(If(OSVer.Major >= 10, PkgInfoEx.PackageState, PkgInfo.PackageState), True)
-                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(OSVer.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
+                        Label53.Text = Casters.OfflineInstallType(If(OSVer.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
                         If OSVer.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
                         Label57.Text = ""
                         Dim cProps As DismCustomPropertyCollection = If(OSVer.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
@@ -884,58 +224,10 @@ Public Class GetPkgInfoDlg
                                 cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                             Next
                             PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            cPropValue.Text = "Please select or expand an entry."
-                                        Case "ESN"
-                                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                        Case "FRA"
-                                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                        Case "PTB", "PTG"
-                                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                        Case "ITA"
-                                            cPropValue.Text = "Selezionare o espandere un elemento."
-                                    End Select
-                                Case 1
-                                    cPropValue.Text = "Please select or expand an entry."
-                                Case 2
-                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                Case 3
-                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                Case 4
-                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                Case 5
-                                    cPropValue.Text = "Selezionare o espandere un elemento."
-                            End Select
+                            cPropValue.Text = LocalizationService.ForSection("GetPkgInfo.PackageList")("Expand.Entry.Label")
                         Else
                             DynaLog.LogMessage("This package does not have custom properties.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label57.Text = "None"
-                                        Case "ESN"
-                                            Label57.Text = "Ninguna"
-                                        Case "FRA"
-                                            Label57.Text = "Aucune"
-                                        Case "PTB", "PTG"
-                                            Label57.Text = "Nenhum"
-                                        Case "ITA"
-                                            Label57.Text = "Nessuno"
-                                    End Select
-                                Case 1
-                                    Label57.Text = "None"
-                                Case 2
-                                    Label57.Text = "Ninguna"
-                                Case 3
-                                    Label57.Text = "Aucune"
-                                Case 4
-                                    Label57.Text = "Nenhum"
-                                Case 5
-                                    Label57.Text = "Nessuno"
-                            End Select
+                            Label57.Text = LocalizationService.ForSection("GetPkgInfo.PackageList")("None.Label")
                             Label57.Visible = True
                             CPropViewer.Visible = False
                         End If
@@ -950,60 +242,12 @@ Public Class GetPkgInfoDlg
                             Next
                         Else
                             DynaLog.LogMessage("This package does not have features.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label59.Text = "None"
-                                        Case "ESN"
-                                            Label59.Text = "Ninguna"
-                                        Case "FRA"
-                                            Label59.Text = "Aucune"
-                                        Case "PTB", "PTG"
-                                            Label59.Text = "Nenhum"
-                                        Case "ITA"
-                                            Label59.Text = "Nessuno"
-                                    End Select
-                                Case 1
-                                    Label59.Text = "None"
-                                Case 2
-                                    Label59.Text = "Ninguna"
-                                Case 3
-                                    Label59.Text = "Aucune"
-                                Case 4
-                                    Label59.Text = "Nenhum"
-                                Case 5
-                                    Label59.Text = "Nessuno"
-                            End Select
+                            Label59.Text = LocalizationService.ForSection("GetPkgInfo.PackageList")("None.Label")
                         End If
                     End Using
                     Panel4.Visible = True
                     Panel7.Visible = False
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label5.Text = "Ready"
-                                Case "ESN"
-                                    Label5.Text = "Listo"
-                                Case "FRA"
-                                    Label5.Text = "Prêt"
-                                Case "PTB", "PTG"
-                                    Label5.Text = "Pronto"
-                                Case "ITA"
-                                    Label5.Text = "Pronto"
-                            End Select
-                        Case 1
-                            Label5.Text = "Ready"
-                        Case 2
-                            Label5.Text = "Listo"
-                        Case 3
-                            Label5.Text = "Prêt"
-                        Case 4
-                            Label5.Text = "Pronto"
-                        Case 5
-                            Label5.Text = "Pronto"
-                    End Select
+                    Label5.Text = LocalizationService.ForSection("GetPkgInfo.PackageList")("Ready.Item")
                 Finally
                     Try
                         DismApi.Shutdown()
@@ -1069,31 +313,7 @@ Public Class GetPkgInfoDlg
             DynaLog.LogMessage("Value of selected custom property: " & selectedNode.Tag.ToString())
             cPropValue.Text = selectedNode.Tag.ToString()
         Else
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
-                        Case "ESN"
-                            cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
-                        Case "FRA"
-                            cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
-                        Case "PTB", "PTG"
-                            cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
-                        Case "ITA"
-                            cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sottovoci, espandetelo."
-                    End Select
-                Case 1
-                    cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
-                Case 2
-                    cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
-                Case 3
-                    cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
-                Case 4
-                    cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
-                Case 5
-                    cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sottovoci, espandetelo."
-            End Select
+            cPropValue.Text = LocalizationService.ForSection("GetPkgInfo.PropertyPath")("SelectedValue.Message")
         End If
     End Sub
 
@@ -1108,88 +328,16 @@ Public Class GetPkgInfoDlg
             If MainForm.ImgBW.IsBusy Then
                 DynaLog.LogMessage("Background processes are busy. Stopping them...")
                 Dim msg As String = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
-                            Case "ESN"
-                                msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
-                            Case "FRA"
-                                msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
-                            Case "PTB", "PTG"
-                                msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
-                            Case "ITA"
-                                msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
-                        End Select
-                    Case 1
-                        msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
-                    Case 2
-                        msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
-                    Case 3
-                        msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
-                    Case 4
-                        msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
-                    Case 5
-                        msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
-                End Select
+                msg = LocalizationService.ForSection("PackageInfo.File")("Wait.Background.Message")
                 MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label5.Text = "Waiting for background processes to finish..."
-                            Case "ESN"
-                                Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
-                            Case "FRA"
-                                Label5.Text = "Attente de la fin des processus en arrière plan..."
-                            Case "PTB", "PTG"
-                                Label5.Text = "À espera que os processos em segundo plano terminem..."
-                            Case "ITA"
-                                Label5.Text = "In attesa che i processi in secondo piano finiscano..."
-                        End Select
-                    Case 1
-                        Label5.Text = "Waiting for background processes to finish..."
-                    Case 2
-                        Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
-                    Case 3
-                        Label5.Text = "Attente de la fin des processus en arrière plan..."
-                    Case 4
-                        Label5.Text = "À espera que os processos em segundo plano terminem..."
-                    Case 5
-                        Label5.Text = "In attesa che i processi in secondo piano finiscano..."
-                End Select
+                Label5.Text = LocalizationService.ForSection("PackageInfo.File")("Waiting.Background.Label")
                 While MainForm.ImgBW.IsBusy
                     Application.DoEvents()
                     Thread.Sleep(500)
                 End While
             End If
             MainForm.StopMountedImageDetector()
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label5.Text = "Preparing package information processes..."
-                        Case "ESN"
-                            Label5.Text = "Preparando procesos de información de paquetes..."
-                        Case "FRA"
-                            Label5.Text = "Préparation des processus d'information des paquets en cours..."
-                        Case "PTB", "PTG"
-                            Label5.Text = "Preparar os processos de informação dos pacotes..."
-                        Case "ITA"
-                            Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
-                    End Select
-                Case 1
-                    Label5.Text = "Preparing package information processes..."
-                Case 2
-                    Label5.Text = "Preparando procesos de información de paquetes..."
-                Case 3
-                    Label5.Text = "Préparation des processus d'information des paquets en cours..."
-                Case 4
-                    Label5.Text = "Preparar os processos de informação dos pacotes..."
-                Case 5
-                    Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
-            End Select
+            Label5.Text = LocalizationService.ForSection("PackageInfo.File")("Preparing.Item")
             Application.DoEvents()
             Try
                 DynaLog.LogMessage("Initializing API...")
@@ -1201,31 +349,7 @@ Public Class GetPkgInfoDlg
                             DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(pkgFile) & Quote)
                             If File.Exists(pkgFile) Then
                                 DynaLog.LogMessage("Package file exists.")
-                                Select Case MainForm.Language
-                                    Case 0
-                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENU", "ENG"
-                                                Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
-                                            Case "ESN"
-                                                Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
-                                            Case "FRA"
-                                                Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
-                                            Case "PTB", "PTG"
-                                                Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
-                                            Case "ITA"
-                                                Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
-                                        End Select
-                                    Case 1
-                                        Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
-                                    Case 2
-                                        Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
-                                    Case 3
-                                        Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
-                                    Case 4
-                                        Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
-                                    Case 5
-                                        Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
-                                End Select
+                                Label5.Text = LocalizationService.ForSection("PackageInfo.File").Format("Loading.Package.Message", Path.GetFileName(pkgFile))
                                 Application.DoEvents()
                                 Dim pkgInfoEx As DismPackageInfoEx = Nothing
                                 Dim pkgInfo As DismPackageInfo = Nothing
@@ -1247,7 +371,7 @@ Public Class GetPkgInfoDlg
                 End Using
             Catch DISMEx As DismException
                 DynaLog.LogMessage("Could not get package file information. Error message: " & DISMEx.Message)
-                MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+                MsgBox(DISMEx.Message & String.Format(LocalizationService.ForSection("GetPkgInfo.Messages")("Hresult.Label"), Hex(DISMEx.HResult)), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 Try
                     DismApi.Shutdown()
@@ -1259,31 +383,7 @@ Public Class GetPkgInfoDlg
             ' Cancel it
         End Try
         DynaLog.LogMessage("This process has finished.")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label5.Text = "Ready"
-                    Case "ESN"
-                        Label5.Text = "Listo"
-                    Case "FRA"
-                        Label5.Text = "Prêt"
-                    Case "PTB", "PTG"
-                        Label5.Text = "Pronto"
-                    Case "ITA"
-                        Label5.Text = "Pronto"
-                End Select
-            Case 1
-                Label5.Text = "Ready"
-            Case 2
-                Label5.Text = "Listo"
-            Case 3
-                Label5.Text = "Prêt"
-            Case 4
-                Label5.Text = "Pronto"
-            Case 5
-                Label5.Text = "Pronto"
-        End Select
+        Label5.Text = LocalizationService.ForSection("PackageInfo.File")("Ready.Item")
         WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
@@ -1291,7 +391,7 @@ Public Class GetPkgInfoDlg
         DynaLog.LogMessage("Displaying information of a specific package file...")
         DynaLog.LogMessage("Index of Selected Package File: " & PkgFile)
         Label9.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).PackageName, PackageInfoList(PkgFile).PackageName)
-        Label11.Text = Casters.CastDismApplicabilityStatus(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
+        Label11.Text = Casters.Applicability(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
         Label17.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Copyright, PackageInfoList(PkgFile).Copyright)
         Label19.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Company, PackageInfoList(PkgFile).Company)
         Label62.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).CreationTime, PackageInfoList(PkgFile).CreationTime)
@@ -1307,7 +407,7 @@ Public Class GetPkgInfoDlg
         Label82.Text = Casters.CastDismRestartType(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).RestartRequired, PackageInfoList(PkgFile).RestartRequired), True)
         Label84.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).SupportInformation, PackageInfoList(PkgFile).SupportInformation)
         Label86.Text = Casters.CastDismPackageState(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).PackageState, PackageInfoList(PkgFile).PackageState), True)
-        Label88.Text = Casters.CastDismFullyOfflineInstallationType(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).FullyOffline, PackageInfoList(PkgFile).FullyOffline), True)
+        Label88.Text = Casters.OfflineInstallType(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).FullyOffline, PackageInfoList(PkgFile).FullyOffline), True)
         If OSVer.Major >= 10 Then Label90.Text = PackageInfoExList(PkgFile).CapabilityId Else Label90.Text = ""
         Label92.Text = ""
         Dim cProps As DismCustomPropertyCollection = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).CustomProperties, PackageInfoList(PkgFile).CustomProperties)
@@ -1319,31 +419,7 @@ Public Class GetPkgInfoDlg
             Next
         Else
             DynaLog.LogMessage("This package does not have custom properties.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label92.Text = "None"
-                        Case "ESN"
-                            Label92.Text = "Ninguna"
-                        Case "FRA"
-                            Label92.Text = "Aucune"
-                        Case "PTB", "PTG"
-                            Label92.Text = "Nenhum"
-                        Case "ITA"
-                            Label92.Text = "Nessuno"
-                    End Select
-                Case 1
-                    Label92.Text = "None"
-                Case 2
-                    Label92.Text = "Ninguna"
-                Case 3
-                    Label92.Text = "Aucune"
-                Case 4
-                    Label92.Text = "Nenhum"
-                Case 5
-                    Label92.Text = "Nessuno"
-            End Select
+            Label92.Text = LocalizationService.ForSection("PackageInfo.Display")("None.Label")
         End If
         Label94.Text = ""
         Dim pkgFeats As DismFeatureCollection = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Features, PackageInfoList(PkgFile).Features)
@@ -1356,31 +432,7 @@ Public Class GetPkgInfoDlg
             Next
         Else
             DynaLog.LogMessage("This package does not have features.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label94.Text = "None"
-                        Case "ESN"
-                            Label94.Text = "Ninguna"
-                        Case "FRA"
-                            Label94.Text = "Aucune"
-                        Case "PTB", "PTG"
-                            Label94.Text = "Nenhum"
-                        Case "ITA"
-                            Label94.Text = "Nessuno"
-                    End Select
-                Case 1
-                    Label94.Text = "None"
-                Case 2
-                    Label94.Text = "Ninguna"
-                Case 3
-                    Label94.Text = "Aucune"
-                Case 4
-                    Label94.Text = "Nenhum"
-                Case 5
-                    Label94.Text = "Nessuno"
-            End Select
+            Label94.Text = LocalizationService.ForSection("PackageInfo.Display")("None.Label")
         End If
     End Sub
 

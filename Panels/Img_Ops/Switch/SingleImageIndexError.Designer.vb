@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SingleImageIndexError
     Inherits System.Windows.Forms.Form
 
@@ -66,8 +66,7 @@ Partial Class SingleImageIndexError
         Me.LinkLabel1.Size = New System.Drawing.Size(599, 42)
         Me.LinkLabel1.TabIndex = 12
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "To know more about the indexes of an image, or some of its specific properties, g" & _
-    "o to ""Commands > Image management > Get image information"", or click here"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.SingleImageIndex")("Know.Indexes.Message")
         Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'Panel2
@@ -101,7 +100,7 @@ Partial Class SingleImageIndexError
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.SingleImageIndex")("Ok.Button")
         '
         'Label2
         '
@@ -110,8 +109,7 @@ Partial Class SingleImageIndexError
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 56)
         Me.Label2.TabIndex = 11
-        Me.Label2.Text = "You cannot switch to other indexes. If you want to save the image changes, you ca" & _
-    "n do so using a new, separate index."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.SingleImageIndex")("Cannot.Switch.Message")
         '
         'Label1
         '
@@ -121,7 +119,7 @@ Partial Class SingleImageIndexError
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 10
-        Me.Label1.Text = "This image seems to have only one index"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.SingleImageIndex")("Image.Seems.Only.Label")
         '
         'SingleImageIndexError
         '
@@ -141,7 +139,7 @@ Partial Class SingleImageIndexError
         Me.Name = "SingleImageIndexError"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.SingleImageIndex")("DISMTools.Label")
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)

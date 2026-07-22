@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class FfuOptimize
     Inherits System.Windows.Forms.Form
 
@@ -62,7 +62,7 @@ Partial Class FfuOptimize
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -73,7 +73,7 @@ Partial Class FfuOptimize
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Cancel.Button")
         '
         'ImageTaskHeader1
         '
@@ -96,7 +96,7 @@ Partial Class FfuOptimize
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 26
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -113,7 +113,7 @@ Partial Class FfuOptimize
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(113, 13)
         Me.Label1.TabIndex = 23
-        Me.Label1.Text = "Image file to optimize:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.FFUOptimize")("ImageFile.Label")
         '
         'CheckBox1
         '
@@ -122,7 +122,7 @@ Partial Class FfuOptimize
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(386, 17)
         Me.CheckBox1.TabIndex = 27
-        Me.CheckBox1.Text = "Optimize a partition other than the default partition in the specified FFU file"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Default.Partition.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Panel1
@@ -142,7 +142,7 @@ Partial Class FfuOptimize
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(90, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Partition number:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.FFUOptimize")("PartitionNumber.Label")
         '
         'NumericUpDown1
         '
@@ -156,8 +156,8 @@ Partial Class FfuOptimize
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Full Flash Utility files|*.ffu|Split FFU files|*.sfu"
-        Me.OpenFileDialog1.Title = "Please specify the source image to apply"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUOptimize")("Full.Flash.Utility.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.FFUOptimize")("OpenFile.Title")
         '
         'FfuOptimize
         '
@@ -180,7 +180,7 @@ Partial Class FfuOptimize
         Me.Name = "FfuOptimize"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Optimize FFU images"
+        Me.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Ffuimages.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()

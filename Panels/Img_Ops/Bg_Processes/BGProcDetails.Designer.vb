@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class BGProcDetails
     Inherits System.Windows.Forms.Form
 
@@ -43,7 +43,7 @@ Partial Class BGProcDetails
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(333, 18)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Gathering image information..."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.BgprocDetails")("Gathering.Image.Label")
         '
         'ProgressBar1
         '
@@ -62,7 +62,7 @@ Partial Class BGProcDetails
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(472, 18)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "<infoTask>"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.BgprocDetails")("InfoTask.Label")
         '
         'Label3
         '
@@ -74,7 +74,7 @@ Partial Class BGProcDetails
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(472, 39)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "These processes may take some time to complete."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.BgprocDetails")("Processes.Take.Time.Label")
         '
         'Panel1
         '
@@ -115,7 +115,7 @@ Partial Class BGProcDetails
         Me.Name = "BGProcDetails"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.BgprocDetails")("DISMTools.Label")
         Me.TopMost = True
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()

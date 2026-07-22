@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ExportDrivers
     Inherits System.Windows.Forms.Form
 
@@ -66,7 +66,7 @@ Partial Class ExportDrivers
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -77,7 +77,7 @@ Partial Class ExportDrivers
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Cancel.Button")
         '
         'Label2
         '
@@ -86,7 +86,7 @@ Partial Class ExportDrivers
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(76, 13)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = "Export target:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ExportDrivers")("ExportTarget.Label")
         '
         'TextBox1
         '
@@ -102,12 +102,12 @@ Partial Class ExportDrivers
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 8
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = "Please specify the path where the drivers will be exported to:"
+        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.ExportDrivers")("DriversPath.Description")
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'GroupBox1
@@ -120,7 +120,7 @@ Partial Class ExportDrivers
         Me.GroupBox1.Size = New System.Drawing.Size(600, 200)
         Me.GroupBox1.TabIndex = 9
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Driver Export Mode"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Driver.Mode.Group")
         '
         'TableLayoutPanel2
         '
@@ -147,7 +147,7 @@ Partial Class ExportDrivers
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(120, 29)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Class Name:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ExportDrivers")("ClassName.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label4
@@ -157,7 +157,7 @@ Partial Class ExportDrivers
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(120, 94)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Class Name Notes:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Class.Name.Notes.Label")
         '
         'Label5
         '
@@ -184,7 +184,7 @@ Partial Class ExportDrivers
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(373, 17)
         Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.Text = "Export drivers with the following matching class name to the destination:"
+        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Matching.Drivers.RadioButton")
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -196,7 +196,7 @@ Partial Class ExportDrivers
         Me.RadioButton1.Size = New System.Drawing.Size(225, 17)
         Me.RadioButton1.TabIndex = 0
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Export all image drivers to the destination"
+        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.ExportDrivers")("Image.Drivers.RadioButton")
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -233,7 +233,7 @@ Partial Class ExportDrivers
         Me.Name = "ExportDrivers"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Export drivers"
+        Me.Text = LocalizationService.ForSection("Designer.ExportDrivers")("ExportDrivers.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

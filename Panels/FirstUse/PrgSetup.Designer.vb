@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class PrgSetup
     Inherits System.Windows.Forms.Form
 
@@ -148,7 +148,7 @@ Partial Class PrgSetup
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(99, 15)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Set up DISMTools"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.PrgSetup")("Set.Up.DISM.Label")
         '
         'backBox
         '
@@ -206,7 +206,7 @@ Partial Class PrgSetup
         Me.Back_Button.Name = "Back_Button"
         Me.Back_Button.Size = New System.Drawing.Size(75, 23)
         Me.Back_Button.TabIndex = 0
-        Me.Back_Button.Text = "Back"
+        Me.Back_Button.Text = LocalizationService.ForSection("Designer.PrgSetup")("Back.Button")
         Me.Back_Button.UseVisualStyleBackColor = True
         Me.Back_Button.Visible = False
         '
@@ -218,7 +218,7 @@ Partial Class PrgSetup
         Me.Next_Button.Name = "Next_Button"
         Me.Next_Button.Size = New System.Drawing.Size(75, 23)
         Me.Next_Button.TabIndex = 0
-        Me.Next_Button.Text = "Next"
+        Me.Next_Button.Text = LocalizationService.ForSection("Designer.PrgSetup")("Next.Button")
         Me.Next_Button.UseVisualStyleBackColor = True
         '
         'Cancel_Button
@@ -229,7 +229,7 @@ Partial Class PrgSetup
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 0
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.PrgSetup")("Cancel.Button")
         Me.Cancel_Button.UseVisualStyleBackColor = True
         Me.Cancel_Button.Visible = False
         '
@@ -279,8 +279,7 @@ Partial Class PrgSetup
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(837, 105)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "DISMTools is a free and open-source, project-driven GUI for DISM operations. To b" & _
-    "egin setting things up, click Next."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.PrgSetup")("DISM.Tools.Free.Message")
         '
         'Label2
         '
@@ -290,7 +289,7 @@ Partial Class PrgSetup
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(268, 32)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Welcome to DISMTools"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.PrgSetup")("Welcome.DISM.Tools.Label")
         '
         'CustomizationPanel
         '
@@ -336,7 +335,7 @@ Partial Class PrgSetup
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(176, 73)
         Me.Label28.TabIndex = 8
-        Me.Label28.Text = "Secondary progress panel style:"
+        Me.Label28.Text = LocalizationService.ForSection("Designer.PrgSetup")("Secondary.Progress.Label")
         Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label9
@@ -348,7 +347,7 @@ Partial Class PrgSetup
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(176, 249)
         Me.Label9.TabIndex = 5
-        Me.Label9.Text = "Log window font:"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.PrgSetup")("Log.Window.Font.Label")
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ComboBox2
@@ -358,12 +357,10 @@ Partial Class PrgSetup
         Me.ComboBox2.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBox2.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Items.AddRange(New Object() {"Use system setting", "English", "Spanish"})
         Me.ComboBox2.Location = New System.Drawing.Point(185, 28)
         Me.ComboBox2.Name = "ComboBox2"
         Me.ComboBox2.Size = New System.Drawing.Size(630, 25)
         Me.ComboBox2.TabIndex = 4
-        Me.ComboBox2.Text = "Use system setting"
         '
         'Label8
         '
@@ -374,7 +371,7 @@ Partial Class PrgSetup
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(176, 25)
         Me.Label8.TabIndex = 3
-        Me.Label8.Text = "Language:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.PrgSetup")("Language.Label")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label7
@@ -386,7 +383,7 @@ Partial Class PrgSetup
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(176, 25)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Color mode:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.PrgSetup")("ColorMode.Label")
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ComboBox1
@@ -396,12 +393,12 @@ Partial Class PrgSetup
         Me.ComboBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBox1.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Use system setting", "Light mode", "Dark mode"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.PrgSetup")("System.Setting.ThemeItem"), LocalizationService.ForSection("Designer.PrgSetup")("LightMode.Item"), LocalizationService.ForSection("Designer.PrgSetup")("DarkMode.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(185, 3)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(630, 25)
         Me.ComboBox1.TabIndex = 2
-        Me.ComboBox1.Text = "Use system setting"
+        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.PrgSetup")("System.Setting.ThemeItem")
         '
         'Panel1
         '
@@ -435,7 +432,7 @@ Partial Class PrgSetup
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox1.Size = New System.Drawing.Size(630, 177)
         Me.TextBox1.TabIndex = 0
-        Me.TextBox1.Text = resources.GetString("TextBox1.Text")
+        Me.TextBox1.Text = LocalizationService.ForSection("PrgSetup.LogPreview")("Packages.Add.Message")
         '
         'Panel9
         '
@@ -457,8 +454,7 @@ Partial Class PrgSetup
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(630, 31)
         Me.Label29.TabIndex = 2
-        Me.Label29.Text = "This font may not be readable on log windows. While you can still use it, we reco" & _
-    "mmend monospaced fonts for increased readability."
+        Me.Label29.Text = LocalizationService.ForSection("Designer.PrgSetup")("Font.Readable.Log.Message")
         '
         'Panel2
         '
@@ -536,7 +532,7 @@ Partial Class PrgSetup
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(71, 24)
         Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.Text = "Classic"
+        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.PrgSetup")("Classic.RadioButton")
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -549,7 +545,7 @@ Partial Class PrgSetup
         Me.RadioButton1.Size = New System.Drawing.Size(79, 24)
         Me.RadioButton1.TabIndex = 0
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Modern"
+        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.PrgSetup")("Modern.RadioButton")
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Label5
@@ -560,8 +556,7 @@ Partial Class PrgSetup
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(824, 68)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = "Make it yours. Customize this program to your liking and click Next. These settin" & _
-    "gs can be configured later in the ""Personalization"" section in Tools > Options"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.PrgSetup")("Yours.Customize.Message")
         '
         'Label6
         '
@@ -571,7 +566,7 @@ Partial Class PrgSetup
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(276, 32)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Customize this program"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.PrgSetup")("CustomizeProgram.Label")
         '
         'LogsPanel
         '
@@ -609,7 +604,7 @@ Partial Class PrgSetup
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(295, 27)
         Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Use default log file"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.PrgSetup")("Default.Log.File.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -622,7 +617,7 @@ Partial Class PrgSetup
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 27)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.PrgSetup")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -645,7 +640,7 @@ Partial Class PrgSetup
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(62, 20)
         Me.Label10.TabIndex = 1
-        Me.Label10.Text = "Log file:"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.PrgSetup")("LogFile.Label")
         '
         'Panel4
         '
@@ -664,8 +659,7 @@ Partial Class PrgSetup
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(736, 57)
         Me.Label16.TabIndex = 6
-        Me.Label16.Text = "The log file should display errors, warnings and information messages after perfo" & _
-    "rming an image operation."
+        Me.Label16.Text = LocalizationService.ForSection("Designer.PrgSetup")("Log.File.Display.Message")
         '
         'TrackBar1
         '
@@ -689,7 +683,7 @@ Partial Class PrgSetup
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(378, 20)
         Me.Label11.TabIndex = 1
-        Me.Label11.Text = "Errors, warnings and information messages (Log level 3)"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.PrgSetup")("Errors.Warnings.Label")
         '
         'CheckBox1
         '
@@ -701,7 +695,7 @@ Partial Class PrgSetup
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(398, 24)
         Me.CheckBox1.TabIndex = 2
-        Me.CheckBox1.Text = "Automatically create logs in the program's log directory"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.PrgSetup")("Auto.Create.Logs.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label13
@@ -712,7 +706,7 @@ Partial Class PrgSetup
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(824, 68)
         Me.Label13.TabIndex = 1
-        Me.Label13.Text = resources.GetString("Label13.Text")
+        Me.Label13.Text = LocalizationService.ForSection("Designer.PrgSetup")("Log.Settings.Message")
         '
         'Label14
         '
@@ -722,7 +716,7 @@ Partial Class PrgSetup
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(589, 32)
         Me.Label14.TabIndex = 0
-        Me.Label14.Text = "What should we log when you perform an operation?"
+        Me.Label14.Text = LocalizationService.ForSection("Designer.PrgSetup")("Log.Label")
         '
         'ModulesPanel
         '
@@ -764,7 +758,7 @@ Partial Class PrgSetup
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(679, 33)
         Me.Label15.TabIndex = 4
-        Me.Label15.Text = "Module for Windows Assessment and Deployment Kit (ADK) compatibility"
+        Me.Label15.Text = LocalizationService.ForSection("Designer.PrgSetup")("Windows.ADK.Module.Label")
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label12
@@ -776,7 +770,7 @@ Partial Class PrgSetup
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(679, 32)
         Me.Label12.TabIndex = 2
-        Me.Label12.Text = "Module for wimlib-imagex compatibility"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.PrgSetup")("WimlibModule.Label")
         Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button3
@@ -790,7 +784,7 @@ Partial Class PrgSetup
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(125, 26)
         Me.Button3.TabIndex = 3
-        Me.Button3.Text = "Install"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.PrgSetup")("Install.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button4
@@ -804,7 +798,7 @@ Partial Class PrgSetup
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(125, 27)
         Me.Button4.TabIndex = 3
-        Me.Button4.Text = "Install"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.PrgSetup")("Install.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label17
@@ -815,7 +809,7 @@ Partial Class PrgSetup
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(798, 130)
         Me.Label17.TabIndex = 1
-        Me.Label17.Text = resources.GetString("Label17.Text")
+        Me.Label17.Text = LocalizationService.ForSection("Designer.PrgSetup")("Module.Install.Isn.Message")
         '
         'Label18
         '
@@ -825,8 +819,7 @@ Partial Class PrgSetup
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(798, 68)
         Me.Label18.TabIndex = 1
-        Me.Label18.Text = "DISMTools supports modules, which extend this program and enhance its capabilitie" & _
-    "s. The following modules are compatible with this version:"
+        Me.Label18.Text = LocalizationService.ForSection("Designer.PrgSetup")("DISM.Tools.Supports.Message")
         '
         'Label19
         '
@@ -836,7 +829,7 @@ Partial Class PrgSetup
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(234, 32)
         Me.Label19.TabIndex = 0
-        Me.Label19.Text = "Extend this program"
+        Me.Label19.Text = LocalizationService.ForSection("Designer.PrgSetup")("ExtendProgram.Label")
         '
         'FinishPanel
         '
@@ -865,7 +858,7 @@ Partial Class PrgSetup
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(270, 36)
         Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Configure more settings"
+        Me.Button5.Text = LocalizationService.ForSection("Designer.PrgSetup")("Configure.Settings.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Label20
@@ -876,7 +869,7 @@ Partial Class PrgSetup
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(824, 24)
         Me.Label20.TabIndex = 1
-        Me.Label20.Text = "Is there anything else you would like to configure?"
+        Me.Label20.Text = LocalizationService.ForSection("Designer.PrgSetup")("Anything.Like.Label")
         '
         'Label21
         '
@@ -886,9 +879,7 @@ Partial Class PrgSetup
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(824, 55)
         Me.Label21.TabIndex = 1
-        Me.Label21.Text = "The settings available to you are more than what you've just configured. If you w" & _
-    "ish to change more of these, click the button below. We'll also make those setti" & _
-    "ngs persistent."
+        Me.Label21.Text = LocalizationService.ForSection("Designer.PrgSetup")("Settings.Available.Message")
         '
         'Label23
         '
@@ -898,8 +889,7 @@ Partial Class PrgSetup
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(824, 68)
         Me.Label23.TabIndex = 1
-        Me.Label23.Text = "You have finished setting up the basics to use DISMTools the way you wanted. Clic" & _
-    "k ""Finish"", and we'll make your settings persistent."
+        Me.Label23.Text = LocalizationService.ForSection("Designer.PrgSetup")("Done.Setting.Up.Message")
         '
         'Label24
         '
@@ -909,7 +899,7 @@ Partial Class PrgSetup
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(211, 32)
         Me.Label24.TabIndex = 0
-        Me.Label24.Text = "Setup is complete"
+        Me.Label24.Text = LocalizationService.ForSection("Designer.PrgSetup")("SetupComplete.Label")
         '
         'TableLayoutPanel3
         '
@@ -937,7 +927,7 @@ Partial Class PrgSetup
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(685, 33)
         Me.Label26.TabIndex = 4
-        Me.Label26.Text = "Stay up to date to receive new features and an improved experience"
+        Me.Label26.Text = LocalizationService.ForSection("Designer.PrgSetup")("Stay.Up.Date.Label")
         Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label27
@@ -949,7 +939,7 @@ Partial Class PrgSetup
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(685, 32)
         Me.Label27.TabIndex = 2
-        Me.Label27.Text = "Get started with DISMTools and image servicing, so you can get around quicker"
+        Me.Label27.Text = LocalizationService.ForSection("Designer.PrgSetup")("Get.Started.DISM.Label")
         Me.Label27.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button6
@@ -963,7 +953,7 @@ Partial Class PrgSetup
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(127, 26)
         Me.Button6.TabIndex = 3
-        Me.Button6.Text = "Get started"
+        Me.Button6.Text = LocalizationService.ForSection("Designer.PrgSetup")("GetStarted.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'Button7
@@ -977,7 +967,7 @@ Partial Class PrgSetup
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(127, 27)
         Me.Button7.TabIndex = 3
-        Me.Button7.Text = "Check for updates"
+        Me.Button7.Text = LocalizationService.ForSection("Designer.PrgSetup")("CheckUpdates.Button")
         Me.Button7.UseVisualStyleBackColor = True
         '
         'Label25
@@ -988,7 +978,7 @@ Partial Class PrgSetup
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(824, 24)
         Me.Label25.TabIndex = 1
-        Me.Label25.Text = "Now that you've set things up, we recommend you do the following things:"
+        Me.Label25.Text = LocalizationService.ForSection("Designer.PrgSetup")("Ve.Set.Things.Label")
         '
         'Label22
         '
@@ -998,7 +988,7 @@ Partial Class PrgSetup
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(824, 35)
         Me.Label22.TabIndex = 1
-        Me.Label22.Text = "You can perform these steps at any time."
+        Me.Label22.Text = LocalizationService.ForSection("Designer.PrgSetup")("Perform.Steps.Time.Label")
         '
         'Panel5
         '
@@ -1020,9 +1010,9 @@ Partial Class PrgSetup
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "All files|*.*"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.PrgSetup")("SaveFile.Filter")
         Me.SaveFileDialog1.SupportMultiDottedExtensions = True
-        Me.SaveFileDialog1.Title = "Specify the log file"
+        Me.SaveFileDialog1.Title = LocalizationService.ForSection("Designer.PrgSetup")("Log.File.Title")
         '
         'PrgSetup
         '
@@ -1043,7 +1033,7 @@ Partial Class PrgSetup
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "PrgSetup"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Set up DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.PrgSetup")("Set.Up.DISM.Label")
         Me.wndControlPanel.ResumeLayout(False)
         Me.wndControlPanel.PerformLayout()
         CType(Me.backBox, System.ComponentModel.ISupportInitialize).EndInit()

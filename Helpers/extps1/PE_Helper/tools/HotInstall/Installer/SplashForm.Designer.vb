@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SplashForm
     Inherits System.Windows.Forms.Form
 
@@ -38,7 +38,7 @@ Partial Class SplashForm
         Me.VersionLabel.Name = "VersionLabel"
         Me.VersionLabel.Size = New System.Drawing.Size(529, 54)
         Me.VersionLabel.TabIndex = 0
-        Me.VersionLabel.Text = "HotInstall OS Installer, version <version>"
+        Me.VersionLabel.Text = GetValueFromLanguageData("SplashScreen.VersionLabel")
         Me.VersionLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight
         '
         'Label1
@@ -50,7 +50,7 @@ Partial Class SplashForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(496, 64)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Operating System Installation"
+        Me.Label1.Text = GetValueFromLanguageData("SplashScreen.OSInstTitle")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'PictureBox1
@@ -73,7 +73,7 @@ Partial Class SplashForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(845, 64)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Setup is starting..."
+        Me.Label2.Text = GetValueFromLanguageData("SplashScreen.OSInstStatus_StartingUp")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'SplashForm
@@ -99,7 +99,7 @@ Partial Class SplashForm
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "HotInstall Operating System Installer"
+        Me.Text = GetValueFromLanguageData("SplashScreen.WindowTitle")
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgCleanup
     Inherits System.Windows.Forms.Form
 
@@ -96,7 +96,7 @@ Partial Class ImgCleanup
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -107,7 +107,7 @@ Partial Class ImgCleanup
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Cancel.Button")
         '
         'Label2
         '
@@ -116,12 +116,12 @@ Partial Class ImgCleanup
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(79, 13)
         Me.Label2.TabIndex = 17
-        Me.Label2.Text = "Choose a task:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Task.Choose.Label")
         '
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Revert pending actions", "Clean up Service Pack backup files", "Clean up component store", "Analyze component store", "Check component store", "Scan component store for corruption", "Repair component store"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.ImgCleanup")("Revert.Pending.Actions.Item"), LocalizationService.ForSection("Designer.ImgCleanup")("Clean.Up.ServicePack.Item"), LocalizationService.ForSection("Designer.ImgCleanup")("Clean.Up.Component.Item"), LocalizationService.ForSection("Designer.ImgCleanup")("Analyze.Component.Store.Item"), LocalizationService.ForSection("Designer.ImgCleanup")("Check.Component.Store.Item"), LocalizationService.ForSection("Designer.ImgCleanup")("Scan.Comp.Store.Item"), LocalizationService.ForSection("Designer.ImgCleanup")("Repair.Component.Store.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(97, 55)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(675, 21)
@@ -135,7 +135,7 @@ Partial Class ImgCleanup
         Me.GroupBox1.Size = New System.Drawing.Size(760, 192)
         Me.GroupBox1.TabIndex = 19
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Task options"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgCleanup")("TaskOptions.Group")
         '
         'Panel1
         '
@@ -170,8 +170,7 @@ Partial Class ImgCleanup
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(754, 172)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "There are no configurable options for this task. However, you should only run thi" & _
-    "s task to try to recover a Windows image that fails to boot."
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgCleanup")("NoOptions.Message")
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel3
@@ -191,7 +190,7 @@ Partial Class ImgCleanup
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(256, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Hide service pack from the Installed Updates list"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgCleanup")("HideServicePack.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Panel4
@@ -215,7 +214,7 @@ Partial Class ImgCleanup
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(392, 13)
         Me.Label6.TabIndex = 1
-        Me.Label6.Text = "LastResetBase_UTC"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Last.Reset.Base.Label")
         '
         'Label7
         '
@@ -224,8 +223,7 @@ Partial Class ImgCleanup
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(442, 13)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "You should only check this option if the base reset takes more than 30 minutes to" & _
-    " complete"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Only.Check.Option.Label")
         '
         'Label5
         '
@@ -234,7 +232,7 @@ Partial Class ImgCleanup
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(279, 13)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = "The superseded components base reset was last run on:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Superseded.Base.Reset.Label")
         '
         'CheckBox3
         '
@@ -243,7 +241,7 @@ Partial Class ImgCleanup
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(210, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = "Defer long-running cleanup operations"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Defer.Long.Running.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -253,7 +251,7 @@ Partial Class ImgCleanup
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(213, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = "Reset base of superseded components"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Reset.Base.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'Panel5
@@ -273,7 +271,7 @@ Partial Class ImgCleanup
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(754, 172)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = "There are no configurable options for this task."
+        Me.Label8.Text = LocalizationService.ForSection("Designer.ImgCleanup")("NoOptions.Label")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel6
@@ -293,7 +291,7 @@ Partial Class ImgCleanup
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(754, 172)
         Me.Label9.TabIndex = 2
-        Me.Label9.Text = "There are no configurable options for this task."
+        Me.Label9.Text = LocalizationService.ForSection("Designer.ImgCleanup")("NoOptions.Label")
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -313,7 +311,7 @@ Partial Class ImgCleanup
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(754, 172)
         Me.Label10.TabIndex = 2
-        Me.Label10.Text = "There are no configurable options for this task."
+        Me.Label10.Text = LocalizationService.ForSection("Designer.ImgCleanup")("NoOptions.Label")
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel8
@@ -369,7 +367,7 @@ Partial Class ImgCleanup
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label11
@@ -380,7 +378,7 @@ Partial Class ImgCleanup
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(44, 13)
         Me.Label11.TabIndex = 1
-        Me.Label11.Text = "Source:"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Source.Label")
         '
         'CheckBox5
         '
@@ -390,7 +388,7 @@ Partial Class ImgCleanup
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(179, 17)
         Me.CheckBox5.TabIndex = 0
-        Me.CheckBox5.Text = "Limit access to Windows Update"
+        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.ImgCleanup")("WindowsUpdate.CheckBox")
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -400,7 +398,7 @@ Partial Class ImgCleanup
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(228, 17)
         Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = "Use different source for component repair"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Different.Source.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'Button2
@@ -411,7 +409,7 @@ Partial Class ImgCleanup
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(175, 23)
         Me.Button2.TabIndex = 12
-        Me.Button2.Text = "Detect from group policy"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Detect.Group.Policy.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label12
@@ -421,7 +419,7 @@ Partial Class ImgCleanup
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(754, 172)
         Me.Label12.TabIndex = 7
-        Me.Label12.Text = "Select a task listed above to configure its options."
+        Me.Label12.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Task.Listed.Label")
         Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label3
@@ -433,13 +431,13 @@ Partial Class ImgCleanup
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(675, 60)
         Me.Label3.TabIndex = 20
-        Me.Label3.Text = "Choose a task to see its description"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgCleanup")("Task.See.Choose.Label")
         '
         'HealthRestoreSourceOFD
         '
-        Me.HealthRestoreSourceOFD.Filter = "WIM files|*.wim|ESD files|*.esd"
+        Me.HealthRestoreSourceOFD.Filter = LocalizationService.ForSection("Designer.ImgCleanup")("WIM.Files.Wimesd.Filter")
         Me.HealthRestoreSourceOFD.SupportMultiDottedExtensions = True
-        Me.HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
+        Me.HealthRestoreSourceOFD.Title = LocalizationService.ForSection("Designer.ImgCleanup")("Source.Title")
         '
         'ImageTaskHeader1
         '
@@ -486,7 +484,7 @@ Partial Class ImgCleanup
         Me.Name = "ImgCleanup"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Image cleanup"
+        Me.Text = LocalizationService.ForSection("Designer.ImgCleanup")("ImageCleanup.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
