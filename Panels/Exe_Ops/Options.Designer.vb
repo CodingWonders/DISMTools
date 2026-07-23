@@ -263,6 +263,7 @@ Partial Class Options
         Me.Label6 = New System.Windows.Forms.Label()
         Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         Me.Label35 = New System.Windows.Forms.Label()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1769,6 +1770,7 @@ Partial Class Options
         '
         'Panel6
         '
+        Me.Panel6.Controls.Add(Me.Button8)
         Me.Panel6.Controls.Add(Me.NumericUpDown2)
         Me.Panel6.Controls.Add(Me.Label6)
         Me.Panel6.Controls.Add(Me.LinkLabel4)
@@ -2933,7 +2935,7 @@ Partial Class Options
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(233, 373)
+        Me.Label6.Location = New System.Drawing.Point(151, 373)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(185, 15)
         Me.Label6.TabIndex = 14
@@ -2941,7 +2943,7 @@ Partial Class Options
         '
         'NumericUpDown2
         '
-        Me.NumericUpDown2.Location = New System.Drawing.Point(424, 371)
+        Me.NumericUpDown2.Location = New System.Drawing.Point(342, 371)
         Me.NumericUpDown2.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
         Me.NumericUpDown2.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown2.Name = "NumericUpDown2"
@@ -2957,6 +2959,16 @@ Partial Class Options
         Me.Label35.Size = New System.Drawing.Size(666, 64)
         Me.Label35.TabIndex = 9
         Me.Label35.Text = resources.GetString("Label35.Text")
+        '
+        'Button8
+        '
+        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button8.Location = New System.Drawing.Point(420, 371)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(158, 23)
+        Me.Button8.TabIndex = 16
+        Me.Button8.Text = "Determine..."
+        Me.Button8.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -3346,5 +3358,6 @@ Partial Class Options
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label35 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Button8 As System.Windows.Forms.Button
 
 End Class
