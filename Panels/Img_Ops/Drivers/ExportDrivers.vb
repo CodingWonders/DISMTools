@@ -110,7 +110,7 @@ Public Class ExportDrivers
             Exit Sub
         End If
         ProgressPanel.drvExportAllDrvs = RadioButton1.Checked
-        ProgressPanel.drvExportSpecificClassNames = SelectedClassNamesLB.Items.Cast(Of String)().ToArray()
+        ProgressPanel.drvExportSpecificClassNames = SelectedClassNamesLB.Items.Cast(Of String)().Distinct().ToArray()
         ProgressPanel.drvExportOrganizeClassNameExports = CheckBox1.Checked
         ProgressPanel.OperationNum = 77
         ' Windows 7 behaves differently from Windows 8 and later when getting drivers.
