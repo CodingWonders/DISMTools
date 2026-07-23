@@ -221,6 +221,8 @@ Public Class Options
         MainForm.PreventSystemFromSleeping = CheckBox8.Checked
         MainForm.HumanizeDates = CheckBox1.Checked
         MainForm.LockUnlockedVolumes = CheckBox25.Checked
+
+        MainForm.PEHelper_MaxConcurrentISO = NumericUpDown2.Value
     End Sub
 
     Private Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1510,6 +1512,8 @@ Public Class Options
         LightThemesCB.ForeColor = CurrentTheme.ForegroundColor
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
+        NumericUpDown2.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown2.ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1671,6 +1675,8 @@ Public Class Options
         CheckBox8.Checked = MainForm.PreventSystemFromSleeping
         CheckBox1.Checked = MainForm.HumanizeDates
         CheckBox25.Checked = MainForm.LockUnlockedVolumes
+
+        NumericUpDown2.Value = MainForm.PEHelper_MaxConcurrentISO
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
