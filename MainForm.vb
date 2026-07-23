@@ -350,7 +350,6 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been requested by the user or by DTUCS. Migrating settings...")
                     MigrationForm.ShowDialog()
-                    Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been disabled. Unless you are testing a build straight out of the build process, a configuration file may be incompatible")
                     NoMigration = True
