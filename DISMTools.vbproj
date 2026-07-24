@@ -84,7 +84,7 @@
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Markdig, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.3.1\lib\net462\Markdig.dll</HintPath>
+      <HintPath>packages\Markdig.1.3.2\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.6.0.0\lib\net472\Microsoft.Dism.dll</HintPath>
