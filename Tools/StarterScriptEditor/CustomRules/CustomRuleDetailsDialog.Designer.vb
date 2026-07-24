@@ -188,6 +188,7 @@ Partial Class CustomRuleDetailsDialog
         '
         'RegexTesterButton
         '
+        Me.RegexTesterButton.Enabled = False
         Me.RegexTesterButton.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.RegexTesterButton.Location = New System.Drawing.Point(23, 247)
         Me.RegexTesterButton.Name = "RegexTesterButton"
