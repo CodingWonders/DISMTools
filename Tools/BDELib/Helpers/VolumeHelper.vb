@@ -134,6 +134,28 @@ Namespace Helpers
             End Try
         End Function
 
+        Public Shared Function GetVolumeConversionStatus(PersistentVolumeId As String, Optional PrecisionFactor As Integer = 4) As ConversionStatus
+            Dim obtainedConversionStatus As ConversionStatus = Nothing
+
+            If PrecisionFactor < 1 Then PrecisionFactor = 1
+            If PrecisionFactor > 4 Then PrecisionFactor = 4
+
+            Try
+                Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
+                If encryptedVolumeInstance Is Nothing Then Throw New Exception()
+                Dim getterObject As ManagementBaseObject = encryptedVolumeInstance.GetMethodParameters("GetConversionStatus")
+                getterObject("PrecisionFactor") = PrecisionFactor
+                Dim getterResults As ManagementBaseObject = encryptedVolumeInstance.InvokeMethod("GetConversionStatus", getterObject, Nothing)
+                If getterResults Is Nothing OrElse getterResults("ReturnValue") <> Constants.S_OK Then Throw New Exception()
+
+                obtainedConversionStatus = New ConversionStatus(getterResults("ConversionStatus"), getterResults("EncryptionPercentage"), getterResults("EncryptionFlags"), getterResults("WipingStatus"), getterResults("WipingPercentage"))
+            Catch ex As Exception
+                Return Nothing
+            End Try
+
+            Return obtainedConversionStatus
+        End Function
+
     End Class
 
 End Namespace

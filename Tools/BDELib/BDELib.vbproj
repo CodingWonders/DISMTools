@@ -67,12 +67,15 @@
   <ItemGroup>
     <Compile Include="BDELib.vb" />
     <Compile Include="Classes\Constants.vb" />
+    <Compile Include="Classes\ConversionStatus.vb" />
     <Compile Include="Classes\EncryptableVolume.vb" />
     <Compile Include="Classes\EncryptionMethod.vb" />
     <Compile Include="Classes\EncryptionVersion.vb" />
     <Compile Include="Classes\KeyProtector.vb" />
     <Compile Include="Classes\KeyProtectorType.vb" />
     <Compile Include="Classes\LockStatus.vb" />
+    <Compile Include="Classes\VolumeConversionStatus.vb" />
+    <Compile Include="Classes\VolumeWipingStatus.vb" />
     <Compile Include="Helpers\VolumeHelper.vb" />
     <Compile Include="Helpers\WMI\WMIHelper.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
