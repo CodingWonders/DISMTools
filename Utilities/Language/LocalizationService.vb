@@ -41,14 +41,20 @@ End Class
 
 Friend Class LocalizationLanguageData
 
+    Private ReadOnly SectionsValue As Dictionary(Of String, Dictionary(Of String, String))
+
     Public Property CultureCode As String
     Public Property LanguageName As String
     Public Property LanguageAuthor As String
     Public Property FilePath As String
     Public ReadOnly Property Sections As Dictionary(Of String, Dictionary(Of String, String))
+        Get
+            Return SectionsValue
+        End Get
+    End Property
 
     Public Sub New()
-        Sections = New Dictionary(Of String, Dictionary(Of String, String))(StringComparer.OrdinalIgnoreCase)
+        SectionsValue = New Dictionary(Of String, Dictionary(Of String, String))(StringComparer.OrdinalIgnoreCase)
     End Sub
 
 End Class
