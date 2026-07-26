@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AppInstallerDownloader
     Inherits System.Windows.Forms.Form
 
@@ -60,7 +60,8 @@ Partial Class AppInstallerDownloader
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(640, 55)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.AppInstaller")("Wait.Message")
+        Me.Label1.Text = "Please wait while DISMTools downloads the application package to add it to this i" & _
+    "mage. This can take some time, depending on your network connection speed."
         '
         'ProgressBar1
         '
@@ -81,7 +82,7 @@ Partial Class AppInstallerDownloader
         Me.StatusLbl.Name = "StatusLbl"
         Me.StatusLbl.Size = New System.Drawing.Size(640, 14)
         Me.StatusLbl.TabIndex = 1
-        Me.StatusLbl.Text = LocalizationService.ForSection("Designer.AppInstaller")("StatusLbl.Label")
+        Me.StatusLbl.Text = "Status"
         '
         'Timer1
         '
@@ -100,7 +101,7 @@ Partial Class AppInstallerDownloader
         Me.GroupBox1.Size = New System.Drawing.Size(637, 122)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.AppInstaller")("TransferDetails.Group")
+        Me.GroupBox1.Text = "Transfer details"
         '
         'downUriLbl
         '
@@ -121,7 +122,7 @@ Partial Class AppInstallerDownloader
         Me.downETALbl.Name = "downETALbl"
         Me.downETALbl.Size = New System.Drawing.Size(600, 14)
         Me.downETALbl.TabIndex = 1
-        Me.downETALbl.Text = LocalizationService.ForSection("Designer.AppInstaller")("TimeRemaining.Label")
+        Me.downETALbl.Text = "Estimated time remaining:"
         '
         'downSpdLbl
         '
@@ -132,7 +133,7 @@ Partial Class AppInstallerDownloader
         Me.downSpdLbl.Name = "downSpdLbl"
         Me.downSpdLbl.Size = New System.Drawing.Size(600, 14)
         Me.downSpdLbl.TabIndex = 1
-        Me.downSpdLbl.Text = LocalizationService.ForSection("Designer.AppInstaller")("DownloadSpeed.Label")
+        Me.downSpdLbl.Text = "Download speed:"
         '
         'Label2
         '
@@ -143,7 +144,7 @@ Partial Class AppInstallerDownloader
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(600, 14)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Designer.AppInstaller")("DownloadURL.Label")
+        Me.Label2.Text = "Download URL:"
         '
         'Cancel_Button
         '
@@ -153,7 +154,7 @@ Partial Class AppInstallerDownloader
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 4
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AppInstaller")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         Me.Cancel_Button.UseVisualStyleBackColor = True
         '
         'Label3
@@ -163,7 +164,7 @@ Partial Class AppInstallerDownloader
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(559, 18)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.AppInstaller")("Wait.Label")
+        Me.Label3.Text = "Please wait..."
         Me.Label3.Visible = False
         '
         'CopyUri_Button
@@ -173,7 +174,7 @@ Partial Class AppInstallerDownloader
         Me.CopyUri_Button.Name = "CopyUri_Button"
         Me.CopyUri_Button.Size = New System.Drawing.Size(75, 23)
         Me.CopyUri_Button.TabIndex = 2
-        Me.CopyUri_Button.Text = LocalizationService.ForSection("Designer.AppInstaller")("CopyURI.Button")
+        Me.CopyUri_Button.Text = "Copy"
         Me.CopyUri_Button.UseVisualStyleBackColor = True
         '
         'AppInstallerDownloader
@@ -197,7 +198,7 @@ Partial Class AppInstallerDownloader
         Me.Name = "AppInstallerDownloader"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.AppInstaller")("DownloadPackage.Button")
+        Me.Text = "Downloading application package..."
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)

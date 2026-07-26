@@ -54,7 +54,7 @@ Partial Class ScriptVersionChooser
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("StarterScript.Designer.Version")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -65,7 +65,7 @@ Partial Class ScriptVersionChooser
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("StarterScript.Designer.Version")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -76,7 +76,9 @@ Partial Class ScriptVersionChooser
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(481, 28)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.Version")("ConfiguredScript.Message")
+        Me.Label1.Text = "This starter script can be configured to work with specific versions of DISMTools" & _
+            " and the Starter Script Editor. Choose the version that you want to target with " & _
+            "this script and click OK:"
         '
         'RadioButton1
         '
@@ -87,7 +89,7 @@ Partial Class ScriptVersionChooser
         Me.RadioButton1.Size = New System.Drawing.Size(316, 17)
         Me.RadioButton1.TabIndex = 2
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("StarterScript.Designer.Version")("Target.Future08.RadioButton")
+        Me.RadioButton1.Text = "This starter script targets DISMTools 0.8 and future versions"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'RadioButton2
@@ -97,7 +99,7 @@ Partial Class ScriptVersionChooser
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(229, 17)
         Me.RadioButton2.TabIndex = 2
-        Me.RadioButton2.Text = LocalizationService.ForSection("StarterScript.Designer.Version")("Target.Legacy073.RadioButton")
+        Me.RadioButton2.Text = "This starter script targets DISMTools 0.7.3"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'ScriptVersionChooser
@@ -118,7 +120,7 @@ Partial Class ScriptVersionChooser
         Me.Name = "ScriptVersionChooser"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("StarterScript.Designer.Version")("TargetVersion.Label")
+        Me.Text = "Choose target version for this script"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

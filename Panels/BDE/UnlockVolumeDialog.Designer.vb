@@ -70,7 +70,7 @@ Partial Class UnlockVolumeDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -81,7 +81,7 @@ Partial Class UnlockVolumeDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -90,7 +90,8 @@ Partial Class UnlockVolumeDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(539, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("RecoveryKey.Message")
+        Me.Label1.Text = "Please enter the 48-digit recovery key to unlock this volume. To help identify th" & _
+    "is volume, refer to its identifier."
         '
         'Label2
         '
@@ -101,7 +102,7 @@ Partial Class UnlockVolumeDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(192, 16)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("KeyProtectorId.Label")
+        Me.Label2.Text = "Key Protector Identifier:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'KeyProtectorIdLabel
@@ -283,7 +284,7 @@ Partial Class UnlockVolumeDialog
         Me.Name = "UnlockVolumeDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("Title")
+        Me.Text = "Unlock encrypted volume"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

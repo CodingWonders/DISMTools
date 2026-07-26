@@ -43,7 +43,8 @@ Partial Class AIResultWindowPinDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(353, 36)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.PinDialog")("ChoosePosition.Message")
+        Me.Label1.Text = "Choose where to pin the Automated Inspection results screen on your primary monit" & _
+    "or."
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Panel1
@@ -67,7 +68,7 @@ Partial Class AIResultWindowPinDialog
         Me.PMDetailLabel.Name = "PMDetailLabel"
         Me.PMDetailLabel.Size = New System.Drawing.Size(133, 54)
         Me.PMDetailLabel.TabIndex = 4
-        Me.PMDetailLabel.Text = LocalizationService.ForSection("StarterScript.Designer.PinDialog")("Monitor.Label")
+        Me.PMDetailLabel.Text = "Monitor"
         Me.PMDetailLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Cancel_Button
@@ -79,7 +80,7 @@ Partial Class AIResultWindowPinDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(175, 23)
         Me.Cancel_Button.TabIndex = 2
-        Me.Cancel_Button.Text = LocalizationService.ForSection("StarterScript.Designer.PinDialog")("ManualPosition.Button")
+        Me.Cancel_Button.Text = "Let me position it manually"
         Me.Cancel_Button.UseVisualStyleBackColor = True
         '
         'OffsetDetailLabel
@@ -158,7 +159,7 @@ Partial Class AIResultWindowPinDialog
         Me.Name = "AIResultWindowPinDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("StarterScript.Designer.PinDialog")("Title")
+        Me.Text = "Pin Window"
         Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

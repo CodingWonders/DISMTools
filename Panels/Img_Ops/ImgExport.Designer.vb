@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgExport
     Inherits System.Windows.Forms.Form
 
@@ -106,7 +106,7 @@ Partial Class ImgExport
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgExport")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -117,7 +117,7 @@ Partial Class ImgExport
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgExport")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'GroupBox1
         '
@@ -132,7 +132,7 @@ Partial Class ImgExport
         Me.GroupBox1.Size = New System.Drawing.Size(984, 91)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgExport")("Sources.Destinations.Group")
+        Me.GroupBox1.Text = "Sources and destinations"
         '
         'Button2
         '
@@ -142,7 +142,7 @@ Partial Class ImgExport
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 10
-        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgExport")("Browse.Button")
+        Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -161,7 +161,7 @@ Partial Class ImgExport
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(119, 13)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgExport")("Destination.ImageFile.Label")
+        Me.Label2.Text = "Destination image file:"
         '
         'Button1
         '
@@ -171,7 +171,7 @@ Partial Class ImgExport
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 7
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgExport")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -190,7 +190,7 @@ Partial Class ImgExport
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(119, 13)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgExport")("SourceImageFile.Label")
+        Me.Label3.Text = "Source image file:"
         '
         'GroupBox2
         '
@@ -200,7 +200,7 @@ Partial Class ImgExport
         Me.GroupBox2.Size = New System.Drawing.Size(984, 362)
         Me.GroupBox2.TabIndex = 9
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ImgExport")("Options.Group")
+        Me.GroupBox2.Text = "Options"
         '
         'TableLayoutPanel2
         '
@@ -252,7 +252,7 @@ Partial Class ImgExport
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgExport")("Reference.Swmfiles.CheckBox")
+        Me.CheckBox1.Text = "Reference SWM files"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'SWMFilePanel
@@ -290,7 +290,7 @@ Partial Class ImgExport
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
         Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 17)
-        Me.ToolStripStatusLabel1.Text = LocalizationService.ForSection("Designer.ImgExport")("Status.InitialLabel")
+        Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
         '
         'Panel2
         '
@@ -320,7 +320,7 @@ Partial Class ImgExport
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(196, 23)
         Me.Button5.TabIndex = 2
-        Me.Button5.Text = LocalizationService.ForSection("Designer.ImgExport")("ScanPattern.Button")
+        Me.Button5.Text = "Scan pattern"
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button4
@@ -330,7 +330,7 @@ Partial Class ImgExport
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(196, 23)
         Me.Button4.TabIndex = 2
-        Me.Button4.Text = LocalizationService.ForSection("Designer.ImgExport")("Name.Image.Button")
+        Me.Button4.Text = "Use name of the image"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label4
@@ -340,7 +340,7 @@ Partial Class ImgExport
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(87, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgExport")("NamingPattern.Label")
+        Me.Label4.Text = "Namimg pattern:"
         '
         'Panel4
         '
@@ -366,7 +366,7 @@ Partial Class ImgExport
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox2.TabIndex = 4
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ImgExport")("CustomName.CheckBox")
+        Me.CheckBox2.Text = "Specify a custom name for the destination image"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'Panel5
@@ -388,19 +388,19 @@ Partial Class ImgExport
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(419, 61)
         Me.Label8.TabIndex = 16
-        Me.Label8.Text = LocalizationService.ForSection("Designer.ImgExport")("Description.Goes.Label")
+        Me.Label8.Text = "(Description goes here)"
         '
         'ComboBox1
         '
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.ImgExport")("None.Item"), LocalizationService.ForSection("Designer.ImgExport")("Fast.Item"), LocalizationService.ForSection("Designer.ImgExport")("Maximum.Item"), LocalizationService.ForSection("Designer.ImgExport")("Recovery.Item")})
+        Me.ComboBox1.Items.AddRange(New Object() {"none", "fast", "maximum", "recovery"})
         Me.ComboBox1.Location = New System.Drawing.Point(28, 34)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(416, 21)
         Me.ComboBox1.TabIndex = 15
-        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.ImgExport")("Fast.Item")
+        Me.ComboBox1.Text = "fast"
         '
         'Label5
         '
@@ -409,7 +409,7 @@ Partial Class ImgExport
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(432, 13)
         Me.Label5.TabIndex = 14
-        Me.Label5.Text = LocalizationService.ForSection("Designer.ImgExport")("CompressionType.Label")
+        Me.Label5.Text = "Destination image compression type:"
         '
         'CheckBox3
         '
@@ -418,7 +418,7 @@ Partial Class ImgExport
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox3.TabIndex = 4
-        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ImgExport")("Image.Bootable.CheckBox")
+        Me.CheckBox3.Text = "Make image bootable (Windows PE only)"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -428,7 +428,7 @@ Partial Class ImgExport
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox4.TabIndex = 4
-        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ImgExport")("Append.Image.WIM.CheckBox")
+        Me.CheckBox4.Text = "Append image with WIMBoot configuration"
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox5
@@ -438,7 +438,7 @@ Partial Class ImgExport
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox5.TabIndex = 4
-        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.ImgExport")("CheckIntegrity.CheckBox")
+        Me.CheckBox5.Text = "Check integrity before exporting image"
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'Label6
@@ -477,22 +477,22 @@ Partial Class ImgExport
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ImgExport")("Index.Column")
+        Me.ColumnHeader1.Text = "Index"
         Me.ColumnHeader1.Width = 44
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.ImgExport")("ImageName.Column")
+        Me.ColumnHeader2.Text = "Image name"
         Me.ColumnHeader2.Width = 256
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.ImgExport")("ImageDescription.Column")
+        Me.ColumnHeader3.Text = "Image description"
         Me.ColumnHeader3.Width = 256
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.ImgExport")("ImageVersion.Column")
+        Me.ColumnHeader4.Text = "Image version"
         Me.ColumnHeader4.Width = 128
         '
         'NumericUpDown1
@@ -511,16 +511,16 @@ Partial Class ImgExport
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 7
-        Me.Label7.Text = LocalizationService.ForSection("Designer.ImgExport")("Source.Image.Index.Label")
+        Me.Label7.Text = "Source image index:"
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgExport")("WIM.Files.Wimesd.Filter")
+        Me.SaveFileDialog1.Filter = "WIM files|*.wim|ESD files|*.esd"
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgExport")("WIM.Files.Wimswm.Filter")
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.ImgExport")("Source.ImageFile.Title")
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim|SWM files|*.swm"
+        Me.OpenFileDialog1.Title = "Specify a source image file to export"
         '
         'ImageTaskHeader1
         '
@@ -554,7 +554,7 @@ Partial Class ImgExport
         Me.Name = "ImgExport"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImgExport")("ExportImage.Label")
+        Me.Text = "Export an image"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

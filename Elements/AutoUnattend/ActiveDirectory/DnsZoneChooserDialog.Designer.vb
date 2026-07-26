@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DnsZoneChooserDialog
     Inherits System.Windows.Forms.Form
 
@@ -59,7 +59,7 @@ Partial Class DnsZoneChooserDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.DNSZones")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -70,7 +70,7 @@ Partial Class DnsZoneChooserDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.DNSZones")("CancelButton.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -79,7 +79,8 @@ Partial Class DnsZoneChooserDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(551, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.DNSZones")("OfferedZones.Message")
+        Me.Label1.Text = "This server offers the following DNS zones you can choose from. Pick a DNS zone f" & _
+    "rom the list below and click OK:"
         '
         'ListView1
         '
@@ -97,22 +98,22 @@ Partial Class DnsZoneChooserDialog
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.DNSZones")("ZoneName.Column")
+        Me.ColumnHeader1.Text = "Zone Name"
         Me.ColumnHeader1.Width = 168
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.DNSZones")("DnsserverName.Column")
+        Me.ColumnHeader2.Text = "DNS Server Name"
         Me.ColumnHeader2.Width = 192
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.DNSZones")("DomainServices.Column")
+        Me.ColumnHeader3.Text = "Integrated with Domain Services?"
         Me.ColumnHeader3.Width = 180
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.DNSZones")("ZoneType.Column")
+        Me.ColumnHeader4.Text = "Zone Type"
         Me.ColumnHeader4.Width = 192
         '
         'Refresh_Button
@@ -123,7 +124,7 @@ Partial Class DnsZoneChooserDialog
         Me.Refresh_Button.Name = "Refresh_Button"
         Me.Refresh_Button.Size = New System.Drawing.Size(75, 23)
         Me.Refresh_Button.TabIndex = 3
-        Me.Refresh_Button.Text = LocalizationService.ForSection("Designer.DNSZones")("Refresh.Button")
+        Me.Refresh_Button.Text = "Refresh"
         Me.Refresh_Button.UseVisualStyleBackColor = True
         '
         'DnsZoneChooserDialog
@@ -144,7 +145,7 @@ Partial Class DnsZoneChooserDialog
         Me.Name = "DnsZoneChooserDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.DNSZones")("DNSZone.Choose.Label")
+        Me.Text = "Choose DNS Zone"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

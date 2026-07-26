@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class PkgParentNameLookupDlg
     Inherits System.Windows.Forms.Form
 
@@ -59,7 +59,7 @@ Partial Class PkgParentNameLookupDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.PkgNameLookup")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -70,7 +70,7 @@ Partial Class PkgParentNameLookupDlg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.PkgNameLookup")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -79,7 +79,7 @@ Partial Class PkgParentNameLookupDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(252, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.PkgParentLookup")("Names.Installed.Label")
+        Me.Label1.Text = "Names of installed packages in the mounted image:"
         '
         'ListBox1
         '
@@ -98,7 +98,7 @@ Partial Class PkgParentNameLookupDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(129, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = LocalizationService.ForSection("Designer.PkgNameLookup")("ParentPackage.Label")
+        Me.Label2.Text = "Name of parent package:"
         '
         'TextBox1
         '
@@ -129,7 +129,7 @@ Partial Class PkgParentNameLookupDlg
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(192, 13)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = LocalizationService.ForSection("Designer.PkgNameLookup")("Get.Package.Names.Label")
+        Me.Label3.Text = "Getting package names. Please wait..."
         Me.Label3.Visible = False
         '
         'PkgParentNameLookupDlg
@@ -152,7 +152,7 @@ Partial Class PkgParentNameLookupDlg
         Me.Name = "PkgParentNameLookupDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.PkgNameLookup")("Installed.Package.Label")
+        Me.Text = "Installed package names"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

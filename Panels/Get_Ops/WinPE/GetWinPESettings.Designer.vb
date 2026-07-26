@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class GetWinPESettings
     Inherits System.Windows.Forms.Form
 
@@ -44,7 +44,7 @@ Partial Class GetWinPESettings
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(75, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.WinPESettings")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         Me.OK_Button.UseVisualStyleBackColor = True
         '
         'Label2
@@ -54,7 +54,7 @@ Partial Class GetWinPESettings
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(248, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = LocalizationService.ForSection("Designer.WinPESettings")("Windows.Label")
+        Me.Label2.Text = "These are the Windows PE settings for this image:"
         '
         'TableLayoutPanel1
         '
@@ -104,7 +104,7 @@ Partial Class GetWinPESettings
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(94, 23)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = LocalizationService.ForSection("Designer.WinPESettings")("Change.Button")
+        Me.Button1.Text = "Change..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Button2
@@ -115,7 +115,7 @@ Partial Class GetWinPESettings
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(94, 24)
         Me.Button2.TabIndex = 0
-        Me.Button2.Text = LocalizationService.ForSection("Designer.WinPESettings")("Change.Button")
+        Me.Button2.Text = "Change..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label3
@@ -126,7 +126,7 @@ Partial Class GetWinPESettings
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(88, 29)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.WinPESettings")("TargetPath.Label")
+        Me.Label3.Text = "Target path:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label4
@@ -137,7 +137,7 @@ Partial Class GetWinPESettings
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(88, 30)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = LocalizationService.ForSection("Designer.WinPESettings")("ScratchSpace.Label")
+        Me.Label4.Text = "Scratch space:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button4
@@ -148,7 +148,7 @@ Partial Class GetWinPESettings
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(96, 23)
         Me.Button4.TabIndex = 12
-        Me.Button4.Text = LocalizationService.ForSection("Designer.WinPESettings")("Save.Button")
+        Me.Button4.Text = "Save..."
         Me.Button4.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -183,7 +183,7 @@ Partial Class GetWinPESettings
         Me.Name = "GetWinPESettings"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.WinPESettings")("Get.Windows.Pesettings.Label")
+        Me.Text = "Get Windows PE settings"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

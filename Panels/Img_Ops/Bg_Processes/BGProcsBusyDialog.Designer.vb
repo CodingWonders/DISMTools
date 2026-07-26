@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class BGProcsBusyDialog
     Inherits System.Windows.Forms.Form
 
@@ -63,7 +63,7 @@ Partial Class BGProcsBusyDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.BgProcessesBusy")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Label2
         '
@@ -72,7 +72,7 @@ Partial Class BGProcsBusyDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 87)
         Me.Label2.TabIndex = 11
-        Me.Label2.Text = LocalizationService.ForSection("Designer.BgProcessesBusy")("Finish.Process.Begin.Message")
+        Me.Label2.Text = resources.GetString("Label2.Text")
         '
         'Label1
         '
@@ -82,7 +82,7 @@ Partial Class BGProcsBusyDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 10
-        Me.Label1.Text = LocalizationService.ForSection("Designer.BgProcessesBusy")("Re.Still.Gathering.Label")
+        Me.Label1.Text = "We're still gathering image information"
         '
         'BGProcsBusyDialog
         '
@@ -101,7 +101,7 @@ Partial Class BGProcsBusyDialog
         Me.Name = "BGProcsBusyDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.BgProcessesBusy")("DISMTools.Label")
+        Me.Text = "DISMTools"
         Me.Panel1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)

@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SampleScriptBrowser
     Inherits System.Windows.Forms.Form
 
@@ -90,7 +90,7 @@ Partial Class SampleScriptBrowser
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -101,7 +101,7 @@ Partial Class SampleScriptBrowser
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'ActionPanel
         '
@@ -121,7 +121,7 @@ Partial Class SampleScriptBrowser
         Me.CreateStarterScriptBtn.Name = "CreateStarterScriptBtn"
         Me.CreateStarterScriptBtn.Size = New System.Drawing.Size(205, 23)
         Me.CreateStarterScriptBtn.TabIndex = 1
-        Me.CreateStarterScriptBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Create.Starter.Button")
+        Me.CreateStarterScriptBtn.Text = "Create your own starter scripts..."
         Me.CreateStarterScriptBtn.UseVisualStyleBackColor = True
         '
         'ScriptListPanel
@@ -148,7 +148,7 @@ Partial Class SampleScriptBrowser
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Name.Column")
+        Me.ColumnHeader1.Text = "Name"
         Me.ColumnHeader1.Width = 286
         '
         'ScriptStageSelectionPanel
@@ -164,7 +164,7 @@ Partial Class SampleScriptBrowser
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.ScriptBrowser")("System.Config.Item"), LocalizationService.ForSection("Designer.ScriptBrowser")("First.User.Logs.Item"), LocalizationService.ForSection("Designer.ScriptBrowser")("Whenever.User.Logs.Item"), LocalizationService.ForSection("Designer.ScriptBrowser")("Scripts.Uploaded.Library.Item"), LocalizationService.ForSection("Designer.ScriptBrowser")("Scripts.Defined.User.Item")})
+        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts uploaded to the Library", "Scripts defined by the user"})
         Me.ComboBox1.Location = New System.Drawing.Point(15, 36)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(291, 21)
@@ -177,7 +177,7 @@ Partial Class SampleScriptBrowser
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(153, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Stage.Type.Choose.Label")
+        Me.Label1.Text = "Choose a stage or script type:"
         '
         'ScriptDetailsContainerPanel
         '
@@ -213,7 +213,7 @@ Partial Class SampleScriptBrowser
         Me.EnterFSModeBtn.Name = "EnterFSModeBtn"
         Me.EnterFSModeBtn.Size = New System.Drawing.Size(107, 23)
         Me.EnterFSModeBtn.TabIndex = 7
-        Me.EnterFSModeBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("EnlargePreview.Label")
+        Me.EnterFSModeBtn.Text = "Enlarge preview"
         Me.EnterFSModeBtn.UseVisualStyleBackColor = True
         '
         'ExportScriptCodeBtn
@@ -223,7 +223,7 @@ Partial Class SampleScriptBrowser
         Me.ExportScriptCodeBtn.Name = "ExportScriptCodeBtn"
         Me.ExportScriptCodeBtn.Size = New System.Drawing.Size(192, 23)
         Me.ExportScriptCodeBtn.TabIndex = 7
-        Me.ExportScriptCodeBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Export.Code.File.Button")
+        Me.ExportScriptCodeBtn.Text = "Export script code to a file..."
         Me.ExportScriptCodeBtn.UseVisualStyleBackColor = True
         '
         'RichTextBox1
@@ -246,7 +246,8 @@ Partial Class SampleScriptBrowser
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(399, 13)
         Me.Label7.TabIndex = 2
-        Me.Label7.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Okinsert.Label")
+        Me.Label7.Text = "Click OK to insert this script. Existing script contents will be replaced by this" & _
+    " script."
         '
         'Label6
         '
@@ -255,7 +256,7 @@ Partial Class SampleScriptBrowser
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(66, 13)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("ScriptCode.Label")
+        Me.Label6.Text = "Script Code:"
         '
         'Label5
         '
@@ -264,7 +265,7 @@ Partial Class SampleScriptBrowser
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(58, 13)
         Me.Label5.TabIndex = 2
-        Me.Label5.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Language.Label")
+        Me.Label5.Text = "Language:"
         '
         'Label4
         '
@@ -275,7 +276,7 @@ Partial Class SampleScriptBrowser
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(588, 48)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Description.Label")
+        Me.Label4.Text = "Script Description"
         '
         'Label3
         '
@@ -286,7 +287,7 @@ Partial Class SampleScriptBrowser
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(661, 44)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("ScriptName.Label")
+        Me.Label3.Text = "Script Name"
         '
         'ScriptDetailsNoSelectedPanel
         '
@@ -307,7 +308,7 @@ Partial Class SampleScriptBrowser
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(481, 96)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("View.Label")
+        Me.Label2.Text = "Select a script to view its information."
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label8
@@ -319,12 +320,12 @@ Partial Class SampleScriptBrowser
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(656, 192)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("StarterScripts.Help.Message")
+        Me.Label8.Text = resources.GetString("Label8.Text")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'ScriptCodeExporterSFD
         '
-        Me.ScriptCodeExporterSFD.Title = LocalizationService.ForSection("Designer.ScriptBrowser")("Export.Code.Title")
+        Me.ScriptCodeExporterSFD.Title = "Export Script Code"
         '
         'SSETimer
         '
@@ -371,7 +372,7 @@ Partial Class SampleScriptBrowser
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(336, 13)
         Me.Label9.TabIndex = 9
-        Me.Label9.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Leave.Full.Screen.Label")
+        Me.Label9.Text = "To leave full screen mode, click the button on the right or press ESC."
         '
         'ExitFSModeBtn
         '
@@ -381,7 +382,7 @@ Partial Class SampleScriptBrowser
         Me.ExitFSModeBtn.Name = "ExitFSModeBtn"
         Me.ExitFSModeBtn.Size = New System.Drawing.Size(107, 23)
         Me.ExitFSModeBtn.TabIndex = 8
-        Me.ExitFSModeBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("GoBack.Label")
+        Me.ExitFSModeBtn.Text = "Go back"
         Me.ExitFSModeBtn.UseVisualStyleBackColor = True
         '
         'SampleScriptBrowser
@@ -403,7 +404,7 @@ Partial Class SampleScriptBrowser
         Me.Name = "SampleScriptBrowser"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("LoadStarterScript.Label")
+        Me.Text = "Load a predefined Starter Script"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ActionPanel.ResumeLayout(False)
         Me.ScriptListPanel.ResumeLayout(False)

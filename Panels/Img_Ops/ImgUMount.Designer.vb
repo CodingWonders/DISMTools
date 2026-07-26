@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgUMount
     Inherits System.Windows.Forms.Form
 
@@ -68,7 +68,7 @@ Partial Class ImgUMount
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgUmount")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -79,7 +79,7 @@ Partial Class ImgUMount
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgUmount")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label2
         '
@@ -88,7 +88,7 @@ Partial Class ImgUMount
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(245, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgUmount")("Options.Required.Label")
+        Me.Label2.Text = "Please specify the options to unmount this image:"
         '
         'GroupBox1
         '
@@ -103,7 +103,7 @@ Partial Class ImgUMount
         Me.GroupBox1.Size = New System.Drawing.Size(600, 125)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgUmount")("MountDirectory.Group")
+        Me.GroupBox1.Text = "Mount directory"
         '
         'Button1
         '
@@ -113,7 +113,7 @@ Partial Class ImgUMount
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 7
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgUmount")("Pick.Button")
+        Me.Button1.Text = "Pick..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -134,7 +134,7 @@ Partial Class ImgUMount
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(117, 13)
         Me.Label4.TabIndex = 5
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgUmount")("MountDirectory.Label")
+        Me.Label4.Text = "Mount directory:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'RadioButton2
@@ -145,7 +145,7 @@ Partial Class ImgUMount
         Me.RadioButton2.Size = New System.Drawing.Size(150, 17)
         Me.RadioButton2.TabIndex = 4
         Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.ImgUmount")("LocatedSomewhere.RadioButton")
+        Me.RadioButton2.Text = "is located somewhere else"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -156,7 +156,7 @@ Partial Class ImgUMount
         Me.RadioButton1.Size = New System.Drawing.Size(134, 17)
         Me.RadioButton1.TabIndex = 4
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.ImgUmount")("LoadedProject.RadioButton")
+        Me.RadioButton1.Text = "is loaded in the project"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Label3
@@ -166,7 +166,7 @@ Partial Class ImgUMount
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(108, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgUmount")("Mount.Dir.Label")
+        Me.Label3.Text = "The mount directory:"
         '
         'GroupBox2
         '
@@ -179,17 +179,17 @@ Partial Class ImgUMount
         Me.GroupBox2.Size = New System.Drawing.Size(600, 179)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ImgUmount")("Additional.Options.Group")
+        Me.GroupBox2.Text = "Additional options"
         '
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.ImgUmount")("Save.Changes.Unmount.Item"), LocalizationService.ForSection("Designer.ImgUmount")("Discard.Changes.Unmount.Item")})
+        Me.ComboBox1.Items.AddRange(New Object() {"Save changes and unmount", "Discard changes and unmount"})
         Me.ComboBox1.Location = New System.Drawing.Point(169, 34)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(403, 21)
         Me.ComboBox1.TabIndex = 4
-        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.ImgUmount")("Save.Changes.Unmount.Item")
+        Me.ComboBox1.Text = "Save changes and unmount"
         '
         'CheckBox2
         '
@@ -198,7 +198,7 @@ Partial Class ImgUMount
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(189, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ImgUmount")("Append.Changes.CheckBox")
+        Me.CheckBox2.Text = "Append changes to another index"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -208,7 +208,7 @@ Partial Class ImgUMount
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgUmount")("Integrity.CheckBox")
+        Me.CheckBox1.Text = "Check image integrity"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label7
@@ -220,12 +220,12 @@ Partial Class ImgUMount
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(144, 13)
         Me.Label7.TabIndex = 3
-        Me.Label7.Text = LocalizationService.ForSection("Designer.ImgUmount")("UnmountOperation.Label")
+        Me.Label7.Text = "Unmount operation:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.ImgUmount")("MountDir.Description")
+        Me.FolderBrowserDialog1.Description = "Please specify a mount directory:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'ImageTaskHeader1
@@ -261,7 +261,7 @@ Partial Class ImgUMount
         Me.Name = "ImgUMount"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImgUmount")("UnmountImage.Label")
+        Me.Text = "Unmount an image"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgIndexSwitch
     Inherits System.Windows.Forms.Form
 
@@ -64,7 +64,7 @@ Partial Class ImgIndexSwitch
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -75,7 +75,7 @@ Partial Class ImgIndexSwitch
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'GroupBox1
         '
@@ -90,7 +90,7 @@ Partial Class ImgIndexSwitch
         Me.GroupBox1.Size = New System.Drawing.Size(535, 103)
         Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Indexes.Group")
+        Me.GroupBox1.Text = "Indexes"
         '
         'NumericUpDown1
         '
@@ -109,7 +109,7 @@ Partial Class ImgIndexSwitch
         Me.RadioButton2.Size = New System.Drawing.Size(162, 17)
         Me.RadioButton2.TabIndex = 1
         Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("DiscardChanges.RadioButton")
+        Me.RadioButton2.Text = "Unmount discarding changes"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -120,7 +120,7 @@ Partial Class ImgIndexSwitch
         Me.RadioButton1.Size = New System.Drawing.Size(134, 17)
         Me.RadioButton1.TabIndex = 1
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Save.Changes.RadioButton")
+        Me.RadioButton1.Text = "Save changes to index"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Label5
@@ -130,7 +130,7 @@ Partial Class ImgIndexSwitch
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(312, 13)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Index.Label")
+        Me.Label5.Text = "<index>"
         '
         'Label4
         '
@@ -139,7 +139,7 @@ Partial Class ImgIndexSwitch
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(140, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Destination.Mount.Label")
+        Me.Label4.Text = "Destination index to mount:"
         '
         'Label3
         '
@@ -147,7 +147,7 @@ Partial Class ImgIndexSwitch
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(222, 38)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Unmounting.Source.Label")
+        Me.Label3.Text = "When unmounting source index, what to do?"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label2
@@ -157,7 +157,7 @@ Partial Class ImgIndexSwitch
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(41, 13)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Image.Label")
+        Me.Label2.Text = "Image:"
         '
         'TextBox1
         '
@@ -174,7 +174,7 @@ Partial Class ImgIndexSwitch
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(186, 13)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Already.Mounted.Label")
+        Me.Label6.Text = "This index has already been mounted"
         Me.Label6.Visible = False
         '
         'ImageTaskHeader1
@@ -211,7 +211,7 @@ Partial Class ImgIndexSwitch
         Me.Name = "ImgIndexSwitch"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImageIndexSwitch")("Image.Indexes.Label")
+        Me.Text = "Switch image indexes"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

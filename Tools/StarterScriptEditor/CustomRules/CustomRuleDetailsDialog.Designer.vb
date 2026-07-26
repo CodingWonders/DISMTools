@@ -70,7 +70,7 @@ Partial Class CustomRuleDetailsDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -81,7 +81,7 @@ Partial Class CustomRuleDetailsDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -90,7 +90,7 @@ Partial Class CustomRuleDetailsDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(62, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("RuleName.Label")
+        Me.Label1.Text = "Rule Name:"
         '
         'RuleNameTextBox
         '
@@ -106,7 +106,7 @@ Partial Class CustomRuleDetailsDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(88, 13)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("RuleDescription.Label")
+        Me.Label2.Text = "Rule Description:"
         '
         'RuleDescriptionTextBox
         '
@@ -122,17 +122,17 @@ Partial Class CustomRuleDetailsDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(75, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("RuleSeverity.Label")
+        Me.Label3.Text = "Rule Severity:"
         '
         'RuleSeverityComboBox
         '
         Me.RuleSeverityComboBox.FormattingEnabled = True
-        Me.RuleSeverityComboBox.Items.AddRange(New Object() {LocalizationService.ForSection("StarterScript.CustomRule.Common")("Low.Item"), LocalizationService.ForSection("StarterScript.CustomRule.Common")("Medium.Item"), LocalizationService.ForSection("StarterScript.CustomRule.Common")("High.Item")})
+        Me.RuleSeverityComboBox.Items.AddRange(New Object() {"Low", "Medium", "High"})
         Me.RuleSeverityComboBox.Location = New System.Drawing.Point(107, 64)
         Me.RuleSeverityComboBox.Name = "RuleSeverityComboBox"
         Me.RuleSeverityComboBox.Size = New System.Drawing.Size(515, 21)
         Me.RuleSeverityComboBox.TabIndex = 3
-        Me.RuleSeverityComboBox.Text = LocalizationService.ForSection("StarterScript.CustomRule.Common")("Medium.Item")
+        Me.RuleSeverityComboBox.Text = "Medium"
         '
         'GroupBox1
         '
@@ -152,7 +152,7 @@ Partial Class CustomRuleDetailsDialog
         Me.GroupBox1.Size = New System.Drawing.Size(606, 317)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("ExpressionParameters.Group")
+        Me.GroupBox1.Text = "Expression Parameters"
         '
         'RegexNextMatchButton
         '
@@ -162,7 +162,7 @@ Partial Class CustomRuleDetailsDialog
         Me.RegexNextMatchButton.Name = "RegexNextMatchButton"
         Me.RegexNextMatchButton.Size = New System.Drawing.Size(128, 23)
         Me.RegexNextMatchButton.TabIndex = 9
-        Me.RegexNextMatchButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("NextMatch.Button")
+        Me.RegexNextMatchButton.Text = "Next Match"
         Me.RegexNextMatchButton.UseVisualStyleBackColor = True
         '
         'RegexPrevMatchButton
@@ -173,7 +173,7 @@ Partial Class CustomRuleDetailsDialog
         Me.RegexPrevMatchButton.Name = "RegexPrevMatchButton"
         Me.RegexPrevMatchButton.Size = New System.Drawing.Size(128, 23)
         Me.RegexPrevMatchButton.TabIndex = 9
-        Me.RegexPrevMatchButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("PreviousMatch.Button")
+        Me.RegexPrevMatchButton.Text = "Previous Match"
         Me.RegexPrevMatchButton.UseVisualStyleBackColor = True
         '
         'MatchCountLabel
@@ -184,7 +184,7 @@ Partial Class CustomRuleDetailsDialog
         Me.MatchCountLabel.Name = "MatchCountLabel"
         Me.MatchCountLabel.Size = New System.Drawing.Size(65, 13)
         Me.MatchCountLabel.TabIndex = 8
-        Me.MatchCountLabel.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails").Format("MatchCount.Label", 0)
+        Me.MatchCountLabel.Text = "0 Matches"
         '
         'RegexTesterButton
         '
@@ -194,18 +194,18 @@ Partial Class CustomRuleDetailsDialog
         Me.RegexTesterButton.Name = "RegexTesterButton"
         Me.RegexTesterButton.Size = New System.Drawing.Size(128, 23)
         Me.RegexTesterButton.TabIndex = 7
-        Me.RegexTesterButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("TestMatches.Button")
+        Me.RegexTesterButton.Text = "Test Matches"
         Me.RegexTesterButton.UseVisualStyleBackColor = True
         '
         'ComboBox2
         '
         Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Items.AddRange(New Object() {LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("Custom.Item"), LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("ApiKeyLeaks.Item")})
+        Me.ComboBox2.Items.AddRange(New Object() {"Custom", "API key leaks"})
         Me.ComboBox2.Location = New System.Drawing.Point(203, 218)
         Me.ComboBox2.Name = "ComboBox2"
         Me.ComboBox2.Size = New System.Drawing.Size(387, 21)
         Me.ComboBox2.TabIndex = 6
-        Me.ComboBox2.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("Custom.Item")
+        Me.ComboBox2.Text = "Custom"
         '
         'Label6
         '
@@ -214,7 +214,7 @@ Partial Class CustomRuleDetailsDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(177, 13)
         Me.Label6.TabIndex = 5
-        Me.Label6.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("PatternTemplate.Label")
+        Me.Label6.Text = "Security violation pattern template:"
         '
         'RuleExpressionTesterTextBox
         '
@@ -235,7 +235,8 @@ Partial Class CustomRuleDetailsDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(372, 32)
         Me.Label5.TabIndex = 3
-        Me.Label5.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("TestRule.Message")
+        Me.Label5.Text = "Use the area below to test your rule against common security violation patterns, " & _
+            "or use a custom template:"
         '
         'RegexCheatSheetButton
         '
@@ -245,7 +246,7 @@ Partial Class CustomRuleDetailsDialog
         Me.RegexCheatSheetButton.Name = "RegexCheatSheetButton"
         Me.RegexCheatSheetButton.Size = New System.Drawing.Size(192, 23)
         Me.RegexCheatSheetButton.TabIndex = 2
-        Me.RegexCheatSheetButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("RegexCheatsheet.Button")
+        Me.RegexCheatSheetButton.Text = "Regular Expression Cheatsheet"
         Me.RegexCheatSheetButton.UseVisualStyleBackColor = True
         '
         'RuleExpressionTextBox
@@ -262,7 +263,7 @@ Partial Class CustomRuleDetailsDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(87, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("RuleExpression.Label")
+        Me.Label4.Text = "Rule Expression:"
         '
         'CustomRuleDetailsDialog
         '
@@ -286,7 +287,7 @@ Partial Class CustomRuleDetailsDialog
         Me.Name = "CustomRuleDetailsDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails")("Title")
+        Me.Text = "Add/Modify Custom Inspection Rule"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

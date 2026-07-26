@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class GetImgInfoDlg
     Inherits System.Windows.Forms.Form
 
@@ -98,9 +98,10 @@ Partial Class GetImgInfoDlg
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.Get.Img")("WIM.Files.Wimvirtual.Filter")
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim|Virtual Hard Disk files|*.vhd, *.vhdx|ESD files|*.esd|SWM files|*" & _
+    ".swm|Full Flash Utility files|*.ffu"
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.Get.Img")("Image.Title")
+        Me.OpenFileDialog1.Title = "Specify the image to get the information from"
         '
         'ImageInfoPanel
         '
@@ -156,11 +157,11 @@ Partial Class GetImgInfoDlg
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.Get.Img")("Index.Column")
+        Me.ColumnHeader1.Text = "Index"
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageName.Column")
+        Me.ColumnHeader2.Text = "Image name"
         Me.ColumnHeader2.Width = 344
         '
         'Panel1
@@ -185,7 +186,7 @@ Partial Class GetImgInfoDlg
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 4
-        Me.Button3.Text = LocalizationService.ForSection("Designer.Get.Img")("Pick.Button")
+        Me.Button3.Text = "Pick..."
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button1
@@ -195,7 +196,7 @@ Partial Class GetImgInfoDlg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 3
-        Me.Button1.Text = LocalizationService.ForSection("Designer.Get.Img")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -213,7 +214,7 @@ Partial Class GetImgInfoDlg
         Me.RadioButton2.Size = New System.Drawing.Size(95, 17)
         Me.RadioButton2.TabIndex = 1
         Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.Get.Img")("AnotherImage.RadioButton")
+        Me.RadioButton2.Text = "Another image"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -224,7 +225,7 @@ Partial Class GetImgInfoDlg
         Me.RadioButton1.Size = New System.Drawing.Size(146, 17)
         Me.RadioButton1.TabIndex = 1
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.Get.Img")("CurrentlyMounted.RadioButton")
+        Me.RadioButton1.Text = "Currently mounted image"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Label3
@@ -234,7 +235,7 @@ Partial Class GetImgInfoDlg
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(141, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.Get.Img")("List.Indexes.ImageFile.Label")
+        Me.Label3.Text = "List of indexes of image file:"
         '
         'Label2
         '
@@ -243,7 +244,7 @@ Partial Class GetImgInfoDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(172, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageFile.Label")
+        Me.Label2.Text = "Image file to get information from:"
         '
         'Panel3
         '
@@ -320,7 +321,7 @@ Partial Class GetImgInfoDlg
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(79, 13)
         Me.Label22.TabIndex = 0
-        Me.Label22.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageVersion.Label")
+        Me.Label22.Text = "Image version:"
         '
         'Label23
         '
@@ -330,7 +331,7 @@ Partial Class GetImgInfoDlg
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label23.Size = New System.Drawing.Size(38, 15)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label23.Text = "Label8"
         Me.Label23.UseMnemonic = False
         '
         'Label24
@@ -341,7 +342,7 @@ Partial Class GetImgInfoDlg
         Me.Label24.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label24.Size = New System.Drawing.Size(70, 17)
         Me.Label24.TabIndex = 0
-        Me.Label24.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageName.Label")
+        Me.Label24.Text = "Image name:"
         '
         'Label25
         '
@@ -352,7 +353,7 @@ Partial Class GetImgInfoDlg
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label25.Size = New System.Drawing.Size(38, 15)
         Me.Label25.TabIndex = 0
-        Me.Label25.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label25.Text = "Label8"
         Me.Label25.UseMnemonic = False
         '
         'Label26
@@ -363,7 +364,7 @@ Partial Class GetImgInfoDlg
         Me.Label26.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label26.Size = New System.Drawing.Size(96, 17)
         Me.Label26.TabIndex = 0
-        Me.Label26.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageDescription.Label")
+        Me.Label26.Text = "Image description:"
         '
         'Label35
         '
@@ -374,7 +375,7 @@ Partial Class GetImgInfoDlg
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label35.Size = New System.Drawing.Size(38, 15)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label35.Text = "Label8"
         Me.Label35.UseMnemonic = False
         '
         'Label31
@@ -385,7 +386,7 @@ Partial Class GetImgInfoDlg
         Me.Label31.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label31.Size = New System.Drawing.Size(62, 17)
         Me.Label31.TabIndex = 0
-        Me.Label31.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageSize.Label")
+        Me.Label31.Text = "Image size:"
         '
         'Label32
         '
@@ -396,7 +397,7 @@ Partial Class GetImgInfoDlg
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label32.Size = New System.Drawing.Size(38, 15)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label32.Text = "Label8"
         Me.Label32.UseMnemonic = False
         '
         'Label41
@@ -407,7 +408,7 @@ Partial Class GetImgInfoDlg
         Me.Label41.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label41.Size = New System.Drawing.Size(102, 17)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = LocalizationService.ForSection("Designer.Get.Img")("Supports.WIM.Boot.Label")
+        Me.Label41.Text = "Supports WIMBoot?"
         '
         'Label40
         '
@@ -418,7 +419,7 @@ Partial Class GetImgInfoDlg
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label40.Size = New System.Drawing.Size(38, 15)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label40.Text = "Label8"
         Me.Label40.UseMnemonic = False
         '
         'Label43
@@ -429,7 +430,7 @@ Partial Class GetImgInfoDlg
         Me.Label43.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label43.Size = New System.Drawing.Size(70, 17)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = LocalizationService.ForSection("Designer.Get.Img")("Architecture.Label")
+        Me.Label43.Text = "Architecture:"
         '
         'Label42
         '
@@ -440,7 +441,7 @@ Partial Class GetImgInfoDlg
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label42.Size = New System.Drawing.Size(38, 15)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label42.Text = "Label8"
         Me.Label42.UseMnemonic = False
         '
         'Label47
@@ -451,7 +452,7 @@ Partial Class GetImgInfoDlg
         Me.Label47.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label47.Size = New System.Drawing.Size(30, 17)
         Me.Label47.TabIndex = 0
-        Me.Label47.Text = LocalizationService.ForSection("Designer.Get.Img")("HAL.Label")
+        Me.Label47.Text = "HAL:"
         '
         'Label46
         '
@@ -462,7 +463,7 @@ Partial Class GetImgInfoDlg
         Me.Label46.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label46.Size = New System.Drawing.Size(38, 15)
         Me.Label46.TabIndex = 0
-        Me.Label46.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label46.Text = "Label8"
         Me.Label46.UseMnemonic = False
         '
         'Label33
@@ -473,7 +474,7 @@ Partial Class GetImgInfoDlg
         Me.Label33.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label33.Size = New System.Drawing.Size(96, 17)
         Me.Label33.TabIndex = 0
-        Me.Label33.Text = LocalizationService.ForSection("Designer.Get.Img")("ServicePackBuild.Label")
+        Me.Label33.Text = "Service Pack build:"
         '
         'Label34
         '
@@ -484,7 +485,7 @@ Partial Class GetImgInfoDlg
         Me.Label34.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label34.Size = New System.Drawing.Size(38, 15)
         Me.Label34.TabIndex = 0
-        Me.Label34.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label34.Text = "Label8"
         Me.Label34.UseMnemonic = False
         '
         'Label28
@@ -495,7 +496,7 @@ Partial Class GetImgInfoDlg
         Me.Label28.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label28.Size = New System.Drawing.Size(96, 17)
         Me.Label28.TabIndex = 0
-        Me.Label28.Text = LocalizationService.ForSection("Designer.Get.Img")("ServicePackLevel.Label")
+        Me.Label28.Text = "Service Pack level:"
         '
         'Label27
         '
@@ -506,7 +507,7 @@ Partial Class GetImgInfoDlg
         Me.Label27.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label27.Size = New System.Drawing.Size(38, 15)
         Me.Label27.TabIndex = 0
-        Me.Label27.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label27.Text = "Label8"
         Me.Label27.UseMnemonic = False
         '
         'Label30
@@ -517,7 +518,7 @@ Partial Class GetImgInfoDlg
         Me.Label30.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label30.Size = New System.Drawing.Size(89, 17)
         Me.Label30.TabIndex = 0
-        Me.Label30.Text = LocalizationService.ForSection("Designer.Get.Img")("InstallationType.Label")
+        Me.Label30.Text = "Installation type:"
         '
         'Label29
         '
@@ -528,7 +529,7 @@ Partial Class GetImgInfoDlg
         Me.Label29.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label29.Size = New System.Drawing.Size(38, 15)
         Me.Label29.TabIndex = 0
-        Me.Label29.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label29.Text = "Label8"
         Me.Label29.UseMnemonic = False
         '
         'Label39
@@ -539,7 +540,7 @@ Partial Class GetImgInfoDlg
         Me.Label39.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label39.Size = New System.Drawing.Size(43, 17)
         Me.Label39.TabIndex = 0
-        Me.Label39.Text = LocalizationService.ForSection("Designer.Get.Img")("Edition.Label")
+        Me.Label39.Text = "Edition:"
         '
         'Label38
         '
@@ -550,7 +551,7 @@ Partial Class GetImgInfoDlg
         Me.Label38.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label38.Size = New System.Drawing.Size(38, 15)
         Me.Label38.TabIndex = 0
-        Me.Label38.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label38.Text = "Label8"
         Me.Label38.UseMnemonic = False
         '
         'Label45
@@ -561,7 +562,7 @@ Partial Class GetImgInfoDlg
         Me.Label45.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label45.Size = New System.Drawing.Size(73, 17)
         Me.Label45.TabIndex = 0
-        Me.Label45.Text = LocalizationService.ForSection("Designer.Get.Img")("ProductType.Label")
+        Me.Label45.Text = "Product type:"
         '
         'Label4
         '
@@ -572,7 +573,7 @@ Partial Class GetImgInfoDlg
         Me.Label4.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label4.Size = New System.Drawing.Size(38, 15)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label4.Text = "Label8"
         Me.Label4.UseMnemonic = False
         '
         'Label5
@@ -583,7 +584,7 @@ Partial Class GetImgInfoDlg
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label5.Size = New System.Drawing.Size(74, 17)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = LocalizationService.ForSection("Designer.Get.Img")("ProductSuite.Label")
+        Me.Label5.Text = "Product suite:"
         '
         'Label44
         '
@@ -594,7 +595,7 @@ Partial Class GetImgInfoDlg
         Me.Label44.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label44.Size = New System.Drawing.Size(38, 15)
         Me.Label44.TabIndex = 0
-        Me.Label44.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label44.Text = "Label8"
         Me.Label44.UseMnemonic = False
         '
         'Label7
@@ -605,7 +606,7 @@ Partial Class GetImgInfoDlg
         Me.Label7.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label7.Size = New System.Drawing.Size(115, 17)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = LocalizationService.ForSection("Designer.Get.Img")("System.Root.Dir.Label")
+        Me.Label7.Text = "System root directory:"
         '
         'Label8
         '
@@ -616,7 +617,7 @@ Partial Class GetImgInfoDlg
         Me.Label8.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label8.Size = New System.Drawing.Size(38, 15)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label8.Text = "Label8"
         Me.Label8.UseMnemonic = False
         '
         'Label9
@@ -627,7 +628,7 @@ Partial Class GetImgInfoDlg
         Me.Label9.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label9.Size = New System.Drawing.Size(57, 17)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = LocalizationService.ForSection("Designer.Get.Img")("FileCount.Label")
+        Me.Label9.Text = "File count:"
         '
         'Label6
         '
@@ -638,7 +639,7 @@ Partial Class GetImgInfoDlg
         Me.Label6.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label6.Size = New System.Drawing.Size(38, 15)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label6.Text = "Label8"
         Me.Label6.UseMnemonic = False
         '
         'Label11
@@ -649,7 +650,7 @@ Partial Class GetImgInfoDlg
         Me.Label11.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label11.Size = New System.Drawing.Size(39, 17)
         Me.Label11.TabIndex = 0
-        Me.Label11.Text = LocalizationService.ForSection("Designer.Get.Img")("Dates.Label")
+        Me.Label11.Text = "Dates:"
         '
         'Label10
         '
@@ -660,7 +661,7 @@ Partial Class GetImgInfoDlg
         Me.Label10.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label10.Size = New System.Drawing.Size(38, 15)
         Me.Label10.TabIndex = 0
-        Me.Label10.Text = LocalizationService.ForSection("Designer.Get.Img")("DynamicValue.Label")
+        Me.Label10.Text = "Label8"
         Me.Label10.UseMnemonic = False
         '
         'Label13
@@ -671,7 +672,7 @@ Partial Class GetImgInfoDlg
         Me.Label13.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label13.Size = New System.Drawing.Size(104, 17)
         Me.Label13.TabIndex = 0
-        Me.Label13.Text = LocalizationService.ForSection("Designer.Get.Img")("Installed.Languages.Label")
+        Me.Label13.Text = "Installed languages:"
         '
         'LanguageList
         '
@@ -710,7 +711,7 @@ Partial Class GetImgInfoDlg
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(436, 36)
         Me.Label36.TabIndex = 0
-        Me.Label36.Text = LocalizationService.ForSection("Designer.Get.Img")("ImageInfo.Label")
+        Me.Label36.Text = "Image information"
         Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -730,7 +731,7 @@ Partial Class GetImgInfoDlg
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(436, 396)
         Me.Label37.TabIndex = 0
-        Me.Label37.Text = LocalizationService.ForSection("Designer.Get.Img")("Index.List.View.Label")
+        Me.Label37.Text = "Select an index on the list view on the left to view its information here"
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel4
@@ -748,7 +749,7 @@ Partial Class GetImgInfoDlg
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(96, 23)
         Me.Button2.TabIndex = 5
-        Me.Button2.Text = LocalizationService.ForSection("Designer.Get.Img")("Save.Button")
+        Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -780,7 +781,7 @@ Partial Class GetImgInfoDlg
         Me.Name = "GetImgInfoDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.Get.Img")("Image.Label")
+        Me.Text = "Get image information"
         Me.ImageInfoPanel.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)

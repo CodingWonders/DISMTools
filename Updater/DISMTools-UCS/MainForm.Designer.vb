@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -84,7 +84,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(264, 15)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Updater.Designer.Main")("DISM.Tools.Update.Label")
+        Me.Label1.Text = "DISMTools Update Check System - Version <ver>"
         '
         'btnControlPanel
         '
@@ -121,7 +121,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(94, 15)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Updater.Designer.Main")("ProductUpdates.Label")
+        Me.Label2.Text = "Product updates"
         '
         'minBox
         '
@@ -178,7 +178,7 @@ Partial Class MainForm
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = LocalizationService.ForSection("Updater.Designer.Main")("Update.Button")
+        Me.Button1.Text = "Update"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'LinkLabel1
@@ -191,7 +191,7 @@ Partial Class MainForm
         Me.LinkLabel1.Size = New System.Drawing.Size(103, 15)
         Me.LinkLabel1.TabIndex = 1
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = LocalizationService.ForSection("Updater.Designer.Main")("View.Release.Notes.Link")
+        Me.LinkLabel1.Text = "View release notes"
         '
         'Label6
         '
@@ -202,7 +202,7 @@ Partial Class MainForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(814, 42)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = LocalizationService.ForSection("Updater.Designer.Main")("VersionInfo.Label")
+        Me.Label6.Text = "Version information"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label7
@@ -212,7 +212,8 @@ Partial Class MainForm
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(538, 15)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = LocalizationService.ForSection("Updater.Designer.Main")("Close.Open.Message")
+        Me.Label7.Text = "Please close any open DISMTools windows, while saving any projects loaded, and th" & _
+    "en click ""Update"""
         '
         'Label5
         '
@@ -221,7 +222,7 @@ Partial Class MainForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(301, 15)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = LocalizationService.ForSection("Updater.Designer.Main")("NewVersion.Label")
+        Me.Label5.Text = "There is a new version available to download and install:"
         '
         'Label4
         '
@@ -230,7 +231,7 @@ Partial Class MainForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(52, 15)
         Me.Label4.TabIndex = 3
-        Me.Label4.Text = LocalizationService.ForSection("Updater.Designer.Main")("Progress.Label")
+        Me.Label4.Text = "Progress"
         '
         'ProgressBar1
         '
@@ -248,7 +249,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(267, 32)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Updater.Designer.Main")("CheckingUpdates.Label")
+        Me.Label3.Text = "Checking for updates..."
         '
         'UpdatePanel
         '
@@ -322,7 +323,7 @@ Partial Class MainForm
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(129, 19)
         Me.CheckBox1.TabIndex = 4
-        Me.CheckBox1.Text = LocalizationService.ForSection("Updater.Designer.Main")("Launch.Ready.CheckBox")
+        Me.CheckBox1.Text = "Launch when ready"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label13
@@ -333,7 +334,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(156, 15)
         Me.Label13.TabIndex = 3
-        Me.Label13.Text = LocalizationService.ForSection("Updater.Designer.Main")("Finishing.Update.Label")
+        Me.Label13.Text = "Finishing update installation"
         '
         'Label12
         '
@@ -343,7 +344,7 @@ Partial Class MainForm
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(115, 15)
         Me.Label12.TabIndex = 3
-        Me.Label12.Text = LocalizationService.ForSection("Updater.Designer.Main")("InstallingUpdate.Label")
+        Me.Label12.Text = "Installing the update"
         '
         'Label11
         '
@@ -353,7 +354,7 @@ Partial Class MainForm
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(159, 15)
         Me.Label11.TabIndex = 3
-        Me.Label11.Text = LocalizationService.ForSection("Updater.Designer.Main")("Prepare.Update.Install.Label")
+        Me.Label11.Text = "Preparing update installation"
         '
         'Label10
         '
@@ -363,7 +364,7 @@ Partial Class MainForm
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(138, 15)
         Me.Label10.TabIndex = 3
-        Me.Label10.Text = LocalizationService.ForSection("Updater.Designer.Main")("Downloading.Update.Label")
+        Me.Label10.Text = "Downloading the update"
         '
         'Label14
         '
@@ -372,7 +373,7 @@ Partial Class MainForm
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(227, 15)
         Me.Label14.TabIndex = 3
-        Me.Label14.Text = LocalizationService.ForSection("Updater.Designer.Main")("Update.Take.Time.Label")
+        Me.Label14.Text = "The update may take some time to install."
         '
         'Label9
         '
@@ -381,7 +382,7 @@ Partial Class MainForm
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(422, 15)
         Me.Label9.TabIndex = 3
-        Me.Label9.Text = LocalizationService.ForSection("Updater.Designer.Main")("Wait.Update.Label")
+        Me.Label9.Text = "Please wait while we update your copy of DISMTools. This may take some time."
         '
         'Label8
         '
@@ -391,7 +392,7 @@ Partial Class MainForm
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(255, 32)
         Me.Label8.TabIndex = 2
-        Me.Label8.Text = LocalizationService.ForSection("Updater.Designer.Main")("Updating.DISM.Tools.Label")
+        Me.Label8.Text = "Updating DISMTools..."
         '
         'FinishPanel
         '
@@ -415,7 +416,7 @@ Partial Class MainForm
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 5
-        Me.Button2.Text = LocalizationService.ForSection("Updater.Designer.Main")("Launch.Button")
+        Me.Button2.Text = "Launch"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label17
@@ -425,7 +426,8 @@ Partial Class MainForm
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(677, 15)
         Me.Label17.TabIndex = 4
-        Me.Label17.Text = LocalizationService.ForSection("Updater.Designer.Main")("Version.Come.New.Message")
+        Me.Label17.Text = "This version may come with new settings you may not have set previously. Your old" & _
+    " settings file will be migrated to this version."
         '
         'Label16
         '
@@ -434,7 +436,8 @@ Partial Class MainForm
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(499, 15)
         Me.Label16.TabIndex = 4
-        Me.Label16.Text = LocalizationService.ForSection("Updater.Designer.Main")("DISM.Tools.Updated.Label")
+        Me.Label16.Text = "DISMTools has been updated successfully. You can now enjoy the new features of th" & _
+    "is release."
         '
         'Label15
         '
@@ -444,7 +447,7 @@ Partial Class MainForm
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(203, 32)
         Me.Label15.TabIndex = 3
-        Me.Label15.Text = LocalizationService.ForSection("Updater.Designer.Main")("UpdateComplete.Label")
+        Me.Label15.Text = "Update complete"
         '
         'ReleaseFetcherBW
         '
@@ -493,7 +496,7 @@ Partial Class MainForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("Updater.Designer.Main")("ProductUpdates.Label")
+        Me.Text = "Product updates"
         Me.btnControlPanel.ResumeLayout(False)
         Me.btnControlPanel.PerformLayout()
         Me.wndControlPanel.ResumeLayout(False)

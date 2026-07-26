@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class BGProcFailureDialog
     Inherits System.Windows.Forms.Form
 
@@ -57,7 +57,7 @@ Partial Class BGProcFailureDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.BgprocFailure")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Label1
         '
@@ -68,7 +68,7 @@ Partial Class BGProcFailureDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(679, 69)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.BgprocFailure")("Run.Issues.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'ListBox1
         '
@@ -129,7 +129,7 @@ Partial Class BGProcFailureDialog
         Me.Name = "BGProcFailureDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.BgprocFailure")("Failed.Bg.Procs.Label")
+        Me.Text = "Failed background processes"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)

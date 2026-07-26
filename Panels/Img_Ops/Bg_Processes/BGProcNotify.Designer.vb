@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class BGProcNotify
     Inherits System.Windows.Forms.Form
 
@@ -42,7 +42,7 @@ Partial Class BGProcNotify
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(293, 18)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.BgprocNotify")("Project.Loaded.Done.Label")
+        Me.Label1.Text = "This project has been loaded successfully"
         '
         'Label2
         '
@@ -54,7 +54,8 @@ Partial Class BGProcNotify
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(315, 32)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.BgprocNotify")("Gathering.Image.Label")
+        Me.Label2.Text = "The program is now gathering image information in the background. This may take s" & _
+    "ome time."
         '
         'Panel1
         '

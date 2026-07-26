@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SetImageEdition
     Inherits System.Windows.Forms.Form
 
@@ -64,7 +64,7 @@ Partial Class SetImageEdition
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImageEdition")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -75,7 +75,7 @@ Partial Class SetImageEdition
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImageEdition")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -84,7 +84,7 @@ Partial Class SetImageEdition
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(147, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = LocalizationService.ForSection("Designer.ImageEdition")("Target.Upgrade.Label")
+        Me.Label1.Text = "Target edition to upgrade to:"
         '
         'ComboBox1
         '
@@ -105,7 +105,7 @@ Partial Class SetImageEdition
         Me.GroupBox1.Size = New System.Drawing.Size(599, 152)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImageEdition")("ServerOptions.Group")
+        Me.GroupBox1.Text = "Active server installation options"
         '
         'TextBox2
         '
@@ -133,7 +133,7 @@ Partial Class SetImageEdition
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(102, 23)
         Me.Button1.TabIndex = 1
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImageEdition")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -150,7 +150,7 @@ Partial Class SetImageEdition
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(571, 17)
         Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.ImageEdition")("AcceptEULA.RadioButton")
+        Me.RadioButton2.Text = "Accept the End-User License Agreement (EULA) and use the following product key:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -162,7 +162,7 @@ Partial Class SetImageEdition
         Me.RadioButton1.Size = New System.Drawing.Size(571, 17)
         Me.RadioButton1.TabIndex = 0
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.ImageEdition")("Copy.EndUser.RadioButton")
+        Me.RadioButton1.Text = "Copy the End-User License Agreement (EULA) to the following location:"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -203,7 +203,7 @@ Partial Class SetImageEdition
         Me.Name = "SetImageEdition"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImageEdition")("Set.Image.Label")
+        Me.Text = "Set image edition"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

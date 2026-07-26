@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class GetAppxPkgInfoDlg
     Inherits System.Windows.Forms.Form
 
@@ -235,7 +235,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(80, 13)
         Me.Label22.TabIndex = 0
-        Me.Label22.Text = LocalizationService.ForSection("Designer.Get.AppX")("PackageName.Label")
+        Me.Label22.Text = "Package name:"
         '
         'Label23
         '
@@ -245,7 +245,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label23.Size = New System.Drawing.Size(38, 15)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label23.Text = "Label8"
         Me.Label23.UseMnemonic = False
         '
         'Label24
@@ -256,7 +256,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label24.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label24.Size = New System.Drawing.Size(128, 17)
         Me.Label24.TabIndex = 0
-        Me.Label24.Text = LocalizationService.ForSection("Designer.Get.AppX")("Display.Name.Label")
+        Me.Label24.Text = "Application display name:"
         '
         'Label25
         '
@@ -267,7 +267,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label25.Size = New System.Drawing.Size(38, 15)
         Me.Label25.TabIndex = 0
-        Me.Label25.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label25.Text = "Label8"
         Me.Label25.UseMnemonic = False
         '
         'Label26
@@ -278,7 +278,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label26.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label26.Size = New System.Drawing.Size(70, 17)
         Me.Label26.TabIndex = 0
-        Me.Label26.Text = LocalizationService.ForSection("Designer.Get.AppX")("Architecture.Label")
+        Me.Label26.Text = "Architecture:"
         '
         'Label35
         '
@@ -289,7 +289,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label35.Size = New System.Drawing.Size(38, 15)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label35.Text = "Label8"
         Me.Label35.UseMnemonic = False
         '
         'Label31
@@ -300,7 +300,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label31.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label31.Size = New System.Drawing.Size(70, 17)
         Me.Label31.TabIndex = 0
-        Me.Label31.Text = LocalizationService.ForSection("Designer.Get.AppX")("ResourceID.Label")
+        Me.Label31.Text = "Resource ID:"
         '
         'Label32
         '
@@ -311,7 +311,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label32.Size = New System.Drawing.Size(38, 15)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label32.Text = "Label8"
         Me.Label32.UseMnemonic = False
         '
         'Label41
@@ -322,7 +322,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label41.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label41.Size = New System.Drawing.Size(46, 17)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = LocalizationService.ForSection("Designer.Get.AppX")("Version.Label")
+        Me.Label41.Text = "Version:"
         '
         'Label40
         '
@@ -333,7 +333,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label40.Size = New System.Drawing.Size(38, 15)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label40.Text = "Label8"
         Me.Label40.UseMnemonic = False
         '
         'Label43
@@ -344,7 +344,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label43.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label43.Size = New System.Drawing.Size(131, 17)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = LocalizationService.ForSection("Designer.Get.AppX")("Registered.User.Label")
+        Me.Label43.Text = "Is registered to any user?"
         '
         'Label42
         '
@@ -355,7 +355,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label42.Size = New System.Drawing.Size(38, 15)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label42.Text = "Label8"
         Me.Label42.UseMnemonic = False
         '
         'Label4
@@ -366,7 +366,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label4.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label4.Size = New System.Drawing.Size(110, 17)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = LocalizationService.ForSection("Designer.Get.AppX")("Install.Dir.Label")
+        Me.Label4.Text = "Installation directory:"
         '
         'Label3
         '
@@ -377,7 +377,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label3.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label3.Size = New System.Drawing.Size(38, 15)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label3.Text = "Label8"
         Me.Label3.UseMnemonic = False
         '
         'Label6
@@ -388,7 +388,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label6.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label6.Size = New System.Drawing.Size(135, 17)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = LocalizationService.ForSection("Designer.Get.AppX")("Package.Manifest.Label")
+        Me.Label6.Text = "Package manifest location:"
         '
         'Label5
         '
@@ -399,7 +399,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label5.Size = New System.Drawing.Size(38, 15)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label5.Text = "Label8"
         Me.Label5.UseMnemonic = False
         '
         'Label8
@@ -410,7 +410,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label8.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label8.Size = New System.Drawing.Size(135, 17)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = LocalizationService.ForSection("Designer.Get.AppX")("StoreLogo.Asset.Dir.Label")
+        Me.Label8.Text = "Store logo asset directory:"
         '
         'Label7
         '
@@ -421,7 +421,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label7.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label7.Size = New System.Drawing.Size(38, 15)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = LocalizationService.ForSection("Designer.Get.AppX")("DynamicValue.Label")
+        Me.Label7.Text = "Label8"
         Me.Label7.UseMnemonic = False
         '
         'Label9
@@ -432,7 +432,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label9.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label9.Size = New System.Drawing.Size(113, 17)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = LocalizationService.ForSection("Designer.Get.AppX")("Main.StoreLogo.Asset.Label")
+        Me.Label9.Text = "Main store logo asset:"
         '
         'PictureBox2
         '
@@ -451,7 +451,9 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label10.Size = New System.Drawing.Size(403, 30)
         Me.Label10.TabIndex = 0
-        Me.Label10.Text = LocalizationService.ForSection("Designer.Get.AppX")("Asset.Guessed.DISM.Message")
+        Me.Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an " & _
+    "incorrect result. If that happens, please report an issue on the GitHub reposito" & _
+    "ry"
         '
         'LinkLabel1
         '
@@ -464,7 +466,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.LinkLabel1.Size = New System.Drawing.Size(194, 15)
         Me.LinkLabel1.TabIndex = 3
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.Get.AppX")("Asset.One.IM.Link")
+        Me.LinkLabel1.Text = "This asset is not the one I'm looking for"
         '
         'Label55
         '
@@ -494,7 +496,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(436, 36)
         Me.Label36.TabIndex = 0
-        Me.Label36.Text = LocalizationService.ForSection("Designer.Get.AppX")("AppX.Package.Label")
+        Me.Label36.Text = "AppX package information"
         Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -514,7 +516,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(436, 396)
         Me.Label37.TabIndex = 0
-        Me.Label37.Text = LocalizationService.ForSection("Designer.Get.AppX")("Installed.AppX.Label")
+        Me.Label37.Text = "Select an installed AppX package on the left to view its information here"
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel4
@@ -532,7 +534,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(96, 23)
         Me.Button2.TabIndex = 12
-        Me.Button2.Text = LocalizationService.ForSection("Designer.Get.AppX")("Save.Button")
+        Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -577,7 +579,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Name = "GetAppxPkgInfoDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.Get.AppX")("AppX.Package.Get.Label")
+        Me.Text = "Get AppX package information"
         Me.FeatureInfoPanel.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)

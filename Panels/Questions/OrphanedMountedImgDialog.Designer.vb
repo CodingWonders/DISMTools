@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class OrphanedMountedImgDialog
     Inherits System.Windows.Forms.Form
 
@@ -56,7 +56,7 @@ Partial Class OrphanedMountedImgDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.OrphanedMount")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -67,7 +67,7 @@ Partial Class OrphanedMountedImgDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.OrphanedMount")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label2
         '
@@ -76,7 +76,7 @@ Partial Class OrphanedMountedImgDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 87)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = LocalizationService.ForSection("Designer.OrphanedMount")("Project.Has.Orphans.Message")
+        Me.Label2.Text = resources.GetString("Label2.Text")
         '
         'Label1
         '
@@ -86,7 +86,7 @@ Partial Class OrphanedMountedImgDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = LocalizationService.ForSection("Designer.OrphanedMount")("Servicing.Session.Label")
+        Me.Label1.Text = "This image needs a servicing session reload"
         '
         'Panel1
         '
@@ -116,7 +116,7 @@ Partial Class OrphanedMountedImgDialog
         Me.Name = "OrphanedMountedImgDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.OrphanedMount")("DISMTools.Label")
+        Me.Text = "DISMTools"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)

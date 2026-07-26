@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class WimFileSourceControl
     Inherits System.Windows.Forms.UserControl
 
@@ -61,7 +61,7 @@ Partial Class WimFileSourceControl
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(210, 26)
         Me.Label1.TabIndex = 8
-        Me.Label1.Text = LocalizationService.ForSection("Designer.WimFileSource")("ImageFile.Label")
+        Me.Label1.Text = "Image file"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox1
@@ -82,7 +82,7 @@ Partial Class WimFileSourceControl
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(79, 26)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = LocalizationService.ForSection("Designer.WimFileSource")("ImageIndex.Label")
+        Me.Label2.Text = "Image index"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Button1

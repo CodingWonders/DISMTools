@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddProvisioningPkg
     Inherits System.Windows.Forms.Form
 
@@ -62,7 +62,7 @@ Partial Class AddProvisioningPkg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ProvPackage")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -73,7 +73,7 @@ Partial Class AddProvisioningPkg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ProvPackage")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'CheckBox1
         '
@@ -83,7 +83,7 @@ Partial Class AddProvisioningPkg
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(277, 17)
         Me.CheckBox1.TabIndex = 9
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ProvPackage")("CommitImage.CheckBox")
+        Me.CheckBox1.Text = "Commit image after adding this provisioning package"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label2
@@ -93,7 +93,7 @@ Partial Class AddProvisioningPkg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(76, 13)
         Me.Label2.TabIndex = 10
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ProvPackage")("PackagePath.Label")
+        Me.Label2.Text = "Package path:"
         '
         'TextBox1
         '
@@ -112,7 +112,7 @@ Partial Class AddProvisioningPkg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 12
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ProvPackage")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label3
@@ -124,11 +124,12 @@ Partial Class AddProvisioningPkg
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(600, 46)
         Me.Label3.TabIndex = 13
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ProvPackage")("Action.Treverted.Add.Message")
+        Me.Label3.Text = "This action can't be reverted. Once you add a provisioning package, you won't be " & _
+    "able to remove it from your Windows image."
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ProvPackage")("Package.Ppkg.Filter")
+        Me.OpenFileDialog1.Filter = "Provisioning package|*.ppkg"
         '
         'Label4
         '
@@ -137,7 +138,7 @@ Partial Class AddProvisioningPkg
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(73, 13)
         Me.Label4.TabIndex = 10
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ProvPackage")("CatalogPath.Label")
+        Me.Label4.Text = "Catalog path:"
         '
         'TextBox2
         '
@@ -156,12 +157,12 @@ Partial Class AddProvisioningPkg
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 12
-        Me.Button2.Text = LocalizationService.ForSection("Designer.ProvPackage")("Browse.Button")
+        Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = LocalizationService.ForSection("Designer.ProvPackage")("Catalog.File.Cat.Filter")
+        Me.OpenFileDialog2.Filter = "Catalog file|*.cat"
         '
         'ImageTaskHeader1
         '
@@ -201,7 +202,7 @@ Partial Class AddProvisioningPkg
         Me.Name = "AddProvisioningPkg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ProvPackage")("Add.Packages.Label")
+        Me.Text = "Add provisioning packages"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

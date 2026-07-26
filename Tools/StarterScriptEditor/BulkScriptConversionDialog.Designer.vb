@@ -38,7 +38,9 @@ Partial Class BulkScriptConversionDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(469, 46)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.BulkConversion")("Wait.Message")
+        Me.Label1.Text = "Please wait while starter scripts are being converted to the latest version of th" & _
+            "e Starter Script format. This can take some time, depending on the amount of sta" & _
+            "rter scripts to process."
         '
         'ProgressBar1
         '
@@ -58,7 +60,7 @@ Partial Class BulkScriptConversionDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(343, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = LocalizationService.ForSection("StarterScript.Designer.BulkConversion")("Progress.Label")
+        Me.Label2.Text = "Progress:"
         '
         'ConverterBW
         '
@@ -89,7 +91,7 @@ Partial Class BulkScriptConversionDialog
         Me.MinimizeBox = False
         Me.Name = "BulkScriptConversionDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("StarterScript.Designer.BulkConversion")("Title")
+        Me.Text = "Converting Starter Scripts..."
         Me.ResumeLayout(False)
 
     End Sub

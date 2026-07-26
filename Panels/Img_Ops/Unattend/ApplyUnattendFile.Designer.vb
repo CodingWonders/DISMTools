@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ApplyUnattendFile
     Inherits System.Windows.Forms.Form
 
@@ -58,7 +58,7 @@ Partial Class ApplyUnattendFile
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -69,7 +69,7 @@ Partial Class ApplyUnattendFile
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Button1
         '
@@ -78,7 +78,7 @@ Partial Class ApplyUnattendFile
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 11
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -95,11 +95,11 @@ Partial Class ApplyUnattendFile
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(64, 13)
         Me.Label2.TabIndex = 9
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("AnswerFile.Label")
+        Me.Label2.Text = "Answer file:"
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ApplyUnattend")("Answer.Files.XML.Filter")
+        Me.OpenFileDialog1.Filter = "Answer files|*.xml"
         '
         'ImageTaskHeader1
         '
@@ -122,7 +122,7 @@ Partial Class ApplyUnattendFile
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(238, 17)
         Me.CheckBox1.TabIndex = 13
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("Copy.AnswerFile.CheckBox")
+        Me.CheckBox1.Text = "Copy answer file to image Sysprep directory"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label1
@@ -132,7 +132,8 @@ Partial Class ApplyUnattendFile
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(565, 13)
         Me.Label1.TabIndex = 14
-        Me.Label1.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("LeaveUnchecked.Message")
+        Me.Label1.Text = "Leave this option unchecked if you specify an answer file that causes conflicts w" & _
+    "ith Sysprep if you enter audit mode."
         '
         'ApplyUnattendFile
         '
@@ -155,7 +156,7 @@ Partial Class ApplyUnattendFile
         Me.Name = "ApplyUnattendFile"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("UnattendAnswer.File.Label")
+        Me.Text = "Apply unattended answer file"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

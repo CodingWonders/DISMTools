@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MountOpDirCreationDialog
     Inherits System.Windows.Forms.Form
 
@@ -39,7 +39,7 @@ Partial Class MountOpDirCreationDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 7
-        Me.Label1.Text = LocalizationService.ForSection("Designer.MountDirCreation")("Create.Label")
+        Me.Label1.Text = "Do you want to create the mount directory?"
         '
         'Panel1
         '
@@ -74,7 +74,7 @@ Partial Class MountOpDirCreationDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.MountDirCreation")("Yes.Button")
+        Me.OK_Button.Text = "Yes"
         '
         'Cancel_Button
         '
@@ -85,7 +85,7 @@ Partial Class MountOpDirCreationDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.MountDirCreation")("No.Button")
+        Me.Cancel_Button.Text = "No"
         '
         'MountOpDirCreationDialog
         '
@@ -103,7 +103,7 @@ Partial Class MountOpDirCreationDialog
         Me.Name = "MountOpDirCreationDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.MountDirCreation")("MountImage.Label")
+        Me.Text = "Mount an image"
         Me.Panel1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)

@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class InvalidSettingsDialog
     Inherits System.Windows.Forms.Form
 
@@ -41,7 +41,7 @@ Partial Class InvalidSettingsDialog
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = LocalizationService.ForSection("Designer.InvalidSettings")("Ok.Button")
+        Me.Button1.Text = "OK"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label2
@@ -51,7 +51,8 @@ Partial Class InvalidSettingsDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 40)
         Me.Label2.TabIndex = 11
-        Me.Label2.Text = LocalizationService.ForSection("Designer.InvalidSettings")("ResetDefaults.Message")
+        Me.Label2.Text = "The invalid settings have been reset to default values. Check the fields below fo" & _
+    "r more information:"
         '
         'Label1
         '
@@ -61,7 +62,7 @@ Partial Class InvalidSettingsDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 23)
         Me.Label1.TabIndex = 10
-        Me.Label1.Text = LocalizationService.ForSection("Designer.InvalidSettings")("Found.Label")
+        Me.Label1.Text = "The program has detected invalid settings"
         '
         'TableLayoutPanel1
         '
@@ -94,7 +95,7 @@ Partial Class InvalidSettingsDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(590, 41)
         Me.Label6.TabIndex = 6
-        Me.Label6.Text = LocalizationService.ForSection("Designer.InvalidSettings")("Scratch.Dir.Status.Label")
+        Me.Label6.Text = "Label6"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label5
@@ -107,7 +108,7 @@ Partial Class InvalidSettingsDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(590, 38)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = LocalizationService.ForSection("Designer.InvalidSettings")("Log.File.Status.Label")
+        Me.Label5.Text = "Label5"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label4
@@ -120,7 +121,7 @@ Partial Class InvalidSettingsDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(590, 38)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = LocalizationService.ForSection("Designer.InvalidSettings")("Log.Font.Status.Label")
+        Me.Label4.Text = "Label4"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label3
@@ -133,7 +134,7 @@ Partial Class InvalidSettingsDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(590, 38)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.InvalidSettings")("DISM.Executable.Status.Label")
+        Me.Label3.Text = "Label3"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'InvalidSettingsDialog
@@ -154,7 +155,7 @@ Partial Class InvalidSettingsDialog
         Me.Name = "InvalidSettingsDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.InvalidSettings")("Detected.Label")
+        Me.Text = "Invalid settings have been detected"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

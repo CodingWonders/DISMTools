@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SetOSUninstWindow
     Inherits System.Windows.Forms.Form
 
@@ -57,7 +57,7 @@ Partial Class SetOSUninstWindow
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.OSRollback")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -68,7 +68,7 @@ Partial Class SetOSUninstWindow
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.OSRollback")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label2
         '
@@ -78,7 +78,7 @@ Partial Class SetOSUninstWindow
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(600, 68)
         Me.Label2.TabIndex = 5
-        Me.Label2.Text = LocalizationService.ForSection("Designer.OSRollback")("Default.OS.Message")
+        Me.Label2.Text = resources.GetString("Label2.Text")
         '
         'Label3
         '
@@ -87,7 +87,7 @@ Partial Class SetOSUninstWindow
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(314, 13)
         Me.Label3.TabIndex = 6
-        Me.Label3.Text = LocalizationService.ForSection("Designer.OSRollback")("Amount.Days.Revert.Label")
+        Me.Label3.Text = "Amount of days you have to revert to the old Windows version:"
         '
         'NumericUpDown1
         '
@@ -132,7 +132,7 @@ Partial Class SetOSUninstWindow
         Me.Name = "SetOSUninstWindow"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.OSRollback")("OSUninstall.Label")
+        Me.Text = "Set operating system uninstall window"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ADDSJoinDialog
     Inherits System.Windows.Forms.Form
 
@@ -166,7 +166,7 @@ Partial Class ADDSJoinDialog
         Me.DnsToolsBtn.Name = "DnsToolsBtn"
         Me.DnsToolsBtn.Size = New System.Drawing.Size(37, 23)
         Me.DnsToolsBtn.TabIndex = 3
-        Me.DnsToolsBtn.Text = LocalizationService.ForSection("Designer.DomainJoin")("DnstoolsBtn.Button")
+        Me.DnsToolsBtn.Text = "..."
         Me.DnsToolsBtn.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.DnsToolsBtn.UseVisualStyleBackColor = True
         '
@@ -192,7 +192,7 @@ Partial Class ADDSJoinDialog
         Me.GroupBox1.Size = New System.Drawing.Size(716, 316)
         Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.DomainJoin")("Nicsettings.Group")
+        Me.GroupBox1.Text = "NIC Settings"
         '
         'Panel1
         '
@@ -220,7 +220,7 @@ Partial Class ADDSJoinDialog
         Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
         Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
         Me.DnsSyntaxCheckerBtn.TabIndex = 10
-        Me.DnsSyntaxCheckerBtn.Text = LocalizationService.ForSection("Designer.DomainJoin")("Verify.DNS.Label")
+        Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
         Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -251,7 +251,8 @@ Partial Class ADDSJoinDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(538, 31)
         Me.Label5.TabIndex = 7
-        Me.Label5.Text = LocalizationService.ForSection("Designer.DomainJoin")("Default.Adapter.Same.Message")
+        Me.Label5.Text = "By default, this adapter will use the same domain suffix you specified above. You" & _
+    " can change it later"
         '
         'ComboBox1
         '
@@ -268,7 +269,7 @@ Partial Class ADDSJoinDialog
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(201, 17)
         Me.RadioButton2.TabIndex = 3
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.DomainJoin")("ManualAdapter.RadioButton")
+        Me.RadioButton2.Text = "Specify a network adapter manually:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'Label7
@@ -280,7 +281,9 @@ Partial Class ADDSJoinDialog
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(461, 33)
         Me.Label7.TabIndex = 9
-        Me.Label7.Text = LocalizationService.ForSection("Designer.DomainJoin")("Address.First.Line.Message")
+        Me.Label7.Text = "The address in the first line will be the primary DNS server address, and any oth" & _
+    "er addresses will become alternative server addresses. You can put both IPv4 and" & _
+    " IPv6 addresses."
         '
         'Label6
         '
@@ -289,7 +292,7 @@ Partial Class ADDSJoinDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(280, 13)
         Me.Label6.TabIndex = 8
-        Me.Label6.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSServer.Addresses.Label")
+        Me.Label6.Text = "DNS Server Addresses (put each address in its own line):"
         '
         'Label4
         '
@@ -298,7 +301,7 @@ Partial Class ADDSJoinDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(116, 13)
         Me.Label4.TabIndex = 5
-        Me.Label4.Text = LocalizationService.ForSection("Designer.DomainJoin")("PrimarySuffix.Label")
+        Me.Label4.Text = "Primary Domain Suffix:"
         '
         'RadioButton1
         '
@@ -309,7 +312,7 @@ Partial Class ADDSJoinDialog
         Me.RadioButton1.Size = New System.Drawing.Size(232, 17)
         Me.RadioButton1.TabIndex = 1
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.DomainJoin")("PickAdapter.RadioButton")
+        Me.RadioButton1.Text = "Pick from a network adapter in this system:"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Label3
@@ -319,7 +322,7 @@ Partial Class ADDSJoinDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(81, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.DomainJoin")("InterfaceAlias.Label")
+        Me.Label3.Text = "Interface Alias:"
         '
         'TextBox1
         '
@@ -339,7 +342,8 @@ Partial Class ADDSJoinDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(591, 31)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Suffix.Added.Message")
+        Me.Label2.Text = "This domain suffix will be added to the list of DNS suffixes. You can add more to" & _
+    " the list of suffixes later."
         '
         'Label1
         '
@@ -348,7 +352,7 @@ Partial Class ADDSJoinDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(116, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.DomainJoin")("PrimarySuffix.Label")
+        Me.Label1.Text = "Primary Domain Suffix:"
         '
         'DNSConfigHeader
         '
@@ -360,7 +364,7 @@ Partial Class ADDSJoinDialog
         Me.DNSConfigHeader.Name = "DNSConfigHeader"
         Me.DNSConfigHeader.Size = New System.Drawing.Size(658, 23)
         Me.DNSConfigHeader.TabIndex = 0
-        Me.DNSConfigHeader.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSSettings.Label")
+        Me.DNSConfigHeader.Text = "Configure DNS settings for network adapters"
         '
         'DSDomainConfigPanel
         '
@@ -410,7 +414,7 @@ Partial Class ADDSJoinDialog
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(408, 13)
         Me.Label17.TabIndex = 8
-        Me.Label17.Text = LocalizationService.ForSection("Designer.DomainJoin")("Type.Security.Account.Label")
+        Me.Label17.Text = "Type the Security Account Manager (SAM) name of the user account in the domain:"
         '
         'TextBox5
         '
@@ -447,7 +451,7 @@ Partial Class ADDSJoinDialog
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(101, 13)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = LocalizationService.ForSection("Designer.DomainJoin")("Organizational.Unit.Label")
+        Me.Label15.Text = "Organizational unit:"
         '
         'Label16
         '
@@ -456,7 +460,7 @@ Partial Class ADDSJoinDialog
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(33, 13)
         Me.Label16.TabIndex = 2
-        Me.Label16.Text = LocalizationService.ForSection("Designer.DomainJoin")("User.Label")
+        Me.Label16.Text = "User:"
         '
         'ComboBox2
         '
@@ -494,7 +498,7 @@ Partial Class ADDSJoinDialog
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(215, 13)
         Me.Label19.TabIndex = 14
-        Me.Label19.Text = LocalizationService.ForSection("Designer.DomainJoin")("SAM.Account.Label")
+        Me.Label19.Text = "SAM account name of selected user object:"
         '
         'Label18
         '
@@ -505,7 +509,8 @@ Partial Class ADDSJoinDialog
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(406, 28)
         Me.Label18.TabIndex = 0
-        Me.Label18.Text = LocalizationService.ForSection("Designer.DomainJoin")("Org.Unit.Account.Message")
+        Me.Label18.Text = "If the desired account is not in any organizational unit, but rather in a contain" & _
+    "er, or somewhere else; click the following button to pick it:"
         '
         'DsAccountObjectPickerBtn
         '
@@ -514,13 +519,13 @@ Partial Class ADDSJoinDialog
         Me.DsAccountObjectPickerBtn.Name = "DsAccountObjectPickerBtn"
         Me.DsAccountObjectPickerBtn.Size = New System.Drawing.Size(125, 23)
         Me.DsAccountObjectPickerBtn.TabIndex = 13
-        Me.DsAccountObjectPickerBtn.Text = LocalizationService.ForSection("Designer.DomainJoin")("Pick.Account.Object.Button")
+        Me.DsAccountObjectPickerBtn.Text = "Pick account object..."
         Me.DsAccountObjectPickerBtn.UseVisualStyleBackColor = True
         '
         'ComboBox4
         '
         Me.ComboBox4.FormattingEnabled = True
-        Me.ComboBox4.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.DomainJoin")("User.Manually.Item"), LocalizationService.ForSection("Designer.DomainJoin")("Pick.User.Org.Item"), LocalizationService.ForSection("Designer.DomainJoin")("Pick.User.Object.Item")})
+        Me.ComboBox4.Items.AddRange(New Object() {"Specify a user manually", "Pick the following user from organizational units in my domain", "Pick the following user object from anywhere in my domain"})
         Me.ComboBox4.Location = New System.Drawing.Point(211, 81)
         Me.ComboBox4.Name = "ComboBox4"
         Me.ComboBox4.Size = New System.Drawing.Size(459, 21)
@@ -551,7 +556,7 @@ Partial Class ADDSJoinDialog
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(289, 21)
         Me.Label13.TabIndex = 0
-        Me.Label13.Text = LocalizationService.ForSection("Designer.DomainJoin")("User.Principal.Name.Label")
+        Me.Label13.Text = "User Principal Name (Windows 2000):"
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label14
@@ -562,7 +567,7 @@ Partial Class ADDSJoinDialog
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(289, 21)
         Me.Label14.TabIndex = 2
-        Me.Label14.Text = LocalizationService.ForSection("Designer.DomainJoin")("Logon.Path.Pre.Label")
+        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'AddsUpnPathText
@@ -614,7 +619,8 @@ Partial Class ADDSJoinDialog
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(517, 32)
         Me.Label11.TabIndex = 0
-        Me.Label11.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Auto.Detected.Message")
+        Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
+    "long to a domain."
         '
         'TextBox6
         '
@@ -634,7 +640,7 @@ Partial Class ADDSJoinDialog
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(582, 65)
         Me.Label12.TabIndex = 11
-        Me.Label12.Text = LocalizationService.ForSection("Designer.DomainJoin")("Ask.Admin.Provide.Message")
+        Me.Label12.Text = resources.GetString("Label12.Text")
         '
         'Label10
         '
@@ -643,7 +649,7 @@ Partial Class ADDSJoinDialog
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(57, 13)
         Me.Label10.TabIndex = 8
-        Me.Label10.Text = LocalizationService.ForSection("Designer.DomainJoin")("Password.Label")
+        Me.Label10.Text = "Password:"
         '
         'Label9
         '
@@ -652,7 +658,7 @@ Partial Class ADDSJoinDialog
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(75, 13)
         Me.Label9.TabIndex = 3
-        Me.Label9.Text = LocalizationService.ForSection("Designer.DomainJoin")("UserAccount.Label")
+        Me.Label9.Text = "User Account:"
         '
         'TextBox4
         '
@@ -668,7 +674,7 @@ Partial Class ADDSJoinDialog
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(76, 13)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = LocalizationService.ForSection("Designer.DomainJoin")("DomainName.Label")
+        Me.Label8.Text = "Domain Name:"
         '
         'DSDomainConfigHeader
         '
@@ -680,7 +686,7 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigHeader.Name = "DSDomainConfigHeader"
         Me.DSDomainConfigHeader.Size = New System.Drawing.Size(658, 23)
         Me.DSDomainConfigHeader.TabIndex = 0
-        Me.DSDomainConfigHeader.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Auth.Label")
+        Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
         '
         'HeaderPanel
         '
@@ -702,7 +708,8 @@ Partial Class ADDSJoinDialog
         Me.DS7_Description.Name = "DS7_Description"
         Me.DS7_Description.Size = New System.Drawing.Size(643, 28)
         Me.DS7_Description.TabIndex = 1
-        Me.DS7_Description.Text = LocalizationService.ForSection("Designer.DomainJoin")("Wizard.Helps.Set.Description")
+        Me.DS7_Description.Text = "This wizard helps you set up your unattended answer file to make a device join a " & _
+    "domain powered by Active Directory Domain Services (AD DS)."
         '
         'PictureBox1
         '
@@ -725,7 +732,7 @@ Partial Class ADDSJoinDialog
         Me.DS7_Header.Name = "DS7_Header"
         Me.DS7_Header.Size = New System.Drawing.Size(658, 23)
         Me.DS7_Header.TabIndex = 0
-        Me.DS7_Header.Text = LocalizationService.ForSection("Designer.DomainJoin")("Join.Active.Dir.Label")
+        Me.DS7_Header.Text = "Join an Active Directory domain"
         '
         'FooterContainer
         '
@@ -756,7 +763,7 @@ Partial Class ADDSJoinDialog
         Me.DNS_Explanation_Link.Size = New System.Drawing.Size(71, 13)
         Me.DNS_Explanation_Link.TabIndex = 0
         Me.DNS_Explanation_Link.TabStop = True
-        Me.DNS_Explanation_Link.Text = LocalizationService.ForSection("Designer.DomainJoin")("WhatDNS.Link")
+        Me.DNS_Explanation_Link.Text = "What is DNS?"
         '
         'TableLayoutPanel1
         '
@@ -786,7 +793,7 @@ Partial Class ADDSJoinDialog
         Me.Back_Button.Name = "Back_Button"
         Me.Back_Button.Size = New System.Drawing.Size(64, 23)
         Me.Back_Button.TabIndex = 0
-        Me.Back_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Back.Button")
+        Me.Back_Button.Text = "Back"
         '
         'Next_Button
         '
@@ -797,7 +804,7 @@ Partial Class ADDSJoinDialog
         Me.Next_Button.Name = "Next_Button"
         Me.Next_Button.Size = New System.Drawing.Size(64, 23)
         Me.Next_Button.TabIndex = 1
-        Me.Next_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Next.Button")
+        Me.Next_Button.Text = "Next"
         '
         'Cancel_Button
         '
@@ -808,7 +815,7 @@ Partial Class ADDSJoinDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(64, 23)
         Me.Cancel_Button.TabIndex = 2
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Help_Button
         '
@@ -819,7 +826,7 @@ Partial Class ADDSJoinDialog
         Me.Help_Button.Name = "Help_Button"
         Me.Help_Button.Size = New System.Drawing.Size(64, 23)
         Me.Help_Button.TabIndex = 3
-        Me.Help_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Help.Button")
+        Me.Help_Button.Text = "Help"
         '
         'ADDSInitBW
         '
@@ -840,13 +847,13 @@ Partial Class ADDSJoinDialog
         Me.DnsResolutionTSMI.Image = Global.DISMTools.My.Resources.Resources.search_light
         Me.DnsResolutionTSMI.Name = "DnsResolutionTSMI"
         Me.DnsResolutionTSMI.Size = New System.Drawing.Size(314, 22)
-        Me.DnsResolutionTSMI.Text = LocalizationService.ForSection("Designer.DomainJoin")("Test.Dnsresolution.Label")
+        Me.DnsResolutionTSMI.Text = "Test DNS resolution"
         '
         'DnsZoneTSMI
         '
         Me.DnsZoneTSMI.Name = "DnsZoneTSMI"
         Me.DnsZoneTSMI.Size = New System.Drawing.Size(314, 22)
-        Me.DnsZoneTSMI.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSZone.Domain.Choose.Label")
+        Me.DnsZoneTSMI.Text = "Choose DNS zone... (domain controllers only)"
         '
         'ADDSJoinDialog
         '
@@ -864,7 +871,7 @@ Partial Class ADDSJoinDialog
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Services.Wizard.Label")
+        Me.Text = "Domain Services Wizard"
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)

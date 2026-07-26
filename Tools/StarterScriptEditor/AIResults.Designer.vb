@@ -51,7 +51,7 @@ Partial Class AIResults
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(324, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("Results.Message")
+        Me.Label1.Text = "The following results were returned during the inspection process:"
         '
         'DataGridView1
         '
@@ -85,13 +85,14 @@ Partial Class AIResults
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(992, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("Accuracy.Warning")
+        Me.Label2.Text = "The inspections performed on the script code are automated and may not be complet" & _
+            "ely accurate. Revise script code manually."
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'DataGridViewImageColumn1
         '
         Me.DataGridViewImageColumn1.DataPropertyName = "ScannedRule"
-        Me.DataGridViewImageColumn1.HeaderText = LocalizationService.ForSection("StarterScript.Designer.AIResults")("Severity.Column")
+        Me.DataGridViewImageColumn1.HeaderText = "Severity"
         Me.DataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
         Me.DataGridViewImageColumn1.Name = "DataGridViewImageColumn1"
         Me.DataGridViewImageColumn1.ReadOnly = True
@@ -108,7 +109,7 @@ Partial Class AIResults
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(63, 23)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("PinTop.CheckBox")
+        Me.CheckBox1.Text = "Pin to top"
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
@@ -120,7 +121,7 @@ Partial Class AIResults
         Me.lblViolationCount.Name = "lblViolationCount"
         Me.lblViolationCount.Size = New System.Drawing.Size(122, 28)
         Me.lblViolationCount.TabIndex = 4
-        Me.lblViolationCount.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("ViolationCount.Label")
+        Me.lblViolationCount.Text = "Violation count:"
         Me.lblViolationCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'cbHighViolations
@@ -135,7 +136,7 @@ Partial Class AIResults
         Me.cbHighViolations.Name = "cbHighViolations"
         Me.cbHighViolations.Size = New System.Drawing.Size(164, 22)
         Me.cbHighViolations.TabIndex = 5
-        Me.cbHighViolations.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("HighViolations.CheckBox")
+        Me.cbHighViolations.Text = "High-severity violations"
         Me.cbHighViolations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.cbHighViolations.UseVisualStyleBackColor = True
         '
@@ -169,7 +170,7 @@ Partial Class AIResults
         Me.cbLowViolations.Name = "cbLowViolations"
         Me.cbLowViolations.Size = New System.Drawing.Size(166, 22)
         Me.cbLowViolations.TabIndex = 7
-        Me.cbLowViolations.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("LowViolations.CheckBox")
+        Me.cbLowViolations.Text = "Low-severity violations"
         Me.cbLowViolations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.cbLowViolations.UseVisualStyleBackColor = True
         '
@@ -185,7 +186,7 @@ Partial Class AIResults
         Me.cbMediumViolations.Name = "cbMediumViolations"
         Me.cbMediumViolations.Size = New System.Drawing.Size(164, 22)
         Me.cbMediumViolations.TabIndex = 6
-        Me.cbMediumViolations.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("MediumViolations.CheckBox")
+        Me.cbMediumViolations.Text = "Medium-severity violations"
         Me.cbMediumViolations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.cbMediumViolations.UseVisualStyleBackColor = True
         '
@@ -197,13 +198,13 @@ Partial Class AIResults
         Me.CustomRulesButton.Name = "CustomRulesButton"
         Me.CustomRulesButton.Size = New System.Drawing.Size(96, 23)
         Me.CustomRulesButton.TabIndex = 7
-        Me.CustomRulesButton.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("CustomRules.Button")
+        Me.CustomRulesButton.Text = "Custom Rules..."
         Me.CustomRulesButton.UseVisualStyleBackColor = True
         '
         'ScannedRuleSeverityColumn
         '
         Me.ScannedRuleSeverityColumn.DataPropertyName = "ScannedRule"
-        Me.ScannedRuleSeverityColumn.HeaderText = LocalizationService.ForSection("StarterScript.Designer.AIResults")("Severity.Column")
+        Me.ScannedRuleSeverityColumn.HeaderText = "Severity"
         Me.ScannedRuleSeverityColumn.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
         Me.ScannedRuleSeverityColumn.Name = "ScannedRuleSeverityColumn"
         Me.ScannedRuleSeverityColumn.ReadOnly = True
@@ -213,7 +214,7 @@ Partial Class AIResults
         'ScannedRuleDataGridViewTextBoxColumn
         '
         Me.ScannedRuleDataGridViewTextBoxColumn.DataPropertyName = "ScannedRule"
-        Me.ScannedRuleDataGridViewTextBoxColumn.HeaderText = LocalizationService.ForSection("StarterScript.Designer.AIResults")("ScannedRule.Column")
+        Me.ScannedRuleDataGridViewTextBoxColumn.HeaderText = "Scanned Rule"
         Me.ScannedRuleDataGridViewTextBoxColumn.Name = "ScannedRuleDataGridViewTextBoxColumn"
         Me.ScannedRuleDataGridViewTextBoxColumn.ReadOnly = True
         Me.ScannedRuleDataGridViewTextBoxColumn.Width = 840
@@ -238,7 +239,7 @@ Partial Class AIResults
         Me.Name = "AIResults"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("StarterScript.Designer.AIResults")("Title")
+        Me.Text = "Automated Inspection Results"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()

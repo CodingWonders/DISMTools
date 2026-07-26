@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgMount
     Inherits System.Windows.Forms.Form
 
@@ -83,7 +83,7 @@ Partial Class ImgMount
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgMount")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -94,7 +94,7 @@ Partial Class ImgMount
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgMount")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label2
         '
@@ -103,7 +103,7 @@ Partial Class ImgMount
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(228, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgMount")("Options.Required.Label")
+        Me.Label2.Text = "Please specify the options to mount an image:"
         '
         'GroupBox1
         '
@@ -117,7 +117,7 @@ Partial Class ImgMount
         Me.GroupBox1.Size = New System.Drawing.Size(760, 89)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgMount")("Source.Group")
+        Me.GroupBox1.Text = "Source"
         '
         'Label4
         '
@@ -128,7 +128,8 @@ Partial Class ImgMount
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(657, 13)
         Me.Label4.TabIndex = 5
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgMount")("Notewant.ESD.Label")
+        Me.Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file firs" & _
+    "t"
         Me.Label4.Visible = False
         '
         'Button3
@@ -138,7 +139,7 @@ Partial Class ImgMount
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 4
-        Me.Button3.Text = LocalizationService.ForSection("Designer.ImgMount")("Convert.Button")
+        Me.Button3.Text = "Convert"
         Me.Button3.UseVisualStyleBackColor = True
         Me.Button3.Visible = False
         '
@@ -149,7 +150,7 @@ Partial Class ImgMount
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgMount")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -167,7 +168,7 @@ Partial Class ImgMount
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(131, 13)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgMount")("ImageFile.Label")
+        Me.Label3.Text = "Image file*:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'GroupBox2
@@ -180,7 +181,7 @@ Partial Class ImgMount
         Me.GroupBox2.Size = New System.Drawing.Size(760, 60)
         Me.GroupBox2.TabIndex = 3
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ImgMount")("Destination.Group")
+        Me.GroupBox2.Text = "Destination"
         '
         'Button2
         '
@@ -189,7 +190,7 @@ Partial Class ImgMount
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 4
-        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgMount")("Browse.Button")
+        Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -207,7 +208,7 @@ Partial Class ImgMount
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(131, 13)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = LocalizationService.ForSection("Designer.ImgMount")("MountDirectory.Label")
+        Me.Label6.Text = "Mount directory*:"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'GroupBox3
@@ -223,7 +224,7 @@ Partial Class ImgMount
         Me.GroupBox3.Size = New System.Drawing.Size(760, 156)
         Me.GroupBox3.TabIndex = 3
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.ImgMount")("Options.Group")
+        Me.GroupBox3.Text = "Options"
         '
         'ListView1
         '
@@ -239,22 +240,22 @@ Partial Class ImgMount
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ImgMount")("Index.Column")
+        Me.ColumnHeader1.Text = "Index"
         Me.ColumnHeader1.Width = 44
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.ImgMount")("ImageName.Column")
+        Me.ColumnHeader2.Text = "Image name"
         Me.ColumnHeader2.Width = 256
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.ImgMount")("ImageDescription.Column")
+        Me.ColumnHeader3.Text = "Image description"
         Me.ColumnHeader3.Width = 256
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.ImgMount")("ImageVersion.Column")
+        Me.ColumnHeader4.Text = "Image version"
         Me.ColumnHeader4.Width = 128
         '
         'NumericUpDown1
@@ -273,7 +274,7 @@ Partial Class ImgMount
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ImgMount")("Integrity.CheckBox")
+        Me.CheckBox4.Text = "Check image integrity"
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -283,7 +284,7 @@ Partial Class ImgMount
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(128, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ImgMount")("Optimize.Times.CheckBox")
+        Me.CheckBox3.Text = "Optimize mount times"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -293,7 +294,7 @@ Partial Class ImgMount
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(185, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgMount")("Mount.Read.CheckBox")
+        Me.CheckBox1.Text = "Mount with read only permissions"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label7
@@ -304,7 +305,7 @@ Partial Class ImgMount
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(131, 13)
         Me.Label7.TabIndex = 2
-        Me.Label7.Text = LocalizationService.ForSection("Designer.ImgMount")("Index.Label")
+        Me.Label7.Text = "Index*:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label11
@@ -314,11 +315,12 @@ Partial Class ImgMount
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(179, 13)
         Me.Label11.TabIndex = 2
-        Me.Label11.Text = LocalizationService.ForSection("Designer.ImgMount")("Fields.End.Required.Label")
+        Me.Label11.Text = "The fields that end in * are required"
         '
         'FileSpecDialog
         '
-        Me.FileSpecDialog.Filter = LocalizationService.ForSection("Designer.ImgMount")("FileSpec.Filter")
+        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx|ISO fil" & _
+    "es|*.iso|Full Flash Utility files|*.ffu"
         '
         'IsoExtractorBW
         '
@@ -359,7 +361,7 @@ Partial Class ImgMount
         Me.Name = "ImgMount"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImgMount")("MountImage.Label")
+        Me.Text = "Mount an image"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

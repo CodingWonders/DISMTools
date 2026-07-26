@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgSplit
     Inherits System.Windows.Forms.Form
 
@@ -65,7 +65,7 @@ Partial Class ImgSplit
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgSplit")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -76,17 +76,17 @@ Partial Class ImgSplit
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgSplit")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgSplit")("Swmfiles.Filter")
-        Me.SaveFileDialog1.Title = LocalizationService.ForSection("Designer.ImgSplit")("SaveFile.Title")
+        Me.SaveFileDialog1.Filter = "SWM files|*.swm"
+        Me.SaveFileDialog1.Title = "Specify the target location of the split images:"
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgSplit")("WIM.Files.Filter")
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.ImgSplit")("Source.WIM.File.Title")
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
+        Me.OpenFileDialog1.Title = "Specify the source WIM file to split:"
         '
         'TextBox1
         '
@@ -102,7 +102,7 @@ Partial Class ImgSplit
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(110, 13)
         Me.Label2.TabIndex = 14
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgSplit")("Source.Image.Label")
+        Me.Label2.Text = "Source image to split:"
         '
         'Button1
         '
@@ -111,7 +111,7 @@ Partial Class ImgSplit
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 15
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgSplit")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -128,7 +128,7 @@ Partial Class ImgSplit
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(225, 13)
         Me.Label3.TabIndex = 14
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgSplit")("Name.Path.Destination.Label")
+        Me.Label3.Text = "Name and path of the destination split image:"
         '
         'Button2
         '
@@ -137,7 +137,7 @@ Partial Class ImgSplit
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 15
-        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgSplit")("Browse.Button")
+        Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label4
@@ -147,7 +147,7 @@ Partial Class ImgSplit
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(183, 13)
         Me.Label4.TabIndex = 14
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgSplit")("Maximum.Size.Images.Label")
+        Me.Label4.Text = "Maximum size of split images (in MB):"
         '
         'NumericUpDown1
         '
@@ -168,7 +168,8 @@ Partial Class ImgSplit
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(603, 34)
         Me.Label5.TabIndex = 14
-        Me.Label5.Text = LocalizationService.ForSection("Designer.ImgSplit")("LargeFile.Note.Message")
+        Me.Label5.Text = "Do note that, to accommodate a large file in the image, a split image file may be" & _
+    " larger than the specified value"
         '
         'CheckBox1
         '
@@ -177,7 +178,7 @@ Partial Class ImgSplit
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox1.TabIndex = 17
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgSplit")("Integrity.CheckBox")
+        Me.CheckBox1.Text = "Check image integrity"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -220,7 +221,7 @@ Partial Class ImgSplit
         Me.Name = "ImgSplit"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImgSplit")("SplitImages.Label")
+        Me.Text = "Split images"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

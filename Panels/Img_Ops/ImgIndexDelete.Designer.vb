@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgIndexDelete
     Inherits System.Windows.Forms.Form
 
@@ -68,7 +68,7 @@ Partial Class ImgIndexDelete
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -79,7 +79,7 @@ Partial Class ImgIndexDelete
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label2
         '
@@ -88,7 +88,7 @@ Partial Class ImgIndexDelete
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(75, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("SourceImage.Label")
+        Me.Label2.Text = "Source image:"
         '
         'TextBox1
         '
@@ -104,7 +104,7 @@ Partial Class ImgIndexDelete
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 9
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Button2
@@ -114,7 +114,7 @@ Partial Class ImgIndexDelete
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(132, 23)
         Me.Button2.TabIndex = 9
-        Me.Button2.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Mounted.Image.Button")
+        Me.Button2.Text = "Use mounted image"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -128,7 +128,7 @@ Partial Class ImgIndexDelete
         Me.GroupBox1.Size = New System.Drawing.Size(680, 232)
         Me.GroupBox1.TabIndex = 10
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("VolumeImages.Group")
+        Me.GroupBox1.Text = "Volume images"
         '
         'ListView2
         '
@@ -144,12 +144,12 @@ Partial Class ImgIndexDelete
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Index.Column")
+        Me.ColumnHeader3.Text = "Index"
         Me.ColumnHeader3.Width = 41
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("ImageName.Column")
+        Me.ColumnHeader4.Text = "Image name"
         Me.ColumnHeader4.Width = 254
         '
         'ListView1
@@ -167,12 +167,12 @@ Partial Class ImgIndexDelete
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Index.Column")
+        Me.ColumnHeader1.Text = "Index"
         Me.ColumnHeader1.Width = 41
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("ImageName.Column")
+        Me.ColumnHeader2.Text = "Image name"
         Me.ColumnHeader2.Width = 254
         '
         'Label4
@@ -182,7 +182,7 @@ Partial Class ImgIndexDelete
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(230, 13)
         Me.Label4.TabIndex = 7
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Get.Indexes.Image.Label")
+        Me.Label4.Text = "Getting indexes from the image. Please wait..."
         Me.Label4.Visible = False
         '
         'Label3
@@ -192,7 +192,8 @@ Partial Class ImgIndexDelete
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(532, 13)
         Me.Label3.TabIndex = 7
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Mark.VolumeImages.Message")
+        Me.Label3.Text = "Please mark the volume images to delete on the left. The image will then have the" & _
+    " indexes shown on the right"
         '
         'CheckBox1
         '
@@ -201,13 +202,13 @@ Partial Class ImgIndexDelete
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox1.TabIndex = 11
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Integrity.CheckBox")
+        Me.CheckBox1.Text = "Check image integrity"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ImageIndexDelete")("WIM.Files.Filter")
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.ImageIndexDelete")("Source.Image.Remove.Title")
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
+        Me.OpenFileDialog1.Title = "Specify the source image to remove volume images from"
         '
         'ImageTaskHeader1
         '
@@ -245,7 +246,7 @@ Partial Class ImgIndexDelete
         Me.Name = "ImgIndexDelete"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImageIndexDelete")("Remove.Volume.Image.Label")
+        Me.Text = "Remove a volume image"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

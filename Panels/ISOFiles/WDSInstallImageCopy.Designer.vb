@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class WDSInstallImageCopy
     Inherits System.Windows.Forms.Form
 
@@ -81,7 +81,7 @@ Partial Class WDSInstallImageCopy
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(75, 23)
         Me.OK_Button.TabIndex = 10
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         Me.OK_Button.UseVisualStyleBackColor = True
         '
         'Cancel_Button
@@ -93,7 +93,7 @@ Partial Class WDSInstallImageCopy
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 11
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         Me.Cancel_Button.UseVisualStyleBackColor = True
         '
         'Button2
@@ -104,7 +104,7 @@ Partial Class WDSInstallImageCopy
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 14
-        Me.Button2.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Pick.Button")
+        Me.Button2.Text = "Pick..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -115,7 +115,7 @@ Partial Class WDSInstallImageCopy
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 15
-        Me.Button1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -134,7 +134,7 @@ Partial Class WDSInstallImageCopy
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(144, 13)
         Me.Label4.TabIndex = 12
-        Me.Label4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageFile.Server.Label")
+        Me.Label4.Text = "Image file to copy to server:"
         '
         'Button3
         '
@@ -144,7 +144,7 @@ Partial Class WDSInstallImageCopy
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(156, 23)
         Me.Button3.TabIndex = 16
-        Me.Button3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Mounted.Image.Button")
+        Me.Button3.Text = "Use mounted image"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Label1
@@ -154,7 +154,7 @@ Partial Class WDSInstallImageCopy
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(238, 13)
         Me.Label1.TabIndex = 12
-        Me.Label1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Images.Added.Group.Label")
+        Me.Label1.Text = "The images will be added to the following group:"
         '
         'TextBox2
         '
@@ -183,27 +183,27 @@ Partial Class WDSInstallImageCopy
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Value.Column")
+        Me.ColumnHeader1.Text = "#"
         Me.ColumnHeader1.Width = 44
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageName.Column")
+        Me.ColumnHeader2.Text = "Image Name"
         Me.ColumnHeader2.Width = 265
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageDescription.Column")
+        Me.ColumnHeader3.Text = "Image Description"
         Me.ColumnHeader3.Width = 343
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageVersion.Column")
+        Me.ColumnHeader4.Text = "Image Version"
         Me.ColumnHeader4.Width = 103
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Image.Architecture.Column")
+        Me.ColumnHeader5.Text = "Image Architecture"
         Me.ColumnHeader5.Width = 130
         '
         'Button4
@@ -214,7 +214,7 @@ Partial Class WDSInstallImageCopy
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(156, 23)
         Me.Button4.TabIndex = 14
-        Me.Button4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Pick.Server.Groups.Button")
+        Me.Button4.Text = "Pick from server groups..."
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button5
@@ -225,7 +225,7 @@ Partial Class WDSInstallImageCopy
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(96, 23)
         Me.Button5.TabIndex = 14
-        Me.Button5.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("SelectAll.Button")
+        Me.Button5.Text = "Select all"
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button6
@@ -236,7 +236,7 @@ Partial Class WDSInstallImageCopy
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(96, 23)
         Me.Button6.TabIndex = 14
-        Me.Button6.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ClearSelection.Button")
+        Me.Button6.Text = "Clear selection"
         Me.Button6.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -249,7 +249,7 @@ Partial Class WDSInstallImageCopy
         Me.GroupBox1.Size = New System.Drawing.Size(984, 98)
         Me.GroupBox1.TabIndex = 18
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Progress.Group")
+        Me.GroupBox1.Text = "Progress"
         '
         'ProgressContainer
         '
@@ -278,7 +278,7 @@ Partial Class WDSInstallImageCopy
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(978, 78)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Re.Ready.OK.Label")
+        Me.Label3.Text = "Once you're ready, click OK."
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ISOProgressPanel
@@ -311,11 +311,11 @@ Partial Class WDSInstallImageCopy
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(950, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Status.Label")
+        Me.Label8.Text = "Status"
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.WDSImageCopy")("WIM.Files.Filter")
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
         '
         'BackgroundWorker1
         '
@@ -361,7 +361,7 @@ Partial Class WDSInstallImageCopy
         Me.Name = "WDSInstallImageCopy"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Image.Win.Deploy.Label")
+        Me.Text = "Copy an image to Windows Deployment Services"
         Me.GroupBox1.ResumeLayout(False)
         Me.ProgressContainer.ResumeLayout(False)
         Me.IdlePanel.ResumeLayout(False)

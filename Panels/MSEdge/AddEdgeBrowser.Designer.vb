@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddEdgeBrowser
     Inherits System.Windows.Forms.Form
 
@@ -55,7 +55,7 @@ Partial Class AddEdgeBrowser
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AddEdgeBrowser")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -65,7 +65,7 @@ Partial Class AddEdgeBrowser
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AddEdgeBrowser")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Win10Title
         '
@@ -87,7 +87,7 @@ Partial Class AddEdgeBrowser
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(276, 30)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.AddEdgeBrowser")("Microsoft.Label")
+        Me.Label1.Text = "Add Microsoft Edge Browser"
         '
         'PictureBox1
         '
@@ -116,7 +116,7 @@ Partial Class AddEdgeBrowser
         Me.Name = "AddEdgeBrowser"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.AddEdgeBrowser")("Microsoft.Label")
+        Me.Text = "Add Microsoft Edge Browser"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()

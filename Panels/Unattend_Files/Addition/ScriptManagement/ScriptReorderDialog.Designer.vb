@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ScriptReorderDialog
     Inherits System.Windows.Forms.Form
 
@@ -79,7 +79,7 @@ Partial Class ScriptReorderDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -90,7 +90,7 @@ Partial Class ScriptReorderDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -101,7 +101,7 @@ Partial Class ScriptReorderDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(981, 37)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Dialog.Alter.Order.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'Panel1
         '
@@ -172,7 +172,7 @@ Partial Class ScriptReorderDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(66, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ScriptReorder")("ScriptCode.Label")
+        Me.Label3.Text = "Script Code:"
         '
         'Panel3
         '
@@ -201,7 +201,7 @@ Partial Class ScriptReorderDialog
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Script.Column")
+        Me.ColumnHeader1.Text = "Script #"
         Me.ColumnHeader1.Width = 256
         '
         'Panel6
@@ -272,7 +272,7 @@ Partial Class ScriptReorderDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(69, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ScriptReorder")("ScriptOrder.Label")
+        Me.Label2.Text = "Script Order:"
         '
         'CheckBox1
         '
@@ -284,7 +284,7 @@ Partial Class ScriptReorderDialog
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(72, 23)
         Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ScriptReorder")("WordWrap.CheckBox")
+        Me.CheckBox1.Text = "Word Wrap"
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
@@ -306,7 +306,7 @@ Partial Class ScriptReorderDialog
         Me.Name = "ScriptReorderDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Scripts.Stage.Label")
+        Me.Text = "Reorder scripts for this stage"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)

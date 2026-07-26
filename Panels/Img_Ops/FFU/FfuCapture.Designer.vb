@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class FfuCapture
     Inherits System.Windows.Forms.Form
 
@@ -74,7 +74,7 @@ Partial Class FfuCapture
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.FFUCapture")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -85,7 +85,7 @@ Partial Class FfuCapture
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUCapture")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'ImageTaskHeader1
         '
@@ -113,7 +113,7 @@ Partial Class FfuCapture
         Me.GroupBox3.Size = New System.Drawing.Size(760, 176)
         Me.GroupBox3.TabIndex = 10
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.FFUCapture")("Source.Group")
+        Me.GroupBox3.Text = "Source"
         '
         'RichTextBox1
         '
@@ -137,7 +137,7 @@ Partial Class FfuCapture
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(71, 13)
         Me.Label1.TabIndex = 4
-        Me.Label1.Text = LocalizationService.ForSection("Designer.FFUCapture")("DriveDetails.Label")
+        Me.Label1.Text = "Drive Details:"
         '
         'Label5
         '
@@ -146,7 +146,7 @@ Partial Class FfuCapture
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(71, 13)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = LocalizationService.ForSection("Designer.FFUCapture")("SourceDrive.Label")
+        Me.Label5.Text = "Source drive:"
         '
         'Button2
         '
@@ -156,7 +156,7 @@ Partial Class FfuCapture
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = LocalizationService.ForSection("Designer.FFUCapture")("Specify.Button")
+        Me.Button2.Text = "Specify..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -178,7 +178,7 @@ Partial Class FfuCapture
         Me.GroupBox1.Size = New System.Drawing.Size(760, 64)
         Me.GroupBox1.TabIndex = 11
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.FFUCapture")("Destination.Group")
+        Me.GroupBox1.Text = "Destination"
         '
         'Button1
         '
@@ -188,7 +188,7 @@ Partial Class FfuCapture
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 10
-        Me.Button1.Text = LocalizationService.ForSection("Designer.FFUCapture")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -207,7 +207,7 @@ Partial Class FfuCapture
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(119, 13)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = LocalizationService.ForSection("Designer.FFUCapture")("Destination.ImageFile.Label")
+        Me.Label2.Text = "Destination image file:"
         '
         'GroupBox2
         '
@@ -223,7 +223,7 @@ Partial Class FfuCapture
         Me.GroupBox2.Size = New System.Drawing.Size(760, 148)
         Me.GroupBox2.TabIndex = 12
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.FFUCapture")("Options.Group")
+        Me.GroupBox2.Text = "Options"
         '
         'Label8
         '
@@ -234,19 +234,19 @@ Partial Class FfuCapture
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(552, 13)
         Me.Label8.TabIndex = 13
-        Me.Label8.Text = LocalizationService.ForSection("Designer.FFUCapture")("Description.Goes.Label")
+        Me.Label8.Text = "(Description goes here)"
         '
         'ComboBox1
         '
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.FFUCapture")("None.Item"), LocalizationService.ForSection("Designer.FFUCapture")("Default.Item")})
+        Me.ComboBox1.Items.AddRange(New Object() {"none", "default"})
         Me.ComboBox1.Location = New System.Drawing.Point(199, 79)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(552, 21)
         Me.ComboBox1.TabIndex = 12
-        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.FFUCapture")("Default.Item")
+        Me.ComboBox1.Text = "default"
         '
         'TextBox4
         '
@@ -264,7 +264,7 @@ Partial Class FfuCapture
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(183, 13)
         Me.Label7.TabIndex = 8
-        Me.Label7.Text = LocalizationService.ForSection("Designer.FFUCapture")("CompressionType.Label")
+        Me.Label7.Text = "Destination image compression type:"
         '
         'Label4
         '
@@ -273,7 +273,7 @@ Partial Class FfuCapture
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(151, 13)
         Me.Label4.TabIndex = 8
-        Me.Label4.Text = LocalizationService.ForSection("Designer.FFUCapture")("Dest.Image.Description.Label")
+        Me.Label4.Text = "Destination image description:"
         '
         'TextBox3
         '
@@ -291,11 +291,11 @@ Partial Class FfuCapture
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(131, 13)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = LocalizationService.ForSection("Designer.FFUCapture")("Destination.Image.Name.Label")
+        Me.Label3.Text = "Destination image name:"
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUCapture")("Full.Flash.Utility.Filter")
+        Me.SaveFileDialog1.Filter = "Full Flash Utility files|*.ffu"
         '
         'FfuCapture
         '
@@ -316,7 +316,7 @@ Partial Class FfuCapture
         Me.Name = "FfuCapture"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.FFUCapture")("File.Label")
+        Me.Text = "Capture a FFU file"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()

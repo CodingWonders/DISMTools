@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DisableFeat
     Inherits System.Windows.Forms.Form
 
@@ -64,7 +64,7 @@ Partial Class DisableFeat
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.DisableFeat")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -75,7 +75,7 @@ Partial Class DisableFeat
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.DisableFeat")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'GroupBox2
         '
@@ -89,7 +89,7 @@ Partial Class DisableFeat
         Me.GroupBox2.Size = New System.Drawing.Size(760, 116)
         Me.GroupBox2.TabIndex = 16
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.DisableFeat")("Options.Group")
+        Me.GroupBox2.Text = "Options"
         '
         'Button1
         '
@@ -99,7 +99,7 @@ Partial Class DisableFeat
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 6
-        Me.Button1.Text = LocalizationService.ForSection("Designer.DisableFeat")("Lookup.Button")
+        Me.Button1.Text = "Lookup..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -118,7 +118,7 @@ Partial Class DisableFeat
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(80, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.DisableFeat")("PackageName.Label")
+        Me.Label3.Text = "Package name:"
         '
         'CheckBox2
         '
@@ -127,7 +127,7 @@ Partial Class DisableFeat
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(234, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.DisableFeat")("Remove.Feature.CheckBox")
+        Me.CheckBox2.Text = "Remove feature without removing manifest"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -137,7 +137,7 @@ Partial Class DisableFeat
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(229, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.DisableFeat")("ParentPackage.CheckBox")
+        Me.CheckBox1.Text = "Specify parent package name for features"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -148,7 +148,7 @@ Partial Class DisableFeat
         Me.GroupBox1.Size = New System.Drawing.Size(760, 338)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.DisableFeat")("Features.Group")
+        Me.GroupBox1.Text = "Features"
         '
         'ListView1
         '
@@ -163,12 +163,12 @@ Partial Class DisableFeat
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.DisableFeat")("FeatureName.Column")
+        Me.ColumnHeader1.Text = "Feature name"
         Me.ColumnHeader1.Width = 372
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.DisableFeat")("State.Column")
+        Me.ColumnHeader2.Text = "State"
         Me.ColumnHeader2.Width = 339
         '
         'ImageTaskHeader1
@@ -203,7 +203,7 @@ Partial Class DisableFeat
         Me.Name = "DisableFeat"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.DisableFeat")("DisableFeatures.Label")
+        Me.Text = "Disable features"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()

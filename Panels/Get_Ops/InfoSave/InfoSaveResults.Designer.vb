@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class InfoSaveResults
     Inherits System.Windows.Forms.Form
 
@@ -44,7 +44,8 @@ Partial Class InfoSaveResults
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(1239, 26)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.InfoSaveResults")("ReportSaved.Message")
+        Me.Label1.Text = "The report has been saved to the location you had specified, and its contents wil" & _
+    "l be shown below."
         '
         'Button1
         '
@@ -54,7 +55,7 @@ Partial Class InfoSaveResults
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = LocalizationService.ForSection("Designer.InfoSaveResults")("Ok.Button")
+        Me.Button1.Text = "OK"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'PrintDialog1
@@ -83,7 +84,7 @@ Partial Class InfoSaveResults
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(218, 23)
         Me.CheckBox1.TabIndex = 5
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.InfoSaveResults")("Display.Content.Web.CheckBox")
+        Me.CheckBox1.Text = "Display content in Web View"
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
@@ -107,12 +108,12 @@ Partial Class InfoSaveResults
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(160, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = LocalizationService.ForSection("Designer.InfoSaveResults")("SaveReport.Button")
+        Me.Button2.Text = "Save report..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.InfoSaveResults")("Htmlreports.Filter")
+        Me.SaveFileDialog1.Filter = "HTML Reports|*.html"
         '
         'Panel1
         '
@@ -142,7 +143,7 @@ Partial Class InfoSaveResults
         Me.MinimumSize = New System.Drawing.Size(512, 600)
         Me.Name = "InfoSaveResults"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("Designer.InfoSaveResults")("Image.Report.Label")
+        Me.Text = "Image information report results"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)

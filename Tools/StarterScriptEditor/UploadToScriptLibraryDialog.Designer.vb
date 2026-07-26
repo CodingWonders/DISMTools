@@ -69,7 +69,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(154, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("Upload.Button")
+        Me.OK_Button.Text = "Upload to the Library"
         '
         'Cancel_Button
         '
@@ -80,7 +80,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(154, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel upload"
         '
         'Label1
         '
@@ -91,7 +91,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(534, 64)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("Introduction.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'LinkLabel1
         '
@@ -105,7 +105,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.LinkLabel1.Size = New System.Drawing.Size(290, 18)
         Me.LinkLabel1.TabIndex = 2
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("SignUp.Link")
+        Me.LinkLabel1.Text = "If you don't have a GitHub account, click here to sign up."
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.LinkLabel1.UseCompatibleTextRendering = True
         '
@@ -118,7 +118,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(534, 42)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("ApiKeyExplanation.Message")
+        Me.Label2.Text = resources.GetString("Label2.Text")
         '
         'TextBox1
         '
@@ -140,7 +140,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(84, 13)
         Me.Label3.TabIndex = 4
-        Me.Label3.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("ApiKey.Label")
+        Me.Label3.Text = "GitHub API Key:"
         '
         'LinkLabel2
         '
@@ -155,7 +155,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.LinkLabel2.Size = New System.Drawing.Size(130, 13)
         Me.LinkLabel2.TabIndex = 5
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("GetApiKey.Link")
+        Me.LinkLabel2.Text = "How do I get an API Key?"
         '
         'Label4
         '
@@ -166,7 +166,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(534, 68)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("PrivacyWarning.Message")
+        Me.Label4.Text = resources.GetString("Label4.Text")
         '
         'CheckBox1
         '
@@ -177,7 +177,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(331, 17)
         Me.CheckBox1.TabIndex = 6
-        Me.CheckBox1.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("AllowUse.CheckBox")
+        Me.CheckBox1.Text = "I allow this starter script to be used by people around the world"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -190,7 +190,8 @@ Partial Class UploadToScriptLibraryDialog
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(510, 32)
         Me.CheckBox2.TabIndex = 6
-        Me.CheckBox2.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("AcknowledgeRisk.CheckBox")
+        Me.CheckBox2.Text = "I acknowledge the risks of uploading a starter script with identifiable informati" & _
+    "on, and have verified that there is no such information"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -202,7 +203,8 @@ Partial Class UploadToScriptLibraryDialog
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(398, 17)
         Me.CheckBox3.TabIndex = 6
-        Me.CheckBox3.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("SaveApiKey.CheckBox")
+        Me.CheckBox3.Text = "If the script file is uploaded successfully, save my API key in an encrypted file" & _
+    ""
         Me.CheckBox3.UseVisualStyleBackColor = True
         Me.CheckBox3.Visible = False
         '
@@ -234,7 +236,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.PreventLeaks_InfoBtn.Name = "PreventLeaks_InfoBtn"
         Me.PreventLeaks_InfoBtn.Size = New System.Drawing.Size(186, 23)
         Me.PreventLeaks_InfoBtn.TabIndex = 0
-        Me.PreventLeaks_InfoBtn.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("LearnMore.Button")
+        Me.PreventLeaks_InfoBtn.Text = "Learn more"
         Me.PreventLeaks_InfoBtn.UseVisualStyleBackColor = True
         '
         'PreventLeaks_InspectBtn
@@ -245,7 +247,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.PreventLeaks_InspectBtn.Name = "PreventLeaks_InspectBtn"
         Me.PreventLeaks_InspectBtn.Size = New System.Drawing.Size(186, 23)
         Me.PreventLeaks_InspectBtn.TabIndex = 0
-        Me.PreventLeaks_InspectBtn.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("InspectCode.Button")
+        Me.PreventLeaks_InspectBtn.Text = "Inspect my code"
         Me.PreventLeaks_InspectBtn.UseVisualStyleBackColor = True
         '
         'UploadToScriptLibraryDialog
@@ -274,7 +276,7 @@ Partial Class UploadToScriptLibraryDialog
         Me.Name = "UploadToScriptLibraryDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("StarterScript.Designer.UploadLibrary")("Title")
+        Me.Text = "Upload to the Starter Script Library"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)

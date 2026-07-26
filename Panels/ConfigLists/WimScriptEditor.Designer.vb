@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class WimScriptEditor
     Inherits System.Windows.Forms.Form
 
@@ -81,7 +81,7 @@ Partial Class WimScriptEditor
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(983, 31)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Config.List.Allows.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'Scintilla1
         '
@@ -153,7 +153,7 @@ Partial Class WimScriptEditor
         Me.GroupBox3.Size = New System.Drawing.Size(486, 150)
         Me.GroupBox3.TabIndex = 0
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Compression.Exclusion.List")
+        Me.GroupBox3.Text = "Compression exclusion list"
         '
         'ListView3
         '
@@ -176,7 +176,7 @@ Partial Class WimScriptEditor
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(75, 23)
         Me.Button10.TabIndex = 1
-        Me.Button10.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Edit.Button")
+        Me.Button10.Text = "Edit..."
         Me.Button10.UseVisualStyleBackColor = True
         '
         'Button9
@@ -187,7 +187,7 @@ Partial Class WimScriptEditor
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(75, 23)
         Me.Button9.TabIndex = 1
-        Me.Button9.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Add.Button")
+        Me.Button9.Text = "Add..."
         Me.Button9.UseVisualStyleBackColor = True
         '
         'Button11
@@ -199,7 +199,7 @@ Partial Class WimScriptEditor
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(75, 23)
         Me.Button11.TabIndex = 1
-        Me.Button11.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Remove.Button")
+        Me.Button11.Text = "Remove"
         Me.Button11.UseVisualStyleBackColor = True
         '
         'GroupBox2
@@ -215,7 +215,7 @@ Partial Class WimScriptEditor
         Me.GroupBox2.Size = New System.Drawing.Size(486, 150)
         Me.GroupBox2.TabIndex = 0
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Exclusion.Exception.List")
+        Me.GroupBox2.Text = "Exclusion exception list"
         '
         'ListView2
         '
@@ -237,7 +237,7 @@ Partial Class WimScriptEditor
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 1
-        Me.Button5.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Add.Button")
+        Me.Button5.Text = "Add..."
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button7
@@ -249,7 +249,7 @@ Partial Class WimScriptEditor
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 1
-        Me.Button7.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Remove.Button")
+        Me.Button7.Text = "Remove"
         Me.Button7.UseVisualStyleBackColor = True
         '
         'Button6
@@ -261,7 +261,7 @@ Partial Class WimScriptEditor
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(75, 23)
         Me.Button6.TabIndex = 1
-        Me.Button6.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Edit.Button")
+        Me.Button6.Text = "Edit..."
         Me.Button6.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -277,7 +277,7 @@ Partial Class WimScriptEditor
         Me.GroupBox1.Size = New System.Drawing.Size(486, 150)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("ExclusionList.Group")
+        Me.GroupBox1.Text = "Exclusion list"
         '
         'ListView1
         '
@@ -300,7 +300,7 @@ Partial Class WimScriptEditor
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 1
-        Me.Button3.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Remove.Button")
+        Me.Button3.Text = "Remove"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -312,7 +312,7 @@ Partial Class WimScriptEditor
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 1
-        Me.Button2.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Edit.Button")
+        Me.Button2.Text = "Edit..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -323,7 +323,7 @@ Partial Class WimScriptEditor
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 1
-        Me.Button1.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Add.Button")
+        Me.Button1.Text = "Add..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'DarkToolStrip1
@@ -350,7 +350,7 @@ Partial Class WimScriptEditor
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton2.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("New.Label")
+        Me.ToolStripButton2.Text = "New"
         '
         'ToolStripButton3
         '
@@ -361,7 +361,7 @@ Partial Class WimScriptEditor
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton3.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Open.Button")
+        Me.ToolStripButton3.Text = "Open..."
         '
         'ToolStripButton4
         '
@@ -372,7 +372,7 @@ Partial Class WimScriptEditor
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton4.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Save.Button")
+        Me.ToolStripButton4.Text = "Save as..."
         '
         'ToolStripSeparator4
         '
@@ -417,7 +417,7 @@ Partial Class WimScriptEditor
         Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton5.Name = "ToolStripButton5"
         Me.ToolStripButton5.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton5.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Toggle.Word.Wrap.Label")
+        Me.ToolStripButton5.Text = "Toggle word wrap"
         '
         'ToolStripSeparator6
         '
@@ -437,7 +437,7 @@ Partial Class WimScriptEditor
         Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton6.Name = "ToolStripButton6"
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton6.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Help.Label")
+        Me.ToolStripButton6.Text = "Help"
         '
         'ToolStripDropDownButton1
         '
@@ -449,7 +449,7 @@ Partial Class WimScriptEditor
         Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
         Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(45, 25)
-        Me.ToolStripDropDownButton1.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Tools.Label")
+        Me.ToolStripDropDownButton1.Text = "Tools"
         '
         'NoOneDriveToolStripMenuItem
         '
@@ -457,19 +457,19 @@ Partial Class WimScriptEditor
         Me.NoOneDriveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
         Me.NoOneDriveToolStripMenuItem.Name = "NoOneDriveToolStripMenuItem"
         Me.NoOneDriveToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
-        Me.NoOneDriveToolStripMenuItem.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("Exclude.User.One.Button")
+        Me.NoOneDriveToolStripMenuItem.Text = "Exclude user OneDrive folders..."
         '
         'WimScriptOFD
         '
-        Me.WimScriptOFD.Filter = LocalizationService.ForSection("Designer.WimScriptEditor")("Inifiles.Filter")
+        Me.WimScriptOFD.Filter = "INI files|*.ini"
         Me.WimScriptOFD.SupportMultiDottedExtensions = True
-        Me.WimScriptOFD.Title = LocalizationService.ForSection("Designer.WimScriptEditor")("Config.List.Load.Title")
+        Me.WimScriptOFD.Title = "Specify the configuration list to load"
         '
         'WimScriptSFD
         '
-        Me.WimScriptSFD.Filter = LocalizationService.ForSection("Designer.WimScriptEditor")("Wimscript.Filter")
+        Me.WimScriptSFD.Filter = "INI files|*.ini"
         Me.WimScriptSFD.SupportMultiDottedExtensions = True
-        Me.WimScriptSFD.Title = LocalizationService.ForSection("Designer.WimScriptEditor")("Location.Save.Config.Title")
+        Me.WimScriptSFD.Title = "Specify the location to save the configuration list to"
         '
         'WimScriptEditor
         '
@@ -483,7 +483,7 @@ Partial Class WimScriptEditor
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "WimScriptEditor"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("Designer.WimScriptEditor")("ConfigList.Label")
+        Me.Text = "DISM Configuration List Editor"
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)

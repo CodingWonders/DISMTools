@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class NewProj
     Inherits System.Windows.Forms.Form
 
@@ -63,7 +63,7 @@ Partial Class NewProj
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.NewProj")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -74,7 +74,7 @@ Partial Class NewProj
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.NewProj")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label2
         '
@@ -83,7 +83,7 @@ Partial Class NewProj
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(252, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = LocalizationService.ForSection("Designer.NewProj")("Options.Required.Label")
+        Me.Label2.Text = "Please specify the options to create a new project:"
         '
         'GroupBox1
         '
@@ -97,7 +97,7 @@ Partial Class NewProj
         Me.GroupBox1.Size = New System.Drawing.Size(710, 112)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.NewProj")("Project.Group")
+        Me.GroupBox1.Text = "Project"
         '
         'Button1
         '
@@ -106,7 +106,7 @@ Partial Class NewProj
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 9
-        Me.Button1.Text = LocalizationService.ForSection("Designer.NewProj")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -131,7 +131,7 @@ Partial Class NewProj
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(94, 13)
         Me.Label4.TabIndex = 7
-        Me.Label4.Text = LocalizationService.ForSection("Designer.NewProj")("Location.Label")
+        Me.Label4.Text = "Location*:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label3
@@ -142,12 +142,12 @@ Partial Class NewProj
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(94, 13)
         Me.Label3.TabIndex = 7
-        Me.Label3.Text = LocalizationService.ForSection("Designer.NewProj")("Name.Label")
+        Me.Label3.Text = "Name*:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.NewProj")("Folder.Store.Description")
+        Me.FolderBrowserDialog1.Description = "Please select a folder to store this project:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'Label5
@@ -157,7 +157,7 @@ Partial Class NewProj
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(179, 13)
         Me.Label5.TabIndex = 7
-        Me.Label5.Text = LocalizationService.ForSection("Designer.NewProj")("Fields.End.Required.Label")
+        Me.Label5.Text = "The fields that end in * are required"
         '
         'ImageTaskHeader1
         '
@@ -192,7 +192,7 @@ Partial Class NewProj
         Me.Name = "NewProj"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.NewProj")("Create.Project.Label")
+        Me.Text = "Create a new project"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

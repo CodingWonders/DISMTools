@@ -143,6 +143,7 @@
     <Compile Include="Classes\AutoInspection\AutoInspectionRule.vb" />
     <Compile Include="Classes\AutoInspection\AutoInspectionRuleSeverity.vb" />
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="RuntimeFormLocalization.vb" />
     <Compile Include="..\..\Utilities\Language\LocalizationService.vb">
       <Link>Utilities\LocalizationService.vb</Link>
     </Compile>

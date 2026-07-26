@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ProjectValueLoadForm
     Inherits System.Windows.Forms.Form
 
@@ -114,7 +114,7 @@ Partial Class ProjectValueLoadForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(81, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.ProjectValues")("Old.File.Label")
+        Me.Label1.Text = "Old project file:"
         '
         'RichTextBox1
         '
@@ -137,7 +137,7 @@ Partial Class ProjectValueLoadForm
         Me.Exit_Button.Name = "Exit_Button"
         Me.Exit_Button.Size = New System.Drawing.Size(75, 23)
         Me.Exit_Button.TabIndex = 2
-        Me.Exit_Button.Text = LocalizationService.ForSection("Designer.ProjectValues")("ExitButton.Button")
+        Me.Exit_Button.Text = "Exit"
         Me.Exit_Button.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -225,7 +225,7 @@ Partial Class ProjectValueLoadForm
         Me.GroupBox1.Size = New System.Drawing.Size(852, 935)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ProjectValues")("Independent.Values.Group")
+        Me.GroupBox1.Text = "Independent values"
         '
         'Label25
         '
@@ -234,7 +234,7 @@ Partial Class ProjectValueLoadForm
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(64, 13)
         Me.Label25.TabIndex = 1
-        Me.Label25.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageLang.Label")
+        Me.Label25.Text = "ImageLang:"
         '
         'Label26
         '
@@ -243,7 +243,7 @@ Partial Class ProjectValueLoadForm
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(92, 13)
         Me.Label26.TabIndex = 1
-        Me.Label26.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Read.Write.Label")
+        Me.Label26.Text = "ImageReadWrite:"
         '
         'Label24
         '
@@ -252,7 +252,7 @@ Partial Class ProjectValueLoadForm
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(102, 13)
         Me.Label24.TabIndex = 1
-        Me.Label24.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Epoch.Modify.Label")
+        Me.Label24.Text = "ImageEpochModify:"
         '
         'Label23
         '
@@ -261,7 +261,7 @@ Partial Class ProjectValueLoadForm
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(103, 13)
         Me.Label23.TabIndex = 1
-        Me.Label23.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Epoch.Create.Label")
+        Me.Label23.Text = "ImageEpochCreate:"
         '
         'Label22
         '
@@ -270,7 +270,7 @@ Partial Class ProjectValueLoadForm
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(86, 13)
         Me.Label22.TabIndex = 1
-        Me.Label22.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFileCount.Value")
+        Me.Label22.Text = "ImageFileCount:"
         '
         'Label21
         '
@@ -279,7 +279,7 @@ Partial Class ProjectValueLoadForm
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(83, 13)
         Me.Label21.TabIndex = 1
-        Me.Label21.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Dir.Count.Label")
+        Me.Label21.Text = "ImageDirCount:"
         '
         'Label20
         '
@@ -288,7 +288,7 @@ Partial Class ProjectValueLoadForm
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(81, 13)
         Me.Label20.TabIndex = 1
-        Me.Label20.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Sys.Root.Label")
+        Me.Label20.Text = "ImageSysRoot:"
         '
         'Label19
         '
@@ -297,7 +297,7 @@ Partial Class ProjectValueLoadForm
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(71, 13)
         Me.Label19.TabIndex = 1
-        Me.Label19.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImagePsuite.Label")
+        Me.Label19.Text = "ImagePSuite:"
         '
         'Label18
         '
@@ -306,7 +306,7 @@ Partial Class ProjectValueLoadForm
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(71, 13)
         Me.Label18.TabIndex = 1
-        Me.Label18.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImagePtype.Label")
+        Me.Label18.Text = "ImagePType:"
         '
         'Label17
         '
@@ -315,7 +315,7 @@ Partial Class ProjectValueLoadForm
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(73, 13)
         Me.Label17.TabIndex = 1
-        Me.Label17.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageEdition.Value")
+        Me.Label17.Text = "ImageEdition:"
         '
         'Label16
         '
@@ -324,7 +324,7 @@ Partial Class ProjectValueLoadForm
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(78, 13)
         Me.Label16.TabIndex = 1
-        Me.Label16.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageSplevel.Label")
+        Me.Label16.Text = "ImageSPLevel:"
         '
         'Label15
         '
@@ -333,7 +333,7 @@ Partial Class ProjectValueLoadForm
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(75, 13)
         Me.Label15.TabIndex = 1
-        Me.Label15.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageSpbuild.Label")
+        Me.Label15.Text = "ImageSPBuild:"
         '
         'Label14
         '
@@ -342,7 +342,7 @@ Partial Class ProjectValueLoadForm
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(56, 13)
         Me.Label14.TabIndex = 1
-        Me.Label14.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageHal.Label")
+        Me.Label14.Text = "ImageHal:"
         '
         'Label13
         '
@@ -351,7 +351,7 @@ Partial Class ProjectValueLoadForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(63, 13)
         Me.Label13.TabIndex = 1
-        Me.Label13.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageArch.Label")
+        Me.Label13.Text = "ImageArch:"
         '
         'Label12
         '
@@ -360,7 +360,7 @@ Partial Class ProjectValueLoadForm
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(85, 13)
         Me.Label12.TabIndex = 1
-        Me.Label12.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.WIM.Boot.Label")
+        Me.Label12.Text = "ImageWIMBoot:"
         '
         'Label11
         '
@@ -369,7 +369,7 @@ Partial Class ProjectValueLoadForm
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(94, 13)
         Me.Label11.TabIndex = 1
-        Me.Label11.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageDescription.Label")
+        Me.Label11.Text = "ImageDescription:"
         '
         'Label10
         '
@@ -378,7 +378,7 @@ Partial Class ProjectValueLoadForm
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(68, 13)
         Me.Label10.TabIndex = 1
-        Me.Label10.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageName.Label")
+        Me.Label10.Text = "ImageName:"
         '
         'Label9
         '
@@ -387,7 +387,7 @@ Partial Class ProjectValueLoadForm
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(76, 13)
         Me.Label9.TabIndex = 1
-        Me.Label9.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageVersion.Label")
+        Me.Label9.Text = "ImageVersion:"
         '
         'Label8
         '
@@ -396,7 +396,7 @@ Partial Class ProjectValueLoadForm
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(95, 13)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Mount.Point.Label")
+        Me.Label8.Text = "ImageMountPoint:"
         '
         'Label7
         '
@@ -405,7 +405,7 @@ Partial Class ProjectValueLoadForm
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(69, 13)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageIndex.Label")
+        Me.Label7.Text = "ImageIndex:"
         '
         'Label6
         '
@@ -414,7 +414,7 @@ Partial Class ProjectValueLoadForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(57, 13)
         Me.Label6.TabIndex = 1
-        Me.Label6.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFile.Label")
+        Me.Label6.Text = "ImageFile:"
         '
         'Label5
         '
@@ -423,7 +423,7 @@ Partial Class ProjectValueLoadForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(103, 13)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = LocalizationService.ForSection("Designer.ProjectValues")("Epoch.Creation.Time.Label")
+        Me.Label5.Text = "EpochCreationTime:"
         '
         'Label4
         '
@@ -432,7 +432,7 @@ Partial Class ProjectValueLoadForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(51, 13)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = LocalizationService.ForSection("Designer.ProjectValues")("Location.Label")
+        Me.Label4.Text = "Location:"
         '
         'Label3
         '
@@ -441,7 +441,7 @@ Partial Class ProjectValueLoadForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(38, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ProjectValues")("Name.Label")
+        Me.Label3.Text = "Name:"
         '
         'Label48
         '
@@ -453,7 +453,7 @@ Partial Class ProjectValueLoadForm
         Me.Label48.Name = "Label48"
         Me.Label48.Size = New System.Drawing.Size(389, 56)
         Me.Label48.TabIndex = 0
-        Me.Label48.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFile.Languages.Label")
+        Me.Label48.Text = "Image file languages"
         '
         'Label47
         '
@@ -465,7 +465,7 @@ Partial Class ProjectValueLoadForm
         Me.Label47.Name = "Label47"
         Me.Label47.Size = New System.Drawing.Size(389, 56)
         Me.Label47.TabIndex = 0
-        Me.Label47.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFileDates.Label")
+        Me.Label47.Text = "Image file creation and modification dates stored in Unix time (GMT+0)"
         '
         'Label49
         '
@@ -477,7 +477,7 @@ Partial Class ProjectValueLoadForm
         Me.Label49.Name = "Label49"
         Me.Label49.Size = New System.Drawing.Size(389, 27)
         Me.Label49.TabIndex = 0
-        Me.Label49.Text = LocalizationService.ForSection("Designer.ProjectValues")("Verify.Image.Read.Label")
+        Me.Label49.Text = "Verify if image has read-write permissions"
         '
         'Label46
         '
@@ -489,7 +489,7 @@ Partial Class ProjectValueLoadForm
         Me.Label46.Name = "Label46"
         Me.Label46.Size = New System.Drawing.Size(389, 27)
         Me.Label46.TabIndex = 0
-        Me.Label46.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFileCount.Label")
+        Me.Label46.Text = "Image file count"
         '
         'Label45
         '
@@ -501,7 +501,7 @@ Partial Class ProjectValueLoadForm
         Me.Label45.Name = "Label45"
         Me.Label45.Size = New System.Drawing.Size(389, 27)
         Me.Label45.TabIndex = 0
-        Me.Label45.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Dir.Label.Label")
+        Me.Label45.Text = "Image directory count"
         '
         'Label44
         '
@@ -513,7 +513,7 @@ Partial Class ProjectValueLoadForm
         Me.Label44.Name = "Label44"
         Me.Label44.Size = New System.Drawing.Size(389, 27)
         Me.Label44.TabIndex = 0
-        Me.Label44.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.System.Root.Label")
+        Me.Label44.Text = "Image system root directory (\WINDOWS)"
         '
         'Label43
         '
@@ -525,7 +525,7 @@ Partial Class ProjectValueLoadForm
         Me.Label43.Name = "Label43"
         Me.Label43.Size = New System.Drawing.Size(389, 27)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Product.Suite.Label")
+        Me.Label43.Text = "Image product suite"
         '
         'Label42
         '
@@ -537,7 +537,7 @@ Partial Class ProjectValueLoadForm
         Me.Label42.Name = "Label42"
         Me.Label42.Size = New System.Drawing.Size(389, 27)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Product.Type.Label")
+        Me.Label42.Text = "Image product type"
         '
         'Label41
         '
@@ -549,7 +549,7 @@ Partial Class ProjectValueLoadForm
         Me.Label41.Name = "Label41"
         Me.Label41.Size = New System.Drawing.Size(389, 27)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageEdition.Label")
+        Me.Label41.Text = "Image edition"
         '
         'Label40
         '
@@ -561,7 +561,7 @@ Partial Class ProjectValueLoadForm
         Me.Label40.Name = "Label40"
         Me.Label40.Size = New System.Drawing.Size(389, 27)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = LocalizationService.ForSection("Designer.ProjectValues")("ServicePackLevel.Label")
+        Me.Label40.Text = "Image Service Pack level (SP1, SP2, SP3...)"
         '
         'Label39
         '
@@ -573,7 +573,7 @@ Partial Class ProjectValueLoadForm
         Me.Label39.Name = "Label39"
         Me.Label39.Size = New System.Drawing.Size(389, 27)
         Me.Label39.TabIndex = 0
-        Me.Label39.Text = LocalizationService.ForSection("Designer.ProjectValues")("ServicePackBuild.Label")
+        Me.Label39.Text = "Image Service Pack build"
         '
         'Label38
         '
@@ -585,7 +585,7 @@ Partial Class ProjectValueLoadForm
         Me.Label38.Name = "Label38"
         Me.Label38.Size = New System.Drawing.Size(389, 27)
         Me.Label38.TabIndex = 0
-        Me.Label38.Text = LocalizationService.ForSection("Designer.ProjectValues")("HAL.Label")
+        Me.Label38.Text = "Image HAL (Hardware Abstraction Layer, hal.dll)"
         '
         'Label37
         '
@@ -597,7 +597,7 @@ Partial Class ProjectValueLoadForm
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(389, 27)
         Me.Label37.TabIndex = 0
-        Me.Label37.Text = LocalizationService.ForSection("Designer.ProjectValues")("Mounted.Image.Arch.Label")
+        Me.Label37.Text = "Mounted image architecture (x86, amd64...)"
         '
         'Label36
         '
@@ -609,7 +609,7 @@ Partial Class ProjectValueLoadForm
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(389, 27)
         Me.Label36.TabIndex = 0
-        Me.Label36.Text = LocalizationService.ForSection("Designer.ProjectValues")("Verify.Image.Supports.Label")
+        Me.Label36.Text = "Verify if image supports WIMBoot (Win8.1 only)"
         '
         'Label35
         '
@@ -621,7 +621,7 @@ Partial Class ProjectValueLoadForm
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(379, 27)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = LocalizationService.ForSection("Designer.ProjectValues")("MountedDescription.Label")
+        Me.Label35.Text = "Mounted image friendly description"
         '
         'Label34
         '
@@ -633,7 +633,7 @@ Partial Class ProjectValueLoadForm
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(379, 27)
         Me.Label34.TabIndex = 0
-        Me.Label34.Text = LocalizationService.ForSection("Designer.ProjectValues")("Mounted.Image.Friendly.Label")
+        Me.Label34.Text = "Mounted image friendly name"
         '
         'Label33
         '
@@ -645,7 +645,7 @@ Partial Class ProjectValueLoadForm
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(379, 27)
         Me.Label33.TabIndex = 0
-        Me.Label33.Text = LocalizationService.ForSection("Designer.ProjectValues")("Image.Version.Grab.Label")
+        Me.Label33.Text = "Image version (grab version from ntoskrnl.exe)"
         '
         'Label32
         '
@@ -657,7 +657,7 @@ Partial Class ProjectValueLoadForm
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(379, 27)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFile.Mount.Point.Label")
+        Me.Label32.Text = "Image file mount point"
         '
         'Label31
         '
@@ -669,7 +669,7 @@ Partial Class ProjectValueLoadForm
         Me.Label31.Name = "Label31"
         Me.Label31.Size = New System.Drawing.Size(379, 27)
         Me.Label31.TabIndex = 0
-        Me.Label31.Text = LocalizationService.ForSection("Designer.ProjectValues")("ImageFileIndex.Label")
+        Me.Label31.Text = "Mounted image file index"
         '
         'Label30
         '
@@ -681,7 +681,7 @@ Partial Class ProjectValueLoadForm
         Me.Label30.Name = "Label30"
         Me.Label30.Size = New System.Drawing.Size(379, 27)
         Me.Label30.TabIndex = 0
-        Me.Label30.Text = LocalizationService.ForSection("Designer.ProjectValues")("Mounted.ImageFile.Name.Label")
+        Me.Label30.Text = "Mounted image file name"
         '
         'Label29
         '
@@ -693,7 +693,7 @@ Partial Class ProjectValueLoadForm
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(379, 27)
         Me.Label29.TabIndex = 0
-        Me.Label29.Text = LocalizationService.ForSection("Designer.ProjectValues")("Creation.Time.Unix.Label")
+        Me.Label29.Text = "Project creation time in Unix time (GMT+0)"
         '
         'Label28
         '
@@ -705,7 +705,7 @@ Partial Class ProjectValueLoadForm
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(379, 27)
         Me.Label28.TabIndex = 0
-        Me.Label28.Text = LocalizationService.ForSection("Designer.ProjectValues")("ProjectLocation.Label")
+        Me.Label28.Text = "Project location"
         '
         'Label27
         '
@@ -717,7 +717,7 @@ Partial Class ProjectValueLoadForm
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(379, 27)
         Me.Label27.TabIndex = 0
-        Me.Label27.Text = LocalizationService.ForSection("Designer.ProjectValues")("ProjectName.Label")
+        Me.Label27.Text = "Project name"
         '
         'Label2
         '
@@ -726,7 +726,8 @@ Partial Class ProjectValueLoadForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(802, 34)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ProjectValues")("Independent.Values.Message")
+        Me.Label2.Text = "Get independent values by piping ""findstr"" to the ""type"" command. Also pass the """ & _
+    "/b"" switch only to show matches on the beginning."
         '
         'RichTextBox24
         '
@@ -1032,7 +1033,7 @@ Partial Class ProjectValueLoadForm
         Me.Label50.Name = "Label50"
         Me.Label50.Size = New System.Drawing.Size(86, 13)
         Me.Label50.TabIndex = 0
-        Me.Label50.Text = LocalizationService.ForSection("Designer.ProjectValues")("New.File.Label")
+        Me.Label50.Text = "New project file:"
         '
         'RichTextBox26
         '
@@ -1055,7 +1056,7 @@ Partial Class ProjectValueLoadForm
         Me.Continue_Button.Name = "Continue_Button"
         Me.Continue_Button.Size = New System.Drawing.Size(75, 23)
         Me.Continue_Button.TabIndex = 2
-        Me.Continue_Button.Text = LocalizationService.ForSection("Designer.ProjectValues")("ContinueButton.Button")
+        Me.Continue_Button.Text = "Continue"
         Me.Continue_Button.UseVisualStyleBackColor = True
         '
         'ProjectValueLoadForm
@@ -1075,7 +1076,7 @@ Partial Class ProjectValueLoadForm
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "ProjectValueLoadForm"
-        Me.Text = LocalizationService.ForSection("Designer.ProjectValues")("ProjectValues.Label")
+        Me.Text = "Project values"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)

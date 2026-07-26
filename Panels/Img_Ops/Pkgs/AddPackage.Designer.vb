@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddPackageDlg
     Inherits System.Windows.Forms.Form
 
@@ -76,7 +76,7 @@ Partial Class AddPackageDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AddPackage")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -87,7 +87,7 @@ Partial Class AddPackageDlg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AddPackage")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'GroupBox1
         '
@@ -105,7 +105,7 @@ Partial Class AddPackageDlg
         Me.GroupBox1.Size = New System.Drawing.Size(760, 349)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.AddPackage")("Packages.Group")
+        Me.GroupBox1.Text = "Packages"
         '
         'Panel1
         '
@@ -142,7 +142,7 @@ Partial Class AddPackageDlg
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(495, 32)
         Me.Label4.TabIndex = 8
-        Me.Label4.Text = LocalizationService.ForSection("Designer.AddPackage")("Folder.Contains.Pkgnum.Label")
+        Me.Label4.Text = "This folder contains <pkgnum> packages."
         '
         'TableLayoutPanel2
         '
@@ -168,7 +168,7 @@ Partial Class AddPackageDlg
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(98, 23)
         Me.Button2.TabIndex = 0
-        Me.Button2.Text = LocalizationService.ForSection("Designer.AddPackage")("SelectAll.Button")
+        Me.Button2.Text = "Select all"
         '
         'Button3
         '
@@ -179,7 +179,7 @@ Partial Class AddPackageDlg
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(98, 23)
         Me.Button3.TabIndex = 1
-        Me.Button3.Text = LocalizationService.ForSection("Designer.AddPackage")("SelectNone.Button")
+        Me.Button3.Text = "Select none"
         '
         'RadioButton2
         '
@@ -188,7 +188,7 @@ Partial Class AddPackageDlg
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(177, 17)
         Me.RadioButton2.TabIndex = 6
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.AddPackage")("Packages.Choose.RadioButton")
+        Me.RadioButton2.Text = "Choose which packages to add:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -200,7 +200,7 @@ Partial Class AddPackageDlg
         Me.RadioButton1.Size = New System.Drawing.Size(199, 17)
         Me.RadioButton1.TabIndex = 6
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.AddPkg")("ScanRecursive.RadioButton")
+        Me.RadioButton1.Text = "Scan folder recursively for packages"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Button1
@@ -210,7 +210,7 @@ Partial Class AddPackageDlg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 5
-        Me.Button1.Text = LocalizationService.ForSection("Designer.AddPackage")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -227,7 +227,7 @@ Partial Class AddPackageDlg
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(100, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = LocalizationService.ForSection("Designer.AddPackage")("PackageOperation.Label")
+        Me.Label3.Text = "Package operation:"
         '
         'Label2
         '
@@ -236,7 +236,7 @@ Partial Class AddPackageDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(86, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.AddPackage")("PackageSource.Label")
+        Me.Label2.Text = "Package source:"
         '
         'GroupBox2
         '
@@ -248,7 +248,7 @@ Partial Class AddPackageDlg
         Me.GroupBox2.Size = New System.Drawing.Size(760, 105)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.AddPackage")("Options.Group")
+        Me.GroupBox2.Text = "Options"
         '
         'CheckBox3
         '
@@ -257,7 +257,7 @@ Partial Class AddPackageDlg
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(191, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.AddPackage")("Save.Image.Packages.CheckBox")
+        Me.CheckBox3.Text = "Save image after adding packages"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -267,7 +267,7 @@ Partial Class AddPackageDlg
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(296, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.AddPkg")("Skip.Online.Install.CheckBox")
+        Me.CheckBox2.Text = "Skip package installation if online operations are pending"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -277,12 +277,12 @@ Partial Class AddPackageDlg
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(248, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.AddPackage")("Ignore.CheckBox")
+        Me.CheckBox1.Text = "Ignore applicability checks (not recommended)"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.AddPackage")("CabFolder.Description")
+        Me.FolderBrowserDialog1.Description = "Specify the folder containing CAB or MSU packages:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = False
         '
@@ -296,7 +296,7 @@ Partial Class AddPackageDlg
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(223, 23)
         Me.Button4.TabIndex = 5
-        Me.Button4.Text = LocalizationService.ForSection("Designer.AddPackage")("Update.Manifest.Button")
+        Me.Button4.Text = "Add update manifest..."
         Me.Button4.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
@@ -332,7 +332,7 @@ Partial Class AddPackageDlg
         Me.Name = "AddPackageDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.AddPackage")("AddPackages.Label")
+        Me.Text = "Add packages"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

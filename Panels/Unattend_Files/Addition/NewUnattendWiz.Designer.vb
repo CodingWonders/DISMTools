@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class NewUnattendWiz
     Inherits System.Windows.Forms.Form
 
@@ -499,31 +499,31 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
         TreeNode1.Name = "Nodo0"
-        TreeNode1.Text = LocalizationService.ForSection("Designer.Unattend")("Welcome.Label")
+        TreeNode1.Text = "Welcome"
         TreeNode2.Name = "Nodo1"
-        TreeNode2.Text = LocalizationService.ForSection("Designer.Unattend")("RegionalConfig.Label")
+        TreeNode2.Text = "Regional Configuration"
         TreeNode3.Name = "Nodo2"
-        TreeNode3.Text = LocalizationService.ForSection("Designer.Unattend")("Basic.System.Config.Label")
+        TreeNode3.Text = "Basic System Configuration"
         TreeNode4.Name = "Nodo3"
-        TreeNode4.Text = LocalizationService.ForSection("Designer.Unattend")("TreeNode.Label")
+        TreeNode4.Text = "Time Zone"
         TreeNode5.Name = "Nodo4"
-        TreeNode5.Text = LocalizationService.ForSection("Designer.Unattend")("DiskConfig.Label")
+        TreeNode5.Text = "Disk Configuration"
         TreeNode6.Name = "Nodo5"
-        TreeNode6.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Label")
+        TreeNode6.Text = "Product Key"
         TreeNode7.Name = "Nodo6"
-        TreeNode7.Text = LocalizationService.ForSection("Designer.Unattend")("UserAccounts.Label")
+        TreeNode7.Text = "User Accounts"
         TreeNode8.Name = "Nodo9"
-        TreeNode8.Text = LocalizationService.ForSection("Designer.Unattend")("VirtualMachine.Support.Label")
+        TreeNode8.Text = "Virtual Machine Support"
         TreeNode9.Name = "Nodo10"
-        TreeNode9.Text = LocalizationService.ForSection("Designer.Unattend")("Wireless.Networking.Label")
+        TreeNode9.Text = "Wireless Networking"
         TreeNode10.Name = "Nodo11"
-        TreeNode10.Text = LocalizationService.ForSection("Designer.Unattend")("SystemTelemetry.Label")
+        TreeNode10.Text = "System Telemetry"
         TreeNode11.Name = "Nodo12"
-        TreeNode11.Text = LocalizationService.ForSection("Designer.Unattend")("PostInstall.Scripts.Label")
+        TreeNode11.Text = "Post-Installation Scripts"
         TreeNode12.Name = "Nodo13"
-        TreeNode12.Text = LocalizationService.ForSection("Designer.Unattend")("Component.Settings.Label")
+        TreeNode12.Text = "Component Settings"
         TreeNode13.Name = "Nodo14"
-        TreeNode13.Text = LocalizationService.ForSection("Designer.Unattend")("Finish.Label")
+        TreeNode13.Text = "Finish"
         Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
@@ -549,7 +549,7 @@ Partial Class NewUnattendWiz
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(75, 15)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.Unattend")("EditorMode.Label")
+        Me.Label2.Text = "Editor mode"
         '
         'PictureBox2
         '
@@ -581,7 +581,7 @@ Partial Class NewUnattendWiz
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(84, 15)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.Unattend")("ExpressMode.Label")
+        Me.Label1.Text = "Express mode"
         '
         'PictureBox1
         '
@@ -660,7 +660,7 @@ Partial Class NewUnattendWiz
         Me.Label59.Name = "Label59"
         Me.Label59.Size = New System.Drawing.Size(320, 13)
         Me.Label59.TabIndex = 16
-        Me.Label59.Text = LocalizationService.ForSection("Designer.Unattend")("Notereturn.Applying.Label")
+        Me.Label59.Text = "NOTE: you will return to this wizard after applying the answer file"
         '
         'LinkLabel7
         '
@@ -672,7 +672,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel7.Size = New System.Drawing.Size(80, 13)
         Me.LinkLabel7.TabIndex = 15
         Me.LinkLabel7.TabStop = True
-        Me.LinkLabel7.Text = LocalizationService.ForSection("Designer.Unattend")("EditAnswerFile.Link")
+        Me.LinkLabel7.Text = "Edit answer file"
         '
         'LinkLabel6
         '
@@ -684,7 +684,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel6.Size = New System.Drawing.Size(218, 13)
         Me.LinkLabel6.TabIndex = 15
         Me.LinkLabel6.TabStop = True
-        Me.LinkLabel6.Text = LocalizationService.ForSection("Designer.Unattend")("Open.Windows.System.Link")
+        Me.LinkLabel6.Text = "Open with Windows System Image Manager"
         '
         'LinkLabel4
         '
@@ -696,7 +696,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel4.Size = New System.Drawing.Size(160, 13)
         Me.LinkLabel4.TabIndex = 15
         Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = LocalizationService.ForSection("Designer.Unattend")("Apply.Unattended.Link")
+        Me.LinkLabel4.Text = "Apply unattended answer file..."
         '
         'LinkLabel3
         '
@@ -708,7 +708,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel3.Size = New System.Drawing.Size(141, 13)
         Me.LinkLabel3.TabIndex = 15
         Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = LocalizationService.ForSection("Designer.Unattend")("Open.Location.File.Link")
+        Me.LinkLabel3.Text = "Open the location of the file"
         '
         'LinkLabel2
         '
@@ -720,7 +720,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel2.Size = New System.Drawing.Size(136, 13)
         Me.LinkLabel2.TabIndex = 15
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = LocalizationService.ForSection("Designer.Unattend")("Create.Another.Link")
+        Me.LinkLabel2.Text = "Create another answer file"
         '
         'Label58
         '
@@ -729,7 +729,8 @@ Partial Class NewUnattendWiz
         Me.Label58.Name = "Label58"
         Me.Label58.Size = New System.Drawing.Size(516, 13)
         Me.Label58.TabIndex = 14
-        Me.Label58.Text = LocalizationService.ForSection("Designer.Unattend")("FileCreated.Message")
+        Me.Label58.Text = "The unattended answer file has been created at the location you specified. What d" & _
+    "o you want to do now?"
         '
         'FinishHeader
         '
@@ -739,7 +740,7 @@ Partial Class NewUnattendWiz
         Me.FinishHeader.Name = "FinishHeader"
         Me.FinishHeader.Size = New System.Drawing.Size(708, 51)
         Me.FinishHeader.TabIndex = 13
-        Me.FinishHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Congratulations.Done.Label")
+        Me.FinishHeader.Text = "Congratulations! You have finished"
         '
         'UnattendProgressPanel
         '
@@ -769,7 +770,7 @@ Partial Class NewUnattendWiz
         Me.Label57.Name = "Label57"
         Me.Label57.Size = New System.Drawing.Size(183, 13)
         Me.Label57.TabIndex = 13
-        Me.Label57.Text = LocalizationService.ForSection("Designer.Unattend")("Wait.Take.Label")
+        Me.Label57.Text = "Please wait - this can take some time"
         '
         'Label56
         '
@@ -778,7 +779,7 @@ Partial Class NewUnattendWiz
         Me.Label56.Name = "Label56"
         Me.Label56.Size = New System.Drawing.Size(53, 13)
         Me.Label56.TabIndex = 13
-        Me.Label56.Text = LocalizationService.ForSection("Designer.Unattend")("Progress.Label")
+        Me.Label56.Text = "Progress:"
         '
         'UnattendProgressHeader
         '
@@ -788,7 +789,7 @@ Partial Class NewUnattendWiz
         Me.UnattendProgressHeader.Name = "UnattendProgressHeader"
         Me.UnattendProgressHeader.Size = New System.Drawing.Size(708, 51)
         Me.UnattendProgressHeader.TabIndex = 12
-        Me.UnattendProgressHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Wait.UnattendAnswer.Button")
+        Me.UnattendProgressHeader.Text = "Please wait while your unattended answer file is being created..."
         '
         'FinalReviewPanel
         '
@@ -811,7 +812,8 @@ Partial Class NewUnattendWiz
         Me.Label54.Name = "Label54"
         Me.Label54.Size = New System.Drawing.Size(904, 35)
         Me.Label54.TabIndex = 15
-        Me.Label54.Text = LocalizationService.ForSection("Designer.Unattend")("Something.Right.Go.Message")
+        Me.Label54.Text = "If something is not right, you will need to go back to that page in order to chan" & _
+    "ge the setting. Do not worry: other settings will be kept intact"
         '
         'CheckBox17
         '
@@ -825,7 +827,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox17.Name = "CheckBox17"
         Me.CheckBox17.Size = New System.Drawing.Size(70, 23)
         Me.CheckBox17.TabIndex = 14
-        Me.CheckBox17.Text = LocalizationService.ForSection("Designer.Unattend")("WordWrap.CheckBox")
+        Me.CheckBox17.Text = "Word wrap"
         Me.CheckBox17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox17.UseVisualStyleBackColor = True
         '
@@ -851,7 +853,7 @@ Partial Class NewUnattendWiz
         Me.FinalReviewHeader.Name = "FinalReviewHeader"
         Me.FinalReviewHeader.Size = New System.Drawing.Size(708, 51)
         Me.FinalReviewHeader.TabIndex = 12
-        Me.FinalReviewHeader.Text = LocalizationService.ForSection("Designer.Unattend")("ReviewSettings.Label")
+        Me.FinalReviewHeader.Text = "Review your settings for the unattended answer file"
         '
         'ComponentPanel
         '
@@ -909,7 +911,7 @@ Partial Class NewUnattendWiz
         Me.Label65.Name = "Label65"
         Me.Label65.Size = New System.Drawing.Size(866, 44)
         Me.Label65.TabIndex = 1
-        Me.Label65.Text = LocalizationService.ForSection("Designer.Unattend")("Don.Twant.Add.Label")
+        Me.Label65.Text = "Don't want to add custom components? Click Next to skip this step."
         Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label15
@@ -920,7 +922,8 @@ Partial Class NewUnattendWiz
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(866, 44)
         Me.Label15.TabIndex = 1
-        Me.Label15.Text = LocalizationService.ForSection("Designer.Unattend")("No.Custom.None.Message")
+        Me.Label15.Text = "No custom components have been added yet. Click the plus symbol on the top of thi" & _
+    "s section to add a new component."
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel5
@@ -934,7 +937,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel5.Size = New System.Drawing.Size(861, 27)
         Me.LinkLabel5.TabIndex = 15
         Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = LocalizationService.ForSection("Designer.Unattend")("Learn.Custom.Link")
+        Me.LinkLabel5.Text = "Learn more about custom components in Windows"
         Me.LinkLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'PictureBox4
@@ -1012,7 +1015,7 @@ Partial Class NewUnattendWiz
         Me.Label64.Name = "Label64"
         Me.Label64.Size = New System.Drawing.Size(47, 15)
         Me.Label64.TabIndex = 0
-        Me.Label64.Text = LocalizationService.ForSection("Designer.Unattend")("Pass.Label")
+        Me.Label64.Text = "Pass:"
         '
         'Panel2
         '
@@ -1041,7 +1044,7 @@ Partial Class NewUnattendWiz
         Me.Label61.Name = "Label61"
         Me.Label61.Size = New System.Drawing.Size(110, 15)
         Me.Label61.TabIndex = 0
-        Me.Label61.Text = LocalizationService.ForSection("Designer.Unattend")("Component.Label")
+        Me.Label61.Text = "Component:"
         '
         'ComponentSwitcherPanel
         '
@@ -1131,7 +1134,7 @@ Partial Class NewUnattendWiz
         Me.Label60.Name = "Label60"
         Me.Label60.Size = New System.Drawing.Size(690, 15)
         Me.Label60.TabIndex = 0
-        Me.Label60.Text = LocalizationService.ForSection("Designer.Unattend")("Component.Count.Label")
+        Me.Label60.Text = "Component {{current}} of {{count}}"
         Me.Label60.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.Label60.Visible = False
         '
@@ -1146,7 +1149,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel9.Size = New System.Drawing.Size(168, 13)
         Me.LinkLabel9.TabIndex = 15
         Me.LinkLabel9.TabStop = True
-        Me.LinkLabel9.Text = LocalizationService.ForSection("Designer.Unattend")("Learn.Component.Link")
+        Me.LinkLabel9.Text = "Learn more about this component"
         Me.LinkLabel9.Visible = False
         '
         'Label52
@@ -1158,7 +1161,9 @@ Partial Class NewUnattendWiz
         Me.Label52.Name = "Label52"
         Me.Label52.Size = New System.Drawing.Size(912, 42)
         Me.Label52.TabIndex = 12
-        Me.Label52.Text = LocalizationService.ForSection("Designer.Unattend")("Screen.Add.Message")
+        Me.Label52.Text = "In this screen you can add additional components that you want to configure in yo" & _
+    "ur unattended answer file. Add new components, specify their passes and their da" & _
+    "ta, and click Next." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'ComponentHeader
         '
@@ -1168,7 +1173,7 @@ Partial Class NewUnattendWiz
         Me.ComponentHeader.Name = "ComponentHeader"
         Me.ComponentHeader.Size = New System.Drawing.Size(708, 51)
         Me.ComponentHeader.TabIndex = 11
-        Me.ComponentHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Components.Label")
+        Me.ComponentHeader.Text = "Configure additional components"
         '
         'PostInstallPanel
         '
@@ -1191,7 +1196,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox22.Name = "CheckBox22"
         Me.CheckBox22.Size = New System.Drawing.Size(120, 17)
         Me.CheckBox22.TabIndex = 14
-        Me.CheckBox22.Text = LocalizationService.ForSection("Designer.Unattend")("Hide.Script.Windows.CheckBox")
+        Me.CheckBox22.Text = "Hide script windows"
         Me.CheckBox22.UseVisualStyleBackColor = True
         '
         'CheckBox20
@@ -1202,7 +1207,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox20.Name = "CheckBox20"
         Me.CheckBox20.Size = New System.Drawing.Size(270, 17)
         Me.CheckBox20.TabIndex = 13
-        Me.CheckBox20.Text = LocalizationService.ForSection("Designer.Unattend")("RestartExplorer.CheckBox")
+        Me.CheckBox20.Text = "Restart Windows Explorer after running the scripts"
         Me.CheckBox20.UseVisualStyleBackColor = True
         '
         'ScriptEditorContainerPanel
@@ -1270,7 +1275,7 @@ Partial Class NewUnattendWiz
         Me.Button20.Name = "Button20"
         Me.Button20.Size = New System.Drawing.Size(256, 23)
         Me.Button20.TabIndex = 3
-        Me.Button20.Text = LocalizationService.ForSection("Designer.Unattend")("Import.StarterScript.Button")
+        Me.Button20.Text = "Import a predefined Starter Script..."
         Me.Button20.UseVisualStyleBackColor = True
         '
         'Button19
@@ -1281,7 +1286,7 @@ Partial Class NewUnattendWiz
         Me.Button19.Name = "Button19"
         Me.Button19.Size = New System.Drawing.Size(256, 23)
         Me.Button19.TabIndex = 3
-        Me.Button19.Text = LocalizationService.ForSection("Designer.Unattend")("ImportScript.Button")
+        Me.Button19.Text = "Import a Starter Script in file system..."
         Me.Button19.UseVisualStyleBackColor = True
         '
         'ComboBox16
@@ -1301,7 +1306,7 @@ Partial Class NewUnattendWiz
         Me.Label67.Name = "Label67"
         Me.Label67.Size = New System.Drawing.Size(58, 13)
         Me.Label67.TabIndex = 1
-        Me.Label67.Text = LocalizationService.ForSection("Designer.Unattend")("Language.Label")
+        Me.Label67.Text = "Language:"
         '
         'Button4
         '
@@ -1311,7 +1316,7 @@ Partial Class NewUnattendWiz
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(110, 23)
         Me.Button4.TabIndex = 0
-        Me.Button4.Text = LocalizationService.ForSection("Designer.Unattend")("OpenScript.Button")
+        Me.Button4.Text = "Open script..."
         Me.Button4.UseVisualStyleBackColor = True
         '
         'NoSpecifiedScriptsPanel
@@ -1333,7 +1338,8 @@ Partial Class NewUnattendWiz
         Me.Label68.Name = "Label68"
         Me.Label68.Size = New System.Drawing.Size(665, 44)
         Me.Label68.TabIndex = 1
-        Me.Label68.Text = LocalizationService.ForSection("Designer.Unattend")("Scripts.Have.None.Message")
+        Me.Label68.Text = "No scripts have been added to this stage yet. Click the plus symbol on the top of" & _
+    " this section to add a new script."
         Me.Label68.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'PictureBox5
@@ -1446,7 +1452,7 @@ Partial Class NewUnattendWiz
         Me.Label66.Name = "Label66"
         Me.Label66.Size = New System.Drawing.Size(426, 15)
         Me.Label66.TabIndex = 0
-        Me.Label66.Text = LocalizationService.ForSection("Designer.Unattend")("Script.Count.Label")
+        Me.Label66.Text = "Script {{current}} of {{count}}"
         Me.Label66.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ScriptStagePanel
@@ -1480,7 +1486,7 @@ Partial Class NewUnattendWiz
         Me.StageEditorDescriptionLabel.Padding = New System.Windows.Forms.Padding(8, 12, 0, 0)
         Me.StageEditorDescriptionLabel.Size = New System.Drawing.Size(226, 42)
         Me.StageEditorDescriptionLabel.TabIndex = 3
-        Me.StageEditorDescriptionLabel.Text = LocalizationService.ForSection("Designer.Unattend")("ScriptRun.Description")
+        Me.StageEditorDescriptionLabel.Text = "To configure a script to run at a specific stage, click the stage:"
         '
         'StageLink1
         '
@@ -1494,7 +1500,7 @@ Partial Class NewUnattendWiz
         Me.StageLink1.Size = New System.Drawing.Size(166, 27)
         Me.StageLink1.TabIndex = 0
         Me.StageLink1.TabStop = True
-        Me.StageLink1.Text = LocalizationService.ForSection("Designer.Unattend")("System.Config.Link")
+        Me.StageLink1.Text = "During system configuration"
         '
         'StageLink2
         '
@@ -1508,7 +1514,7 @@ Partial Class NewUnattendWiz
         Me.StageLink2.Size = New System.Drawing.Size(156, 27)
         Me.StageLink2.TabIndex = 1
         Me.StageLink2.TabStop = True
-        Me.StageLink2.Text = LocalizationService.ForSection("Designer.Unattend")("First.User.Logs.Link")
+        Me.StageLink2.Text = "When the first user logs on"
         '
         'StageLink3
         '
@@ -1522,7 +1528,7 @@ Partial Class NewUnattendWiz
         Me.StageLink3.Size = New System.Drawing.Size(232, 27)
         Me.StageLink3.TabIndex = 2
         Me.StageLink3.TabStop = True
-        Me.StageLink3.Text = LocalizationService.ForSection("Designer.Unattend")("Whenever.User.Logs.Link")
+        Me.StageLink3.Text = "Whenever a user logs on for the first time"
         '
         'Label51
         '
@@ -1533,7 +1539,7 @@ Partial Class NewUnattendWiz
         Me.Label51.Name = "Label51"
         Me.Label51.Size = New System.Drawing.Size(912, 69)
         Me.Label51.TabIndex = 11
-        Me.Label51.Text = LocalizationService.ForSection("Designer.Unattend")("ScriptScreenHelp.Message")
+        Me.Label51.Text = resources.GetString("Label51.Text")
         '
         'PostInstallHeader
         '
@@ -1543,7 +1549,7 @@ Partial Class NewUnattendWiz
         Me.PostInstallHeader.Name = "PostInstallHeader"
         Me.PostInstallHeader.Size = New System.Drawing.Size(708, 51)
         Me.PostInstallHeader.TabIndex = 10
-        Me.PostInstallHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Run.Install.Label")
+        Me.PostInstallHeader.Text = "What will be run after installation?"
         '
         'SystemTelemetryPanel
         '
@@ -1574,7 +1580,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton27.Name = "RadioButton27"
         Me.RadioButton27.Size = New System.Drawing.Size(106, 17)
         Me.RadioButton27.TabIndex = 0
-        Me.RadioButton27.Text = LocalizationService.ForSection("Designer.Unattend")("EnableTelemetry.RadioButton")
+        Me.RadioButton27.Text = "Enable telemetry"
         Me.RadioButton27.UseVisualStyleBackColor = True
         '
         'RadioButton26
@@ -1586,7 +1592,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton26.Size = New System.Drawing.Size(108, 17)
         Me.RadioButton26.TabIndex = 0
         Me.RadioButton26.TabStop = True
-        Me.RadioButton26.Text = LocalizationService.ForSection("Designer.Unattend")("DisableTelemetry.RadioButton")
+        Me.RadioButton26.Text = "Disable telemetry"
         Me.RadioButton26.UseVisualStyleBackColor = True
         '
         'CheckBox16
@@ -1597,7 +1603,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox16.Name = "CheckBox16"
         Me.CheckBox16.Size = New System.Drawing.Size(276, 17)
         Me.CheckBox16.TabIndex = 12
-        Me.CheckBox16.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        Me.CheckBox16.Text = "I want to configure these settings during installation"
         Me.CheckBox16.UseVisualStyleBackColor = True
         '
         'SystemTelemetryHeader
@@ -1608,7 +1614,7 @@ Partial Class NewUnattendWiz
         Me.SystemTelemetryHeader.Name = "SystemTelemetryHeader"
         Me.SystemTelemetryHeader.Size = New System.Drawing.Size(708, 51)
         Me.SystemTelemetryHeader.TabIndex = 10
-        Me.SystemTelemetryHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Control.Limit.Much.Message")
+        Me.SystemTelemetryHeader.Text = "Control and limit how much information is sent to Microsoft and third-parties"
         '
         'NetworkConnectionPanel
         '
@@ -1650,7 +1656,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton25.Size = New System.Drawing.Size(259, 17)
         Me.RadioButton25.TabIndex = 4
         Me.RadioButton25.TabStop = True
-        Me.RadioButton25.Text = LocalizationService.ForSection("Designer.Unattend")("WirelessSettings.RadioButton")
+        Me.RadioButton25.Text = "Configure settings for the wireless network now:"
         Me.RadioButton25.UseVisualStyleBackColor = True
         '
         'WirelessNetworkSettingsPanel
@@ -1680,14 +1686,14 @@ Partial Class NewUnattendWiz
         Me.LinkLabel8.Size = New System.Drawing.Size(206, 13)
         Me.LinkLabel8.TabIndex = 4
         Me.LinkLabel8.TabStop = True
-        Me.LinkLabel8.Text = LocalizationService.ForSection("Designer.Unattend")("Access.Router.Config.Link")
+        Me.LinkLabel8.Text = "Access router configuration to learn more"
         '
         'ComboBox13
         '
         Me.ComboBox13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox13.FormattingEnabled = True
-        Me.ComboBox13.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Unattend")("Open.Least.Secure.Item"), LocalizationService.ForSection("Designer.Unattend")("Wpapsk.Item"), LocalizationService.ForSection("Designer.Unattend")("Wpasae.Item")})
+        Me.ComboBox13.Items.AddRange(New Object() {"Open (least secure)", "WPA2-PSK", "WPA3-SAE"})
         Me.ComboBox13.Location = New System.Drawing.Point(277, 66)
         Me.ComboBox13.Name = "ComboBox13"
         Me.ComboBox13.Size = New System.Drawing.Size(489, 21)
@@ -1721,7 +1727,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox15.Name = "CheckBox15"
         Me.CheckBox15.Size = New System.Drawing.Size(685, 17)
         Me.CheckBox15.TabIndex = 1
-        Me.CheckBox15.Text = LocalizationService.ForSection("Designer.Unattend")("ConnectHidden.CheckBox")
+        Me.CheckBox15.Text = "Connect even if not broadcasting"
         Me.CheckBox15.UseVisualStyleBackColor = True
         '
         'Label49
@@ -1731,7 +1737,7 @@ Partial Class NewUnattendWiz
         Me.Label49.Name = "Label49"
         Me.Label49.Size = New System.Drawing.Size(193, 13)
         Me.Label49.TabIndex = 0
-        Me.Label49.Text = LocalizationService.ForSection("Designer.Unattend")("Password.Label")
+        Me.Label49.Text = "Password:"
         '
         'Label48
         '
@@ -1740,7 +1746,7 @@ Partial Class NewUnattendWiz
         Me.Label48.Name = "Label48"
         Me.Label48.Size = New System.Drawing.Size(193, 13)
         Me.Label48.TabIndex = 0
-        Me.Label48.Text = LocalizationService.ForSection("Designer.Unattend")("AuthTechnology.Label")
+        Me.Label48.Text = "Authentication technology:"
         '
         'Label50
         '
@@ -1751,7 +1757,8 @@ Partial Class NewUnattendWiz
         Me.Label50.Name = "Label50"
         Me.Label50.Size = New System.Drawing.Size(489, 48)
         Me.Label50.TabIndex = 0
-        Me.Label50.Text = LocalizationService.ForSection("Designer.Unattend")("Technology.Both.Choose.Label")
+        Me.Label50.Text = "Please choose the technology that both the wireless router and your network adapt" & _
+    "er support."
         '
         'Label47
         '
@@ -1760,7 +1767,7 @@ Partial Class NewUnattendWiz
         Me.Label47.Name = "Label47"
         Me.Label47.Size = New System.Drawing.Size(193, 13)
         Me.Label47.TabIndex = 0
-        Me.Label47.Text = LocalizationService.ForSection("Designer.Unattend")("SsidnetworkName.Label")
+        Me.Label47.Text = "SSID (Network Name):"
         '
         'RadioButton30
         '
@@ -1769,7 +1776,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton30.Name = "RadioButton30"
         Me.RadioButton30.Size = New System.Drawing.Size(110, 17)
         Me.RadioButton30.TabIndex = 4
-        Me.RadioButton30.Text = LocalizationService.ForSection("Designer.Unattend")("SkipConfig.RadioButton")
+        Me.RadioButton30.Text = "Skip configuration"
         Me.RadioButton30.UseVisualStyleBackColor = True
         '
         'Label55
@@ -1780,7 +1787,8 @@ Partial Class NewUnattendWiz
         Me.Label55.Name = "Label55"
         Me.Label55.Size = New System.Drawing.Size(436, 36)
         Me.Label55.TabIndex = 0
-        Me.Label55.Text = LocalizationService.ForSection("Designer.Unattend")("Option.Either.Choose.Label")
+        Me.Label55.Text = "Choose this option if you either don't have a network adapter or plan to use Ethe" & _
+    "rnet"
         '
         'Label53
         '
@@ -1802,7 +1810,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox14.Name = "CheckBox14"
         Me.CheckBox14.Size = New System.Drawing.Size(276, 17)
         Me.CheckBox14.TabIndex = 11
-        Me.CheckBox14.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        Me.CheckBox14.Text = "I want to configure these settings during installation"
         Me.CheckBox14.UseVisualStyleBackColor = True
         '
         'NetworkConnectionHeader
@@ -1813,7 +1821,7 @@ Partial Class NewUnattendWiz
         Me.NetworkConnectionHeader.Name = "NetworkConnectionHeader"
         Me.NetworkConnectionHeader.Size = New System.Drawing.Size(708, 51)
         Me.NetworkConnectionHeader.TabIndex = 9
-        Me.NetworkConnectionHeader.Text = LocalizationService.ForSection("Designer.Unattend")("WirelessSettings.Label")
+        Me.NetworkConnectionHeader.Text = "Configure wireless network settings and get connected online"
         '
         'VirtualMachinePanel
         '
@@ -1847,19 +1855,19 @@ Partial Class NewUnattendWiz
         Me.Label46.Name = "Label46"
         Me.Label46.Size = New System.Drawing.Size(345, 52)
         Me.Label46.TabIndex = 2
-        Me.Label46.Text = LocalizationService.ForSection("Designer.Unattend")("Guest.Additions.Message")
+        Me.Label46.Text = resources.GetString("Label46.Text")
         '
         'ComboBox8
         '
         Me.ComboBox8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox8.FormattingEnabled = True
-        Me.ComboBox8.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Unattend")("Virtual.Box.Guest.Item"), LocalizationService.ForSection("Designer.Unattend")("VmwareTools.Item"), LocalizationService.ForSection("Designer.Unattend")("Virt.Ioguest.Tools.Item"), LocalizationService.ForSection("Designer.Unattend")("ParallelsTools.Item")})
+        Me.ComboBox8.Items.AddRange(New Object() {"VirtualBox Guest Additions", "VMware Tools", "VirtIO Guest Tools", "Parallels Tools"})
         Me.ComboBox8.Location = New System.Drawing.Point(162, 19)
         Me.ComboBox8.Name = "ComboBox8"
         Me.ComboBox8.Size = New System.Drawing.Size(695, 21)
         Me.ComboBox8.TabIndex = 1
-        Me.ComboBox8.Text = LocalizationService.ForSection("Designer.Unattend")("Virt.Ioguest.Tools.Item")
+        Me.ComboBox8.Text = "VirtIO Guest Tools"
         '
         'Label45
         '
@@ -1868,7 +1876,7 @@ Partial Class NewUnattendWiz
         Me.Label45.Name = "Label45"
         Me.Label45.Size = New System.Drawing.Size(124, 13)
         Me.Label45.TabIndex = 0
-        Me.Label45.Text = LocalizationService.ForSection("Designer.Unattend")("VirtualMachine.Label")
+        Me.Label45.Text = "Virtual Machine Support:"
         '
         'RadioButton24
         '
@@ -1879,7 +1887,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton24.Size = New System.Drawing.Size(303, 17)
         Me.RadioButton24.TabIndex = 10
         Me.RadioButton24.TabStop = True
-        Me.RadioButton24.Text = LocalizationService.ForSection("Designer.Unattend")("Iplan.Target.RadioButton")
+        Me.RadioButton24.Text = "No, I plan on using the target installation on a real system"
         Me.RadioButton24.UseVisualStyleBackColor = True
         '
         'RadioButton23
@@ -1889,7 +1897,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton23.Name = "RadioButton23"
         Me.RadioButton23.Size = New System.Drawing.Size(318, 17)
         Me.RadioButton23.TabIndex = 10
-        Me.RadioButton23.Text = LocalizationService.ForSection("Designer.Unattend")("Iwant.Target.RadioButton")
+        Me.RadioButton23.Text = "Yes, I want to use the target installation on a virtual machine"
         Me.RadioButton23.UseVisualStyleBackColor = True
         '
         'VirtualMachineHeader
@@ -1900,7 +1908,7 @@ Partial Class NewUnattendWiz
         Me.VirtualMachineHeader.Name = "VirtualMachineHeader"
         Me.VirtualMachineHeader.Size = New System.Drawing.Size(708, 51)
         Me.VirtualMachineHeader.TabIndex = 9
-        Me.VirtualMachineHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Add.Enhanced.Support.Message")
+        Me.VirtualMachineHeader.Text = "Do you want to add enhanced support from your virtual machine solution?"
         '
         'AccountLockoutPanel
         '
@@ -1922,7 +1930,8 @@ Partial Class NewUnattendWiz
         Me.Label44.Name = "Label44"
         Me.Label44.Size = New System.Drawing.Size(443, 13)
         Me.Label44.TabIndex = 13
-        Me.Label44.Text = LocalizationService.ForSection("Designer.Unattend")("Checking.Option.Target.Label")
+        Me.Label44.Text = "Checking this option will make the target installation more vulnerable to brute-f" & _
+    "orce attacks"
         '
         'EnabledAccountLockoutPanel
         '
@@ -1962,7 +1971,7 @@ Partial Class NewUnattendWiz
         Me.Label41.Name = "Label41"
         Me.Label41.Size = New System.Drawing.Size(227, 13)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = LocalizationService.ForSection("Designer.Unattend")("Amount.Failed.Attempts.Label")
+        Me.Label41.Text = "After the following amount of failed attempts:"
         '
         'Label43
         '
@@ -1972,7 +1981,7 @@ Partial Class NewUnattendWiz
         Me.Label43.Name = "Label43"
         Me.Label43.Size = New System.Drawing.Size(289, 13)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = LocalizationService.ForSection("Designer.Unattend")("UnlockMinutes.Label")
+        Me.Label43.Text = "After the following amount of minutes, unlock the account:"
         '
         'NumericUpDown8
         '
@@ -1991,7 +2000,7 @@ Partial Class NewUnattendWiz
         Me.Label40.Name = "Label40"
         Me.Label40.Size = New System.Drawing.Size(115, 13)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = LocalizationService.ForSection("Designer.Unattend")("Lock.Out.Account.Label")
+        Me.Label40.Text = "Lock out an account..."
         '
         'NumericUpDown6
         '
@@ -2010,7 +2019,7 @@ Partial Class NewUnattendWiz
         Me.Label42.Name = "Label42"
         Me.Label42.Size = New System.Drawing.Size(207, 13)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = LocalizationService.ForSection("Designer.Unattend")("TimeframeMinutes.Label")
+        Me.Label42.Text = "Within the following timeframe in minutes:"
         '
         'NumericUpDown7
         '
@@ -2029,7 +2038,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton22.Name = "RadioButton22"
         Me.RadioButton22.Size = New System.Drawing.Size(247, 17)
         Me.RadioButton22.TabIndex = 9
-        Me.RadioButton22.Text = LocalizationService.ForSection("Designer.Unattend")("CustomLockout.RadioButton")
+        Me.RadioButton22.Text = "Continue with custom Account Lockout policies"
         Me.RadioButton22.UseVisualStyleBackColor = True
         '
         'RadioButton21
@@ -2041,7 +2050,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton21.Size = New System.Drawing.Size(247, 17)
         Me.RadioButton21.TabIndex = 9
         Me.RadioButton21.TabStop = True
-        Me.RadioButton21.Text = LocalizationService.ForSection("Designer.Unattend")("DefaultLockout.RadioButton")
+        Me.RadioButton21.Text = "Continue with default Account Lockout policies"
         Me.RadioButton21.UseVisualStyleBackColor = True
         '
         'CheckBox13
@@ -2052,7 +2061,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox13.Name = "CheckBox13"
         Me.CheckBox13.Size = New System.Drawing.Size(90, 17)
         Me.CheckBox13.TabIndex = 11
-        Me.CheckBox13.Text = LocalizationService.ForSection("Designer.Unattend")("DisablePolicy.CheckBox")
+        Me.CheckBox13.Text = "Disable policy"
         Me.CheckBox13.UseVisualStyleBackColor = True
         '
         'AccountLockdownHeader
@@ -2063,7 +2072,7 @@ Partial Class NewUnattendWiz
         Me.AccountLockdownHeader.Name = "AccountLockdownHeader"
         Me.AccountLockdownHeader.Size = New System.Drawing.Size(708, 51)
         Me.AccountLockdownHeader.TabIndex = 8
-        Me.AccountLockdownHeader.Text = LocalizationService.ForSection("Designer.Unattend")("AccountLockout.Label")
+        Me.AccountLockdownHeader.Text = "Configure Account Lockout policies for the target system"
         '
         'PWExpirationPanel
         '
@@ -2110,7 +2119,7 @@ Partial Class NewUnattendWiz
         Me.Label39.Name = "Label39"
         Me.Label39.Size = New System.Drawing.Size(30, 13)
         Me.Label39.TabIndex = 1
-        Me.Label39.Text = LocalizationService.ForSection("Designer.Unattend")("Days.Label")
+        Me.Label39.Text = "days"
         '
         'NumericUpDown5
         '
@@ -2130,7 +2139,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton20.Name = "RadioButton20"
         Me.RadioButton20.Size = New System.Drawing.Size(316, 17)
         Me.RadioButton20.TabIndex = 0
-        Me.RadioButton20.Text = LocalizationService.ForSection("Designer.Unattend")("ExpirePassword.RadioButton")
+        Me.RadioButton20.Text = "Passwords should expire after the following number of days:"
         Me.RadioButton20.UseVisualStyleBackColor = True
         '
         'RadioButton19
@@ -2142,7 +2151,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton19.Size = New System.Drawing.Size(211, 17)
         Me.RadioButton19.TabIndex = 0
         Me.RadioButton19.TabStop = True
-        Me.RadioButton19.Text = LocalizationService.ForSection("Designer.Unattend")("Expire42Days.RadioButton")
+        Me.RadioButton19.Text = "Passwords should expire after 42 days"
         Me.RadioButton19.UseVisualStyleBackColor = True
         '
         'RadioButton18
@@ -2152,7 +2161,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton18.Name = "RadioButton18"
         Me.RadioButton18.Size = New System.Drawing.Size(431, 17)
         Me.RadioButton18.TabIndex = 8
-        Me.RadioButton18.Text = LocalizationService.ForSection("Designer.Unattend")("PasswordsExpire.RadioButton")
+        Me.RadioButton18.Text = "Passwords should expire after a certain amount of days (not recommended by NIST)"
         Me.RadioButton18.UseVisualStyleBackColor = True
         '
         'RadioButton17
@@ -2164,7 +2173,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton17.Size = New System.Drawing.Size(174, 17)
         Me.RadioButton17.TabIndex = 8
         Me.RadioButton17.TabStop = True
-        Me.RadioButton17.Text = LocalizationService.ForSection("Designer.Unattend")("NeverExpire.RadioButton")
+        Me.RadioButton17.Text = "Passwords should never expire"
         Me.RadioButton17.UseVisualStyleBackColor = True
         '
         'PWExpirationHeader
@@ -2175,7 +2184,7 @@ Partial Class NewUnattendWiz
         Me.PWExpirationHeader.Name = "PWExpirationHeader"
         Me.PWExpirationHeader.Size = New System.Drawing.Size(708, 51)
         Me.PWExpirationHeader.TabIndex = 7
-        Me.PWExpirationHeader.Text = LocalizationService.ForSection("Designer.Unattend")("PasswordsExpire.Label")
+        Me.PWExpirationHeader.Text = "Should passwords expire?"
         '
         'UserAccountPanel
         '
@@ -2198,7 +2207,7 @@ Partial Class NewUnattendWiz
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(286, 13)
         Me.Label34.TabIndex = 11
-        Me.Label34.Text = LocalizationService.ForSection("Designer.NewUnattend.LocalAccounts")("OnlyNow.Label")
+        Me.Label34.Text = "Uncheck this only if you want to set up local accounts now"
         '
         'CheckBox6
         '
@@ -2210,7 +2219,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(276, 17)
         Me.CheckBox6.TabIndex = 10
-        Me.CheckBox6.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        Me.CheckBox6.Text = "I want to configure these settings during installation"
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'ManualAccountPanel
@@ -2473,7 +2482,7 @@ Partial Class NewUnattendWiz
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(158, 24)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = LocalizationService.ForSection("Designer.Unattend")("AccountName.Label")
+        Me.Label35.Text = "Account name:"
         Me.Label35.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label38
@@ -2483,7 +2492,7 @@ Partial Class NewUnattendWiz
         Me.Label38.Name = "Label38"
         Me.Label38.Size = New System.Drawing.Size(158, 24)
         Me.Label38.TabIndex = 2
-        Me.Label38.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Label")
+        Me.Label38.Text = "Account 1:"
         Me.Label38.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'CheckBox8
@@ -2493,7 +2502,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(158, 18)
         Me.CheckBox8.TabIndex = 3
-        Me.CheckBox8.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option2.CheckBox")
+        Me.CheckBox8.Text = "Account 2:"
         Me.CheckBox8.UseVisualStyleBackColor = True
         '
         'CheckBox9
@@ -2503,7 +2512,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox9.Name = "CheckBox9"
         Me.CheckBox9.Size = New System.Drawing.Size(158, 18)
         Me.CheckBox9.TabIndex = 3
-        Me.CheckBox9.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option3.CheckBox")
+        Me.CheckBox9.Text = "Account 3:"
         Me.CheckBox9.UseVisualStyleBackColor = True
         '
         'CheckBox10
@@ -2513,7 +2522,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox10.Name = "CheckBox10"
         Me.CheckBox10.Size = New System.Drawing.Size(158, 18)
         Me.CheckBox10.TabIndex = 3
-        Me.CheckBox10.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option4.CheckBox")
+        Me.CheckBox10.Text = "Account 4:"
         Me.CheckBox10.UseVisualStyleBackColor = True
         '
         'CheckBox11
@@ -2523,7 +2532,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(158, 20)
         Me.CheckBox11.TabIndex = 3
-        Me.CheckBox11.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option5.CheckBox")
+        Me.CheckBox11.Text = "Account 5:"
         Me.CheckBox11.UseVisualStyleBackColor = True
         '
         'TextBox4
@@ -2544,7 +2553,7 @@ Partial Class NewUnattendWiz
         Me.UserListOverviewLabel.Name = "UserListOverviewLabel"
         Me.UserListOverviewLabel.Size = New System.Drawing.Size(158, 24)
         Me.UserListOverviewLabel.TabIndex = 25
-        Me.UserListOverviewLabel.Text = LocalizationService.ForSection("Designer.Unattend")("UserList.Label")
+        Me.UserListOverviewLabel.Text = "User accounts:"
         Me.UserListOverviewLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComboBox12
@@ -2614,7 +2623,7 @@ Partial Class NewUnattendWiz
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(161, 24)
         Me.Label37.TabIndex = 1
-        Me.Label37.Text = LocalizationService.ForSection("Designer.Unattend")("AccountGroup.Label")
+        Me.Label37.Text = "Account group:"
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label36
@@ -2625,7 +2634,7 @@ Partial Class NewUnattendWiz
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(158, 24)
         Me.Label36.TabIndex = 1
-        Me.Label36.Text = LocalizationService.ForSection("Designer.Unattend")("AccountPassword.Label")
+        Me.Label36.Text = "Account password:"
         Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'TextBox6
@@ -2685,7 +2694,7 @@ Partial Class NewUnattendWiz
         Me.Label69.Name = "Label69"
         Me.Label69.Size = New System.Drawing.Size(158, 24)
         Me.Label69.TabIndex = 1
-        Me.Label69.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Display.Name.Label")
+        Me.Label69.Text = "Account display name:"
         Me.Label69.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'DisplayNamePanel1
@@ -2729,7 +2738,7 @@ Partial Class NewUnattendWiz
         Me.GroupBox1.Size = New System.Drawing.Size(829, 140)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.Unattend")("FirstLog.Group")
+        Me.GroupBox1.Text = "First log on"
         '
         'AutoLogonSettingsPanel
         '
@@ -2762,7 +2771,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton16.Name = "RadioButton16"
         Me.RadioButton16.Size = New System.Drawing.Size(311, 17)
         Me.RadioButton16.TabIndex = 0
-        Me.RadioButton16.Text = LocalizationService.ForSection("Designer.Unattend")("Log.Built.Admin.RadioButton")
+        Me.RadioButton16.Text = "Log on to the built-in administrator account, with password:"
         Me.RadioButton16.UseVisualStyleBackColor = True
         '
         'RadioButton15
@@ -2774,7 +2783,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton15.Size = New System.Drawing.Size(258, 17)
         Me.RadioButton15.TabIndex = 0
         Me.RadioButton15.TabStop = True
-        Me.RadioButton15.Text = LocalizationService.ForSection("Designer.Unattend")("Log.First.Admin.RadioButton")
+        Me.RadioButton15.Text = "Log on to the first administrator account created"
         Me.RadioButton15.UseVisualStyleBackColor = True
         '
         'CheckBox12
@@ -2784,7 +2793,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox12.Name = "CheckBox12"
         Me.CheckBox12.Size = New System.Drawing.Size(260, 17)
         Me.CheckBox12.TabIndex = 0
-        Me.CheckBox12.Text = LocalizationService.ForSection("Designer.Unattend")("Auto.Login.Admin.CheckBox")
+        Me.CheckBox12.Text = "Log on automatically to an Administrator account"
         Me.CheckBox12.UseVisualStyleBackColor = True
         '
         'CheckBox7
@@ -2796,7 +2805,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(181, 17)
         Me.CheckBox7.TabIndex = 3
-        Me.CheckBox7.Text = LocalizationService.ForSection("Designer.Unattend")("ObscurePasswords.CheckBox")
+        Me.CheckBox7.Text = "Obscure passwords with Base64"
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'CheckBox18
@@ -2806,7 +2815,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox18.Name = "CheckBox18"
         Me.CheckBox18.Size = New System.Drawing.Size(219, 17)
         Me.CheckBox18.TabIndex = 5
-        Me.CheckBox18.Text = LocalizationService.ForSection("Designer.Unattend")("Ask.Microsoft.CheckBox")
+        Me.CheckBox18.Text = "Ask for a Microsoft account interactively"
         Me.CheckBox18.UseVisualStyleBackColor = True
         '
         'FillerLabel2
@@ -2827,7 +2836,7 @@ Partial Class NewUnattendWiz
         Me.UserAccountHeader.Name = "UserAccountHeader"
         Me.UserAccountHeader.Size = New System.Drawing.Size(708, 51)
         Me.UserAccountHeader.TabIndex = 6
-        Me.UserAccountHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Target.Install.Label")
+        Me.UserAccountHeader.Text = "Who will use the target installation?"
         '
         'ProductKeyPanel
         '
@@ -2847,7 +2856,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox21.Name = "CheckBox21"
         Me.CheckBox21.Size = New System.Drawing.Size(285, 17)
         Me.CheckBox21.TabIndex = 10
-        Me.CheckBox21.Text = LocalizationService.ForSection("Designer.Unattend")("FirmwareProductKey.CheckBox")
+        Me.CheckBox21.Text = "Get product key from firmware (modern systems only)"
         Me.CheckBox21.UseVisualStyleBackColor = True
         '
         'ManualProductKeyOptionsPanel
@@ -2896,7 +2905,7 @@ Partial Class NewUnattendWiz
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(277, 13)
         Me.Label32.TabIndex = 3
-        Me.Label32.Text = LocalizationService.ForSection("Designer.Unattend")("Product.Label")
+        Me.Label32.Text = "Please make sure that the product key you enter is valid"
         '
         'Label31
         '
@@ -2906,7 +2915,7 @@ Partial Class NewUnattendWiz
         Me.Label31.Name = "Label31"
         Me.Label31.Size = New System.Drawing.Size(421, 13)
         Me.Label31.TabIndex = 3
-        Me.Label31.Text = LocalizationService.ForSection("Designer.Unattend")("DISM.Tools.Cannot.Label")
+        Me.Label31.Text = "DISMTools cannot verify whether product keys can be valid for activation"
         '
         'Label33
         '
@@ -2917,7 +2926,7 @@ Partial Class NewUnattendWiz
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(825, 13)
         Me.Label33.TabIndex = 0
-        Me.Label33.Text = LocalizationService.ForSection("Designer.Unattend")("Type.Each.Character.Label")
+        Me.Label33.Text = "(Type each character of the product key, including the dashes)"
         '
         'Label30
         '
@@ -2926,7 +2935,7 @@ Partial Class NewUnattendWiz
         Me.Label30.Name = "Label30"
         Me.Label30.Size = New System.Drawing.Size(161, 13)
         Me.Label30.TabIndex = 0
-        Me.Label30.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Custom.Label")
+        Me.Label30.Text = "Product Key:"
         '
         'TextBox3
         '
@@ -2962,7 +2971,7 @@ Partial Class NewUnattendWiz
         Me.Button21.Name = "Button21"
         Me.Button21.Size = New System.Drawing.Size(181, 23)
         Me.Button21.TabIndex = 5
-        Me.Button21.Text = LocalizationService.ForSection("Designer.Unattend")("Detect.Image.Edition.Button")
+        Me.Button21.Text = "Detect from image edition"
         Me.Button21.UseVisualStyleBackColor = True
         '
         'Button5
@@ -2973,7 +2982,7 @@ Partial Class NewUnattendWiz
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 4
-        Me.Button5.Text = LocalizationService.ForSection("Designer.Unattend")("Copy.Button")
+        Me.Button5.Text = "Copy"
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Label29
@@ -2983,7 +2992,7 @@ Partial Class NewUnattendWiz
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(353, 13)
         Me.Label29.TabIndex = 3
-        Me.Label29.Text = LocalizationService.ForSection("Designer.Unattend")("Only.Generic.Key.Label")
+        Me.Label29.Text = "You should only use this generic key with the edition you want to deploy"
         '
         'TextBox2
         '
@@ -3013,7 +3022,7 @@ Partial Class NewUnattendWiz
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(228, 13)
         Me.Label28.TabIndex = 0
-        Me.Label28.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Generic.Label")
+        Me.Label28.Text = "Product Key:"
         '
         'Label27
         '
@@ -3022,7 +3031,7 @@ Partial Class NewUnattendWiz
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(248, 13)
         Me.Label27.TabIndex = 0
-        Me.Label27.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Edition.Label")
+        Me.Label27.Text = "Use the product key for this edition:"
         '
         'RadioButton14
         '
@@ -3031,7 +3040,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton14.Name = "RadioButton14"
         Me.RadioButton14.Size = New System.Drawing.Size(149, 17)
         Me.RadioButton14.TabIndex = 6
-        Me.RadioButton14.Text = LocalizationService.ForSection("Designer.Unattend")("CustomProductKey.RadioButton")
+        Me.RadioButton14.Text = "Use a custom product key"
         Me.RadioButton14.UseVisualStyleBackColor = True
         '
         'RadioButton13
@@ -3043,7 +3052,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton13.Size = New System.Drawing.Size(278, 17)
         Me.RadioButton13.TabIndex = 6
         Me.RadioButton13.TabStop = True
-        Me.RadioButton13.Text = LocalizationService.ForSection("Designer.Unattend")("GenericKey.RadioButton")
+        Me.RadioButton13.Text = "Use a generic product key (no activation capabilities)"
         Me.RadioButton13.UseVisualStyleBackColor = True
         '
         'ProductKeyHeader
@@ -3054,7 +3063,7 @@ Partial Class NewUnattendWiz
         Me.ProductKeyHeader.Name = "ProductKeyHeader"
         Me.ProductKeyHeader.Size = New System.Drawing.Size(708, 51)
         Me.ProductKeyHeader.TabIndex = 5
-        Me.ProductKeyHeader.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Type.Label")
+        Me.ProductKeyHeader.Text = "Type your product key for operating system installation"
         '
         'DiskConfigurationPanel
         '
@@ -3112,7 +3121,7 @@ Partial Class NewUnattendWiz
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(323, 13)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = LocalizationService.ForSection("Designer.Unattend")("RecoveryPartition.Label")
+        Me.Label23.Text = "Windows Recovery Environment partition size (in MB):"
         '
         'CheckBox5
         '
@@ -3123,7 +3132,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(176, 17)
         Me.CheckBox5.TabIndex = 2
-        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.Unattend")("InstallRecoveryEnv.CheckBox")
+        Me.CheckBox5.Text = "Install a Recovery Environment"
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'PartTablePanel
@@ -3169,7 +3178,7 @@ Partial Class NewUnattendWiz
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(247, 13)
         Me.Label22.TabIndex = 0
-        Me.Label22.Text = LocalizationService.ForSection("Designer.Unattend")("EFI.System.Label")
+        Me.Label22.Text = "EFI System Partition (ESP) size (in MB):"
         '
         'RadioButton8
         '
@@ -3178,7 +3187,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton8.Name = "RadioButton8"
         Me.RadioButton8.Size = New System.Drawing.Size(46, 17)
         Me.RadioButton8.TabIndex = 0
-        Me.RadioButton8.Text = LocalizationService.ForSection("Designer.Unattend")("MBR.RadioButton")
+        Me.RadioButton8.Text = "MBR"
         Me.RadioButton8.UseVisualStyleBackColor = True
         '
         'RadioButton7
@@ -3190,7 +3199,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton7.Size = New System.Drawing.Size(44, 17)
         Me.RadioButton7.TabIndex = 0
         Me.RadioButton7.TabStop = True
-        Me.RadioButton7.Text = LocalizationService.ForSection("Designer.Unattend")("GPT.RadioButton")
+        Me.RadioButton7.Text = "GPT"
         Me.RadioButton7.UseVisualStyleBackColor = True
         '
         'Label21
@@ -3200,7 +3209,7 @@ Partial Class NewUnattendWiz
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(78, 13)
         Me.Label21.TabIndex = 0
-        Me.Label21.Text = LocalizationService.ForSection("Designer.Unattend")("PartitionTable.Label")
+        Me.Label21.Text = "Partition table:"
         '
         'Label20
         '
@@ -3211,7 +3220,7 @@ Partial Class NewUnattendWiz
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(307, 13)
         Me.Label20.TabIndex = 7
-        Me.Label20.Text = LocalizationService.ForSection("Designer.Unattend")("Skip.Disk.Config.Label")
+        Me.Label20.Text = "Uncheck this only if you want to set up disk configuration now."
         '
         'CheckBox4
         '
@@ -3223,7 +3232,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(276, 17)
         Me.CheckBox4.TabIndex = 5
-        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        Me.CheckBox4.Text = "I want to configure these settings during installation"
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'DiskConfigurationHeader
@@ -3234,7 +3243,7 @@ Partial Class NewUnattendWiz
         Me.DiskConfigurationHeader.Name = "DiskConfigurationHeader"
         Me.DiskConfigurationHeader.Size = New System.Drawing.Size(708, 51)
         Me.DiskConfigurationHeader.TabIndex = 4
-        Me.DiskConfigurationHeader.Text = LocalizationService.ForSection("Designer.Unattend")("DiskLayout.Label")
+        Me.DiskConfigurationHeader.Text = "Configure the disk and partition layout of the target system"
         '
         'TimeZonePanel
         '
@@ -3271,7 +3280,7 @@ Partial Class NewUnattendWiz
         Me.CurrentTimeSelTZ.Name = "CurrentTimeSelTZ"
         Me.CurrentTimeSelTZ.Size = New System.Drawing.Size(29, 13)
         Me.CurrentTimeSelTZ.TabIndex = 3
-        Me.CurrentTimeSelTZ.Text = LocalizationService.ForSection("Designer.Unattend")("Time.Label")
+        Me.CurrentTimeSelTZ.Text = "Time"
         '
         'CurrentTimeUTC
         '
@@ -3280,7 +3289,7 @@ Partial Class NewUnattendWiz
         Me.CurrentTimeUTC.Name = "CurrentTimeUTC"
         Me.CurrentTimeUTC.Size = New System.Drawing.Size(29, 13)
         Me.CurrentTimeUTC.TabIndex = 3
-        Me.CurrentTimeUTC.Text = LocalizationService.ForSection("Designer.Unattend")("CurrentTime.Label")
+        Me.CurrentTimeUTC.Text = "Time"
         '
         'Label19
         '
@@ -3289,7 +3298,7 @@ Partial Class NewUnattendWiz
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(171, 13)
         Me.Label19.TabIndex = 2
-        Me.Label19.Text = LocalizationService.ForSection("Designer.Unattend")("Time.Selected.Zone.Label")
+        Me.Label19.Text = "Current time (selected time zone):"
         '
         'Label18
         '
@@ -3298,7 +3307,7 @@ Partial Class NewUnattendWiz
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(102, 13)
         Me.Label18.TabIndex = 2
-        Me.Label18.Text = LocalizationService.ForSection("Designer.Unattend")("Time.UTC.Label")
+        Me.Label18.Text = "Current time (UTC):"
         '
         'ComboBox5
         '
@@ -3317,7 +3326,7 @@ Partial Class NewUnattendWiz
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(59, 13)
         Me.Label17.TabIndex = 0
-        Me.Label17.Text = LocalizationService.ForSection("Designer.Unattend")("TimeZone.Label")
+        Me.Label17.Text = "Time zone:"
         '
         'RadioButton4
         '
@@ -3326,7 +3335,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton4.Name = "RadioButton4"
         Me.RadioButton4.Size = New System.Drawing.Size(148, 17)
         Me.RadioButton4.TabIndex = 4
-        Me.RadioButton4.Text = LocalizationService.ForSection("Designer.Unattend")("Set.Time.Zone.RadioButton")
+        Me.RadioButton4.Text = "Set a time zone manually:"
         Me.RadioButton4.UseVisualStyleBackColor = True
         '
         'RadioButton3
@@ -3338,7 +3347,8 @@ Partial Class NewUnattendWiz
         Me.RadioButton3.Size = New System.Drawing.Size(422, 17)
         Me.RadioButton3.TabIndex = 4
         Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = LocalizationService.ForSection("Designer.Unattend")("Windows.Decide.RadioButton")
+        Me.RadioButton3.Text = "Let Windows decide my time zone based on the regional configurations I set earlie" & _
+    "r"
         Me.RadioButton3.UseVisualStyleBackColor = True
         '
         'TimeZoneHeader
@@ -3349,7 +3359,7 @@ Partial Class NewUnattendWiz
         Me.TimeZoneHeader.Name = "TimeZoneHeader"
         Me.TimeZoneHeader.Size = New System.Drawing.Size(708, 51)
         Me.TimeZoneHeader.TabIndex = 3
-        Me.TimeZoneHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Configure.Time.Zone.Label")
+        Me.TimeZoneHeader.Text = "Configure time zone settings"
         '
         'SysConfigPanel
         '
@@ -3375,7 +3385,7 @@ Partial Class NewUnattendWiz
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.Unattend")("DesktopX86.Item"), LocalizationService.ForSection("Designer.Unattend")("DesktopX64.Item"), LocalizationService.ForSection("Designer.Unattend")("Armwindows.Item")})
+        Me.CheckedListBox1.Items.AddRange(New Object() {"x86 (Desktop 32-Bit)", "x64 (Desktop 64-Bit)", "ARM64 (Windows on ARM)"})
         Me.CheckedListBox1.Location = New System.Drawing.Point(182, 82)
         Me.CheckedListBox1.Name = "CheckedListBox1"
         Me.CheckedListBox1.Size = New System.Drawing.Size(761, 68)
@@ -3388,7 +3398,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox19.Name = "CheckBox19"
         Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
         Me.CheckBox19.TabIndex = 9
-        Me.CheckBox19.Text = LocalizationService.ForSection("Designer.Unattend")("UseConfigSet.CheckBox")
+        Me.CheckBox19.Text = "Use a configuration set or distribution share"
         Me.CheckBox19.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -3400,7 +3410,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox3.TabIndex = 8
-        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.Unattend")("Windows.Set.Random.CheckBox")
+        Me.CheckBox3.Text = "Let Windows set a random computer name"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'Label62
@@ -3412,7 +3422,7 @@ Partial Class NewUnattendWiz
         Me.Label62.Name = "Label62"
         Me.Label62.Size = New System.Drawing.Size(872, 33)
         Me.Label62.TabIndex = 1
-        Me.Label62.Text = LocalizationService.ForSection("Designer.Unattend")("Config.Set.Message")
+        Me.Label62.Text = resources.GetString("Label62.Text")
         '
         'ComputerNamePanel
         '
@@ -3457,7 +3467,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton29.Name = "RadioButton29"
         Me.RadioButton29.Size = New System.Drawing.Size(301, 17)
         Me.RadioButton29.TabIndex = 5
-        Me.RadioButton29.Text = LocalizationService.ForSection("Designer.Unattend")("Script.Sets.Name.RadioButton")
+        Me.RadioButton29.Text = "Have the following script configure the name (advanced):"
         Me.RadioButton29.UseVisualStyleBackColor = True
         '
         'RadioButton28
@@ -3469,7 +3479,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton28.Size = New System.Drawing.Size(267, 17)
         Me.RadioButton28.TabIndex = 5
         Me.RadioButton28.TabStop = True
-        Me.RadioButton28.Text = LocalizationService.ForSection("Designer.Unattend")("ComputerName.RadioButton")
+        Me.RadioButton28.Text = "Choose a computer name yourself (recommended)"
         Me.RadioButton28.UseVisualStyleBackColor = True
         '
         'ManualComputerNamePanel
@@ -3493,7 +3503,7 @@ Partial Class NewUnattendWiz
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(152, 23)
         Me.Button3.TabIndex = 3
-        Me.Button3.Text = LocalizationService.ForSection("Designer.Unattend")("Get.Computer.Name.Button")
+        Me.Button3.Text = "Get computer name"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -3513,7 +3523,7 @@ Partial Class NewUnattendWiz
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(87, 13)
         Me.Label16.TabIndex = 1
-        Me.Label16.Text = LocalizationService.ForSection("Designer.Unattend")("ComputerName.Label")
+        Me.Label16.Text = "Computer name:"
         '
         'Label63
         '
@@ -3525,7 +3535,7 @@ Partial Class NewUnattendWiz
         Me.Label63.Name = "Label63"
         Me.Label63.Size = New System.Drawing.Size(551, 18)
         Me.Label63.TabIndex = 1
-        Me.Label63.Text = LocalizationService.ForSection("Designer.Unattend")("Type.Computer.Name.Label")
+        Me.Label63.Text = "Please type a computer name"
         Me.Label63.Visible = False
         '
         'WinSVSettingsPanel
@@ -3549,7 +3559,8 @@ Partial Class NewUnattendWiz
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(720, 31)
         Me.Label14.TabIndex = 1
-        Me.Label14.Text = LocalizationService.ForSection("Designer.Unattend")("Check.Option.Only.Message")
+        Me.Label14.Text = "Check this option only if the target system does not have any network capabilitie" & _
+    "s. You can configure local users in the User Accounts section"
         '
         'CheckBox2
         '
@@ -3558,7 +3569,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(215, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.Unattend")("BypassNetwork.CheckBox")
+        Me.CheckBox2.Text = "Bypass Mandatory Network Connection"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -3568,7 +3579,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(167, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.Unattend")("BypassRequirements.CheckBox")
+        Me.CheckBox1.Text = "Bypass System Requirements"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label13
@@ -3578,7 +3589,7 @@ Partial Class NewUnattendWiz
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(110, 13)
         Me.Label13.TabIndex = 6
-        Me.Label13.Text = LocalizationService.ForSection("Designer.Unattend")("Windows11.Label")
+        Me.Label13.Text = "Windows 11 settings:"
         '
         'Label12
         '
@@ -3589,7 +3600,8 @@ Partial Class NewUnattendWiz
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(761, 32)
         Me.Label12.TabIndex = 5
-        Me.Label12.Text = LocalizationService.ForSection("Designer.Unattend")("System.Architec.Label")
+        Me.Label12.Text = "Please select the system architecture that is supported by the target Windows ima" & _
+    "ge to apply"
         '
         'Label11
         '
@@ -3598,7 +3610,7 @@ Partial Class NewUnattendWiz
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(119, 13)
         Me.Label11.TabIndex = 3
-        Me.Label11.Text = LocalizationService.ForSection("Designer.Unattend")("Processor.Architecture.Label")
+        Me.Label11.Text = "Processor architecture:"
         '
         'SysConfigHeader
         '
@@ -3608,7 +3620,7 @@ Partial Class NewUnattendWiz
         Me.SysConfigHeader.Name = "SysConfigHeader"
         Me.SysConfigHeader.Size = New System.Drawing.Size(708, 51)
         Me.SysConfigHeader.TabIndex = 2
-        Me.SysConfigHeader.Text = LocalizationService.ForSection("Designer.Unattend")("BasicSettings.Label")
+        Me.SysConfigHeader.Text = "Configure basic system settings"
         '
         'RegionalSettingsPanel
         '
@@ -3631,7 +3643,7 @@ Partial Class NewUnattendWiz
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(636, 68)
         Me.Label10.TabIndex = 4
-        Me.Label10.Text = LocalizationService.ForSection("Designer.Unattend")("Configure.Settings.Label")
+        Me.Label10.Text = "You will need to configure these settings during the setup process"
         '
         'RegionalSettings
         '
@@ -3679,7 +3691,7 @@ Partial Class NewUnattendWiz
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(225, 26)
         Me.Label6.TabIndex = 1
-        Me.Label6.Text = LocalizationService.ForSection("Designer.Unattend")("SystemLanguage.Label")
+        Me.Label6.Text = "System language:"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label7
@@ -3690,7 +3702,7 @@ Partial Class NewUnattendWiz
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(225, 26)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = LocalizationService.ForSection("Designer.Unattend")("SystemLocale.Label")
+        Me.Label7.Text = "System locale:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ComboBox4
@@ -3711,7 +3723,7 @@ Partial Class NewUnattendWiz
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(225, 29)
         Me.Label9.TabIndex = 1
-        Me.Label9.Text = LocalizationService.ForSection("Designer.Unattend")("HomeLocation.Label")
+        Me.Label9.Text = "Home location:"
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ComboBox3
@@ -3733,7 +3745,7 @@ Partial Class NewUnattendWiz
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(225, 26)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = LocalizationService.ForSection("Designer.Unattend")("Keyboard.Layout.IME.Label")
+        Me.Label8.Text = "Keyboard layout/IME:"
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ComboBox2
@@ -3766,7 +3778,7 @@ Partial Class NewUnattendWiz
         Me.Button22.Name = "Button22"
         Me.Button22.Size = New System.Drawing.Size(169, 23)
         Me.Button22.TabIndex = 2
-        Me.Button22.Text = LocalizationService.ForSection("Designer.Unattend")("Country.EEA.Choose.Button")
+        Me.Button22.Text = "Choose country from the EEA"
         Me.Button22.UseVisualStyleBackColor = True
         '
         'Button1
@@ -3778,7 +3790,7 @@ Partial Class NewUnattendWiz
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(137, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = LocalizationService.ForSection("Designer.Unattend")("Additional.Layouts.Button")
+        Me.Button1.Text = "Additional layouts"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'RadioButton2
@@ -3788,7 +3800,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(168, 17)
         Me.RadioButton2.TabIndex = 2
-        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureLater.RadioButton")
+        Me.RadioButton2.Text = "Configure these settings later"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -3800,7 +3812,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton1.Size = New System.Drawing.Size(170, 17)
         Me.RadioButton1.TabIndex = 2
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.Unattend")("SettingsNow.RadioButton")
+        Me.RadioButton1.Text = "Configure these settings now:"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'RegionalSettingsHeader
@@ -3811,7 +3823,7 @@ Partial Class NewUnattendWiz
         Me.RegionalSettingsHeader.Name = "RegionalSettingsHeader"
         Me.RegionalSettingsHeader.Size = New System.Drawing.Size(708, 51)
         Me.RegionalSettingsHeader.TabIndex = 1
-        Me.RegionalSettingsHeader.Text = LocalizationService.ForSection("Designer.Unattend")("LanguageKeyboard.Label")
+        Me.RegionalSettingsHeader.Text = "Configure your language, keyboard layout, and other regional settings"
         '
         'WelcomePanel
         '
@@ -3836,7 +3848,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel10.Size = New System.Drawing.Size(436, 13)
         Me.LinkLabel10.TabIndex = 4
         Me.LinkLabel10.TabStop = True
-        Me.LinkLabel10.Text = LocalizationService.ForSection("Designer.Unattend")("Copy.Linux.Mac.Link")
+        Me.LinkLabel10.Text = "Copy Linux and macOS versions of the unattended answer file generator program..."
         '
         'LinkLabel1
         '
@@ -3849,7 +3861,7 @@ Partial Class NewUnattendWiz
         Me.LinkLabel1.Size = New System.Drawing.Size(436, 13)
         Me.LinkLabel1.TabIndex = 2
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.Unattend")("OnlineGenerator.Link")
+        Me.LinkLabel1.Text = "Answer file generator (online version)"
         '
         'WelcomeHeader
         '
@@ -3859,7 +3871,7 @@ Partial Class NewUnattendWiz
         Me.WelcomeHeader.Name = "WelcomeHeader"
         Me.WelcomeHeader.Size = New System.Drawing.Size(708, 51)
         Me.WelcomeHeader.TabIndex = 14
-        Me.WelcomeHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Welcome.Unattended.Label")
+        Me.WelcomeHeader.Text = "Welcome to the unattended answer file creation wizard"
         '
         'WelcomeDesc
         '
@@ -3870,7 +3882,7 @@ Partial Class NewUnattendWiz
         Me.WelcomeDesc.Name = "WelcomeDesc"
         Me.WelcomeDesc.Size = New System.Drawing.Size(596, 188)
         Me.WelcomeDesc.TabIndex = 0
-        Me.WelcomeDesc.Text = LocalizationService.ForSection("Designer.Unattend")("CreationHelp.Message")
+        Me.WelcomeDesc.Text = resources.GetString("WelcomeDesc.Text")
         '
         'Label5
         '
@@ -3880,7 +3892,7 @@ Partial Class NewUnattendWiz
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(471, 115)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = LocalizationService.ForSection("Designer.Unattend")("AvailableNow.Label")
+        Me.Label5.Text = "Not available for now!"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.Label5.Visible = False
         '
@@ -3932,7 +3944,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton2.Text = LocalizationService.ForSection("Designer.Unattend")("NewOverwrite.Label")
+        Me.ToolStripButton2.Text = "New (overwrites existing content)"
         '
         'ToolStripButton3
         '
@@ -3943,7 +3955,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton3.Text = LocalizationService.ForSection("Designer.Unattend")("Open.Button")
+        Me.ToolStripButton3.Text = "Open..."
         '
         'ToolStripButton4
         '
@@ -3954,7 +3966,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton4.Text = LocalizationService.ForSection("Designer.Unattend")("Save.Button")
+        Me.ToolStripButton4.Text = "Save as..."
         '
         'ToolStripSeparator4
         '
@@ -3999,7 +4011,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton5.Name = "ToolStripButton5"
         Me.ToolStripButton5.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton5.Text = LocalizationService.ForSection("Designer.Unattend")("WordWrap.Label")
+        Me.ToolStripButton5.Text = "Word wrap"
         '
         'ToolStripSeparator6
         '
@@ -4019,7 +4031,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton6.Name = "ToolStripButton6"
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton6.Text = LocalizationService.ForSection("Designer.Unattend")("Help.Label")
+        Me.ToolStripButton6.Text = "Help"
         '
         'ToolStripButton1
         '
@@ -4031,8 +4043,8 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(24, 24)
-        Me.ToolStripButton1.Text = LocalizationService.ForSection("Designer.Unattend")("NormalizeSpacing.Label")
-        Me.ToolStripButton1.ToolTipText = LocalizationService.ForSection("Designer.Unattend")("NormalizeSpacing.Tooltip")
+        Me.ToolStripButton1.Text = "Normalize spacing"
+        Me.ToolStripButton1.ToolTipText = "Makes the spacing consistent by replacing tabs with spaces"
         '
         'HeaderPanel
         '
@@ -4054,7 +4066,8 @@ Partial Class NewUnattendWiz
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(928, 13)
         Me.Label4.TabIndex = 3
-        Me.Label4.Text = LocalizationService.ForSection("Designer.Unattend")("WizardHelp.Label")
+        Me.Label4.Text = "If you haven't created unattended answer files before, use this wizard to create " & _
+    "one."
         '
         'Label3
         '
@@ -4064,7 +4077,7 @@ Partial Class NewUnattendWiz
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(141, 30)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = LocalizationService.ForSection("Designer.Unattend")("ExpressMode.Label")
+        Me.Label3.Text = "Express mode"
         '
         'PictureBox3
         '
@@ -4103,7 +4116,7 @@ Partial Class NewUnattendWiz
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(174, 23)
         Me.Button12.TabIndex = 0
-        Me.Button12.Text = LocalizationService.ForSection("Designer.Unattend")("Join.Target.Device.Button")
+        Me.Button12.Text = "Join target device to domain..."
         Me.Button12.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel1
@@ -4134,7 +4147,7 @@ Partial Class NewUnattendWiz
         Me.Back_Button.Name = "Back_Button"
         Me.Back_Button.Size = New System.Drawing.Size(64, 23)
         Me.Back_Button.TabIndex = 0
-        Me.Back_Button.Text = LocalizationService.ForSection("Designer.Unattend")("BackButton.Button")
+        Me.Back_Button.Text = "Back"
         '
         'Next_Button
         '
@@ -4146,7 +4159,7 @@ Partial Class NewUnattendWiz
         Me.Next_Button.Name = "Next_Button"
         Me.Next_Button.Size = New System.Drawing.Size(64, 23)
         Me.Next_Button.TabIndex = 1
-        Me.Next_Button.Text = LocalizationService.ForSection("Designer.Unattend")("NextButton.Button")
+        Me.Next_Button.Text = "Next"
         '
         'Cancel_Button
         '
@@ -4157,7 +4170,7 @@ Partial Class NewUnattendWiz
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(64, 23)
         Me.Cancel_Button.TabIndex = 2
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Unattend")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Help_Button
         '
@@ -4168,7 +4181,7 @@ Partial Class NewUnattendWiz
         Me.Help_Button.Name = "Help_Button"
         Me.Help_Button.Size = New System.Drawing.Size(64, 23)
         Me.Help_Button.TabIndex = 3
-        Me.Help_Button.Text = LocalizationService.ForSection("Designer.Unattend")("Help.Button")
+        Me.Help_Button.Text = "Help"
         '
         'TimeZonePageTimer
         '
@@ -4180,7 +4193,7 @@ Partial Class NewUnattendWiz
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.Unattend")("Answer.Files.XML.Filter")
+        Me.SaveFileDialog1.Filter = "Answer files|*.xml"
         '
         'UnattendGenBW
         '
@@ -4188,34 +4201,37 @@ Partial Class NewUnattendWiz
         'UGNotify
         '
         Me.UGNotify.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
-        Me.UGNotify.BalloonTipText = LocalizationService.ForSection("Designer.Unattend")("SelfContained.Message")
-        Me.UGNotify.BalloonTipTitle = LocalizationService.ForSection("Designer.Unattend")("Gen.Download.Complete.Title")
+        Me.UGNotify.BalloonTipText = "The self-contained version of UnattendGen has been successfully downloaded. DISMT" & _
+    "ools will use this version from now on"
+        Me.UGNotify.BalloonTipTitle = "UnattendGen download complete"
         Me.UGNotify.Icon = CType(resources.GetObject("UGNotify.Icon"), System.Drawing.Icon)
         Me.UGNotify.Text = "DISMTools"
         Me.UGNotify.Visible = True
         '
         'EditorModeOFD
         '
-        Me.EditorModeOFD.Filter = LocalizationService.ForSection("Designer.Unattend")("EditorMode.Filter")
+        Me.EditorModeOFD.Filter = "Answer files|*.xml"
         '
         'EditorModeSFD
         '
-        Me.EditorModeSFD.Filter = LocalizationService.ForSection("Designer.Unattend")("Answer.Files.XML.Filter")
+        Me.EditorModeSFD.Filter = "Answer files|*.xml"
         '
         'ScriptEditorOFD
         '
-        Me.ScriptEditorOFD.Filter = LocalizationService.ForSection("Designer.Unattend")("Power.Shell.Scripts.Filter")
-        Me.ScriptEditorOFD.Title = LocalizationService.ForSection("Designer.Unattend")("OpenScript.Title")
+        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd|Visual Basic Scripts|*." & _
+    "vbs;*.vbe;*.wsf;*.wsc|JScript files|*.js;*.jse"
+        Me.ScriptEditorOFD.Title = "Open script"
         '
         'CPUnattendGenFBD
         '
-        Me.CPUnattendGenFBD.Description = LocalizationService.ForSection("Designer.Unattend")("Path.Description")
+        Me.CPUnattendGenFBD.Description = "Specify the path on which you want to store Linux and macOS versions of UnattendG" & _
+    "en:"
         Me.CPUnattendGenFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = LocalizationService.ForSection("Designer.Unattend")("DISM.Tools.Starter.Filter")
-        Me.OpenFileDialog2.Title = LocalizationService.ForSection("Designer.Unattend")("Pick.StarterScript.Title")
+        Me.OpenFileDialog2.Filter = "DISMTools Starter Scripts|*.dtss"
+        Me.OpenFileDialog2.Title = "Pick a Starter Script"
         '
         'NewUnattendWiz
         '
@@ -4233,7 +4249,7 @@ Partial Class NewUnattendWiz
         Me.MinimumSize = New System.Drawing.Size(1280, 720)
         Me.Name = "NewUnattendWiz"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("Designer.Unattend")("CreationHelp.Label")
+        Me.Text = "Unattended answer file creation wizard"
         Me.SidePanel.ResumeLayout(False)
         Me.ExpressModeSteps.ResumeLayout(False)
         Me.EditorPanelTrigger.ResumeLayout(False)

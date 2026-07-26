@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddDrivers
     Inherits System.Windows.Forms.Form
 
@@ -76,7 +76,7 @@ Partial Class AddDrivers
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AddDrivers")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -87,7 +87,7 @@ Partial Class AddDrivers
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AddDrivers")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'GroupBox1
         '
@@ -99,7 +99,7 @@ Partial Class AddDrivers
         Me.GroupBox1.Size = New System.Drawing.Size(548, 360)
         Me.GroupBox1.TabIndex = 7
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.AddDrivers")("DriverFiles.Group")
+        Me.GroupBox1.Text = "Driver files"
         '
         'Label2
         '
@@ -109,7 +109,8 @@ Partial Class AddDrivers
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(536, 32)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Designer.AddDrivers")("Drivers.Required.Message")
+        Me.Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them " & _
+    "to the list below:"
         '
         'TableLayoutPanel2
         '
@@ -140,7 +141,7 @@ Partial Class AddDrivers
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(128, 22)
         Me.Button4.TabIndex = 3
-        Me.Button4.Text = LocalizationService.ForSection("Designer.AddDrivers")("Remove.Selected.Entry.Button")
+        Me.Button4.Text = "Remove selected entry"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button3
@@ -152,7 +153,7 @@ Partial Class AddDrivers
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(128, 22)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = LocalizationService.ForSection("Designer.AddDrivers")("Remove.Entries.Button")
+        Me.Button3.Text = "Remove all entries"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -163,7 +164,7 @@ Partial Class AddDrivers
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(128, 22)
         Me.Button2.TabIndex = 1
-        Me.Button2.Text = LocalizationService.ForSection("Designer.AddDrivers")("AddFolder.Button")
+        Me.Button2.Text = "Add folder..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -174,7 +175,7 @@ Partial Class AddDrivers
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(128, 22)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = LocalizationService.ForSection("Designer.AddDrivers")("AddFile.Button")
+        Me.Button1.Text = "Add file..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'ListView1
@@ -190,12 +191,12 @@ Partial Class AddDrivers
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.AddDrivers")("FileFolder.Column")
+        Me.ColumnHeader1.Text = "File/Folder"
         Me.ColumnHeader1.Width = 350
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.AddDrivers")("Type.Column")
+        Me.ColumnHeader2.Text = "Type"
         Me.ColumnHeader2.Width = 154
         '
         'GroupBox2
@@ -207,7 +208,7 @@ Partial Class AddDrivers
         Me.GroupBox2.Size = New System.Drawing.Size(430, 460)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.AddDrivers")("DriverFolders.Group")
+        Me.GroupBox2.Text = "Driver folders"
         '
         'Panel1
         '
@@ -237,7 +238,8 @@ Partial Class AddDrivers
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(417, 42)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.AddDrivers")("Scan.Driver.Message")
+        Me.Label3.Text = "You can let the program scan the driver folders present on the list below recursi" & _
+    "vely and add them as well. To do so, tick the entries you'd like to be scanned:"
         '
         'GroupBox3
         '
@@ -248,7 +250,7 @@ Partial Class AddDrivers
         Me.GroupBox3.Size = New System.Drawing.Size(548, 94)
         Me.GroupBox3.TabIndex = 7
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.AddDrivers")("Options.Group")
+        Me.GroupBox3.Text = "Options"
         '
         'CheckBox2
         '
@@ -257,7 +259,7 @@ Partial Class AddDrivers
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(190, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.AddDrivers")("CommitImage.CheckBox")
+        Me.CheckBox2.Text = "Commit image after adding drivers"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -267,17 +269,18 @@ Partial Class AddDrivers
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(202, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.AddDrivers")("Force.Install.CheckBox")
+        Me.CheckBox1.Text = "Force installation of unsigned drivers"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.AddDrivers")("Driver.Files.Inf.Filter")
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.AddDrivers")("DriverPackage.Title")
+        Me.OpenFileDialog1.Filter = "Driver files|*.inf"
+        Me.OpenFileDialog1.Title = "Specify the driver package to add"
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.AddDrivers")("DriverFolder.Description")
+        Me.FolderBrowserDialog1.Description = "Specify the folder containing driver packages. You will then be able to specify i" & _
+    "f it needs to be scanned recursively:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'ImageTaskHeader1
@@ -313,7 +316,7 @@ Partial Class AddDrivers
         Me.Name = "AddDrivers"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.AddDrivers")("AddDrivers.Label")
+        Me.Text = "Add drivers"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)

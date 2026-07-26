@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class OneDriveExclusionDlg
     Inherits System.Windows.Forms.Form
 
@@ -60,7 +60,7 @@ Partial Class OneDriveExclusionDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("Exclude.Button")
+        Me.OK_Button.Text = "Exclude"
         '
         'Cancel_Button
         '
@@ -71,7 +71,7 @@ Partial Class OneDriveExclusionDlg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("CancelButton.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'PictureBox1
         '
@@ -92,7 +92,7 @@ Partial Class OneDriveExclusionDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(560, 124)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("Tool.Help.Exclude.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'Label3
         '
@@ -101,7 +101,7 @@ Partial Class OneDriveExclusionDlg
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(560, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("Re.Ready.Label")
+        Me.Label3.Text = "When you're ready, click Exclude."
         '
         'Label2
         '
@@ -110,7 +110,7 @@ Partial Class OneDriveExclusionDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(195, 13)
         Me.Label2.TabIndex = 5
-        Me.Label2.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("Path.Exclude.Label")
+        Me.Label2.Text = "Path to exclude OneDrive folders from:"
         '
         'TextBox1
         '
@@ -126,12 +126,12 @@ Partial Class OneDriveExclusionDlg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 7
-        Me.Button1.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.OneDriveExclusion")("UserFolderPath.Description")
+        Me.FolderBrowserDialog1.Description = "Choose a path that contains user folders:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = False
         '
@@ -156,7 +156,7 @@ Partial Class OneDriveExclusionDlg
         Me.Name = "OneDriveExclusionDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.OneDriveExclusion")("Exclude.User.Label")
+        Me.Text = "Exclude user OneDrive folders"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

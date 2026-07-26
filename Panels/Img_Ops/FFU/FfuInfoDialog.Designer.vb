@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class FfuInfoDialog
     Inherits System.Windows.Forms.Form
 
@@ -81,7 +81,7 @@ Partial Class FfuInfoDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -92,7 +92,7 @@ Partial Class FfuInfoDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'TabControl1
         '
@@ -124,7 +124,7 @@ Partial Class FfuInfoDialog
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(463, 355)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Ffuheader.Tab")
+        Me.TabPage1.Text = "FFU Header"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'Label10
@@ -136,7 +136,7 @@ Partial Class FfuInfoDialog
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(262, 13)
         Me.Label10.TabIndex = 2
-        Me.Label10.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Me.Label10.Text = "  "
         '
         'Label8
         '
@@ -147,7 +147,7 @@ Partial Class FfuInfoDialog
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(262, 13)
         Me.Label8.TabIndex = 2
-        Me.Label8.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Me.Label8.Text = "  "
         '
         'Label6
         '
@@ -158,7 +158,7 @@ Partial Class FfuInfoDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(262, 13)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Me.Label6.Text = "  "
         '
         'Label4
         '
@@ -169,7 +169,7 @@ Partial Class FfuInfoDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(262, 13)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Me.Label4.Text = "  "
         '
         'Label9
         '
@@ -178,7 +178,7 @@ Partial Class FfuInfoDialog
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(99, 13)
         Me.Label9.TabIndex = 2
-        Me.Label9.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("CompressionType.Label")
+        Me.Label9.Text = "Compression Type:"
         '
         'Label7
         '
@@ -187,7 +187,7 @@ Partial Class FfuInfoDialog
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(68, 13)
         Me.Label7.TabIndex = 2
-        Me.Label7.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Ffuversion.Label")
+        Me.Label7.Text = "FFU Version:"
         '
         'Label5
         '
@@ -196,7 +196,7 @@ Partial Class FfuInfoDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(96, 13)
         Me.Label5.TabIndex = 2
-        Me.Label5.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Physical.Disk.Path.Label")
+        Me.Label5.Text = "Physical Disk Path:"
         '
         'Label3
         '
@@ -205,7 +205,7 @@ Partial Class FfuInfoDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(121, 13)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Vhdstorage.Device.ID.Label")
+        Me.Label3.Text = "VHD Storage Device ID:"
         '
         'TextBox2
         '
@@ -232,7 +232,7 @@ Partial Class FfuInfoDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(90, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("MountedVHDID.Label")
+        Me.Label2.Text = "Mounted VHD ID:"
         '
         'Label1
         '
@@ -241,7 +241,7 @@ Partial Class FfuInfoDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(101, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("MountedVhdpath.Label")
+        Me.Label1.Text = "Mounted VHD path:"
         '
         'TabPage2
         '
@@ -255,7 +255,7 @@ Partial Class FfuInfoDialog
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(463, 355)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("MountedVHD.Tab")
+        Me.TabPage2.Text = "Mounted VHD"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'Panel2
@@ -318,7 +318,7 @@ Partial Class FfuInfoDialog
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(203, 13)
         Me.Label12.TabIndex = 1
-        Me.Label12.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Selected.Partition.Label")
+        Me.Label12.Text = "Information about the selected partition:"
         '
         'Label11
         '
@@ -329,7 +329,8 @@ Partial Class FfuInfoDialog
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(440, 30)
         Me.Label11.TabIndex = 1
-        Me.Label11.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Mounted.FFU.Message")
+        Me.Label11.Text = "This mounted FFU file contains the following partitions. To show details of a spe" & _
+    "cific partition, select it from the list below:"
         '
         'TabPage3
         '
@@ -338,7 +339,7 @@ Partial Class FfuInfoDialog
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Size = New System.Drawing.Size(463, 355)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Manifest.Tab")
+        Me.TabPage3.Text = "Manifest"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
         'RichTextBox2
@@ -370,7 +371,7 @@ Partial Class FfuInfoDialog
         Me.Name = "FfuInfoDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Full.Flash.Utility.Label")
+        Me.Text = "Full Flash Utility (FFU) Information"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)

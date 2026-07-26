@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class RemProvAppxPackage
     Inherits System.Windows.Forms.Form
 
@@ -59,7 +59,7 @@ Partial Class RemProvAppxPackage
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.RemoveAppx")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -70,7 +70,7 @@ Partial Class RemProvAppxPackage
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.RemoveAppx")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'ListView1
         '
@@ -89,32 +89,32 @@ Partial Class RemProvAppxPackage
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.RemoveAppx")("PackageName.Column")
+        Me.ColumnHeader1.Text = "Package name"
         Me.ColumnHeader1.Width = 243
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.RemoveAppx")("App.Display.Name.Column")
+        Me.ColumnHeader2.Text = "Application display name"
         Me.ColumnHeader2.Width = 202
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.RemoveAppx")("Architecture.Column")
+        Me.ColumnHeader3.Text = "Architecture"
         Me.ColumnHeader3.Width = 73
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.RemoveAppx")("ResourceID.Column")
+        Me.ColumnHeader4.Text = "Resource ID"
         Me.ColumnHeader4.Width = 74
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.RemoveAppx")("Version.Column")
+        Me.ColumnHeader5.Text = "Version"
         Me.ColumnHeader5.Width = 80
         '
         'ColumnHeader6
         '
-        Me.ColumnHeader6.Text = LocalizationService.ForSection("Designer.RemoveAppx")("Registered.User.Column")
+        Me.ColumnHeader6.Text = "Registered to any user?"
         Me.ColumnHeader6.Width = 130
         '
         'ImageTaskHeader1
@@ -148,7 +148,7 @@ Partial Class RemProvAppxPackage
         Me.Name = "RemProvAppxPackage"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.RemoveAppx")("Prov.Label")
+        Me.Text = "Remove provisioned AppX packages"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

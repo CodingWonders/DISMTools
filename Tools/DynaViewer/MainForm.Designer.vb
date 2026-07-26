@@ -68,7 +68,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(92, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Dyna.Log.File.Label")
+        Me.Label1.Text = "DynaLog Log File:"
         '
         'TextBox1
         '
@@ -81,7 +81,7 @@ Partial Class MainForm
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("DynaViewer.Designer.Main")("LogFiles.Filter")
+        Me.OpenFileDialog1.Filter = "Log Files|*.log"
         '
         'GroupBox1
         '
@@ -94,7 +94,7 @@ Partial Class MainForm
         Me.GroupBox1.Size = New System.Drawing.Size(1248, 551)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Dyna.Log.Event")
+        Me.GroupBox1.Text = "DynaLog Event Logs"
         '
         'ListView1
         '
@@ -111,22 +111,22 @@ Partial Class MainForm
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("EventTimestamp.Column")
+        Me.ColumnHeader1.Text = "Event Timestamp"
         Me.ColumnHeader1.Width = 192
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("ProcessID.Column")
+        Me.ColumnHeader4.Text = "Process ID"
         Me.ColumnHeader4.Width = 94
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("EventCaller.Column")
+        Me.ColumnHeader2.Text = "Event Caller"
         Me.ColumnHeader2.Width = 256
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Message.Column")
+        Me.ColumnHeader3.Text = "Message"
         Me.ColumnHeader3.Width = 640
         '
         'Button1
@@ -137,7 +137,7 @@ Partial Class MainForm
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Button2
@@ -149,7 +149,7 @@ Partial Class MainForm
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 4
-        Me.Button2.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Refresh.Button")
+        Me.Button2.Text = "Refresh"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label2
@@ -160,7 +160,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(687, 13)
         Me.Label2.TabIndex = 5
-        Me.Label2.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Processed.Entries.Label")
+        Me.Label2.Text = "Number of processed entries: <entries>"
         Me.Label2.Visible = False
         '
         'Button3
@@ -171,7 +171,7 @@ Partial Class MainForm
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 6
-        Me.Button3.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("About.ActionButton")
+        Me.Button3.Text = "About"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'ColorModeCMS
@@ -184,19 +184,19 @@ Partial Class MainForm
         '
         Me.LightCM_TSMI.Name = "LightCM_TSMI"
         Me.LightCM_TSMI.Size = New System.Drawing.Size(120, 22)
-        Me.LightCM_TSMI.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("LightCM.Label")
+        Me.LightCM_TSMI.Text = "Light"
         '
         'DarkCM_TSMI
         '
         Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
         Me.DarkCM_TSMI.Size = New System.Drawing.Size(120, 22)
-        Me.DarkCM_TSMI.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("DarkCM.Label")
+        Me.DarkCM_TSMI.Text = "Dark"
         '
         'SystemCM_TSMI
         '
         Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
         Me.SystemCM_TSMI.Size = New System.Drawing.Size(120, 22)
-        Me.SystemCM_TSMI.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("SystemCM.Label")
+        Me.SystemCM_TSMI.Text = "System"
         '
         'Button4
         '
@@ -206,7 +206,7 @@ Partial Class MainForm
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(106, 23)
         Me.Button4.TabIndex = 8
-        Me.Button4.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("ColorMode.Button")
+        Me.Button4.Text = "Color Mode"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel1
@@ -257,7 +257,7 @@ Partial Class MainForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(85, 28)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("PID.Label")
+        Me.Label4.Text = "PID:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label5
@@ -269,7 +269,7 @@ Partial Class MainForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(212, 28)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("EventCaller.Label")
+        Me.Label5.Text = "Event Caller:"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label6
@@ -282,7 +282,7 @@ Partial Class MainForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(58, 28)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Options.Heading.Label")
+        Me.Label6.Text = "Options:"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComboBox1
@@ -311,7 +311,7 @@ Partial Class MainForm
         Me.RegexCB.Name = "RegexCB"
         Me.RegexCB.Size = New System.Drawing.Size(26, 23)
         Me.RegexCB.TabIndex = 4
-        Me.RegexCB.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("RegexCB.Label")
+        Me.RegexCB.Text = ".*"
         Me.RegexCB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.RegexCB.UseVisualStyleBackColor = True
         '
@@ -322,7 +322,7 @@ Partial Class MainForm
         Me.RegexFailureBtn.Name = "RegexFailureBtn"
         Me.RegexFailureBtn.Size = New System.Drawing.Size(27, 23)
         Me.RegexFailureBtn.TabIndex = 5
-        Me.RegexFailureBtn.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Regex.Failure.Btn.Label")
+        Me.RegexFailureBtn.Text = "!"
         Me.RegexFailureBtn.UseVisualStyleBackColor = True
         Me.RegexFailureBtn.Visible = False
         '
@@ -335,7 +335,7 @@ Partial Class MainForm
         Me.CaseSensitiveCB.Name = "CaseSensitiveCB"
         Me.CaseSensitiveCB.Size = New System.Drawing.Size(26, 23)
         Me.CaseSensitiveCB.TabIndex = 4
-        Me.CaseSensitiveCB.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Aa.Label")
+        Me.CaseSensitiveCB.Text = "Aa"
         Me.CaseSensitiveCB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CaseSensitiveCB.UseVisualStyleBackColor = True
         '
@@ -367,7 +367,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(834, 28)
         Me.Label3.TabIndex = 6
-        Me.Label3.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Message.Label")
+        Me.Label3.Text = "Message:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'MainForm
@@ -390,7 +390,7 @@ Partial Class MainForm
         Me.MinimumSize = New System.Drawing.Size(1280, 720)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("DynaViewer.Designer.Main")("Dyna.Log.Viewer.Label")
+        Me.Text = "DynaLog Log Viewer"
         Me.GroupBox1.ResumeLayout(False)
         Me.ColorModeCMS.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)

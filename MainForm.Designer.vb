@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -606,19 +606,19 @@ Partial Class MainForm
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ManageOfflineInstallationToolStripMenuItem, Me.ToolStripSeparator37, Me.RecentProjectsListMenu, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
-        Me.FileToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("File.Label")
+        Me.FileToolStripMenuItem.Text = "&File"
         '
         'NewProjectToolStripMenuItem
         '
         Me.NewProjectToolStripMenuItem.Name = "NewProjectToolStripMenuItem"
         Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.NewProjectToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("NewProject.Button")
+        Me.NewProjectToolStripMenuItem.Text = "&New project..."
         '
         'OpenExistingProjectToolStripMenuItem
         '
         Me.OpenExistingProjectToolStripMenuItem.Name = "OpenExistingProjectToolStripMenuItem"
         Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.OpenExistingProjectToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Open.Existing.Project.Label")
+        Me.OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
         '
         'ToolStripSeparator26
         '
@@ -629,13 +629,13 @@ Partial Class MainForm
         '
         Me.ManageOnlineInstallationToolStripMenuItem.Name = "ManageOnlineInstallationToolStripMenuItem"
         Me.ManageOnlineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.ManageOnlineInstallationToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Manage.Online.Install.Label")
+        Me.ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
         '
         'ManageOfflineInstallationToolStripMenuItem
         '
         Me.ManageOfflineInstallationToolStripMenuItem.Name = "ManageOfflineInstallationToolStripMenuItem"
         Me.ManageOfflineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.ManageOfflineInstallationToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Manage.Ffline.Button")
+        Me.ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
         '
         'ToolStripSeparator37
         '
@@ -647,7 +647,7 @@ Partial Class MainForm
         Me.RecentProjectsListMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RecentProject1ToolStripMenuItem, Me.RecentProject2ToolStripMenuItem, Me.RecentProject3ToolStripMenuItem, Me.RecentProject4ToolStripMenuItem, Me.RecentProject5ToolStripMenuItem, Me.RecentProject6ToolStripMenuItem, Me.RecentProject7ToolStripMenuItem, Me.RecentProject8ToolStripMenuItem, Me.RecentProject9ToolStripMenuItem, Me.RecentProject10ToolStripMenuItem})
         Me.RecentProjectsListMenu.Name = "RecentProjectsListMenu"
         Me.RecentProjectsListMenu.Size = New System.Drawing.Size(224, 22)
-        Me.RecentProjectsListMenu.Text = LocalizationService.ForSection("Designer.Main")("RecentProjects.Label")
+        Me.RecentProjectsListMenu.Text = "Recent projects"
         '
         'RecentProject1ToolStripMenuItem
         '
@@ -729,14 +729,14 @@ Partial Class MainForm
         Me.SaveProjectToolStripMenuItem.Enabled = False
         Me.SaveProjectToolStripMenuItem.Name = "SaveProjectToolStripMenuItem"
         Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.SaveProjectToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("SaveProject.Button")
+        Me.SaveProjectToolStripMenuItem.Text = "&Save project..."
         '
         'SaveProjectasToolStripMenuItem
         '
         Me.SaveProjectasToolStripMenuItem.Enabled = False
         Me.SaveProjectasToolStripMenuItem.Name = "SaveProjectasToolStripMenuItem"
         Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.SaveProjectasToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Save.Project.Button")
+        Me.SaveProjectasToolStripMenuItem.Text = "Save project &as..."
         '
         'ToolStripSeparator2
         '
@@ -747,27 +747,27 @@ Partial Class MainForm
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
         Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.ExitToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Exit.Label")
+        Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'ProjectToolStripMenuItem
         '
         Me.ProjectToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewProjectFilesInFileExplorerToolStripMenuItem, Me.UnloadProjectToolStripMenuItem, Me.ToolStripSeparator3, Me.SwitchImageIndexesToolStripMenuItem, Me.ToolStripSeparator11, Me.ProjectPropertiesToolStripMenuItem, Me.ImagePropertiesToolStripMenuItem})
         Me.ProjectToolStripMenuItem.Name = "ProjectToolStripMenuItem"
         Me.ProjectToolStripMenuItem.Size = New System.Drawing.Size(56, 20)
-        Me.ProjectToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Project.Label")
+        Me.ProjectToolStripMenuItem.Text = "&Project"
         Me.ProjectToolStripMenuItem.Visible = False
         '
         'ViewProjectFilesInFileExplorerToolStripMenuItem
         '
         Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Name = "ViewProjectFilesInFileExplorerToolStripMenuItem"
         Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
-        Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("View.Project.Files.Label")
+        Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
         '
         'UnloadProjectToolStripMenuItem
         '
         Me.UnloadProjectToolStripMenuItem.Name = "UnloadProjectToolStripMenuItem"
         Me.UnloadProjectToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
-        Me.UnloadProjectToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("UnloadProject.Button")
+        Me.UnloadProjectToolStripMenuItem.Text = "Unload project..."
         '
         'ToolStripSeparator3
         '
@@ -778,7 +778,7 @@ Partial Class MainForm
         '
         Me.SwitchImageIndexesToolStripMenuItem.Name = "SwitchImageIndexesToolStripMenuItem"
         Me.SwitchImageIndexesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
-        Me.SwitchImageIndexesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Switch.Image.Indexes.Button")
+        Me.SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
         '
         'ToolStripSeparator11
         '
@@ -789,20 +789,20 @@ Partial Class MainForm
         '
         Me.ProjectPropertiesToolStripMenuItem.Name = "ProjectPropertiesToolStripMenuItem"
         Me.ProjectPropertiesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
-        Me.ProjectPropertiesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ProjectProps.Label")
+        Me.ProjectPropertiesToolStripMenuItem.Text = "Project properties"
         '
         'ImagePropertiesToolStripMenuItem
         '
         Me.ImagePropertiesToolStripMenuItem.Name = "ImagePropertiesToolStripMenuItem"
         Me.ImagePropertiesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
-        Me.ImagePropertiesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ImageProps.Label")
+        Me.ImagePropertiesToolStripMenuItem.Text = "Image properties"
         '
         'CommandsToolStripMenuItem
         '
         Me.CommandsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageManagementToolStripMenuItem, Me.OSPackagesToolStripMenuItem, Me.ProvisioningPackagesToolStripMenuItem, Me.AppPackagesToolStripMenuItem, Me.AppPatchesToolStripMenuItem, Me.DefaultAppAssociationsToolStripMenuItem, Me.LanguagesAndRegionSettingsToolStripMenuItem, Me.CapabilitiesToolStripMenuItem, Me.WindowsEditionsToolStripMenuItem, Me.DriversToolStripMenuItem, Me.UnattendedAnswerFilesToolStripMenuItem, Me.WindowsPEServicingToolStripMenuItem, Me.OSUninstallToolStripMenuItem, Me.ReservedStorageToolStripMenuItem, Me.MicrosoftEdgeToolStripMenuItem})
         Me.CommandsToolStripMenuItem.Name = "CommandsToolStripMenuItem"
         Me.CommandsToolStripMenuItem.Size = New System.Drawing.Size(81, 20)
-        Me.CommandsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Commands.Label")
+        Me.CommandsToolStripMenuItem.Text = "Com&mands"
         Me.CommandsToolStripMenuItem.Visible = False
         '
         'ImageManagementToolStripMenuItem
@@ -810,142 +810,142 @@ Partial Class MainForm
         Me.ImageManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppendImage, Me.ApplyFFU, Me.ApplyImage, Me.CaptureCustomImage, Me.CaptureFFU, Me.CaptureImage, Me.CleanupMountpoints, Me.CommitImage, Me.DeleteImage, Me.ExportImage, Me.GetImageInfo, Me.GetWIMBootEntry, Me.ListImage, Me.MountImage, Me.OptimizeFFU, Me.OptimizeImage, Me.RemountImage, Me.SplitFFU, Me.SplitImage, Me.UnmountImage, Me.UpdateWIMBootEntry, Me.ApplySiloedPackage, Me.ToolStripSeparator34, Me.SaveImageInformationToolStripMenuItem})
         Me.ImageManagementToolStripMenuItem.Name = "ImageManagementToolStripMenuItem"
         Me.ImageManagementToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.ImageManagementToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ImageManagement.Label")
+        Me.ImageManagementToolStripMenuItem.Text = "Image management"
         '
         'AppendImage
         '
         Me.AppendImage.Name = "AppendImage"
         Me.AppendImage.Size = New System.Drawing.Size(289, 22)
-        Me.AppendImage.Text = LocalizationService.ForSection("Designer.Main")("Append.Capture.Dir.Button")
+        Me.AppendImage.Text = "Append capture directory to image..."
         '
         'ApplyFFU
         '
         Me.ApplyFFU.Name = "ApplyFFU"
         Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
-        Me.ApplyFFU.Text = LocalizationService.ForSection("Designer.Main")("ApplyFfusfufile.Button")
+        Me.ApplyFFU.Text = "Apply FFU or SFU file..."
         '
         'ApplyImage
         '
         Me.ApplyImage.Name = "ApplyImage"
         Me.ApplyImage.Size = New System.Drawing.Size(289, 22)
-        Me.ApplyImage.Text = LocalizationService.ForSection("Designer.Main")("ApplyWimswmfile.Button")
+        Me.ApplyImage.Text = "Apply WIM or SWM file..."
         '
         'CaptureCustomImage
         '
         Me.CaptureCustomImage.Name = "CaptureCustomImage"
         Me.CaptureCustomImage.Size = New System.Drawing.Size(289, 22)
-        Me.CaptureCustomImage.Text = LocalizationService.ForSection("Designer.Main")("Capture.Incremental.Button")
+        Me.CaptureCustomImage.Text = "Capture incremental changes to file..."
         Me.CaptureCustomImage.Visible = False
         '
         'CaptureFFU
         '
         Me.CaptureFFU.Name = "CaptureFFU"
         Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
-        Me.CaptureFFU.Text = LocalizationService.ForSection("Designer.Main")("Capture.Partitions.Button")
+        Me.CaptureFFU.Text = "Capture partitions to FFU file..."
         '
         'CaptureImage
         '
         Me.CaptureImage.Name = "CaptureImage"
         Me.CaptureImage.Size = New System.Drawing.Size(289, 22)
-        Me.CaptureImage.Text = LocalizationService.ForSection("Designer.Main")("Capture.Image.Drive.Button")
+        Me.CaptureImage.Text = "Capture image of a drive to WIM file..."
         '
         'CleanupMountpoints
         '
         Me.CleanupMountpoints.Name = "CleanupMountpoints"
         Me.CleanupMountpoints.Size = New System.Drawing.Size(289, 22)
-        Me.CleanupMountpoints.Text = LocalizationService.ForSection("Designer.Main")("Delete.Resources.Button")
+        Me.CleanupMountpoints.Text = "Delete resources from corrupted image..."
         '
         'CommitImage
         '
         Me.CommitImage.Name = "CommitImage"
         Me.CommitImage.Size = New System.Drawing.Size(289, 22)
-        Me.CommitImage.Text = LocalizationService.ForSection("Designer.Main")("Apply.Changes.Image.Button")
+        Me.CommitImage.Text = "Apply changes to image..."
         '
         'DeleteImage
         '
         Me.DeleteImage.Name = "DeleteImage"
         Me.DeleteImage.Size = New System.Drawing.Size(289, 22)
-        Me.DeleteImage.Text = LocalizationService.ForSection("Designer.Main")("Delete.Volume.Image.Button")
+        Me.DeleteImage.Text = "Delete volume image from WIM file..."
         '
         'ExportImage
         '
         Me.ExportImage.Name = "ExportImage"
         Me.ExportImage.Size = New System.Drawing.Size(289, 22)
-        Me.ExportImage.Text = LocalizationService.ForSection("Designer.Main")("ExportImage.Button")
+        Me.ExportImage.Text = "Export image..."
         '
         'GetImageInfo
         '
         Me.GetImageInfo.Name = "GetImageInfo"
         Me.GetImageInfo.Size = New System.Drawing.Size(289, 22)
-        Me.GetImageInfo.Text = LocalizationService.ForSection("Designer.Main")("Get.Image.Button")
+        Me.GetImageInfo.Text = "Get image information..."
         '
         'GetWIMBootEntry
         '
         Me.GetWIMBootEntry.Name = "GetWIMBootEntry"
         Me.GetWIMBootEntry.Size = New System.Drawing.Size(289, 22)
-        Me.GetWIMBootEntry.Text = LocalizationService.ForSection("Designer.Main")("Get.WIM.Boot.Button")
+        Me.GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
         Me.GetWIMBootEntry.Visible = False
         '
         'ListImage
         '
         Me.ListImage.Name = "ListImage"
         Me.ListImage.Size = New System.Drawing.Size(289, 22)
-        Me.ListImage.Text = LocalizationService.ForSection("Designer.Main")("List.Files.Dirs.Button")
+        Me.ListImage.Text = "List files and directories in image..."
         '
         'MountImage
         '
         Me.MountImage.Name = "MountImage"
         Me.MountImage.Size = New System.Drawing.Size(289, 22)
-        Me.MountImage.Text = LocalizationService.ForSection("Designer.Main")("MountImage.Button")
+        Me.MountImage.Text = "Mount image..."
         '
         'OptimizeFFU
         '
         Me.OptimizeFFU.Name = "OptimizeFFU"
         Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
-        Me.OptimizeFFU.Text = LocalizationService.ForSection("Designer.Main")("Optimize.FFU.File.Button")
+        Me.OptimizeFFU.Text = "Optimize FFU file..."
         '
         'OptimizeImage
         '
         Me.OptimizeImage.Name = "OptimizeImage"
         Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
-        Me.OptimizeImage.Text = LocalizationService.ForSection("Designer.Main")("OptimizeImage.Button")
+        Me.OptimizeImage.Text = "Optimize image..."
         '
         'RemountImage
         '
         Me.RemountImage.Name = "RemountImage"
         Me.RemountImage.Size = New System.Drawing.Size(289, 22)
-        Me.RemountImage.Text = LocalizationService.ForSection("Designer.Main")("Remount.Image.Button")
+        Me.RemountImage.Text = "Remount image for servicing..."
         '
         'SplitFFU
         '
         Me.SplitFFU.Name = "SplitFFU"
         Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
-        Me.SplitFFU.Text = LocalizationService.ForSection("Designer.Main")("Split.FFU.File.Button")
+        Me.SplitFFU.Text = "Splt FFU file into SFU files..."
         '
         'SplitImage
         '
         Me.SplitImage.Name = "SplitImage"
         Me.SplitImage.Size = New System.Drawing.Size(289, 22)
-        Me.SplitImage.Text = LocalizationService.ForSection("Designer.Main")("Split.WIM.File.Button")
+        Me.SplitImage.Text = "Split WIM file into SWM files..."
         '
         'UnmountImage
         '
         Me.UnmountImage.Name = "UnmountImage"
         Me.UnmountImage.Size = New System.Drawing.Size(289, 22)
-        Me.UnmountImage.Text = LocalizationService.ForSection("Designer.Main")("UnmountImage.Button")
+        Me.UnmountImage.Text = "Unmount image..."
         '
         'UpdateWIMBootEntry
         '
         Me.UpdateWIMBootEntry.Name = "UpdateWIMBootEntry"
         Me.UpdateWIMBootEntry.Size = New System.Drawing.Size(289, 22)
-        Me.UpdateWIMBootEntry.Text = LocalizationService.ForSection("Designer.Main")("Update.WIM.Boot.Button")
+        Me.UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
         Me.UpdateWIMBootEntry.Visible = False
         '
         'ApplySiloedPackage
         '
         Me.ApplySiloedPackage.Name = "ApplySiloedPackage"
         Me.ApplySiloedPackage.Size = New System.Drawing.Size(289, 22)
-        Me.ApplySiloedPackage.Text = LocalizationService.ForSection("Designer.Main")("Apply.Siloed.Prov.Button")
+        Me.ApplySiloedPackage.Text = "Apply siloed provisioning package..."
         Me.ApplySiloedPackage.Visible = False
         '
         'ToolStripSeparator34
@@ -957,50 +957,50 @@ Partial Class MainForm
         '
         Me.SaveImageInformationToolStripMenuItem.Name = "SaveImageInformationToolStripMenuItem"
         Me.SaveImageInformationToolStripMenuItem.Size = New System.Drawing.Size(289, 22)
-        Me.SaveImageInformationToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Save.Image.Button")
+        Me.SaveImageInformationToolStripMenuItem.Text = "Save image information..."
         '
         'OSPackagesToolStripMenuItem
         '
         Me.OSPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPackages, Me.AddPackage, Me.RemovePackage, Me.GetFeatures, Me.EnableFeature, Me.DisableFeature, Me.ToolStripSeparator4, Me.CleanupImage})
         Me.OSPackagesToolStripMenuItem.Name = "OSPackagesToolStripMenuItem"
         Me.OSPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.OSPackagesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("OSPackages.Label")
+        Me.OSPackagesToolStripMenuItem.Text = "OS packages"
         '
         'GetPackages
         '
         Me.GetPackages.Name = "GetPackages"
         Me.GetPackages.Size = New System.Drawing.Size(292, 22)
-        Me.GetPackages.Text = LocalizationService.ForSection("Designer.Main")("GetPackages.Button")
+        Me.GetPackages.Text = "Get package information..."
         '
         'AddPackage
         '
         Me.AddPackage.Name = "AddPackage"
         Me.AddPackage.Size = New System.Drawing.Size(292, 22)
-        Me.AddPackage.Text = LocalizationService.ForSection("Designer.Main")("AddPackage.Button")
+        Me.AddPackage.Text = "Add package..."
         '
         'RemovePackage
         '
         Me.RemovePackage.Name = "RemovePackage"
         Me.RemovePackage.Size = New System.Drawing.Size(292, 22)
-        Me.RemovePackage.Text = LocalizationService.ForSection("Designer.Main")("RemovePackage.Button")
+        Me.RemovePackage.Text = "Remove package..."
         '
         'GetFeatures
         '
         Me.GetFeatures.Name = "GetFeatures"
         Me.GetFeatures.Size = New System.Drawing.Size(292, 22)
-        Me.GetFeatures.Text = LocalizationService.ForSection("Designer.Main")("GetFeatures.Button")
+        Me.GetFeatures.Text = "Get feature information..."
         '
         'EnableFeature
         '
         Me.EnableFeature.Name = "EnableFeature"
         Me.EnableFeature.Size = New System.Drawing.Size(292, 22)
-        Me.EnableFeature.Text = LocalizationService.ForSection("Designer.Main")("EnableFeature.Button")
+        Me.EnableFeature.Text = "Enable feature..."
         '
         'DisableFeature
         '
         Me.DisableFeature.Name = "DisableFeature"
         Me.DisableFeature.Size = New System.Drawing.Size(292, 22)
-        Me.DisableFeature.Text = LocalizationService.ForSection("Designer.Main")("DisableFeature.Button")
+        Me.DisableFeature.Text = "Disable feature..."
         '
         'ToolStripSeparator4
         '
@@ -1011,33 +1011,33 @@ Partial Class MainForm
         '
         Me.CleanupImage.Name = "CleanupImage"
         Me.CleanupImage.Size = New System.Drawing.Size(292, 22)
-        Me.CleanupImage.Text = LocalizationService.ForSection("Designer.Main")("CleanupRecovery.Button")
+        Me.CleanupImage.Text = "Perform cleanup or recovery operations..."
         '
         'ProvisioningPackagesToolStripMenuItem
         '
         Me.ProvisioningPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddProvisioningPackage, Me.GetProvisioningPackageInfo, Me.ApplyCustomDataImage})
         Me.ProvisioningPackagesToolStripMenuItem.Name = "ProvisioningPackagesToolStripMenuItem"
         Me.ProvisioningPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.ProvisioningPackagesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ProvPackages.Label")
+        Me.ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
         '
         'AddProvisioningPackage
         '
         Me.AddProvisioningPackage.Name = "AddProvisioningPackage"
         Me.AddProvisioningPackage.Size = New System.Drawing.Size(283, 22)
-        Me.AddProvisioningPackage.Text = LocalizationService.ForSection("Designer.Main")("Add.Prov.Package.Button")
+        Me.AddProvisioningPackage.Text = "Add provisioning package..."
         '
         'GetProvisioningPackageInfo
         '
         Me.GetProvisioningPackageInfo.Name = "GetProvisioningPackageInfo"
         Me.GetProvisioningPackageInfo.Size = New System.Drawing.Size(283, 22)
-        Me.GetProvisioningPackageInfo.Text = LocalizationService.ForSection("Designer.Main")("Get.Prov.Package.Button")
+        Me.GetProvisioningPackageInfo.Text = "Get provisioning package information..."
         Me.GetProvisioningPackageInfo.Visible = False
         '
         'ApplyCustomDataImage
         '
         Me.ApplyCustomDataImage.Name = "ApplyCustomDataImage"
         Me.ApplyCustomDataImage.Size = New System.Drawing.Size(283, 22)
-        Me.ApplyCustomDataImage.Text = LocalizationService.ForSection("Designer.Main")("Apply.CustomData.Button")
+        Me.ApplyCustomDataImage.Text = "Apply custom data image..."
         Me.ApplyCustomDataImage.Visible = False
         '
         'AppPackagesToolStripMenuItem
@@ -1045,38 +1045,38 @@ Partial Class MainForm
         Me.AppPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetProvisionedAppxPackages, Me.AddProvisionedAppxPackage, Me.RemoveProvisionedAppxPackage, Me.OptimizeProvisionedAppxPackages, Me.SetProvisionedAppxDataFile})
         Me.AppPackagesToolStripMenuItem.Name = "AppPackagesToolStripMenuItem"
         Me.AppPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.AppPackagesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("AppPackages.Label")
+        Me.AppPackagesToolStripMenuItem.Text = "App packages"
         '
         'GetProvisionedAppxPackages
         '
         Me.GetProvisionedAppxPackages.Name = "GetProvisionedAppxPackages"
         Me.GetProvisionedAppxPackages.Size = New System.Drawing.Size(287, 22)
-        Me.GetProvisionedAppxPackages.Text = LocalizationService.ForSection("Designer.Main")("Get.App.Package.Button")
+        Me.GetProvisionedAppxPackages.Text = "Get app package information..."
         '
         'AddProvisionedAppxPackage
         '
         Me.AddProvisionedAppxPackage.Name = "AddProvisionedAppxPackage"
         Me.AddProvisionedAppxPackage.Size = New System.Drawing.Size(287, 22)
-        Me.AddProvisionedAppxPackage.Text = LocalizationService.ForSection("Designer.Main")("Add.Provisioned.App.Button")
+        Me.AddProvisionedAppxPackage.Text = "Add provisioned app package..."
         '
         'RemoveProvisionedAppxPackage
         '
         Me.RemoveProvisionedAppxPackage.Name = "RemoveProvisionedAppxPackage"
         Me.RemoveProvisionedAppxPackage.Size = New System.Drawing.Size(287, 22)
-        Me.RemoveProvisionedAppxPackage.Text = LocalizationService.ForSection("Designer.Main")("Remove.Prov.App.Button")
+        Me.RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
         '
         'OptimizeProvisionedAppxPackages
         '
         Me.OptimizeProvisionedAppxPackages.Name = "OptimizeProvisionedAppxPackages"
         Me.OptimizeProvisionedAppxPackages.Size = New System.Drawing.Size(287, 22)
-        Me.OptimizeProvisionedAppxPackages.Text = LocalizationService.ForSection("Designer.Main")("Optimize.Provisioned.Button")
+        Me.OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
         Me.OptimizeProvisionedAppxPackages.Visible = False
         '
         'SetProvisionedAppxDataFile
         '
         Me.SetProvisionedAppxDataFile.Name = "SetProvisionedAppxDataFile"
         Me.SetProvisionedAppxDataFile.Size = New System.Drawing.Size(287, 22)
-        Me.SetProvisionedAppxDataFile.Text = LocalizationService.ForSection("Designer.Main")("Add.CustomData.File.Button")
+        Me.SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
         Me.SetProvisionedAppxDataFile.Visible = False
         '
         'AppPatchesToolStripMenuItem
@@ -1084,125 +1084,125 @@ Partial Class MainForm
         Me.AppPatchesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckAppPatch, Me.GetAppPatchInfo, Me.GetAppPatches, Me.GetAppInfo, Me.GetApps})
         Me.AppPatchesToolStripMenuItem.Name = "AppPatchesToolStripMenuItem"
         Me.AppPatchesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.AppPatchesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("AppMspservicing.Label")
+        Me.AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
         Me.AppPatchesToolStripMenuItem.Visible = False
         '
         'CheckAppPatch
         '
         Me.CheckAppPatch.Name = "CheckAppPatch"
         Me.CheckAppPatch.Size = New System.Drawing.Size(408, 22)
-        Me.CheckAppPatch.Text = LocalizationService.ForSection("Designer.Main")("Get.App.Patch.Button")
+        Me.CheckAppPatch.Text = "Get application patch information..."
         '
         'GetAppPatchInfo
         '
         Me.GetAppPatchInfo.Name = "GetAppPatchInfo"
         Me.GetAppPatchInfo.Size = New System.Drawing.Size(408, 22)
-        Me.GetAppPatchInfo.Text = LocalizationService.ForSection("Designer.Main")("Installed.App.Details.Button")
+        Me.GetAppPatchInfo.Text = "Get detailed installed application patch information..."
         '
         'GetAppPatches
         '
         Me.GetAppPatches.Name = "GetAppPatches"
         Me.GetAppPatches.Size = New System.Drawing.Size(408, 22)
-        Me.GetAppPatches.Text = LocalizationService.ForSection("Designer.Main")("Basic.Installed.App.Button")
+        Me.GetAppPatches.Text = "Get basic installed application patch information..."
         '
         'GetAppInfo
         '
         Me.GetAppInfo.Name = "GetAppInfo"
         Me.GetAppInfo.Size = New System.Drawing.Size(408, 22)
-        Me.GetAppInfo.Text = LocalizationService.ForSection("Designer.Main")("Get.Detailed.Button")
+        Me.GetAppInfo.Text = "Get detailed Windows Installer (*.msi) application information..."
         '
         'GetApps
         '
         Me.GetApps.Name = "GetApps"
         Me.GetApps.Size = New System.Drawing.Size(408, 22)
-        Me.GetApps.Text = LocalizationService.ForSection("Designer.Main")("Get.Basic.Windows.Button")
+        Me.GetApps.Text = "Get basic Windows Installer (*.msi) application information..."
         '
         'DefaultAppAssociationsToolStripMenuItem
         '
         Me.DefaultAppAssociationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportDefaultAppAssociations, Me.GetDefaultAppAssociations, Me.ImportDefaultAppAssociations, Me.RemoveDefaultAppAssociations})
         Me.DefaultAppAssociationsToolStripMenuItem.Name = "DefaultAppAssociationsToolStripMenuItem"
         Me.DefaultAppAssociationsToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.DefaultAppAssociationsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("DefaultApp.Assoc.Label")
+        Me.DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
         Me.DefaultAppAssociationsToolStripMenuItem.Visible = False
         '
         'ExportDefaultAppAssociations
         '
         Me.ExportDefaultAppAssociations.Name = "ExportDefaultAppAssociations"
         Me.ExportDefaultAppAssociations.Size = New System.Drawing.Size(331, 22)
-        Me.ExportDefaultAppAssociations.Text = LocalizationService.ForSection("Designer.Main")("Export.Default.Button")
+        Me.ExportDefaultAppAssociations.Text = "Export default application associations..."
         '
         'GetDefaultAppAssociations
         '
         Me.GetDefaultAppAssociations.Name = "GetDefaultAppAssociations"
         Me.GetDefaultAppAssociations.Size = New System.Drawing.Size(331, 22)
-        Me.GetDefaultAppAssociations.Text = LocalizationService.ForSection("Designer.Main")("DefaultApp.Assoc.Button")
+        Me.GetDefaultAppAssociations.Text = "Get default application association information..."
         '
         'ImportDefaultAppAssociations
         '
         Me.ImportDefaultAppAssociations.Name = "ImportDefaultAppAssociations"
         Me.ImportDefaultAppAssociations.Size = New System.Drawing.Size(331, 22)
-        Me.ImportDefaultAppAssociations.Text = LocalizationService.ForSection("Designer.Main")("Import.Default.Button")
+        Me.ImportDefaultAppAssociations.Text = "Import default application associations..."
         '
         'RemoveDefaultAppAssociations
         '
         Me.RemoveDefaultAppAssociations.Name = "RemoveDefaultAppAssociations"
         Me.RemoveDefaultAppAssociations.Size = New System.Drawing.Size(331, 22)
-        Me.RemoveDefaultAppAssociations.Text = LocalizationService.ForSection("Designer.Main")("Remove.Default.Button")
+        Me.RemoveDefaultAppAssociations.Text = "Remove default application associations..."
         '
         'LanguagesAndRegionSettingsToolStripMenuItem
         '
         Me.LanguagesAndRegionSettingsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetIntl, Me.SetUILang, Me.SetUILangFallback, Me.SetSysUILang, Me.SetSysLocale, Me.SetUserLocale, Me.SetInputLocale, Me.ToolStripSeparator5, Me.SetAllIntl, Me.ToolStripSeparator6, Me.SetTimeZone, Me.ToolStripSeparator7, Me.SetSKUIntlDefaults, Me.ToolStripSeparator8, Me.SetLayeredDriver, Me.GenLangINI, Me.SetSetupUILang})
         Me.LanguagesAndRegionSettingsToolStripMenuItem.Name = "LanguagesAndRegionSettingsToolStripMenuItem"
         Me.LanguagesAndRegionSettingsToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.LanguagesAndRegionSettingsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Languages.Regional.Label")
+        Me.LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
         '
         'GetIntl
         '
         Me.GetIntl.Name = "GetIntl"
         Me.GetIntl.Size = New System.Drawing.Size(295, 22)
-        Me.GetIntl.Text = LocalizationService.ForSection("Designer.Main")("Intl.Settings.Button")
+        Me.GetIntl.Text = "Get international settings and languages..."
         Me.GetIntl.Visible = False
         '
         'SetUILang
         '
         Me.SetUILang.Name = "SetUILang"
         Me.SetUILang.Size = New System.Drawing.Size(295, 22)
-        Me.SetUILang.Text = LocalizationService.ForSection("Designer.Main")("SetUilanguage.Button")
+        Me.SetUILang.Text = "Set UI language..."
         Me.SetUILang.Visible = False
         '
         'SetUILangFallback
         '
         Me.SetUILangFallback.Name = "SetUILangFallback"
         Me.SetUILangFallback.Size = New System.Drawing.Size(295, 22)
-        Me.SetUILangFallback.Text = LocalizationService.ForSection("Designer.Main")("Set.Default.Button")
+        Me.SetUILangFallback.Text = "Set default UI fallback language..."
         Me.SetUILangFallback.Visible = False
         '
         'SetSysUILang
         '
         Me.SetSysUILang.Name = "SetSysUILang"
         Me.SetSysUILang.Size = New System.Drawing.Size(295, 22)
-        Me.SetSysUILang.Text = LocalizationService.ForSection("Designer.Main")("Set.System.Preferred.Button")
+        Me.SetSysUILang.Text = "Set system preferred UI language..."
         Me.SetSysUILang.Visible = False
         '
         'SetSysLocale
         '
         Me.SetSysLocale.Name = "SetSysLocale"
         Me.SetSysLocale.Size = New System.Drawing.Size(295, 22)
-        Me.SetSysLocale.Text = LocalizationService.ForSection("Designer.Main")("Set.System.Locale.Button")
+        Me.SetSysLocale.Text = "Set system locale..."
         Me.SetSysLocale.Visible = False
         '
         'SetUserLocale
         '
         Me.SetUserLocale.Name = "SetUserLocale"
         Me.SetUserLocale.Size = New System.Drawing.Size(295, 22)
-        Me.SetUserLocale.Text = LocalizationService.ForSection("Designer.Main")("Set.User.Locale.Button")
+        Me.SetUserLocale.Text = "Set user locale..."
         Me.SetUserLocale.Visible = False
         '
         'SetInputLocale
         '
         Me.SetInputLocale.Name = "SetInputLocale"
         Me.SetInputLocale.Size = New System.Drawing.Size(295, 22)
-        Me.SetInputLocale.Text = LocalizationService.ForSection("Designer.Main")("Set.Input.Locale.Button")
+        Me.SetInputLocale.Text = "Set input locale..."
         Me.SetInputLocale.Visible = False
         '
         'ToolStripSeparator5
@@ -1215,7 +1215,7 @@ Partial Class MainForm
         '
         Me.SetAllIntl.Name = "SetAllIntl"
         Me.SetAllIntl.Size = New System.Drawing.Size(295, 22)
-        Me.SetAllIntl.Text = LocalizationService.ForSection("Designer.Main")("Set.UI.Button")
+        Me.SetAllIntl.Text = "Set UI language and locales..."
         Me.SetAllIntl.Visible = False
         '
         'ToolStripSeparator6
@@ -1228,7 +1228,7 @@ Partial Class MainForm
         '
         Me.SetTimeZone.Name = "SetTimeZone"
         Me.SetTimeZone.Size = New System.Drawing.Size(295, 22)
-        Me.SetTimeZone.Text = LocalizationService.ForSection("Designer.Main")("Set.Default.Time.Button")
+        Me.SetTimeZone.Text = "Set default time zone..."
         Me.SetTimeZone.Visible = False
         '
         'ToolStripSeparator7
@@ -1241,7 +1241,7 @@ Partial Class MainForm
         '
         Me.SetSKUIntlDefaults.Name = "SetSKUIntlDefaults"
         Me.SetSKUIntlDefaults.Size = New System.Drawing.Size(295, 22)
-        Me.SetSKUIntlDefaults.Text = LocalizationService.ForSection("Designer.Main")("Set.Default.Languages.Button")
+        Me.SetSKUIntlDefaults.Text = "Set default languages and locales..."
         Me.SetSKUIntlDefaults.Visible = False
         '
         'ToolStripSeparator8
@@ -1254,20 +1254,20 @@ Partial Class MainForm
         '
         Me.SetLayeredDriver.Name = "SetLayeredDriver"
         Me.SetLayeredDriver.Size = New System.Drawing.Size(295, 22)
-        Me.SetLayeredDriver.Text = LocalizationService.ForSection("Designer.Main")("Set.Layered.Driver.Button")
+        Me.SetLayeredDriver.Text = "Set layered driver..."
         '
         'GenLangINI
         '
         Me.GenLangINI.Name = "GenLangINI"
         Me.GenLangINI.Size = New System.Drawing.Size(295, 22)
-        Me.GenLangINI.Text = LocalizationService.ForSection("Designer.Main")("Generate.Lang.Ini.Button")
+        Me.GenLangINI.Text = "Generate Lang.ini file..."
         Me.GenLangINI.Visible = False
         '
         'SetSetupUILang
         '
         Me.SetSetupUILang.Name = "SetSetupUILang"
         Me.SetSetupUILang.Size = New System.Drawing.Size(295, 22)
-        Me.SetSetupUILang.Text = LocalizationService.ForSection("Designer.Main")("Set.Default.Setup.Button")
+        Me.SetSetupUILang.Text = "Set default Setup language..."
         Me.SetSetupUILang.Visible = False
         '
         'CapabilitiesToolStripMenuItem
@@ -1275,119 +1275,119 @@ Partial Class MainForm
         Me.CapabilitiesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddCapability, Me.ExportSource, Me.GetCapabilities, Me.RemoveCapability})
         Me.CapabilitiesToolStripMenuItem.Name = "CapabilitiesToolStripMenuItem"
         Me.CapabilitiesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.CapabilitiesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Capabilities.Label")
+        Me.CapabilitiesToolStripMenuItem.Text = "Capabilities"
         '
         'AddCapability
         '
         Me.AddCapability.Name = "AddCapability"
         Me.AddCapability.Size = New System.Drawing.Size(258, 22)
-        Me.AddCapability.Text = LocalizationService.ForSection("Designer.Main")("AddCapability.Button")
+        Me.AddCapability.Text = "Add capability..."
         '
         'ExportSource
         '
         Me.ExportSource.Name = "ExportSource"
         Me.ExportSource.Size = New System.Drawing.Size(258, 22)
-        Me.ExportSource.Text = LocalizationService.ForSection("Designer.Main")("Export.Capabilities.Button")
+        Me.ExportSource.Text = "Export capabilities into repository..."
         Me.ExportSource.Visible = False
         '
         'GetCapabilities
         '
         Me.GetCapabilities.Name = "GetCapabilities"
         Me.GetCapabilities.Size = New System.Drawing.Size(258, 22)
-        Me.GetCapabilities.Text = LocalizationService.ForSection("Designer.Main")("GetCapabilities.Button")
+        Me.GetCapabilities.Text = "Get capability information..."
         '
         'RemoveCapability
         '
         Me.RemoveCapability.Name = "RemoveCapability"
         Me.RemoveCapability.Size = New System.Drawing.Size(258, 22)
-        Me.RemoveCapability.Text = LocalizationService.ForSection("Designer.Main")("RemoveCapability.Button")
+        Me.RemoveCapability.Text = "Remove capability..."
         '
         'WindowsEditionsToolStripMenuItem
         '
         Me.WindowsEditionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetCurrentEdition, Me.GetTargetEditions, Me.SetEdition, Me.SetProductKey})
         Me.WindowsEditionsToolStripMenuItem.Name = "WindowsEditionsToolStripMenuItem"
         Me.WindowsEditionsToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.WindowsEditionsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("WindowsEditions.Label")
+        Me.WindowsEditionsToolStripMenuItem.Text = "Windows editions"
         '
         'GetCurrentEdition
         '
         Me.GetCurrentEdition.Name = "GetCurrentEdition"
         Me.GetCurrentEdition.Size = New System.Drawing.Size(187, 22)
-        Me.GetCurrentEdition.Text = LocalizationService.ForSection("Designer.Main")("Get.Edition.Button")
+        Me.GetCurrentEdition.Text = "Get current edition..."
         '
         'GetTargetEditions
         '
         Me.GetTargetEditions.Name = "GetTargetEditions"
         Me.GetTargetEditions.Size = New System.Drawing.Size(187, 22)
-        Me.GetTargetEditions.Text = LocalizationService.ForSection("Designer.Main")("Get.Upgrade.Targets.Button")
+        Me.GetTargetEditions.Text = "Get upgrade targets..."
         '
         'SetEdition
         '
         Me.SetEdition.Name = "SetEdition"
         Me.SetEdition.Size = New System.Drawing.Size(187, 22)
-        Me.SetEdition.Text = LocalizationService.ForSection("Designer.Main")("UpgradeImage.Button")
+        Me.SetEdition.Text = "Upgrade image..."
         '
         'SetProductKey
         '
         Me.SetProductKey.Name = "SetProductKey"
         Me.SetProductKey.Size = New System.Drawing.Size(187, 22)
-        Me.SetProductKey.Text = LocalizationService.ForSection("Designer.Main")("SetProductKey.Button")
+        Me.SetProductKey.Text = "Set product key..."
         '
         'DriversToolStripMenuItem
         '
         Me.DriversToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetDrivers, Me.AddDriver, Me.RemoveDriver, Me.ExportDriver, Me.ImportDriver})
         Me.DriversToolStripMenuItem.Name = "DriversToolStripMenuItem"
         Me.DriversToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.DriversToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Drivers.Label")
+        Me.DriversToolStripMenuItem.Text = "Drivers"
         '
         'GetDrivers
         '
         Me.GetDrivers.Name = "GetDrivers"
         Me.GetDrivers.Size = New System.Drawing.Size(204, 22)
-        Me.GetDrivers.Text = LocalizationService.ForSection("Designer.Main")("GetDrivers.Button")
+        Me.GetDrivers.Text = "Get driver information..."
         '
         'AddDriver
         '
         Me.AddDriver.Name = "AddDriver"
         Me.AddDriver.Size = New System.Drawing.Size(204, 22)
-        Me.AddDriver.Text = LocalizationService.ForSection("Designer.Main")("AddDriver.Button")
+        Me.AddDriver.Text = "Add driver..."
         '
         'RemoveDriver
         '
         Me.RemoveDriver.Name = "RemoveDriver"
         Me.RemoveDriver.Size = New System.Drawing.Size(204, 22)
-        Me.RemoveDriver.Text = LocalizationService.ForSection("Designer.Main")("RemoveDriver.Button")
+        Me.RemoveDriver.Text = "Remove driver..."
         '
         'ExportDriver
         '
         Me.ExportDriver.Name = "ExportDriver"
         Me.ExportDriver.Size = New System.Drawing.Size(204, 22)
-        Me.ExportDriver.Text = LocalizationService.ForSection("Designer.Main")("Export.DriverPackages.Button")
+        Me.ExportDriver.Text = "Export driver packages..."
         '
         'ImportDriver
         '
         Me.ImportDriver.Name = "ImportDriver"
         Me.ImportDriver.Size = New System.Drawing.Size(204, 22)
-        Me.ImportDriver.Text = LocalizationService.ForSection("Designer.Main")("Import.DriverPackages.Button")
+        Me.ImportDriver.Text = "Import driver packages..."
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
         Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem, Me.ToolStripSeparator48, Me.AuditModeTSMI})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.UnattendedAnswerFilesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Unattended.Answer.Label")
+        Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
         '
         'ApplyUnattend
         '
         Me.ApplyUnattend.Name = "ApplyUnattend"
         Me.ApplyUnattend.Size = New System.Drawing.Size(237, 22)
-        Me.ApplyUnattend.Text = LocalizationService.ForSection("Designer.Main")("Apply.Unattended.Button")
+        Me.ApplyUnattend.Text = "Apply unattended answer file..."
         '
         'RemoveAppliedAnswerFileToolStripMenuItem
         '
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Name = "RemoveAppliedAnswerFileToolStripMenuItem"
         Me.RemoveAppliedAnswerFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
-        Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Remove.Applied.Label")
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = "Remove applied answer file"
         '
         'ToolStripSeparator48
         '
@@ -1398,129 +1398,129 @@ Partial Class MainForm
         '
         Me.AuditModeTSMI.Name = "AuditModeTSMI"
         Me.AuditModeTSMI.Size = New System.Drawing.Size(237, 22)
-        Me.AuditModeTSMI.Text = LocalizationService.ForSection("Designer.Main")("System.Enter.Audit.Label")
+        Me.AuditModeTSMI.Text = "Make system enter audit mode"
         '
         'WindowsPEServicingToolStripMenuItem
         '
         Me.WindowsPEServicingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPESettings, Me.SetScratchSpace, Me.SetTargetPath})
         Me.WindowsPEServicingToolStripMenuItem.Name = "WindowsPEServicingToolStripMenuItem"
         Me.WindowsPEServicingToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.WindowsPEServicingToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("WindowsPE.Label")
+        Me.WindowsPEServicingToolStripMenuItem.Text = "Windows PE servicing"
         '
         'GetPESettings
         '
         Me.GetPESettings.Name = "GetPESettings"
         Me.GetPESettings.Size = New System.Drawing.Size(173, 22)
-        Me.GetPESettings.Text = LocalizationService.ForSection("Designer.Main")("GetSettings.Button")
+        Me.GetPESettings.Text = "Get settings..."
         '
         'SetScratchSpace
         '
         Me.SetScratchSpace.Name = "SetScratchSpace"
         Me.SetScratchSpace.Size = New System.Drawing.Size(173, 22)
-        Me.SetScratchSpace.Text = LocalizationService.ForSection("Designer.Main")("SetScratchSpace.Button")
+        Me.SetScratchSpace.Text = "Set scratch space..."
         '
         'SetTargetPath
         '
         Me.SetTargetPath.Name = "SetTargetPath"
         Me.SetTargetPath.Size = New System.Drawing.Size(173, 22)
-        Me.SetTargetPath.Text = LocalizationService.ForSection("Designer.Main")("Set.Target.Path.Button")
+        Me.SetTargetPath.Text = "Set target path..."
         '
         'OSUninstallToolStripMenuItem
         '
         Me.OSUninstallToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetOSUninstallWindow, Me.InitiateOSUninstall, Me.RemoveOSUninstall, Me.SetOSUninstallWindow})
         Me.OSUninstallToolStripMenuItem.Name = "OSUninstallToolStripMenuItem"
         Me.OSUninstallToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.OSUninstallToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("OSUninstall.Label")
+        Me.OSUninstallToolStripMenuItem.Text = "OS uninstall"
         '
         'GetOSUninstallWindow
         '
         Me.GetOSUninstallWindow.Name = "GetOSUninstallWindow"
         Me.GetOSUninstallWindow.Size = New System.Drawing.Size(209, 22)
-        Me.GetOSUninstallWindow.Text = LocalizationService.ForSection("Designer.Main")("Get.Uninstall.Window.Button")
+        Me.GetOSUninstallWindow.Text = "Get uninstall window..."
         '
         'InitiateOSUninstall
         '
         Me.InitiateOSUninstall.Name = "InitiateOSUninstall"
         Me.InitiateOSUninstall.Size = New System.Drawing.Size(209, 22)
-        Me.InitiateOSUninstall.Text = LocalizationService.ForSection("Designer.Main")("Initiate.Uninstall.Button")
+        Me.InitiateOSUninstall.Text = "Initiate uninstall..."
         '
         'RemoveOSUninstall
         '
         Me.RemoveOSUninstall.Name = "RemoveOSUninstall"
         Me.RemoveOSUninstall.Size = New System.Drawing.Size(209, 22)
-        Me.RemoveOSUninstall.Text = LocalizationService.ForSection("Designer.Main")("Remove.Roll.Back.Button")
+        Me.RemoveOSUninstall.Text = "Remove roll back ability..."
         '
         'SetOSUninstallWindow
         '
         Me.SetOSUninstallWindow.Name = "SetOSUninstallWindow"
         Me.SetOSUninstallWindow.Size = New System.Drawing.Size(209, 22)
-        Me.SetOSUninstallWindow.Text = LocalizationService.ForSection("Designer.Main")("Set.Uninstall.Window.Button")
+        Me.SetOSUninstallWindow.Text = "Set uninstall window..."
         '
         'ReservedStorageToolStripMenuItem
         '
         Me.ReservedStorageToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetReservedStorageState, Me.GetReservedStorageState})
         Me.ReservedStorageToolStripMenuItem.Name = "ReservedStorageToolStripMenuItem"
         Me.ReservedStorageToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.ReservedStorageToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ReservedStorage.Label")
+        Me.ReservedStorageToolStripMenuItem.Text = "Reserved storage"
         Me.ReservedStorageToolStripMenuItem.Visible = False
         '
         'SetReservedStorageState
         '
         Me.SetReservedStorageState.Name = "SetReservedStorageState"
         Me.SetReservedStorageState.Size = New System.Drawing.Size(218, 22)
-        Me.SetReservedStorageState.Text = LocalizationService.ForSection("Designer.Main")("Set.Reserved.Storage.Button")
+        Me.SetReservedStorageState.Text = "Set reserved storage state..."
         '
         'GetReservedStorageState
         '
         Me.GetReservedStorageState.Name = "GetReservedStorageState"
         Me.GetReservedStorageState.Size = New System.Drawing.Size(218, 22)
-        Me.GetReservedStorageState.Text = LocalizationService.ForSection("Designer.Main")("Get.Reserved.Storage.Button")
+        Me.GetReservedStorageState.Text = "Get reserved storage state..."
         '
         'MicrosoftEdgeToolStripMenuItem
         '
         Me.MicrosoftEdgeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddEdge, Me.AddEdgeBrowser, Me.AddEdgeWebView})
         Me.MicrosoftEdgeToolStripMenuItem.Name = "MicrosoftEdgeToolStripMenuItem"
         Me.MicrosoftEdgeToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.MicrosoftEdgeToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("MicrosoftEdge.Label")
+        Me.MicrosoftEdgeToolStripMenuItem.Text = "Microsoft Edge"
         Me.MicrosoftEdgeToolStripMenuItem.Visible = False
         '
         'AddEdge
         '
         Me.AddEdge.Name = "AddEdge"
         Me.AddEdge.Size = New System.Drawing.Size(186, 22)
-        Me.AddEdge.Text = LocalizationService.ForSection("Designer.Main")("AddEdge.Button")
+        Me.AddEdge.Text = "Add Edge..."
         '
         'AddEdgeBrowser
         '
         Me.AddEdgeBrowser.Name = "AddEdgeBrowser"
         Me.AddEdgeBrowser.Size = New System.Drawing.Size(186, 22)
-        Me.AddEdgeBrowser.Text = LocalizationService.ForSection("Designer.Main")("Add.Edge.Browser.Button")
+        Me.AddEdgeBrowser.Text = "Add Edge browser..."
         '
         'AddEdgeWebView
         '
         Me.AddEdgeWebView.Name = "AddEdgeWebView"
         Me.AddEdgeWebView.Size = New System.Drawing.Size(186, 22)
-        Me.AddEdgeWebView.Text = LocalizationService.ForSection("Designer.Main")("Add.Edge.Web.Button")
+        Me.AddEdgeWebView.Text = "Add Edge WebView..."
         '
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
-        Me.ToolsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Tools.Label")
+        Me.ToolsToolStripMenuItem.Text = "&Tools"
         '
         'ImageConversionToolStripMenuItem
         '
         Me.ImageConversionToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.WIMESDToolStripMenuItem})
         Me.ImageConversionToolStripMenuItem.Name = "ImageConversionToolStripMenuItem"
         Me.ImageConversionToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.ImageConversionToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ImageConversion.Label")
+        Me.ImageConversionToolStripMenuItem.Text = "Image conversion"
         '
         'WIMESDToolStripMenuItem
         '
         Me.WIMESDToolStripMenuItem.Name = "WIMESDToolStripMenuItem"
         Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
-        Me.WIMESDToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Wimesd.Label")
+        Me.WIMESDToolStripMenuItem.Text = "WIM <-> ESD"
         '
         'ToolStripSeparator12
         '
@@ -1531,7 +1531,7 @@ Partial Class MainForm
         '
         Me.MergeSWM.Name = "MergeSWM"
         Me.MergeSWM.Size = New System.Drawing.Size(373, 22)
-        Me.MergeSWM.Text = LocalizationService.ForSection("Designer.Main")("MergeSwmfiles.Button")
+        Me.MergeSWM.Text = "Merge SWM files..."
         '
         'ToolStripSeparator18
         '
@@ -1543,7 +1543,7 @@ Partial Class MainForm
         Me.RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         Me.RemountImageWithWritePermissionsToolStripMenuItem.Name = "RemountImageWithWritePermissionsToolStripMenuItem"
         Me.RemountImageWithWritePermissionsToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.RemountImageWithWritePermissionsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Remount.Image.Write.Label")
+        Me.RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
         '
         'ToolStripSeparator13
         '
@@ -1554,7 +1554,7 @@ Partial Class MainForm
         '
         Me.CommandShellToolStripMenuItem.Name = "CommandShellToolStripMenuItem"
         Me.CommandShellToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.CommandShellToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("CommandConsole.Label")
+        Me.CommandShellToolStripMenuItem.Text = "Command Console"
         '
         'ToolStripSeparator16
         '
@@ -1565,13 +1565,13 @@ Partial Class MainForm
         '
         Me.UnattendedAnswerFileManagerToolStripMenuItem.Name = "UnattendedAnswerFileManagerToolStripMenuItem"
         Me.UnattendedAnswerFileManagerToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.UnattendedAnswerFileManagerToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Unattended.AnswerFile.Label")
+        Me.UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
         '
         'UnattendedAnswerFileCreatorToolStripMenuItem
         '
         Me.UnattendedAnswerFileCreatorToolStripMenuItem.Name = "UnattendedAnswerFileCreatorToolStripMenuItem"
         Me.UnattendedAnswerFileCreatorToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.UnattendedAnswerFileCreatorToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Unattended.Creator.Label")
+        Me.UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
         '
         'ToolStripSeparator42
         '
@@ -1582,19 +1582,19 @@ Partial Class MainForm
         '
         Me.RegCplToolStripMenuItem.Name = "RegCplToolStripMenuItem"
         Me.RegCplToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.RegCplToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Manage.Image.Registry.Button")
+        Me.RegCplToolStripMenuItem.Text = "Manage image registry hives..."
         '
         'ManageSystemServicesToolStripMenuItem
         '
         Me.ManageSystemServicesToolStripMenuItem.Name = "ManageSystemServicesToolStripMenuItem"
         Me.ManageSystemServicesToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.ManageSystemServicesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Manage.System.Button")
+        Me.ManageSystemServicesToolStripMenuItem.Text = "Manage system services..."
         '
         'ManageSystemEnvironmentVariablesToolStripMenuItem
         '
         Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Name = "ManageSystemEnvironmentVariablesToolStripMenuItem"
         Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Manage.System.Env.Button")
+        Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Text = "Manage system environment variables..."
         '
         'ToolStripSeparator43
         '
@@ -1606,19 +1606,19 @@ Partial Class MainForm
         Me.WebResourcesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem, Me.LanguagesAndFODWin10ToolStripMenuItem})
         Me.WebResourcesToolStripMenuItem.Name = "WebResourcesToolStripMenuItem"
         Me.WebResourcesToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.WebResourcesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("WebResources.Label")
+        Me.WebResourcesToolStripMenuItem.Text = "Web Resources"
         '
         'LanguagesAndOptionalFeaturesISOToolStripMenuItem
         '
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Name = "LanguagesAndOptionalFeaturesISOToolStripMenuItem"
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Size = New System.Drawing.Size(360, 22)
-        Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Download.Languages.Button")
+        Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Download Languages and Optional Features ISOs..."
         '
         'LanguagesAndFODWin10ToolStripMenuItem
         '
         Me.LanguagesAndFODWin10ToolStripMenuItem.Name = "LanguagesAndFODWin10ToolStripMenuItem"
         Me.LanguagesAndFODWin10ToolStripMenuItem.Size = New System.Drawing.Size(360, 22)
-        Me.LanguagesAndFODWin10ToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Download.FOD.Button")
+        Me.LanguagesAndFODWin10ToolStripMenuItem.Text = "Download Languages and FOD discs for Windows 10..."
         '
         'ToolStripSeparator45
         '
@@ -1630,19 +1630,19 @@ Partial Class MainForm
         Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI, Me.CopyImageToWdsServerTSMI})
         Me.PxeHelperServersTSMI.Name = "PxeHelperServersTSMI"
         Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(373, 22)
-        Me.PxeHelperServersTSMI.Text = LocalizationService.ForSection("Designer.Main")("StartPXE.Button")
+        Me.PxeHelperServersTSMI.Text = "Start PXE Helper Server for..."
         '
         'StartWdsHelperTSMI
         '
         Me.StartWdsHelperTSMI.Name = "StartWdsHelperTSMI"
         Me.StartWdsHelperTSMI.Size = New System.Drawing.Size(377, 22)
-        Me.StartWdsHelperTSMI.Text = LocalizationService.ForSection("Designer.Main")("Windows.Label")
+        Me.StartWdsHelperTSMI.Text = "Windows Deployment Services"
         '
         'StartFogHelperTSMI
         '
         Me.StartFogHelperTSMI.Name = "StartFogHelperTSMI"
         Me.StartFogHelperTSMI.Size = New System.Drawing.Size(377, 22)
-        Me.StartFogHelperTSMI.Text = LocalizationService.ForSection("Designer.Main")("FOG.Label")
+        Me.StartFogHelperTSMI.Text = "FOG"
         '
         'ToolStripSeparator46
         '
@@ -1653,13 +1653,13 @@ Partial Class MainForm
         '
         Me.UnixFogInstructionTSMI.Name = "UnixFogInstructionTSMI"
         Me.UnixFogInstructionTSMI.Size = New System.Drawing.Size(377, 22)
-        Me.UnixFogInstructionTSMI.Text = LocalizationService.ForSection("Designer.Main")("Show.Instructions.Label")
+        Me.UnixFogInstructionTSMI.Text = "Show instructions for FOG Helper Server on UNIX systems"
         '
         'CopyImageToWdsServerTSMI
         '
         Me.CopyImageToWdsServerTSMI.Name = "CopyImageToWdsServerTSMI"
         Me.CopyImageToWdsServerTSMI.Size = New System.Drawing.Size(377, 22)
-        Me.CopyImageToWdsServerTSMI.Text = LocalizationService.ForSection("Designer.Main")("Copy.My.Windows.Button")
+        Me.CopyImageToWdsServerTSMI.Text = "Copy my Windows image to a WDS server..."
         '
         'ToolStripSeparator41
         '
@@ -1670,7 +1670,7 @@ Partial Class MainForm
         '
         Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
         Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Evaluate.Windows.Label")
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
         '
         'ToolStripSeparator47
         '
@@ -1681,13 +1681,13 @@ Partial Class MainForm
         '
         Me.ReportManagerToolStripMenuItem.Name = "ReportManagerToolStripMenuItem"
         Me.ReportManagerToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.ReportManagerToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ReportManager.Label")
+        Me.ReportManagerToolStripMenuItem.Text = "Report manager"
         '
         'MountedImageManagerTSMI
         '
         Me.MountedImageManagerTSMI.Name = "MountedImageManagerTSMI"
         Me.MountedImageManagerTSMI.Size = New System.Drawing.Size(373, 22)
-        Me.MountedImageManagerTSMI.Text = LocalizationService.ForSection("Designer.Main")("Mounted.Image.Manager.Label")
+        Me.MountedImageManagerTSMI.Text = "Mounted image manager"
         '
         'ToolStripSeparator28
         '
@@ -1698,13 +1698,13 @@ Partial Class MainForm
         '
         Me.CreateDiscImageToolStripMenuItem.Name = "CreateDiscImageToolStripMenuItem"
         Me.CreateDiscImageToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.CreateDiscImageToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Create.Disc.Image.Button")
+        Me.CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
         '
         'CreateTestingEnvironmentToolStripMenuItem
         '
         Me.CreateTestingEnvironmentToolStripMenuItem.Name = "CreateTestingEnvironmentToolStripMenuItem"
         Me.CreateTestingEnvironmentToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.CreateTestingEnvironmentToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Create.Testing.Button")
+        Me.CreateTestingEnvironmentToolStripMenuItem.Text = "Create testing environment..."
         '
         'ToolStripSeparator38
         '
@@ -1715,7 +1715,7 @@ Partial Class MainForm
         '
         Me.WimScriptEditorCommand.Name = "WimScriptEditorCommand"
         Me.WimScriptEditorCommand.Size = New System.Drawing.Size(373, 22)
-        Me.WimScriptEditorCommand.Text = LocalizationService.ForSection("Designer.Main")("Config.List.Editor.Label")
+        Me.WimScriptEditorCommand.Text = "Configuration list editor"
         '
         'ToolStripSeparator49
         '
@@ -1726,13 +1726,13 @@ Partial Class MainForm
         '
         Me.SSE_TSMI.Name = "SSE_TSMI"
         Me.SSE_TSMI.Size = New System.Drawing.Size(373, 22)
-        Me.SSE_TSMI.Text = LocalizationService.ForSection("Designer.Main")("Create.StarterScript.Label")
+        Me.SSE_TSMI.Text = "Create a starter script"
         '
         'ThemeDesigner_TSMI
         '
         Me.ThemeDesigner_TSMI.Name = "ThemeDesigner_TSMI"
         Me.ThemeDesigner_TSMI.Size = New System.Drawing.Size(373, 22)
-        Me.ThemeDesigner_TSMI.Text = LocalizationService.ForSection("Designer.Main")("DesignTheme.Label")
+        Me.ThemeDesigner_TSMI.Text = "Design a theme"
         '
         'ToolStripSeparator9
         '
@@ -1743,28 +1743,28 @@ Partial Class MainForm
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
-        Me.OptionsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Options.Label")
+        Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
-        Me.HelpToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Help.Label")
+        Me.HelpToolStripMenuItem.Text = "&Help"
         '
         'HelpTopicsToolStripMenuItem
         '
         Me.HelpTopicsToolStripMenuItem.Name = "HelpTopicsToolStripMenuItem"
         Me.HelpTopicsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1
         Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.HelpTopicsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("HelpTopics.Label")
+        Me.HelpTopicsToolStripMenuItem.Text = "Help Topics"
         '
         'DISMToolsTourToolStripMenuItem
         '
         Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
         Me.DISMToolsTourToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
         Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.DISMToolsTourToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("DISM.Tools.Tour.Label")
+        Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
         '
         'ToolStripSeparator10
         '
@@ -1775,7 +1775,7 @@ Partial Class MainForm
         '
         Me.AboutDISMToolsToolStripMenuItem.Name = "AboutDISMToolsToolStripMenuItem"
         Me.AboutDISMToolsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.AboutDISMToolsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("DISM.Tools.Label")
+        Me.AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
         '
         'ToolStripSeparator21
         '
@@ -1786,19 +1786,19 @@ Partial Class MainForm
         '
         Me.Discord.Name = "Discord"
         Me.Discord.Size = New System.Drawing.Size(286, 22)
-        Me.Discord.Text = LocalizationService.ForSection("Designer.Main")("Join.Discord.Opens.Label")
+        Me.Discord.Text = "Join the discord (opens in web browser)"
         '
         'ReportFeedbackToolStripMenuItem
         '
         Me.ReportFeedbackToolStripMenuItem.Name = "ReportFeedbackToolStripMenuItem"
         Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.ReportFeedbackToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Report.Feedback.Opens.Label")
+        Me.ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
         '
         'OpenDiagnosticLogsInLogViewerToolStripMenuItem
         '
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Name = "OpenDiagnosticLogsInLogViewerToolStripMenuItem"
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Open.Diagnostic.Logs.Label")
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = "Open diagnostic logs in log viewer"
         '
         'ToolStripSeparator35
         '
@@ -1809,7 +1809,7 @@ Partial Class MainForm
         '
         Me.ContributeToTheHelpSystemToolStripMenuItem.Name = "ContributeToTheHelpSystemToolStripMenuItem"
         Me.ContributeToTheHelpSystemToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.ContributeToTheHelpSystemToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Contribute.Help.System.Label")
+        Me.ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
         '
         'BranchTSMI
         '
@@ -1817,7 +1817,7 @@ Partial Class MainForm
         Me.BranchTSMI.Image = CType(resources.GetObject("BranchTSMI.Image"), System.Drawing.Image)
         Me.BranchTSMI.Name = "BranchTSMI"
         Me.BranchTSMI.Size = New System.Drawing.Size(72, 20)
-        Me.BranchTSMI.Text = LocalizationService.ForSection("Designer.Main")("Branch.Label")
+        Me.BranchTSMI.Text = "Branch"
         Me.BranchTSMI.Visible = False
         '
         'VersionTSMI
@@ -1825,8 +1825,9 @@ Partial Class MainForm
         Me.VersionTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.VersionTSMI.Name = "VersionTSMI"
         Me.VersionTSMI.Size = New System.Drawing.Size(66, 20)
-        Me.VersionTSMI.Text = LocalizationService.ForSection("Designer.Main")("Preview.Label")
-        Me.VersionTSMI.ToolTipText = LocalizationService.ForSection("Designer.Main")("Beta.Release.Tooltip")
+        Me.VersionTSMI.Text = "PREVIEW"
+        Me.VersionTSMI.ToolTipText = "This is a beta release. In it, you will encounter lots of bugs and incomplete fea" & _
+    "tures."
         Me.VersionTSMI.Visible = False
         '
         'ExitFullScreenTSMI
@@ -1835,7 +1836,7 @@ Partial Class MainForm
         Me.ExitFullScreenTSMI.Image = Global.DISMTools.My.Resources.Resources.exit_full_screen_glyph
         Me.ExitFullScreenTSMI.Name = "ExitFullScreenTSMI"
         Me.ExitFullScreenTSMI.Size = New System.Drawing.Size(61, 20)
-        Me.ExitFullScreenTSMI.Text = LocalizationService.ForSection("Designer.Main")("Full.Screen.Shortcut.Label")
+        Me.ExitFullScreenTSMI.Text = "(F11)"
         Me.ExitFullScreenTSMI.Visible = False
         '
         'InvalidSettingsTSMI
@@ -1845,14 +1846,14 @@ Partial Class MainForm
         Me.InvalidSettingsTSMI.Image = CType(resources.GetObject("InvalidSettingsTSMI.Image"), System.Drawing.Image)
         Me.InvalidSettingsTSMI.Name = "InvalidSettingsTSMI"
         Me.InvalidSettingsTSMI.Size = New System.Drawing.Size(220, 20)
-        Me.InvalidSettingsTSMI.Text = LocalizationService.ForSection("Designer.Main")("Settings.Detected.Label")
+        Me.InvalidSettingsTSMI.Text = "Invalid settings have been detected"
         Me.InvalidSettingsTSMI.Visible = False
         '
         'ISFix
         '
         Me.ISFix.Name = "ISFix"
         Me.ISFix.Size = New System.Drawing.Size(168, 22)
-        Me.ISFix.Text = LocalizationService.ForSection("Designer.Main")("MoreInfo.Label")
+        Me.ISFix.Text = "More information"
         '
         'ToolStripSeparator19
         '
@@ -1863,7 +1864,7 @@ Partial Class MainForm
         '
         Me.ISHelp.Name = "ISHelp"
         Me.ISHelp.Size = New System.Drawing.Size(168, 22)
-        Me.ISHelp.Text = LocalizationService.ForSection("Designer.Main")("WhatsThis.Label")
+        Me.ISHelp.Text = "What's this?"
         '
         'TourActionsTSMI
         '
@@ -1872,7 +1873,7 @@ Partial Class MainForm
         Me.TourActionsTSMI.Image = Global.DISMTools.My.Resources.Resources.tour_glyph_light
         Me.TourActionsTSMI.Name = "TourActionsTSMI"
         Me.TourActionsTSMI.Size = New System.Drawing.Size(161, 20)
-        Me.TourActionsTSMI.Text = LocalizationService.ForSection("Designer.Main")("DISM.Tools.Actions.Label")
+        Me.TourActionsTSMI.Text = "DISMTools Tour Actions"
         Me.TourActionsTSMI.Visible = False
         '
         'ServerStatusTSMI
@@ -1880,7 +1881,7 @@ Partial Class MainForm
         Me.ServerStatusTSMI.Enabled = False
         Me.ServerStatusTSMI.Name = "ServerStatusTSMI"
         Me.ServerStatusTSMI.Size = New System.Drawing.Size(247, 22)
-        Me.ServerStatusTSMI.Text = LocalizationService.ForSection("Designer.Main")("Tour.Server.Active.Label")
+        Me.ServerStatusTSMI.Text = "Tour Server is active on port 2022"
         '
         'ToolStripSeparator44
         '
@@ -1891,7 +1892,7 @@ Partial Class MainForm
         '
         Me.RestartDTTourTSMI.Name = "RestartDTTourTSMI"
         Me.RestartDTTourTSMI.Size = New System.Drawing.Size(247, 22)
-        Me.RestartDTTourTSMI.Text = LocalizationService.ForSection("Designer.Main")("RestartTour.Label")
+        Me.RestartDTTourTSMI.Text = "Restart Tour"
         '
         'ToolStripSeparator22
         '
@@ -1902,7 +1903,7 @@ Partial Class MainForm
         '
         Me.StopDTTourServerTSMI.Name = "StopDTTourServerTSMI"
         Me.StopDTTourServerTSMI.Size = New System.Drawing.Size(247, 22)
-        Me.StopDTTourServerTSMI.Text = LocalizationService.ForSection("Designer.Main")("Stop.Tour.Server.Label")
+        Me.StopDTTourServerTSMI.Text = "Stop Tour Server"
         '
         'HomePanel
         '
@@ -2014,7 +2015,7 @@ Partial Class MainForm
         Me.Label6.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
         Me.Label6.Size = New System.Drawing.Size(236, 32)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = LocalizationService.ForSection("Designer.Main")("Video.Content.Loaded.Label")
+        Me.Label6.Text = "Video content could not be loaded."
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LinkLabel31
@@ -2029,7 +2030,7 @@ Partial Class MainForm
         Me.LinkLabel31.Size = New System.Drawing.Size(96, 32)
         Me.LinkLabel31.TabIndex = 1
         Me.LinkLabel31.TabStop = True
-        Me.LinkLabel31.Text = LocalizationService.ForSection("Designer.Main")("LearnMore.Link")
+        Me.LinkLabel31.Text = "Learn more"
         Me.LinkLabel31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel32
@@ -2044,7 +2045,7 @@ Partial Class MainForm
         Me.LinkLabel32.Size = New System.Drawing.Size(96, 32)
         Me.LinkLabel32.TabIndex = 1
         Me.LinkLabel32.TabStop = True
-        Me.LinkLabel32.Text = LocalizationService.ForSection("Designer.Main")("Retry.Button")
+        Me.LinkLabel32.Text = "Retry"
         Me.LinkLabel32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ListView2
@@ -2066,7 +2067,7 @@ Partial Class MainForm
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.Main")("Name.Column")
+        Me.ColumnHeader4.Text = "Name"
         Me.ColumnHeader4.Width = 384
         '
         'RefreshFactButton
@@ -2089,7 +2090,7 @@ Partial Class MainForm
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(94, 17)
         Me.Label9.TabIndex = 1
-        Me.Label9.Text = LocalizationService.ForSection("Designer.Main")("FactDay.Label")
+        Me.Label9.Text = "Fact of the day"
         '
         'Label12
         '
@@ -2099,7 +2100,7 @@ Partial Class MainForm
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(155, 17)
         Me.Label12.TabIndex = 1
-        Me.Label12.Text = LocalizationService.ForSection("Designer.Main")("Learn.Watching.Videos.Label")
+        Me.Label12.Text = "Learn by watching videos"
         '
         'LinkLabel30
         '
@@ -2111,7 +2112,7 @@ Partial Class MainForm
         Me.LinkLabel30.Size = New System.Drawing.Size(223, 15)
         Me.LinkLabel30.TabIndex = 0
         Me.LinkLabel30.TabStop = True
-        Me.LinkLabel30.Text = LocalizationService.ForSection("Designer.Main")("Managing.External.Link")
+        Me.LinkLabel30.Text = "Managing external Windows installations"
         '
         'LinkLabel29
         '
@@ -2123,7 +2124,7 @@ Partial Class MainForm
         Me.LinkLabel29.Size = New System.Drawing.Size(190, 15)
         Me.LinkLabel29.TabIndex = 0
         Me.LinkLabel29.TabStop = True
-        Me.LinkLabel29.Text = LocalizationService.ForSection("Designer.Main")("Managing.Install.Link")
+        Me.LinkLabel29.Text = "Managing your current installation"
         '
         'LinkLabel28
         '
@@ -2135,7 +2136,7 @@ Partial Class MainForm
         Me.LinkLabel28.Size = New System.Drawing.Size(258, 15)
         Me.LinkLabel28.TabIndex = 0
         Me.LinkLabel28.TabStop = True
-        Me.LinkLabel28.Text = LocalizationService.ForSection("Designer.Main")("Get.Started.DISM.Link")
+        Me.LinkLabel28.Text = "Get started with DISMTools and image servicing"
         '
         'LinkLabel27
         '
@@ -2147,7 +2148,7 @@ Partial Class MainForm
         Me.LinkLabel27.Size = New System.Drawing.Size(172, 15)
         Me.LinkLabel27.TabIndex = 0
         Me.LinkLabel27.TabStop = True
-        Me.LinkLabel27.Text = LocalizationService.ForSection("Designer.Main")("Learn.Snew.Link")
+        Me.LinkLabel27.Text = "Learn what's new in this release"
         '
         'Panel5
         '
@@ -2167,7 +2168,7 @@ Partial Class MainForm
         Me.Label4.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.Label4.Size = New System.Drawing.Size(428, 32)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = LocalizationService.ForSection("Designer.Main")("Explore.Get.Started.Label")
+        Me.Label4.Text = "Explore and get started"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'NewsPanel
@@ -2211,7 +2212,7 @@ Partial Class MainForm
         Me.Label7.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
         Me.Label7.Size = New System.Drawing.Size(384, 32)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = LocalizationService.ForSection("Designer.Main")("News.Feed.Loaded.Label")
+        Me.Label7.Text = "The news feed could not be loaded."
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LinkLabel34
@@ -2226,7 +2227,7 @@ Partial Class MainForm
         Me.LinkLabel34.Size = New System.Drawing.Size(96, 32)
         Me.LinkLabel34.TabIndex = 1
         Me.LinkLabel34.TabStop = True
-        Me.LinkLabel34.Text = LocalizationService.ForSection("Main.News")("LearnMore.Link")
+        Me.LinkLabel34.Text = "Learn more"
         Me.LinkLabel34.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel33
@@ -2241,7 +2242,7 @@ Partial Class MainForm
         Me.LinkLabel33.Size = New System.Drawing.Size(96, 32)
         Me.LinkLabel33.TabIndex = 1
         Me.LinkLabel33.TabStop = True
-        Me.LinkLabel33.Text = LocalizationService.ForSection("Main.News.Load")("Retry.Button")
+        Me.LinkLabel33.Text = "Retry"
         Me.LinkLabel33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -2263,7 +2264,7 @@ Partial Class MainForm
         Me.Label5.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.Label5.Size = New System.Drawing.Size(216, 32)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = LocalizationService.ForSection("Designer.Main")("Stay.Up.Date.Label")
+        Me.Label5.Text = "Stay up-to-date"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label8
@@ -2274,7 +2275,7 @@ Partial Class MainForm
         Me.Label8.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
         Me.Label8.Size = New System.Drawing.Size(360, 32)
         Me.Label8.TabIndex = 2
-        Me.Label8.Text = LocalizationService.ForSection("Designer.Main")("News.Last.Updated.Label")
+        Me.Label8.Text = "News last updated: "
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'NewsContentPreviewerPanel
@@ -2308,7 +2309,7 @@ Partial Class MainForm
         Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.NewsFeedTextLabel.Size = New System.Drawing.Size(583, 32)
         Me.NewsFeedTextLabel.TabIndex = 1
-        Me.NewsFeedTextLabel.Text = LocalizationService.ForSection("Designer.Main")("NewsFeed.Item.Label")
+        Me.NewsFeedTextLabel.Text = "Item Feed Text"
         Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'NewsFeedDateLabel
@@ -2319,7 +2320,7 @@ Partial Class MainForm
         Me.NewsFeedDateLabel.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
         Me.NewsFeedDateLabel.Size = New System.Drawing.Size(384, 32)
         Me.NewsFeedDateLabel.TabIndex = 3
-        Me.NewsFeedDateLabel.Text = LocalizationService.ForSection("Designer.Main")("Item.Feed.Date.Label")
+        Me.NewsFeedDateLabel.Text = "Item Feed Date"
         Me.NewsFeedDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'NewsFeedCloseBtn
@@ -2359,7 +2360,7 @@ Partial Class MainForm
         Me.ComputerOSLabel.Name = "ComputerOSLabel"
         Me.ComputerOSLabel.Size = New System.Drawing.Size(322, 15)
         Me.ComputerOSLabel.TabIndex = 7
-        Me.ComputerOSLabel.Text = LocalizationService.ForSection("Designer.Main")("OS.Label")
+        Me.ComputerOSLabel.Text = "OS"
         Me.ComputerOSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'AdminToolsBtn
@@ -2423,7 +2424,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(233, 24)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = LocalizationService.ForSection("Designer.Main")("IP.Address.Config.Label")
+        Me.Label3.Text = "IP Address Configuration:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComputerDhcpStatusLabel
@@ -2445,7 +2446,7 @@ Partial Class MainForm
         Me.ComputerProcessorLabel.Name = "ComputerProcessorLabel"
         Me.ComputerProcessorLabel.Size = New System.Drawing.Size(473, 23)
         Me.ComputerProcessorLabel.TabIndex = 2
-        Me.ComputerProcessorLabel.Text = LocalizationService.ForSection("Designer.Main")("Processor.Label")
+        Me.ComputerProcessorLabel.Text = "Processor"
         Me.ComputerProcessorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label1
@@ -2456,7 +2457,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(233, 23)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = LocalizationService.ForSection("Designer.Main")("DomainMembership.Label")
+        Me.Label1.Text = "Domain Membership:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComputerMemoryLabel
@@ -2468,7 +2469,7 @@ Partial Class MainForm
         Me.ComputerMemoryLabel.Name = "ComputerMemoryLabel"
         Me.ComputerMemoryLabel.Size = New System.Drawing.Size(473, 23)
         Me.ComputerMemoryLabel.TabIndex = 2
-        Me.ComputerMemoryLabel.Text = LocalizationService.ForSection("Designer.Main")("Memory.Label")
+        Me.ComputerMemoryLabel.Text = "Memory"
         Me.ComputerMemoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComputerStorageLabel
@@ -2480,7 +2481,7 @@ Partial Class MainForm
         Me.ComputerStorageLabel.Name = "ComputerStorageLabel"
         Me.ComputerStorageLabel.Size = New System.Drawing.Size(473, 23)
         Me.ComputerStorageLabel.TabIndex = 2
-        Me.ComputerStorageLabel.Text = LocalizationService.ForSection("Designer.Main")("Storage.Label")
+        Me.ComputerStorageLabel.Text = "Storage"
         Me.ComputerStorageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComputerDomainStatusLabel
@@ -2491,7 +2492,7 @@ Partial Class MainForm
         Me.ComputerDomainStatusLabel.Name = "ComputerDomainStatusLabel"
         Me.ComputerDomainStatusLabel.Size = New System.Drawing.Size(234, 23)
         Me.ComputerDomainStatusLabel.TabIndex = 2
-        Me.ComputerDomainStatusLabel.Text = LocalizationService.ForSection("Designer.Main")("DomainStatus.Label")
+        Me.ComputerDomainStatusLabel.Text = "Domain Status"
         Me.ComputerDomainStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label2
@@ -2502,7 +2503,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(233, 23)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = LocalizationService.ForSection("Designer.Main")("WorkgroupDomain.Label")
+        Me.Label2.Text = "Workgroup/Domain:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ComputerDomainWorkgroupLabel
@@ -2523,7 +2524,7 @@ Partial Class MainForm
         Me.ComputerModelLabel.Name = "ComputerModelLabel"
         Me.ComputerModelLabel.Size = New System.Drawing.Size(322, 21)
         Me.ComputerModelLabel.TabIndex = 1
-        Me.ComputerModelLabel.Text = LocalizationService.ForSection("Designer.Main")("ComputerModel.Label")
+        Me.ComputerModelLabel.Text = "Computer Model"
         '
         'ComputerNameLabel
         '
@@ -2533,7 +2534,7 @@ Partial Class MainForm
         Me.ComputerNameLabel.Name = "ComputerNameLabel"
         Me.ComputerNameLabel.Size = New System.Drawing.Size(322, 30)
         Me.ComputerNameLabel.TabIndex = 1
-        Me.ComputerNameLabel.Text = LocalizationService.ForSection("Designer.Main")("ComputerName.Label")
+        Me.ComputerNameLabel.Text = "Computer Name"
         '
         'ComputerWallpaperPB
         '
@@ -2555,7 +2556,7 @@ Partial Class MainForm
         Me.ChangeComputerNameLink.Size = New System.Drawing.Size(50, 15)
         Me.ChangeComputerNameLink.TabIndex = 5
         Me.ChangeComputerNameLink.TabStop = True
-        Me.ChangeComputerNameLink.Text = LocalizationService.ForSection("Designer.Main")("Rename.Link")
+        Me.ChangeComputerNameLink.Text = "Rename"
         Me.ChangeComputerNameLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'SidePanel
@@ -2597,7 +2598,7 @@ Partial Class MainForm
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.Main")("PathName.Column")
+        Me.ColumnHeader3.Text = "Path/Name"
         Me.ColumnHeader3.Width = 163
         '
         'UpdatePanel
@@ -2623,7 +2624,8 @@ Partial Class MainForm
         Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
         Me.UpdateLink.TabIndex = 0
         Me.UpdateLink.TabStop = True
-        Me.UpdateLink.Text = LocalizationService.ForSection("Designer.Main")("NewVersion.Available.Link")
+        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
+    "e"
         Me.UpdateLink.UseCompatibleTextRendering = True
         '
         'RecentRemoveLink
@@ -2637,7 +2639,7 @@ Partial Class MainForm
         Me.RecentRemoveLink.Size = New System.Drawing.Size(190, 15)
         Me.RecentRemoveLink.TabIndex = 2
         Me.RecentRemoveLink.TabStop = True
-        Me.RecentRemoveLink.Text = LocalizationService.ForSection("Designer.Main")("RemoveEntry.Link")
+        Me.RecentRemoveLink.Text = "Remove entry"
         Me.RecentRemoveLink.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.RecentRemoveLink.Visible = False
         '
@@ -2651,7 +2653,7 @@ Partial Class MainForm
         Me.OfflineInstMgmt.Size = New System.Drawing.Size(157, 15)
         Me.OfflineInstMgmt.TabIndex = 2
         Me.OfflineInstMgmt.TabStop = True
-        Me.OfflineInstMgmt.Text = LocalizationService.ForSection("Designer.Main")("Manage.Offline.Button.Button")
+        Me.OfflineInstMgmt.Text = "Manage offline installation..."
         '
         'OnlineInstMgmt
         '
@@ -2663,7 +2665,7 @@ Partial Class MainForm
         Me.OnlineInstMgmt.Size = New System.Drawing.Size(147, 15)
         Me.OnlineInstMgmt.TabIndex = 2
         Me.OnlineInstMgmt.TabStop = True
-        Me.OnlineInstMgmt.Text = LocalizationService.ForSection("Designer.Main")("Manage.Online.Install.Link")
+        Me.OnlineInstMgmt.Text = "Manage online installation"
         '
         'ExistingProjLink
         '
@@ -2675,7 +2677,7 @@ Partial Class MainForm
         Me.ExistingProjLink.Size = New System.Drawing.Size(128, 15)
         Me.ExistingProjLink.TabIndex = 2
         Me.ExistingProjLink.TabStop = True
-        Me.ExistingProjLink.Text = LocalizationService.ForSection("Designer.Main")("Open.Existing.Project.Link")
+        Me.ExistingProjLink.Text = "Open existing project..."
         '
         'NewProjLink
         '
@@ -2687,7 +2689,7 @@ Partial Class MainForm
         Me.NewProjLink.Size = New System.Drawing.Size(80, 15)
         Me.NewProjLink.TabIndex = 2
         Me.NewProjLink.TabStop = True
-        Me.NewProjLink.Text = LocalizationService.ForSection("Designer.Main")("NewProject.Link")
+        Me.NewProjLink.Text = "New project..."
         '
         'Label10
         '
@@ -2697,7 +2699,7 @@ Partial Class MainForm
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(116, 21)
         Me.Label10.TabIndex = 1
-        Me.Label10.Text = LocalizationService.ForSection("Designer.Main")("RecentProjects.Label")
+        Me.Label10.Text = "Recent projects"
         '
         'LabelHeader1
         '
@@ -2707,7 +2709,7 @@ Partial Class MainForm
         Me.LabelHeader1.Name = "LabelHeader1"
         Me.LabelHeader1.Size = New System.Drawing.Size(49, 21)
         Me.LabelHeader1.TabIndex = 1
-        Me.LabelHeader1.Text = LocalizationService.ForSection("Designer.Main")("Begin.Label")
+        Me.LabelHeader1.Text = "Begin"
         '
         'Panel3
         '
@@ -2799,7 +2801,7 @@ Partial Class MainForm
         Me.GroupBox4.Size = New System.Drawing.Size(666, 230)
         Me.GroupBox4.TabIndex = 0
         Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = LocalizationService.ForSection("Designer.Main")("ImageOperations.Group")
+        Me.GroupBox4.Text = "Image operations"
         '
         'Button24
         '
@@ -2809,7 +2811,7 @@ Partial Class MainForm
         Me.Button24.Name = "Button24"
         Me.Button24.Size = New System.Drawing.Size(324, 63)
         Me.Button24.TabIndex = 1
-        Me.Button24.Text = LocalizationService.ForSection("Designer.Main")("Switch.Image.Indexes.Button")
+        Me.Button24.Text = "Switch image indexes..."
         Me.Button24.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button24.UseVisualStyleBackColor = True
         '
@@ -2821,7 +2823,7 @@ Partial Class MainForm
         Me.Button31.Name = "Button31"
         Me.Button31.Size = New System.Drawing.Size(159, 63)
         Me.Button31.TabIndex = 1
-        Me.Button31.Text = LocalizationService.ForSection("Designer.Main")("CaptureImage.Button")
+        Me.Button31.Text = "Capture image..."
         Me.Button31.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button31.UseVisualStyleBackColor = True
         '
@@ -2833,7 +2835,7 @@ Partial Class MainForm
         Me.Button30.Name = "Button30"
         Me.Button30.Size = New System.Drawing.Size(159, 63)
         Me.Button30.TabIndex = 1
-        Me.Button30.Text = LocalizationService.ForSection("Designer.Main")("ApplyImage.Button")
+        Me.Button30.Text = "Apply image..."
         Me.Button30.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button30.UseVisualStyleBackColor = True
         '
@@ -2844,7 +2846,7 @@ Partial Class MainForm
         Me.Button33.Name = "Button33"
         Me.Button33.Size = New System.Drawing.Size(159, 63)
         Me.Button33.TabIndex = 1
-        Me.Button33.Text = LocalizationService.ForSection("Designer.Main")("Save.Complete.Image.Button")
+        Me.Button33.Text = "Save complete image information..."
         Me.Button33.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button33.UseVisualStyleBackColor = True
         '
@@ -2856,7 +2858,7 @@ Partial Class MainForm
         Me.Button32.Name = "Button32"
         Me.Button32.Size = New System.Drawing.Size(159, 63)
         Me.Button32.TabIndex = 1
-        Me.Button32.Text = LocalizationService.ForSection("Designer.Main")("Remove.VolumeImages.Button")
+        Me.Button32.Text = "Remove volume images..."
         Me.Button32.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button32.UseVisualStyleBackColor = True
         '
@@ -2868,7 +2870,7 @@ Partial Class MainForm
         Me.Button26.Name = "Button26"
         Me.Button26.Size = New System.Drawing.Size(159, 63)
         Me.Button26.TabIndex = 1
-        Me.Button26.Text = LocalizationService.ForSection("Designer.Main")("MountImage.Button")
+        Me.Button26.Text = "Mount image..."
         Me.Button26.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button26.UseVisualStyleBackColor = True
         '
@@ -2880,7 +2882,7 @@ Partial Class MainForm
         Me.Button25.Name = "Button25"
         Me.Button25.Size = New System.Drawing.Size(324, 63)
         Me.Button25.TabIndex = 1
-        Me.Button25.Text = LocalizationService.ForSection("Designer.Main")("Reload.Servicing.Button")
+        Me.Button25.Text = "Reload servicing session"
         Me.Button25.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button25.UseVisualStyleBackColor = True
         '
@@ -2893,7 +2895,7 @@ Partial Class MainForm
         Me.Button29.Name = "Button29"
         Me.Button29.Size = New System.Drawing.Size(324, 28)
         Me.Button29.TabIndex = 1
-        Me.Button29.Text = LocalizationService.ForSection("Designer.Main")("Unmount.Image.Button")
+        Me.Button29.Text = "Unmount image discarding changes"
         Me.Button29.UseVisualStyleBackColor = True
         '
         'Button28
@@ -2905,7 +2907,7 @@ Partial Class MainForm
         Me.Button28.Name = "Button28"
         Me.Button28.Size = New System.Drawing.Size(324, 28)
         Me.Button28.TabIndex = 1
-        Me.Button28.Text = LocalizationService.ForSection("Designer.Main")("CommitImage.Button")
+        Me.Button28.Text = "Commit and unmount image"
         Me.Button28.UseVisualStyleBackColor = True
         '
         'Button27
@@ -2916,7 +2918,7 @@ Partial Class MainForm
         Me.Button27.Name = "Button27"
         Me.Button27.Size = New System.Drawing.Size(159, 63)
         Me.Button27.TabIndex = 1
-        Me.Button27.Text = LocalizationService.ForSection("Designer.Main")("Commit.Changes.Button")
+        Me.Button27.Text = "Commit current changes"
         Me.Button27.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button27.UseVisualStyleBackColor = True
         '
@@ -2932,7 +2934,7 @@ Partial Class MainForm
         Me.GroupBox5.Size = New System.Drawing.Size(666, 162)
         Me.GroupBox5.TabIndex = 0
         Me.GroupBox5.TabStop = False
-        Me.GroupBox5.Text = LocalizationService.ForSection("Designer.Main")("Package.Operations.Group")
+        Me.GroupBox5.Text = "Package operations"
         '
         'Button38
         '
@@ -2941,7 +2943,7 @@ Partial Class MainForm
         Me.Button38.Name = "Button38"
         Me.Button38.Size = New System.Drawing.Size(214, 63)
         Me.Button38.TabIndex = 1
-        Me.Button38.Text = LocalizationService.ForSection("Designer.Main")("Save.Installed.Button")
+        Me.Button38.Text = "Save installed package information..."
         Me.Button38.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button38.UseVisualStyleBackColor = True
         '
@@ -2953,7 +2955,7 @@ Partial Class MainForm
         Me.Button35.Name = "Button35"
         Me.Button35.Size = New System.Drawing.Size(324, 63)
         Me.Button35.TabIndex = 1
-        Me.Button35.Text = LocalizationService.ForSection("Designer.Main")("RemovePackage.Button")
+        Me.Button35.Text = "Remove package..."
         Me.Button35.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button35.UseVisualStyleBackColor = True
         '
@@ -2965,7 +2967,7 @@ Partial Class MainForm
         Me.Button37.Name = "Button37"
         Me.Button37.Size = New System.Drawing.Size(324, 63)
         Me.Button37.TabIndex = 1
-        Me.Button37.Text = LocalizationService.ForSection("Designer.Main")("Component.Store.Maint.Button")
+        Me.Button37.Text = "Perform component store maintenance and cleanup..."
         Me.Button37.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button37.UseVisualStyleBackColor = True
         '
@@ -2977,7 +2979,7 @@ Partial Class MainForm
         Me.Button34.Name = "Button34"
         Me.Button34.Size = New System.Drawing.Size(214, 63)
         Me.Button34.TabIndex = 1
-        Me.Button34.Text = LocalizationService.ForSection("Designer.Main")("Get.Package.Button")
+        Me.Button34.Text = "Get package information..."
         Me.Button34.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button34.UseVisualStyleBackColor = True
         '
@@ -2989,7 +2991,7 @@ Partial Class MainForm
         Me.Button36.Name = "Button36"
         Me.Button36.Size = New System.Drawing.Size(214, 63)
         Me.Button36.TabIndex = 1
-        Me.Button36.Text = LocalizationService.ForSection("Designer.Main")("AddPackage.Button")
+        Me.Button36.Text = "Add package..."
         Me.Button36.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button36.UseVisualStyleBackColor = True
         '
@@ -3004,7 +3006,7 @@ Partial Class MainForm
         Me.GroupBox6.Size = New System.Drawing.Size(666, 93)
         Me.GroupBox6.TabIndex = 0
         Me.GroupBox6.TabStop = False
-        Me.GroupBox6.Text = LocalizationService.ForSection("Designer.Main")("Feature.Operations.Group")
+        Me.GroupBox6.Text = "Feature operations"
         '
         'Button42
         '
@@ -3013,7 +3015,7 @@ Partial Class MainForm
         Me.Button42.Name = "Button42"
         Me.Button42.Size = New System.Drawing.Size(159, 63)
         Me.Button42.TabIndex = 1
-        Me.Button42.Text = LocalizationService.ForSection("Designer.Main")("Save.Feature.Button")
+        Me.Button42.Text = "Save feature information..."
         Me.Button42.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button42.UseVisualStyleBackColor = True
         '
@@ -3025,7 +3027,7 @@ Partial Class MainForm
         Me.Button39.Name = "Button39"
         Me.Button39.Size = New System.Drawing.Size(159, 63)
         Me.Button39.TabIndex = 1
-        Me.Button39.Text = LocalizationService.ForSection("Designer.Main")("Get.Feature.Button")
+        Me.Button39.Text = "Get feature information..."
         Me.Button39.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button39.UseVisualStyleBackColor = True
         '
@@ -3037,7 +3039,7 @@ Partial Class MainForm
         Me.Button41.Name = "Button41"
         Me.Button41.Size = New System.Drawing.Size(159, 63)
         Me.Button41.TabIndex = 1
-        Me.Button41.Text = LocalizationService.ForSection("Designer.Main")("EnableFeature.Button")
+        Me.Button41.Text = "Enable feature..."
         Me.Button41.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button41.UseVisualStyleBackColor = True
         '
@@ -3049,7 +3051,7 @@ Partial Class MainForm
         Me.Button40.Name = "Button40"
         Me.Button40.Size = New System.Drawing.Size(159, 63)
         Me.Button40.TabIndex = 1
-        Me.Button40.Text = LocalizationService.ForSection("Designer.Main")("DisableFeature.Button")
+        Me.Button40.Text = "Disable feature..."
         Me.Button40.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button40.UseVisualStyleBackColor = True
         '
@@ -3064,7 +3066,7 @@ Partial Class MainForm
         Me.GroupBox7.Size = New System.Drawing.Size(666, 93)
         Me.GroupBox7.TabIndex = 0
         Me.GroupBox7.TabStop = False
-        Me.GroupBox7.Text = LocalizationService.ForSection("Designer.Main")("AppX.Package.Operations")
+        Me.GroupBox7.Text = "AppX package operations"
         '
         'Button46
         '
@@ -3073,7 +3075,7 @@ Partial Class MainForm
         Me.Button46.Name = "Button46"
         Me.Button46.Size = New System.Drawing.Size(159, 63)
         Me.Button46.TabIndex = 1
-        Me.Button46.Text = LocalizationService.ForSection("Designer.Main")("Save.Installed.AppX.Button")
+        Me.Button46.Text = "Save installed AppX package information..."
         Me.Button46.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button46.UseVisualStyleBackColor = True
         '
@@ -3085,7 +3087,7 @@ Partial Class MainForm
         Me.Button44.Name = "Button44"
         Me.Button44.Size = New System.Drawing.Size(159, 63)
         Me.Button44.TabIndex = 1
-        Me.Button44.Text = LocalizationService.ForSection("Designer.Main")("Add.AppX.Package.Button")
+        Me.Button44.Text = "Add AppX package..."
         Me.Button44.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button44.UseVisualStyleBackColor = True
         '
@@ -3097,7 +3099,7 @@ Partial Class MainForm
         Me.Button45.Name = "Button45"
         Me.Button45.Size = New System.Drawing.Size(159, 63)
         Me.Button45.TabIndex = 1
-        Me.Button45.Text = LocalizationService.ForSection("Designer.Main")("Get.App.Button")
+        Me.Button45.Text = "Get app information..."
         Me.Button45.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button45.UseVisualStyleBackColor = True
         '
@@ -3109,7 +3111,7 @@ Partial Class MainForm
         Me.Button43.Name = "Button43"
         Me.Button43.Size = New System.Drawing.Size(159, 63)
         Me.Button43.TabIndex = 1
-        Me.Button43.Text = LocalizationService.ForSection("Designer.Main")("Remove.AppX.Package.Button")
+        Me.Button43.Text = "Remove AppX package..."
         Me.Button43.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button43.UseVisualStyleBackColor = True
         '
@@ -3124,7 +3126,7 @@ Partial Class MainForm
         Me.GroupBox8.Size = New System.Drawing.Size(666, 93)
         Me.GroupBox8.TabIndex = 0
         Me.GroupBox8.TabStop = False
-        Me.GroupBox8.Text = LocalizationService.ForSection("Designer.Main")("Capability.Operations.Group")
+        Me.GroupBox8.Text = "Capability operations"
         '
         'Button50
         '
@@ -3133,7 +3135,7 @@ Partial Class MainForm
         Me.Button50.Name = "Button50"
         Me.Button50.Size = New System.Drawing.Size(159, 63)
         Me.Button50.TabIndex = 1
-        Me.Button50.Text = LocalizationService.ForSection("Designer.Main")("Save.Capability.Button")
+        Me.Button50.Text = "Save capability information..."
         Me.Button50.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button50.UseVisualStyleBackColor = True
         '
@@ -3145,7 +3147,7 @@ Partial Class MainForm
         Me.Button48.Name = "Button48"
         Me.Button48.Size = New System.Drawing.Size(159, 63)
         Me.Button48.TabIndex = 1
-        Me.Button48.Text = LocalizationService.ForSection("Designer.Main")("AddCapability.Button")
+        Me.Button48.Text = "Add capability..."
         Me.Button48.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button48.UseVisualStyleBackColor = True
         '
@@ -3157,7 +3159,7 @@ Partial Class MainForm
         Me.Button49.Name = "Button49"
         Me.Button49.Size = New System.Drawing.Size(159, 63)
         Me.Button49.TabIndex = 1
-        Me.Button49.Text = LocalizationService.ForSection("Designer.Main")("Get.Capability.Button")
+        Me.Button49.Text = "Get capability information..."
         Me.Button49.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button49.UseVisualStyleBackColor = True
         '
@@ -3169,7 +3171,7 @@ Partial Class MainForm
         Me.Button47.Name = "Button47"
         Me.Button47.Size = New System.Drawing.Size(159, 63)
         Me.Button47.TabIndex = 1
-        Me.Button47.Text = LocalizationService.ForSection("Designer.Main")("RemoveCapability.Button")
+        Me.Button47.Text = "Remove capability..."
         Me.Button47.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button47.UseVisualStyleBackColor = True
         '
@@ -3184,7 +3186,7 @@ Partial Class MainForm
         Me.GroupBox9.Size = New System.Drawing.Size(666, 93)
         Me.GroupBox9.TabIndex = 0
         Me.GroupBox9.TabStop = False
-        Me.GroupBox9.Text = LocalizationService.ForSection("Designer.Main")("DriverOperations.Group")
+        Me.GroupBox9.Text = "Driver operations"
         '
         'Button54
         '
@@ -3193,7 +3195,7 @@ Partial Class MainForm
         Me.Button54.Name = "Button54"
         Me.Button54.Size = New System.Drawing.Size(159, 63)
         Me.Button54.TabIndex = 1
-        Me.Button54.Text = LocalizationService.ForSection("Designer.Main")("Save.Installed.Driver.Button")
+        Me.Button54.Text = "Save installed driver information..."
         Me.Button54.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button54.UseVisualStyleBackColor = True
         '
@@ -3205,7 +3207,7 @@ Partial Class MainForm
         Me.Button53.Name = "Button53"
         Me.Button53.Size = New System.Drawing.Size(159, 63)
         Me.Button53.TabIndex = 1
-        Me.Button53.Text = LocalizationService.ForSection("Designer.Main")("AddDriverPackage.Button")
+        Me.Button53.Text = "Add driver package..."
         Me.Button53.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button53.UseVisualStyleBackColor = True
         '
@@ -3217,7 +3219,7 @@ Partial Class MainForm
         Me.Button51.Name = "Button51"
         Me.Button51.Size = New System.Drawing.Size(159, 63)
         Me.Button51.TabIndex = 1
-        Me.Button51.Text = LocalizationService.ForSection("Designer.Main")("RemoveDriver.Button")
+        Me.Button51.Text = "Remove driver..."
         Me.Button51.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button51.UseVisualStyleBackColor = True
         '
@@ -3229,7 +3231,7 @@ Partial Class MainForm
         Me.Button52.Name = "Button52"
         Me.Button52.Size = New System.Drawing.Size(159, 63)
         Me.Button52.TabIndex = 1
-        Me.Button52.Text = LocalizationService.ForSection("Designer.Main")("Get.Driver.Button")
+        Me.Button52.Text = "Get driver information..."
         Me.Button52.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button52.UseVisualStyleBackColor = True
         '
@@ -3244,7 +3246,7 @@ Partial Class MainForm
         Me.GroupBox10.Size = New System.Drawing.Size(666, 53)
         Me.GroupBox10.TabIndex = 0
         Me.GroupBox10.TabStop = False
-        Me.GroupBox10.Text = LocalizationService.ForSection("Designer.Main")("Windows.Group")
+        Me.GroupBox10.Text = "Windows PE operations"
         '
         'Button58
         '
@@ -3255,7 +3257,7 @@ Partial Class MainForm
         Me.Button58.Name = "Button58"
         Me.Button58.Size = New System.Drawing.Size(159, 23)
         Me.Button58.TabIndex = 1
-        Me.Button58.Text = LocalizationService.ForSection("Designer.Main")("SetScratchSpace.Button")
+        Me.Button58.Text = "Set scratch space..."
         Me.Button58.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button58.UseVisualStyleBackColor = True
         '
@@ -3268,7 +3270,7 @@ Partial Class MainForm
         Me.Button57.Name = "Button57"
         Me.Button57.Size = New System.Drawing.Size(159, 23)
         Me.Button57.TabIndex = 1
-        Me.Button57.Text = LocalizationService.ForSection("Designer.Main")("Set.Target.Path.Button")
+        Me.Button57.Text = "Set target path..."
         Me.Button57.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button57.UseVisualStyleBackColor = True
         '
@@ -3281,7 +3283,7 @@ Partial Class MainForm
         Me.Button56.Name = "Button56"
         Me.Button56.Size = New System.Drawing.Size(159, 23)
         Me.Button56.TabIndex = 1
-        Me.Button56.Text = LocalizationService.ForSection("Designer.Main")("SaveConfig.Button")
+        Me.Button56.Text = "Save configuration..."
         Me.Button56.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button56.UseVisualStyleBackColor = True
         '
@@ -3294,7 +3296,7 @@ Partial Class MainForm
         Me.Button55.Name = "Button55"
         Me.Button55.Size = New System.Drawing.Size(159, 23)
         Me.Button55.TabIndex = 1
-        Me.Button55.Text = LocalizationService.ForSection("Designer.Main")("GetConfig.Button")
+        Me.Button55.Text = "Get configuration..."
         Me.Button55.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button55.UseVisualStyleBackColor = True
         '
@@ -3328,7 +3330,7 @@ Partial Class MainForm
         Me.BWFailLearnMoreBtn.Name = "BWFailLearnMoreBtn"
         Me.BWFailLearnMoreBtn.Size = New System.Drawing.Size(147, 23)
         Me.BWFailLearnMoreBtn.TabIndex = 1
-        Me.BWFailLearnMoreBtn.Text = LocalizationService.ForSection("Designer.Main")("LearnMore.Button")
+        Me.BWFailLearnMoreBtn.Text = "Learn more..."
         Me.BWFailLearnMoreBtn.UseVisualStyleBackColor = True
         '
         'BWFailLabel
@@ -3341,7 +3343,8 @@ Partial Class MainForm
         Me.BWFailLabel.Name = "BWFailLabel"
         Me.BWFailLabel.Size = New System.Drawing.Size(530, 13)
         Me.BWFailLabel.TabIndex = 0
-        Me.BWFailLabel.Text = LocalizationService.ForSection("Designer.Main")("One.Bg.Procs.Message")
+        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " & _
+    "may not be available."
         '
         'ProjectSidePanel
         '
@@ -3388,7 +3391,7 @@ Partial Class MainForm
         Me.Label55.Name = "Label55"
         Me.Label55.Size = New System.Drawing.Size(79, 15)
         Me.Label55.TabIndex = 14
-        Me.Label55.Text = LocalizationService.ForSection("Designer.Main")("ProjectTasks.Label")
+        Me.Label55.Text = "Project Tasks"
         '
         'PrjTasks
         '
@@ -3425,7 +3428,7 @@ Partial Class MainForm
         Me.LinkLabel17.Size = New System.Drawing.Size(245, 32)
         Me.LinkLabel17.TabIndex = 5
         Me.LinkLabel17.TabStop = True
-        Me.LinkLabel17.Text = LocalizationService.ForSection("Designer.Main")("UnloadProject.Link")
+        Me.LinkLabel17.Text = "Unload project"
         Me.LinkLabel17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox11
@@ -3452,7 +3455,7 @@ Partial Class MainForm
         Me.LinkLabel16.Size = New System.Drawing.Size(245, 31)
         Me.LinkLabel16.TabIndex = 3
         Me.LinkLabel16.TabStop = True
-        Me.LinkLabel16.Text = LocalizationService.ForSection("Designer.Main")("Open.File.Explorer.Link")
+        Me.LinkLabel16.Text = "Open in File Explorer"
         Me.LinkLabel16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox10
@@ -3479,7 +3482,7 @@ Partial Class MainForm
         Me.LinkLabel15.Size = New System.Drawing.Size(245, 31)
         Me.LinkLabel15.TabIndex = 0
         Me.LinkLabel15.TabStop = True
-        Me.LinkLabel15.Text = LocalizationService.ForSection("Designer.Main")("View.Project.Props.Link")
+        Me.LinkLabel15.Text = "View project properties"
         Me.LinkLabel15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox9
@@ -3502,7 +3505,7 @@ Partial Class MainForm
         Me.Button21.Name = "Button21"
         Me.Button21.Size = New System.Drawing.Size(221, 28)
         Me.Button21.TabIndex = 10
-        Me.Button21.Text = LocalizationService.ForSection("Designer.Main")("UnloadProject.ActionButton")
+        Me.Button21.Text = "Unload project"
         Me.Button21.UseVisualStyleBackColor = True
         Me.Button21.Visible = False
         '
@@ -3515,7 +3518,7 @@ Partial Class MainForm
         Me.Button22.Name = "Button22"
         Me.Button22.Size = New System.Drawing.Size(221, 28)
         Me.Button22.TabIndex = 11
-        Me.Button22.Text = LocalizationService.ForSection("Designer.Main")("View.File.Explorer.Button")
+        Me.Button22.Text = "View in File Explorer"
         Me.Button22.UseVisualStyleBackColor = True
         Me.Button22.Visible = False
         '
@@ -3528,7 +3531,7 @@ Partial Class MainForm
         Me.Button23.Name = "Button23"
         Me.Button23.Size = New System.Drawing.Size(221, 28)
         Me.Button23.TabIndex = 12
-        Me.Button23.Text = LocalizationService.ForSection("Designer.Main")("View.Project.Props.Button")
+        Me.Button23.Text = "View project properties"
         Me.Button23.UseVisualStyleBackColor = True
         Me.Button23.Visible = False
         '
@@ -3568,7 +3571,7 @@ Partial Class MainForm
         Me.LinkLabel14.Size = New System.Drawing.Size(157, 223)
         Me.LinkLabel14.TabIndex = 5
         Me.LinkLabel14.TabStop = True
-        Me.LinkLabel14.Text = LocalizationService.ForSection("Designer.Main")("Mount.Image.Link")
+        Me.LinkLabel14.Text = "Click here to mount an image"
         '
         'Label50
         '
@@ -3579,7 +3582,7 @@ Partial Class MainForm
         Me.Label50.Name = "Label50"
         Me.Label50.Size = New System.Drawing.Size(157, 15)
         Me.Label50.TabIndex = 2
-        Me.Label50.Text = LocalizationService.ForSection("Designer.Main")("ImgStatus.Label")
+        Me.Label50.Text = "imgStatus"
         '
         'Label51
         '
@@ -3589,7 +3592,7 @@ Partial Class MainForm
         Me.Label51.Name = "Label51"
         Me.Label51.Size = New System.Drawing.Size(123, 102)
         Me.Label51.TabIndex = 1
-        Me.Label51.Text = LocalizationService.ForSection("Designer.Main")("Location.Label")
+        Me.Label51.Text = "Location:"
         Me.Label51.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label52
@@ -3600,7 +3603,7 @@ Partial Class MainForm
         Me.Label52.Name = "Label52"
         Me.Label52.Size = New System.Drawing.Size(157, 102)
         Me.Label52.TabIndex = 2
-        Me.Label52.Text = LocalizationService.ForSection("Designer.Main")("ProjPath.Label")
+        Me.Label52.Text = "projPath"
         '
         'Label53
         '
@@ -3611,7 +3614,7 @@ Partial Class MainForm
         Me.TableLayoutPanel6.SetRowSpan(Me.Label53, 2)
         Me.Label53.Size = New System.Drawing.Size(123, 238)
         Me.Label53.TabIndex = 1
-        Me.Label53.Text = LocalizationService.ForSection("Designer.Main")("ImagesMounted.Label")
+        Me.Label53.Text = "Images mounted?"
         Me.Label53.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Panel13
@@ -3630,7 +3633,7 @@ Partial Class MainForm
         Me.Label54.Name = "Label54"
         Me.Label54.Size = New System.Drawing.Size(123, 23)
         Me.Label54.TabIndex = 1
-        Me.Label54.Text = LocalizationService.ForSection("Designer.Main")("Name.Label")
+        Me.Label54.Text = "Name:"
         Me.Label54.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label49
@@ -3641,7 +3644,7 @@ Partial Class MainForm
         Me.Label49.Name = "Label49"
         Me.Label49.Size = New System.Drawing.Size(157, 29)
         Me.Label49.TabIndex = 2
-        Me.Label49.Text = LocalizationService.ForSection("Designer.Main")("ProjectName.DynamicLabel")
+        Me.Label49.Text = "Label49"
         Me.Label49.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'SidePanel_ImageView
@@ -3676,7 +3679,7 @@ Partial Class MainForm
         Me.Label59.Name = "Label59"
         Me.Label59.Size = New System.Drawing.Size(285, 32)
         Me.Label59.TabIndex = 19
-        Me.Label59.Text = LocalizationService.ForSection("Designer.Main")("ImageMounted.Label")
+        Me.Label59.Text = "No image has been mounted"
         Me.Label59.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label58
@@ -3688,7 +3691,7 @@ Partial Class MainForm
         Me.Label58.Name = "Label58"
         Me.Label58.Size = New System.Drawing.Size(285, 71)
         Me.Label58.TabIndex = 19
-        Me.Label58.Text = LocalizationService.ForSection("Designer.Main")("Mount.Image.Order.Label")
+        Me.Label58.Text = "You need to mount an image in order to view its information."
         Me.Label58.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label57
@@ -3700,7 +3703,7 @@ Partial Class MainForm
         Me.Label57.Name = "Label57"
         Me.Label57.Size = New System.Drawing.Size(49, 15)
         Me.Label57.TabIndex = 18
-        Me.Label57.Text = LocalizationService.ForSection("Designer.Main")("Choices.Label")
+        Me.Label57.Text = "Choices"
         '
         'TableLayoutPanel7
         '
@@ -3735,7 +3738,7 @@ Partial Class MainForm
         Me.LinkLabel18.Size = New System.Drawing.Size(245, 32)
         Me.LinkLabel18.TabIndex = 3
         Me.LinkLabel18.TabStop = True
-        Me.LinkLabel18.Text = LocalizationService.ForSection("Designer.Main")("Pick.Mounted.Image.Link")
+        Me.LinkLabel18.Text = "Pick a mounted image..."
         Me.LinkLabel18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox12
@@ -3761,7 +3764,7 @@ Partial Class MainForm
         Me.LinkLabel21.Size = New System.Drawing.Size(245, 32)
         Me.LinkLabel21.TabIndex = 0
         Me.LinkLabel21.TabStop = True
-        Me.LinkLabel21.Text = LocalizationService.ForSection("Designer.Main")("MountImage.Link")
+        Me.LinkLabel21.Text = "Mount an image..."
         Me.LinkLabel21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox15
@@ -3795,7 +3798,7 @@ Partial Class MainForm
         Me.Label56.Name = "Label56"
         Me.Label56.Size = New System.Drawing.Size(74, 15)
         Me.Label56.TabIndex = 15
-        Me.Label56.Text = LocalizationService.ForSection("Designer.Main")("ImageTasks.Label")
+        Me.Label56.Text = "Image Tasks"
         '
         'ImgTasks
         '
@@ -3830,7 +3833,7 @@ Partial Class MainForm
         Me.LinkLabel19.Size = New System.Drawing.Size(245, 32)
         Me.LinkLabel19.TabIndex = 3
         Me.LinkLabel19.TabStop = True
-        Me.LinkLabel19.Text = LocalizationService.ForSection("Designer.Main")("UnmountImage.Link")
+        Me.LinkLabel19.Text = "Unmount image"
         Me.LinkLabel19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox13
@@ -3856,7 +3859,7 @@ Partial Class MainForm
         Me.LinkLabel20.Size = New System.Drawing.Size(245, 32)
         Me.LinkLabel20.TabIndex = 0
         Me.LinkLabel20.TabStop = True
-        Me.LinkLabel20.Text = LocalizationService.ForSection("Designer.Main")("View.Image.Props.Link")
+        Me.LinkLabel20.Text = "View image properties"
         Me.LinkLabel20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox14
@@ -3906,7 +3909,7 @@ Partial Class MainForm
         Me.Label39.Name = "Label39"
         Me.Label39.Size = New System.Drawing.Size(106, 23)
         Me.Label39.TabIndex = 4
-        Me.Label39.Text = LocalizationService.ForSection("Designer.Main")("ImageIndex.Label")
+        Me.Label39.Text = "Image index:"
         Me.Label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label40
@@ -3916,7 +3919,7 @@ Partial Class MainForm
         Me.Label40.Name = "Label40"
         Me.Label40.Size = New System.Drawing.Size(106, 178)
         Me.Label40.TabIndex = 3
-        Me.Label40.Text = LocalizationService.ForSection("Designer.Main")("Description.Label")
+        Me.Label40.Text = "Description:"
         Me.Label40.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label41
@@ -3927,7 +3930,7 @@ Partial Class MainForm
         Me.Label41.Name = "Label41"
         Me.Label41.Size = New System.Drawing.Size(168, 23)
         Me.Label41.TabIndex = 6
-        Me.Label41.Text = LocalizationService.ForSection("Designer.Main")("ImgIndex.Label")
+        Me.Label41.Text = "imgIndex"
         Me.Label41.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label42
@@ -3937,7 +3940,7 @@ Partial Class MainForm
         Me.Label42.Name = "Label42"
         Me.Label42.Size = New System.Drawing.Size(106, 84)
         Me.Label42.TabIndex = 3
-        Me.Label42.Text = LocalizationService.ForSection("Designer.Main")("Name.Label")
+        Me.Label42.Text = "Name:"
         Me.Label42.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label43
@@ -3947,7 +3950,7 @@ Partial Class MainForm
         Me.Label43.Name = "Label43"
         Me.Label43.Size = New System.Drawing.Size(106, 74)
         Me.Label43.TabIndex = 3
-        Me.Label43.Text = LocalizationService.ForSection("Designer.Main")("MountPoint.Label")
+        Me.Label43.Text = "Mount point:"
         Me.Label43.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label44
@@ -3958,7 +3961,7 @@ Partial Class MainForm
         Me.Label44.Name = "Label44"
         Me.Label44.Size = New System.Drawing.Size(168, 74)
         Me.Label44.TabIndex = 5
-        Me.Label44.Text = LocalizationService.ForSection("Designer.Main")("MountPoint.Value")
+        Me.Label44.Text = "mountPoint"
         '
         'Label45
         '
@@ -3967,7 +3970,7 @@ Partial Class MainForm
         Me.Label45.Name = "Label45"
         Me.Label45.Size = New System.Drawing.Size(106, 20)
         Me.Label45.TabIndex = 3
-        Me.Label45.Text = LocalizationService.ForSection("Designer.Main")("Version.Label")
+        Me.Label45.Text = "Version:"
         Me.Label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label46
@@ -3978,7 +3981,7 @@ Partial Class MainForm
         Me.Label46.Name = "Label46"
         Me.Label46.Size = New System.Drawing.Size(168, 84)
         Me.Label46.TabIndex = 6
-        Me.Label46.Text = LocalizationService.ForSection("Designer.Main")("ImgName.Label")
+        Me.Label46.Text = "imgName"
         Me.Label46.UseMnemonic = False
         '
         'Label47
@@ -3989,7 +3992,7 @@ Partial Class MainForm
         Me.Label47.Name = "Label47"
         Me.Label47.Size = New System.Drawing.Size(168, 178)
         Me.Label47.TabIndex = 6
-        Me.Label47.Text = LocalizationService.ForSection("Designer.Main")("ImgDesc.Label")
+        Me.Label47.Text = "imgDesc"
         Me.Label47.UseMnemonic = False
         '
         'Label48
@@ -4000,7 +4003,7 @@ Partial Class MainForm
         Me.Label48.Name = "Label48"
         Me.Label48.Size = New System.Drawing.Size(168, 20)
         Me.Label48.TabIndex = 6
-        Me.Label48.Text = LocalizationService.ForSection("Designer.Main")("ImgVersion.Label")
+        Me.Label48.Text = "imgVersion"
         Me.Label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Panel10
@@ -4040,7 +4043,7 @@ Partial Class MainForm
         Me.LinkLabel12.Size = New System.Drawing.Size(144, 36)
         Me.LinkLabel12.TabIndex = 3
         Me.LinkLabel12.TabStop = True
-        Me.LinkLabel12.Text = LocalizationService.ForSection("Designer.Main")("Project.Link")
+        Me.LinkLabel12.Text = "PROJECT"
         Me.LinkLabel12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel13
@@ -4056,7 +4059,7 @@ Partial Class MainForm
         Me.LinkLabel13.Size = New System.Drawing.Size(144, 36)
         Me.LinkLabel13.TabIndex = 2
         Me.LinkLabel13.TabStop = True
-        Me.LinkLabel13.Text = LocalizationService.ForSection("Designer.Main")("Image.Link")
+        Me.LinkLabel13.Text = "IMAGE"
         Me.LinkLabel13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ProjectViewHeader
@@ -4097,7 +4100,7 @@ Partial Class MainForm
         Me.TimeLabel.Padding = New System.Windows.Forms.Padding(0, 12, 8, 0)
         Me.TimeLabel.Size = New System.Drawing.Size(256, 48)
         Me.TimeLabel.TabIndex = 1
-        Me.TimeLabel.Text = LocalizationService.ForSection("Designer.Main")("Clock.DynamicLabel")
+        Me.TimeLabel.Text = "Label40"
         Me.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'GreetingLabel
@@ -4110,7 +4113,7 @@ Partial Class MainForm
         Me.GreetingLabel.Padding = New System.Windows.Forms.Padding(8, 0, 0, 0)
         Me.GreetingLabel.Size = New System.Drawing.Size(692, 48)
         Me.GreetingLabel.TabIndex = 0
-        Me.GreetingLabel.Text = LocalizationService.ForSection("Designer.Main")("Welcome.Servicing.Label")
+        Me.GreetingLabel.Text = "Welcome to this servicing session"
         Me.GreetingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'MenuToggle
@@ -4144,7 +4147,7 @@ Partial Class MainForm
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = LocalizationService.ForSection("Designer.Main")("CloseTab.Label")
+        Me.ToolStripButton1.Text = "Close tab"
         Me.ToolStripButton1.Visible = False
         '
         'ToolStripButton2
@@ -4154,7 +4157,7 @@ Partial Class MainForm
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton2.Text = LocalizationService.ForSection("Designer.Main")("SaveProject.Label")
+        Me.ToolStripButton2.Text = "Save project"
         '
         'ToolStripSeparator14
         '
@@ -4167,8 +4170,8 @@ Partial Class MainForm
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(105, 22)
-        Me.ToolStripButton3.Text = LocalizationService.ForSection("Designer.Main")("UnloadProject.Label")
-        Me.ToolStripButton3.ToolTipText = LocalizationService.ForSection("Designer.Main")("Unload.Project.Tooltip")
+        Me.ToolStripButton3.Text = "Unload project"
+        Me.ToolStripButton3.ToolTipText = "Unload project from this program"
         '
         'ToolStripSeparator15
         '
@@ -4185,7 +4188,7 @@ Partial Class MainForm
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton4.Text = LocalizationService.ForSection("Designer.Main")("Show.Progress.Window.Label")
+        Me.ToolStripButton4.Text = "Show progress window"
         Me.ToolStripButton4.Visible = False
         '
         'Panel2
@@ -4224,7 +4227,7 @@ Partial Class MainForm
         Me.RefreshViewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.RefreshViewTSB.Name = "RefreshViewTSB"
         Me.RefreshViewTSB.Size = New System.Drawing.Size(23, 22)
-        Me.RefreshViewTSB.Text = LocalizationService.ForSection("Designer.Main")("RefreshView.Label")
+        Me.RefreshViewTSB.Text = "Refresh view"
         '
         'ToolStripSeparator17
         '
@@ -4237,7 +4240,7 @@ Partial Class MainForm
         Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
         Me.ExpandCollapseTSB.Size = New System.Drawing.Size(65, 22)
-        Me.ExpandCollapseTSB.Text = LocalizationService.ForSection("Designer.Main")("Expand.Label")
+        Me.ExpandCollapseTSB.Text = "Expand"
         '
         'prjTreeStatus
         '
@@ -4256,7 +4259,7 @@ Partial Class MainForm
         '
         Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
         Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(125, 17)
-        Me.ToolStripStatusLabel2.Text = LocalizationService.ForSection("Designer.Main")("Preparing.Project.Button")
+        Me.ToolStripStatusLabel2.Text = "Preparing project tree..."
         '
         'ToolStripProgressBar1
         '
@@ -4272,7 +4275,7 @@ Partial Class MainForm
         Me.StatusStrip.Name = "StatusStrip"
         Me.StatusStrip.Size = New System.Drawing.Size(1264, 26)
         Me.StatusStrip.TabIndex = 0
-        Me.StatusStrip.Text = LocalizationService.ForSection("Designer.Main")("Status.Label")
+        Me.StatusStrip.Text = "Status"
         '
         'BackgroundProcessesButton
         '
@@ -4283,21 +4286,21 @@ Partial Class MainForm
         Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
         Me.BackgroundProcessesButton.Size = New System.Drawing.Size(25, 24)
-        Me.BackgroundProcessesButton.ToolTipText = LocalizationService.ForSection("Designer.Main")("View.BgProcesses.Tooltip")
+        Me.BackgroundProcessesButton.ToolTipText = "View background processes"
         '
         'MenuDesc
         '
         Me.MenuDesc.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MenuDesc.Name = "MenuDesc"
         Me.MenuDesc.Size = New System.Drawing.Size(39, 21)
-        Me.MenuDesc.Text = LocalizationService.ForSection("Designer.Main")("Ready.Label")
+        Me.MenuDesc.Text = "Ready"
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.Main")("DISM.Tools.Project.Filter")
+        Me.OpenFileDialog1.Filter = "DISMTools project files|*.dtproj"
         Me.OpenFileDialog1.RestoreDirectory = True
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.Main")("Project.File.Load.Title")
+        Me.OpenFileDialog1.Title = "Specify the project file to load"
         '
         'PkgInfoCMS
         '
@@ -4311,13 +4314,13 @@ Partial Class MainForm
         '
         Me.PkgBasicInfo.Name = "PkgBasicInfo"
         Me.PkgBasicInfo.Size = New System.Drawing.Size(276, 22)
-        Me.PkgBasicInfo.Text = LocalizationService.ForSection("Designer.Main")("Get.Basic.Label")
+        Me.PkgBasicInfo.Text = "Get basic information (all packages)"
         '
         'PkgDetailedInfo
         '
         Me.PkgDetailedInfo.Name = "PkgDetailedInfo"
         Me.PkgDetailedInfo.Size = New System.Drawing.Size(276, 22)
-        Me.PkgDetailedInfo.Text = LocalizationService.ForSection("Designer.Main")("Get.Detailed.Specific.Label")
+        Me.PkgDetailedInfo.Text = "Get detailed information (specific package)"
         '
         'ImgBW
         '
@@ -4336,7 +4339,7 @@ Partial Class MainForm
         '
         'LocalMountDirFBD
         '
-        Me.LocalMountDirFBD.Description = LocalizationService.ForSection("Designer.Main")("MountDir.Description")
+        Me.LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
         Me.LocalMountDirFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.LocalMountDirFBD.ShowNewFolderButton = False
         '
@@ -4355,13 +4358,13 @@ Partial Class MainForm
         '
         Me.CommitAndUnmountTSMI.Name = "CommitAndUnmountTSMI"
         Me.CommitAndUnmountTSMI.Size = New System.Drawing.Size(252, 22)
-        Me.CommitAndUnmountTSMI.Text = LocalizationService.ForSection("Designer.Main")("CommitImage.Label")
+        Me.CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
         '
         'DiscardAndUnmountTSMI
         '
         Me.DiscardAndUnmountTSMI.Name = "DiscardAndUnmountTSMI"
         Me.DiscardAndUnmountTSMI.Size = New System.Drawing.Size(252, 22)
-        Me.DiscardAndUnmountTSMI.Text = LocalizationService.ForSection("Designer.Main")("Discard.Changes.Label")
+        Me.DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
         '
         'ToolStripSeparator20
         '
@@ -4372,7 +4375,7 @@ Partial Class MainForm
         '
         Me.UnmountSettingsToolStripMenuItem.Name = "UnmountSettingsToolStripMenuItem"
         Me.UnmountSettingsToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
-        Me.UnmountSettingsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("UnmountSettings.Button")
+        Me.UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
         '
         'AppxPackagePopupCMS
         '
@@ -4385,13 +4388,13 @@ Partial Class MainForm
         Me.ViewPackageDirectoryToolStripMenuItem.Image = Global.DISMTools.My.Resources.Resources.openfile
         Me.ViewPackageDirectoryToolStripMenuItem.Name = "ViewPackageDirectoryToolStripMenuItem"
         Me.ViewPackageDirectoryToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
-        Me.ViewPackageDirectoryToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("View.Package.Dir.Label")
+        Me.ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
         '
         'ResViewTSMI
         '
         Me.ResViewTSMI.Name = "ResViewTSMI"
         Me.ResViewTSMI.Size = New System.Drawing.Size(196, 22)
-        Me.ResViewTSMI.Text = LocalizationService.ForSection("Designer.Main")("ViewResources.Label")
+        Me.ResViewTSMI.Text = "View resources for "
         '
         'TreeViewCMS
         '
@@ -4403,13 +4406,13 @@ Partial Class MainForm
         '
         Me.ExpandToolStripMenuItem.Name = "ExpandToolStripMenuItem"
         Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.ExpandToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ExpandItem.Label")
+        Me.ExpandToolStripMenuItem.Text = "Expand item"
         '
         'AccessDirectoryToolStripMenuItem
         '
         Me.AccessDirectoryToolStripMenuItem.Name = "AccessDirectoryToolStripMenuItem"
         Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.AccessDirectoryToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("AccessDirectory.Label")
+        Me.AccessDirectoryToolStripMenuItem.Text = "Access directory"
         '
         'ToolStripSeparator23
         '
@@ -4420,7 +4423,7 @@ Partial Class MainForm
         '
         Me.UnloadProjectToolStripMenuItem1.Name = "UnloadProjectToolStripMenuItem1"
         Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(218, 22)
-        Me.UnloadProjectToolStripMenuItem1.Text = LocalizationService.ForSection("Designer.Main")("UnloadProject.Label")
+        Me.UnloadProjectToolStripMenuItem1.Text = "Unload project"
         '
         'ToolStripSeparator24
         '
@@ -4432,19 +4435,19 @@ Partial Class MainForm
         Me.CopyDeploymentToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OfAllArchitecturesToolStripMenuItem, Me.OfSelectedArchitectureToolStripMenuItem, Me.ToolStripSeparator25, Me.ForX86ArchitectureToolStripMenuItem, Me.ForAmd64ArchitectureToolStripMenuItem, Me.ForARMArchitectureToolStripMenuItem, Me.ForARM64ArchitectureToolStripMenuItem})
         Me.CopyDeploymentToolsToolStripMenuItem.Name = "CopyDeploymentToolsToolStripMenuItem"
         Me.CopyDeploymentToolsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.CopyDeploymentToolsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Copy.Deployment.Tools.Label")
+        Me.CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
         '
         'OfAllArchitecturesToolStripMenuItem
         '
         Me.OfAllArchitecturesToolStripMenuItem.Name = "OfAllArchitecturesToolStripMenuItem"
         Me.OfAllArchitecturesToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.OfAllArchitecturesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("AllArchitectures.Label")
+        Me.OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
         '
         'OfSelectedArchitectureToolStripMenuItem
         '
         Me.OfSelectedArchitectureToolStripMenuItem.Name = "OfSelectedArchitectureToolStripMenuItem"
         Me.OfSelectedArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.OfSelectedArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Selected.Architecture.Label")
+        Me.OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
         '
         'ToolStripSeparator25
         '
@@ -4455,25 +4458,25 @@ Partial Class MainForm
         '
         Me.ForX86ArchitectureToolStripMenuItem.Name = "ForX86ArchitectureToolStripMenuItem"
         Me.ForX86ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.ForX86ArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Xarchitecture.Label")
+        Me.ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
         '
         'ForAmd64ArchitectureToolStripMenuItem
         '
         Me.ForAmd64ArchitectureToolStripMenuItem.Name = "ForAmd64ArchitectureToolStripMenuItem"
         Me.ForAmd64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.ForAmd64ArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Amarkdown.Architecture.Label")
+        Me.ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
         '
         'ForARMArchitectureToolStripMenuItem
         '
         Me.ForARMArchitectureToolStripMenuItem.Name = "ForARMArchitectureToolStripMenuItem"
         Me.ForARMArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.ForARMArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ARM.Label")
+        Me.ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
         '
         'ForARM64ArchitectureToolStripMenuItem
         '
         Me.ForARM64ArchitectureToolStripMenuItem.Name = "ForARM64ArchitectureToolStripMenuItem"
         Me.ForARM64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.ForARM64ArchitectureToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ARM64.Label")
+        Me.ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
         '
         'ToolStripSeparator27
         '
@@ -4485,19 +4488,19 @@ Partial Class MainForm
         Me.ImageOperationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MountImageToolStripMenuItem, Me.UnmountImageToolStripMenuItem, Me.ToolStripSeparator29, Me.RemoveVolumeImagesToolStripMenuItem, Me.SwitchImageIndexesToolStripMenuItem1})
         Me.ImageOperationsToolStripMenuItem.Name = "ImageOperationsToolStripMenuItem"
         Me.ImageOperationsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.ImageOperationsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ImageOperations.Label")
+        Me.ImageOperationsToolStripMenuItem.Text = "Image operations"
         '
         'MountImageToolStripMenuItem
         '
         Me.MountImageToolStripMenuItem.Name = "MountImageToolStripMenuItem"
         Me.MountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.MountImageToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("MountImage.Button")
+        Me.MountImageToolStripMenuItem.Text = "Mount image..."
         '
         'UnmountImageToolStripMenuItem
         '
         Me.UnmountImageToolStripMenuItem.Name = "UnmountImageToolStripMenuItem"
         Me.UnmountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.UnmountImageToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("UnmountImage.Button")
+        Me.UnmountImageToolStripMenuItem.Text = "Unmount image..."
         '
         'ToolStripSeparator29
         '
@@ -4508,13 +4511,13 @@ Partial Class MainForm
         '
         Me.RemoveVolumeImagesToolStripMenuItem.Name = "RemoveVolumeImagesToolStripMenuItem"
         Me.RemoveVolumeImagesToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.RemoveVolumeImagesToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Remove.VolumeImages.Button")
+        Me.RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
         '
         'SwitchImageIndexesToolStripMenuItem1
         '
         Me.SwitchImageIndexesToolStripMenuItem1.Name = "SwitchImageIndexesToolStripMenuItem1"
         Me.SwitchImageIndexesToolStripMenuItem1.Size = New System.Drawing.Size(210, 22)
-        Me.SwitchImageIndexesToolStripMenuItem1.Text = LocalizationService.ForSection("Designer.Main")("Switch.Image.Indexes.Button")
+        Me.SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
         '
         'ToolStripSeparator30
         '
@@ -4526,19 +4529,19 @@ Partial Class MainForm
         Me.UnattendedAnswerFilesToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ManageToolStripMenuItem, Me.CreationWizardToolStripMenuItem})
         Me.UnattendedAnswerFilesToolStripMenuItem1.Name = "UnattendedAnswerFilesToolStripMenuItem1"
         Me.UnattendedAnswerFilesToolStripMenuItem1.Size = New System.Drawing.Size(218, 22)
-        Me.UnattendedAnswerFilesToolStripMenuItem1.Text = LocalizationService.ForSection("Designer.Main")("Unattended.Answer.Label")
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
         '
         'ManageToolStripMenuItem
         '
         Me.ManageToolStripMenuItem.Name = "ManageToolStripMenuItem"
         Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
-        Me.ManageToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Manage.Label")
+        Me.ManageToolStripMenuItem.Text = "Manage"
         '
         'CreationWizardToolStripMenuItem
         '
         Me.CreationWizardToolStripMenuItem.Name = "CreationWizardToolStripMenuItem"
         Me.CreationWizardToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
-        Me.CreationWizardToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Create.Label")
+        Me.CreationWizardToolStripMenuItem.Text = "Create"
         '
         'ToolStripSeparator31
         '
@@ -4549,7 +4552,7 @@ Partial Class MainForm
         '
         Me.ScratchDirectorySettingsToolStripMenuItem.Name = "ScratchDirectorySettingsToolStripMenuItem"
         Me.ScratchDirectorySettingsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.ScratchDirectorySettingsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Configure.Scratch.Dir.Label")
+        Me.ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
         '
         'ToolStripSeparator32
         '
@@ -4560,7 +4563,7 @@ Partial Class MainForm
         '
         Me.ManageReportsToolStripMenuItem.Name = "ManageReportsToolStripMenuItem"
         Me.ManageReportsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.ManageReportsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ManageReports.Label")
+        Me.ManageReportsToolStripMenuItem.Text = "Manage reports"
         '
         'ToolStripSeparator33
         '
@@ -4572,19 +4575,19 @@ Partial Class MainForm
         Me.AddToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewFileToolStripMenuItem, Me.ExistingFileToolStripMenuItem})
         Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
         Me.AddToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
-        Me.AddToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Add.Button")
+        Me.AddToolStripMenuItem.Text = "Add"
         '
         'NewFileToolStripMenuItem
         '
         Me.NewFileToolStripMenuItem.Name = "NewFileToolStripMenuItem"
         Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.NewFileToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("NewFile.Button")
+        Me.NewFileToolStripMenuItem.Text = "New file..."
         '
         'ExistingFileToolStripMenuItem
         '
         Me.ExistingFileToolStripMenuItem.Name = "ExistingFileToolStripMenuItem"
         Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
-        Me.ExistingFileToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("ExistingFile.Button")
+        Me.ExistingFileToolStripMenuItem.Text = "Existing file..."
         '
         'ADKCopierBW
         '
@@ -4607,17 +4610,17 @@ Partial Class MainForm
         '
         Me.SaveResourceToolStripMenuItem.Name = "SaveResourceToolStripMenuItem"
         Me.SaveResourceToolStripMenuItem.Size = New System.Drawing.Size(130, 22)
-        Me.SaveResourceToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("SaveResource.Button")
+        Me.SaveResourceToolStripMenuItem.Text = "Save resource..."
         '
         'CopyToolStripMenuItem
         '
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
         Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(130, 22)
-        Me.CopyToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("CopyResource.Label")
+        Me.CopyToolStripMenuItem.Text = "Copy resource"
         '
         'AppxResSFD
         '
-        Me.AppxResSFD.Filter = LocalizationService.ForSection("Designer.Main")("PngFiles.Filter")
+        Me.AppxResSFD.Filter = "PNG files|*.png"
         '
         'Notifications
         '
@@ -4633,13 +4636,13 @@ Partial Class MainForm
         '
         Me.MicrosoftAppsToolStripMenuItem.Name = "MicrosoftAppsToolStripMenuItem"
         Me.MicrosoftAppsToolStripMenuItem.Size = New System.Drawing.Size(319, 22)
-        Me.MicrosoftAppsToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Visit.Microsoft.Apps.Label")
+        Me.MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
         '
         'MicrosoftStoreGenerationProjectToolStripMenuItem
         '
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem.Name = "MicrosoftStoreGenerationProjectToolStripMenuItem"
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem.Size = New System.Drawing.Size(319, 22)
-        Me.MicrosoftStoreGenerationProjectToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Visit.Microsoft.Label")
+        Me.MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
         '
         'ToolStripSeparator36
         '
@@ -4650,11 +4653,11 @@ Partial Class MainForm
         '
         Me.AppxDownloadHelpToolStripMenuItem.Name = "AppxDownloadHelpToolStripMenuItem"
         Me.AppxDownloadHelpToolStripMenuItem.Size = New System.Drawing.Size(319, 22)
-        Me.AppxDownloadHelpToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Iget.Apps.Label")
+        Me.AppxDownloadHelpToolStripMenuItem.Text = "How do I get applications?"
         '
         'ImgInfoSFD
         '
-        Me.ImgInfoSFD.Filter = LocalizationService.ForSection("Designer.Main")("MarkdownFiles.Filter")
+        Me.ImgInfoSFD.Filter = "Markdown files|*.md"
         '
         'Timer1
         '
@@ -4688,7 +4691,7 @@ Partial Class MainForm
         '
         Me.GetImageFileInformationToolStripMenuItem.Name = "GetImageFileInformationToolStripMenuItem"
         Me.GetImageFileInformationToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
-        Me.GetImageFileInformationToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Get.ImageFile.Button")
+        Me.GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
         '
         'ToolStripSeparator39
         '
@@ -4699,7 +4702,7 @@ Partial Class MainForm
         '
         Me.SaveCompleteImageInformationToolStripMenuItem.Name = "SaveCompleteImageInformationToolStripMenuItem"
         Me.SaveCompleteImageInformationToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
-        Me.SaveCompleteImageInformationToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Save.Complete.Image.Button")
+        Me.SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
         '
         'ToolStripSeparator40
         '
@@ -4710,13 +4713,13 @@ Partial Class MainForm
         '
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Name = "CreateDiscImageWithThisFileToolStripMenuItem"
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
-        Me.CreateDiscImageWithThisFileToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Create.Disc.ImageFile.Button")
+        Me.CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
         '
         'UploadThisImageToMyWDSServerToolStripMenuItem
         '
         Me.UploadThisImageToMyWDSServerToolStripMenuItem.Name = "UploadThisImageToMyWDSServerToolStripMenuItem"
         Me.UploadThisImageToMyWDSServerToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
-        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Text = LocalizationService.ForSection("Designer.Main")("Upload.Image.My.Button")
+        Me.UploadThisImageToMyWDSServerToolStripMenuItem.Text = "Upload this image to my WDS server..."
         '
         'WIEDownloaderBW
         '
@@ -4741,13 +4744,13 @@ Partial Class MainForm
         '
         Me.ApplyWimTSMI.Name = "ApplyWimTSMI"
         Me.ApplyWimTSMI.Size = New System.Drawing.Size(194, 22)
-        Me.ApplyWimTSMI.Text = LocalizationService.ForSection("Designer.Main")("ApplyWimswmesd.Button")
+        Me.ApplyWimTSMI.Text = "Apply WIM/SWM/ESD file..."
         '
         'ApplyFfuTSMI
         '
         Me.ApplyFfuTSMI.Name = "ApplyFfuTSMI"
         Me.ApplyFfuTSMI.Size = New System.Drawing.Size(194, 22)
-        Me.ApplyFfuTSMI.Text = LocalizationService.ForSection("Designer.Main")("Apply.FFU.File.Button")
+        Me.ApplyFfuTSMI.Text = "Apply FFU file..."
         '
         'ImgCaptureModeCMS
         '
@@ -4760,13 +4763,13 @@ Partial Class MainForm
         '
         Me.CaptureWimTSMI.Name = "CaptureWimTSMI"
         Me.CaptureWimTSMI.Size = New System.Drawing.Size(272, 22)
-        Me.CaptureWimTSMI.Text = LocalizationService.ForSection("Designer.Main")("Capture.Install.Dir.Button")
+        Me.CaptureWimTSMI.Text = "Capture installation directory to WIM file..."
         '
         'CaptureFfuTSMI
         '
         Me.CaptureFfuTSMI.Name = "CaptureFfuTSMI"
         Me.CaptureFfuTSMI.Size = New System.Drawing.Size(272, 22)
-        Me.CaptureFfuTSMI.Text = LocalizationService.ForSection("Designer.Main")("Capture.Install.Drive.Button")
+        Me.CaptureFfuTSMI.Text = "Capture installation drive to FFU file..."
         '
         'SSETimer
         '
@@ -4789,7 +4792,7 @@ Partial Class MainForm
         Me.MinimumSize = New System.Drawing.Size(1280, 720)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
-        Me.Text = LocalizationService.ForSection("Designer.Main")("DISMTools.Label")
+        Me.Text = "DISMTools"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.HomePanel.ResumeLayout(False)

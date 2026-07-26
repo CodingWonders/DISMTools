@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class GetCapabilityInfoDlg
     Inherits System.Windows.Forms.Form
 
@@ -82,7 +82,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(38, 13)
         Me.Label2.TabIndex = 9
-        Me.Label2.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Ready.Label")
+        Me.Label2.Text = "Ready"
         '
         'FeatureInfoPanel
         '
@@ -138,12 +138,12 @@ Partial Class GetCapabilityInfoDlg
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Identity.Column")
+        Me.ColumnHeader1.Text = "Capability identity"
         Me.ColumnHeader1.Width = 298
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("State.Column")
+        Me.ColumnHeader2.Text = "State"
         Me.ColumnHeader2.Width = 118
         '
         'SearchPanel
@@ -254,7 +254,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(97, 13)
         Me.Label22.TabIndex = 0
-        Me.Label22.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Identity.Label")
+        Me.Label22.Text = "Capability identity:"
         '
         'Label23
         '
@@ -264,7 +264,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label23.Size = New System.Drawing.Size(38, 15)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DynamicValue.Label")
+        Me.Label23.Text = "Label8"
         Me.Label23.UseMnemonic = False
         '
         'Label24
@@ -275,7 +275,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label24.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label24.Size = New System.Drawing.Size(87, 17)
         Me.Label24.TabIndex = 0
-        Me.Label24.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("CapabilityName.Label")
+        Me.Label24.Text = "Capability name:"
         '
         'Label25
         '
@@ -286,7 +286,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label25.Size = New System.Drawing.Size(38, 15)
         Me.Label25.TabIndex = 0
-        Me.Label25.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DynamicValue.Label")
+        Me.Label25.Text = "Label8"
         Me.Label25.UseMnemonic = False
         '
         'Label26
@@ -297,7 +297,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label26.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label26.Size = New System.Drawing.Size(86, 17)
         Me.Label26.TabIndex = 0
-        Me.Label26.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("CapabilityState.Label")
+        Me.Label26.Text = "Capability state:"
         '
         'Label35
         '
@@ -308,7 +308,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label35.Size = New System.Drawing.Size(38, 15)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DynamicValue.Label")
+        Me.Label35.Text = "Label8"
         Me.Label35.UseMnemonic = False
         '
         'Label31
@@ -319,7 +319,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label31.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label31.Size = New System.Drawing.Size(74, 17)
         Me.Label31.TabIndex = 0
-        Me.Label31.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DisplayName.Label")
+        Me.Label31.Text = "Display name:"
         '
         'Label32
         '
@@ -330,7 +330,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label32.Size = New System.Drawing.Size(38, 15)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DynamicValue.Label")
+        Me.Label32.Text = "Label8"
         Me.Label32.UseMnemonic = False
         '
         'Label41
@@ -341,7 +341,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label41.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label41.Size = New System.Drawing.Size(113, 17)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Description.Label")
+        Me.Label41.Text = "Capability description:"
         '
         'Label40
         '
@@ -352,7 +352,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label40.Size = New System.Drawing.Size(38, 15)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DynamicValue.Label")
+        Me.Label40.Text = "Label8"
         Me.Label40.UseMnemonic = False
         '
         'Label43
@@ -363,7 +363,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label43.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label43.Size = New System.Drawing.Size(35, 17)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Sizes.Label")
+        Me.Label43.Text = "Sizes:"
         '
         'Label42
         '
@@ -374,7 +374,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label42.Size = New System.Drawing.Size(38, 15)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("DynamicValue.Label")
+        Me.Label42.Text = "Label8"
         Me.Label42.UseMnemonic = False
         '
         'Label55
@@ -405,7 +405,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(436, 36)
         Me.Label36.TabIndex = 0
-        Me.Label36.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("CapabilityInfo.Label")
+        Me.Label36.Text = "Capability information"
         Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -425,7 +425,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(436, 396)
         Me.Label37.TabIndex = 0
-        Me.Label37.Text = LocalizationService.ForSection("Designer.GetCapInfo")("SelectCapability.Label")
+        Me.Label37.Text = "Select an installed capability on the left to view its information here"
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel4
@@ -443,7 +443,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(96, 23)
         Me.Button2.TabIndex = 10
-        Me.Button2.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Save.Button")
+        Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -453,7 +453,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(152, 23)
         Me.Button1.TabIndex = 11
-        Me.Button1.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Look.Item.Online.Button")
+        Me.Button1.Text = "Look this item online"
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
         '
@@ -488,7 +488,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Name = "GetCapabilityInfoDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.CapabilityInfo")("Get.Label")
+        Me.Text = "Get capability information"
         Me.FeatureInfoPanel.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)

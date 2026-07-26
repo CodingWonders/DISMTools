@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class EnvVarManagementForm
     Inherits System.Windows.Forms.Form
 
@@ -96,7 +96,7 @@ Partial Class EnvVarManagementForm
         Me.SaveAllChangesBtn.Name = "SaveAllChangesBtn"
         Me.SaveAllChangesBtn.Size = New System.Drawing.Size(137, 23)
         Me.SaveAllChangesBtn.TabIndex = 0
-        Me.SaveAllChangesBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Save.Changes.Label")
+        Me.SaveAllChangesBtn.Text = "Save all changes"
         Me.SaveAllChangesBtn.UseVisualStyleBackColor = True
         '
         'HeaderContainerPanel
@@ -117,7 +117,8 @@ Partial Class EnvVarManagementForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(1240, 42)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = LocalizationService.ForSection("Designer.EnvVars")("Intro.Message")
+        Me.Label1.Text = "This tool lets you view and manage the environment variables of this target image" & _
+    ". Click the Save button to save any changes made to the environment variables."
         '
         'EnvVarContainerSplitPanel
         '
@@ -158,7 +159,7 @@ Partial Class EnvVarManagementForm
         Me.SysEnvVarGB.Size = New System.Drawing.Size(734, 260)
         Me.SysEnvVarGB.TabIndex = 0
         Me.SysEnvVarGB.TabStop = False
-        Me.SysEnvVarGB.Text = LocalizationService.ForSection("Designer.EnvVars")("TargetSystem.Label")
+        Me.SysEnvVarGB.Text = "Environment variables for the target system"
         '
         'SysEnvVarPanel
         '
@@ -185,12 +186,12 @@ Partial Class EnvVarManagementForm
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.EnvVars")("Name.Column")
+        Me.ColumnHeader3.Text = "Name"
         Me.ColumnHeader3.Width = 221
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.EnvVars")("Value.Column")
+        Me.ColumnHeader4.Text = "Value"
         Me.ColumnHeader4.Width = 476
         '
         'SysEnvVarActionPanel
@@ -212,7 +213,7 @@ Partial Class EnvVarManagementForm
         Me.RemoveMachineVarButton.Name = "RemoveMachineVarButton"
         Me.RemoveMachineVarButton.Size = New System.Drawing.Size(161, 23)
         Me.RemoveMachineVarButton.TabIndex = 0
-        Me.RemoveMachineVarButton.Text = LocalizationService.ForSection("Designer.EnvVars")("Remove.Machine.Label")
+        Me.RemoveMachineVarButton.Text = "Remove machine variable"
         Me.RemoveMachineVarButton.UseVisualStyleBackColor = True
         '
         'AddMachineVarButton
@@ -223,7 +224,7 @@ Partial Class EnvVarManagementForm
         Me.AddMachineVarButton.Name = "AddMachineVarButton"
         Me.AddMachineVarButton.Size = New System.Drawing.Size(161, 23)
         Me.AddMachineVarButton.TabIndex = 0
-        Me.AddMachineVarButton.Text = LocalizationService.ForSection("Designer.EnvVars")("Add.Machine.Variable.Button")
+        Me.AddMachineVarButton.Text = "Add machine variable..."
         Me.AddMachineVarButton.UseVisualStyleBackColor = True
         '
         'UserEnvVarGB
@@ -236,7 +237,7 @@ Partial Class EnvVarManagementForm
         Me.UserEnvVarGB.Size = New System.Drawing.Size(734, 260)
         Me.UserEnvVarGB.TabIndex = 0
         Me.UserEnvVarGB.TabStop = False
-        Me.UserEnvVarGB.Text = LocalizationService.ForSection("Designer.EnvVars")("DefaultUser.Label")
+        Me.UserEnvVarGB.Text = "Environment variables for default user profiles"
         '
         'UserEnvVarPanel
         '
@@ -263,12 +264,12 @@ Partial Class EnvVarManagementForm
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.EnvVars")("Name.Column")
+        Me.ColumnHeader1.Text = "Name"
         Me.ColumnHeader1.Width = 221
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.EnvVars")("Value.Column")
+        Me.ColumnHeader2.Text = "Value"
         Me.ColumnHeader2.Width = 476
         '
         'UserEnvVarActionPanel
@@ -290,7 +291,7 @@ Partial Class EnvVarManagementForm
         Me.RemoveUserVarBtn.Name = "RemoveUserVarBtn"
         Me.RemoveUserVarBtn.Size = New System.Drawing.Size(161, 23)
         Me.RemoveUserVarBtn.TabIndex = 0
-        Me.RemoveUserVarBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Remove.User.Variable.Label")
+        Me.RemoveUserVarBtn.Text = "Remove user variable"
         Me.RemoveUserVarBtn.UseVisualStyleBackColor = True
         '
         'AddUserVarButton
@@ -301,7 +302,7 @@ Partial Class EnvVarManagementForm
         Me.AddUserVarButton.Name = "AddUserVarButton"
         Me.AddUserVarButton.Size = New System.Drawing.Size(161, 23)
         Me.AddUserVarButton.TabIndex = 0
-        Me.AddUserVarButton.Text = LocalizationService.ForSection("Designer.EnvVars")("Add.User.Variable.Button")
+        Me.AddUserVarButton.Text = "Add user variable..."
         Me.AddUserVarButton.UseVisualStyleBackColor = True
         '
         'EnvVarDetailsPanel
@@ -333,7 +334,7 @@ Partial Class EnvVarManagementForm
         Me.SaveVarBtn.Name = "SaveVarBtn"
         Me.SaveVarBtn.Size = New System.Drawing.Size(99, 23)
         Me.SaveVarBtn.TabIndex = 5
-        Me.SaveVarBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("SaveVariable.Label")
+        Me.SaveVarBtn.Text = "Save Variable"
         Me.SaveVarBtn.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -375,7 +376,7 @@ Partial Class EnvVarManagementForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(40, 13)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = LocalizationService.ForSection("Designer.EnvVars")("Scope.Label")
+        Me.Label4.Text = "Scope:"
         '
         'Label7
         '
@@ -387,7 +388,8 @@ Partial Class EnvVarManagementForm
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(452, 36)
         Me.Label7.TabIndex = 2
-        Me.Label7.Text = LocalizationService.ForSection("Designer.EnvVars")("Hierarchical.Values.Message")
+        Me.Label7.Text = "This variable is hierarchical. Values added to the system variable will be either" & _
+    " prepended to or replaced by the user variable when the user profile is loaded."
         Me.Label7.Visible = False
         '
         'Label6
@@ -397,7 +399,7 @@ Partial Class EnvVarManagementForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(345, 13)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = LocalizationService.ForSection("Designer.EnvVars")("Variables.Location.Label")
+        Me.Label6.Text = "* Environment variables contained within this value are not expanded."
         '
         'Label5
         '
@@ -406,7 +408,7 @@ Partial Class EnvVarManagementForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 13)
         Me.Label5.TabIndex = 2
-        Me.Label5.Text = LocalizationService.ForSection("Designer.EnvVars")("Value.Label")
+        Me.Label5.Text = "Value:"
         '
         'Label3
         '
@@ -415,7 +417,7 @@ Partial Class EnvVarManagementForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(38, 13)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = LocalizationService.ForSection("Designer.EnvVars")("Name.Label")
+        Me.Label3.Text = "Name:"
         '
         'Label2
         '
@@ -425,7 +427,7 @@ Partial Class EnvVarManagementForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(256, 19)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Designer.EnvVars")("VariableInfo.Label")
+        Me.Label2.Text = "Environment Variable Information:"
         '
         'PictureBox1
         '
@@ -465,7 +467,7 @@ Partial Class EnvVarManagementForm
         Me.CopyToUserScopeBtn.Name = "CopyToUserScopeBtn"
         Me.CopyToUserScopeBtn.Size = New System.Drawing.Size(219, 23)
         Me.CopyToUserScopeBtn.TabIndex = 7
-        Me.CopyToUserScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Copy.Default.User.Label")
+        Me.CopyToUserScopeBtn.Text = "Copy to default user scope"
         Me.CopyToUserScopeBtn.UseVisualStyleBackColor = True
         '
         'CopyToMachineScopeBtn
@@ -476,7 +478,7 @@ Partial Class EnvVarManagementForm
         Me.CopyToMachineScopeBtn.Name = "CopyToMachineScopeBtn"
         Me.CopyToMachineScopeBtn.Size = New System.Drawing.Size(218, 23)
         Me.CopyToMachineScopeBtn.TabIndex = 5
-        Me.CopyToMachineScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Copy.Machine.Scope.Label")
+        Me.CopyToMachineScopeBtn.Text = "Copy to machine scope"
         Me.CopyToMachineScopeBtn.UseVisualStyleBackColor = True
         '
         'MoveToMachineScopeBtn
@@ -487,7 +489,7 @@ Partial Class EnvVarManagementForm
         Me.MoveToMachineScopeBtn.Name = "MoveToMachineScopeBtn"
         Me.MoveToMachineScopeBtn.Size = New System.Drawing.Size(218, 23)
         Me.MoveToMachineScopeBtn.TabIndex = 4
-        Me.MoveToMachineScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Move.Machine.Scope.Label")
+        Me.MoveToMachineScopeBtn.Text = "Move to machine scope"
         Me.MoveToMachineScopeBtn.UseVisualStyleBackColor = True
         '
         'MoveToUserScopeBtn
@@ -498,7 +500,7 @@ Partial Class EnvVarManagementForm
         Me.MoveToUserScopeBtn.Name = "MoveToUserScopeBtn"
         Me.MoveToUserScopeBtn.Size = New System.Drawing.Size(219, 23)
         Me.MoveToUserScopeBtn.TabIndex = 4
-        Me.MoveToUserScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Move.Default.User.Label")
+        Me.MoveToUserScopeBtn.Text = "Move to default user scope"
         Me.MoveToUserScopeBtn.UseVisualStyleBackColor = True
         '
         'EnvVarManagementForm
@@ -514,7 +516,7 @@ Partial Class EnvVarManagementForm
         Me.MinimumSize = New System.Drawing.Size(1280, 720)
         Me.Name = "EnvVarManagementForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = LocalizationService.ForSection("Designer.EnvVars")("SystemVariables.Label")
+        Me.Text = "System Environment Variable Management"
         Me.ButtonContainerPanel.ResumeLayout(False)
         Me.HeaderContainerPanel.ResumeLayout(False)
         Me.EnvVarContainerSplitPanel.Panel1.ResumeLayout(False)

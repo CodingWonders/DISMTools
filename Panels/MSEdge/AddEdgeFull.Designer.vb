@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddEdgeFull
     Inherits System.Windows.Forms.Form
 
@@ -56,7 +56,7 @@ Partial Class AddEdgeFull
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AddEdgeFull")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -66,7 +66,7 @@ Partial Class AddEdgeFull
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AddEdgeFull")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Win10Title
         '
@@ -88,7 +88,7 @@ Partial Class AddEdgeFull
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(197, 30)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = LocalizationService.ForSection("Designer.AddEdgeFull")("Microsoft.Label")
+        Me.Label1.Text = "Add Microsoft Edge"
         '
         'PictureBox1
         '
@@ -117,7 +117,7 @@ Partial Class AddEdgeFull
         Me.Name = "AddEdgeFull"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.AddEdgeFull")("Microsoft.Label")
+        Me.Text = "Add Microsoft Edge"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()

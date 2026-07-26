@@ -36,7 +36,7 @@ Partial Class LockVolumeDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(352, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("Wait.Message")
+        Me.Label1.Text = "Please wait while we lock this volume. This will take a couple of seconds."
         '
         'Label2
         '
@@ -45,7 +45,7 @@ Partial Class LockVolumeDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(68, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("DriveLetter.Label")
+        Me.Label2.Text = "Drive Letter:"
         '
         'DrLetterLabel
         '
@@ -62,7 +62,7 @@ Partial Class LockVolumeDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(110, 13)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("PersistentVolumeId.Label")
+        Me.Label4.Text = "Persistent Volume ID:"
         '
         'PersistentVolumeIdLabel
         '
@@ -94,7 +94,7 @@ Partial Class LockVolumeDialog
         Me.Name = "LockVolumeDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("Title")
+        Me.Text = "Locking volume..."
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

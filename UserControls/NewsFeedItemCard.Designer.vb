@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class NewsFeedItemCard
     Inherits System.Windows.Forms.UserControl
 
@@ -40,7 +40,7 @@ Partial Class NewsFeedItemCard
         Me.FeedItemLinkLabel.Size = New System.Drawing.Size(293, 34)
         Me.FeedItemLinkLabel.TabIndex = 0
         Me.FeedItemLinkLabel.TabStop = True
-        Me.FeedItemLinkLabel.Text = LocalizationService.ForSection("Designer.NewsFeedCard")("Item.Title")
+        Me.FeedItemLinkLabel.Text = "Feed Item Title"
         '
         'FeedItemDateLabel
         '
@@ -51,7 +51,7 @@ Partial Class NewsFeedItemCard
         Me.FeedItemDateLabel.Name = "FeedItemDateLabel"
         Me.FeedItemDateLabel.Size = New System.Drawing.Size(217, 34)
         Me.FeedItemDateLabel.TabIndex = 1
-        Me.FeedItemDateLabel.Text = LocalizationService.ForSection("Designer.NewsFeedCard")("ItemDate.Label")
+        Me.FeedItemDateLabel.Text = "Item Date"
         Me.FeedItemDateLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'NewsFeedItemCard

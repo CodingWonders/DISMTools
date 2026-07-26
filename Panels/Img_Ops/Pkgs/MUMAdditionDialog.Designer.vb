@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MUMAdditionDialog
     Inherits System.Windows.Forms.Form
 
@@ -57,7 +57,7 @@ Partial Class MUMAdditionDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.MUMAdd")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -68,7 +68,7 @@ Partial Class MUMAdditionDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.MUMAdd")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -79,7 +79,7 @@ Partial Class MUMAdditionDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 46)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.MUMAdd")("DialogHelp.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'TextBox1
         '
@@ -97,7 +97,7 @@ Partial Class MUMAdditionDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(160, 13)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Designer.MUMAdd")("Path.Manifest.File.Label")
+        Me.Label2.Text = "Path of the manifest file to add:"
         '
         'Button1
         '
@@ -106,12 +106,12 @@ Partial Class MUMAdditionDialog
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 3
-        Me.Button1.Text = LocalizationService.ForSection("Designer.MUMAdd")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.MUMAdd")("MUMFiles.Filter")
+        Me.OpenFileDialog1.Filter = "Microsoft Update Manifest (MUM) files|update.mum"
         '
         'MUMAdditionDialog
         '
@@ -132,7 +132,7 @@ Partial Class MUMAdditionDialog
         Me.Name = "MUMAdditionDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.MUMAdd")("Update.Manifest.Label")
+        Me.Text = "Add update manifest"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

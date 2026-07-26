@@ -247,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="RuntimeFormLocalization.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>

@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class PECustomizerDialog
     Inherits System.Windows.Forms.Form
 
@@ -98,7 +98,7 @@ Partial Class PECustomizerDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -109,7 +109,7 @@ Partial Class PECustomizerDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.PECustomizer")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -118,7 +118,7 @@ Partial Class PECustomizerDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(287, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Customize.Session.Label")
+        Me.Label1.Text = "Customize the Preinstallation Environment for this session:"
         '
         'GroupBox1
         '
@@ -131,7 +131,7 @@ Partial Class PECustomizerDialog
         Me.GroupBox1.Size = New System.Drawing.Size(556, 100)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Wallpaper.Group")
+        Me.GroupBox1.Text = "Wallpaper"
         '
         'Button1
         '
@@ -141,7 +141,7 @@ Partial Class PECustomizerDialog
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -151,7 +151,7 @@ Partial Class PECustomizerDialog
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(199, 17)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("My.Desktop.CheckBox")
+        Me.CheckBox1.Text = "Use my current desktop background"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -171,7 +171,7 @@ Partial Class PECustomizerDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(206, 13)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Path.Custom.Wallpaper.Label")
+        Me.Label2.Text = "Path to custom wallpaper (JPG files only):"
         '
         'CheckBox2
         '
@@ -182,7 +182,7 @@ Partial Class PECustomizerDialog
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(508, 17)
         Me.CheckBox2.TabIndex = 3
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Show.Version.Top.CheckBox")
+        Me.CheckBox2.Text = "Show version information on the top-left corner of the primary screen"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -194,7 +194,7 @@ Partial Class PECustomizerDialog
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(324, 17)
         Me.CheckBox3.TabIndex = 3
-        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Display.Images.CheckBox")
+        Me.CheckBox3.Text = "Display images and groups in a WDS server in a graphical view"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -209,7 +209,8 @@ Partial Class PECustomizerDialog
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(502, 32)
         Me.CheckBox4.TabIndex = 3
-        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Show.Report.Hardware.Message")
+        Me.CheckBox4.Text = "Show a report with hardware IDs of unknown devices when launching the Driver Inst" & _
+    "allation Module"
         Me.CheckBox4.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
@@ -222,19 +223,19 @@ Partial Class PECustomizerDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(508, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Default.Partitio.Table.Label")
+        Me.Label3.Text = "Default partition table override:"
         '
         'ComboBox1
         '
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Item"), LocalizationService.ForSection("Designer.PECustomizer")("Default.Mbrpartition.Item"), LocalizationService.ForSection("Designer.PECustomizer")("Default.Gptpartition.Item")})
+        Me.ComboBox1.Items.AddRange(New Object() {"Do not use a partition table override", "Default to using a MBR partition table regardless of the firmware type", "Default to using a GPT partition table regardless of the firmware type"})
         Me.ComboBox1.Location = New System.Drawing.Point(9, 125)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(511, 21)
         Me.ComboBox1.TabIndex = 4
-        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Item")
+        Me.ComboBox1.Text = "Do not use a partition table override"
         '
         'Label4
         '
@@ -245,7 +246,8 @@ Partial Class PECustomizerDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(489, 13)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Message")
+        Me.Label4.Text = "Partition table overrides affect both disk configuration and boot file creation p" & _
+    "rocedures taken."
         '
         'Label5
         '
@@ -256,19 +258,21 @@ Partial Class PECustomizerDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(508, 13)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = LocalizationService.ForSection("Designer.PECustomizer")("SecureBoot.Label")
+        Me.Label5.Text = "On supported UEFI systems with Secure Boot and Windows UEFI CA 2023 certificates:" & _
+    ""
         '
         'ComboBox2
         '
         Me.ComboBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Version.Item"), LocalizationService.ForSection("Designer.PECustomizer.BootSign")("Windows.Production.PCA.Item"), LocalizationService.ForSection("Designer.PECustomizer.BootSign")("Windows.UEFI.CA.Item")})
+        Me.ComboBox2.Items.AddRange(New Object() {"Ask me which version of the boot binary to use", "Default to boot binaries signed with Microsoft Windows Production PCA 2011", "Default to boot binaries signed with Windows UEFI CA 2023, if available on my tar" & _
+                "get image"})
         Me.ComboBox2.Location = New System.Drawing.Point(9, 192)
         Me.ComboBox2.Name = "ComboBox2"
         Me.ComboBox2.Size = New System.Drawing.Size(511, 21)
         Me.ComboBox2.TabIndex = 4
-        Me.ComboBox2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Version.Item")
+        Me.ComboBox2.Text = "Ask me which version of the boot binary to use"
         '
         'Label6
         '
@@ -277,7 +281,8 @@ Partial Class PECustomizerDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(455, 13)
         Me.Label6.TabIndex = 5
-        Me.Label6.Text = LocalizationService.ForSection("Designer.PECustomizer")("Connection.Attempts.Label")
+        Me.Label6.Text = "Amount of connection attempts that should be considered when connecting to a WDS " & _
+    "server:"
         '
         'NumericUpDown1
         '
@@ -297,11 +302,11 @@ Partial Class PECustomizerDialog
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(113, 13)
         Me.Label7.TabIndex = 5
-        Me.Label7.Text = LocalizationService.ForSection("Designer.PECustomizer")("ConnectionAttempts.Label")
+        Me.Label7.Text = "connection attempt(s)"
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.PECustomizer")("JpgfilesJpg.Filter")
+        Me.OpenFileDialog1.Filter = "JPG files|*.jpg"
         '
         'CheckBox5
         '
@@ -313,7 +318,8 @@ Partial Class PECustomizerDialog
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(508, 32)
         Me.CheckBox5.TabIndex = 3
-        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.PECustomizer")("CopyAnswerFiles.Message")
+        Me.CheckBox5.Text = "Copy unattended answer files specified in the ISO creator to the Sysprep director" & _
+    "y of the target system"
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'Label8
@@ -323,7 +329,7 @@ Partial Class PECustomizerDialog
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(324, 13)
         Me.Label8.TabIndex = 5
-        Me.Label8.Text = LocalizationService.ForSection("Designer.PECustomizer")("Port.Used.PXE.Label")
+        Me.Label8.Text = "Port to be used by PXE Helper clients to send requests by default:"
         '
         'NumericUpDown2
         '
@@ -345,7 +351,8 @@ Partial Class PECustomizerDialog
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(508, 13)
         Me.Label9.TabIndex = 5
-        Me.Label9.Text = LocalizationService.ForSection("Designer.PECustomizer")("Pick.Default.Keyboard.Label")
+        Me.Label9.Text = "Pick the default keyboard layout to use in the Preinstallation Environment from t" & _
+    "he list below:"
         '
         'ListView1
         '
@@ -361,12 +368,12 @@ Partial Class PECustomizerDialog
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.PECustomizer")("LayoutCode.Column")
+        Me.ColumnHeader1.Text = "Layout Code"
         Me.ColumnHeader1.Width = 96
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.PECustomizer")("LayoutName.Column")
+        Me.ColumnHeader2.Text = "Layout Name"
         Me.ColumnHeader2.Width = 384
         '
         'Label10
@@ -376,7 +383,7 @@ Partial Class PECustomizerDialog
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(207, 13)
         Me.Label10.TabIndex = 1
-        Me.Label10.Text = LocalizationService.ForSection("Designer.PECustomizer")("Layout.Code.Selected.Label")
+        Me.Label10.Text = "Layout code of selected keyboard layout:"
         '
         'TextBox2
         '
@@ -393,7 +400,7 @@ Partial Class PECustomizerDialog
         Me.DefaultPolicySaveButton.Name = "DefaultPolicySaveButton"
         Me.DefaultPolicySaveButton.Size = New System.Drawing.Size(160, 23)
         Me.DefaultPolicySaveButton.TabIndex = 9
-        Me.DefaultPolicySaveButton.Text = LocalizationService.ForSection("Designer.PECustomizer")("Save.Default.Policies.Label")
+        Me.DefaultPolicySaveButton.Text = "Save to default policies"
         Me.DefaultPolicySaveButton.UseVisualStyleBackColor = True
         '
         'TabControl1
@@ -427,7 +434,7 @@ Partial Class PECustomizerDialog
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(548, 256)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = LocalizationService.ForSection("Designer.PECustomizer")("General.Tab")
+        Me.TabPage1.Text = "General"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'TabPage2
@@ -444,7 +451,7 @@ Partial Class PECustomizerDialog
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(548, 256)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = LocalizationService.ForSection("Designer.PECustomizer")("PXEs.Tab")
+        Me.TabPage2.Text = "PXE Helpers"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'TabPage3
@@ -460,7 +467,7 @@ Partial Class PECustomizerDialog
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Size = New System.Drawing.Size(548, 256)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = LocalizationService.ForSection("Designer.PECustomizer")("KeyboardLayouts.Tab")
+        Me.TabPage3.Text = "Keyboard Layouts"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
         'Label11
@@ -472,7 +479,8 @@ Partial Class PECustomizerDialog
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(492, 13)
         Me.Label11.TabIndex = 10
-        Me.Label11.Text = LocalizationService.ForSection("Designer.PECustomizer")("Option.Only.Take.Label")
+        Me.Label11.Text = "This option will only take effect on images that don't have any answer files appl" & _
+    "ied."
         '
         'CheckBox6
         '
@@ -483,7 +491,7 @@ Partial Class PECustomizerDialog
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(508, 17)
         Me.CheckBox6.TabIndex = 9
-        Me.CheckBox6.Text = LocalizationService.ForSection("Designer.PECustomizer")("KeyboardOverride.CheckBox")
+        Me.CheckBox6.Text = "Override keyboard layouts used by target images with the one I select here"
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'TabPage4
@@ -496,7 +504,7 @@ Partial Class PECustomizerDialog
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage4.Size = New System.Drawing.Size(548, 256)
         Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Unattended.Deployments.Tab")
+        Me.TabPage4.Text = "Unattended Deployments"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
         'Label12
@@ -508,19 +516,20 @@ Partial Class PECustomizerDialog
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(508, 13)
         Me.Label12.TabIndex = 5
-        Me.Label12.Text = LocalizationService.ForSection("Designer.PECustomizer")("Unattended.AnswerFile.Label")
+        Me.Label12.Text = "If an unattended answer file exists in both the ISO file and the Windows image fi" & _
+    "le:"
         '
         'ComboBox3
         '
         Me.ComboBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Resolve.Item"), LocalizationService.ForSection("Designer.PECustomizer.Conflict")("ISO.Item"), LocalizationService.ForSection("Designer.PECustomizer.Conflict")("WindowsImage.Item")})
+        Me.ComboBox3.Items.AddRange(New Object() {"Ask me how to resolve the conflict", "Handle the conflict by using the answer file of the ISO file", "Handle the conflict by using the answer file of the Windows image file"})
         Me.ComboBox3.Location = New System.Drawing.Point(12, 32)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(511, 21)
         Me.ComboBox3.TabIndex = 6
-        Me.ComboBox3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Resolve.Item")
+        Me.ComboBox3.Text = "Ask me how to resolve the conflict"
         '
         'Label13
         '
@@ -531,7 +540,7 @@ Partial Class PECustomizerDialog
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(508, 128)
         Me.Label13.TabIndex = 5
-        Me.Label13.Text = LocalizationService.ForSection("Designer.PECustomizer")("Assuming.Each.Answer.Message")
+        Me.Label13.Text = resources.GetString("Label13.Text")
         Me.Label13.Visible = False
         '
         'PECustomizerDialog
@@ -553,7 +562,7 @@ Partial Class PECustomizerDialog
         Me.Name = "PECustomizerDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.PECustomizer")("CustomizePE.Label")
+        Me.Text = "Customize Preinstallation Environment"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

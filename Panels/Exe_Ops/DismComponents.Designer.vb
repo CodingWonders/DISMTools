@@ -51,7 +51,7 @@ Partial Class DismComponents
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.DISMComponents")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'ListView1
         '
@@ -67,12 +67,12 @@ Partial Class DismComponents
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.DISMComponents")("Component.Column")
+        Me.ColumnHeader1.Text = "Component"
         Me.ColumnHeader1.Width = 250
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.DISMComponents")("Version.Column")
+        Me.ColumnHeader2.Text = "Version"
         Me.ColumnHeader2.Width = 238
         '
         'DismComponents
@@ -90,7 +90,7 @@ Partial Class DismComponents
         Me.Name = "DismComponents"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.DISMComponents")("Dismcomponents.Label")
+        Me.Text = "DISM Components"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

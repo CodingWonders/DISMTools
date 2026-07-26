@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class CapabilityFilterAssistantDialog
     Inherits System.Windows.Forms.Form
 
@@ -58,7 +58,7 @@ Partial Class CapabilityFilterAssistantDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("Apply.Button")
+        Me.OK_Button.Text = "Apply"
         '
         'Cancel_Button
         '
@@ -69,7 +69,7 @@ Partial Class CapabilityFilterAssistantDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("Clear.Button")
+        Me.Cancel_Button.Text = "Clear"
         '
         'TableLayoutPanel2
         '
@@ -99,7 +99,7 @@ Partial Class CapabilityFilterAssistantDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(117, 27)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("Name.Label")
+        Me.Label2.Text = "Name:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label3
@@ -110,7 +110,7 @@ Partial Class CapabilityFilterAssistantDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(117, 27)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("State.Label")
+        Me.Label3.Text = "State:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'TextBox1
@@ -125,7 +125,7 @@ Partial Class CapabilityFilterAssistantDialog
         '
         Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.CapabilityFilter")("AnyState.Item"), LocalizationService.ForSection("Designer.CapabilityFilter")("Installed.Item"), LocalizationService.ForSection("Designer.CapabilityFilter")("Install.Pending.Item"), LocalizationService.ForSection("Designer.CapabilityFilter")("Removed.Item")})
+        Me.ComboBox1.Items.AddRange(New Object() {"Any state", "Installed", "Installation Pending", "Removed"})
         Me.ComboBox1.Location = New System.Drawing.Point(126, 30)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(442, 21)
@@ -138,7 +138,7 @@ Partial Class CapabilityFilterAssistantDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(155, 13)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("FilterInfo.Prompt.Label")
+        Me.Label1.Text = "Filter capability information by:"
         '
         'CapabilityFilterAssistantDialog
         '
@@ -157,7 +157,7 @@ Partial Class CapabilityFilterAssistantDialog
         Me.Name = "CapabilityFilterAssistantDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("FilterInfo.Title")
+        Me.Text = "Filter capability information"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()

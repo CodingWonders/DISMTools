@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgAppend
     Inherits System.Windows.Forms.Form
 
@@ -81,7 +81,7 @@ Partial Class ImgAppend
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgAppend")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -92,7 +92,7 @@ Partial Class ImgAppend
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgAppend")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'GroupBox2
         '
@@ -120,7 +120,7 @@ Partial Class ImgAppend
         Me.GroupBox2.Size = New System.Drawing.Size(984, 278)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ImgAppend")("Options.Group")
+        Me.GroupBox2.Text = "Options"
         '
         'Button5
         '
@@ -131,7 +131,7 @@ Partial Class ImgAppend
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 13
-        Me.Button5.Text = LocalizationService.ForSection("Designer.ImgAppend")("Create.Button")
+        Me.Button5.Text = "Create..."
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Label2
@@ -142,7 +142,7 @@ Partial Class ImgAppend
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(135, 13)
         Me.Label2.TabIndex = 12
-        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgAppend")("Path.Config.File.Label")
+        Me.Label2.Text = "Path of configuration file:"
         '
         'Button4
         '
@@ -151,7 +151,7 @@ Partial Class ImgAppend
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(156, 23)
         Me.Button4.TabIndex = 4
-        Me.Button4.Text = LocalizationService.ForSection("Designer.ImgAppend")("Grab.Last.Image.Button")
+        Me.Button4.Text = "Grab from last image"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button3
@@ -162,7 +162,7 @@ Partial Class ImgAppend
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 4
-        Me.Button3.Text = LocalizationService.ForSection("Designer.ImgAppend")("Browse.Button")
+        Me.Button3.Text = "Browse..."
         Me.Button3.UseVisualStyleBackColor = True
         '
         'CheckBox6
@@ -174,7 +174,7 @@ Partial Class ImgAppend
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox6.TabIndex = 0
-        Me.CheckBox6.Text = LocalizationService.ForSection("Designer.ImgAppend")("Reparse.Point.Tag.CheckBox")
+        Me.CheckBox6.Text = "Use the reparse point tag fix"
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'CheckBox7
@@ -184,7 +184,7 @@ Partial Class ImgAppend
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox7.TabIndex = 0
-        Me.CheckBox7.Text = LocalizationService.ForSection("Designer.ImgAppend")("ExtendedAttributes.CheckBox")
+        Me.CheckBox7.Text = "Capture extended attributes"
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'CheckBox5
@@ -194,7 +194,7 @@ Partial Class ImgAppend
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(121, 17)
         Me.CheckBox5.TabIndex = 0
-        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.ImgAppend")("Check.File.Errors.CheckBox")
+        Me.CheckBox5.Text = "Check for file errors"
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -204,7 +204,7 @@ Partial Class ImgAppend
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(128, 17)
         Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ImgAppend")("Verify.Image.CheckBox")
+        Me.CheckBox4.Text = "Verify image integrity"
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -214,7 +214,7 @@ Partial Class ImgAppend
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(219, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ImgAppend")("Image.Bootable.CheckBox")
+        Me.CheckBox3.Text = "Make image bootable (Windows PE only)"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -224,7 +224,7 @@ Partial Class ImgAppend
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(199, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ImgAppend")("WIM.Boot.Config.CheckBox")
+        Me.CheckBox2.Text = "Append with WIMBoot configuration"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'TextBox4
@@ -255,7 +255,7 @@ Partial Class ImgAppend
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(299, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgAppend")("Exclude.Files.Dirs.CheckBox")
+        Me.CheckBox1.Text = "Exclude certain files and directories for destination image"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label5
@@ -265,7 +265,7 @@ Partial Class ImgAppend
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(156, 13)
         Me.Label5.TabIndex = 2
-        Me.Label5.Text = LocalizationService.ForSection("Designer.ImgAppend")("Dest.Image.Description.Label")
+        Me.Label5.Text = "Destination image description:"
         '
         'Label7
         '
@@ -274,7 +274,7 @@ Partial Class ImgAppend
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(156, 13)
         Me.Label7.TabIndex = 2
-        Me.Label7.Text = LocalizationService.ForSection("Designer.ImgAppend")("Destination.Image.Name.Label")
+        Me.Label7.Text = "Destination image name:"
         '
         'Button2
         '
@@ -284,7 +284,7 @@ Partial Class ImgAppend
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 4
-        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgAppend")("Browse.Button")
+        Me.Button2.Text = "Browse..."
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -303,7 +303,7 @@ Partial Class ImgAppend
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(142, 13)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = LocalizationService.ForSection("Designer.ImgAppend")("Destination.ImageFile.Label")
+        Me.Label6.Text = "Destination image file:"
         '
         'GroupBox1
         '
@@ -320,7 +320,7 @@ Partial Class ImgAppend
         Me.GroupBox1.Size = New System.Drawing.Size(984, 88)
         Me.GroupBox1.TabIndex = 9
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgAppend")("Sources.Destinations.Group")
+        Me.GroupBox1.Text = "Sources and destinations"
         '
         'Button1
         '
@@ -330,7 +330,7 @@ Partial Class ImgAppend
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgAppend")("Browse.Button")
+        Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -349,7 +349,7 @@ Partial Class ImgAppend
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(142, 13)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgAppend")("Source.Image.Dir.Label")
+        Me.Label3.Text = "Source image directory:"
         '
         'FolderBrowserDialog1
         '
@@ -357,13 +357,13 @@ Partial Class ImgAppend
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgAppend")("WIM.Files.Filter")
+        Me.SaveFileDialog1.Filter = "WIM files|*.wim"
         Me.SaveFileDialog1.OverwritePrompt = False
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgAppend")("WimscriptIniwim.Filter")
-        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.ImgAppend")("Wimscript.Ini.Title")
+        Me.OpenFileDialog1.Filter = "WimScript.ini|WimScript.ini"
+        Me.OpenFileDialog1.Title = "Specify a WimScript.ini configuration file"
         '
         'ImageTaskHeader1
         '
@@ -397,7 +397,7 @@ Partial Class ImgAppend
         Me.Name = "ImgAppend"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.ImgAppend")("AppendImage.Label")
+        Me.Text = "Append to an image"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()

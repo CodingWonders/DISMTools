@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class OfflineInstDriveLister
     Inherits System.Windows.Forms.Form
 
@@ -67,7 +67,7 @@ Partial Class OfflineInstDriveLister
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Ok.Button")
+        Me.OK_Button.Text = "OK"
         '
         'Cancel_Button
         '
@@ -78,7 +78,7 @@ Partial Class OfflineInstDriveLister
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Cancel.Button")
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Button1
         '
@@ -87,7 +87,7 @@ Partial Class OfflineInstDriveLister
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 1
-        Me.Button1.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Refresh.Button")
+        Me.Button1.Text = "Refresh"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1
@@ -99,7 +99,7 @@ Partial Class OfflineInstDriveLister
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(799, 28)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Begin.Install.Message")
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'ListView1
         '
@@ -118,42 +118,42 @@ Partial Class OfflineInstDriveLister
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("DriveLetter.Column")
+        Me.ColumnHeader1.Text = "Drive letter"
         Me.ColumnHeader1.Width = 68
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("DriveLabel.Column")
+        Me.ColumnHeader2.Text = "Drive label"
         Me.ColumnHeader2.Width = 128
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("DriveType.Column")
+        Me.ColumnHeader3.Text = "Drive type"
         Me.ColumnHeader3.Width = 70
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("TotalSize.Column")
+        Me.ColumnHeader4.Text = "Total size"
         Me.ColumnHeader4.Width = 94
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Available.Free.Space.Column")
+        Me.ColumnHeader5.Text = "Available free space"
         Me.ColumnHeader5.Width = 110
         '
         'ColumnHeader6
         '
-        Me.ColumnHeader6.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("DriveFormat.Column")
+        Me.ColumnHeader6.Text = "Drive format"
         Me.ColumnHeader6.Width = 77
         '
         'ColumnHeader7
         '
-        Me.ColumnHeader7.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("ContainsWindows.Column")
+        Me.ColumnHeader7.Text = "Contains Windows?"
         Me.ColumnHeader7.Width = 109
         '
         'ColumnHeader8
         '
-        Me.ColumnHeader8.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Windows.Column")
+        Me.ColumnHeader8.Text = "Windows version"
         Me.ColumnHeader8.Width = 104
         '
         'Timer1
@@ -168,7 +168,7 @@ Partial Class OfflineInstDriveLister
         Me.UnlockNoticeLabel.Name = "UnlockNoticeLabel"
         Me.UnlockNoticeLabel.Size = New System.Drawing.Size(390, 13)
         Me.UnlockNoticeLabel.TabIndex = 4
-        Me.UnlockNoticeLabel.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("UnlockNotice.Label")
+        Me.UnlockNoticeLabel.Text = "You will be prompted to enter the recovery key for this drive when you click OK."
         Me.UnlockNoticeLabel.Visible = False
         '
         'OfflineInstDriveLister
@@ -190,7 +190,7 @@ Partial Class OfflineInstDriveLister
         Me.Name = "OfflineInstDriveLister"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = LocalizationService.ForSection("Designer.OfflineDriveList")("Disk.Choose.Label")
+        Me.Text = "Choose a disk"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
