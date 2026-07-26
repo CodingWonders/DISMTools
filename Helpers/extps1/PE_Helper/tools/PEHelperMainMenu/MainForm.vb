@@ -1,5 +1,6 @@
 Imports Microsoft.Win32
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 Imports System.ComponentModel
 
 Public Class MainForm

@@ -335,8 +335,8 @@ Module LocalizationService
 
         AddLanguageSyntaxIssues(languageData.FilePath, errors, warnings)
 
-        For Each referenceSection In referenceData.Sections
-            For Each referenceItem In referenceSection.Value
+        For Each referenceSection As KeyValuePair(Of String, Dictionary(Of String, String)) In referenceData.Sections
+            For Each referenceItem As KeyValuePair(Of String, String) In referenceSection.Value
                 Dim translatedValue As String = FindExactValue(languageData, referenceSection.Key, referenceItem.Key)
                 If translatedValue Is Nothing Then
                     missingCount += 1
@@ -359,8 +359,8 @@ Module LocalizationService
             Next
         Next
 
-        For Each translatedSection In languageData.Sections
-            For Each translatedItem In translatedSection.Value
+        For Each translatedSection As KeyValuePair(Of String, Dictionary(Of String, String)) In languageData.Sections
+            For Each translatedItem As KeyValuePair(Of String, String) In translatedSection.Value
                 If FindExactValue(referenceData, translatedSection.Key, translatedItem.Key) Is Nothing Then
                     unknownCount += 1
                     warnings.Add("Unknown entry [" & translatedSection.Key & "] " & translatedItem.Key & ". Key and section names must not be translated.")
