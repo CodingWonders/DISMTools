@@ -2808,7 +2808,8 @@ Public Class ProgressPanel
                 ' of a volume and is quoted.
                 Dim SourceIsRooted As Boolean = Path.GetPathRoot(ComponentRepairSource) = ComponentRepairSource
                 Dim SourcePath As String = If(SourceIsRooted, ComponentRepairSource, Quote & ComponentRepairSource & Quote)
-                CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")        End Select
+                CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
+        End Select
         RunProcess(DismProgram, CommandArgs)
                 currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Gathering.Error.Level.Item")
         LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
