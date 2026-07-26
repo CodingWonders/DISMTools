@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class WDSBootImageArchitectureSelector
     Inherits System.Windows.Forms.Form
 
@@ -53,7 +53,7 @@ Partial Class WDSBootImageArchitectureSelector
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("PEHelper.Designer.WDSArch")("Okbutton.Button")
         '
         'Cancel_Button
         '
@@ -64,7 +64,7 @@ Partial Class WDSBootImageArchitectureSelector
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("PEHelper.Designer.WDSArch")("CancelButton.Button")
         '
         'Label1
         '
@@ -73,7 +73,7 @@ Partial Class WDSBootImageArchitectureSelector
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(104, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Target architecture:"
+        Me.Label1.Text = LocalizationService.ForSection("PEHelper.Designer.WDSArch")("Architecture.Label")
         '
         'ComboBox1
         '
@@ -102,7 +102,7 @@ Partial Class WDSBootImageArchitectureSelector
         Me.Name = "WdsBootImageArchitectureSelector"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Specify architecture for target WDS boot image"
+        Me.Text = LocalizationService.ForSection("PEHelper.Designer.WDSArch")("Architecture.Label.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

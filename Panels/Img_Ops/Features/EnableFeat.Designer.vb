@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class EnableFeat
     Inherits System.Windows.Forms.Form
 
@@ -77,7 +77,7 @@ Partial Class EnableFeat
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.EnableFeat")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -88,7 +88,7 @@ Partial Class EnableFeat
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.EnableFeat")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -98,7 +98,7 @@ Partial Class EnableFeat
         Me.GroupBox1.Size = New System.Drawing.Size(760, 242)
         Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Features"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.EnableFeat")("Features.Group")
         '
         'ListView1
         '
@@ -114,12 +114,12 @@ Partial Class EnableFeat
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Feature name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.EnableFeat")("FeatureName.Column")
         Me.ColumnHeader1.Width = 372
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "State"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.EnableFeat")("State.Column")
         Me.ColumnHeader2.Width = 339
         '
         'GroupBox2
@@ -141,7 +141,7 @@ Partial Class EnableFeat
         Me.GroupBox2.Size = New System.Drawing.Size(760, 212)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Options"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.EnableFeat")("Options.Group")
         '
         'Button3
         '
@@ -151,7 +151,7 @@ Partial Class EnableFeat
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(175, 23)
         Me.Button3.TabIndex = 13
-        Me.Button3.Text = "Detect from group policy"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.EnableFeat")("Detect.Group.Policy.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Panel9
@@ -203,7 +203,7 @@ Partial Class EnableFeat
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 6
-        Me.Button2.Text = "Browse..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.EnableFeat")("Browse.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -214,7 +214,7 @@ Partial Class EnableFeat
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 6
-        Me.Button1.Text = "Lookup..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.EnableFeat")("Lookup.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label4
@@ -225,7 +225,7 @@ Partial Class EnableFeat
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(84, 13)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Feature source:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.EnableFeat")("FeatureSource.Label")
         '
         'TextBox1
         '
@@ -243,7 +243,7 @@ Partial Class EnableFeat
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(80, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Package name:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.EnableFeat")("PackageName.Label")
         '
         'CheckBox5
         '
@@ -252,7 +252,7 @@ Partial Class EnableFeat
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(206, 17)
         Me.CheckBox5.TabIndex = 0
-        Me.CheckBox5.Text = "Commit image after enabling features"
+        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.EnableFeat")("CommitImage.CheckBox")
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -265,7 +265,7 @@ Partial Class EnableFeat
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(232, 17)
         Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = "Contact Windows Update for online images"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.EnableFeat")("Contact.Win.Update.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -275,7 +275,7 @@ Partial Class EnableFeat
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(150, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = "Enable all parent features"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.EnableFeat")("ParentFeatures.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -285,7 +285,7 @@ Partial Class EnableFeat
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(135, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = "Specify feature source"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.EnableFeat")("Feature.Source.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -295,12 +295,12 @@ Partial Class EnableFeat
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(229, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Specify parent package name for features"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.EnableFeat")("ParentPackage.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
+        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.EnableFeat")("SourceFolder.Description")
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = False
         '
@@ -336,7 +336,7 @@ Partial Class EnableFeat
         Me.Name = "EnableFeat"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Enable features"
+        Me.Text = LocalizationService.ForSection("Designer.EnableFeat")("EnableFeatures.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)

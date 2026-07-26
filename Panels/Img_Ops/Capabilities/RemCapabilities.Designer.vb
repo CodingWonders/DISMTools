@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class RemCapabilities
     Inherits System.Windows.Forms.Form
 
@@ -55,7 +55,7 @@ Partial Class RemCapabilities
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.RemCapabilities")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -66,7 +66,7 @@ Partial Class RemCapabilities
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.RemCapabilities")("Cancel.Button")
         '
         'ListView1
         '
@@ -81,12 +81,12 @@ Partial Class RemCapabilities
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Capability"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.RemCapabilities")("Capability.Column")
         Me.ColumnHeader1.Width = 524
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "State"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.RemCapabilities")("State.Column")
         Me.ColumnHeader2.Width = 199
         '
         'ImageTaskHeader1
@@ -120,7 +120,7 @@ Partial Class RemCapabilities
         Me.Name = "RemCapabilities"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Remove capabilities"
+        Me.Text = LocalizationService.ForSection("Designer.RemCapabilities")("Remove.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

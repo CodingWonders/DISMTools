@@ -1,11 +1,10 @@
-﻿Imports Microsoft.Win32
+Imports Microsoft.Win32
 Imports System.IO
-Imports Microsoft.VisualBasic.ControlChars
 Imports System.ComponentModel
 
 Public Class MainForm
 
-    Private RestartMessage As String, ProcessExitCodeMessage As String
+    Private RestartMessage As String
 
     Friend AutoCapture As Boolean = False
     Friend CopyProfile As Boolean = False
@@ -24,88 +23,20 @@ Public Class MainForm
         PictureBox4.Image = If(instTypeVal.ToLower().Contains("server"), My.Resources.arrow_normal, My.Resources.arrow_disabled)
         PictureBox4.Enabled = (instTypeVal.ToLower().Contains("server"))
 
-        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENU", "ENG"
-                RestartMessage = "This will restart your computer. Make sure you have configured your computer to boot via installation media. Do you want to restart?"
-                ProcessExitCodeMessage = "Process exited with code 0x{0}:" & CrLf & CrLf & "{1}"
-                Label1.Text = "What do you want to do?"
-                Label3.Text = "Start a PXE Helper Server for Network Installation"
-                LinkLabel1.Text = "Install an Operating System"
-                LinkLabel2.Text = "Restart to Installation Media"
-                LinkLabel3.Text = "Start a PXE Helper Server for Network Installation"
-                LinkLabel4.Text = "Prepare System for Image Capture"
-                LinkLabel5.Text = "Back"
-                LinkLabel6.Text = "Explore contents of this disc"
-                LinkLabel7.Text = "Start PXE Helper Server for FOG"
-                LinkLabel8.Text = "Start PXE Helper Server for Windows Deployment Services"
-                LinkLabel9.Text = "Copy boot image to WDS server..."
-                ExitLink.Text = "Exit"
-                pxeServerPortSwitcherMessage = "Hold down SHIFT to change the port to use for this PXE Helper Server"
-            Case "ESN"
-                RestartMessage = "Esto reiniciará su equipo. Asegúrese de haber configurado el equipo para iniciar este medio de instalación. ¿Desea reiniciar?"
-                ProcessExitCodeMessage = "El proceso terminó con código 0x{0}:" & CrLf & CrLf & "{1}"
-                Label1.Text = "¿Qué desea hacer?"
-                Label3.Text = "Iniciar un servidor de PXE Helpers para instalación en red"
-                LinkLabel1.Text = "Instalar un sistema operativo"
-                LinkLabel2.Text = "Reiniciar desde el medio de instalación"
-                LinkLabel3.Text = "Iniciar un servidor de PXE Helpers para instalación en red"
-                LinkLabel4.Text = "Preparar el sistema para captura de imágenes"
-                LinkLabel5.Text = "Atrás"
-                LinkLabel6.Text = "Explorar los contenidos de este disco"
-                LinkLabel7.Text = "Iniciar el servidor de PXE Helpers para FOG"
-                LinkLabel8.Text = "Iniciar el servidor de PXE Helpers para WDS"
-                LinkLabel9.Text = "Copiar imagen de arranque al servidor WDS..."
-                ExitLink.Text = "Salir"
-                pxeServerPortSwitcherMessage = "Mantenga pulsado SHIFT para cambiar el puerto a usar para este servidor de PXE Helpers"
-            Case "FRA"
-                RestartMessage = "Votre ordinateur va redémarrer. Assurez-vous qu’il est configuré pour démarrer sur le média d’installation. Voulez-vous redémarrer ?"
-                ProcessExitCodeMessage = "Processus terminé avec le code 0x{0} :" & CrLf & CrLf & "{1}"
-                Label1.Text = "Que voulez-vous faire ?"
-                Label3.Text = "Démarrer un serveur PXE Helper pour l’installation réseau"
-                LinkLabel1.Text = "Installer un système d’exploitation"
-                LinkLabel2.Text = "Redémarrer sur le média d’installation"
-                LinkLabel3.Text = "Démarrer un serveur PXE Helper pour l’installation réseau"
-                LinkLabel4.Text = "Préparer le système pour la capture d’image"
-                LinkLabel5.Text = "Retour"
-                LinkLabel6.Text = "Explorer le contenu de ce disque"
-                LinkLabel7.Text = "Démarrer un serveur PXE Helper pour FOG"
-                LinkLabel8.Text = "Démarrer un serveur PXE Helper pour WDS"
-                LinkLabel9.Text = "Copier l'image de démarrage sur le serveur WDS..."
-                ExitLink.Text = "Sortie"
-                pxeServerPortSwitcherMessage = "Maintenez la touche MAJ enfoncée pour modifier le port à utiliser pour ce serveur PXE Helper"
-            Case "PTB", "PTG"
-                RestartMessage = "O computador será reiniciado. Certifique-se de que está configurado para iniciar pelo meio de instalação. Deseja reiniciar?"
-                ProcessExitCodeMessage = "Processo terminou com o código 0x{0}:" & CrLf & CrLf & "{1}"
-                Label1.Text = "O que deseja fazer?"
-                Label3.Text = "Iniciar servidor PXE Helper para instalação em rede"
-                LinkLabel1.Text = "Instalar um sistema operativo"
-                LinkLabel2.Text = "Reiniciar para o meio de instalação"
-                LinkLabel3.Text = "Iniciar servidor PXE Helper para instalação em rede"
-                LinkLabel4.Text = "Preparar sistema para captura de imagem"
-                LinkLabel5.Text = "Voltar"
-                LinkLabel6.Text = "Explore o conteúdo deste disco"
-                LinkLabel7.Text = "Iniciar servidor PXE Helper para FOG"
-                LinkLabel8.Text = "Iniciar servidor PXE Helper para WDS"
-                LinkLabel9.Text = "Copiar imagem de arranque para o servidor WDS..."
-                ExitLink.Text = "Sair"
-                pxeServerPortSwitcherMessage = "Mantenha premida a tecla SHIFT para alterar a porta a utilizar neste servidor auxiliar PXE"
-            Case "ITA"
-                RestartMessage = "Il computer verrà riavviato. Assicurati che sia configurato per avviarsi dal supporto di installazione. Vuoi riavviare?"
-                ProcessExitCodeMessage = "Processo completato con codice 0x{0}:" & CrLf & CrLf & "{1}"
-                Label1.Text = "Cosa vuoi fare?"
-                Label3.Text = "Avvia server PXE Helper per installazione di rete"
-                LinkLabel1.Text = "Installa un sistema operativo"
-                LinkLabel2.Text = "Riavvia con il supporto di installazione"
-                LinkLabel3.Text = "Avvia server PXE Helper per installazione di rete"
-                LinkLabel4.Text = "Prepara sistema per acquisizione immagine"
-                LinkLabel5.Text = "Indietro"
-                LinkLabel6.Text = "Esplora i contenuti di questo disco"
-                LinkLabel7.Text = "Avvia server PXE Helper per FOG"
-                LinkLabel8.Text = "Avvia server PXE Helper per WDS"
-                LinkLabel9.Text = "Copia l'immagine di avvio sul server WDS..."
-                ExitLink.Text = "Esci"
-                pxeServerPortSwitcherMessage = "Tenere premuto il tasto SHIFT per modificare la porta da utilizzare per questo server PXE Helper"
-        End Select
+        RestartMessage = LocalizationService.ForSection("PEHelper.Restart")("Warning.Message")
+        Label1.Text = LocalizationService.ForSection("PEHelper.Main")("WhatWant.Label")
+        Label3.Text = LocalizationService.ForSection("PEHelper.Main")("StartServer.Label")
+        LinkLabel1.Text = LocalizationService.ForSection("PEHelper.Main")("Install.Operating.Link")
+        LinkLabel2.Text = LocalizationService.ForSection("PEHelper.Main")("Restart.Install.Media.Link")
+        LinkLabel3.Text = LocalizationService.ForSection("PEHelper.Main")("StartServer.Network.Link")
+        LinkLabel4.Text = LocalizationService.ForSection("PEHelper.Main")("Prepare.System.Image.Link")
+        LinkLabel5.Text = LocalizationService.ForSection("PEHelper.Main")("Back.Button")
+        LinkLabel6.Text = LocalizationService.ForSection("PEHelper.Main")("Explore.Contents.Disc.Link")
+        LinkLabel7.Text = LocalizationService.ForSection("PEHelper.Main")("StartServer.Fog.Link")
+        LinkLabel8.Text = LocalizationService.ForSection("PEHelper.Main")("StartServer.Wds.Link")
+        LinkLabel9.Text = LocalizationService.ForSection("PEHelper.Main")("Copy.Boot.Image.Link")
+        ExitLink.Text = LocalizationService.ForSection("PEHelper.Main")("Exit.Button")
+        pxeServerPortSwitcherMessage = LocalizationService.ForSection("PEHelper.PXE")("ChangePort.Tooltip")
     End Sub
 
     Private Sub ExitLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ExitLink.LinkClicked
@@ -143,13 +74,15 @@ Public Class MainForm
         Dim exitCode As Integer = ProcessHelper.RunProcess(FilePath, Arguments, WorkingDirectory, RunAsAdmin)
         Visible = True
         If exitCode <> 0 Then
-            MsgBox(String.Format(ProcessExitCodeMessage, Hex(exitCode), New Win32Exception(exitCode).Message),
+            MsgBox(LocalizationService.ForSection("PEHelper.Process").Format("ExitCode.Message", Hex(exitCode), New Win32Exception(exitCode).Message),
                    vbOKOnly + vbExclamation, Text)
         End If
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        RunProcess(Path.Combine(Application.StartupPath, "setup.exe"), RunAsAdmin:=True)
+        RunProcess(Path.Combine(Application.StartupPath, "setup.exe"),
+                   "--language=" & Quote & LocalizationService.CurrentCultureCode & Quote,
+                   RunAsAdmin:=True)
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked

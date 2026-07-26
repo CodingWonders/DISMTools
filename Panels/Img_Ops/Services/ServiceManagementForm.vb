@@ -1,10 +1,10 @@
-﻿Imports System.Threading.Tasks
+Imports System.Threading.Tasks
 
 Public Class ServiceManagementForm
 
     Dim ServiceList As New List(Of WindowsService),
         ModifiedServiceList As New List(Of WindowsService)
-    Dim ServiceStartTypes() As String = New String() {"Boot Loader", "I/O System", "Automatic", "Manual", "Disabled"}
+    Dim ServiceStartTypes() As String
 
     Public Event ServiceSaveReported(current As Integer, count As Integer)
 
@@ -14,7 +14,7 @@ Public Class ServiceManagementForm
     Private isModified As Boolean = False
 
     Private Sub OnServiceSaveReported(current As Integer, count As Integer) Handles Me.ServiceSaveReported
-        progressMessage = String.Format("Saving service information... ({0}/{1}, {2}%)", current, count, Math.Round((current / count) * 100, 0))
+        progressMessage = LocalizationService.ForSection("ServiceManagement.Progress").Format("Saving.Label", current, count, Math.Round((current / count) * 100, 0))
     End Sub
 
     Public Sub ReportServiceSave(current As Integer, count As Integer)
@@ -44,14 +44,8 @@ Public Class ServiceManagementForm
         TextBox9.Text = selectedService.FailureActionToString(selectedService.FailureActions.FirstFailure)
         TextBox10.Text = selectedService.FailureActionToString(selectedService.FailureActions.SecondFailure)
         TextBox11.Text = selectedService.FailureActionToString(selectedService.FailureActions.SubsequentFailure)
-        TextBox12.Text = String.Format("{0} minute(s)", (selectedService.FailureActions.ResetDelayInSeconds / 60))
-        TextBox13.Text = String.Format("{0} minute(s) ({1} seconds) after first failure, {2} minute(s) ({3} seconds) after second failure, {4} minute(s) ({5} seconds) after subsequent failures",
-                                       Math.Round((selectedService.FailureActions.FirstDelayInMillis / 60000), 2),
-                                       Math.Round((selectedService.FailureActions.FirstDelayInMillis / 1000), 2),
-                                       Math.Round((selectedService.FailureActions.SecondDelayInMillis / 60000), 2),
-                                       Math.Round((selectedService.FailureActions.SecondDelayInMillis / 1000), 2),
-                                       Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 60000), 2),
-                                       Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 1000), 2))
+        TextBox12.Text = LocalizationService.ForSection("ServiceManagement.Display").Format("MinuteS.Label", (selectedService.FailureActions.ResetDelayInSeconds / 60))
+        TextBox13.Text = LocalizationService.ForSection("Services.Display").Format("MinutesSeconds.Message", Math.Round((selectedService.FailureActions.FirstDelayInMillis / 60000), 2), Math.Round((selectedService.FailureActions.FirstDelayInMillis / 1000), 2), Math.Round((selectedService.FailureActions.SecondDelayInMillis / 60000), 2), Math.Round((selectedService.FailureActions.SecondDelayInMillis / 1000), 2), Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 60000), 2), Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 1000), 2))
 
         CheckBox1.Checked = If(selectedService.StartType = WindowsService.ServiceStartType.Automatic, selectedService.DelayedStart, False)
         CheckBox1.Enabled = selectedService.StartType = WindowsService.ServiceStartType.Automatic
@@ -62,12 +56,12 @@ Public Class ServiceManagementForm
 
         If {80, 96}.Contains(selectedService.Type) Then
             If selectedService.UserServiceFlags = Integer.MinValue Then
-                TextBox14.Text = "Undefined"
+                TextBox14.Text = LocalizationService.ForSection("ServiceManagement.Display")("Undefined.Label")
             Else
                 TextBox14.Text = selectedService.UserServiceFlags
             End If
         Else
-            TextBox14.Text = "Not a per-user service"
+            TextBox14.Text = LocalizationService.ForSection("ServiceManagement.Display")("Per.User.Label")
         End If
 
         ListView2.Items.Clear()
@@ -88,7 +82,7 @@ Public Class ServiceManagementForm
             ListView5.Items.AddRange(servicesInGroup.Select(Function(serviceInGroup) New ListViewItem(New String() {serviceInGroup.Name, serviceInGroup.DisplayName, serviceInGroup.TypeToString()})).ToArray())
             ListView5.Visible = True
         Else
-            TextBox6.Text = "<undefined service group>"
+            TextBox6.Text = LocalizationService.ForSection("ServiceManagement.Display")("Undefined.Group.Label")
             ListView5.Visible = False
         End If
     End Sub
@@ -96,6 +90,11 @@ Public Class ServiceManagementForm
     Private Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ListView1.Items.Clear()
         ComboBox1.Items.Clear()
+        ServiceStartTypes = New String() {LocalizationService.ForSection("ServiceManagement.StartTypes")("BootLoader.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Iosystem.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Automatic.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Manual.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Disabled.Label")}
         ComboBox1.Items.AddRange(ServiceStartTypes)
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -213,7 +212,7 @@ Public Class ServiceManagementForm
 
             If ForbiddenTypesForNonServices.Contains(ServiceList(selectedIndex).Type) AndAlso
                 ForbiddenStartTypesForNonServices.Contains(ComboBox1.SelectedIndex) Then
-                If MsgBox("The selected start type is unsupported for services of this type. The selected service may not work correctly or at all if you continue with this start type." & vbCrLf & vbCrLf & "Do you want to reset this start type to its current value?", vbYesNo + vbExclamation) = MsgBoxResult.Yes Then
+                If MsgBox(LocalizationService.ForSection("Services.Messages")("StartType.Message"), vbYesNo + vbExclamation) = MsgBoxResult.Yes Then
                     ComboBox1.SelectedIndex = ServiceList(selectedIndex).StartType
                     Exit Sub
                 End If
@@ -252,11 +251,9 @@ Public Class ServiceManagementForm
                                                                                                                    ReportServiceSave(current, count)
                                                                                                                End Sub)
                           End Function) Then
-            MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
-                   "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
-                   "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("Services.Messages")("System.Done.Message"), vbOKOnly + vbInformation)
         Else
-            MsgBox("System service information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
+            MsgBox(LocalizationService.ForSection("Services.Messages")("InfoSaved.Message"), vbOKOnly + vbExclamation)
         End If
         WindowHelper.EnableCloseCapability(Handle)
         Cursor = Cursors.Arrow
@@ -278,7 +275,7 @@ Public Class ServiceManagementForm
         End If
 
         If isModified Then
-            If MsgBox("Some changes have been made. Closing this window will discard all your changes to Windows services. Do you want to discard these changes?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+            If MsgBox(LocalizationService.ForSection("Services.Messages")("UnsavedClose.Message"), vbYesNo + vbQuestion) = MsgBoxResult.No Then
                 e.Cancel = True
                 Beep()
                 Exit Sub
@@ -311,7 +308,7 @@ Public Class ServiceManagementForm
         If isBusy Then Exit Sub
 
         If isModified Then
-            If MsgBox("Some changes have been made. Reloading service information will discard all your changes to Windows services. Do you want to discard these changes?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+            If MsgBox(LocalizationService.ForSection("Services.Messages")("UnsavedReload.Message"), vbYesNo + vbQuestion) = MsgBoxResult.No Then
                 Exit Sub
             End If
         End If
@@ -352,8 +349,8 @@ Public Class ServiceManagementForm
 
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
         If ListView1.SelectedItems.Count = 1 Then
-            If MessageBox.Show("Continuing with the removal of this service can cause the target system to become either unstable or unbootable. Do you want to continue?",
-                               "Remove service", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
+            If MessageBox.Show(LocalizationService.ForSection("ServiceMgmt.Messages")("Continui.Removal.Svc.Message"),
+                               LocalizationService.ForSection("Services.Messages")("RemoveService.Title"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
 
             Dim selectedIndex As Integer = ListView1.FocusedItem.Index
 
@@ -369,9 +366,8 @@ Public Class ServiceManagementForm
                 ModifiedServiceList.Add(newService)
             End If
 
-            MessageBox.Show("The service has been successfully scheduled for deletion. The removal of this service will take place when you save the changes. " &
-                            "Should you ever need this service back, please import the service information backup that will be made during the save process.",
-                            "Remove service", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("Services.Messages")("Scheduled.Deletion.Message"),
+                            LocalizationService.ForSection("Services.Messages")("RemoveService.Title"), MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             ' Force refresh of service information
             DisplayServiceInformation(ListView1.FocusedItem.Index)

@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DriverFilterAssistantDialog
     Inherits System.Windows.Forms.Form
 
@@ -107,7 +107,7 @@ Partial Class DriverFilterAssistantDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "Apply"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.DriverFilter")("Apply.Button")
         '
         'Cancel_Button
         '
@@ -118,7 +118,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Clear"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.DriverFilter")("Clear.Button")
         '
         'Label1
         '
@@ -127,14 +127,14 @@ Partial Class DriverFilterAssistantDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(138, 13)
         Me.Label1.TabIndex = 4
-        Me.Label1.Text = "Filter driver information by:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.DriverFilter")("FilterPrompt.Label")
         '
         'ComboBox1
         '
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Published Name", "Original File Name", "Provider Name", "Class Name", "Inbox Status", "Boot-Critical Status", "Signature Status", "Date"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.DriverFilter")("PublishedName.Item"), LocalizationService.ForSection("Designer.DriverFilter")("Original.File.Name.Item"), LocalizationService.ForSection("Designer.DriverFilter")("ProviderName.Item"), LocalizationService.ForSection("Designer.DriverFilter")("ClassName.Item"), LocalizationService.ForSection("Designer.DriverFilter")("InboxStatus.Item"), LocalizationService.ForSection("Designer.DriverFilter")("Boot.Critical.Status.Item"), LocalizationService.ForSection("Designer.DriverFilter")("SignatureStatus.Item"), LocalizationService.ForSection("Designer.DriverFilter")("Date.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(15, 28)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(597, 21)
@@ -214,7 +214,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(67, 13)
         Me.Label13.TabIndex = 1
-        Me.Label13.Text = "Month Name"
+        Me.Label13.Text = LocalizationService.ForSection("Designer.DriverFilter")("MonthName.Label")
         Me.Label13.Visible = False
         '
         'NumericUpDown1
@@ -247,7 +247,7 @@ Partial Class DriverFilterAssistantDialog
         Me.ComboBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox4.FormattingEnabled = True
-        Me.ComboBox4.Items.AddRange(New Object() {"Year", "Month", "Date"})
+        Me.ComboBox4.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.DriverFilter")("Year.Item"), LocalizationService.ForSection("Designer.DriverFilter")("Month.Item"), LocalizationService.ForSection("Designer.DriverFilter")("Date.Item")})
         Me.ComboBox4.Location = New System.Drawing.Point(12, 12)
         Me.ComboBox4.Name = "ComboBox4"
         Me.ComboBox4.Size = New System.Drawing.Size(546, 21)
@@ -258,7 +258,7 @@ Partial Class DriverFilterAssistantDialog
         Me.ComboBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Items.AddRange(New Object() {"Released on", "Not released on", "Released before", "Released on or before", "Released after", "Released on or after"})
+        Me.ComboBox3.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.DriverFilter")("Released.Item"), LocalizationService.ForSection("Designer.DriverFilter")("NotReleased.Item"), LocalizationService.ForSection("Designer.DriverFilter")("ReleasedBefore.Item"), LocalizationService.ForSection("Designer.DriverFilter")("ReleasedOnBefore.Item"), LocalizationService.ForSection("Designer.DriverFilter")("ReleasedAfter.Item"), LocalizationService.ForSection("Designer.DriverFilter")("ReleasedOnAfter.Item")})
         Me.ComboBox3.Location = New System.Drawing.Point(14, 32)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(570, 21)
@@ -271,7 +271,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(34, 13)
         Me.Label12.TabIndex = 0
-        Me.Label12.Text = "Date:"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.DriverFilter")("Date.Label")
         '
         'SignatureStatusFilterPanel
         '
@@ -291,7 +291,7 @@ Partial Class DriverFilterAssistantDialog
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(216, 17)
         Me.CheckBox3.TabIndex = 1
-        Me.CheckBox3.Text = "The drivers I'm searching for are signed"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.DriverFilter")("Search.Signed.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'Label11
@@ -301,7 +301,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(91, 13)
         Me.Label11.TabIndex = 0
-        Me.Label11.Text = "Signature Status:"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.DriverFilter")("SignatureStatus.Label")
         '
         'BootCriticalStatusFilterPanel
         '
@@ -321,7 +321,7 @@ Partial Class DriverFilterAssistantDialog
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(312, 17)
         Me.CheckBox2.TabIndex = 1
-        Me.CheckBox2.Text = "The drivers I'm searching for are critical to the boot process"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.DriverFilter")("Search.BootCritical.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'Label10
@@ -331,7 +331,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(103, 13)
         Me.Label10.TabIndex = 0
-        Me.Label10.Text = "Boot-Critical Status:"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.DriverFilter")("Boot.Critical.Status.Label")
         '
         'InboxStatusFilterPanel
         '
@@ -351,7 +351,7 @@ Partial Class DriverFilterAssistantDialog
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(339, 17)
         Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "The drivers I'm searching for are part of the Windows distribution"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.DriverFilter")("Search.Inbox.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label9
@@ -361,7 +361,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(73, 13)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = "Inbox Status:"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.DriverFilter")("InboxStatus.Label")
         '
         'ClassNameFilterPanel
         '
@@ -399,7 +399,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(124, 29)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Class Name:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.DriverFilter")("ClassName.Label")
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label7
@@ -409,7 +409,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(124, 94)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Class Name Notes:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.DriverFilter")("Class.Name.Notes.Label")
         '
         'Label8
         '
@@ -456,7 +456,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(81, 13)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Provider Name:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.DriverFilter")("ProviderName.Label")
         '
         'OriginalFileNameFilterPanel
         '
@@ -485,7 +485,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(96, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Original File Name:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.DriverFilter")("Original.File.Name.Label")
         '
         'PublishedNameFilterPanel
         '
@@ -514,7 +514,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(86, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Published Name:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.DriverFilter")("PublishedName.Label")
         '
         'NoFilterTypeSelectedPanel
         '
@@ -533,7 +533,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(595, 179)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Choose a filter to use for driver searches."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.DriverFilter")("Driver.Searches.Choose.Label")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'DriverFilterAssistantDialog
@@ -554,7 +554,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Name = "DriverFilterAssistantDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Filter driver information"
+        Me.Text = LocalizationService.ForSection("Designer.DriverFilter")("Title")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.FilterTypeContainerPanel.ResumeLayout(False)
         Me.DateFilterPanel.ResumeLayout(False)

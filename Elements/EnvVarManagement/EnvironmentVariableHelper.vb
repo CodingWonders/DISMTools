@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports Microsoft.Win32
 Imports Microsoft.VisualBasic.ControlChars
 
@@ -102,9 +102,7 @@ Module EnvironmentVariableHelper
             If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
                 ' Back up current system env vars
                 If Not ExportCurrentEnvVarInformation(True) Then
-                    If MsgBox("Current environment variable information for the system scope could not be backed up. Backups are used in case of a mistake during environment variable management. You may continue, but at your own risk." & CrLf & CrLf &
-                          "Applications that rely on these variables may not work correctly, and you will not be able to use previous variable configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
-                          "Do you want to continue without backing up current variable information?", vbYesNo + vbExclamation, "Environment variable information could not be backed up") = MsgBoxResult.No Then
+                    If MsgBox(LocalizationService.ForSection("EnvVars.Helper")("CurrentInfo.Message"), vbYesNo + vbExclamation, LocalizationService.ForSection("EnvVars.Helper")("BackupSaved.Title")) = MsgBoxResult.No Then
                         Return False
                     End If
                 End If
@@ -138,9 +136,7 @@ Module EnvironmentVariableHelper
             If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Users", "Default", "NTUSER.DAT"), "HKLM\zDEFAULT") = 0 Then
                 ' Back up current user env vars
                 If Not ExportCurrentEnvVarInformation(False) Then
-                    If MsgBox("Current environment variable information for the user scope could not be backed up. Backups are used in case of a mistake during environment variable management. You may continue, but at your own risk." & CrLf & CrLf &
-                          "Applications that rely on these variables may not work correctly, and you will not be able to use previous variable configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
-                          "Do you want to continue without backing up current variable information?", vbYesNo + vbExclamation, "Environment variable information could not be backed up") = MsgBoxResult.No Then
+                    If MsgBox(LocalizationService.ForSection("EnvVars.Helper")("UserBackup.Message"), vbYesNo + vbExclamation, LocalizationService.ForSection("EnvVars.Helper")("BackupSaved.Title")) = MsgBoxResult.No Then
                         Return False
                     End If
                 End If

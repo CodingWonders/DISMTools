@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AutoReloadForm
     Inherits System.Windows.Forms.Form
 
@@ -57,8 +57,7 @@ Partial Class AutoReloadForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(577, 44)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Please wait while DISMTools reloads the servicing session of orphaned images. Thi" & _
-    "s can take some time. Once complete, this dialog will close."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.AutoReloadForm")("Wait.Message")
         '
         'GroupBox1
         '
@@ -68,7 +67,7 @@ Partial Class AutoReloadForm
         Me.GroupBox1.Size = New System.Drawing.Size(600, 96)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Image information"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.AutoReloadForm")("ImageInfo.Group")
         '
         'TableLayoutPanel1
         '
@@ -103,7 +102,7 @@ Partial Class AutoReloadForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(173, 38)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = "Image mount point:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.AutoReloadForm")("Image.Mount.Point.Label")
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'imgFile
@@ -121,7 +120,7 @@ Partial Class AutoReloadForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(173, 38)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Image file:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.AutoReloadForm")("ImageFile.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label2
@@ -133,7 +132,7 @@ Partial Class AutoReloadForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(73, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Please wait..."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.AutoReloadForm")("Wait.Label")
         '
         'ProgressBar1
         '
@@ -162,7 +161,7 @@ Partial Class AutoReloadForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "AutoReloadForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.AutoReloadForm")("DISMTools.Label")
         Me.TopMost = True
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)

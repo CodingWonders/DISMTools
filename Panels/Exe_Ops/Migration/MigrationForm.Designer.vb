@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MigrationForm
     Inherits System.Windows.Forms.Form
 
@@ -37,8 +37,7 @@ Partial Class MigrationForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(615, 37)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Please wait while DISMTools migrates your old settings file to work on this versi" & _
-    "on. This may take some time."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.MigrationForm")("Wait.Message")
         '
         'ProgressBar1
         '
@@ -57,7 +56,7 @@ Partial Class MigrationForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(73, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Please wait..."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.MigrationForm")("Wait.Label")
         '
         'BackgroundWorker1
         '
@@ -77,7 +76,7 @@ Partial Class MigrationForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MigrationForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.MigrationForm")("DISMTools.Label")
         Me.TopMost = True
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -1,4 +1,4 @@
-﻿Public Class BGProcDetails
+Public Class BGProcDetails
 
     Private isMouseDown As Boolean = False
     Private mouseOffset As Point
@@ -96,41 +96,8 @@
                     End If
                 End If
             End If
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label1.Text = "Gathering image information..."
-                            Label3.Text = "These processes may take some time to complete"
-                        Case "ESN"
-                            Label1.Text = "Recopilando información de la imagen..."
-                            Label3.Text = "Estos procesos podrían tardar algo de tiempo en completar"
-                        Case "FRA"
-                            Label1.Text = "Collecte des informations de l'image en cours..."
-                            Label3.Text = "Ces processus peuvent prendre un certain temps"
-                        Case "PTB", "PTG"
-                            Label1.Text = "A recolher informação sobre a imagem..."
-                            Label3.Text = "Estes processos podem demorar algum tempo a concluir"
-                        Case "ITA"
-                            Label1.Text = "Raccolta informazioni sull'immagine..."
-                            Label3.Text = "Il completamento di questi processi può richiedere del tempo"
-                    End Select
-                Case 1
-                    Label1.Text = "Gathering image information..."
-                    Label3.Text = "These processes may take some time to complete"
-                Case 2
-                    Label1.Text = "Recopilando información de la imagen..."
-                    Label3.Text = "Estos procesos podrían tardar algo de tiempo en completar"
-                Case 3
-                    Label1.Text = "Collecte des informations de l'image en cours..."
-                    Label3.Text = "Ces processus peuvent prendre un certain temps"
-                Case 4
-                    Label1.Text = "A recolher informação sobre a imagem..."
-                    Label3.Text = "Estes processos podem demorar algum tempo a concluir"
-                Case 5
-                    Label1.Text = "Raccolta informazioni sull'immagine..."
-                    Label3.Text = "Il completamento di questi processi può richiedere del tempo"
-            End Select
+            Label1.Text = LocalizationService.ForSection("BGProcDetails.VisibleChanged")("Gathering.Image.Label")
+            Label3.Text = LocalizationService.ForSection("BGProcDetails.VisibleChanged")("Processes.Take.Time.Label")
             BackColor = CurrentTheme.BackgroundColor
             ForeColor = CurrentTheme.ForegroundColor
             If MainForm.pinState = 0 Then

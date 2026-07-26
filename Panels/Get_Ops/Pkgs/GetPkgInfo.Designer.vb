@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class GetPkgInfoDlg
     Inherits System.Windows.Forms.Form
 
@@ -221,8 +221,7 @@ Partial Class GetPkgInfoDlg
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(791, 83)
         Me.Label4.TabIndex = 3
-        Me.Label4.Text = "Click here to get information about packages that you want to add to the Windows " & _
-    "image you're servicing before proceeding with the package addition process"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("AddPackages.Help.Message")
         '
         'Label3
         '
@@ -233,8 +232,7 @@ Partial Class GetPkgInfoDlg
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(791, 83)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Click here to get information about packages that you've installed or that came w" & _
-    "ith the Windows image you're servicing"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Get.Packages.Message")
         '
         'PictureBox3
         '
@@ -267,7 +265,7 @@ Partial Class GetPkgInfoDlg
         Me.InstalledPackageLink.Size = New System.Drawing.Size(366, 13)
         Me.InstalledPackageLink.TabIndex = 1
         Me.InstalledPackageLink.TabStop = True
-        Me.InstalledPackageLink.Text = "I want to get information about installed packages in the image"
+        Me.InstalledPackageLink.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("InstalledPackage.Link")
         '
         'PackageFileLink
         '
@@ -280,7 +278,7 @@ Partial Class GetPkgInfoDlg
         Me.PackageFileLink.Size = New System.Drawing.Size(262, 13)
         Me.PackageFileLink.TabIndex = 1
         Me.PackageFileLink.TabStop = True
-        Me.PackageFileLink.Text = "I want to get information about package files"
+        Me.PackageFileLink.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("PackageFile.Link")
         '
         'Label2
         '
@@ -289,7 +287,7 @@ Partial Class GetPkgInfoDlg
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(221, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "What do you want to get information about?"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Get.Label")
         '
         'PackageInfoPanel
         '
@@ -312,7 +310,7 @@ Partial Class GetPkgInfoDlg
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(96, 23)
         Me.Button4.TabIndex = 11
-        Me.Button4.Text = "Save..."
+        Me.Button4.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Save.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label5
@@ -323,7 +321,7 @@ Partial Class GetPkgInfoDlg
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(822, 44)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Status"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Status.Label")
         '
         'PackageContainerPanel
         '
@@ -512,7 +510,7 @@ Partial Class GetPkgInfoDlg
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(80, 13)
         Me.Label22.TabIndex = 0
-        Me.Label22.Text = "Package name:"
+        Me.Label22.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("PackageName.Label")
         '
         'Label23
         '
@@ -523,7 +521,7 @@ Partial Class GetPkgInfoDlg
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label23.Size = New System.Drawing.Size(38, 15)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = "Label8"
+        Me.Label23.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label23.UseMnemonic = False
         '
         'Label24
@@ -534,7 +532,7 @@ Partial Class GetPkgInfoDlg
         Me.Label24.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label24.Size = New System.Drawing.Size(114, 17)
         Me.Label24.TabIndex = 0
-        Me.Label24.Text = "Is package applicable?"
+        Me.Label24.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Package.Applicable.Label")
         '
         'Label25
         '
@@ -545,7 +543,7 @@ Partial Class GetPkgInfoDlg
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label25.Size = New System.Drawing.Size(38, 15)
         Me.Label25.TabIndex = 0
-        Me.Label25.Text = "Label8"
+        Me.Label25.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label25.UseMnemonic = False
         '
         'Label26
@@ -556,7 +554,7 @@ Partial Class GetPkgInfoDlg
         Me.Label26.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label26.Size = New System.Drawing.Size(58, 17)
         Me.Label26.TabIndex = 0
-        Me.Label26.Text = "Copyright:"
+        Me.Label26.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Copyright.Label")
         '
         'Label35
         '
@@ -567,7 +565,7 @@ Partial Class GetPkgInfoDlg
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label35.Size = New System.Drawing.Size(38, 15)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = "Label8"
+        Me.Label35.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label35.UseMnemonic = False
         '
         'Label31
@@ -578,7 +576,7 @@ Partial Class GetPkgInfoDlg
         Me.Label31.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label31.Size = New System.Drawing.Size(56, 17)
         Me.Label31.TabIndex = 0
-        Me.Label31.Text = "Company:"
+        Me.Label31.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Company.Label")
         '
         'Label32
         '
@@ -589,7 +587,7 @@ Partial Class GetPkgInfoDlg
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label32.Size = New System.Drawing.Size(38, 15)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = "Label8"
+        Me.Label32.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label32.UseMnemonic = False
         '
         'Label41
@@ -600,7 +598,7 @@ Partial Class GetPkgInfoDlg
         Me.Label41.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label41.Size = New System.Drawing.Size(75, 17)
         Me.Label41.TabIndex = 0
-        Me.Label41.Text = "Creation time:"
+        Me.Label41.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("CreationTime.Label")
         '
         'Label40
         '
@@ -611,7 +609,7 @@ Partial Class GetPkgInfoDlg
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label40.Size = New System.Drawing.Size(38, 15)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = "Label8"
+        Me.Label40.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label40.UseMnemonic = False
         '
         'Label43
@@ -622,7 +620,7 @@ Partial Class GetPkgInfoDlg
         Me.Label43.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label43.Size = New System.Drawing.Size(64, 17)
         Me.Label43.TabIndex = 0
-        Me.Label43.Text = "Description:"
+        Me.Label43.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Description.Label")
         '
         'Label42
         '
@@ -633,7 +631,7 @@ Partial Class GetPkgInfoDlg
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label42.Size = New System.Drawing.Size(38, 15)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = "Label8"
+        Me.Label42.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label42.UseMnemonic = False
         '
         'Label47
@@ -644,7 +642,7 @@ Partial Class GetPkgInfoDlg
         Me.Label47.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label47.Size = New System.Drawing.Size(68, 17)
         Me.Label47.TabIndex = 0
-        Me.Label47.Text = "Install client:"
+        Me.Label47.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("InstallClient.Label")
         '
         'Label46
         '
@@ -655,7 +653,7 @@ Partial Class GetPkgInfoDlg
         Me.Label46.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label46.Size = New System.Drawing.Size(38, 15)
         Me.Label46.TabIndex = 0
-        Me.Label46.Text = "Label8"
+        Me.Label46.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label46.UseMnemonic = False
         '
         'Label33
@@ -666,7 +664,7 @@ Partial Class GetPkgInfoDlg
         Me.Label33.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label33.Size = New System.Drawing.Size(112, 17)
         Me.Label33.TabIndex = 0
-        Me.Label33.Text = "Install package name:"
+        Me.Label33.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Install.Package.Name.Label")
         '
         'Label34
         '
@@ -677,7 +675,7 @@ Partial Class GetPkgInfoDlg
         Me.Label34.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label34.Size = New System.Drawing.Size(38, 15)
         Me.Label34.TabIndex = 0
-        Me.Label34.Text = "Label8"
+        Me.Label34.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label34.UseMnemonic = False
         '
         'Label28
@@ -688,7 +686,7 @@ Partial Class GetPkgInfoDlg
         Me.Label28.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label28.Size = New System.Drawing.Size(63, 17)
         Me.Label28.TabIndex = 0
-        Me.Label28.Text = "Install time:"
+        Me.Label28.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("InstallTime.Label")
         '
         'Label27
         '
@@ -699,7 +697,7 @@ Partial Class GetPkgInfoDlg
         Me.Label27.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label27.Size = New System.Drawing.Size(38, 15)
         Me.Label27.TabIndex = 0
-        Me.Label27.Text = "Label8"
+        Me.Label27.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label27.UseMnemonic = False
         '
         'Label30
@@ -710,7 +708,7 @@ Partial Class GetPkgInfoDlg
         Me.Label30.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label30.Size = New System.Drawing.Size(91, 17)
         Me.Label30.TabIndex = 0
-        Me.Label30.Text = "Last update time:"
+        Me.Label30.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Last.Update.Time.Label")
         '
         'Label29
         '
@@ -721,7 +719,7 @@ Partial Class GetPkgInfoDlg
         Me.Label29.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label29.Size = New System.Drawing.Size(38, 15)
         Me.Label29.TabIndex = 0
-        Me.Label29.Text = "Label8"
+        Me.Label29.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label29.UseMnemonic = False
         '
         'Label39
@@ -732,7 +730,7 @@ Partial Class GetPkgInfoDlg
         Me.Label39.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label39.Size = New System.Drawing.Size(74, 17)
         Me.Label39.TabIndex = 0
-        Me.Label39.Text = "Display name:"
+        Me.Label39.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DisplayName.Label")
         '
         'Label38
         '
@@ -743,7 +741,7 @@ Partial Class GetPkgInfoDlg
         Me.Label38.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label38.Size = New System.Drawing.Size(38, 15)
         Me.Label38.TabIndex = 0
-        Me.Label38.Text = "Label8"
+        Me.Label38.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label38.UseMnemonic = False
         '
         'Label45
@@ -754,7 +752,7 @@ Partial Class GetPkgInfoDlg
         Me.Label45.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label45.Size = New System.Drawing.Size(77, 17)
         Me.Label45.TabIndex = 0
-        Me.Label45.Text = "Product name:"
+        Me.Label45.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("ProductName.Label")
         '
         'Label44
         '
@@ -765,7 +763,7 @@ Partial Class GetPkgInfoDlg
         Me.Label44.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label44.Size = New System.Drawing.Size(38, 15)
         Me.Label44.TabIndex = 0
-        Me.Label44.Text = "Label8"
+        Me.Label44.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label44.UseMnemonic = False
         '
         'Label14
@@ -776,7 +774,7 @@ Partial Class GetPkgInfoDlg
         Me.Label14.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label14.Size = New System.Drawing.Size(86, 17)
         Me.Label14.TabIndex = 0
-        Me.Label14.Text = "Product version:"
+        Me.Label14.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("ProductVersion.Label")
         '
         'Label15
         '
@@ -787,7 +785,7 @@ Partial Class GetPkgInfoDlg
         Me.Label15.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label15.Size = New System.Drawing.Size(38, 15)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Label8"
+        Me.Label15.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label15.UseMnemonic = False
         '
         'Label16
@@ -798,7 +796,7 @@ Partial Class GetPkgInfoDlg
         Me.Label16.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label16.Size = New System.Drawing.Size(74, 17)
         Me.Label16.TabIndex = 0
-        Me.Label16.Text = "Release type:"
+        Me.Label16.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("ReleaseType.Label")
         '
         'Label21
         '
@@ -809,7 +807,7 @@ Partial Class GetPkgInfoDlg
         Me.Label21.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label21.Size = New System.Drawing.Size(38, 15)
         Me.Label21.TabIndex = 0
-        Me.Label21.Text = "Label8"
+        Me.Label21.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label21.UseMnemonic = False
         '
         'Label48
@@ -820,7 +818,7 @@ Partial Class GetPkgInfoDlg
         Me.Label48.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label48.Size = New System.Drawing.Size(109, 17)
         Me.Label48.TabIndex = 0
-        Me.Label48.Text = "Is a restart required?"
+        Me.Label48.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("RestartRequired.Label")
         '
         'Label13
         '
@@ -831,7 +829,7 @@ Partial Class GetPkgInfoDlg
         Me.Label13.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label13.Size = New System.Drawing.Size(38, 15)
         Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Label8"
+        Me.Label13.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label13.UseMnemonic = False
         '
         'Label50
@@ -842,7 +840,7 @@ Partial Class GetPkgInfoDlg
         Me.Label50.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label50.Size = New System.Drawing.Size(106, 17)
         Me.Label50.TabIndex = 0
-        Me.Label50.Text = "Support information:"
+        Me.Label50.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("SupportInfo.Label")
         '
         'Label49
         '
@@ -853,7 +851,7 @@ Partial Class GetPkgInfoDlg
         Me.Label49.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label49.Size = New System.Drawing.Size(38, 15)
         Me.Label49.TabIndex = 0
-        Me.Label49.Text = "Label8"
+        Me.Label49.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label49.UseMnemonic = False
         '
         'Label52
@@ -864,7 +862,7 @@ Partial Class GetPkgInfoDlg
         Me.Label52.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label52.Size = New System.Drawing.Size(37, 17)
         Me.Label52.TabIndex = 0
-        Me.Label52.Text = "State:"
+        Me.Label52.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("State.Label")
         '
         'Label51
         '
@@ -875,7 +873,7 @@ Partial Class GetPkgInfoDlg
         Me.Label51.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label51.Size = New System.Drawing.Size(38, 15)
         Me.Label51.TabIndex = 0
-        Me.Label51.Text = "Label8"
+        Me.Label51.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label51.UseMnemonic = False
         '
         'Label54
@@ -886,7 +884,7 @@ Partial Class GetPkgInfoDlg
         Me.Label54.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label54.Size = New System.Drawing.Size(201, 17)
         Me.Label54.TabIndex = 0
-        Me.Label54.Text = "Is a boot up required for full installation?"
+        Me.Label54.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Boot.Up.Required.Label")
         '
         'Label53
         '
@@ -897,7 +895,7 @@ Partial Class GetPkgInfoDlg
         Me.Label53.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label53.Size = New System.Drawing.Size(38, 15)
         Me.Label53.TabIndex = 0
-        Me.Label53.Text = "Label8"
+        Me.Label53.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label53.UseMnemonic = False
         '
         'Label61
@@ -908,7 +906,7 @@ Partial Class GetPkgInfoDlg
         Me.Label61.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label61.Size = New System.Drawing.Size(97, 17)
         Me.Label61.TabIndex = 0
-        Me.Label61.Text = "Capability identity:"
+        Me.Label61.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Capability.Identity.Label")
         '
         'Label56
         '
@@ -919,7 +917,7 @@ Partial Class GetPkgInfoDlg
         Me.Label56.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label56.Size = New System.Drawing.Size(38, 15)
         Me.Label56.TabIndex = 0
-        Me.Label56.Text = "Label8"
+        Me.Label56.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label56.UseMnemonic = False
         '
         'Label58
@@ -930,7 +928,7 @@ Partial Class GetPkgInfoDlg
         Me.Label58.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label58.Size = New System.Drawing.Size(99, 17)
         Me.Label58.TabIndex = 0
-        Me.Label58.Text = "Custom properties:"
+        Me.Label58.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("CustomProps.Label")
         '
         'Label57
         '
@@ -941,7 +939,7 @@ Partial Class GetPkgInfoDlg
         Me.Label57.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label57.Size = New System.Drawing.Size(38, 15)
         Me.Label57.TabIndex = 0
-        Me.Label57.Text = "Label8"
+        Me.Label57.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label57.UseMnemonic = False
         Me.Label57.Visible = False
         '
@@ -1019,7 +1017,7 @@ Partial Class GetPkgInfoDlg
         Me.Label60.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label60.Size = New System.Drawing.Size(54, 17)
         Me.Label60.TabIndex = 0
-        Me.Label60.Text = "Features:"
+        Me.Label60.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Features.Label")
         '
         'Label59
         '
@@ -1030,7 +1028,7 @@ Partial Class GetPkgInfoDlg
         Me.Label59.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label59.Size = New System.Drawing.Size(38, 15)
         Me.Label59.TabIndex = 0
-        Me.Label59.Text = "Label8"
+        Me.Label59.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label59.UseMnemonic = False
         '
         'Label55
@@ -1061,7 +1059,7 @@ Partial Class GetPkgInfoDlg
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(436, 36)
         Me.Label36.TabIndex = 0
-        Me.Label36.Text = "Package information"
+        Me.Label36.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("PackageInfo.Label")
         Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel7
@@ -1081,7 +1079,7 @@ Partial Class GetPkgInfoDlg
         Me.Label37.Name = "Label37"
         Me.Label37.Size = New System.Drawing.Size(436, 376)
         Me.Label37.TabIndex = 0
-        Me.Label37.Text = "Select an installed package to view its information here"
+        Me.Label37.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Installed.Package.View.Label")
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel4
@@ -1165,7 +1163,7 @@ Partial Class GetPkgInfoDlg
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(142, 22)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Remove all"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("RemoveAll.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -1177,7 +1175,7 @@ Partial Class GetPkgInfoDlg
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(140, 22)
         Me.Button2.TabIndex = 1
-        Me.Button2.Text = "Remove selected"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("RemoveSelected.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -1188,7 +1186,7 @@ Partial Class GetPkgInfoDlg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(140, 22)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Add package..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("AddPackage.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'PackageFileContainerPanel
@@ -1274,7 +1272,7 @@ Partial Class GetPkgInfoDlg
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(80, 13)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = "Package name:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("PackageName.Label")
         '
         'Label9
         '
@@ -1285,7 +1283,7 @@ Partial Class GetPkgInfoDlg
         Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label9.Size = New System.Drawing.Size(38, 15)
         Me.Label9.TabIndex = 24
-        Me.Label9.Text = "Label8"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label9.UseMnemonic = False
         '
         'Label10
@@ -1296,7 +1294,7 @@ Partial Class GetPkgInfoDlg
         Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label10.Size = New System.Drawing.Size(114, 17)
         Me.Label10.TabIndex = 25
-        Me.Label10.Text = "Is package applicable?"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Package.Applicable.Label")
         '
         'Label11
         '
@@ -1307,7 +1305,7 @@ Partial Class GetPkgInfoDlg
         Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label11.Size = New System.Drawing.Size(38, 15)
         Me.Label11.TabIndex = 26
-        Me.Label11.Text = "Label8"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label11.UseMnemonic = False
         '
         'Label12
@@ -1318,7 +1316,7 @@ Partial Class GetPkgInfoDlg
         Me.Label12.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label12.Size = New System.Drawing.Size(58, 17)
         Me.Label12.TabIndex = 27
-        Me.Label12.Text = "Copyright:"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Copyright.Label")
         '
         'Label17
         '
@@ -1329,7 +1327,7 @@ Partial Class GetPkgInfoDlg
         Me.Label17.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label17.Size = New System.Drawing.Size(38, 15)
         Me.Label17.TabIndex = 28
-        Me.Label17.Text = "Label8"
+        Me.Label17.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label17.UseMnemonic = False
         '
         'Label18
@@ -1340,7 +1338,7 @@ Partial Class GetPkgInfoDlg
         Me.Label18.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label18.Size = New System.Drawing.Size(56, 17)
         Me.Label18.TabIndex = 29
-        Me.Label18.Text = "Company:"
+        Me.Label18.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Company.Label")
         '
         'Label19
         '
@@ -1351,7 +1349,7 @@ Partial Class GetPkgInfoDlg
         Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label19.Size = New System.Drawing.Size(38, 15)
         Me.Label19.TabIndex = 30
-        Me.Label19.Text = "Label8"
+        Me.Label19.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label19.UseMnemonic = False
         '
         'Label20
@@ -1362,7 +1360,7 @@ Partial Class GetPkgInfoDlg
         Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label20.Size = New System.Drawing.Size(75, 17)
         Me.Label20.TabIndex = 31
-        Me.Label20.Text = "Creation time:"
+        Me.Label20.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("CreationTime.Label")
         '
         'Label62
         '
@@ -1373,7 +1371,7 @@ Partial Class GetPkgInfoDlg
         Me.Label62.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label62.Size = New System.Drawing.Size(38, 15)
         Me.Label62.TabIndex = 33
-        Me.Label62.Text = "Label8"
+        Me.Label62.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label62.UseMnemonic = False
         '
         'Label63
@@ -1384,7 +1382,7 @@ Partial Class GetPkgInfoDlg
         Me.Label63.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label63.Size = New System.Drawing.Size(64, 17)
         Me.Label63.TabIndex = 42
-        Me.Label63.Text = "Description:"
+        Me.Label63.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Description.Label")
         '
         'Label64
         '
@@ -1395,7 +1393,7 @@ Partial Class GetPkgInfoDlg
         Me.Label64.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label64.Size = New System.Drawing.Size(38, 15)
         Me.Label64.TabIndex = 34
-        Me.Label64.Text = "Label8"
+        Me.Label64.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label64.UseMnemonic = False
         '
         'Label65
@@ -1406,7 +1404,7 @@ Partial Class GetPkgInfoDlg
         Me.Label65.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label65.Size = New System.Drawing.Size(68, 17)
         Me.Label65.TabIndex = 35
-        Me.Label65.Text = "Install client:"
+        Me.Label65.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("InstallClient.Label")
         '
         'Label66
         '
@@ -1417,7 +1415,7 @@ Partial Class GetPkgInfoDlg
         Me.Label66.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label66.Size = New System.Drawing.Size(38, 15)
         Me.Label66.TabIndex = 36
-        Me.Label66.Text = "Label8"
+        Me.Label66.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label66.UseMnemonic = False
         '
         'Label67
@@ -1428,7 +1426,7 @@ Partial Class GetPkgInfoDlg
         Me.Label67.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label67.Size = New System.Drawing.Size(112, 17)
         Me.Label67.TabIndex = 37
-        Me.Label67.Text = "Install package name:"
+        Me.Label67.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Install.Package.Name.Label")
         '
         'Label68
         '
@@ -1439,7 +1437,7 @@ Partial Class GetPkgInfoDlg
         Me.Label68.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label68.Size = New System.Drawing.Size(38, 15)
         Me.Label68.TabIndex = 38
-        Me.Label68.Text = "Label8"
+        Me.Label68.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label68.UseMnemonic = False
         '
         'Label69
@@ -1450,7 +1448,7 @@ Partial Class GetPkgInfoDlg
         Me.Label69.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label69.Size = New System.Drawing.Size(63, 17)
         Me.Label69.TabIndex = 39
-        Me.Label69.Text = "Install time:"
+        Me.Label69.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("InstallTime.Label")
         '
         'Label70
         '
@@ -1461,7 +1459,7 @@ Partial Class GetPkgInfoDlg
         Me.Label70.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label70.Size = New System.Drawing.Size(38, 15)
         Me.Label70.TabIndex = 40
-        Me.Label70.Text = "Label8"
+        Me.Label70.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label70.UseMnemonic = False
         '
         'Label71
@@ -1472,7 +1470,7 @@ Partial Class GetPkgInfoDlg
         Me.Label71.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label71.Size = New System.Drawing.Size(91, 17)
         Me.Label71.TabIndex = 41
-        Me.Label71.Text = "Last update time:"
+        Me.Label71.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Last.Update.Time.Label")
         '
         'Label72
         '
@@ -1483,7 +1481,7 @@ Partial Class GetPkgInfoDlg
         Me.Label72.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label72.Size = New System.Drawing.Size(38, 15)
         Me.Label72.TabIndex = 23
-        Me.Label72.Text = "Label8"
+        Me.Label72.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label72.UseMnemonic = False
         '
         'Label73
@@ -1494,7 +1492,7 @@ Partial Class GetPkgInfoDlg
         Me.Label73.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label73.Size = New System.Drawing.Size(74, 17)
         Me.Label73.TabIndex = 32
-        Me.Label73.Text = "Display name:"
+        Me.Label73.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DisplayName.Label")
         '
         'Label74
         '
@@ -1505,7 +1503,7 @@ Partial Class GetPkgInfoDlg
         Me.Label74.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label74.Size = New System.Drawing.Size(38, 15)
         Me.Label74.TabIndex = 22
-        Me.Label74.Text = "Label8"
+        Me.Label74.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label74.UseMnemonic = False
         '
         'Label75
@@ -1516,7 +1514,7 @@ Partial Class GetPkgInfoDlg
         Me.Label75.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label75.Size = New System.Drawing.Size(77, 17)
         Me.Label75.TabIndex = 10
-        Me.Label75.Text = "Product name:"
+        Me.Label75.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("ProductName.Label")
         '
         'Label76
         '
@@ -1527,7 +1525,7 @@ Partial Class GetPkgInfoDlg
         Me.Label76.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label76.Size = New System.Drawing.Size(38, 15)
         Me.Label76.TabIndex = 2
-        Me.Label76.Text = "Label8"
+        Me.Label76.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label76.UseMnemonic = False
         '
         'Label77
@@ -1538,7 +1536,7 @@ Partial Class GetPkgInfoDlg
         Me.Label77.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label77.Size = New System.Drawing.Size(86, 17)
         Me.Label77.TabIndex = 3
-        Me.Label77.Text = "Product version:"
+        Me.Label77.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("ProductVersion.Label")
         '
         'Label78
         '
@@ -1549,7 +1547,7 @@ Partial Class GetPkgInfoDlg
         Me.Label78.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label78.Size = New System.Drawing.Size(38, 15)
         Me.Label78.TabIndex = 4
-        Me.Label78.Text = "Label8"
+        Me.Label78.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label78.UseMnemonic = False
         '
         'Label79
@@ -1560,7 +1558,7 @@ Partial Class GetPkgInfoDlg
         Me.Label79.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label79.Size = New System.Drawing.Size(74, 17)
         Me.Label79.TabIndex = 5
-        Me.Label79.Text = "Release type:"
+        Me.Label79.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("ReleaseType.Label")
         '
         'Label80
         '
@@ -1571,7 +1569,7 @@ Partial Class GetPkgInfoDlg
         Me.Label80.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label80.Size = New System.Drawing.Size(38, 15)
         Me.Label80.TabIndex = 6
-        Me.Label80.Text = "Label8"
+        Me.Label80.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label80.UseMnemonic = False
         '
         'Label81
@@ -1582,7 +1580,7 @@ Partial Class GetPkgInfoDlg
         Me.Label81.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label81.Size = New System.Drawing.Size(109, 17)
         Me.Label81.TabIndex = 7
-        Me.Label81.Text = "Is a restart required?"
+        Me.Label81.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("RestartRequired.Label")
         '
         'Label82
         '
@@ -1593,7 +1591,7 @@ Partial Class GetPkgInfoDlg
         Me.Label82.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label82.Size = New System.Drawing.Size(38, 15)
         Me.Label82.TabIndex = 8
-        Me.Label82.Text = "Label8"
+        Me.Label82.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label82.UseMnemonic = False
         '
         'Label83
@@ -1604,7 +1602,7 @@ Partial Class GetPkgInfoDlg
         Me.Label83.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label83.Size = New System.Drawing.Size(106, 17)
         Me.Label83.TabIndex = 9
-        Me.Label83.Text = "Support information:"
+        Me.Label83.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("SupportInfo.Label")
         '
         'Label84
         '
@@ -1615,7 +1613,7 @@ Partial Class GetPkgInfoDlg
         Me.Label84.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label84.Size = New System.Drawing.Size(38, 15)
         Me.Label84.TabIndex = 11
-        Me.Label84.Text = "Label8"
+        Me.Label84.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label84.UseMnemonic = False
         '
         'Label85
@@ -1626,7 +1624,7 @@ Partial Class GetPkgInfoDlg
         Me.Label85.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label85.Size = New System.Drawing.Size(37, 17)
         Me.Label85.TabIndex = 20
-        Me.Label85.Text = "State:"
+        Me.Label85.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("State.Label")
         '
         'Label86
         '
@@ -1637,7 +1635,7 @@ Partial Class GetPkgInfoDlg
         Me.Label86.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label86.Size = New System.Drawing.Size(38, 15)
         Me.Label86.TabIndex = 12
-        Me.Label86.Text = "Label8"
+        Me.Label86.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label86.UseMnemonic = False
         '
         'Label87
@@ -1648,7 +1646,7 @@ Partial Class GetPkgInfoDlg
         Me.Label87.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label87.Size = New System.Drawing.Size(201, 17)
         Me.Label87.TabIndex = 13
-        Me.Label87.Text = "Is a boot up required for full installation?"
+        Me.Label87.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Boot.Up.Required.Label")
         '
         'Label88
         '
@@ -1659,7 +1657,7 @@ Partial Class GetPkgInfoDlg
         Me.Label88.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label88.Size = New System.Drawing.Size(38, 15)
         Me.Label88.TabIndex = 14
-        Me.Label88.Text = "Label8"
+        Me.Label88.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label88.UseMnemonic = False
         '
         'Label89
@@ -1670,7 +1668,7 @@ Partial Class GetPkgInfoDlg
         Me.Label89.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label89.Size = New System.Drawing.Size(97, 17)
         Me.Label89.TabIndex = 44
-        Me.Label89.Text = "Capability identity:"
+        Me.Label89.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Capability.Identity.Label")
         '
         'Label90
         '
@@ -1681,7 +1679,7 @@ Partial Class GetPkgInfoDlg
         Me.Label90.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label90.Size = New System.Drawing.Size(38, 15)
         Me.Label90.TabIndex = 45
-        Me.Label90.Text = "Label8"
+        Me.Label90.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label90.UseMnemonic = False
         '
         'Label91
@@ -1692,7 +1690,7 @@ Partial Class GetPkgInfoDlg
         Me.Label91.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label91.Size = New System.Drawing.Size(99, 17)
         Me.Label91.TabIndex = 17
-        Me.Label91.Text = "Custom properties:"
+        Me.Label91.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("CustomProps.Label")
         '
         'Label92
         '
@@ -1703,7 +1701,7 @@ Partial Class GetPkgInfoDlg
         Me.Label92.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label92.Size = New System.Drawing.Size(38, 15)
         Me.Label92.TabIndex = 18
-        Me.Label92.Text = "Label8"
+        Me.Label92.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label92.UseMnemonic = False
         '
         'Label93
@@ -1714,7 +1712,7 @@ Partial Class GetPkgInfoDlg
         Me.Label93.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label93.Size = New System.Drawing.Size(54, 17)
         Me.Label93.TabIndex = 19
-        Me.Label93.Text = "Features:"
+        Me.Label93.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Features.Label")
         '
         'Label94
         '
@@ -1725,7 +1723,7 @@ Partial Class GetPkgInfoDlg
         Me.Label94.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label94.Size = New System.Drawing.Size(38, 15)
         Me.Label94.TabIndex = 21
-        Me.Label94.Text = "Label8"
+        Me.Label94.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("DynamicValue.Label")
         Me.Label94.UseMnemonic = False
         '
         'Label95
@@ -1756,7 +1754,7 @@ Partial Class GetPkgInfoDlg
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(436, 36)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Package information"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("PackageInfo.Label")
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'NoPkgPanel
@@ -1776,7 +1774,7 @@ Partial Class GetPkgInfoDlg
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(436, 376)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Add or select a package file to view its information here"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Add.Package.File.Label")
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FlowLayoutPanel1
@@ -1797,12 +1795,12 @@ Partial Class GetPkgInfoDlg
         Me.LinkLabel1.Size = New System.Drawing.Size(60, 13)
         Me.LinkLabel1.TabIndex = 2
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "<- Go back"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("GoBack.Link")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "CAB files|*.cab"
-        Me.OpenFileDialog1.Title = "Locate package files"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.GetPkgInfo")("Cabfiles.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.GetPkgInfo")("Locate.Package.Files.Title")
         '
         'ImageTaskHeader1
         '
@@ -1833,7 +1831,7 @@ Partial Class GetPkgInfoDlg
         Me.Name = "GetPkgInfoDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Get package information"
+        Me.Text = LocalizationService.ForSection("Designer.GetPkgInfo")("Package.Label")
         Me.MenuPanel.ResumeLayout(False)
         Me.MenuPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()

@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SetPETargetPath
     Inherits System.Windows.Forms.Form
 
@@ -55,7 +55,7 @@ Partial Class SetPETargetPath
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.SetTargetPath")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -66,7 +66,7 @@ Partial Class SetPETargetPath
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.SetTargetPath")("Cancel.Button")
         '
         'Label2
         '
@@ -77,8 +77,7 @@ Partial Class SetPETargetPath
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 28)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "The target path is a directory where the Windows PE files will be copied to in or" & _
-    "der to boot to the environment. Please specify a target path and click OK."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.SetTargetPath")("Target.Dir.Message")
         '
         'Label3
         '
@@ -87,7 +86,7 @@ Partial Class SetPETargetPath
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(68, 13)
         Me.Label3.TabIndex = 9
-        Me.Label3.Text = "Target path:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.SetTargetPath")("TargetPath.Label")
         '
         'TextBox1
         '
@@ -129,7 +128,7 @@ Partial Class SetPETargetPath
         Me.Name = "SetPETargetPath"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Set Windows PE target path"
+        Me.Text = LocalizationService.ForSection("Designer.SetTargetPath")("Windows.Petarget.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

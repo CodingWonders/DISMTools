@@ -35,8 +35,7 @@ Partial Class RegexCheatsheet
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(437, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Use the following cheatsheet when performing message queries with regular express" & _
-            "ions:"
+        Me.Label1.Text = LocalizationService.ForSection("DynaViewer.Designer.Regex")("CheatsheetHelp.Label")
         '
         'TextBox1
         '
@@ -51,7 +50,7 @@ Partial Class RegexCheatsheet
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBox1.Size = New System.Drawing.Size(479, 370)
         Me.TextBox1.TabIndex = 2
-        Me.TextBox1.Text = resources.GetString("TextBox1.Text")
+        Me.TextBox1.Text = LocalizationService.ForSection("DynaViewer.Designer.Regex")("CharacterClasses.Message")
         '
         'CheckBox1
         '
@@ -63,7 +62,7 @@ Partial Class RegexCheatsheet
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(63, 23)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = "Pin to top"
+        Me.CheckBox1.Text = LocalizationService.ForSection("DynaViewer.Designer.Regex")("PinTop.CheckBox")
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
@@ -83,7 +82,7 @@ Partial Class RegexCheatsheet
         Me.Name = "RegexCheatsheet"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
-        Me.Text = "Regular Expression Cheatsheet"
+        Me.Text = LocalizationService.ForSection("DynaViewer.Designer.Regex")("RegexCheatsheet.Label")
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

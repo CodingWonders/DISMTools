@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class ScriptReorderDialog
 
@@ -32,7 +32,7 @@ Public Class ScriptReorderDialog
 
     Private Sub ShowScriptSet()
         ListView1.Items.Clear()
-        ListView1.Items.AddRange(ScriptSet.Select(Function(script) New ListViewItem(New String() {String.Format("Script {0}", ScriptSet.IndexOf(script) + 1)})).ToArray())
+        ListView1.Items.AddRange(ScriptSet.Select(Function(script) New ListViewItem(New String() {String.Format(LocalizationService.ForSection("ScriptReorder")("Script.Label"), ScriptSet.IndexOf(script) + 1)})).ToArray())
     End Sub
 
     Private Sub MoveScript(SourceIndex As Integer, NewIndex As Integer)
@@ -93,19 +93,19 @@ Public Class ScriptReorderDialog
     End Sub
 
     Private Sub MoveFirstBtn_MouseHover(sender As Object, e As EventArgs) Handles MoveFirstBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Move selected script to the top")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ScriptReorder")("Move.Selected.Top.Label"))
     End Sub
 
     Private Sub MovePreviousBtn_MouseHover(sender As Object, e As EventArgs) Handles MovePreviousBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Move selected script to the previous position")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ScriptReorder")("Move.Selected.Previous.Label"))
     End Sub
 
     Private Sub MoveNextBtn_MouseHover(sender As Object, e As EventArgs) Handles MoveNextBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Move selected script to the next position")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ScriptReorder")("Move.Selected.Next.Label"))
     End Sub
 
     Private Sub MoveLastBtn_MouseHover(sender As Object, e As EventArgs) Handles MoveLastBtn.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Move selected script to the bottom")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ScriptReorder")("Move.Selected.Bottom.Label"))
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

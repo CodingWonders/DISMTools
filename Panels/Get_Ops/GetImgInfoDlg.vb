@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
 Imports System.Threading
@@ -16,331 +16,37 @@ Public Class GetImgInfoDlg
     Dim SelectedImageFile As String
 
     Private Sub GetImgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Get image information"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Image file to get information from:"
-                        Label3.Text = "List of indexes of image file:"
-                        Label22.Text = "Image version:"
-                        Label24.Text = "Image name:"
-                        Label26.Text = "Image description:"
-                        Label31.Text = "Image size:"
-                        Label41.Text = "Supports WIMBoot?"
-                        Label43.Text = "Architecture:"
-                        Label47.Text = "HAL:"
-                        Label33.Text = "Service Pack build:"
-                        Label28.Text = "Service Pack level:"
-                        Label30.Text = "Installation type:"
-                        Label39.Text = "Edition:"
-                        Label45.Text = "Product type:"
-                        Label5.Text = "Product suite:"
-                        Label7.Text = "System root directory:"
-                        Label9.Text = "File count:"
-                        Label11.Text = "Dates:"
-                        Label13.Text = "Installed languages:"
-                        Label36.Text = "Image information"
-                        Label37.Text = "Select an index on the list view on the left to view its information here"
-                        RadioButton1.Text = "Currently mounted image"
-                        RadioButton2.Text = "Another image"
-                        Button1.Text = "Browse..."
-                        Button2.Text = "Save..."
-                        Button3.Text = "Pick..."
-                        ListView1.Columns(0).Text = "Index"
-                        ListView1.Columns(1).Text = "Image name"
-                        OpenFileDialog1.Title = "Specify the image to get the information from"
-                    Case "ESN"
-                        Text = "Obtener información de la imagen"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Archivo de imagen del que obtener información:"
-                        Label3.Text = "Listado de índices del archivo de imagen:"
-                        Label22.Text = "Versión de la imagen:"
-                        Label24.Text = "Nombre de la imagen:"
-                        Label26.Text = "Descripción de la imagen:"
-                        Label31.Text = "Tamaño de la imagen:"
-                        Label41.Text = "¿Soporta WIMBoot?"
-                        Label43.Text = "Arquitectura:"
-                        Label47.Text = "HAL:"
-                        Label33.Text = "Compilación de Service Pack:"
-                        Label28.Text = "Nivel de Service Pack:"
-                        Label30.Text = "Tipo de instalación:"
-                        Label39.Text = "Edición:"
-                        Label45.Text = "Tipo de producto:"
-                        Label5.Text = "Suite de producto:"
-                        Label7.Text = "Directorio raíz del sistema:"
-                        Label9.Text = "Número de archivos:"
-                        Label11.Text = "Fechas:"
-                        Label13.Text = "Idiomas instalados:"
-                        Label36.Text = "Información de la imagen"
-                        Label37.Text = "Seleccione un índice del listado de la izquierda para ver su información aquí"
-                        RadioButton1.Text = "Imagen montada actualmente"
-                        RadioButton2.Text = "Otra imagen"
-                        Button1.Text = "Examinar..."
-                        Button2.Text = "Guardar..."
-                        Button3.Text = "Escoger..."
-                        ListView1.Columns(0).Text = "Índice"
-                        ListView1.Columns(1).Text = "Nombre de imagen"
-                        OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
-                    Case "FRA"
-                        Text = "Obtenir des informations de l'image"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Fichier image à partir duquel les informations sont obtenues :"
-                        Label3.Text = "Liste des index du fichier d'image :"
-                        Label22.Text = "Version de l'image :"
-                        Label24.Text = "Nom de l'image :"
-                        Label26.Text = "Description de l'image :"
-                        Label31.Text = "Taille de l'image :"
-                        Label41.Text = "Supporte WIMBoot ?"
-                        Label43.Text = "Architecture :"
-                        Label47.Text = "HAL :"
-                        Label33.Text = "Compilation du Service Pack ::"
-                        Label28.Text = "Niveau du Service Pack :"
-                        Label30.Text = "Type d'installation :"
-                        Label39.Text = "Édition:"
-                        Label45.Text = "Type de produit :"
-                        Label5.Text = "Suite de produit :"
-                        Label7.Text = "Répertoire racine du système :"
-                        Label9.Text = "Nombre de fichiers :"
-                        Label11.Text = "Dates:"
-                        Label13.Text = "Langues installées :"
-                        Label36.Text = "Information de l'image"
-                        Label37.Text = "Sélectionnez un index dans la liste de gauche pour afficher son information ici."
-                        RadioButton1.Text = "Image actuellement montée"
-                        RadioButton2.Text = "Autre image"
-                        Button1.Text = "Parcourir..."
-                        Button2.Text = "Sauvegarder..."
-                        Button3.Text = "Choisir..."
-                        ListView1.Columns(0).Text = "Index"
-                        ListView1.Columns(1).Text = "Nom de l'image"
-                        OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
-                    Case "PTB", "PTG"
-                        Text = "Obter informações sobre a imagem"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Ficheiro de imagem de onde obter informações:"
-                        Label3.Text = "Lista de índices do ficheiro de imagem:"
-                        Label22.Text = "Versão da imagem:"
-                        Label24.Text = "Nome da imagem:"
-                        Label26.Text = "Descrição da imagem:"
-                        Label31.Text = "Tamanho da imagem:"
-                        Label41.Text = "Suporta WIMBoot?"
-                        Label43.Text = "Arquitetura:"
-                        Label47.Text = "HAL:"
-                        Label33.Text = "Service Pack build:"
-                        Label28.Text = "Nível do Service Pack:"
-                        Label30.Text = "Tipo de instalação:"
-                        Label39.Text = "Edição:"
-                        Label45.Text = "Tipo de produto:"
-                        Label5.Text = "Conjunto de produtos:"
-                        Label7.Text = "Diretório raiz do sistema:"
-                        Label9.Text = "Contagem de ficheiros:"
-                        Label11.Text = "Datas:"
-                        Label13.Text = "Idiomas instalados:"
-                        Label36.Text = "Informações sobre a imagem"
-                        Label37.Text = "Seleccione um índice na vista de lista à esquerda para ver a respectiva informação aqui"
-                        RadioButton1.Text = "Imagem atualmente montada"
-                        RadioButton2.Text = "Outra imagem"
-                        Button1.Text = " Navegar..."
-                        Button2.Text = "Guardar..."
-                        Button3.Text = "Selecionar..."
-                        ListView1.Columns(0).Text = "Índice"
-                        ListView1.Columns(1).Text = "Nome da imagem"
-                        OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
-                    Case "ITA"
-                        Text = "Verifica informazioni immagine"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "File immagine da cui ottenere informazioni:"
-                        Label3.Text = "Elenco indici file immagine:"
-                        Label22.Text = "Versione immagine:"
-                        Label24.Text = "Nome immagine:"
-                        Label26.Text = "Descrizione immagine:"
-                        Label31.Text = "Dimensione immagine:"
-                        Label41.Text = "Supporta WIMBoot?"
-                        Label43.Text = "Architettura:"
-                        Label47.Text = "HAL:"
-                        Label33.Text = "Service Pack build:"
-                        Label28.Text = "Livello Service Pack:"
-                        Label30.Text = "Tipo di installazione:"
-                        Label39.Text = "Edizione:"
-                        Label45.Text = "Tipo prodotto:"
-                        Label5.Text = "Suite prodotti:"
-                        Label7.Text = "Cartella principale sistema:"
-                        Label9.Text = "Numero file:"
-                        Label11.Text = "Data:"
-                        Label13.Text = "Lingue installate:"
-                        Label36.Text = "Informazioni immagine"
-                        Label37.Text = "Per visualizzarne qui le informazioni seleziona a sinistra un indice nella vista elenco"
-                        RadioButton1.Text = "Immagine attualmente montata"
-                        RadioButton2.Text = "Altra immagine"
-                        Button1.Text = "Sfoglia..."
-                        Button2.Text = "Salva..."
-                        Button3.Text = "Scegli..."
-                        ListView1.Columns(0).Text = "Indice"
-                        ListView1.Columns(1).Text = "Nome immagine"
-                        OpenFileDialog1.Title = "Specifica l'immagine di cui verificare le informazioni"
-                End Select
-            Case 1
-                Text = "Get image information"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Image file to get information from:"
-                Label3.Text = "List of indexes of image file:"
-                Label22.Text = "Image version:"
-                Label24.Text = "Image name:"
-                Label26.Text = "Image description:"
-                Label31.Text = "Image size:"
-                Label41.Text = "Supports WIMBoot?"
-                Label43.Text = "Architecture:"
-                Label47.Text = "HAL:"
-                Label33.Text = "Service Pack build:"
-                Label28.Text = "Service Pack level:"
-                Label30.Text = "Installation type:"
-                Label39.Text = "Edition:"
-                Label45.Text = "Product type:"
-                Label5.Text = "Product suite:"
-                Label7.Text = "System root directory:"
-                Label9.Text = "File count:"
-                Label11.Text = "Dates:"
-                Label13.Text = "Installed languages:"
-                Label36.Text = "Image information"
-                Label37.Text = "Select an index on the list view on the left to view its information here"
-                RadioButton1.Text = "Currently mounted image"
-                RadioButton2.Text = "Another image"
-                Button1.Text = "Browse..."
-                Button2.Text = "Save..."
-                Button3.Text = "Pick..."
-                ListView1.Columns(0).Text = "Index"
-                ListView1.Columns(1).Text = "Image name"
-                OpenFileDialog1.Title = "Specify the image to get the information from"
-            Case 2
-                Text = "Obtener información de la imagen"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Archivo de imagen del que obtener información:"
-                Label3.Text = "Listado de índices del archivo de imagen:"
-                Label22.Text = "Versión de la imagen:"
-                Label24.Text = "Nombre de la imagen:"
-                Label26.Text = "Descripción de la imagen:"
-                Label31.Text = "Tamaño de la imagen:"
-                Label41.Text = "¿Soporta WIMBoot?"
-                Label43.Text = "Arquitectura:"
-                Label47.Text = "HAL:"
-                Label33.Text = "Compilación de Service Pack:"
-                Label28.Text = "Nivel de Service Pack:"
-                Label30.Text = "Tipo de instalación:"
-                Label39.Text = "Edición:"
-                Label45.Text = "Tipo de producto:"
-                Label5.Text = "Suite de producto:"
-                Label7.Text = "Directorio raíz del sistema:"
-                Label9.Text = "Número de archivos:"
-                Label11.Text = "Fechas:"
-                Label13.Text = "Idiomas instalados:"
-                Label36.Text = "Información de la imagen"
-                Label37.Text = "Seleccione un índice del listado de la izquierda para ver su información aquí"
-                RadioButton1.Text = "Imagen montada actualmente"
-                RadioButton2.Text = "Otra imagen"
-                Button1.Text = "Examinar..."
-                Button2.Text = "Guardar..."
-                Button3.Text = "Escoger..."
-                ListView1.Columns(0).Text = "Índice"
-                ListView1.Columns(1).Text = "Nombre de imagen"
-                OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
-            Case 3
-                Text = "Obtenir des informations de l'image"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Fichier image à partir duquel les informations sont obtenues :"
-                Label3.Text = "Liste des index du fichier d'image :"
-                Label22.Text = "Version de l'image :"
-                Label24.Text = "Nom de l'image :"
-                Label26.Text = "Description de l'image :"
-                Label31.Text = "Taille de l'image :"
-                Label41.Text = "Supporte WIMBoot ?"
-                Label43.Text = "Architecture :"
-                Label47.Text = "HAL :"
-                Label33.Text = "Compilation du Service Pack ::"
-                Label28.Text = "Niveau du Service Pack :"
-                Label30.Text = "Type d'installation :"
-                Label39.Text = "Édition:"
-                Label45.Text = "Type de produit :"
-                Label5.Text = "Suite de produit :"
-                Label7.Text = "Répertoire racine du système :"
-                Label9.Text = "Nombre de fichiers :"
-                Label11.Text = "Dates:"
-                Label13.Text = "Langues installées :"
-                Label36.Text = "Information de l'image"
-                Label37.Text = "Sélectionnez un index dans la liste de gauche pour afficher son information ici."
-                RadioButton1.Text = "Image actuellement montée"
-                RadioButton2.Text = "Autre image"
-                Button1.Text = "Parcourir..."
-                Button2.Text = "Sauvegarder..."
-                Button3.Text = "Choisir..."
-                ListView1.Columns(0).Text = "Index"
-                ListView1.Columns(1).Text = "Nom de l'image"
-                OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
-            Case 4
-                Text = "Obter informações sobre a imagem"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Ficheiro de imagem de onde obter informações:"
-                Label3.Text = "Lista de índices do ficheiro de imagem:"
-                Label22.Text = "Versão da imagem:"
-                Label24.Text = "Nome da imagem:"
-                Label26.Text = "Descrição da imagem:"
-                Label31.Text = "Tamanho da imagem:"
-                Label41.Text = "Suporta WIMBoot?"
-                Label43.Text = "Arquitetura:"
-                Label47.Text = "HAL:"
-                Label33.Text = "Service Pack build:"
-                Label28.Text = "Nível do Service Pack:"
-                Label30.Text = "Tipo de instalação:"
-                Label39.Text = "Edição:"
-                Label45.Text = "Tipo de produto:"
-                Label5.Text = "Conjunto de produtos:"
-                Label7.Text = "Diretório raiz do sistema:"
-                Label9.Text = "Contagem de ficheiros:"
-                Label11.Text = "Datas:"
-                Label13.Text = "Idiomas instalados:"
-                Label36.Text = "Informações sobre a imagem"
-                Label37.Text = "Seleccione um índice na vista de lista à esquerda para ver a respectiva informação aqui"
-                RadioButton1.Text = "Imagem atualmente montada"
-                RadioButton2.Text = "Outra imagem"
-                Button1.Text = " Navegar..."
-                Button2.Text = "Guardar..."
-                Button3.Text = "Selecionar..."
-                ListView1.Columns(0).Text = "Índice"
-                ListView1.Columns(1).Text = "Nome da imagem"
-                OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
-            Case 5
-                Text = "Verifica informazioni immagine"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "File immagine di cui verificare le informazioni:"
-                Label3.Text = "Elenco indici file immagine:"
-                Label22.Text = "Versione immagine:"
-                Label24.Text = "Nome immagine:"
-                Label26.Text = "Descrizione immagine:"
-                Label31.Text = "Dimensione immagine:"
-                Label41.Text = "Supporta WIMBoot?"
-                Label43.Text = "Architettura:"
-                Label47.Text = "HAL:"
-                Label33.Text = "Build Service Pack:"
-                Label28.Text = "Livello Service Pack:"
-                Label30.Text = "Tipo installazione:"
-                Label39.Text = "Edizione:"
-                Label45.Text = "Tipo prodotto:"
-                Label5.Text = "Suite prodotti:"
-                Label7.Text = "Cartella principale sistema:"
-                Label9.Text = "Numero file:"
-                Label11.Text = "Data:"
-                Label13.Text = "Lingue installate:"
-                Label36.Text = "Informazioni immagine"
-                Label37.Text = "Per visualizzarne qui le informazioni seleziona a sinistra un indice nella vista elenco"
-                RadioButton1.Text = "Immagine attualmente montata"
-                RadioButton2.Text = "Altra immagine"
-                Button1.Text = "Sfoglia..."
-                Button2.Text = "Salva..."
-                Button3.Text = "Scegli..."
-                ListView1.Columns(0).Text = "Indice"
-                ListView1.Columns(1).Text = "Nome immagine"
-                OpenFileDialog1.Title = "Specifica l'immagine di cui verificare le informazioni"
-        End Select
+        Text = LocalizationService.ForSection("ImageInfo")("Get.Image.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("ImageInfo").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("ImageInfo")("ImageFile.Get.Label")
+        Label3.Text = LocalizationService.ForSection("ImageInfo")("List.Indexes.ImageFile.Label")
+        Label22.Text = LocalizationService.ForSection("ImageInfo")("ImageVersion.Label")
+        Label24.Text = LocalizationService.ForSection("ImageInfo")("ImageName.Label")
+        Label26.Text = LocalizationService.ForSection("ImageInfo")("ImageDescription.Label")
+        Label31.Text = LocalizationService.ForSection("ImageInfo")("ImageSize.Label")
+        Label41.Text = LocalizationService.ForSection("ImageInfo")("Supports.WIM.Boot.Label")
+        Label43.Text = LocalizationService.ForSection("ImageInfo")("Architecture.Label")
+        Label47.Text = LocalizationService.ForSection("ImageInfo")("HAL.Label")
+        Label33.Text = LocalizationService.ForSection("ImageInfo")("ServicePackBuild.Label")
+        Label28.Text = LocalizationService.ForSection("ImageInfo")("ServicePackLevel.Label")
+        Label30.Text = LocalizationService.ForSection("ImageInfo")("InstallationType.Label")
+        Label39.Text = LocalizationService.ForSection("ImageInfo")("Edition.Label")
+        Label45.Text = LocalizationService.ForSection("ImageInfo")("ProductType.Label")
+        Label5.Text = LocalizationService.ForSection("ImageInfo")("ProductSuite.Label")
+        Label7.Text = LocalizationService.ForSection("ImageInfo")("System.Root.Dir.Label")
+        Label9.Text = LocalizationService.ForSection("ImageInfo")("FileCount.Label")
+        Label11.Text = LocalizationService.ForSection("ImageInfo")("Dates.Label")
+        Label13.Text = LocalizationService.ForSection("ImageInfo")("Installed.Languages.Label")
+        Label36.Text = LocalizationService.ForSection("ImageInfo")("ImageInfo.Label")
+        Label37.Text = LocalizationService.ForSection("ImageInfo")("Index.List.View.Label")
+        RadioButton1.Text = LocalizationService.ForSection("ImageInfo")("CurrentlyMounted.RadioButton")
+        RadioButton2.Text = LocalizationService.ForSection("ImageInfo")("AnotherImage.RadioButton")
+        Button1.Text = LocalizationService.ForSection("ImageInfo")("Browse.Button")
+        Button2.Text = LocalizationService.ForSection("ImageInfo")("Save.Button")
+        Button3.Text = LocalizationService.ForSection("ImageInfo")("Pick.Button")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("ImageInfo")("Index.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("ImageInfo")("ImageName.Column")
+        OpenFileDialog1.Title = LocalizationService.ForSection("ImageInfo")("Image.Get.Title")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -399,31 +105,7 @@ Public Class GetImgInfoDlg
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ESN"
-                            msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "FRA"
-                            msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "PTB", "PTG"
-                            msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ITA"
-                            msg = "Impossibile verificare informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                    End Select
-                Case 1
-                    msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 2
-                    msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 3
-                    msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 4
-                    msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 5
-                    msg = "Impossibile verificare informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-            End Select
+            msg = LocalizationService.ForSection("ImageInfo.GetImageInfo").Format("Gather.ImageFile.Message", ex.ToString(), ex.Message, Hex(ex.HResult))
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -443,58 +125,12 @@ Public Class GetImgInfoDlg
         DetectFeatureUpdate(ImageInfoList(Index).ProductVersion)
         Label25.Text = ImageInfoList(Index).ImageName
         Label35.Text = ImageInfoList(Index).ImageDescription
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-                    Case "ESN"
-                        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-                    Case "FRA"
-                        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize, True) & ")"
-                    Case "PTB", "PTG"
-                        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-                    Case "ITA"
-                        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-                End Select
-            Case 1
-                Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-            Case 2
-                Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-            Case 3
-                Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize, True) & ")"
-            Case 4
-                Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-            Case 5
-                Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
-        End Select
+        Dim isFrenchSizeText As Boolean = LocalizationService.CurrentCultureCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)
+        Dim readableImageSize As String = If(isFrenchSizeText, Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize, True), Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize))
+        Label32.Text = LocalizationService.ForSection("ImageInfo").Format("Bytes.Label", ImageInfoList(Index).ImageSize.ToString("N0"), readableImageSize)
 
         Label42.Text = Casters.CastDismArchitecture(ImageInfoList(Index).Architecture, True)
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Undefined by the image")
-                    Case "ESN"
-                        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "No definida por la imagen")
-                    Case "FRA"
-                        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Non défini par l'image")
-                    Case "PTB", "PTG"
-                        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Não definido pela imagem")
-                    Case "ITA"
-                        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Non definito dall'immagine")
-                End Select
-            Case 1
-                Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Undefined by the image")
-            Case 2
-                Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "No definida por la imagen")
-            Case 3
-                Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Non défini par l'image")
-            Case 4
-                Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Não definido pela imagem")
-            Case 5
-                Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Non definito dall'immagine")
-        End Select
+        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, LocalizationService.ForSection("ImageInfo.DisplayImageInfo")("UndefinedImage.Label"))
         Label34.Text = ImageInfoList(Index).ProductVersion.Revision
         Label27.Text = ImageInfoList(Index).SpLevel
         Label29.Text = ImageInfoList(Index).InstallationType
@@ -504,31 +140,7 @@ Public Class GetImgInfoDlg
         Label8.Text = ImageInfoList(Index).SystemRoot
         LanguageList.Items.Clear()
         For Each language In ImageInfoList(Index).Languages
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", default", "") & ")")
-                        Case "ESN"
-                            LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
-                        Case "FRA"
-                            LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", défaut", "") & ")")
-                        Case "PTB", "PTG"
-                            LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
-                        Case "ITA"
-                            LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
-                    End Select
-                Case 1
-                    LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", default", "") & ")")
-                Case 2
-                    LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
-                Case 3
-                    LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", défaut", "") & ")")
-                Case 4
-                    LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
-                Case 5
-                    LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
-            End Select
+            LanguageList.Items.Add(language.Name & LocalizationService.ForSection("ImageInfo.LanguageList")("Display.Name.Open.Label") & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, LocalizationService.ForSection("ImageInfo.LanguageList")("Default.Label"), "") & LocalizationService.ForSection("ImageInfo.LanguageList")("Display.Name.Close.Label"))
         Next
         If ImageInfoList(Index).CustomizedInfo IsNot Nothing Then
             Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
@@ -544,51 +156,8 @@ Public Class GetImgInfoDlg
                 ImageModificationDate = ModifiedDate.ToString("MM/dd/yyyy HH:mm:ss")
             End If
 
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
-                            Label10.Text = "Date created: " & ImageCreationDate & CrLf & _
-                                "Date modified: " & ImageModificationDate
-                        Case "ESN"
-                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
-                            Label10.Text = "Fecha de creación: " & ImageCreationDate & CrLf & _
-                                "Fecha de modificación: " & ImageModificationDate
-                        Case "FRA"
-                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
-                            Label10.Text = "Date de création : " & ImageCreationDate & CrLf & _
-                                "Date de modification : " & ImageModificationDate
-                        Case "PTB", "PTG"
-                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
-                            Label10.Text = "Data de criação: " & ImageCreationDate & CrLf & _
-                                "Data de modificação: " & ImageModificationDate
-                        Case "ITA"
-                            Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
-                            Label10.Text = "Data di creazione: " & ImageCreationDate & CrLf & _
-                                "Data modifica: " & ImageModificationDate
-                    End Select
-                Case 1
-                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
-                    Label10.Text = "Date created: " & ImageCreationDate & CrLf & _
-                        "Date modified: " & ImageModificationDate
-                Case 2
-                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " archivos en " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directorios"
-                    Label10.Text = "Fecha de creación: " & ImageCreationDate & CrLf & _
-                        "Fecha de modificación: " & ImageModificationDate
-                Case 3
-                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
-                    Label10.Text = "Date de création : " & ImageCreationDate & CrLf & _
-                        "Date de modification : " & ImageModificationDate
-                Case 4
-                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
-                    Label10.Text = "Data de criação: " & ImageCreationDate & CrLf & _
-                        "Data de modificação: " & ImageModificationDate
-                Case 5
-                    Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
-                    Label10.Text = "Data di creazione: " & ImageCreationDate & CrLf & _
-                        "Data modifica: " & ImageModificationDate
-            End Select
+            Label6.Text = LocalizationService.ForSection("ImageInfo.DisplayImageInfo").Format("FilesDirectories.Label", ImageInfoList(Index).CustomizedInfo.FileCount, ImageInfoList(Index).CustomizedInfo.DirectoryCount)
+            Label10.Text = LocalizationService.ForSection("ImageInfo.DisplayImageInfo").Format("Date.Created.Modified.Label", ImageCreationDate, ImageModificationDate)
         Else
             Label6.Text = ""
             Label10.Text = ""
@@ -720,31 +289,7 @@ Public Class GetImgInfoDlg
                 Exit Sub
         End Select
         DynaLog.LogMessage("Detected feature update: " & FeatUpd)
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label23.Text &= " (feature update: " & FeatUpd & ")"
-                    Case "ESN"
-                        Label23.Text &= " (actualización de características: " & FeatUpd & ")"
-                    Case "FRA"
-                        Label23.Text &= "(m-à-j des caractéristiques: " & FeatUpd & ")"
-                    Case "PTB", "PTG"
-                        Label23.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
-                    Case "ITA"
-                        Label23.Text &= " (aggiornamento funzionalità: " & FeatUpd & ")"
-                End Select
-            Case 1
-                Label23.Text &= " (feature update: " & FeatUpd & ")"
-            Case 2
-                Label23.Text &= " (actualización de características: " & FeatUpd & ")"
-            Case 3
-                Label23.Text &= "(m-à-j des caractéristiques: " & FeatUpd & ")"
-            Case 4
-                Label23.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
-            Case 5
-                Label23.Text &= " (aggiornamento funzionalità: " & FeatUpd & ")"
-        End Select
+        Label23.Text &= LocalizationService.ForSection("ImageInfo.FeatureUpdate")("FeatureUpdate.Label") & FeatUpd & LocalizationService.ForSection("ImageInfo.FeatureUpdate")("Text1.Label")
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged

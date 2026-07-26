@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class RemPackage
     Inherits System.Windows.Forms.Form
 
@@ -67,7 +67,7 @@ Partial Class RemPackage
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.RemPackage")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -78,7 +78,7 @@ Partial Class RemPackage
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.RemPackage")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -95,7 +95,7 @@ Partial Class RemPackage
         Me.GroupBox1.Size = New System.Drawing.Size(760, 460)
         Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Package removal"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.RemPackage")("PackageRemoval.Group")
         '
         'Panel2
         '
@@ -146,7 +146,7 @@ Partial Class RemPackage
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.RemPackage")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -164,8 +164,7 @@ Partial Class RemPackage
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(684, 41)
         Me.Label4.TabIndex = 2
-        Me.Label4.Text = "NOTE: the program may show packages that weren't added in the first place. Howeve" & _
-    "r, if a package is not added, the program will skip it."
+        Me.Label4.Text = LocalizationService.ForSection("Designer.RemPackage")("Note.May.Message")
         '
         'Label3
         '
@@ -175,7 +174,7 @@ Partial Class RemPackage
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(86, 13)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Package source:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.RemPackage")("PackageSource.Label")
         '
         'RadioButton2
         '
@@ -184,7 +183,7 @@ Partial Class RemPackage
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(129, 17)
         Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.Text = "Specify package files:"
+        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.RemPackage")("Package.Files.RadioButton")
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -196,12 +195,12 @@ Partial Class RemPackage
         Me.RadioButton1.Size = New System.Drawing.Size(141, 17)
         Me.RadioButton1.TabIndex = 0
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Specify package names:"
+        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.RemPackage")("Package.Names.RadioButton")
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = "Please specify a package source:"
+        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.RemPackage")("PackageSource.Description")
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = False
         '
@@ -236,7 +235,7 @@ Partial Class RemPackage
         Me.Name = "RemPackage"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Remove packages"
+        Me.Text = LocalizationService.ForSection("Designer.RemPackage")("RemovePackages.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

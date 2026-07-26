@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -87,7 +87,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(575, 48)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "What do you want to do?"
+        Me.Label1.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("WhatWant.Label")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'PictureBox2
@@ -115,7 +115,7 @@ Partial Class MainForm
         Me.LinkLabel1.Size = New System.Drawing.Size(255, 25)
         Me.LinkLabel1.TabIndex = 3
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Install an Operating System"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Install.Operating.Link")
         '
         'PictureBox3
         '
@@ -142,7 +142,7 @@ Partial Class MainForm
         Me.LinkLabel2.Size = New System.Drawing.Size(242, 25)
         Me.LinkLabel2.TabIndex = 3
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Restart to Installation Media"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Restart.Install.Media.Link")
         '
         'PictureBox4
         '
@@ -169,7 +169,7 @@ Partial Class MainForm
         Me.LinkLabel3.Size = New System.Drawing.Size(413, 25)
         Me.LinkLabel3.TabIndex = 3
         Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "Start a PXE Helper Server for Network Installation"
+        Me.LinkLabel3.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("StartPXE.Link")
         '
         'ExitLink
         '
@@ -186,7 +186,7 @@ Partial Class MainForm
         Me.ExitLink.Size = New System.Drawing.Size(71, 25)
         Me.ExitLink.TabIndex = 3
         Me.ExitLink.TabStop = True
-        Me.ExitLink.Text = "Exit"
+        Me.ExitLink.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Exit.Button")
         Me.ExitLink.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'MainMenuPanel
@@ -222,7 +222,7 @@ Partial Class MainForm
         Me.LinkLabel6.Size = New System.Drawing.Size(237, 25)
         Me.LinkLabel6.TabIndex = 3
         Me.LinkLabel6.TabStop = True
-        Me.LinkLabel6.Text = "Explore contents of this disc"
+        Me.LinkLabel6.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Explore.Contents.Disc.Link")
         '
         'LinkLabel4
         '
@@ -238,7 +238,7 @@ Partial Class MainForm
         Me.LinkLabel4.Size = New System.Drawing.Size(290, 25)
         Me.LinkLabel4.TabIndex = 3
         Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = "Prepare System for Image Capture"
+        Me.LinkLabel4.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Prepare.System.Image.Link")
         '
         'PictureBox7
         '
@@ -275,8 +275,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(670, 45)
         Me.Label2.TabIndex = 5
-        Me.Label2.Text = "PE Helper Scripts and Components (c) 2024-2026 CodingWonders Software" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Compilatio" & _
-    "n Scripts (c) 2022 CT Tech Group LLC" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FOG PowerShell API (c) 2020 JJ Fullmer"
+        Me.Label2.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("PE.Helper.Message")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'PxeHelpersMenu
@@ -322,7 +321,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(455, 25)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Start a PXE Helper Server for Network Installation"
+        Me.Label3.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("StartPXE.Label")
         '
         'LinkLabel5
         '
@@ -338,7 +337,7 @@ Partial Class MainForm
         Me.LinkLabel5.Size = New System.Drawing.Size(50, 25)
         Me.LinkLabel5.TabIndex = 3
         Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = "Back"
+        Me.LinkLabel5.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Back.Button")
         '
         'LinkLabel10
         '
@@ -354,7 +353,7 @@ Partial Class MainForm
         Me.LinkLabel10.Size = New System.Drawing.Size(326, 25)
         Me.LinkLabel10.TabIndex = 3
         Me.LinkLabel10.TabStop = True
-        Me.LinkLabel10.Text = "Copy installation image to WDS server"
+        Me.LinkLabel10.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Copy.Install.Image.Link")
         '
         'LinkLabel9
         '
@@ -370,7 +369,7 @@ Partial Class MainForm
         Me.LinkLabel9.Size = New System.Drawing.Size(270, 25)
         Me.LinkLabel9.TabIndex = 3
         Me.LinkLabel9.TabStop = True
-        Me.LinkLabel9.Text = "Copy boot image to WDS server"
+        Me.LinkLabel9.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("Copy.Boot.Image.Link")
         '
         'LinkLabel7
         '
@@ -386,7 +385,7 @@ Partial Class MainForm
         Me.LinkLabel7.Size = New System.Drawing.Size(268, 25)
         Me.LinkLabel7.TabIndex = 3
         Me.LinkLabel7.TabStop = True
-        Me.LinkLabel7.Text = "Start PXE Helper Server for FOG"
+        Me.LinkLabel7.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("StartPXE.PXEFOG.Link")
         '
         'LinkLabel8
         '
@@ -402,7 +401,7 @@ Partial Class MainForm
         Me.LinkLabel8.Size = New System.Drawing.Size(481, 25)
         Me.LinkLabel8.TabIndex = 3
         Me.LinkLabel8.TabStop = True
-        Me.LinkLabel8.Text = "Start PXE Helper Server for Windows Deployment Services"
+        Me.LinkLabel8.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("StartPXE.PXE.Windows.Link")
         '
         'PictureBox11
         '
@@ -480,7 +479,7 @@ Partial Class MainForm
         Me.MaximizeBox = False
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools Preinstallation Environment"
+        Me.Text = LocalizationService.ForSection("PEHelper.Designer.Main")("DISM.Tools.PE.Label")
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()

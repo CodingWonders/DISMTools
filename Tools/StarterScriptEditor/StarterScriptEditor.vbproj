@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FF315C4A-2668-4E7A-8885-00C2F806945C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>StarterScriptEditor.My.MyApplication</StartupObject>
+    <StartupObject>StarterScript.My.MyApplication</StartupObject>
     <RootNamespace>StarterScriptEditor</RootNamespace>
     <AssemblyName>StarterScriptEditor</AssemblyName>
     <MyType>WindowsForms</MyType>
@@ -40,7 +40,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>StarterScriptEditor.xml</DocumentationFile>
+    <DocumentationFile>StarterScript.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -50,7 +50,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>StarterScriptEditor.xml</DocumentationFile>
+    <DocumentationFile>StarterScript.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -142,6 +142,10 @@
     <Compile Include="Classes\AutoInspection\AutoInspectionResult.vb" />
     <Compile Include="Classes\AutoInspection\AutoInspectionRule.vb" />
     <Compile Include="Classes\AutoInspection\AutoInspectionRuleSeverity.vb" />
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="..\..\Utilities\Language\LocalizationService.vb">
+      <Link>Utilities\LocalizationService.vb</Link>
+    </Compile>
     <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
     <Compile Include="Classes\ScriptVersion.vb" />
     <Compile Include="Classes\StarterScript.vb" />

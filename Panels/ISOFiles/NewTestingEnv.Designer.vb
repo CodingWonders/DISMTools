@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class NewTestingEnv
     Inherits System.Windows.Forms.Form
 
@@ -65,7 +65,7 @@ Partial Class NewTestingEnv
         Me.LinkLabel1.Size = New System.Drawing.Size(343, 13)
         Me.LinkLabel1.TabIndex = 20
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Download the Windows ADK"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Download.Windows.ADK.Link")
         '
         'OK_Button
         '
@@ -75,7 +75,7 @@ Partial Class NewTestingEnv
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(75, 23)
         Me.OK_Button.TabIndex = 18
-        Me.OK_Button.Text = "Create"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Create.Button")
         Me.OK_Button.UseVisualStyleBackColor = True
         '
         'Cancel_Button
@@ -86,7 +86,7 @@ Partial Class NewTestingEnv
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 19
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Cancel.Button")
         Me.Cancel_Button.UseVisualStyleBackColor = True
         '
         'Label2
@@ -98,7 +98,7 @@ Partial Class NewTestingEnv
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(760, 55)
         Me.Label2.TabIndex = 16
-        Me.Label2.Text = resources.GetString("Label2.Text")
+        Me.Label2.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("WizardHelp.Message")
         '
         'Panel1
         '
@@ -129,7 +129,7 @@ Partial Class NewTestingEnv
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(105, 13)
         Me.Label6.TabIndex = 6
-        Me.Label6.Text = "Architecture:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Architecture.Label")
         '
         'Label5
         '
@@ -139,7 +139,7 @@ Partial Class NewTestingEnv
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(132, 13)
         Me.Label5.TabIndex = 15
-        Me.Label5.Text = "Environment architecture:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Env.Architecture.Label")
         '
         'Button3
         '
@@ -149,7 +149,7 @@ Partial Class NewTestingEnv
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 14
-        Me.Button3.Text = "Browse..."
+        Me.Button3.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Browse.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'TextBox3
@@ -169,7 +169,7 @@ Partial Class NewTestingEnv
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(120, 13)
         Me.Label7.TabIndex = 12
-        Me.Label7.Text = "Target project location:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Target.Project.Label")
         '
         'GroupBox2
         '
@@ -181,7 +181,7 @@ Partial Class NewTestingEnv
         Me.GroupBox2.Size = New System.Drawing.Size(760, 98)
         Me.GroupBox2.TabIndex = 21
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Progress"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Progress.Group")
         '
         'ProgressContainer
         '
@@ -210,7 +210,7 @@ Partial Class NewTestingEnv
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(754, 78)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Once you're ready, click the Create button."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Re.Ready.Create.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ISOProgressPanel
@@ -244,8 +244,7 @@ Partial Class NewTestingEnv
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(726, 13)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = "You can do other things while the ISO is being created. Come back here anytime fo" & _
-    "r an updated status."
+        Me.Label9.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Other.Things.Message")
         '
         'Label8
         '
@@ -256,7 +255,7 @@ Partial Class NewTestingEnv
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(726, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Status"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Status.Label")
         '
         'FolderBrowserDialog1
         '
@@ -313,7 +312,7 @@ Partial Class NewTestingEnv
         Me.Name = "NewTestingEnv"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Create a testing environment"
+        Me.Text = LocalizationService.ForSection("Designer.NewTestingEnv")("Create.Environment.Label")
         Me.Panel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.ProgressContainer.ResumeLayout(False)

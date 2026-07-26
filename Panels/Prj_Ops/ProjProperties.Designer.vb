@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ProjProperties
     Inherits System.Windows.Forms.Form
 
@@ -134,7 +134,7 @@ Partial Class ProjProperties
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ProjProps")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -145,7 +145,7 @@ Partial Class ProjProperties
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ProjProps")("Cancel.Button")
         '
         'Label8
         '
@@ -157,7 +157,7 @@ Partial Class ProjProperties
         Me.Label8.Padding = New System.Windows.Forms.Padding(3)
         Me.Label8.Size = New System.Drawing.Size(186, 19)
         Me.Label8.TabIndex = 5
-        Me.Label8.Text = "Project GUID:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.ProjProps")("ProjectGUID.Label")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label7
@@ -170,7 +170,7 @@ Partial Class ProjProperties
         Me.Label7.Padding = New System.Windows.Forms.Padding(3)
         Me.Label7.Size = New System.Drawing.Size(186, 19)
         Me.Label7.TabIndex = 5
-        Me.Label7.Text = "Creation date:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.ProjProps")("CreationDate.Label")
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label6
@@ -183,7 +183,7 @@ Partial Class ProjProperties
         Me.Label6.Padding = New System.Windows.Forms.Padding(3)
         Me.Label6.Size = New System.Drawing.Size(186, 19)
         Me.Label6.TabIndex = 5
-        Me.Label6.Text = "Location:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.ProjProps")("Location.Label")
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label12
@@ -196,7 +196,7 @@ Partial Class ProjProperties
         Me.Label12.Padding = New System.Windows.Forms.Padding(3)
         Me.Label12.Size = New System.Drawing.Size(784, 19)
         Me.Label12.TabIndex = 5
-        Me.Label12.Text = "projGuid"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.ProjProps")("ProjGuid.Label")
         '
         'Label11
         '
@@ -208,7 +208,7 @@ Partial Class ProjProperties
         Me.Label11.Padding = New System.Windows.Forms.Padding(3)
         Me.Label11.Size = New System.Drawing.Size(784, 19)
         Me.Label11.TabIndex = 5
-        Me.Label11.Text = "projTZData"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.ProjProps")("ProjTzdata.Label")
         '
         'Label10
         '
@@ -220,7 +220,7 @@ Partial Class ProjProperties
         Me.Label10.Padding = New System.Windows.Forms.Padding(3)
         Me.Label10.Size = New System.Drawing.Size(784, 19)
         Me.Label10.TabIndex = 5
-        Me.Label10.Text = "projPath"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.ProjProps")("ProjPath.Label")
         '
         'Label9
         '
@@ -232,7 +232,7 @@ Partial Class ProjProperties
         Me.Label9.Padding = New System.Windows.Forms.Padding(3)
         Me.Label9.Size = New System.Drawing.Size(784, 19)
         Me.Label9.TabIndex = 5
-        Me.Label9.Text = "projName"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.ProjProps")("ProjName.Label")
         '
         'Label5
         '
@@ -244,7 +244,7 @@ Partial Class ProjProperties
         Me.Label5.Padding = New System.Windows.Forms.Padding(3)
         Me.Label5.Size = New System.Drawing.Size(186, 19)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Name:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.ProjProps")("Name.Label")
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'LanguageList
@@ -268,7 +268,7 @@ Partial Class ProjProperties
         Me.RemountImgBtn.Name = "RemountImgBtn"
         Me.RemountImgBtn.Size = New System.Drawing.Size(140, 24)
         Me.RemountImgBtn.TabIndex = 19
-        Me.RemountImgBtn.Text = "Reload"
+        Me.RemountImgBtn.Text = LocalizationService.ForSection("Designer.ProjProps")("RemountImg.Label")
         Me.RemountImgBtn.UseVisualStyleBackColor = True
         Me.RemountImgBtn.Visible = False
         '
@@ -281,7 +281,7 @@ Partial Class ProjProperties
         Me.RecoverButton.Name = "RecoverButton"
         Me.RecoverButton.Size = New System.Drawing.Size(140, 24)
         Me.RecoverButton.TabIndex = 19
-        Me.RecoverButton.Text = "Recover"
+        Me.RecoverButton.Text = LocalizationService.ForSection("Designer.ProjProps")("Recover.Label")
         Me.RecoverButton.UseVisualStyleBackColor = True
         Me.RecoverButton.Visible = False
         '
@@ -295,7 +295,7 @@ Partial Class ProjProperties
         Me.Label13.Padding = New System.Windows.Forms.Padding(4)
         Me.Label13.Size = New System.Drawing.Size(186, 21)
         Me.Label13.TabIndex = 6
-        Me.Label13.Text = "Mount directory:"
+        Me.Label13.Text = LocalizationService.ForSection("Designer.ProjProps")("MountDirectory.Label")
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label58
@@ -308,7 +308,7 @@ Partial Class ProjProperties
         Me.Label58.Padding = New System.Windows.Forms.Padding(4)
         Me.Label58.Size = New System.Drawing.Size(132, 54)
         Me.Label58.TabIndex = 7
-        Me.Label58.Text = "Installed languages:"
+        Me.Label58.Text = LocalizationService.ForSection("Designer.ProjProps")("Installed.Languages.Label")
         Me.Label58.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label60
@@ -320,7 +320,7 @@ Partial Class ProjProperties
         Me.Label60.Padding = New System.Windows.Forms.Padding(4)
         Me.Label60.Size = New System.Drawing.Size(132, 21)
         Me.Label60.TabIndex = 7
-        Me.Label60.Text = "File format:"
+        Me.Label60.Text = LocalizationService.ForSection("Designer.ProjProps")("FileFormat.Label")
         Me.Label60.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label57
@@ -333,7 +333,7 @@ Partial Class ProjProperties
         Me.Label57.Padding = New System.Windows.Forms.Padding(4)
         Me.Label57.Size = New System.Drawing.Size(132, 21)
         Me.Label57.TabIndex = 7
-        Me.Label57.Text = "Modification date:"
+        Me.Label57.Text = LocalizationService.ForSection("Designer.ProjProps")("ModificationDate.Label")
         Me.Label57.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label55
@@ -346,7 +346,7 @@ Partial Class ProjProperties
         Me.Label55.Padding = New System.Windows.Forms.Padding(4)
         Me.Label55.Size = New System.Drawing.Size(132, 21)
         Me.Label55.TabIndex = 7
-        Me.Label55.Text = "Creation date:"
+        Me.Label55.Text = LocalizationService.ForSection("Designer.ProjProps")("CreationDate.Label")
         Me.Label55.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label53
@@ -359,7 +359,7 @@ Partial Class ProjProperties
         Me.Label53.Padding = New System.Windows.Forms.Padding(4)
         Me.Label53.Size = New System.Drawing.Size(132, 21)
         Me.Label53.TabIndex = 7
-        Me.Label53.Text = "File count:"
+        Me.Label53.Text = LocalizationService.ForSection("Designer.ProjProps")("FileCount.Label")
         Me.Label53.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label51
@@ -372,7 +372,7 @@ Partial Class ProjProperties
         Me.Label51.Padding = New System.Windows.Forms.Padding(4)
         Me.Label51.Size = New System.Drawing.Size(132, 21)
         Me.Label51.TabIndex = 7
-        Me.Label51.Text = "Directory count:"
+        Me.Label51.Text = LocalizationService.ForSection("Designer.ProjProps")("DirectoryCount.Label")
         Me.Label51.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label49
@@ -385,7 +385,7 @@ Partial Class ProjProperties
         Me.Label49.Padding = New System.Windows.Forms.Padding(4)
         Me.Label49.Size = New System.Drawing.Size(132, 21)
         Me.Label49.TabIndex = 7
-        Me.Label49.Text = "System root directory:"
+        Me.Label49.Text = LocalizationService.ForSection("Designer.ProjProps")("System.Root.Dir.Label")
         Me.Label49.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label47
@@ -398,7 +398,7 @@ Partial Class ProjProperties
         Me.Label47.Padding = New System.Windows.Forms.Padding(4)
         Me.Label47.Size = New System.Drawing.Size(132, 21)
         Me.Label47.TabIndex = 7
-        Me.Label47.Text = "Product suite:"
+        Me.Label47.Text = LocalizationService.ForSection("Designer.ProjProps")("ProductSuite.Label")
         Me.Label47.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label45
@@ -411,7 +411,7 @@ Partial Class ProjProperties
         Me.Label45.Padding = New System.Windows.Forms.Padding(4)
         Me.Label45.Size = New System.Drawing.Size(132, 21)
         Me.Label45.TabIndex = 7
-        Me.Label45.Text = "Product type:"
+        Me.Label45.Text = LocalizationService.ForSection("Designer.ProjProps")("ProductType.Label")
         Me.Label45.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label43
@@ -424,7 +424,7 @@ Partial Class ProjProperties
         Me.Label43.Padding = New System.Windows.Forms.Padding(4)
         Me.Label43.Size = New System.Drawing.Size(132, 30)
         Me.Label43.TabIndex = 7
-        Me.Label43.Text = "Edition:"
+        Me.Label43.Text = LocalizationService.ForSection("Designer.ProjProps")("Edition.Label")
         Me.Label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label41
@@ -437,7 +437,7 @@ Partial Class ProjProperties
         Me.Label41.Padding = New System.Windows.Forms.Padding(4)
         Me.Label41.Size = New System.Drawing.Size(132, 21)
         Me.Label41.TabIndex = 7
-        Me.Label41.Text = "Service Pack level:"
+        Me.Label41.Text = LocalizationService.ForSection("Designer.ProjProps")("ServicePackLevel.Label")
         Me.Label41.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label39
@@ -450,7 +450,7 @@ Partial Class ProjProperties
         Me.Label39.Padding = New System.Windows.Forms.Padding(4)
         Me.Label39.Size = New System.Drawing.Size(132, 21)
         Me.Label39.TabIndex = 7
-        Me.Label39.Text = "Service Pack build:"
+        Me.Label39.Text = LocalizationService.ForSection("Designer.ProjProps")("ServicePackBuild.Label")
         Me.Label39.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label37
@@ -463,7 +463,7 @@ Partial Class ProjProperties
         Me.Label37.Padding = New System.Windows.Forms.Padding(4)
         Me.Label37.Size = New System.Drawing.Size(132, 21)
         Me.Label37.TabIndex = 7
-        Me.Label37.Text = "HAL:"
+        Me.Label37.Text = LocalizationService.ForSection("Designer.ProjProps")("HAL.Label")
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label35
@@ -476,7 +476,7 @@ Partial Class ProjProperties
         Me.Label35.Padding = New System.Windows.Forms.Padding(4)
         Me.Label35.Size = New System.Drawing.Size(186, 21)
         Me.Label35.TabIndex = 7
-        Me.Label35.Text = "Architecture:"
+        Me.Label35.Text = LocalizationService.ForSection("Designer.ProjProps")("Architecture.Label")
         Me.Label35.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label33
@@ -489,7 +489,7 @@ Partial Class ProjProperties
         Me.Label33.Padding = New System.Windows.Forms.Padding(4)
         Me.Label33.Size = New System.Drawing.Size(186, 21)
         Me.Label33.TabIndex = 7
-        Me.Label33.Text = "Supports WIMBoot?"
+        Me.Label33.Text = LocalizationService.ForSection("Designer.ProjProps")("Supports.WIM.Boot.Label")
         Me.Label33.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label22
@@ -502,7 +502,7 @@ Partial Class ProjProperties
         Me.Label22.Padding = New System.Windows.Forms.Padding(4)
         Me.Label22.Size = New System.Drawing.Size(186, 30)
         Me.Label22.TabIndex = 7
-        Me.Label22.Text = "Image status:"
+        Me.Label22.Text = LocalizationService.ForSection("Designer.ProjProps")("ImageStatus.Label")
         Me.Label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label14
@@ -515,7 +515,7 @@ Partial Class ProjProperties
         Me.Label14.Padding = New System.Windows.Forms.Padding(4)
         Me.Label14.Size = New System.Drawing.Size(186, 21)
         Me.Label14.TabIndex = 7
-        Me.Label14.Text = "Image index:"
+        Me.Label14.Text = LocalizationService.ForSection("Designer.ProjProps")("ImageIndex.Label")
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label31
@@ -528,7 +528,7 @@ Partial Class ProjProperties
         Me.Label31.Padding = New System.Windows.Forms.Padding(4)
         Me.Label31.Size = New System.Drawing.Size(186, 21)
         Me.Label31.TabIndex = 8
-        Me.Label31.Text = "Size:"
+        Me.Label31.Text = LocalizationService.ForSection("Designer.ProjProps")("Size.Label")
         Me.Label31.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label29
@@ -541,7 +541,7 @@ Partial Class ProjProperties
         Me.Label29.Padding = New System.Windows.Forms.Padding(4)
         Me.Label29.Size = New System.Drawing.Size(186, 21)
         Me.Label29.TabIndex = 8
-        Me.Label29.Text = "Description:"
+        Me.Label29.Text = LocalizationService.ForSection("Designer.ProjProps")("Description.Label")
         Me.Label29.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label27
@@ -554,7 +554,7 @@ Partial Class ProjProperties
         Me.Label27.Padding = New System.Windows.Forms.Padding(4)
         Me.Label27.Size = New System.Drawing.Size(186, 21)
         Me.Label27.TabIndex = 8
-        Me.Label27.Text = "Name:"
+        Me.Label27.Text = LocalizationService.ForSection("Designer.ProjProps")("Name.Label")
         Me.Label27.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label25
@@ -567,7 +567,7 @@ Partial Class ProjProperties
         Me.Label25.Padding = New System.Windows.Forms.Padding(4)
         Me.Label25.Size = New System.Drawing.Size(186, 21)
         Me.Label25.TabIndex = 8
-        Me.Label25.Text = "Version:"
+        Me.Label25.Text = LocalizationService.ForSection("Designer.ProjProps")("Version.Label")
         Me.Label25.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label15
@@ -580,7 +580,7 @@ Partial Class ProjProperties
         Me.Label15.Padding = New System.Windows.Forms.Padding(4)
         Me.Label15.Size = New System.Drawing.Size(186, 21)
         Me.Label15.TabIndex = 8
-        Me.Label15.Text = "Image file:"
+        Me.Label15.Text = LocalizationService.ForSection("Designer.ProjProps")("ImageFile.Label")
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'imgFormat
@@ -593,7 +593,7 @@ Partial Class ProjProperties
         Me.imgFormat.Padding = New System.Windows.Forms.Padding(4)
         Me.imgFormat.Size = New System.Drawing.Size(361, 21)
         Me.imgFormat.TabIndex = 10
-        Me.imgFormat.Text = "imgFormat"
+        Me.imgFormat.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgFormat.Label")
         '
         'imgModification
         '
@@ -605,7 +605,7 @@ Partial Class ProjProperties
         Me.imgModification.Padding = New System.Windows.Forms.Padding(4)
         Me.imgModification.Size = New System.Drawing.Size(361, 21)
         Me.imgModification.TabIndex = 10
-        Me.imgModification.Text = "imgModification"
+        Me.imgModification.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgModification.Label")
         '
         'imgCreation
         '
@@ -617,7 +617,7 @@ Partial Class ProjProperties
         Me.imgCreation.Padding = New System.Windows.Forms.Padding(4)
         Me.imgCreation.Size = New System.Drawing.Size(361, 21)
         Me.imgCreation.TabIndex = 10
-        Me.imgCreation.Text = "imgCreation"
+        Me.imgCreation.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgCreation.Label")
         '
         'imgFiles
         '
@@ -629,7 +629,7 @@ Partial Class ProjProperties
         Me.imgFiles.Padding = New System.Windows.Forms.Padding(4)
         Me.imgFiles.Size = New System.Drawing.Size(361, 21)
         Me.imgFiles.TabIndex = 10
-        Me.imgFiles.Text = "imgFiles"
+        Me.imgFiles.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgFiles.Label")
         '
         'imgDirs
         '
@@ -641,7 +641,7 @@ Partial Class ProjProperties
         Me.imgDirs.Padding = New System.Windows.Forms.Padding(4)
         Me.imgDirs.Size = New System.Drawing.Size(361, 21)
         Me.imgDirs.TabIndex = 10
-        Me.imgDirs.Text = "imgDirs"
+        Me.imgDirs.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgDirs.Label")
         '
         'imgSysRoot
         '
@@ -653,7 +653,7 @@ Partial Class ProjProperties
         Me.imgSysRoot.Padding = New System.Windows.Forms.Padding(4)
         Me.imgSysRoot.Size = New System.Drawing.Size(361, 21)
         Me.imgSysRoot.TabIndex = 10
-        Me.imgSysRoot.Text = "imgSysRoot"
+        Me.imgSysRoot.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.Sys.Root.Label")
         '
         'imgPSuite
         '
@@ -665,7 +665,7 @@ Partial Class ProjProperties
         Me.imgPSuite.Padding = New System.Windows.Forms.Padding(4)
         Me.imgPSuite.Size = New System.Drawing.Size(361, 21)
         Me.imgPSuite.TabIndex = 10
-        Me.imgPSuite.Text = "imgPSuite"
+        Me.imgPSuite.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgPsuite.Label")
         '
         'imgPType
         '
@@ -677,7 +677,7 @@ Partial Class ProjProperties
         Me.imgPType.Padding = New System.Windows.Forms.Padding(4)
         Me.imgPType.Size = New System.Drawing.Size(361, 21)
         Me.imgPType.TabIndex = 10
-        Me.imgPType.Text = "imgPType"
+        Me.imgPType.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgPtype.Label")
         '
         'imgEdition
         '
@@ -689,7 +689,7 @@ Partial Class ProjProperties
         Me.imgEdition.Padding = New System.Windows.Forms.Padding(4)
         Me.imgEdition.Size = New System.Drawing.Size(361, 30)
         Me.imgEdition.TabIndex = 10
-        Me.imgEdition.Text = "imgEdition"
+        Me.imgEdition.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgEdition.Label")
         Me.imgEdition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'imgSPLvl
@@ -702,7 +702,7 @@ Partial Class ProjProperties
         Me.imgSPLvl.Padding = New System.Windows.Forms.Padding(4)
         Me.imgSPLvl.Size = New System.Drawing.Size(361, 21)
         Me.imgSPLvl.TabIndex = 10
-        Me.imgSPLvl.Text = "imgSPLvl"
+        Me.imgSPLvl.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgSplvl.Label")
         '
         'imgSPBuild
         '
@@ -714,7 +714,7 @@ Partial Class ProjProperties
         Me.imgSPBuild.Padding = New System.Windows.Forms.Padding(4)
         Me.imgSPBuild.Size = New System.Drawing.Size(361, 21)
         Me.imgSPBuild.TabIndex = 10
-        Me.imgSPBuild.Text = "imgSPBuild"
+        Me.imgSPBuild.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgSpbuild.Label")
         '
         'imgHal
         '
@@ -726,7 +726,7 @@ Partial Class ProjProperties
         Me.imgHal.Padding = New System.Windows.Forms.Padding(4)
         Me.imgHal.Size = New System.Drawing.Size(361, 21)
         Me.imgHal.TabIndex = 10
-        Me.imgHal.Text = "imgHal"
+        Me.imgHal.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgHal.Label")
         '
         'imgMountDir
         '
@@ -738,7 +738,7 @@ Partial Class ProjProperties
         Me.imgMountDir.Padding = New System.Windows.Forms.Padding(4)
         Me.imgMountDir.Size = New System.Drawing.Size(285, 21)
         Me.imgMountDir.TabIndex = 9
-        Me.imgMountDir.Text = "imgMountDir"
+        Me.imgMountDir.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.Mount.Dir.Label")
         '
         'imgArch
         '
@@ -750,7 +750,7 @@ Partial Class ProjProperties
         Me.imgArch.Padding = New System.Windows.Forms.Padding(4)
         Me.imgArch.Size = New System.Drawing.Size(285, 21)
         Me.imgArch.TabIndex = 10
-        Me.imgArch.Text = "imgArch"
+        Me.imgArch.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgArch.Label")
         '
         'imgWimBootStatus
         '
@@ -762,7 +762,7 @@ Partial Class ProjProperties
         Me.imgWimBootStatus.Padding = New System.Windows.Forms.Padding(4)
         Me.imgWimBootStatus.Size = New System.Drawing.Size(285, 21)
         Me.imgWimBootStatus.TabIndex = 10
-        Me.imgWimBootStatus.Text = "imgWimBootStatus"
+        Me.imgWimBootStatus.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.WIM.Boot.Label")
         '
         'imgMountedStatus
         '
@@ -773,7 +773,7 @@ Partial Class ProjProperties
         Me.imgMountedStatus.Padding = New System.Windows.Forms.Padding(4)
         Me.imgMountedStatus.Size = New System.Drawing.Size(139, 30)
         Me.imgMountedStatus.TabIndex = 10
-        Me.imgMountedStatus.Text = "imgMountedStatus"
+        Me.imgMountedStatus.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.Mounted.Status.Label")
         Me.imgMountedStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'imgSize
@@ -786,7 +786,7 @@ Partial Class ProjProperties
         Me.imgSize.Padding = New System.Windows.Forms.Padding(4)
         Me.imgSize.Size = New System.Drawing.Size(285, 21)
         Me.imgSize.TabIndex = 11
-        Me.imgSize.Text = "imgSize"
+        Me.imgSize.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgSize.Label")
         '
         'imgMountedDesc
         '
@@ -798,7 +798,7 @@ Partial Class ProjProperties
         Me.imgMountedDesc.Padding = New System.Windows.Forms.Padding(4)
         Me.imgMountedDesc.Size = New System.Drawing.Size(285, 21)
         Me.imgMountedDesc.TabIndex = 11
-        Me.imgMountedDesc.Text = "imgMountedDesc"
+        Me.imgMountedDesc.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.Mounted.Desc.Label")
         Me.imgMountedDesc.UseMnemonic = False
         '
         'imgMountedName
@@ -811,7 +811,7 @@ Partial Class ProjProperties
         Me.imgMountedName.Padding = New System.Windows.Forms.Padding(4)
         Me.imgMountedName.Size = New System.Drawing.Size(285, 21)
         Me.imgMountedName.TabIndex = 11
-        Me.imgMountedName.Text = "imgMountedName"
+        Me.imgMountedName.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.Mounted.Name.Label")
         Me.imgMountedName.UseMnemonic = False
         '
         'imgVersion
@@ -824,7 +824,7 @@ Partial Class ProjProperties
         Me.imgVersion.Padding = New System.Windows.Forms.Padding(4)
         Me.imgVersion.Size = New System.Drawing.Size(285, 21)
         Me.imgVersion.TabIndex = 11
-        Me.imgVersion.Text = "imgVersion"
+        Me.imgVersion.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgVersion.Label")
         '
         'imgIndex
         '
@@ -836,7 +836,7 @@ Partial Class ProjProperties
         Me.imgIndex.Padding = New System.Windows.Forms.Padding(4)
         Me.imgIndex.Size = New System.Drawing.Size(285, 21)
         Me.imgIndex.TabIndex = 10
-        Me.imgIndex.Text = "imgIndex"
+        Me.imgIndex.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgIndex.Label")
         '
         'imgName
         '
@@ -848,7 +848,7 @@ Partial Class ProjProperties
         Me.imgName.Padding = New System.Windows.Forms.Padding(4)
         Me.imgName.Size = New System.Drawing.Size(285, 21)
         Me.imgName.TabIndex = 11
-        Me.imgName.Text = "imgName"
+        Me.imgName.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgName.Label")
         '
         'Label4
         '
@@ -858,7 +858,7 @@ Partial Class ProjProperties
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(261, 13)
         Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Getting project and image information. Please wait..."
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ProjProps")("Getting.Project.Image.Label")
         '
         'Panel1
         '
@@ -879,7 +879,7 @@ Partial Class ProjProperties
         Me.FfuInfoBtn.Name = "FfuInfoBtn"
         Me.FfuInfoBtn.Size = New System.Drawing.Size(174, 23)
         Me.FfuInfoBtn.TabIndex = 6
-        Me.FfuInfoBtn.Text = "View FFU information"
+        Me.FfuInfoBtn.Text = LocalizationService.ForSection("Designer.ProjProps")("View.Ffuinformation.Label")
         Me.FfuInfoBtn.UseVisualStyleBackColor = True
         Me.FfuInfoBtn.Visible = False
         '
@@ -1018,7 +1018,7 @@ Partial Class ProjProperties
         Me.RWRemountBtn.Name = "RWRemountBtn"
         Me.RWRemountBtn.Size = New System.Drawing.Size(200, 23)
         Me.RWRemountBtn.TabIndex = 18
-        Me.RWRemountBtn.Text = "Remount with write permissions"
+        Me.RWRemountBtn.Text = LocalizationService.ForSection("Designer.ProjProps")("Remount.Write.Label")
         Me.RWRemountBtn.UseVisualStyleBackColor = True
         Me.RWRemountBtn.Visible = False
         '
@@ -1032,7 +1032,7 @@ Partial Class ProjProperties
         Me.imgRW.Padding = New System.Windows.Forms.Padding(4)
         Me.imgRW.Size = New System.Drawing.Size(139, 29)
         Me.imgRW.TabIndex = 10
-        Me.imgRW.Text = "imgRW"
+        Me.imgRW.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgRW.Label")
         '
         'Label62
         '
@@ -1044,7 +1044,7 @@ Partial Class ProjProperties
         Me.Label62.Padding = New System.Windows.Forms.Padding(4)
         Me.Label62.Size = New System.Drawing.Size(132, 29)
         Me.Label62.TabIndex = 7
-        Me.Label62.Text = "Image R/W permissions:"
+        Me.Label62.Text = LocalizationService.ForSection("Designer.ProjProps")("Image.Rwpermissions.Label")
         Me.Label62.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Panel2
@@ -1067,7 +1067,7 @@ Partial Class ProjProperties
         Me.Label2.Padding = New System.Windows.Forms.Padding(4)
         Me.Label2.Size = New System.Drawing.Size(132, 21)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = "Installation type:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ProjProps")("InstallationType.Label")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'imgInstType
@@ -1080,7 +1080,7 @@ Partial Class ProjProperties
         Me.imgInstType.Padding = New System.Windows.Forms.Padding(4)
         Me.imgInstType.Size = New System.Drawing.Size(361, 21)
         Me.imgInstType.TabIndex = 10
-        Me.imgInstType.Text = "imgInstType"
+        Me.imgInstType.Text = LocalizationService.ForSection("Designer.ProjProps")("Img.Inst.Type.Label")
         '
         'TableLayoutPanel2
         '
@@ -1111,7 +1111,7 @@ Partial Class ProjProperties
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(485, 13)
         Me.Label20.TabIndex = 15
-        Me.Label20.Text = "Image present on project?"
+        Me.Label20.Text = LocalizationService.ForSection("Designer.ProjProps")("Image.Present.Project.Label")
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label19
@@ -1124,7 +1124,7 @@ Partial Class ProjProperties
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(485, 13)
         Me.Label19.TabIndex = 14
-        Me.Label19.Text = "imgStatus"
+        Me.Label19.Text = LocalizationService.ForSection("Designer.ProjProps")("ImgStatus.Label")
         '
         'Panel3
         '
@@ -1157,9 +1157,7 @@ Partial Class ProjProperties
         Me.LinkLabel2.Size = New System.Drawing.Size(919, 32)
         Me.LinkLabel2.TabIndex = 16
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "Many properties cannot be seen because an image has not yet been mounted. Once yo" & _
-    "u mount it, detailed information will be shown here. Click here to mount an imag" & _
-    "e"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("Designer.ProjProps")("Many.Cannot.Seen.Message")
         Me.LinkLabel2.UseCompatibleTextRendering = True
         '
         'ImageTaskHeader1
@@ -1194,7 +1192,7 @@ Partial Class ProjProperties
         Me.Name = "ProjProperties"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Properties"
+        Me.Text = LocalizationService.ForSection("Designer.ProjProps")("Props.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()

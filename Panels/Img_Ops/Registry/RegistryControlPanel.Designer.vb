@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class RegistryControlPanel
     Inherits System.Windows.Forms.Form
 
@@ -63,7 +63,7 @@ Partial Class RegistryControlPanel
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(599, 42)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Tool.Lets.Load.Message")
         '
         'TableLayoutPanel1
         '
@@ -104,7 +104,7 @@ Partial Class RegistryControlPanel
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(102, 25)
         Me.Button12.TabIndex = 15
-        Me.Button12.Text = "Load"
+        Me.Button12.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Button")
         Me.Button12.UseVisualStyleBackColor = True
         '
         'Button11
@@ -116,7 +116,7 @@ Partial Class RegistryControlPanel
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(102, 23)
         Me.Button11.TabIndex = 14
-        Me.Button11.Text = "Load"
+        Me.Button11.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Button")
         Me.Button11.UseVisualStyleBackColor = True
         '
         'Button10
@@ -128,7 +128,7 @@ Partial Class RegistryControlPanel
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(102, 23)
         Me.Button10.TabIndex = 13
-        Me.Button10.Text = "Load"
+        Me.Button10.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Button")
         Me.Button10.UseVisualStyleBackColor = True
         '
         'Label5
@@ -139,7 +139,7 @@ Partial Class RegistryControlPanel
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(382, 31)
         Me.Label5.TabIndex = 9
-        Me.Label5.Text = "NTUSER.DAT (Default User)"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Ntuserdatdefault.User.Label")
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button4
@@ -151,7 +151,7 @@ Partial Class RegistryControlPanel
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(98, 25)
         Me.Button4.TabIndex = 11
-        Me.Button4.Text = "Open"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Open.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label4
@@ -162,7 +162,7 @@ Partial Class RegistryControlPanel
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(382, 29)
         Me.Label4.TabIndex = 6
-        Me.Label4.Text = "DEFAULT"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Default.Label")
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button3
@@ -174,7 +174,7 @@ Partial Class RegistryControlPanel
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(98, 23)
         Me.Button3.TabIndex = 8
-        Me.Button3.Text = "Open"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Open.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Label3
@@ -185,7 +185,7 @@ Partial Class RegistryControlPanel
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(382, 29)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "SYSTEM"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.RegistryPanel")("System.Label")
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button2
@@ -197,7 +197,7 @@ Partial Class RegistryControlPanel
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(98, 23)
         Me.Button2.TabIndex = 5
-        Me.Button2.Text = "Open"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Open.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label2
@@ -208,7 +208,7 @@ Partial Class RegistryControlPanel
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(382, 29)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "SOFTWARE"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Software.Label")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Button1
@@ -220,7 +220,7 @@ Partial Class RegistryControlPanel
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(98, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Open"
+        Me.Button1.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Open.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Button9
@@ -232,7 +232,7 @@ Partial Class RegistryControlPanel
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(102, 23)
         Me.Button9.TabIndex = 12
-        Me.Button9.Text = "Load"
+        Me.Button9.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Button")
         Me.Button9.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -249,7 +249,7 @@ Partial Class RegistryControlPanel
         Me.GroupBox1.Size = New System.Drawing.Size(599, 182)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Load Custom Hive"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Custom.Hive")
         '
         'TableLayoutPanel2
         '
@@ -276,7 +276,7 @@ Partial Class RegistryControlPanel
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(183, 23)
         Me.Button6.TabIndex = 11
-        Me.Button6.Text = "Unload"
+        Me.Button6.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Unload.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'Button7
@@ -288,7 +288,7 @@ Partial Class RegistryControlPanel
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(182, 23)
         Me.Button7.TabIndex = 10
-        Me.Button7.Text = "Open"
+        Me.Button7.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Open.Button")
         Me.Button7.UseVisualStyleBackColor = True
         '
         'Button8
@@ -299,7 +299,7 @@ Partial Class RegistryControlPanel
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(182, 23)
         Me.Button8.TabIndex = 9
-        Me.Button8.Text = "Load"
+        Me.Button8.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Button")
         Me.Button8.UseVisualStyleBackColor = True
         '
         'Button5
@@ -309,7 +309,7 @@ Partial Class RegistryControlPanel
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(98, 23)
         Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Browse..."
+        Me.Button5.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Browse.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -336,7 +336,7 @@ Partial Class RegistryControlPanel
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(103, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Path in the registry:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.RegistryPanel")("PathRegistry.Label")
         '
         'Label7
         '
@@ -347,7 +347,7 @@ Partial Class RegistryControlPanel
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(72, 13)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Hive location:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.RegistryPanel")("HiveLocation.Label")
         '
         'Label6
         '
@@ -358,7 +358,7 @@ Partial Class RegistryControlPanel
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(568, 31)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "If you want to load a different registry hive, specify its path and click Load:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Load.Different.Label")
         '
         'OpenFileDialog1
         '
@@ -378,7 +378,7 @@ Partial Class RegistryControlPanel
         Me.MinimumSize = New System.Drawing.Size(640, 420)
         Me.Name = "RegistryControlPanel"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Image registry hives"
+        Me.Text = LocalizationService.ForSection("Designer.RegistryPanel")("Image.Hives.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

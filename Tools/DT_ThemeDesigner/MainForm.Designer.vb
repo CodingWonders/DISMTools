@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -129,7 +129,7 @@ Partial Class MainForm
         Me.GroupBox1.Size = New System.Drawing.Size(606, 154)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Theme Colors"
+        Me.GroupBox1.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("ThemeColors.Group")
         '
         'Label17
         '
@@ -138,7 +138,7 @@ Partial Class MainForm
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(35, 13)
         Me.Label17.TabIndex = 9
-        Me.Label17.Text = "4"
+        Me.Label17.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("OptionFour.Label")
         Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label16
@@ -148,7 +148,7 @@ Partial Class MainForm
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(35, 13)
         Me.Label16.TabIndex = 8
-        Me.Label16.Text = "3"
+        Me.Label16.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("OptionThree.Label")
         Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label15
@@ -158,7 +158,7 @@ Partial Class MainForm
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(35, 13)
         Me.Label15.TabIndex = 7
-        Me.Label15.Text = "2"
+        Me.Label15.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("OptionTwo.Label")
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label14
@@ -168,7 +168,7 @@ Partial Class MainForm
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(35, 13)
         Me.Label14.TabIndex = 6
-        Me.Label14.Text = "1"
+        Me.Label14.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("OptionOne.Label")
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label13
@@ -255,7 +255,7 @@ Partial Class MainForm
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 3
-        Me.Button7.Text = "Change..."
+        Me.Button7.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button7.UseVisualStyleBackColor = True
         '
         'Button6
@@ -265,7 +265,7 @@ Partial Class MainForm
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(75, 23)
         Me.Button6.TabIndex = 3
-        Me.Button6.Text = "Change..."
+        Me.Button6.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'Button5
@@ -275,7 +275,7 @@ Partial Class MainForm
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 3
-        Me.Button5.Text = "Change..."
+        Me.Button5.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button4
@@ -285,7 +285,7 @@ Partial Class MainForm
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 23)
         Me.Button4.TabIndex = 3
-        Me.Button4.Text = "Change..."
+        Me.Button4.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button2
@@ -295,7 +295,7 @@ Partial Class MainForm
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Change..."
+        Me.Button2.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label3
@@ -305,7 +305,7 @@ Partial Class MainForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(184, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Background Color for Inner Sections:"
+        Me.Label3.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Bg.Color.Inner.Label")
         '
         'Button3
         '
@@ -314,7 +314,7 @@ Partial Class MainForm
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Change..."
+        Me.Button3.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button1
@@ -324,7 +324,7 @@ Partial Class MainForm
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Change..."
+        Me.Button1.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label4
@@ -334,7 +334,7 @@ Partial Class MainForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(95, 13)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Foreground Color:"
+        Me.Label4.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("ForegroundColor.Label")
         '
         'Label5
         '
@@ -344,7 +344,7 @@ Partial Class MainForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(257, 13)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = "(Inactive colors are calculated by the theme engine)"
+        Me.Label5.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Inactive.Colors.Label")
         '
         'Label6
         '
@@ -353,7 +353,7 @@ Partial Class MainForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(77, 13)
         Me.Label6.TabIndex = 1
-        Me.Label6.Text = "Accent Colors:"
+        Me.Label6.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("AccentColors.Label")
         '
         'Label2
         '
@@ -362,7 +362,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(95, 13)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Background Color:"
+        Me.Label2.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("BackgroundColor.Label")
         '
         'CheckBox1
         '
@@ -371,7 +371,7 @@ Partial Class MainForm
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(217, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "DISMTools should use dark mode glyphs"
+        Me.CheckBox1.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("DISM.Tools.Dark.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -390,7 +390,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(73, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Theme Name:"
+        Me.Label1.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("ThemeName.Label")
         '
         'ColorDialog1
         '
@@ -418,7 +418,7 @@ Partial Class MainForm
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(606, 25)
         Me.Label20.TabIndex = 3
-        Me.Label20.Text = "See your changes live on the preview section below:"
+        Me.Label20.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("See.Changes.Live.Label")
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ToolStrip1
@@ -438,7 +438,7 @@ Partial Class MainForm
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = "New Theme"
+        Me.ToolStripButton1.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("NewTheme.Label")
         '
         'ToolStripButton2
         '
@@ -447,7 +447,7 @@ Partial Class MainForm
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton2.Text = "Open Theme File..."
+        Me.ToolStripButton2.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Open.Theme.File.Button")
         '
         'ToolStripButton3
         '
@@ -456,7 +456,7 @@ Partial Class MainForm
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton3.Text = "Save theme file..."
+        Me.ToolStripButton3.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Save.Theme.File.Button")
         '
         'ToolStripButton4
         '
@@ -466,7 +466,7 @@ Partial Class MainForm
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton4.Text = "About..."
+        Me.ToolStripButton4.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("About.Button")
         '
         'ThemePreviewPanel
         '
@@ -543,7 +543,7 @@ Partial Class MainForm
         Me.AccentedLabel4.Name = "AccentedLabel4"
         Me.AccentedLabel4.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel4.TabIndex = 6
-        Me.AccentedLabel4.Text = "4"
+        Me.AccentedLabel4.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Value.Option4.Label")
         Me.AccentedLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AccentedLabel3
@@ -556,7 +556,7 @@ Partial Class MainForm
         Me.AccentedLabel3.Name = "AccentedLabel3"
         Me.AccentedLabel3.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel3.TabIndex = 5
-        Me.AccentedLabel3.Text = "3"
+        Me.AccentedLabel3.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Value.Option3.Label")
         Me.AccentedLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AccentedLabel2
@@ -569,7 +569,7 @@ Partial Class MainForm
         Me.AccentedLabel2.Name = "AccentedLabel2"
         Me.AccentedLabel2.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel2.TabIndex = 4
-        Me.AccentedLabel2.Text = "2"
+        Me.AccentedLabel2.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Value.Option2.Label")
         Me.AccentedLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TextBox2
@@ -581,7 +581,7 @@ Partial Class MainForm
         Me.TextBox2.ReadOnly = True
         Me.TextBox2.Size = New System.Drawing.Size(610, 62)
         Me.TextBox2.TabIndex = 3
-        Me.TextBox2.Text = resources.GetString("TextBox2.Text")
+        Me.TextBox2.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Heuristic.Reasoning.Message")
         '
         'InactiveLabel
         '
@@ -592,7 +592,7 @@ Partial Class MainForm
         Me.InactiveLabel.Name = "InactiveLabel"
         Me.InactiveLabel.Size = New System.Drawing.Size(113, 13)
         Me.InactiveLabel.TabIndex = 2
-        Me.InactiveLabel.Text = "INACTIVE CONTROL"
+        Me.InactiveLabel.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Inactivecontrol.Label")
         '
         'ActiveLabel
         '
@@ -603,7 +603,7 @@ Partial Class MainForm
         Me.ActiveLabel.Name = "ActiveLabel"
         Me.ActiveLabel.Size = New System.Drawing.Size(101, 13)
         Me.ActiveLabel.TabIndex = 2
-        Me.ActiveLabel.Text = "ACTIVE CONTROL"
+        Me.ActiveLabel.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Activecontrol.Label")
         '
         'TestSection
         '
@@ -624,7 +624,7 @@ Partial Class MainForm
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(610, 29)
         Me.Label18.TabIndex = 0
-        Me.Label18.Text = "Label in Inner Section"
+        Me.Label18.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Label.Inner.Section.Label")
         Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AccentedLabel1
@@ -637,7 +637,7 @@ Partial Class MainForm
         Me.AccentedLabel1.Name = "AccentedLabel1"
         Me.AccentedLabel1.Size = New System.Drawing.Size(32, 32)
         Me.AccentedLabel1.TabIndex = 0
-        Me.AccentedLabel1.Text = "1"
+        Me.AccentedLabel1.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Value.Option1.Label")
         Me.AccentedLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label19
@@ -647,15 +647,15 @@ Partial Class MainForm
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(75, 13)
         Me.Label19.TabIndex = 0
-        Me.Label19.Text = "Test Control 1"
+        Me.Label19.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("TestControl.Label")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Theme Files|*.ini"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Theme.Files.Ini.Filter")
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "Theme Files|*.ini"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("SaveFile.Filter")
         '
         'Panel1
         '
@@ -676,25 +676,25 @@ Partial Class MainForm
         Me.ColorModeTSDDB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ColorModeTSDDB.Name = "ColorModeTSDDB"
         Me.ColorModeTSDDB.Size = New System.Drawing.Size(29, 22)
-        Me.ColorModeTSDDB.Text = "Change Color Mode..."
+        Me.ColorModeTSDDB.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Change.Color.Mode.Button")
         '
         'LightCM_TSMI
         '
         Me.LightCM_TSMI.Name = "LightCM_TSMI"
         Me.LightCM_TSMI.Size = New System.Drawing.Size(152, 22)
-        Me.LightCM_TSMI.Text = "Light"
+        Me.LightCM_TSMI.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Light.Label")
         '
         'DarkCM_TSMI
         '
         Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
         Me.DarkCM_TSMI.Size = New System.Drawing.Size(152, 22)
-        Me.DarkCM_TSMI.Text = "Dark"
+        Me.DarkCM_TSMI.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Dark.Label")
         '
         'SystemCM_TSMI
         '
         Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
         Me.SystemCM_TSMI.Size = New System.Drawing.Size(152, 22)
-        Me.SystemCM_TSMI.Text = "System"
+        Me.SystemCM_TSMI.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("System.Label")
         '
         'ToolStripSeparator1
         '
@@ -709,7 +709,7 @@ Partial Class MainForm
         Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton5.Name = "ToolStripButton5"
         Me.ToolStripButton5.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton5.Text = "Enable write access..."
+        Me.ToolStripButton5.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("Enable.Write.Access.Button")
         '
         'MainForm
         '
@@ -726,7 +726,7 @@ Partial Class MainForm
         Me.MinimumSize = New System.Drawing.Size(640, 320)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools Theme Designer"
+        Me.Text = LocalizationService.ForSection("ThemeDesigner.Designer.Main")("DISM.Tools.Theme.Label")
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ThemeParameterPanel.ResumeLayout(False)

@@ -117,7 +117,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Close_Button.Name = "Close_Button"
         Me.Close_Button.Size = New System.Drawing.Size(75, 23)
         Me.Close_Button.TabIndex = 0
-        Me.Close_Button.Text = "Close"
+        Me.Close_Button.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("Close.Button")
         Me.Close_Button.UseVisualStyleBackColor = True
         '
         'ButtonContainerPanel
@@ -204,7 +204,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(629, 318)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Classic PAT"
+        Me.TabPage1.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ClassicPat.Tab")
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'ClassicPatStepsContainerPanel
@@ -236,7 +236,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(212, 50)
         Me.Label10.TabIndex = 1
-        Me.Label10.Text = "Provide information for the token"
+        Me.Label10.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ProvideTokenInfo.Label")
         '
         'PictureBox5
         '
@@ -255,7 +255,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(207, 227)
         Me.Label14.TabIndex = 2
-        Me.Label14.Text = resources.GetString("Label14.Text")
+        Me.Label14.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ClassicPatDetails.Message")
         '
         'ClassicPatKeyPanel
         '
@@ -277,7 +277,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(593, 22)
         Me.Label11.TabIndex = 1
-        Me.Label11.Text = "Work with your API key"
+        Me.Label11.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("WorkWithKey.Label")
         '
         'PictureBox6
         '
@@ -296,7 +296,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(588, 58)
         Me.Label12.TabIndex = 2
-        Me.Label12.Text = resources.GetString("Label12.Text")
+        Me.Label12.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("UseGeneratedKey.Message")
         '
         'TabPage2
         '
@@ -306,7 +306,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(629, 318)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Fine-grained PAT"
+        Me.TabPage2.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("FineGrainedPat.Tab")
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'FineGrainedPatStepsContainerPanel
@@ -339,7 +339,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(212, 50)
         Me.Label16.TabIndex = 1
-        Me.Label16.Text = "Provide information for the token"
+        Me.Label16.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ProvideTokenInfo.Label")
         '
         'PictureBox8
         '
@@ -358,7 +358,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(207, 227)
         Me.Label17.TabIndex = 2
-        Me.Label17.Text = resources.GetString("Label17.Text")
+        Me.Label17.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("FineGrainedDetails.Message")
         '
         'FineGrainedPatContDetailsPanel
         '
@@ -380,7 +380,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(199, 50)
         Me.Label18.TabIndex = 1
-        Me.Label18.Text = "Provide information for the token"
+        Me.Label18.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ProvideTokenInfo.Label")
         '
         'PictureBox9
         '
@@ -399,7 +399,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(194, 227)
         Me.Label19.TabIndex = 2
-        Me.Label19.Text = resources.GetString("Label19.Text")
+        Me.Label19.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("FineGrainedPermissions.Message")
         '
         'FineGrainedPatKeyPanel
         '
@@ -421,7 +421,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(593, 22)
         Me.Label13.TabIndex = 1
-        Me.Label13.Text = "Work with your API key"
+        Me.Label13.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("WorkWithKey.Label")
         '
         'PictureBox7
         '
@@ -440,7 +440,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(588, 58)
         Me.Label15.TabIndex = 2
-        Me.Label15.Text = resources.GetString("Label15.Text")
+        Me.Label15.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("UseGeneratedKey.Message")
         '
         'Label9
         '
@@ -449,7 +449,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(636, 32)
         Me.Label9.TabIndex = 2
-        Me.Label9.Text = resources.GetString("Label9.Text")
+        Me.Label9.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ChooseTokenType.Message")
         '
         'Label8
         '
@@ -459,7 +459,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(270, 19)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = "Create a Personal Access Token"
+        Me.Label8.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("CreatePat.Label")
         '
         'TokenMgmtPanel
         '
@@ -525,7 +525,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(463, 19)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Go to Settings by clicking your profile picture on the dashboard:"
+        Me.Label4.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("OpenSettings.Message")
         '
         'PictureBox1
         '
@@ -557,8 +557,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(619, 19)
         Me.Label5.TabIndex = 3
-        Me.Label5.Text = "In the account settings, head over to Developer Settings, then Personal Access To" & _
-            "kens"
+        Me.Label5.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("OpenDeveloperSettings.Message")
         '
         'PictureBox3
         '
@@ -600,7 +599,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(417, 19)
         Me.Label6.TabIndex = 3
-        Me.Label6.Text = "Click ""Generate new token"" and pick one of the following:"
+        Me.Label6.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("GenerateToken.Message")
         '
         'PictureBox4
         '
@@ -619,7 +618,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(329, 13)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Note that you need to access Tokens (classic) in the previous step."
+        Me.Label7.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("ClassicTokenNote.Message")
         '
         'Label3
         '
@@ -628,7 +627,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(247, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "To access token management, follow these steps:"
+        Me.Label3.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("TokenManagementSteps.Message")
         '
         'Label2
         '
@@ -638,7 +637,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(291, 19)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Access GitHub Token Management"
+        Me.Label2.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("AccessTokenManagement.Label")
         '
         'StepsSidePanel
         '
@@ -661,7 +660,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.LinkLabel2.Size = New System.Drawing.Size(174, 13)
         Me.LinkLabel2.TabIndex = 1
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "2. Create a Personal Access Token"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("CreatePat.Link")
         '
         'LinkLabel1
         '
@@ -674,7 +673,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.LinkLabel1.Size = New System.Drawing.Size(216, 13)
         Me.LinkLabel1.TabIndex = 1
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "1. Access GitHub Token Management"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("AccessTokenManagement.Link")
         '
         'Label1
         '
@@ -683,7 +682,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(216, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Click one of the links below to select a step:"
+        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("SelectStep.Message")
         '
         'ApiKeyGenerationStepsWizard
         '
@@ -700,7 +699,7 @@ Partial Class ApiKeyGenerationStepsWizard
         Me.Name = "ApiKeyGenerationStepsWizard"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Generate GitHub API Keys"
+        Me.Text = LocalizationService.ForSection("StarterScript.Designer.ApiKeyWizard")("Title")
         Me.ButtonContainerPanel.ResumeLayout(False)
         Me.StepsContainerPanel.ResumeLayout(False)
         Me.PageContainerPanel.ResumeLayout(False)

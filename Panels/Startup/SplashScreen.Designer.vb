@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SplashScreen
     Inherits System.Windows.Forms.Form
 
@@ -69,7 +69,7 @@ Partial Class SplashScreen
         Me.VersionLabel.Name = "VersionLabel"
         Me.VersionLabel.Size = New System.Drawing.Size(560, 23)
         Me.VersionLabel.TabIndex = 1
-        Me.VersionLabel.Text = "Version"
+        Me.VersionLabel.Text = LocalizationService.ForSection("Designer.SplashScreen")("VersionLabel.Label")
         Me.VersionLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight
         Me.VersionLabel.Visible = False
         '
@@ -93,7 +93,7 @@ Partial Class SplashScreen
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "DISMTools - Starting up..."
+        Me.Text = LocalizationService.ForSection("Designer.SplashScreen")("DISM.Tools.Starting.Button")
         Me.TopMost = True
         CType(Me.LogoPic, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PreviewFlag, System.ComponentModel.ISupportInitialize).EndInit()

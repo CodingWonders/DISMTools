@@ -136,6 +136,7 @@ Source: ".\files\AutoUnattend\*"; DestDir: "{#pfDir}\AutoUnattend"; Flags: ignor
 Source: ".\files\AutoReload\*"; DestDir: "{#pfDir}\AutoReload"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\language\*"; DestDir: "{#pfDir}\language"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\runtimes\*"; DestDir: "{#pfDir}\runtimes"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\tools\*"; DestDir: "{#pfDir}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\videos\*"; DestDir: "{#pfDir}\videos"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -200,7 +201,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ColorTheme_Dark"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ColorTheme_Light"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ExpandedProgressPanel"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "Language"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LanguageCode"; ValueData: "en-US"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Consolas"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 11; Flags: uninsdeletevalue createvalueifdoesntexist

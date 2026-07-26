@@ -42,9 +42,7 @@ Partial Class AICustomRuleViewer
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(917, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "View custom rules for automated inspection. Use the buttons at the bottom of the " & _
-            "window to perform tasks with custom rules. When you've finished setting up custo" & _
-            "m rules, click Save Rules."
+        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Help.Message")
         '
         'AddCustomRuleButton
         '
@@ -54,7 +52,7 @@ Partial Class AICustomRuleViewer
         Me.AddCustomRuleButton.Name = "AddCustomRuleButton"
         Me.AddCustomRuleButton.Size = New System.Drawing.Size(96, 23)
         Me.AddCustomRuleButton.TabIndex = 1
-        Me.AddCustomRuleButton.Text = "Add Rule..."
+        Me.AddCustomRuleButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Add.Button")
         Me.AddCustomRuleButton.UseVisualStyleBackColor = True
         '
         'ModifyCustomRuleButton
@@ -66,7 +64,7 @@ Partial Class AICustomRuleViewer
         Me.ModifyCustomRuleButton.Name = "ModifyCustomRuleButton"
         Me.ModifyCustomRuleButton.Size = New System.Drawing.Size(96, 23)
         Me.ModifyCustomRuleButton.TabIndex = 1
-        Me.ModifyCustomRuleButton.Text = "Modify Rule..."
+        Me.ModifyCustomRuleButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Modify.Button")
         Me.ModifyCustomRuleButton.UseVisualStyleBackColor = True
         '
         'DeleteCustomRuleButton
@@ -78,7 +76,7 @@ Partial Class AICustomRuleViewer
         Me.DeleteCustomRuleButton.Name = "DeleteCustomRuleButton"
         Me.DeleteCustomRuleButton.Size = New System.Drawing.Size(96, 23)
         Me.DeleteCustomRuleButton.TabIndex = 1
-        Me.DeleteCustomRuleButton.Text = "Delete Rule"
+        Me.DeleteCustomRuleButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Delete.Button")
         Me.DeleteCustomRuleButton.UseVisualStyleBackColor = True
         '
         'SaveCustomRulesButton
@@ -89,7 +87,7 @@ Partial Class AICustomRuleViewer
         Me.SaveCustomRulesButton.Name = "SaveCustomRulesButton"
         Me.SaveCustomRulesButton.Size = New System.Drawing.Size(96, 23)
         Me.SaveCustomRulesButton.TabIndex = 1
-        Me.SaveCustomRulesButton.Text = "Save Rules"
+        Me.SaveCustomRulesButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Save.Button")
         Me.SaveCustomRulesButton.UseVisualStyleBackColor = True
         '
         'RefreshRulesButton
@@ -100,7 +98,7 @@ Partial Class AICustomRuleViewer
         Me.RefreshRulesButton.Name = "RefreshRulesButton"
         Me.RefreshRulesButton.Size = New System.Drawing.Size(96, 23)
         Me.RefreshRulesButton.TabIndex = 1
-        Me.RefreshRulesButton.Text = "Refresh Rules"
+        Me.RefreshRulesButton.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Refresh.Button")
         Me.RefreshRulesButton.UseVisualStyleBackColor = True
         '
         'CustomRuleLV
@@ -119,22 +117,22 @@ Partial Class AICustomRuleViewer
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Name.Column")
         Me.ColumnHeader1.Width = 192
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Description"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Description.Column")
         Me.ColumnHeader2.Width = 344
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Expression"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Expression.Column")
         Me.ColumnHeader3.Width = 344
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Severity"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Severity.Column")
         Me.ColumnHeader4.Width = 72
         '
         'AICustomRuleViewer
@@ -153,7 +151,7 @@ Partial Class AICustomRuleViewer
         Me.Name = "AICustomRuleViewer"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Custom Rules"
+        Me.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleViewer")("Title")
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

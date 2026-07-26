@@ -47,7 +47,7 @@ Partial Class ImageTaskHeader
         Me.ItemTitle.Name = "ItemTitle"
         Me.ItemTitle.Size = New System.Drawing.Size(340, 30)
         Me.ItemTitle.TabIndex = 3
-        Me.ItemTitle.Text = "Item Text"
+        Me.ItemTitle.Text = LocalizationService.ForSection("Designer.ImageTaskHeader")("ItemText.Title")
         '
         'ImageTaskHeader
         '

@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImportDrivers
     Inherits System.Windows.Forms.Form
 
@@ -84,7 +84,7 @@ Partial Class ImportDrivers
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -95,7 +95,7 @@ Partial Class ImportDrivers
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Cancel.Button")
         '
         'Label2
         '
@@ -106,7 +106,7 @@ Partial Class ImportDrivers
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 28)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = resources.GetString("Label2.Text")
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Process.Third.Message")
         '
         'Label3
         '
@@ -114,12 +114,12 @@ Partial Class ImportDrivers
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(124, 13)
         Me.Label3.TabIndex = 6
-        Me.Label3.Text = "Import source:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ImportDrivers")("ImportSource.Label")
         '
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Windows image", "Online installation", "Offline installation"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.ImportDrivers")("Windows.Item"), LocalizationService.ForSection("Designer.ImportDrivers")("Online.Install.Item"), LocalizationService.ForSection("Designer.ImportDrivers")("Offline.Install.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(144, 89)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(468, 21)
@@ -159,7 +159,7 @@ Partial Class ImportDrivers
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(556, 13)
         Me.Label10.TabIndex = 4
-        Me.Label10.Text = "<imgFile>"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.ImportDrivers")("ImgFile.Label")
         Me.Label10.Visible = False
         '
         'Label9
@@ -169,7 +169,7 @@ Partial Class ImportDrivers
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(58, 13)
         Me.Label9.TabIndex = 4
-        Me.Label9.Text = "Image file:"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.ImportDrivers")("ImageFile.Label")
         '
         'Label6
         '
@@ -178,7 +178,7 @@ Partial Class ImportDrivers
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(257, 13)
         Me.Label6.TabIndex = 3
-        Me.Label6.Text = "You can't use the import target as the import source"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Tuse.Target.Label")
         Me.Label6.Visible = False
         '
         'Button1
@@ -188,7 +188,7 @@ Partial Class ImportDrivers
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Pick..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Pick.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -205,7 +205,7 @@ Partial Class ImportDrivers
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(192, 13)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Windows image to import drivers from:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Windows.Label")
         '
         'OfflineInstPanel
         '
@@ -228,7 +228,7 @@ Partial Class ImportDrivers
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(257, 13)
         Me.Label8.TabIndex = 5
-        Me.Label8.Text = "You can't use the import target as the import source"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Tuse.Target.Label")
         Me.Label8.Visible = False
         '
         'ListView1
@@ -248,42 +248,42 @@ Partial Class ImportDrivers
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Drive letter"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.ImportDrivers")("DriveLetter.Column")
         Me.ColumnHeader1.Width = 68
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Drive label"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.ImportDrivers")("DriveLabel.Column")
         Me.ColumnHeader2.Width = 128
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Drive type"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.ImportDrivers")("DriveType.Column")
         Me.ColumnHeader3.Width = 70
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Total size"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.ImportDrivers")("TotalSize.Column")
         Me.ColumnHeader4.Width = 94
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Available free space"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Available.Free.Space.Column")
         Me.ColumnHeader5.Width = 110
         '
         'ColumnHeader6
         '
-        Me.ColumnHeader6.Text = "Drive format"
+        Me.ColumnHeader6.Text = LocalizationService.ForSection("Designer.ImportDrivers")("DriveFormat.Column")
         Me.ColumnHeader6.Width = 77
         '
         'ColumnHeader7
         '
-        Me.ColumnHeader7.Text = "Contains Windows?"
+        Me.ColumnHeader7.Text = LocalizationService.ForSection("Designer.ImportDrivers")("ContainsWindows.Column")
         Me.ColumnHeader7.Width = 109
         '
         'ColumnHeader8
         '
-        Me.ColumnHeader8.Text = "Windows version"
+        Me.ColumnHeader8.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Windows.Column")
         Me.ColumnHeader8.Width = 104
         '
         'Button2
@@ -294,7 +294,7 @@ Partial Class ImportDrivers
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 3
-        Me.Button2.Text = "Refresh"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Refresh.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -313,7 +313,7 @@ Partial Class ImportDrivers
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(204, 13)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Offline installation to import drivers from:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Offline.Drivers.Label")
         '
         'DefaultPanel
         '
@@ -331,7 +331,7 @@ Partial Class ImportDrivers
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(596, 278)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Choose a source listed above to configure its settings."
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ImportDrivers")("Source.Listed.Choose.Label")
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ImageTaskHeader1
@@ -368,7 +368,7 @@ Partial Class ImportDrivers
         Me.Name = "ImportDrivers"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Import drivers"
+        Me.Text = LocalizationService.ForSection("Designer.ImportDrivers")("ImportDrivers.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ImportSourceContainer.ResumeLayout(False)
         Me.WinImagePanel.ResumeLayout(False)

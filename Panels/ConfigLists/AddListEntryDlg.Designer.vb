@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddListEntryDlg
     Inherits System.Windows.Forms.Form
 
@@ -55,7 +55,7 @@ Partial Class AddListEntryDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.Add.List")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -66,7 +66,7 @@ Partial Class AddListEntryDlg
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Add.List")("Cancel.Button")
         '
         'Button1
         '
@@ -76,7 +76,7 @@ Partial Class AddListEntryDlg
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 1
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.Add.List")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label1
@@ -86,7 +86,7 @@ Partial Class AddListEntryDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(37, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Entry:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.Add.List")("Entry.Label")
         '
         'TextBox1
         '
@@ -99,7 +99,7 @@ Partial Class AddListEntryDlg
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "All files|*.*"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.Add.List")("AllFiles.Filter")
         '
         'AddListEntryDlg
         '
@@ -119,7 +119,7 @@ Partial Class AddListEntryDlg
         Me.Name = "AddListEntryDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
-        Me.Text = "Add entry"
+        Me.Text = LocalizationService.ForSection("Designer.Add.List")("AddEntry.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

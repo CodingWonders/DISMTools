@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class PxeServerPortSpecifier
     Inherits System.Windows.Forms.Form
 
@@ -58,7 +58,7 @@ Partial Class PxeServerPortSpecifier
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -69,7 +69,7 @@ Partial Class PxeServerPortSpecifier
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Cancel.Button")
         '
         'Label1
         '
@@ -80,7 +80,7 @@ Partial Class PxeServerPortSpecifier
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(598, 72)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Other.Message")
         '
         'Label2
         '
@@ -89,7 +89,7 @@ Partial Class PxeServerPortSpecifier
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(228, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Use the following port for server components:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Port.Server.Label")
         '
         'NumericUpDown1
         '
@@ -109,7 +109,7 @@ Partial Class PxeServerPortSpecifier
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Default"
+        Me.Button1.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Default.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Button2
@@ -119,7 +119,7 @@ Partial Class PxeServerPortSpecifier
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(176, 23)
         Me.Button2.TabIndex = 5
-        Me.Button2.Text = "Check if this port is in use"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Check.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'PxeServerPortSpecifier
@@ -142,7 +142,7 @@ Partial Class PxeServerPortSpecifier
         Me.Name = "PxeServerPortSpecifier"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Specify a port for server components"
+        Me.Text = LocalizationService.ForSection("Designer.PXEServerPort")("ServerComponents.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

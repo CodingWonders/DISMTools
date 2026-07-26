@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ProgressPanel
     Inherits System.Windows.Forms.Form
 
@@ -65,7 +65,7 @@ Partial Class ProgressPanel
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(703, 30)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Image operations in progress..."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.Progress")("Image.Operations.Label")
         '
         'Label2
         '
@@ -76,7 +76,7 @@ Partial Class ProgressPanel
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(699, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Please wait while the following tasks are done. This may take some time."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Progress")("Wait.Tasks.Label")
         '
         'Cancel_Button
         '
@@ -86,7 +86,7 @@ Partial Class ProgressPanel
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 3
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Progress")("Cancel.Button")
         Me.Cancel_Button.UseVisualStyleBackColor = True
         Me.Cancel_Button.Visible = False
         '
@@ -113,7 +113,7 @@ Partial Class ProgressPanel
         Me.currentTask.Name = "currentTask"
         Me.currentTask.Size = New System.Drawing.Size(699, 13)
         Me.currentTask.TabIndex = 5
-        Me.currentTask.Text = "currentTask"
+        Me.currentTask.Text = LocalizationService.ForSection("Designer.Progress")("CurrentTask.Label")
         '
         'allTasks
         '
@@ -124,7 +124,7 @@ Partial Class ProgressPanel
         Me.allTasks.Name = "allTasks"
         Me.allTasks.Size = New System.Drawing.Size(581, 13)
         Me.allTasks.TabIndex = 5
-        Me.allTasks.Text = "allTasks"
+        Me.allTasks.Text = LocalizationService.ForSection("Designer.Progress")("AllTasks.Label")
         '
         'taskCountLbl
         '
@@ -135,7 +135,7 @@ Partial Class ProgressPanel
         Me.taskCountLbl.Name = "taskCountLbl"
         Me.taskCountLbl.Size = New System.Drawing.Size(112, 13)
         Me.taskCountLbl.TabIndex = 5
-        Me.taskCountLbl.Text = "Tasks: {currentTCont} of {taskCount}"
+        Me.taskCountLbl.Text = LocalizationService.ForSection("Designer.Progress")("Tasks.Tcont.Label")
         Me.taskCountLbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'LogTextContainer
@@ -196,7 +196,7 @@ Partial Class ProgressPanel
         Me.LogButton.Name = "LogButton"
         Me.LogButton.Size = New System.Drawing.Size(116, 23)
         Me.LogButton.TabIndex = 3
-        Me.LogButton.Text = "Show log"
+        Me.LogButton.Text = LocalizationService.ForSection("Designer.Progress")("ShowLog.Label")
         Me.LogButton.UseVisualStyleBackColor = True
         '
         'ProgressBW
@@ -292,7 +292,7 @@ Partial Class ProgressPanel
         Me.LinkLabel1.Size = New System.Drawing.Size(153, 13)
         Me.LinkLabel1.TabIndex = 7
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Show DISM log file (advanced)"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.Progress")("Show.Dismlog.File.Link")
         Me.LinkLabel1.Visible = False
         '
         'PictureBox1
@@ -333,7 +333,7 @@ Partial Class ProgressPanel
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ProgressPanel"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Progress"
+        Me.Text = LocalizationService.ForSection("Designer.Progress")("Progress.Label")
         Me.LogTextContainer.ResumeLayout(False)
         Me.DISM_OpLogs.ResumeLayout(False)
         Me.DT_OpLogs.ResumeLayout(False)

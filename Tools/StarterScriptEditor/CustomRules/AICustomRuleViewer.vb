@@ -42,7 +42,7 @@ Public Class AICustomRuleViewer
             CustomRules = AIHelper.GetScriptInspectionCustomRules()
             ViewCustomRules()
         Catch fnfEx As FileNotFoundException
-            Dim creationResponse As DialogResult = MessageBox.Show("Custom rules you specify here are saved to a rule file that, currently, does not exist. Do you want to create it?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Dim creationResponse As DialogResult = MessageBox.Show(LocalizationService.ForSection("StarterScript.CustomRuleViewer.Messages")("CreateFile.Message"), Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             Select Case creationResponse
                 Case Windows.Forms.DialogResult.Yes
                     AIHelper.SaveCustomRules(New List(Of AutoInspectionRule))
@@ -52,7 +52,7 @@ Public Class AICustomRuleViewer
                     Exit Sub
             End Select
         Catch ex As Exception
-            Dim recreationResponse As DialogResult = MessageBox.Show("Custom rules could not be loaded. Do you want to recreate the custom rule file?", Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Dim recreationResponse As DialogResult = MessageBox.Show(LocalizationService.ForSection("StarterScript.CustomRuleViewer.Messages")("RecreateFile.Message"), Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             Select Case recreationResponse
                 Case Windows.Forms.DialogResult.Yes
                     AIHelper.SaveCustomRules(New List(Of AutoInspectionRule))
@@ -71,9 +71,9 @@ Public Class AICustomRuleViewer
             Dim crItem As AutoInspectionRule = CustomRules(i)
             Dim crSeverityStatus As String = ""
             Select Case crItem.RuleSeverity
-                Case AutoInspectionRuleSeverity.Low : crSeverityStatus = "Low"
-                Case AutoInspectionRuleSeverity.Medium : crSeverityStatus = "Medium"
-                Case AutoInspectionRuleSeverity.High : crSeverityStatus = "High"
+                Case AutoInspectionRuleSeverity.Low : crSeverityStatus = LocalizationService.ForSection("StarterScript.CustomRule.Common")("Low.Item")
+                Case AutoInspectionRuleSeverity.Medium : crSeverityStatus = LocalizationService.ForSection("StarterScript.CustomRule.Common")("Medium.Item")
+                Case AutoInspectionRuleSeverity.High : crSeverityStatus = LocalizationService.ForSection("StarterScript.CustomRule.Common")("High.Item")
             End Select
             crItems(i) = New ListViewItem(New String() {crItem.RuleName, crItem.RuleDescription, crItem.RuleExpression, crSeverityStatus})
         Next
@@ -99,13 +99,13 @@ Public Class AICustomRuleViewer
         If AIHelper.SaveCustomRules(CustomRules, crXmlDataPath) Then
             IsModified = False
         Else
-            MessageBox.Show("Custom rules could not be saved. A backup of the old rules has been reinstated.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.CustomRuleViewer.Messages")("SaveFailed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
     Private Sub RefreshRulesButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshRulesButton.Click
         If IsModified Then
-            Dim saveResponse As DialogResult = MessageBox.Show("Do you want to save changes to custom rules?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            Dim saveResponse As DialogResult = MessageBox.Show(LocalizationService.ForSection("StarterScript.CustomRuleViewer.Messages")("SaveChanges.Message"), Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             Select Case saveResponse
                 Case Windows.Forms.DialogResult.Yes : SaveCustomRulesButton.PerformClick()
                 Case Windows.Forms.DialogResult.Cancel : Exit Sub
@@ -155,7 +155,7 @@ Public Class AICustomRuleViewer
 
     Private Sub AICustomRuleViewer_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         If IsModified Then
-            Dim saveResponse As DialogResult = MessageBox.Show("Do you want to save changes to custom rules?", Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            Dim saveResponse As DialogResult = MessageBox.Show(LocalizationService.ForSection("StarterScript.CustomRuleViewer.Messages")("SaveChanges.Message"), Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             Select Case saveResponse
                 Case Windows.Forms.DialogResult.Yes : SaveCustomRulesButton.PerformClick()
                 Case Windows.Forms.DialogResult.Cancel

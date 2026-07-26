@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgSwmToWim
     Inherits System.Windows.Forms.Form
 
@@ -76,7 +76,7 @@ Partial Class ImgSwmToWim
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.Img.SWM")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -87,17 +87,17 @@ Partial Class ImgSwmToWim
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.Img.SWM")("Cancel.Button")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Split WIM files|*.swm"
-        Me.OpenFileDialog1.Title = "Specify the source SWM file to merge"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.Img.SWM")("Split.WIM.Files.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.Img.SWM")("Source.Swmfile.Title")
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "WIM files|*.wim"
-        Me.SaveFileDialog1.Title = "Specify the destination WIM file to merge the source SWM files to"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.Img.SWM")("WIM.Files.Filter")
+        Me.SaveFileDialog1.Title = LocalizationService.ForSection("Designer.Img.SWM")("Dest.WIM.File.Title")
         '
         'Label2
         '
@@ -106,7 +106,7 @@ Partial Class ImgSwmToWim
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(88, 13)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Source SWM file:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Img.SWM")("SourceSwmfile.Label")
         '
         'TextBox1
         '
@@ -125,7 +125,7 @@ Partial Class ImgSwmToWim
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 6
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.Img.SWM")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label4
@@ -135,7 +135,7 @@ Partial Class ImgSwmToWim
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(107, 13)
         Me.Label4.TabIndex = 4
-        Me.Label4.Text = "Destination WIM file:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.Img.SWM")("Destination.WIM.File.Label")
         '
         'TextBox2
         '
@@ -154,7 +154,7 @@ Partial Class ImgSwmToWim
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 6
-        Me.Button2.Text = "Browse..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.Img.SWM")("Browse.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Label3
@@ -165,8 +165,7 @@ Partial Class ImgSwmToWim
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(727, 47)
         Me.Label3.TabIndex = 4
-        Me.Label3.Text = "NOTE: when specifying the SWM file, choose the first file. DISMTools will take ca" & _
-    "re of additional SWM files stored in that directory."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.Img.SWM")("Notewhen.Specifying.Message")
         '
         'LinkLabel1
         '
@@ -179,7 +178,7 @@ Partial Class ImgSwmToWim
         Me.LinkLabel1.Size = New System.Drawing.Size(94, 13)
         Me.LinkLabel1.TabIndex = 7
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Learn how to do it"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.Img.SWM")("LearnHow.Link")
         '
         'GroupBox1
         '
@@ -194,7 +193,7 @@ Partial Class ImgSwmToWim
         Me.GroupBox1.Size = New System.Drawing.Size(760, 126)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Source"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.Img.SWM")("Source.Group")
         '
         'GroupBox2
         '
@@ -208,7 +207,7 @@ Partial Class ImgSwmToWim
         Me.GroupBox2.Size = New System.Drawing.Size(760, 230)
         Me.GroupBox2.TabIndex = 9
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Options"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.Img.SWM")("Options.Group")
         '
         'ListView1
         '
@@ -224,22 +223,22 @@ Partial Class ImgSwmToWim
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Index"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.Img.SWM")("Index.Column")
         Me.ColumnHeader1.Width = 44
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Image name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.Img.SWM")("ImageName.Column")
         Me.ColumnHeader2.Width = 256
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Image description"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.Img.SWM")("ImageDescription.Column")
         Me.ColumnHeader3.Width = 256
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Image version"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.Img.SWM")("ImageVersion.Column")
         Me.ColumnHeader4.Width = 128
         '
         'NumericUpDown1
@@ -258,7 +257,7 @@ Partial Class ImgSwmToWim
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(39, 13)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Index:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.Img.SWM")("Index.Label")
         '
         'GroupBox3
         '
@@ -272,7 +271,7 @@ Partial Class ImgSwmToWim
         Me.GroupBox3.Size = New System.Drawing.Size(760, 92)
         Me.GroupBox3.TabIndex = 10
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Destination"
+        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.Img.SWM")("Destination.Group")
         '
         'ImageTaskHeader1
         '
@@ -308,7 +307,7 @@ Partial Class ImgSwmToWim
         Me.Name = "ImgSwmToWim"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Merge SWM files"
+        Me.Text = LocalizationService.ForSection("Designer.Img.SWM")("MergeSwmfiles.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

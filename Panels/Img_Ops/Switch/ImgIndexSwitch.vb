@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class ImgIndexSwitch
     Implements IImageTaskDialog
@@ -43,31 +43,7 @@ Public Class ImgIndexSwitch
         DynaLog.LogMessage("Getting image indexes...")
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = MainForm.SourceImg
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-        End Select
+        PleaseWaitDialog.Label2.Text = LocalizationService.ForSection("ImageIndexSwitch.Initialize")("Getting.Image.Indexes.Label")
         PleaseWaitDialog.ShowDialog(Me)
         MainForm.StartMountedImageDetector()
         Return (PleaseWaitDialog.imgIndexes > 1)
@@ -77,131 +53,17 @@ Public Class ImgIndexSwitch
         If Not Initialize() Then
             Close()
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Switch image indexes"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Image:"
-                        Label3.Text = "When unmounting source index, what to do?"
-                        Label4.Text = "Destination index to mount:"
-                        Label6.Text = "This index has already been mounted"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        GroupBox1.Text = "Indexes"
-                        RadioButton1.Text = "Save changes to index"
-                        RadioButton2.Text = "Unmount discarding changes"
-                    Case "ESN"
-                        Text = "Cambiar índices de imagen"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Imagen:"
-                        Label3.Text = "Al desmontar índice de origen, ¿qué hacer?"
-                        Label4.Text = "Índice de destino a montar:"
-                        Label6.Text = "Este índice ya está montado"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        GroupBox1.Text = "Índice"
-                        RadioButton1.Text = "Guardar cambios en el índice"
-                        RadioButton2.Text = "Desmontar descartando cambios"
-                    Case "FRA"
-                        Text = "Changer d'index de l'image"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Image :"
-                        Label3.Text = "Que faire lors du démonter l'index original ?"
-                        Label4.Text = "Index de destination à monter :"
-                        Label6.Text = "Cet index a déjà été monté"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        GroupBox1.Text = "Index"
-                        RadioButton1.Text = "Sauvegarder les modifications dans l'index"
-                        RadioButton2.Text = "Annuler les modifications et démonter"
-                    Case "PTB", "PTG"
-                        Text = "Mudar os índices de imagem"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Imagem:"
-                        Label3.Text = "Quando desmontar o índice de origem, o que fazer?"
-                        Label4.Text = "Índice de destino para montar:"
-                        Label6.Text = "Este índice já foi montado"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        GroupBox1.Text = "Índices"
-                        RadioButton1.Text = "Guardar alterações no índice"
-                        RadioButton2.Text = "Desmontar descartando as alterações"
-                    Case "ITA"
-                        Text = "Cambia gli indici delle immagini"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Immagine:"
-                        Label3.Text = "Quando si smonta l'indice sorgente, cosa fare?"
-                        Label4.Text = "Indice di destinazione da montare:"
-                        Label6.Text = "Questo indice è già stato montato"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        GroupBox1.Text = "Indici"
-                        RadioButton1.Text = "Salva le modifiche all'indice"
-                        RadioButton2.Text = "Smonta scartando le modifiche"
-                End Select
-            Case 1
-                Text = "Switch image indexes"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Image:"
-                Label3.Text = "When unmounting source index, what to do?"
-                Label4.Text = "Destination index to mount:"
-                Label6.Text = "This index has already been mounted"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                GroupBox1.Text = "Indexes"
-                RadioButton1.Text = "Save changes to index"
-                RadioButton2.Text = "Unmount discarding changes"
-            Case 2
-                Text = "Cambiar índices de imagen"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Imagen:"
-                Label3.Text = "Al desmontar índice de origen, ¿qué hacer?"
-                Label4.Text = "Índice de destino a montar:"
-                Label6.Text = "Este índice ya está montado"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                GroupBox1.Text = "Índice"
-                RadioButton1.Text = "Guardar cambios en el índice"
-                RadioButton2.Text = "Desmontar descartando cambios"
-            Case 3
-                Text = "Changer d'index de l'image"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Image :"
-                Label3.Text = "Que faire lors du démonter l'index original ?"
-                Label4.Text = "Index de destination à monter :"
-                Label6.Text = "Cet index a déjà été monté"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                GroupBox1.Text = "Index"
-                RadioButton1.Text = "Sauvegarder les modifications dans l'index"
-                RadioButton2.Text = "Annuler les modifications et démonter"
-            Case 4
-                Text = "Mudar os índices de imagem"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Imagem:"
-                Label3.Text = "Quando desmontar o índice de origem, o que fazer?"
-                Label4.Text = "Índice de destino para montar:"
-                Label6.Text = "Este índice já foi montado"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                GroupBox1.Text = "Índices"
-                RadioButton1.Text = "Guardar alterações no índice"
-                RadioButton2.Text = "Desmontar descartando as alterações"
-            Case 5
-                Text = "Cambia gli indici delle immagini"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Immagine:"
-                Label3.Text = "Quando si smonta l'indice sorgente, cosa fare?"
-                Label4.Text = "Indice di destinazione da montare:"
-                Label6.Text = "Questo indice è già stato montato"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                GroupBox1.Text = "Indici"
-                RadioButton1.Text = "Salva le modifiche all'indice"
-                RadioButton2.Text = "Smonta scartando le modifiche"
-        End Select
+        Text = LocalizationService.ForSection("ImageIndexSwitch")("Image.Indexes.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("ImageIndexSwitch").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("ImageIndexSwitch")("Image.Label")
+        Label3.Text = LocalizationService.ForSection("ImageIndexSwitch")("Unmounting.Source.Label")
+        Label4.Text = LocalizationService.ForSection("ImageIndexSwitch")("Destination.Mount.Label")
+        Label6.Text = LocalizationService.ForSection("ImageIndexSwitch")("Already.Mounted.Label")
+        OK_Button.Text = LocalizationService.ForSection("ImageIndexSwitch")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ImageIndexSwitch")("Cancel.Button")
+        GroupBox1.Text = LocalizationService.ForSection("ImageIndexSwitch")("Indexes.Group")
+        RadioButton1.Text = LocalizationService.ForSection("ImageIndexSwitch")("Save.Changes.RadioButton")
+        RadioButton2.Text = LocalizationService.ForSection("ImageIndexSwitch")("DiscardChanges.RadioButton")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

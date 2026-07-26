@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports System.Management
 Imports DISMTools.Utilities
@@ -10,31 +10,7 @@ Public Class FfuApply
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("Either no image file has been specified or it does not exist in the file system.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
-                        Case "ESN"
-                            MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
-                        Case "FRA"
-                            MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
-                        Case "PTB", "PTG"
-                            MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
-                        Case "ITA"
-                            MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, Label1.Text)
-                    End Select
-                Case 1
-                    MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
-                Case 2
-                    MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
-                Case 3
-                    MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
-                Case 4
-                    MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
-                Case 5
-                    MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, Label1.Text)
-            End Select
+            MsgBox(LocalizationService.ForSection("FfuApply.Validation")("ImageFile.Message"), vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
         End If
         ProgressPanel.FFUApplicationSourceImg = TextBox1.Text
@@ -46,7 +22,7 @@ Public Class FfuApply
         End If
 
         ' TODO until we find a way to grab the manifest of the unmounted FFU, simply ask.
-        MsgBox("Make sure that the destination disk is as large or larger than the specified FFU file when mounted. If the destination disk is larger than the FFU's expanded partitions, please extend partitions to their full extent.", vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
+        MsgBox(LocalizationService.ForSection("FFU.Apply.Messages")("Destination.Disk.Message"), vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         ProgressPanel.OperationNum = 2
@@ -88,41 +64,8 @@ Public Class FfuApply
         ListBox1.Items.Clear()
         If TextBox1.Text = "" Or PatternName = "" Then
             DynaLog.LogMessage("Either no source image file has been specified or no pattern has been specified.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("Please specify a source FFU file. This will let you use the SFU files for later image application", vbOKOnly + vbCritical, "Apply an image")
-                            ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SFU files"
-                        Case "ESN"
-                            MsgBox("Especifique el arhivo FFU de origen. Esto le permitirá usar los archivos SFU para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
-                            ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SFU"
-                        Case "FRA"
-                            MsgBox("Veuillez indiquer un fichier FFU original. Cela vous permettra d'utiliser les fichiers SFU pour une application d'image ultérieure.", vbOKOnly + vbCritical, "Appliquer une image")
-                            ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SFU"
-                        Case "PTB", "PTG"
-                            MsgBox("Especifique um ficheiro FFU de origem. Isto permitir-lhe-á utilizar os ficheiros SFU para uma aplicação de imagem posterior", vbOKOnly + vbCritical, "Aplicar uma imagem")
-                            ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SFU"
-                        Case "ITA"
-                            MsgBox("Specificare un file FFU di origine. In questo modo sarà possibile utilizzare i file SFU per una successiva applicazione di immagini", vbOKOnly + vbCritical, "Applica un'immagine")
-                            ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SFU"
-                    End Select
-                Case 1
-                    MsgBox("Please specify a source FFU file. This will let you use the SFU files for later image application", vbOKOnly + vbCritical, "Apply an image")
-                    ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SFU files"
-                Case 2
-                    MsgBox("Especifique el arhivo FFU de origen. Esto le permitirá usar los archivos SFU para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
-                    ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SFU"
-                Case 3
-                    MsgBox("Veuillez indiquer un fichier FFU original. Cela vous permettra d'utiliser les fichiers SFU pour une application d'image ultérieure.", vbOKOnly + vbCritical, "Appliquer une image")
-                    ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SFU"
-                Case 4
-                    MsgBox("Especifique um ficheiro FFU de origem. Isto permitir-lhe-á utilizar os ficheiros SFU para uma aplicação de imagem posterior", vbOKOnly + vbCritical, "Aplicar uma imagem")
-                    ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SFU"
-                Case 5
-                    MsgBox("Specificare un file FFU di origine. In questo modo sarà possibile utilizzare i file SFU per una successiva applicazione di immagini", vbOKOnly + vbCritical, "Applica un'immagine")
-                    ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SFU"
-            End Select
+            MsgBox(LocalizationService.ForSection("FfuApply.ScanSFUPattern")("Source.File.Required.Message"), vbOKOnly + vbCritical, LocalizationService.ForSection("FfuApply.ScanSFUPattern")("ApplyImage.Message"))
+            ToolStripStatusLabel1.Text = LocalizationService.ForSection("FfuApply.ScanSFUPattern").Format("Naming.Returns.Item", ListBox1.Items.Count)
             Beep()
             Exit Sub
         End If
@@ -133,31 +76,7 @@ Public Class FfuApply
             End If
         Next
         DynaLog.LogMessage("Pattern search results: " & ListBox1.Items.Count)
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SFU files"
-                    Case "ESN"
-                        ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SFU"
-                    Case "FRA"
-                        ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SFU"
-                    Case "PTB", "PTG"
-                        ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SFU"
-                    Case "ITA"
-                        ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SFU"
-                End Select
-            Case 1
-                ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SFU files"
-            Case 2
-                ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SFU"
-            Case 3
-                ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SFU"
-            Case 4
-                ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SFU"
-            Case 5
-                ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SFU"
-        End Select
+        ToolStripStatusLabel1.Text = LocalizationService.ForSection("FfuApply.ScanSFUPattern").Format("Naming.Returns.Label", ListBox1.Items.Count)
         If ListBox1.Items.Count <= 0 Then Beep()
     End Sub
 
@@ -185,31 +104,7 @@ Public Class FfuApply
         TextBox2.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SFU files"
-                    Case "ESN"
-                        ToolStripStatusLabel1.Text = "Especifique la nomenclatura del patrón de los archivos SFU"
-                    Case "FRA"
-                        ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SFU"
-                    Case "PTB", "PTG"
-                        ToolStripStatusLabel1.Text = "Especifique o padrão de nomenclatura dos ficheiros SFU"
-                    Case "ITA"
-                        ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SFU"
-                End Select
-            Case 1
-                ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SFU files"
-            Case 2
-                ToolStripStatusLabel1.Text = "Especifique la nomenclatura del patrón de los archivos SFU"
-            Case 3
-                ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SFU"
-            Case 4
-                ToolStripStatusLabel1.Text = "Especifique o padrão de nomenclatura dos ficheiros SFU"
-            Case 5
-                ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SFU"
-        End Select
+        ToolStripStatusLabel1.Text = LocalizationService.ForSection("FfuApply")("NamingPattern.Required.Label")
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
             UseMountedImgBtn.Enabled = False
         Else

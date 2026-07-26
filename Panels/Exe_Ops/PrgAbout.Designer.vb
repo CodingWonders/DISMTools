@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class PrgAbout
     Inherits System.Windows.Forms.Form
 
@@ -102,7 +102,7 @@ Partial Class PrgAbout
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.PrgAbout")("Ok.Button")
         '
         'PictureBox1
         '
@@ -123,7 +123,7 @@ Partial Class PrgAbout
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(121, 13)
         Me.Label1.TabIndex = 4
-        Me.Label1.Text = "DISMTools - version {0}"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.PrgAbout").Format("DISM.Tools.Version.Label", "")
         '
         'Label2
         '
@@ -144,7 +144,7 @@ Partial Class PrgAbout
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(105, 13)
         Me.Label15.TabIndex = 4
-        Me.Label15.Text = "Build date goes here"
+        Me.Label15.Text = LocalizationService.ForSection("Designer.PrgAbout")("Build.Date.Goes.Label")
         Me.Label15.Visible = False
         '
         'ModernPanelContainer
@@ -233,7 +233,7 @@ Partial Class PrgAbout
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(363, 42)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "These resources and components were used in the creation of this program:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.PrgAbout")("ResourcesUsed.Label")
         '
         'Label4
         '
@@ -244,7 +244,7 @@ Partial Class PrgAbout
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(86, 21)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Resources"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.PrgAbout")("Resources.Label")
         '
         'Label5
         '
@@ -253,7 +253,7 @@ Partial Class PrgAbout
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(48, 15)
         Me.Label5.TabIndex = 2
-        Me.Label5.Text = "Fluency"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.PrgAbout")("Fluency.Label")
         '
         'LinkLabel4
         '
@@ -266,7 +266,7 @@ Partial Class PrgAbout
         Me.LinkLabel4.Size = New System.Drawing.Size(80, 30)
         Me.LinkLabel4.TabIndex = 3
         Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = "Icons8"
+        Me.LinkLabel4.Text = LocalizationService.ForSection("Designer.PrgAbout")("Icons.Link")
         Me.LinkLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label6
@@ -276,7 +276,7 @@ Partial Class PrgAbout
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(129, 15)
         Me.Label6.TabIndex = 2
-        Me.Label6.Text = "SQL Server icon (Color)"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.PrgAbout")("Sqlserver.Icon.Color.Label")
         '
         'Label7
         '
@@ -287,7 +287,7 @@ Partial Class PrgAbout
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(70, 21)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Utilities"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.PrgAbout")("Utilities.Label")
         '
         'Label8
         '
@@ -296,7 +296,7 @@ Partial Class PrgAbout
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(35, 15)
         Me.Label8.TabIndex = 2
-        Me.Label8.Text = "7-Zip"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.PrgAbout")("Zip.Label")
         '
         'LinkLabel5
         '
@@ -309,7 +309,7 @@ Partial Class PrgAbout
         Me.LinkLabel5.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel5.TabIndex = 4
         Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = "Visit website"
+        Me.LinkLabel5.Text = LocalizationService.ForSection("Designer.PrgAbout")("VisitWebsite.Link")
         Me.LinkLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel9
@@ -324,7 +324,7 @@ Partial Class PrgAbout
         Me.LinkLabel9.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel9.TabIndex = 8
         Me.LinkLabel9.TabStop = True
-        Me.LinkLabel9.Text = "Visit website"
+        Me.LinkLabel9.Text = LocalizationService.ForSection("Designer.PrgAbout")("VisitWebsite.Link")
         Me.LinkLabel9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel10
@@ -339,7 +339,7 @@ Partial Class PrgAbout
         Me.LinkLabel10.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel10.TabIndex = 8
         Me.LinkLabel10.TabStop = True
-        Me.LinkLabel10.Text = "Visit website"
+        Me.LinkLabel10.Text = LocalizationService.ForSection("Designer.PrgAbout")("VisitWebsite.Link")
         Me.LinkLabel10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label10
@@ -350,7 +350,7 @@ Partial Class PrgAbout
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(168, 21)
         Me.Label10.TabIndex = 1
-        Me.Label10.Text = "Help documentation"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.PrgAbout")("Help.Documentation.Label")
         '
         'Label13
         '
@@ -359,7 +359,7 @@ Partial Class PrgAbout
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(162, 15)
         Me.Label13.TabIndex = 1
-        Me.Label13.Text = "Scintila.NET (NuGet package)"
+        Me.Label13.Text = LocalizationService.ForSection("Designer.PrgAbout")("Scintila.Netnu.Get.Label")
         '
         'Label16
         '
@@ -368,7 +368,7 @@ Partial Class PrgAbout
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(176, 15)
         Me.Label16.TabIndex = 5
-        Me.Label16.Text = "ManagedDism (NuGet package)"
+        Me.Label16.Text = LocalizationService.ForSection("Designer.PrgAbout")("Managed.Dismnu.Get.Label")
         '
         'Label11
         '
@@ -377,7 +377,7 @@ Partial Class PrgAbout
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(130, 15)
         Me.Label11.TabIndex = 6
-        Me.Label11.Text = "Command Help source"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.PrgAbout")("Command.Help.Source.Label")
         '
         'LinkLabel7
         '
@@ -390,7 +390,7 @@ Partial Class PrgAbout
         Me.LinkLabel7.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel7.TabIndex = 4
         Me.LinkLabel7.TabStop = True
-        Me.LinkLabel7.Text = "Microsoft"
+        Me.LinkLabel7.Text = LocalizationService.ForSection("Designer.PrgAbout")("Microsoft.Link")
         Me.LinkLabel7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label17
@@ -401,7 +401,7 @@ Partial Class PrgAbout
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(129, 21)
         Me.Label17.TabIndex = 1
-        Me.Label17.Text = "Branding assets"
+        Me.Label17.Text = LocalizationService.ForSection("Designer.PrgAbout")("BrandingAssets.Label")
         '
         'Label19
         '
@@ -410,7 +410,7 @@ Partial Class PrgAbout
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(42, 15)
         Me.Label19.TabIndex = 2
-        Me.Label19.Text = "DarkUI"
+        Me.Label19.Text = LocalizationService.ForSection("Designer.PrgAbout")("DarkUI.Label")
         '
         'LinkLabel12
         '
@@ -423,7 +423,7 @@ Partial Class PrgAbout
         Me.LinkLabel12.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel12.TabIndex = 9
         Me.LinkLabel12.TabStop = True
-        Me.LinkLabel12.Text = "Visit website"
+        Me.LinkLabel12.Text = LocalizationService.ForSection("Designer.PrgAbout")("VisitWebsite.Link")
         Me.LinkLabel12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel11
@@ -437,7 +437,7 @@ Partial Class PrgAbout
         Me.LinkLabel11.Name = "LinkLabel11"
         Me.LinkLabel11.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel11.TabIndex = 9
-        Me.LinkLabel11.Text = "Microsoft"
+        Me.LinkLabel11.Text = LocalizationService.ForSection("Designer.PrgAbout")("Microsoft.Link")
         Me.LinkLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label18
@@ -447,7 +447,7 @@ Partial Class PrgAbout
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(154, 15)
         Me.Label18.TabIndex = 2
-        Me.Label18.Text = "Windows Home Server 2011"
+        Me.Label18.Text = LocalizationService.ForSection("Designer.PrgAbout")("Windows.Label")
         '
         'LicensesPanel
         '
@@ -526,7 +526,7 @@ Partial Class PrgAbout
         Me.LinkLabel3.Size = New System.Drawing.Size(134, 28)
         Me.LinkLabel3.TabIndex = 2
         Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "WHAT'S NEW"
+        Me.LinkLabel3.Text = LocalizationService.ForSection("Designer.PrgAbout")("Whatsnew.Link")
         Me.LinkLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel2
@@ -542,7 +542,7 @@ Partial Class PrgAbout
         Me.LinkLabel2.Size = New System.Drawing.Size(134, 28)
         Me.LinkLabel2.TabIndex = 1
         Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "LICENSES"
+        Me.LinkLabel2.Text = LocalizationService.ForSection("Designer.PrgAbout")("Licenses.Link")
         Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'LinkLabel1
@@ -558,7 +558,7 @@ Partial Class PrgAbout
         Me.LinkLabel1.Size = New System.Drawing.Size(134, 28)
         Me.LinkLabel1.TabIndex = 0
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "CREDITS"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.PrgAbout")("Credits.Link")
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'PictureBox2
@@ -590,7 +590,7 @@ Partial Class PrgAbout
         Me.UpdCheckBtn.Name = "UpdCheckBtn"
         Me.UpdCheckBtn.Size = New System.Drawing.Size(168, 23)
         Me.UpdCheckBtn.TabIndex = 10
-        Me.UpdCheckBtn.Text = "Check for updates"
+        Me.UpdCheckBtn.Text = LocalizationService.ForSection("Designer.PrgAbout")("CheckUpdates.Label")
         Me.UpdCheckBtn.UseVisualStyleBackColor = True
         '
         'PictureBox4
@@ -661,7 +661,7 @@ Partial Class PrgAbout
         Me.Name = "PrgAbout"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "About this program"
+        Me.Text = LocalizationService.ForSection("Designer.PrgAbout")("AboutProgram.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ModernPanelContainer.ResumeLayout(False)

@@ -210,9 +210,9 @@ Public Class MainForm
         CheckBox1.Checked = NewTheme.IsDark
         ChangeColorPreviews()
         LoadCurrentTheme()
-        Text = String.Format("DISMTools Theme Designer - {0}", Path.GetFileName(SavedThemePath))
+        Text = String.Format(LocalizationService.ForSection("ThemeDesigner.Main")("Window.Title"), Path.GetFileName(SavedThemePath))
         If (File.GetAttributes(SavedThemePath) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
-            MessageBox.Show("This theme has been loaded with read-only privileges. If you make changes, you must save them to a new file or enable write access.", "Theme Designer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(LocalizationService.ForSection("ThemeDesigner.Messages")("Loaded.Read.Only.Message"), LocalizationService.ForSection("ThemeDesigner.Messages")("ThemeDesigner.Label"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             roMode = True
             ToolStripButton5.Enabled = True
         End If
@@ -226,7 +226,7 @@ Public Class MainForm
     Private Sub Label7_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label9.MouseHover, Label8.MouseHover, Label7.MouseHover, Label13.MouseHover, Label12.MouseHover, Label11.MouseHover, Label10.MouseHover
         Try
             Dim BackgroundColor As Color = CType(sender, Label).BackColor
-            CurrentColorTT.SetToolTip(sender, String.Format("Current Color: RGB({0}, {1}, {2}). Click to copy to clipboard", BackgroundColor.R, BackgroundColor.G, BackgroundColor.B))
+            CurrentColorTT.SetToolTip(sender, LocalizationService.ForSection("Tools.ThemeDesigner.Main").Format("Color.Rgbclick.Label", BackgroundColor.R, BackgroundColor.G, BackgroundColor.B))
         Catch ex As Exception
 
         End Try
@@ -243,7 +243,7 @@ Public Class MainForm
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
         If String.IsNullOrEmpty(NewTheme.Name) Then
-            MessageBox.Show("You must provide a name for the theme.", "Theme name missing", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(LocalizationService.ForSection("ThemeDesigner.Messages")("Provide.Name.Label"), LocalizationService.ForSection("ThemeDesigner.Messages")("Name.Missing.Label"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         SaveFileDialog1.ShowDialog()
@@ -252,12 +252,12 @@ Public Class MainForm
     Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
         Cursor = Cursors.WaitCursor
         If ThemeHelper.SaveTheme(NewTheme, SaveFileDialog1.FileName) Then
-            MessageBox.Show("The theme has been saved successfully at the specified location.", "Save Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("ThemeDesigner.Messages")("Saved.Done.Label"), LocalizationService.ForSection("ThemeDesigner.Messages")("SaveSuccess.Label"), MessageBoxButtons.OK, MessageBoxIcon.Information)
             SavedThemePath = SaveFileDialog1.FileName
-            Text = String.Format("DISMTools Theme Designer - {0}", Path.GetFileName(SavedThemePath))
+            Text = String.Format(LocalizationService.ForSection("ThemeDesigner.Main")("Window.Title"), Path.GetFileName(SavedThemePath))
             roMode = False
         Else
-            MessageBox.Show("Could not save the theme.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("ThemeDesigner.Messages")("SaveTheme.Label"), LocalizationService.ForSection("ThemeDesigner.Messages")("SaveError.Label"), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
         Cursor = Cursors.Arrow
     End Sub
@@ -270,21 +270,14 @@ Public Class MainForm
         LoadCurrentTheme()
         roMode = False
         SavedThemePath = ""
-        Text = "DISMTools Theme Designer"
+        Text = LocalizationService.ForSection("ThemeDesigner.Main")("Window.DefaultTitle")
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
 #If VBC_VER >= 9.0 Then
-        MsgBox(String.Format("DISMTools Theme Designer version {0}" & CrLf & CrLf & "{1}. {2}", _
-                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
-                My.Application.Info.Copyright, _
-                "INI File Parser: © 2008 Ricardo Amores Hernández"), _
-            vbOKOnly + vbInformation, "About")
+        MsgBox(LocalizationService.ForSection("ThemeDesigner.Messages").Format("DISM.Tools.Designer.Label", My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), My.Application.Info.Copyright, "INI File Parser:  2008 Ricardo Amores Hernndez"), vbOKOnly + vbInformation, LocalizationService.ForSection("ThemeDesigner.Messages")("About.Label"))
 #Else
-        MsgBox(String.Format("DISMTools Theme Designer version {0}_NET2REL" & CrLf & CrLf & "{1}. {2}", _
-                My.Application.Info.Version.ToString(), _
-                My.Application.Info.Copyright, "INI File Parser: © 2008 Ricardo Amores Hernández"), _
-            vbOKOnly + vbInformation, "About")
+        MsgBox(LocalizationService.ForSection("ThemeDesigner.Messages").Format("About.Version.Message", My.Application.Info.Version.ToString(), My.Application.Info.Copyright, "INI File Parser:  2008 Ricardo Amores Hernndez"), vbOKOnly + vbInformation, LocalizationService.ForSection("ThemeDesigner.Messages")("About.Label"))
 #End If
     End Sub
 
@@ -307,7 +300,7 @@ Public Class MainForm
             roMode = False
             ToolStripButton5.Enabled = False
         Catch ex As Exception
-            MessageBox.Show("Could not enable write access for this script file. Make sure that the script is not in read-only media.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("ThemeDesigner.Messages")("Enable.Write.Access.Message"), LocalizationService.ForSection("ThemeDesigner.Messages")("StarterScript.Editor.Label"), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 

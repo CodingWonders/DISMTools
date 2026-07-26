@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SaveProjectQuestionDialog
     Inherits System.Windows.Forms.Form
 
@@ -58,7 +58,7 @@ Partial Class SaveProjectQuestionDialog
         Me.Yes_Button.Name = "Yes_Button"
         Me.Yes_Button.Size = New System.Drawing.Size(66, 23)
         Me.Yes_Button.TabIndex = 0
-        Me.Yes_Button.Text = "Yes"
+        Me.Yes_Button.Text = LocalizationService.ForSection("Designer.SaveProject")("Yes.Button")
         '
         'No_Button
         '
@@ -69,7 +69,7 @@ Partial Class SaveProjectQuestionDialog
         Me.No_Button.Name = "No_Button"
         Me.No_Button.Size = New System.Drawing.Size(66, 23)
         Me.No_Button.TabIndex = 1
-        Me.No_Button.Text = "No"
+        Me.No_Button.Text = LocalizationService.ForSection("Designer.SaveProject")("No.Button")
         '
         'Cancel_Button
         '
@@ -80,7 +80,7 @@ Partial Class SaveProjectQuestionDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(66, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.SaveProject")("Cancel.Button")
         '
         'Panel1
         '
@@ -100,7 +100,7 @@ Partial Class SaveProjectQuestionDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(471, 23)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Do you want to save the changes of this project?"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.SaveProject")("SaveChanges.Label")
         '
         'Label2
         '
@@ -109,8 +109,7 @@ Partial Class SaveProjectQuestionDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(471, 39)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "If you shut down or restart your system without unmounting the images, you will n" & _
-    "eed to reload the servicing session."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.SaveProject")("Shutdown.Message")
         '
         'SaveProjectQuestionDialog
         '
@@ -130,7 +129,7 @@ Partial Class SaveProjectQuestionDialog
         Me.Name = "SaveProjectQuestionDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "DISMTools"
+        Me.Text = LocalizationService.ForSection("Designer.SaveProject")("AppName.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)

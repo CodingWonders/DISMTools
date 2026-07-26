@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class BGProcsAdvSettings
     Inherits System.Windows.Forms.Form
 
@@ -56,7 +56,7 @@ Partial Class BGProcsAdvSettings
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.BgProcesses")("Okbutton.Button")
         '
         'Cancel_Button
         '
@@ -66,7 +66,7 @@ Partial Class BGProcsAdvSettings
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.BgProcesses")("Cancel.Button")
         '
         'Label1
         '
@@ -75,7 +75,7 @@ Partial Class BGProcsAdvSettings
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(275, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Configure additional settings for background processes:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.BgProcsSettings")("Additional.Label")
         '
         'CheckBox1
         '
@@ -86,8 +86,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(440, 32)
         Me.CheckBox1.TabIndex = 2
-        Me.CheckBox1.Text = "Enhance detection of installed AppX packages of an active installation with Power" & _
-    "Shell helpers"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.BgProcesses")("Enhance.App.Detect.CheckBox")
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
@@ -100,7 +99,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(246, 17)
         Me.CheckBox2.TabIndex = 2
-        Me.CheckBox2.Text = "Skip packages with non-removable policies set"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.BgProcesses")("SkipNonRemovable.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -110,7 +109,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(138, 17)
         Me.CheckBox3.TabIndex = 2
-        Me.CheckBox3.Text = "Detect all image drivers"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.BgProcesses")("DetectAllDrivers.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -123,7 +122,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(422, 32)
         Me.CheckBox4.TabIndex = 2
-        Me.CheckBox4.Text = "Skip framework packages, and remove them from the listings if they were detected"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.BgProcesses")("Skip.Framework.CheckBox")
         Me.CheckBox4.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
@@ -134,7 +133,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(282, 17)
         Me.CheckBox5.TabIndex = 2
-        Me.CheckBox5.Text = "Run all background processes after performing a task"
+        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.BgProcesses")("Run.CheckBox")
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'BGProcsAdvSettings
@@ -158,7 +157,7 @@ Partial Class BGProcsAdvSettings
         Me.Name = "BGProcsAdvSettings"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Advanced background process settings"
+        Me.Text = LocalizationService.ForSection("Designer.BgProcsSettings")("Advanced.Process.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

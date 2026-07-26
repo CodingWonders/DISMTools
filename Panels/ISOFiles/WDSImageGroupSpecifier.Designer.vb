@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class WDSImageGroupSpecifier
     Inherits System.Windows.Forms.Form
 
@@ -58,7 +58,7 @@ Partial Class WDSImageGroupSpecifier
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -69,7 +69,7 @@ Partial Class WDSImageGroupSpecifier
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Cancel.Button")
         '
         'Label1
         '
@@ -78,7 +78,7 @@ Partial Class WDSImageGroupSpecifier
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(94, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Choose an action:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Action.Choose.Label")
         '
         'ComboBox1
         '
@@ -98,7 +98,7 @@ Partial Class WDSImageGroupSpecifier
         Me.Refresh_Button.Name = "Refresh_Button"
         Me.Refresh_Button.Size = New System.Drawing.Size(75, 23)
         Me.Refresh_Button.TabIndex = 3
-        Me.Refresh_Button.Text = "Refresh"
+        Me.Refresh_Button.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Refresh.Button")
         Me.Refresh_Button.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -110,7 +110,7 @@ Partial Class WDSImageGroupSpecifier
         Me.RadioButton1.Size = New System.Drawing.Size(278, 17)
         Me.RadioButton1.TabIndex = 4
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Upload this image to the following WDS image group:"
+        Me.RadioButton1.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Upload.RadioButton")
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'RadioButton2
@@ -120,7 +120,7 @@ Partial Class WDSImageGroupSpecifier
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(384, 17)
         Me.RadioButton2.TabIndex = 4
-        Me.RadioButton2.Text = "Create the following WDS image group for me and upload this image there:"
+        Me.RadioButton2.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("CreateGroup.RadioButton")
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -140,7 +140,7 @@ Partial Class WDSImageGroupSpecifier
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(131, 13)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = "This group already exists."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Already.Exists.Label")
         Me.Label2.Visible = False
         '
         'WDSImageGroupSpecifier
@@ -165,7 +165,7 @@ Partial Class WDSImageGroupSpecifier
         Me.Name = "WDSImageGroupSpecifier"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Specify a group in your WDS server..."
+        Me.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("SpecifyGroup.Button")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

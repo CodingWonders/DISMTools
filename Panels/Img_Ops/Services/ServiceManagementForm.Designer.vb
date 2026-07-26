@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ServiceManagementForm
     Inherits System.Windows.Forms.Form
 
@@ -138,8 +138,7 @@ Partial Class ServiceManagementForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(1240, 42)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "This tool lets you view and manage the services of this target image. Click Save " & _
-    "service changes to save any changes made to the Windows services."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.Services")("Intro.Message")
         '
         'ListView1
         '
@@ -159,27 +158,27 @@ Partial Class ServiceManagementForm
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Service Name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
         Me.ColumnHeader1.Width = 218
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Display Name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
         Me.ColumnHeader2.Width = 279
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Description"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.Services")("Description.Column")
         Me.ColumnHeader3.Width = 237
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Start Type"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.Services")("StartType.Column")
         Me.ColumnHeader4.Width = 173
         '
         'ColumnHeader12
         '
-        Me.ColumnHeader12.Text = "Type"
+        Me.ColumnHeader12.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
         Me.ColumnHeader12.Width = 195
         '
         'TabControl1
@@ -221,7 +220,7 @@ Partial Class ServiceManagementForm
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Service Information"
+        Me.TabPage1.Text = LocalizationService.ForSection("Designer.Services")("ServiceInfo.Tab")
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'Panel3
@@ -261,7 +260,7 @@ Partial Class ServiceManagementForm
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(92, 17)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = "Delayed Start"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.Services")("DelayedStart.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Label4
@@ -271,7 +270,7 @@ Partial Class ServiceManagementForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(102, 13)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Service Description:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.Services")("Description.Label")
         '
         'TextBox14
         '
@@ -291,7 +290,7 @@ Partial Class ServiceManagementForm
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(99, 13)
         Me.Label19.TabIndex = 1
-        Me.Label19.Text = "User Service Flags:"
+        Me.Label19.Text = LocalizationService.ForSection("Designer.Services")("User.Flags.Label")
         '
         'TextBox7
         '
@@ -309,7 +308,7 @@ Partial Class ServiceManagementForm
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(73, 13)
         Me.Label8.TabIndex = 1
-        Me.Label8.Text = "Service Type:"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.Services")("ServiceType.Label")
         '
         'Label7
         '
@@ -318,7 +317,7 @@ Partial Class ServiceManagementForm
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(100, 13)
         Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Service Start Type:"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.Services")("Start.Type.Label")
         '
         'TextBox5
         '
@@ -338,7 +337,7 @@ Partial Class ServiceManagementForm
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(111, 13)
         Me.Label6.TabIndex = 1
-        Me.Label6.Text = "Service Object Name:"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.Services")("Object.Name.Label")
         '
         'TextBox4
         '
@@ -358,7 +357,7 @@ Partial Class ServiceManagementForm
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(104, 13)
         Me.Label5.TabIndex = 1
-        Me.Label5.Text = "Service Image Path:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.Services")("Image.Path.Label")
         '
         'TextBox2
         '
@@ -378,7 +377,7 @@ Partial Class ServiceManagementForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(113, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Service Display Name:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.Services")("Display.Name.Label")
         '
         'TextBox1
         '
@@ -398,7 +397,7 @@ Partial Class ServiceManagementForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(76, 13)
         Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Service Name:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Label")
         '
         'PictureBox1
         '
@@ -417,7 +416,7 @@ Partial Class ServiceManagementForm
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Required Privileges"
+        Me.TabPage2.Text = LocalizationService.ForSection("Designer.Services")("Required.Privileges.Tab")
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'ListView2
@@ -434,17 +433,17 @@ Partial Class ServiceManagementForm
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Privilege Name"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.Services")("PrivilegeName.Column")
         Me.ColumnHeader5.Width = 170
         '
         'ColumnHeader6
         '
-        Me.ColumnHeader6.Text = "Privilege Display Name"
+        Me.ColumnHeader6.Text = LocalizationService.ForSection("Designer.Services")("PrivilegeName.Display.Column")
         Me.ColumnHeader6.Width = 177
         '
         'ColumnHeader7
         '
-        Me.ColumnHeader7.Text = "Privilege Description"
+        Me.ColumnHeader7.Text = LocalizationService.ForSection("Designer.Services")("Privilege.Description.Column")
         Me.ColumnHeader7.Width = 592
         '
         'TabPage3
@@ -456,7 +455,7 @@ Partial Class ServiceManagementForm
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Error Control"
+        Me.TabPage3.Text = LocalizationService.ForSection("Designer.Services")("ErrorControl.Tab")
         Me.TabPage3.UseVisualStyleBackColor = True
         '
         'Panel4
@@ -501,7 +500,7 @@ Partial Class ServiceManagementForm
         Me.GroupBox1.Size = New System.Drawing.Size(1170, 150)
         Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Failure Actions"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.Services")("FailureActions.Group")
         '
         'TextBox11
         '
@@ -521,7 +520,7 @@ Partial Class ServiceManagementForm
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(92, 13)
         Me.Label12.TabIndex = 7
-        Me.Label12.Text = "On Future Errors:"
+        Me.Label12.Text = LocalizationService.ForSection("Designer.Services")("FutureErrors.Label")
         '
         'TextBox10
         '
@@ -541,7 +540,7 @@ Partial Class ServiceManagementForm
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(73, 13)
         Me.Label11.TabIndex = 5
-        Me.Label11.Text = "On 2nd Error:"
+        Me.Label11.Text = LocalizationService.ForSection("Designer.Services")("NdError.Label")
         '
         'TextBox13
         '
@@ -561,7 +560,7 @@ Partial Class ServiceManagementForm
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(216, 13)
         Me.Label14.TabIndex = 3
-        Me.Label14.Text = "Restart Service after the following minutes:"
+        Me.Label14.Text = LocalizationService.ForSection("Designer.ServiceMgmt")("Restart.Minutes.Label")
         '
         'TextBox12
         '
@@ -581,7 +580,7 @@ Partial Class ServiceManagementForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(229, 13)
         Me.Label13.TabIndex = 3
-        Me.Label13.Text = "Reset Error Count after the following minutes:"
+        Me.Label13.Text = LocalizationService.ForSection("Designer.Services")("ResetErrorCount.Label")
         '
         'TextBox9
         '
@@ -601,7 +600,7 @@ Partial Class ServiceManagementForm
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(70, 13)
         Me.Label10.TabIndex = 3
-        Me.Label10.Text = "On 1st Error:"
+        Me.Label10.Text = LocalizationService.ForSection("Designer.Services")("StError.Label")
         '
         'Label9
         '
@@ -610,7 +609,7 @@ Partial Class ServiceManagementForm
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(216, 13)
         Me.Label9.TabIndex = 3
-        Me.Label9.Text = "On service error, what should Windows do?"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.Services")("Error.Windows.Label")
         '
         'TabPage4
         '
@@ -619,7 +618,7 @@ Partial Class ServiceManagementForm
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "Service Dependencies"
+        Me.TabPage4.Text = LocalizationService.ForSection("Designer.Services")("Dependencies.Tab")
         Me.TabPage4.UseVisualStyleBackColor = True
         '
         'SplitContainer1
@@ -667,17 +666,17 @@ Partial Class ServiceManagementForm
         '
         'ColumnHeader8
         '
-        Me.ColumnHeader8.Text = "Service Name"
+        Me.ColumnHeader8.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
         Me.ColumnHeader8.Width = 209
         '
         'ColumnHeader9
         '
-        Me.ColumnHeader9.Text = "Display Name"
+        Me.ColumnHeader9.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
         Me.ColumnHeader9.Width = 209
         '
         'ColumnHeader10
         '
-        Me.ColumnHeader10.Text = "Type"
+        Me.ColumnHeader10.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
         Me.ColumnHeader10.Width = 120
         '
         'Label17
@@ -687,7 +686,7 @@ Partial Class ServiceManagementForm
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(232, 13)
         Me.Label17.TabIndex = 0
-        Me.Label17.Text = "This service depends on the following services:"
+        Me.Label17.Text = LocalizationService.ForSection("Designer.ServiceMgmt")("Dependencies.Label")
         '
         'Panel2
         '
@@ -716,17 +715,17 @@ Partial Class ServiceManagementForm
         '
         'ColumnHeader11
         '
-        Me.ColumnHeader11.Text = "Service Name"
+        Me.ColumnHeader11.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
         Me.ColumnHeader11.Width = 209
         '
         'ColumnHeader13
         '
-        Me.ColumnHeader13.Text = "Display Name"
+        Me.ColumnHeader13.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
         Me.ColumnHeader13.Width = 209
         '
         'ColumnHeader14
         '
-        Me.ColumnHeader14.Text = "Type"
+        Me.ColumnHeader14.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
         Me.ColumnHeader14.Width = 120
         '
         'Label18
@@ -736,7 +735,7 @@ Partial Class ServiceManagementForm
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(227, 13)
         Me.Label18.TabIndex = 0
-        Me.Label18.Text = "The following services depend on this service:"
+        Me.Label18.Text = LocalizationService.ForSection("Designer.ServiceMgmt")("Dependent.Services.Label")
         '
         'TabPage5
         '
@@ -749,7 +748,7 @@ Partial Class ServiceManagementForm
         Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage5.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage5.TabIndex = 4
-        Me.TabPage5.Text = "Service Groups"
+        Me.TabPage5.Text = LocalizationService.ForSection("Designer.Services")("ServiceGroups.Tab")
         Me.TabPage5.UseVisualStyleBackColor = True
         '
         'GetSvchostGroupsBtn
@@ -760,7 +759,7 @@ Partial Class ServiceManagementForm
         Me.GetSvchostGroupsBtn.Name = "GetSvchostGroupsBtn"
         Me.GetSvchostGroupsBtn.Size = New System.Drawing.Size(265, 23)
         Me.GetSvchostGroupsBtn.TabIndex = 5
-        Me.GetSvchostGroupsBtn.Text = "Get registered service host groups"
+        Me.GetSvchostGroupsBtn.Text = LocalizationService.ForSection("Designer.Services")("RegisteredHosts.Label")
         Me.GetSvchostGroupsBtn.UseVisualStyleBackColor = True
         '
         'GroupBox2
@@ -774,7 +773,7 @@ Partial Class ServiceManagementForm
         Me.GroupBox2.Size = New System.Drawing.Size(1193, 167)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Services that belong to this group"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.Services")("Services.Belong.Group")
         '
         'ListView5
         '
@@ -791,17 +790,17 @@ Partial Class ServiceManagementForm
         '
         'ColumnHeader15
         '
-        Me.ColumnHeader15.Text = "Service Name"
+        Me.ColumnHeader15.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
         Me.ColumnHeader15.Width = 209
         '
         'ColumnHeader16
         '
-        Me.ColumnHeader16.Text = "Display Name"
+        Me.ColumnHeader16.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
         Me.ColumnHeader16.Width = 567
         '
         'ColumnHeader17
         '
-        Me.ColumnHeader17.Text = "Type"
+        Me.ColumnHeader17.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
         Me.ColumnHeader17.Width = 311
         '
         'TextBox6
@@ -822,7 +821,7 @@ Partial Class ServiceManagementForm
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(144, 13)
         Me.Label16.TabIndex = 0
-        Me.Label16.Text = "This service is part of group:"
+        Me.Label16.Text = LocalizationService.ForSection("Designer.Services")("Part.Group.Label")
         '
         'SaveServiceInfoBtn
         '
@@ -832,7 +831,7 @@ Partial Class ServiceManagementForm
         Me.SaveServiceInfoBtn.Name = "SaveServiceInfoBtn"
         Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(155, 23)
         Me.SaveServiceInfoBtn.TabIndex = 4
-        Me.SaveServiceInfoBtn.Text = "Save service changes"
+        Me.SaveServiceInfoBtn.Text = LocalizationService.ForSection("Designer.Services")("Save.Changes.Label")
         Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
         '
         'ProgressLabel
@@ -843,7 +842,7 @@ Partial Class ServiceManagementForm
         Me.ProgressLabel.Name = "ProgressLabel"
         Me.ProgressLabel.Size = New System.Drawing.Size(73, 13)
         Me.ProgressLabel.TabIndex = 5
-        Me.ProgressLabel.Text = "Please wait..."
+        Me.ProgressLabel.Text = LocalizationService.ForSection("Designer.Services")("ProgressLabel.Label")
         Me.ProgressLabel.Visible = False
         '
         'Timer1
@@ -858,7 +857,7 @@ Partial Class ServiceManagementForm
         Me.ReloadServiceInformationBtn.Name = "ReloadServiceInformationBtn"
         Me.ReloadServiceInformationBtn.Size = New System.Drawing.Size(75, 23)
         Me.ReloadServiceInformationBtn.TabIndex = 6
-        Me.ReloadServiceInformationBtn.Text = "Reload"
+        Me.ReloadServiceInformationBtn.Text = LocalizationService.ForSection("Designer.Services")("Reload.Label")
         Me.ReloadServiceInformationBtn.UseVisualStyleBackColor = True
         '
         'ServiceInfoContainerPanel
@@ -891,7 +890,7 @@ Partial Class ServiceManagementForm
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(708, 90)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = "No service has been selected. Select a service above to view details."
+        Me.Label15.Text = LocalizationService.ForSection("Designer.Services")("SelectService.Label")
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'SelectedServicePanel
@@ -911,12 +910,12 @@ Partial Class ServiceManagementForm
         Me.ReportServiceInfoBtn.Name = "ReportServiceInfoBtn"
         Me.ReportServiceInfoBtn.Size = New System.Drawing.Size(191, 23)
         Me.ReportServiceInfoBtn.TabIndex = 8
-        Me.ReportServiceInfoBtn.Text = "Save service information..."
+        Me.ReportServiceInfoBtn.Text = LocalizationService.ForSection("Designer.Services")("Save.Button")
         Me.ReportServiceInfoBtn.UseVisualStyleBackColor = True
         '
         'ServiceInfoSFD
         '
-        Me.ServiceInfoSFD.Filter = "Markdown files|*.md"
+        Me.ServiceInfoSFD.Filter = LocalizationService.ForSection("Designer.Services")("MarkdownFiles.Filter")
         '
         'RestoreServiceBtn
         '
@@ -927,7 +926,7 @@ Partial Class ServiceManagementForm
         Me.RestoreServiceBtn.Name = "RestoreServiceBtn"
         Me.RestoreServiceBtn.Size = New System.Drawing.Size(156, 23)
         Me.RestoreServiceBtn.TabIndex = 8
-        Me.RestoreServiceBtn.Text = "Restore service"
+        Me.RestoreServiceBtn.Text = LocalizationService.ForSection("Designer.Services")("RestoreService.Label")
         Me.RestoreServiceBtn.UseVisualStyleBackColor = True
         '
         'DeleteServiceBtn
@@ -939,7 +938,7 @@ Partial Class ServiceManagementForm
         Me.DeleteServiceBtn.Name = "DeleteServiceBtn"
         Me.DeleteServiceBtn.Size = New System.Drawing.Size(156, 23)
         Me.DeleteServiceBtn.TabIndex = 8
-        Me.DeleteServiceBtn.Text = "Delete service"
+        Me.DeleteServiceBtn.Text = LocalizationService.ForSection("Designer.Services")("DeleteService.Label")
         Me.DeleteServiceBtn.UseVisualStyleBackColor = True
         '
         'ServiceManagementForm
@@ -962,7 +961,7 @@ Partial Class ServiceManagementForm
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "ServiceManagementForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "System Service Management"
+        Me.Text = LocalizationService.ForSection("Designer.Services")("System.Label")
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()

@@ -37,8 +37,7 @@ Partial Class InspectionProgressDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(481, 24)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Please wait while script code is inspected for any security violations. This may " & _
-    "take some time."
+        Me.Label1.Text = LocalizationService.ForSection("StarterScript.Designer.InspectionProgress")("Wait.Message")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'ProgressBar1
@@ -77,7 +76,7 @@ Partial Class InspectionProgressDialog
         Me.Name = "InspectionProgressDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Inspecting Script Code..."
+        Me.Text = LocalizationService.ForSection("StarterScript.Designer.InspectionProgress")("Title")
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

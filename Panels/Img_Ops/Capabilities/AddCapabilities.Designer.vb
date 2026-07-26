@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddCapabilities
     Inherits System.Windows.Forms.Form
 
@@ -76,7 +76,7 @@ Partial Class AddCapabilities
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -87,7 +87,7 @@ Partial Class AddCapabilities
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -98,7 +98,7 @@ Partial Class AddCapabilities
         Me.GroupBox1.Size = New System.Drawing.Size(759, 314)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Capabilities"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Capabilities.Group")
         '
         'TableLayoutPanel2
         '
@@ -123,7 +123,7 @@ Partial Class AddCapabilities
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(98, 23)
         Me.Button2.TabIndex = 0
-        Me.Button2.Text = "Select all"
+        Me.Button2.Text = LocalizationService.ForSection("Designer.AddCapabilities")("SelectAll.Button")
         '
         'Button3
         '
@@ -134,7 +134,7 @@ Partial Class AddCapabilities
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(98, 23)
         Me.Button3.TabIndex = 1
-        Me.Button3.Text = "Select none"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.AddCapabilities")("SelectNone.Button")
         '
         'ListView1
         '
@@ -149,12 +149,12 @@ Partial Class AddCapabilities
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Capability"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Capability.Column")
         Me.ColumnHeader1.Width = 520
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "State"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.AddCapabilities")("State.Column")
         Me.ColumnHeader2.Width = 204
         '
         'GroupBox2
@@ -171,7 +171,7 @@ Partial Class AddCapabilities
         Me.GroupBox2.Size = New System.Drawing.Size(759, 142)
         Me.GroupBox2.TabIndex = 6
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Options"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Options.Group")
         '
         'Button1
         '
@@ -181,7 +181,7 @@ Partial Class AddCapabilities
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 9
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label2
@@ -192,7 +192,7 @@ Partial Class AddCapabilities
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(44, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = "Source:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Source.Label")
         '
         'CheckBox3
         '
@@ -201,7 +201,7 @@ Partial Class AddCapabilities
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(209, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = "Commit image after adding capabilities"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.AddCaps")("CommitImage.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -212,7 +212,7 @@ Partial Class AddCapabilities
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(179, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = "Limit access to Windows Update"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.AddCapabilities")("WindowsUpdate.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -222,7 +222,7 @@ Partial Class AddCapabilities
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(241, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Specify different source for capability installs"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.AddCapabilities")("DifferentSource.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Button4
@@ -233,7 +233,7 @@ Partial Class AddCapabilities
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(175, 23)
         Me.Button4.TabIndex = 9
-        Me.Button4.Text = "Detect from group policy"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.AddCapabilities")("Detect.Group.Policy.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Panel1
@@ -268,7 +268,7 @@ Partial Class AddCapabilities
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = "Specify the source to use for capability addition:"
+        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.AddCapabilities")("SourceHint.Description")
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'ImageTaskHeader1
@@ -314,7 +314,7 @@ Partial Class AddCapabilities
         Me.Name = "AddCapabilities"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Add capabilities"
+        Me.Text = LocalizationService.ForSection("Designer.AddCapabilities")("AddCapabilities.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)

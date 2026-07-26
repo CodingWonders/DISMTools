@@ -51,7 +51,7 @@ Partial Class CryptographicProgressDialog
         Me.Padding = New System.Windows.Forms.Padding(8)
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Please wait..."
+        Me.Text = LocalizationService.ForSection("StarterScript.Designer.CryptoProgress")("Title")
         Me.ResumeLayout(False)
 
     End Sub

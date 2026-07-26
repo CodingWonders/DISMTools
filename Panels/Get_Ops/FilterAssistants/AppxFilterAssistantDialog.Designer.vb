@@ -69,7 +69,7 @@ Partial Class AppxFilterAssistantDialog
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "Apply"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Apply.Button")
         '
         'Cancel_Button
         '
@@ -80,7 +80,7 @@ Partial Class AppxFilterAssistantDialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Clear"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Clear.Button")
         '
         'Label1
         '
@@ -89,7 +89,7 @@ Partial Class AppxFilterAssistantDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(178, 13)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Filter AppX package information by:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("FilterBy.Label")
         '
         'NameFilterRadioButton
         '
@@ -100,7 +100,7 @@ Partial Class AppxFilterAssistantDialog
         Me.NameFilterRadioButton.Size = New System.Drawing.Size(56, 17)
         Me.NameFilterRadioButton.TabIndex = 4
         Me.NameFilterRadioButton.TabStop = True
-        Me.NameFilterRadioButton.Text = "Name:"
+        Me.NameFilterRadioButton.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Name.RadioButton")
         Me.NameFilterRadioButton.UseVisualStyleBackColor = True
         '
         'RegStatusRadioButton
@@ -110,7 +110,7 @@ Partial Class AppxFilterAssistantDialog
         Me.RegStatusRadioButton.Name = "RegStatusRadioButton"
         Me.RegStatusRadioButton.Size = New System.Drawing.Size(116, 17)
         Me.RegStatusRadioButton.TabIndex = 4
-        Me.RegStatusRadioButton.Text = "Registration status"
+        Me.RegStatusRadioButton.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegistrationStatus.RadioButton")
         Me.RegStatusRadioButton.UseVisualStyleBackColor = True
         '
         'RegStatusPanel
@@ -134,17 +134,17 @@ Partial Class AppxFilterAssistantDialog
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(196, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Who are the applications registered to?"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredTo.Label")
         '
         'RegStatusComboBox
         '
         Me.RegStatusComboBox.FormattingEnabled = True
-        Me.RegStatusComboBox.Items.AddRange(New Object() {"The applications aren't registered to anyone", "The applications are registered to anyone", "The applications are registered to me", "The applications are registered to the following user"})
+        Me.RegStatusComboBox.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToNoOne.Item"), LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToAnyone.Item"), LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToMe.Item"), LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToUser.Item")})
         Me.RegStatusComboBox.Location = New System.Drawing.Point(232, 13)
         Me.RegStatusComboBox.Name = "RegStatusComboBox"
         Me.RegStatusComboBox.Size = New System.Drawing.Size(406, 21)
         Me.RegStatusComboBox.TabIndex = 1
-        Me.RegStatusComboBox.Text = "The applications are registered to me"
+        Me.RegStatusComboBox.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToMe.Item")
         '
         'UserAccountLV
         '
@@ -161,17 +161,17 @@ Partial Class AppxFilterAssistantDialog
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Account Name"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("AccountName.Column")
         Me.ColumnHeader1.Width = 128
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Display Name"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("DisplayName.Column")
         Me.ColumnHeader2.Width = 192
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "SID"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Sid.Column")
         Me.ColumnHeader3.Width = 272
         '
         'PackageNameTextBox
@@ -188,8 +188,7 @@ Partial Class AppxFilterAssistantDialog
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(373, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Select a user from the list above to filter application registration to this user" & _
-    "."
+        Me.Label3.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("SelectUser.Message")
         '
         'SelectedUserDetailsTextBox
         '
@@ -243,7 +242,7 @@ Partial Class AppxFilterAssistantDialog
         Me.Name = "AppxFilterAssistantDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Filter AppX information"
+        Me.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Title")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.RegStatusPanel.ResumeLayout(False)
         Me.RegStatusPanel.PerformLayout()

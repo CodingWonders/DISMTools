@@ -1,4 +1,4 @@
-﻿' DISMTools: operation numbers
+' DISMTools: operation numbers
 
 ' OperationNum          Action
 ' 00                    Create DISMTools project
@@ -197,8 +197,6 @@ Public Class ProgressPanel
 
     Dim dateStr As String = "DISMTools-"
 
-    Dim Language As Integer = 0                             ' Form language, taken from MainForm
-
     Dim mntString As String = ""                            ' Mount directory, necessary for the DISM API
 
     Dim OnlineMgmt As Boolean                               ' Determine whether to perform actions to the active installation or the mounted Windows image
@@ -220,6 +218,7 @@ Public Class ProgressPanel
     Dim LogPath As String
     Dim LogLevel As Integer
     Dim QuietOps As Boolean
+
     Dim SkipSysRestart As Boolean
     Dim UseScratchDir As Boolean
     Dim AutoScratch As Boolean
@@ -229,6 +228,7 @@ Public Class ProgressPanel
     Dim BckArgs As String
 
     Dim IsExpanded As Boolean
+    Private CancelButtonClosesDialog As Boolean
 
 
     ' OperationNum: 0
@@ -582,6 +582,11 @@ Public Class ProgressPanel
 
     Private ReferenceImage As WindowsImage
 
+
+    Private Function ProgressLogText(itemKey As String) As String
+        Return LocalizationService.ForSection("Progress.LogText")(itemKey)
+    End Function
+
     Private Sub OnAllTasksLogReported(AllTasksMessage As String) Handles Me.AllTasksLogReported
         allTasks.Text = AllTasksMessage
     End Sub
@@ -621,69 +626,22 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
-        If Cancel_Button.Text = "Cancel" Or Cancel_Button.Text = "Cancelar" Or Cancel_Button.Text = "Annulla" Then
-            ProgressBW.CancelAsync()
-        ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
+        If CancelButtonClosesDialog Then
             Close()
+            Return
         End If
+
+        ProgressBW.CancelAsync()
     End Sub
 
     Private Sub LogButton_Click(sender As Object, e As EventArgs) Handles LogButton.Click
         Dim collapsedHeight As Integer = WindowHelper.ScaleLogical(240)
         Dim expandedHeight As Integer = WindowHelper.ScaleLogical(420)
         If Not IsExpanded Then
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            LogButton.Text = "Hide log"
-                        Case "ESN"
-                            LogButton.Text = "Ocultar registro"
-                        Case "FRA"
-                            LogButton.Text = "Cacher le journal"
-                        Case "PTB", "PTG"
-                            LogButton.Text = "Ocultar registo"
-                        Case "ITA"
-                            LogButton.Text = "Nascondi registro"
-                    End Select
-                Case 1
-                    LogButton.Text = "Hide log"
-                Case 2
-                    LogButton.Text = "Ocultar registro"
-                Case 3
-                    LogButton.Text = "Cacher le journal"
-                Case 4
-                    LogButton.Text = "Ocultar registo"
-                Case 5
-                    LogButton.Text = "Nascondi registro"
-            End Select
+            LogButton.Text = LocalizationService.ForSection("Progress.Log")("HideLog.Label")
             Height = expandedHeight
         Else
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            LogButton.Text = "Show log"
-                        Case "ESN"
-                            LogButton.Text = "Mostrar registro"
-                        Case "FRA"
-                            LogButton.Text = "Afficher le journal"
-                        Case "PTB", "PTG"
-                            LogButton.Text = "Mostrar registo"
-                        Case "ITA"
-                            LogButton.Text = "Visualizza registro"
-                    End Select
-                Case 1
-                    LogButton.Text = "Show log"
-                Case 2
-                    LogButton.Text = "Mostrar registro"
-                Case 3
-                    LogButton.Text = "Afficher le journal"
-                Case 4
-                    LogButton.Text = "Mostrar registo"
-                Case 5
-                    LogButton.Text = "Visualizza registro"
-            End Select
+            LogButton.Text = LocalizationService.ForSection("Progress.Log")("ShowLog.Item")
             Height = collapsedHeight
         End If
         IsExpanded = Not IsExpanded
@@ -749,31 +707,7 @@ Public Class ProgressPanel
         End If
         DynaLog.LogMessage("Number of tasks: " & taskCount)
         AllPB.Maximum = taskCount * 100
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        taskCountLbl.Text = "Tasks: 1/" & taskCount
-                    Case "ESN"
-                        taskCountLbl.Text = "Tareas: 1/" & taskCount
-                    Case "FRA"
-                        taskCountLbl.Text = "Tâches : 1/" & taskCount
-                    Case "PTB", "PTG"
-                        taskCountLbl.Text = "Tarefas: 1/" & taskCount
-                    Case "ITA"
-                        taskCountLbl.Text = "Attività: 1/" & taskCount
-                End Select
-            Case 1
-                taskCountLbl.Text = "Tasks: 1/" & taskCount
-            Case 2
-                taskCountLbl.Text = "Tareas: 1/" & taskCount
-            Case 3
-                taskCountLbl.Text = "Tâches : 1/" & taskCount
-            Case 4
-                taskCountLbl.Text = "Tarefas: 1/" & taskCount
-            Case 5
-                taskCountLbl.Text = "Attività: 1/" & taskCount
-        End Select
+        taskCountLbl.Text = LocalizationService.ForSection("Progress.GetTasks").Format("Tasks.Label", taskCount)
         CenterToParent()
     End Sub
 
@@ -818,31 +752,7 @@ Public Class ProgressPanel
             AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count)
             prevValue = AllPB.Value
             If Not currentTCont = taskList.Count Then currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskList.Count
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskList.Count
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & taskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskList.Count
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskList.Count
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & taskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskList.Count)
             DynaLog.LogMessage("Determining if tasks are successful...")
             If IsSuccessful Then successfulTasks += 1 Else failedTasks += 1
         Next
@@ -1019,42 +929,9 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Creating a project...")
         DynaLog.LogMessage("- Project name: " & Quote & projName & Quote)
         DynaLog.LogMessage("- Project path: " & Quote & projPath & Quote)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Creating project: " & Quote & projName & Quote
-                        currentTask.Text = "Creating DISMTools project structure..."
-                    Case "ESN"
-                        allTasks.Text = "Creando proyecto: " & Quote & projName & Quote
-                        currentTask.Text = "Creando estructura del proyecto de DISMTools..."
-                    Case "FRA"
-                        allTasks.Text = "Création d'un projet en cours : " & Quote & projName & Quote
-                        currentTask.Text = "Création de la structure du projet DISMTools en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Criar projeto: " & Quote & projName & Quote
-                        currentTask.Text = "Criar a estrutura do projeto DISMTools..."
-                    Case "ITA"
-                        allTasks.Text = "Creazione di progetto: " & Quote & projName & Quote
-                        currentTask.Text = "Creazione struttura progetto DISMTools..."
-                End Select
-            Case 1
-                allTasks.Text = "Creating project: " & Quote & projName & Quote
-                currentTask.Text = "Creating DISMTools project structure..."
-            Case 2
-                allTasks.Text = "Creando proyecto: " & Quote & projName & Quote
-                currentTask.Text = "Creando estructura del proyecto de DISMTools..."
-            Case 3
-                allTasks.Text = "Création d'un projet en cours : " & Quote & projName & Quote
-                currentTask.Text = "Création de la structure du projet DISMTools en cours..."
-            Case 4
-                allTasks.Text = "Criar projeto: " & Quote & projName & Quote
-                currentTask.Text = "Criar a estrutura do projeto DISMTools..."
-            Case 5
-                allTasks.Text = "Creazione di progetto: " & Quote & projName & Quote
-                currentTask.Text = "Creazione struttura progetto DISMTools..."
-        End Select
-        LogView.AppendText(CrLf & "Creating project structure...")
+        allTasks.Text = LocalizationService.ForSection("Progress.CreateProject").Format("CreatingProject.Label", projName)
+        currentTask.Text = LocalizationService.ForSection("Progress.CreateProject")("CreateProject.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Creating.Project.Structure"))
         Try
             DynaLog.LogMessage("Creating main project directory...")
             Directory.CreateDirectory(projPath & "\" & projName)
@@ -1129,15 +1006,15 @@ Public Class ProgressPanel
             CurrentPB.Value = 100
             Thread.Sleep(125)
             AllPB.Value = CurrentPB.Value
-            LogView.AppendText(CrLf & "Project created successfully.")
+            LogView.AppendText(CrLf & ProgressLogText("Project.Created.Successfully"))
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = AllPB.Maximum
             IsSuccessful = True
         Catch ex As Exception
             DynaLog.LogMessage("Could not create the project. Error message: " & ex.Message)
-            LogView.AppendText(CrLf & "An error has occurred. Please read the details below: " & CrLf & ex.GetType().ToString() & ": " & Err.Description)
+            LogView.AppendText(CrLf & ProgressLogText("An.Error.Has.Occurred.Please.Read.The.Details") & CrLf & ex.GetType().ToString() & ": " & Err.Description)
             If IsDebugged Then
-                LogView.AppendText(CrLf & "Debugging information: " & ex.StackTrace)
+                LogView.AppendText(CrLf & ProgressLogText("Debugging.Information") & ex.StackTrace)
             End If
             IsSuccessful = False
         End Try
@@ -1165,63 +1042,30 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Check for file errors? " & If(AppendixCheckIntegrity, "Yes", "No"))
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No"))
         DynaLog.LogMessage("- Capture extended attributes (EAs)? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Appending to image..."
-                        currentTask.Text = "Appending specified mount directory to the specified target image..."
-                    Case "ESN"
-                        allTasks.Text = "Anexando a la imagen..."
-                        currentTask.Text = "Anexando el directorio de montaje especificado a la imagen de destino..."
-                    Case "FRA"
-                        allTasks.Text = "Annexe à l'image... "
-                        currentTask.Text = "Annexe du répertoire de montage spécifié à l'image cible spécifiée..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Anexo à imagem..."
-                        currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
-                    Case "ITA"
-                        allTasks.Text = "Applicazione all'immagine..."
-                        currentTask.Text = "Applicazione cartella montaggio specificata all'immagine destinazione specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Appending to image..."
-                currentTask.Text = "Appending specified mount directory to the specified target image..."
-            Case 2
-                allTasks.Text = "Anexando a la imagen..."
-                currentTask.Text = "Anexando el directorio de montaje especificado a la imagen de destino..."
-            Case 3
-                allTasks.Text = "Annexe à l'image... "
-                currentTask.Text = "Annexe du répertoire de montage spécifié à l'image cible spécifiée..."
-            Case 4
-                allTasks.Text = "Anexo à imagem..."
-                currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
-            Case 5
-                allTasks.Text = "Applicazione all'immagine..."
-                currentTask.Text = "Applicazione cartella montaggio specificata all'immagine destinazione specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Appending mount directory to specified target image..." & CrLf & "Options:" & CrLf &
-                           "- Source image directory: " & AppendixSourceDir & CrLf &
-                           "- Destination image file: " & AppendixDestinationImage & CrLf &
-                           "- Destination image name: " & AppendixName & CrLf &
-                           "- Destination image description: " & If(AppendixDescription = "", "(none specified)", AppendixDescription) & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.AppendImage")("AppendingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.AppendImage")("Appending.Mount.Dir.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Appending.Mount.Directory.To.Specified.Target.Image") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Image.Directory") & AppendixSourceDir & CrLf &
+                           ProgressLogText("Destination.Image.File") & AppendixDestinationImage & CrLf &
+                           ProgressLogText("Destination.Image.Name") & AppendixName & CrLf &
+                           ProgressLogText("Destination.Image.Description") & If(AppendixDescription = "", ProgressLogText("None.Specified"), AppendixDescription) & CrLf)
         If AppendixWimScriptConfig = "" Then
             DynaLog.LogMessage("No configuration list file has been specified.")
-            LogView.AppendText("- Configuration list file: not specified" & CrLf)
+            LogView.AppendText(ProgressLogText("Configuration.List.File.Not.Specified") & CrLf)
         Else
             DynaLog.LogMessage("A configuration list file has been specified. Checking if it exists...")
-            LogView.AppendText("- Configuration list file: " & Quote & AppendixWimScriptConfig & Quote & CrLf)
+            LogView.AppendText(ProgressLogText("Configuration.List.File") & Quote & AppendixWimScriptConfig & Quote & CrLf)
             If Not File.Exists(AppendixWimScriptConfig) Then
                 DynaLog.LogMessage("The configuration list file does not exist in the file system and will be skipped.")
-                LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
+                LogView.AppendText(ProgressLogText("WARNING.The.Configuration.List.File.Does.Not.Exist") & CrLf)
             End If
         End If
-        LogView.AppendText("- Append image with WIMBoot configuration? " & If(AppendixUseWimBoot, "Yes", "No") & CrLf &
-                           "- Make image bootable? " & If(AppendixBootable, "Yes", "No") & CrLf &
-                           "- Verify image integrity? " & If(AppendixCheckIntegrity, "Yes", "No") & CrLf &
-                           "- Check for file errors? " & If(AppendixVerify, "Yes", "No") & CrLf &
-                           "- Use the reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No") & CrLf &
-                           "- Capture extended attributes? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
+        LogView.AppendText(ProgressLogText("Append.Image.With.WIMBOOT.Configuration") & If(AppendixUseWimBoot, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Make.Image.Bootable") & If(AppendixBootable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Verify.Image.Integrity") & If(AppendixCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Check.For.File.Errors") & If(AppendixVerify, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Use.The.Reparse.Point.Tag.Fix") & If(AppendixReparsePt, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Capture.Extended.Attributes") & If(AppendixCaptureExtendedAttribs, ProgressLogText("Yes"), ProgressLogText("No")))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1248,37 +1092,13 @@ Public Class ProgressPanel
         If Not AppendixReparsePt Then CommandArgs &= " /norpfix"
         If AppendixCaptureExtendedAttribs Then CommandArgs &= " /EA"
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.AppendImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -1287,45 +1107,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Image to apply: " & Quote & FFUApplicationSourceImg & Quote)
         DynaLog.LogMessage("- Application drive: " & Quote & FFUApplicationDestDrive & Quote)
         DynaLog.LogMessage("- SFU name pattern: " & Quote & FFUApplicationSFUPattern & Quote)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Applying image..."
-                        currentTask.Text = "Applying specified image to the specified destination..."
-                    Case "ESN"
-                        allTasks.Text = "Aplicando imagen..."
-                        currentTask.Text = "Aplicando imagen especificada al destino especificado..."
-                    Case "FRA"
-                        allTasks.Text = "Application de l'image en cours..."
-                        currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Aplicar imagem..."
-                        currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
-                    Case "ITA"
-                        allTasks.Text = "Applicazione dell'immagine..."
-                        currentTask.Text = "Applicazione immagine specificata alla destinazione specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Applying image..."
-                currentTask.Text = "Applying specified image to the specified destination..."
-            Case 2
-                allTasks.Text = "Aplicando imagen..."
-                currentTask.Text = "Aplicando imagen especificada al destino especificado..."
-            Case 3
-                allTasks.Text = "Application de l'image en cours..."
-                currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
-            Case 4
-                allTasks.Text = "Aplicar imagem..."
-                currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
-            Case 5
-                allTasks.Text = "Applicazione dell'immagine..."
-                currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
-                           "- Source image file: " & ApplicationSourceImg & CrLf &
-                           "- Index to apply: " & ApplicationIndex & CrLf &
-                           "- Target directory: " & ApplicationDestDir & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("ApplyingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("Applying.Image.Dest.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Applying.Image") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Image.File") & ApplicationSourceImg & CrLf &
+                           ProgressLogText("Index.To.Apply") & ApplicationIndex & CrLf &
+                           ProgressLogText("Target.Directory") & ApplicationDestDir & CrLf)
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1340,43 +1127,19 @@ Public Class ProgressPanel
         ' Detect additional options and set CommandArgs
         CommandArgs &= " /applydrive=" & Quote & FFUApplicationDestDrive & Quote
         If FFUApplicationSFUPattern = "" Then
-            LogView.AppendText("- Split FFU (SFU) file pattern: not specified/not using SFU file" & CrLf)
+            LogView.AppendText(ProgressLogText("Split.FFU.SFU.File.Pattern.Not.Specified.Not") & CrLf)
         Else
-            LogView.AppendText("- Split FFU (SFU) file pattern: " & FFUApplicationSFUPattern & CrLf)
+            LogView.AppendText(ProgressLogText("Split.FFU.SFU.File.Pattern") & FFUApplicationSFUPattern & CrLf)
             CommandArgs &= " /sfufile=" & FFUApplicationSFUPattern
         End If
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -1393,45 +1156,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Apply with WIMBoot configuration? " & If(ApplicationUseWimBoot, "Yes", "No"))
         DynaLog.LogMessage("- Apply in compact mode? " & If(ApplicationCompactMode, "Yes", "No"))
         DynaLog.LogMessage("- Apply extended attributes (EAs)? " & If(ApplicationUseExtAttr, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Applying image..."
-                        currentTask.Text = "Applying specified image to the specified destination..."
-                    Case "ESN"
-                        allTasks.Text = "Aplicando imagen..."
-                        currentTask.Text = "Aplicando imagen especificada al destino especificado..."
-                    Case "FRA"
-                        allTasks.Text = "Application de l'image en cours..."
-                        currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Aplicar imagem..."
-                        currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
-                    Case "ITA"
-                        allTasks.Text = "Applicazione dell'immagine..."
-                        currentTask.Text = "Applicazione immagine specificata alla destinazione specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Applying image..."
-                currentTask.Text = "Applying specified image to the specified destination..."
-            Case 2
-                allTasks.Text = "Aplicando imagen..."
-                currentTask.Text = "Aplicando imagen especificada al destino especificado..."
-            Case 3
-                allTasks.Text = "Application de l'image en cours..."
-                currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
-            Case 4
-                allTasks.Text = "Aplicar imagem..."
-                currentTask.Text = "Aplicar a imagem especificada ao destino especificado..."
-            Case 5
-                allTasks.Text = "Applicazione dell'immagine..."
-                currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
-                           "- Source image file: " & ApplicationSourceImg & CrLf &
-                           "- Index to apply: " & ApplicationIndex & CrLf &
-                           "- Target directory: " & ApplicationDestDir & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.ApplyImage")("ApplyingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ApplyImage")("Applying.Image.Dest.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Applying.Image") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Image.File") & ApplicationSourceImg & CrLf &
+                           ProgressLogText("Index.To.Apply") & ApplicationIndex & CrLf &
+                           ProgressLogText("Target.Directory") & ApplicationDestDir & CrLf)
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1448,85 +1178,61 @@ Public Class ProgressPanel
         Dim DestinationPath As String = If(DestinationIsRooted, ApplicationDestDir, Quote & ApplicationDestDir & Quote)
         CommandArgs &= " /applydir=" & DestinationPath
         If ApplicationCheckInt Then
-            LogView.AppendText("- Verify image integrity? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Verify.Image.Integrity.Yes") & CrLf)
             CommandArgs &= " /checkintegrity"
         Else
-            LogView.AppendText("- Verify image integrity? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Verify.Image.Integrity.No") & CrLf)
         End If
         If ApplicationVerify Then
-            LogView.AppendText("- Check for file errors? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Check.For.File.Errors.Yes") & CrLf)
             CommandArgs &= " /verify"
         Else
-            LogView.AppendText("- Check for file errors? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Check.For.File.Errors.No") & CrLf)
         End If
         If ApplicationReparsePt Then
-            LogView.AppendText("- Use reparse point tag fix? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.Reparse.Point.Tag.Fix.Yes") & CrLf)
         Else
-            LogView.AppendText("- Use reparse point tag fix? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.Reparse.Point.Tag.Fix.No") & CrLf)
             CommandArgs &= " /norpfix"
         End If
         If ApplicationSWMPattern = "" Then
-            LogView.AppendText("- Split WIM (SWM) file pattern: not specified/not using SWM file" & CrLf)
+            LogView.AppendText(ProgressLogText("Split.WIM.SWM.File.Pattern.Not.Specified.Not") & CrLf)
         Else
-            LogView.AppendText("- Split WIM (SWM) file pattern: " & ApplicationSWMPattern & CrLf)
+            LogView.AppendText(ProgressLogText("Split.WIM.SWM.File.Pattern") & ApplicationSWMPattern & CrLf)
             CommandArgs &= " /swmfile=" & ApplicationSWMPattern
         End If
         If ApplicationValidateForTD Then
-            LogView.AppendText("- Validate for Trusted Desktop? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Validate.For.Trusted.Desktop.Yes") & CrLf)
             CommandArgs &= " /confirmtrustedfile"
         Else
-            LogView.AppendText("- Validate for Trusted Desktop? No/Not supported" & CrLf)
+            LogView.AppendText(ProgressLogText("Validate.For.Trusted.Desktop.No.Not.Supported") & CrLf)
         End If
         If ApplicationUseWimBoot Then
-            LogView.AppendText("- Apply using WIMBoot configuration? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Apply.Using.WIMBOOT.Configuration.Yes") & CrLf)
             CommandArgs &= " /wimboot"
         Else
-            LogView.AppendText("- Apply using WIMBoot configuration? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Apply.Using.WIMBOOT.Configuration.No") & CrLf)
         End If
         If ApplicationCompactMode Then
-            LogView.AppendText("- Use Compact mode? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.Compact.Mode.Yes") & CrLf)
             CommandArgs &= " /compact"
         Else
-            LogView.AppendText("- Use Compact mode? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.Compact.Mode.No") & CrLf)
         End If
         If ApplicationUseExtAttr Then
-            LogView.AppendText("- Apply using extended attributes? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Apply.Using.Extended.Attributes.Yes") & CrLf)
             CommandArgs &= " /ea"
         Else
-            LogView.AppendText("- Apply using extended attributes? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Apply.Using.Extended.Attributes.No") & CrLf)
         End If
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.ApplyImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -1536,45 +1242,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Destination image: " & Quote & FFUCaptureDestinationFfuImage & Quote)
         DynaLog.LogMessage("- Destination image name: " & Quote & FFUCaptureName & Quote)
         DynaLog.LogMessage("- Destination image description: " & Quote & FFUCaptureDescription & Quote)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Capturing image..."
-                        currentTask.Text = "Capturing specified directory into a new image..."
-                    Case "ESN"
-                        allTasks.Text = "Capturando imagen..."
-                        currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
-                    Case "FRA"
-                        allTasks.Text = "Capture de l'image en cours..."
-                        currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Capturar imagem..."
-                        currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
-                    Case "ITA"
-                        allTasks.Text = "Cattura immagine..."
-                        currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
-                End Select
-            Case 1
-                allTasks.Text = "Capturing image..."
-                currentTask.Text = "Capturing specified directory into a new image..."
-            Case 2
-                allTasks.Text = "Capturando imagen..."
-                currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
-            Case 3
-                allTasks.Text = "Capture de l'image en cours..."
-                currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
-            Case 4
-                allTasks.Text = "Capturar imagem..."
-                currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
-            Case 5
-                allTasks.Text = "Cattura immagine..."
-                currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
-        End Select
-        LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
-                           "- Source directory: " & FFUCaptureSourceDrive & CrLf &
-                           "- Destination image: " & FFUCaptureDestinationFfuImage & CrLf &
-                           "- Captured image name: " & FFUCaptureName & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("CapturingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("CaptureDir.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Capturing.Directory") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Directory") & FFUCaptureSourceDrive & CrLf &
+                           ProgressLogText("Destination.Image") & FFUCaptureDestinationFfuImage & CrLf &
+                           ProgressLogText("Captured.Image.Name") & FFUCaptureName & CrLf)
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1588,52 +1261,28 @@ Public Class ProgressPanel
         End Select
         ' Get additional options
         If FFUCaptureDescription = "" Then
-            LogView.AppendText("- Captured image description: none specified" & CrLf)
+            LogView.AppendText(ProgressLogText("Captured.Image.Description.None.Specified") & CrLf)
         Else
             DynaLog.LogMessage("A description has been provided.")
-            LogView.AppendText("- Captured image description: " & Quote & FFUCaptureDescription & Quote & CrLf)
+            LogView.AppendText(ProgressLogText("Captured.Image.Description") & Quote & FFUCaptureDescription & Quote & CrLf)
             CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
         End If
         If FFUCaptureCompressType = 0 Then
-            LogView.AppendText("- Compression type: none" & CrLf)
+            LogView.AppendText(ProgressLogText("Compression.Type.None") & CrLf)
             CommandArgs &= " /compress=none"
         ElseIf FFUCaptureCompressType = 1 Then
-            LogView.AppendText("- Compression type: default" & CrLf)
+            LogView.AppendText(ProgressLogText("Compression.Type.Default") & CrLf)
             CommandArgs &= " /compress=default"
         End If
-        LogView.AppendText(CrLf & "Capturing image...")
+        LogView.AppendText(CrLf & ProgressLogText("Capturing.Image"))
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -1656,45 +1305,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(CaptureReparsePt, "Yes", "No"))
         DynaLog.LogMessage("- Capture extended attributes (EAs)? " & If(CaptureExtendedAttributes, "Yes", "No"))
         DynaLog.LogMessage("- Capture compression level type: " & CaptureCompressType)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Capturing image..."
-                        currentTask.Text = "Capturing specified directory into a new image..."
-                    Case "ESN"
-                        allTasks.Text = "Capturando imagen..."
-                        currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
-                    Case "FRA"
-                        allTasks.Text = "Capture de l'image en cours..."
-                        currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Capturar imagem..."
-                        currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
-                    Case "ITA"
-                        allTasks.Text = "Cattura immagine..."
-                        currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
-                End Select
-            Case 1
-                allTasks.Text = "Capturing image..."
-                currentTask.Text = "Capturing specified directory into a new image..."
-            Case 2
-                allTasks.Text = "Capturando imagen..."
-                currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
-            Case 3
-                allTasks.Text = "Capture de l'image en cours..."
-                currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
-            Case 4
-                allTasks.Text = "Capturar imagem..."
-                currentTask.Text = "Capturar o diretório especificado para uma nova imagem..."
-            Case 5
-                allTasks.Text = "Cattura immagine..."
-                currentTask.Text = "Cattura cartella specificata in una nuova immagine..."
-        End Select
-        LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
-                           "- Source directory: " & CaptureSourceDir & CrLf &
-                           "- Destination image: " & CaptureDestinationImage & CrLf &
-                           "- Captured image name: " & CaptureName & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.CaptureImage")("CapturingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.CaptureImage")("CaptureDir.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Capturing.Directory") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Directory") & CaptureSourceDir & CrLf &
+                           ProgressLogText("Destination.Image") & CaptureDestinationImage & CrLf &
+                           ProgressLogText("Captured.Image.Name") & CaptureName & CrLf)
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1708,148 +1324,91 @@ Public Class ProgressPanel
         End Select
         ' Get additional options
         If CaptureDescription = "" Then
-            LogView.AppendText("- Captured image description: none specified" & CrLf)
+            LogView.AppendText(ProgressLogText("Captured.Image.Description.None.Specified") & CrLf)
         Else
             DynaLog.LogMessage("A description has been provided.")
-            LogView.AppendText("- Captured image description: " & Quote & CaptureDescription & Quote & CrLf)
+            LogView.AppendText(ProgressLogText("Captured.Image.Description") & Quote & CaptureDescription & Quote & CrLf)
             CommandArgs &= " /description=" & Quote & CaptureDescription & Quote
         End If
         If CaptureWimScriptConfig = "" Then
             DynaLog.LogMessage("No configuration list file has been specified.")
-            LogView.AppendText("- Configuration list file: not specified" & CrLf)
+            LogView.AppendText(ProgressLogText("Configuration.List.File.Not.Specified") & CrLf)
         Else
             DynaLog.LogMessage("A configuration list file has been specified. Checking if it exists...")
-            LogView.AppendText("- Configuration list file: " & CaptureWimScriptConfig & CrLf)
+            LogView.AppendText(ProgressLogText("Configuration.List.File") & CaptureWimScriptConfig & CrLf)
             ' Possibly, the file may have been deleted after being specified. Determine whether it still exists
             If File.Exists(CaptureWimScriptConfig) Then
                 CommandArgs &= " /configfile=" & Quote & CaptureWimScriptConfig & Quote
             Else
                 DynaLog.LogMessage("The configuration list file does not exist in the file system and will be skipped.")
-                LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
+                LogView.AppendText(ProgressLogText("WARNING.The.Configuration.List.File.Does.Not.Exist") & CrLf)
             End If
         End If
         If CaptureCompressType = 0 Then
-            LogView.AppendText("- Compression type: none" & CrLf)
+            LogView.AppendText(ProgressLogText("Compression.Type.None") & CrLf)
             CommandArgs &= " /compress=none"
         ElseIf CaptureCompressType = 1 Then
-            LogView.AppendText("- Compression type: fast" & CrLf)
+            LogView.AppendText(ProgressLogText("Compression.Type.Fast") & CrLf)
             CommandArgs &= " /compress=fast"
         ElseIf CaptureCompressType = 2 Then
-            LogView.AppendText("- Compression type: maximum" & CrLf)
+            LogView.AppendText(ProgressLogText("Compression.Type.Maximum") & CrLf)
             CommandArgs &= " /compress=max"
         End If
         If CaptureBootable Then
-            LogView.AppendText("- Mark image as bootable? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Mark.Image.As.Bootable.Yes") & CrLf)
             CommandArgs &= " /bootable"
         Else
-            LogView.AppendText("- Mark image as bootable? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Mark.Image.As.Bootable.No") & CrLf)
         End If
         If CaptureCheckIntegrity Then
-            LogView.AppendText("- Check image integrity? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Check.Image.Integrity.Yes") & CrLf)
             CommandArgs &= " /checkintegrity"
         Else
-            LogView.AppendText("- Check image integrity? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Check.Image.Integrity.No") & CrLf)
         End If
         If CaptureVerify Then
-            LogView.AppendText("- Verify file errors? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Verify.File.Errors.Yes") & CrLf)
             CommandArgs &= " /verify"
         Else
-            LogView.AppendText("- Verify file errors? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Verify.File.Errors.No") & CrLf)
         End If
         If CaptureReparsePt Then
-            LogView.AppendText("- Use the Reparse Point tag fix? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.The.Reparse.Point.Tag.Fix.Yes") & CrLf)
         Else
-            LogView.AppendText("- Use the Reparse Point tag fix? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.The.Reparse.Point.Tag.Fix.No") & CrLf)
             CommandArgs &= " /norpfix"
         End If
         If CaptureUseWimBoot Then
-            LogView.AppendText("- Append with WIMBoot configuration? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Append.With.WIMBOOT.Configuration.Yes") & CrLf)
             CommandArgs &= " /wimboot"
         Else
-            LogView.AppendText("- Append with WIMBoot configuration? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Append.With.WIMBOOT.Configuration.No") & CrLf)
         End If
         If CaptureExtendedAttributes Then
-            LogView.AppendText("- Capture extended attributes? Yes" & CrLf)
+            LogView.AppendText(ProgressLogText("Capture.Extended.Attributes.Yes") & CrLf)
             CommandArgs &= " /ea"
         Else
-            LogView.AppendText("- Capture extended attributes? No" & CrLf)
+            LogView.AppendText(ProgressLogText("Capture.Extended.Attributes.No") & CrLf)
         End If
-        LogView.AppendText(CrLf & "Capturing image...")
+        LogView.AppendText(CrLf & ProgressLogText("Capturing.Image"))
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.CaptureImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
     Private Sub CleanupMountpoints()
         DynaLog.LogMessage("Cleaning up mount points by deleting resources from old or corrupted images...")
         DynaLog.LogMessage("This does not require any additional options and invokes an API call. This will take some time depending on your system performance.")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Cleaning up mount points..."
-                        currentTask.Text = "Deleting resources from old or corrupted images..."
-                    Case "ESN"
-                        allTasks.Text = "Limpiando puntos de montaje..."
-                        currentTask.Text = "Eliminando recursos de imágenes antiguas o corruptas..."
-                    Case "FRA"
-                        allTasks.Text = "Nettoyage des points de montage en cours..."
-                        currentTask.Text = "Suppression des ressources des images anciennes ou corrompues en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Limpeza de pontos de montagem..."
-                        currentTask.Text = "Eliminar recursos de imagens antigas ou corrompidas..."
-                    Case "ITA"
-                        allTasks.Text = "Pulizia punti montaggio..."
-                        currentTask.Text = "Eliminazione risorse da immagini vecchie o corrotte..."
-                End Select
-            Case 1
-                allTasks.Text = "Cleaning up mount points..."
-                currentTask.Text = "Deleting resources from old or corrupted images..."
-            Case 2
-                allTasks.Text = "Limpiando puntos de montaje..."
-                currentTask.Text = "Eliminando recursos de imágenes antiguas o corruptas..."
-            Case 3
-                allTasks.Text = "Nettoyage des points de montage en cours..."
-                currentTask.Text = "Suppression des ressources des images anciennes ou corrompues en cours..."
-            Case 4
-                allTasks.Text = "Limpeza de pontos de montagem..."
-                currentTask.Text = "Eliminar recursos de imagens antigas ou corrompidas..."
-            Case 5
-                allTasks.Text = "Pulizia punti montaggio..."
-                currentTask.Text = "Eliminazione risorse da immagini vecchie o corrotte..."
-        End Select
-        LogView.AppendText(CrLf & "Cleaning up mount points..." & CrLf & CrLf &
-                           "This can take some time, depending on the drives connected to this system.")
+                allTasks.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Cleaning.Up.Mount.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Deleting.Corrupted.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Cleaning.Up.Mount.Points") & CrLf & CrLf &
+                           ProgressLogText("This.Can.Take.Some.Time.Depending.On.The"))
         Try
             DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
@@ -1868,40 +1427,16 @@ Public Class ProgressPanel
         End Try
         CurrentPB.Value = 50
         AllPB.Value = CurrentPB.Value
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         If errCode Is Nothing Then
             errCode = 0
             IsSuccessful = True
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -1943,49 +1478,16 @@ Public Class ProgressPanel
 
     Private Sub CommitImage()
         DynaLog.LogMessage("Saving changes to the Windows image...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Committing image..."
-                        currentTask.Text = "Saving changes to the image..."
-                    Case "ESN"
-                        allTasks.Text = "Guardando imagen..."
-                        currentTask.Text = "Guardando cambios en la imagen..."
-                    Case "FRA"
-                        allTasks.Text = "Sauvegarde de l'image en cours..."
-                        currentTask.Text = "Sauvegarde des modifications apportées à l'image en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A confirmar a imagem..."
-                        currentTask.Text = "Guardar alterações na imagem..."
-                    Case "ITA"
-                        allTasks.Text = "Modifica immagine..."
-                        currentTask.Text = "Salvataggio modifiche nell'immagine..."
-                End Select
-            Case 1
-                allTasks.Text = "Committing image..."
-                currentTask.Text = "Saving changes to the image..."
-            Case 2
-                allTasks.Text = "Guardando imagen..."
-                currentTask.Text = "Guardando cambios en la imagen..."
-            Case 3
-                allTasks.Text = "Sauvegarde de l'image en cours..."
-                currentTask.Text = "Sauvegarde des modifications apportées à l'image en cours..."
-            Case 4
-                allTasks.Text = "A confirmar a imagem..."
-                currentTask.Text = "Guardar alterações na imagem..."
-            Case 5
-                allTasks.Text = "Modifica immagine..."
-                currentTask.Text = "Salvataggio modifiche nell'immagine..."
-        End Select
+                allTasks.Text = LocalizationService.ForSection("Progress.CommitImage")("CommittingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.CommitImage")("Saving.Changes.Image.Button")
         If ReferenceImage IsNot Nothing Then
             If Path.GetExtension(ReferenceImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
                 CommitFfu()
                 Exit Sub
             End If
         End If
-        LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
-                           "- Mount directory: " & MountDir)
+        LogView.AppendText(CrLf & ProgressLogText("Saving.Changes") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Mount.Directory") & MountDir)
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1999,37 +1501,13 @@ Public Class ProgressPanel
         End Select
         ' TODO: Add additional options later
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.CommitImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -2041,110 +1519,29 @@ Public Class ProgressPanel
             RunOps(21)
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
         End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Deleting images..."
-                        currentTask.Text = "Preparing to remove volume images..."
-                    Case "ESN"
-                        allTasks.Text = "Eliminando imágenes..."
-                        currentTask.Text = "Preparando para eliminar imágenes de volumen..."
-                    Case "FRA"
-                        allTasks.Text = "Suppression des images en cours..."
-                        currentTask.Text = "Préparation de la suppression des images de volume en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A eliminar imagens..."
-                        currentTask.Text = "A preparar a remoção de imagens de volume..."
-                    Case "ITA"
-                        allTasks.Text = "Eliminazione immagini..."
-                        currentTask.Text = "Preparazione rimozione immagini volume..."
-                End Select
-            Case 1
-                allTasks.Text = "Deleting images..."
-                currentTask.Text = "Preparing to remove volume images..."
-            Case 2
-                allTasks.Text = "Eliminando imágenes..."
-                currentTask.Text = "Preparando para eliminar imágenes de volumen..."
-            Case 3
-                allTasks.Text = "Suppression des images en cours..."
-                currentTask.Text = "Préparation de la suppression des images de volume en cours..."
-            Case 4
-                allTasks.Text = "A eliminar imagens..."
-                currentTask.Text = "A preparar a remoção de imagens de volume..."
-            Case 5
-                allTasks.Text = "Eliminazione immagini..."
-                currentTask.Text = "Preparazione rimozione immagini volume..."
-        End Select
+                allTasks.Text = LocalizationService.ForSection("Progress.RemoveVolumes")("DeletingImages.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemoveVolumes")("Prepare.Remove.Button")
         DynaLog.LogMessage("Source image to remove indexes from: " & Quote & imgIndexDeletionSourceImg & Quote)
-        LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf &
-                           "Options:" & CrLf &
-                           "- Source image: " & imgIndexDeletionSourceImg & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Removing.Volume.Images.From.File") & CrLf &
+                           ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Image") & imgIndexDeletionSourceImg & CrLf)
         If imgIndexDeletionIntCheck Then
-            LogView.AppendText("- Check image integrity? Yes")
+            LogView.AppendText(ProgressLogText("Check.Image.Integrity.Yes"))
         Else
-            LogView.AppendText("- Check image integrity? No")
+            LogView.AppendText(ProgressLogText("Check.Image.Integrity.No"))
         End If
         CurrentPB.Maximum = imgIndexDeletionCount
         ' Removing volume images
         LogView.AppendText(CrLf &
-                           "Removing volume images..." & CrLf)
+                           ProgressLogText("Removing.Volume.Images") & CrLf)
         For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
             If x + 1 > CurrentPB.Maximum Then Exit For
             DynaLog.LogMessage("Volume image to remove: " & Quote & imgIndexDeletionNames(x) & Quote)
             DynaLog.LogMessage("Processing task...")
             CurrentPB.Value = x + 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression de l'image de volume " & Quote & imgIndexDeletionNames(x) & Quote & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "Remover a imagem do volume " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione immagine volume " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                Case 2
-                    currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                Case 3
-                    currentTask.Text = "Suppression de l'image de volume " & Quote & imgIndexDeletionNames(x) & Quote & " en cours..."
-                Case 4
-                    currentTask.Text = "Remover a imagem do volume " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-                Case 5
-                    currentTask.Text = "Rimozione immagine volume " & Quote & imgIndexDeletionNames(x) & Quote & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.RemoveVolumes").Format("Volume.Image.Item", imgIndexDeletionNames(x))
             LogView.AppendText(CrLf &
                                "- " & imgIndexDeletionNames(x) & "...")
             CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
@@ -2153,9 +1550,9 @@ Public Class ProgressPanel
             End If
             RunProcess(DismProgram, CommandArgs)
             If Hex(DismExitCode).Length < 8 Then
-                LogView.AppendText(" Error level : " & DismExitCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & DismExitCode)
             Else
-                LogView.AppendText(" Error level : 0x" & Hex(DismExitCode))
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & Hex(DismExitCode))
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
@@ -2178,64 +1575,31 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Mark the image as bootable? " & If(imgExportMarkBootable, "Yes", "No"))
         DynaLog.LogMessage("- Use WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No"))
         DynaLog.LogMessage("- Check image integrity? " & If(imgExportCheckIntegrity, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Exporting image..."
-                        currentTask.Text = "Exporting specified image..."
-                    Case "ESN"
-                        allTasks.Text = "Exportando imagen..."
-                        currentTask.Text = "Exportando imagen especificada..."
-                    Case "FRA"
-                        allTasks.Text = "Exportation de l'image en cours..."
-                        currentTask.Text = "Exportation de l'image spécifiée en cours..."
-                    Case "PTB"
-                        allTasks.Text = "Exportar imagem..."
-                        currentTask.Text = "Exportar imagem especificada..."
-                    Case "ITA"
-                        allTasks.Text = "Esportazione immagine..."
-                        currentTask.Text = "Esportazione immagine specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Exporting image..."
-                currentTask.Text = "Exporting specified image..."
-            Case 2
-                allTasks.Text = "Exportando imagen..."
-                currentTask.Text = "Exportando imagen especificada..."
-            Case 3
-                allTasks.Text = "Exportation de l'image en cours..."
-                currentTask.Text = "Exportation de l'image spécifiée en cours..."
-            Case 4
-                allTasks.Text = "Exportar imagem..."
-                currentTask.Text = "Exportar imagem especificada..."
-            Case 5
-                allTasks.Text = "Esportazione immagine..."
-                currentTask.Text = "Esportazione immagine specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Exporting the specified image to a destination image..." & CrLf & "Options:" & CrLf &
-                           "- Source image file: " & imgExportSourceImage & CrLf &
-                           "- Source image index: " & imgExportSourceIndex & CrLf &
-                           "- Destination image file: " & imgExportDestinationImage & CrLf &
-                           If(imgExportDestinationUseCustomName, "- Destination image name: " & imgExportDestinationName, ""))
+                allTasks.Text = LocalizationService.ForSection("Progress.ExportImage")("ExportingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ExportImage")("Exporting.Image.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Exporting.The.Specified.Image.To.A.Destination.Image") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Source.Image.File") & imgExportSourceImage & CrLf &
+                           ProgressLogText("Source.Image.Index") & imgExportSourceIndex & CrLf &
+                           ProgressLogText("Destination.Image.File") & imgExportDestinationImage & CrLf &
+                           If(imgExportDestinationUseCustomName, ProgressLogText("Destination.Image.Name") & imgExportDestinationName, ""))
         Select Case imgExportCompressType
             Case 0
-                LogView.AppendText(CrLf & "- Compression type: no compression")
+                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.No.Compression"))
             Case 1
-                LogView.AppendText(CrLf & "- Compression type: fast compression")
+                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.Fast.Compression"))
             Case 2
-                LogView.AppendText(CrLf & "- Compression type: maximum compression")
+                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.Maximum.Compression"))
             Case 3
-                LogView.AppendText(CrLf & "- Compression type: ESD conversion (recovery)")
+                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.ESD.Conversion.Recovery"))
         End Select
-        LogView.AppendText(CrLf & "- Mark the image as bootable? " & If(imgExportMarkBootable, "Yes", "No") & CrLf &
-                           "- Append image with WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No") & CrLf &
-                           "- Check image integrity before exporting the image? " & If(imgExportCheckIntegrity, "Yes", "No"))
+        LogView.AppendText(CrLf & ProgressLogText("Mark.The.Image.As.Bootable") & If(imgExportMarkBootable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Append.Image.With.WIMBOOT.Configuration") & If(imgExportUseWimBoot, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Check.Image.Integrity.Before.Exporting.The.Image") & If(imgExportCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")))
         ' Show information regarding SWM files
         DynaLog.LogMessage("Extension of source image file: " & Path.GetExtension(imgExportSourceImage))
         If Path.GetExtension(imgExportSourceImage).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("We are dealing with SWM files. Showing why we mark all of them for export...")
-            LogView.AppendText(CrLf & CrLf & "NOTE: the source image contains an asterisk sign (*) in the file name to merge all SWM files")
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("NOTE.The.Source.Image.Contains.An.Asterisk.Sign"))
         End If
         ' Configure basic command arguments
         Select Case DismVersionChecker.ProductMajorPart
@@ -2267,37 +1631,13 @@ Public Class ProgressPanel
         If imgExportUseWimBoot Then CommandArgs &= " /wimboot"
         If imgExportCheckIntegrity Then CommandArgs &= " /checkintegrity"
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.ExportImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -2322,45 +1662,12 @@ Public Class ProgressPanel
             DynaLog.LogMessage("- Mount with read-only permissions? " & If(isReadOnly, "Yes", "No"))
             DynaLog.LogMessage("- Optimize mount times? " & If(isOptimized, "Yes", "No"))
             DynaLog.LogMessage("- Check image integrity? " & If(isIntegrityTested, "Yes", "No"))
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            allTasks.Text = "Mounting image..."
-                            currentTask.Text = "Mounting specified image..."
-                        Case "ESN"
-                            allTasks.Text = "Montando imagen..."
-                            currentTask.Text = "Montando imagen especificada..."
-                        Case "FRA"
-                            allTasks.Text = "Montage de l'image en cours..."
-                            currentTask.Text = "Montage de l'image spécifiée en cours..."
-                        Case "PTB", "PTG"
-                            allTasks.Text = "Montagem de imagem..."
-                            currentTask.Text = "Montagem da imagem especificada..."
-                        Case "ITA"
-                            allTasks.Text = "Montaggio immagine..."
-                            currentTask.Text = "Montaggio immagine specificata..."
-                    End Select
-                Case 1
-                    allTasks.Text = "Mounting image..."
-                    currentTask.Text = "Mounting specified image..."
-                Case 2
-                    allTasks.Text = "Montando imagen..."
-                    currentTask.Text = "Montando imagen especificada..."
-                Case 3
-                    allTasks.Text = "Montage de l'image en cours..."
-                    currentTask.Text = "Montage de l'image spécifiée en cours..."
-                Case 4
-                    allTasks.Text = "Montagem de imagem..."
-                    currentTask.Text = "Montagem da imagem especificada..."
-                Case 5
-                    allTasks.Text = "Montaggio immagine..."
-                    currentTask.Text = "Montaggio immagine specificata..."
-            End Select
-            LogView.AppendText(CrLf & "Mounting image..." & CrLf & "Options:" & CrLf &
-                               "- Image file: " & SourceImg & CrLf &
-                               "- Image index: " & ImgIndex & CrLf &
-                               "- Mount point: " & MountDir)
+                    allTasks.Text = LocalizationService.ForSection("Progress.MountImage")("MountingImage.Button")
+                    currentTask.Text = LocalizationService.ForSection("Progress.MountImage")("Mounting.Image.Button")
+            LogView.AppendText(CrLf & ProgressLogText("Mounting.Image") & CrLf & ProgressLogText("Options") & CrLf &
+                               ProgressLogText("Image.File") & SourceImg & CrLf &
+                               ProgressLogText("Image.Index") & ImgIndex & CrLf &
+                               ProgressLogText("Mount.Point") & MountDir)
             Try
                 If Not isReadOnly AndAlso (File.GetAttributes(SourceImg) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
                     DynaLog.LogMessage("Source image contains read-only flag. Attempting to remove it...")
@@ -2383,56 +1690,32 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
             End Select
             If isReadOnly Then
-                LogView.AppendText(CrLf & "- Mount image with read-only permissions? Yes")
+                LogView.AppendText(CrLf & ProgressLogText("Mount.Image.With.Read.Only.Permissions.Yes"))
                 CommandArgs &= " /readonly"
             Else
-                LogView.AppendText(CrLf & "- Mount image with read-only permissions? No")
+                LogView.AppendText(CrLf & ProgressLogText("Mount.Image.With.Read.Only.Permissions.No"))
             End If
             If isOptimized Then
-                LogView.AppendText(CrLf & "- Optimize mount time? Yes")
+                LogView.AppendText(CrLf & ProgressLogText("Optimize.Mount.Time.Yes"))
                 CommandArgs &= " /optimize"
             Else
-                LogView.AppendText(CrLf & "- Optimize mount time? No")
+                LogView.AppendText(CrLf & ProgressLogText("Optimize.Mount.Time.No"))
             End If
             If isIntegrityTested Then
-                LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.Yes"))
                 CommandArgs &= " /checkintegrity"
             Else
-                LogView.AppendText(CrLf & "- Check image integrity? No")
+                LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.No"))
             End If
             RunProcess(DismProgram, CommandArgs)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta del livello di errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
+                    currentTask.Text = LocalizationService.ForSection("Progress.MountImage")("Gathering.Error.Level.Item")
+            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         End If
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -2440,11 +1723,11 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Optimizing the Windows FFU image...")
         DynaLog.LogMessage("- Source image to optimize: " & Quote & FFUOptimizationSource & Quote)
         DynaLog.LogMessage("- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", ""))
-        allTasks.Text = "Optimizing image..."
-        currentTask.Text = "Optimizing Windows image..."
-        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
-                           "- Source image to optimize: " & Quote & FFUOptimizationSource & Quote & CrLf &
-                           "- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", "") & CrLf)
+        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("OptimizingImage.Label")
+        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Optimizing.Windows.Label")
+        LogView.AppendText(CrLf & ProgressLogText("Optimizing.Windows.Image") & CrLf &
+                           ProgressLogText("Source.Image.To.Optimize") & Quote & FFUOptimizationSource & Quote & CrLf &
+                           ProgressLogText("Partition.To.Optimize") & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, ProgressLogText("Default.Partition.In.The.FFU.Will.Be.Optimized"), "") & CrLf)
         ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -2456,16 +1739,16 @@ Public Class ProgressPanel
         If FFUOptimizationCustomPartitionNum > 0 Then CommandArgs &= " /partitionnumber=" & FFUOptimizationCustomPartitionNum
 
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -2474,11 +1757,11 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Optimizing the Windows image...")
         DynaLog.LogMessage("- Source image to optimize: " & Quote & OptimizationSource & Quote)
         DynaLog.LogMessage("- Optimization mode: " & OptimizationMode)
-        allTasks.Text = "Optimizing image..."
-        currentTask.Text = "Optimizing Windows image..."
-        LogView.AppendText(CrLf & "Optimizing Windows image..." & CrLf &
-                           "- Source image to optimize: " & Quote & OptimizationSource & Quote & CrLf &
-                           "- Optimization mode: " & If(OptimizationMode = 0, "Reduce online configuration time", "Prepare image for WIMBoot system") & CrLf)
+        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("OptimizingImage.Label")
+        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Optimizing.Windows.Label")
+        LogView.AppendText(CrLf & ProgressLogText("Optimizing.Windows.Image") & CrLf &
+                           ProgressLogText("Source.Image.To.Optimize") & Quote & OptimizationSource & Quote & CrLf &
+                           ProgressLogText("Optimization.Mode") & If(OptimizationMode = 0, ProgressLogText("Reduce.Online.Configuration.Time"), ProgressLogText("Prepare.Image.For.WIMBOOT.System")) & CrLf)
         ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -2487,16 +1770,16 @@ Public Class ProgressPanel
                 CommandArgs &= " /image=" & Quote & OptimizationSource & Quote & " /optimize-image " & If(OptimizationMode = 0, "/boot", "/wimboot")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -2505,43 +1788,10 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Reloading the servicing session of the mounted image...")
         DynaLog.LogMessage("- Mount location of the image file we are interested in reloading: " & Quote & MountDir & Quote)
         DynaLog.LogMessage("This invokes an API call. This process will take some time depending on your system performance and how big the Windows image is.")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Remounting image..."
-                        currentTask.Text = "Reloading servicing session for mounted image..."
-                    Case "ESN"
-                        allTasks.Text = "Remontando imagen..."
-                        currentTask.Text = "Recargando sesión de servicio para la imagen montada..."
-                    Case "FRA"
-                        allTasks.Text = "Remontage de l'image en cours..."
-                        currentTask.Text = "Rechargement de la session de maintenance pour l'image montée en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Remontando imagem..."
-                        currentTask.Text = "Recarregar sessão de manutenção para a imagem montada..."
-                    Case "ITA"
-                        allTasks.Text = "Rimontaggio immagine..."
-                        currentTask.Text = "Ricaricamento sessione assistenza per l'immagine montata..."
-                End Select
-            Case 1
-                allTasks.Text = "Remounting image..."
-                currentTask.Text = "Reloading servicing session for mounted image..."
-            Case 2
-                allTasks.Text = "Remontando imagen..."
-                currentTask.Text = "Recargando sesión de servicio para la imagen montada..."
-            Case 3
-                allTasks.Text = "Remontage de l'image en cours..."
-                currentTask.Text = "Rechargement de la session de maintenance pour l'image montée en cours..."
-            Case 4
-                allTasks.Text = "Remontando imagem..."
-                currentTask.Text = "Recarregar sessão de manutenção para a imagem montada..."
-            Case 5
-                allTasks.Text = "Rimontaggio immagine..."
-                currentTask.Text = "Ricaricamento sessione assistenza per l'immagine montata..."
-        End Select
-        LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
-                           "- Mount directory: " & MountDir)
+                allTasks.Text = LocalizationService.ForSection("Progress.RemountImage")("RemountingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemountImage")("ReloadSession.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Reloading.Servicing.Session") & CrLf &
+                           ProgressLogText("Mount.Directory") & MountDir)
         Try
             DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
@@ -2561,40 +1811,16 @@ Public Class ProgressPanel
         End Try
         CurrentPB.Value = 50
         AllPB.Value = CurrentPB.Value
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemountImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         If errCode Is Nothing Then
             errCode = 0
             IsSuccessful = True
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -2604,47 +1830,14 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Maximum size of split images: " & SFUSplitFileSize & " MB")
         DynaLog.LogMessage("- Destination of SFU files: " & Quote & SFUSplitTargetFile & Quote)
         DynaLog.LogMessage("- Check image integrity? " & If(SFUSplitCheckIntegrity, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Splitting image..."
-                        currentTask.Text = "Splitting FFU file..."
-                    Case "ESN"
-                        allTasks.Text = "Dividiendo imagen..."
-                        currentTask.Text = "Dividiendo archivo FFU..."
-                    Case "FRA"
-                        allTasks.Text = "Division de l'image en cours..."
-                        currentTask.Text = "Division du fichier FFU en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Dividir imagem..."
-                        currentTask.Text = "Dividir ficheiro FFU..."
-                    Case "ITA"
-                        allTasks.Text = "Divisione immagine..."
-                        currentTask.Text = "Divisione file FFU..."
-                End Select
-            Case 1
-                allTasks.Text = "Splitting image..."
-                currentTask.Text = "Splitting FFU file..."
-            Case 2
-                allTasks.Text = "Dividiendo imagen..."
-                currentTask.Text = "Dividiendo archivo FFU..."
-            Case 3
-                allTasks.Text = "Division de l'image en cours..."
-                currentTask.Text = "Division du fichier FFU en cours..."
-            Case 4
-                allTasks.Text = "Dividir imagem..."
-                currentTask.Text = "Dividir ficheiro FFU..."
-            Case 5
-                allTasks.Text = "Divisione immagine..."
-                currentTask.Text = "Divisione file FFU..."
-        End Select
-        LogView.AppendText(CrLf & "Splitting FFU file into SFU files..." & CrLf &
-                           "- Source image file to split: " & Quote & SFUSplitSourceFile & Quote & CrLf &
-                           "- Maximum size of the split images (in MB): " & SFUSplitFileSize & " MB" & CrLf &
-                           "- Name and path of the target SFU file: " & Quote & SFUSplitTargetFile & Quote & CrLf &
-                           "- Check integrity before splitting this image? " & If(SFUSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf &
-                           "Do note that, if the image contains a large file that can't fit within the maximum size, a SFU file may be larger than the rest, to accommodate it." & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.SplitFfuImage")("SplittingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.SplitFfuImage")("Splitting.File.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Splitting.FFU.File.Into.SFU.Files") & CrLf &
+                           ProgressLogText("Source.Image.File.To.Split") & Quote & SFUSplitSourceFile & Quote & CrLf &
+                           ProgressLogText("Maximum.Size.Of.The.Split.Images.In.MB") & SFUSplitFileSize & " MB" & CrLf &
+                           ProgressLogText("Name.And.Path.Of.The.Target.SFU.File") & Quote & SFUSplitTargetFile & Quote & CrLf &
+                           ProgressLogText("Check.Integrity.Before.Splitting.This.Image") & If(SFUSplitCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf & CrLf &
+                           ProgressLogText("Do.Note.That.If.The.Image.Contains.A") & CrLf)
         ' Check the DISM version, as the Windows 7 version doesn't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -2658,16 +1851,16 @@ Public Class ProgressPanel
                 CommandArgs &= " /split-image /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -2678,47 +1871,14 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Maximum size of split images: " & SWMSplitFileSize & " MB")
         DynaLog.LogMessage("- Destination of SWM files: " & Quote & SWMSplitTargetFile & Quote)
         DynaLog.LogMessage("- Check image integrity? " & If(SWMSplitCheckIntegrity, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Splitting image..."
-                        currentTask.Text = "Splitting WIM file..."
-                    Case "ESN"
-                        allTasks.Text = "Dividiendo imagen..."
-                        currentTask.Text = "Dividiendo archivo WIM..."
-                    Case "FRA"
-                        allTasks.Text = "Division de l'image en cours..."
-                        currentTask.Text = "Division du fichier WIM en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Dividir imagem..."
-                        currentTask.Text = "Dividir ficheiro WIM..."
-                    Case "ITA"
-                        allTasks.Text = "Divisione immagine..."
-                        currentTask.Text = "Divisione file WIM..."
-                End Select
-            Case 1
-                allTasks.Text = "Splitting image..."
-                currentTask.Text = "Splitting WIM file..."
-            Case 2
-                allTasks.Text = "Dividiendo imagen..."
-                currentTask.Text = "Dividiendo archivo WIM..."
-            Case 3
-                allTasks.Text = "Division de l'image en cours..."
-                currentTask.Text = "Division du fichier WIM en cours..."
-            Case 4
-                allTasks.Text = "Dividir imagem..."
-                currentTask.Text = "Dividir ficheiro WIM..."
-            Case 5
-                allTasks.Text = "Divisione immagine..."
-                currentTask.Text = "Divisione file WIM..."
-        End Select
-        LogView.AppendText(CrLf & "Splitting WIM file into SWM files..." & CrLf &
-                           "- Source image file to split: " & Quote & SWMSplitSourceFile & Quote & CrLf &
-                           "- Maximum size of the split images (in MB): " & SWMSplitFileSize & " MB" & CrLf &
-                           "- Name and path of the target SWM file: " & Quote & SWMSplitTargetFile & Quote & CrLf &
-                           "- Check integrity before splitting this image? " & If(SWMSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf &
-                           "Do note that, if the image contains a large file that can't fit within the maximum size, a SWM file may be larger than the rest, to accommodate it." & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.SplitImage")("SplittingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.SplitImage")("Splitting.WIM.File.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Splitting.WIM.File.Into.SWM.Files") & CrLf &
+                           ProgressLogText("Source.Image.File.To.Split") & Quote & SWMSplitSourceFile & Quote & CrLf &
+                           ProgressLogText("Maximum.Size.Of.The.Split.Images.In.MB") & SWMSplitFileSize & " MB" & CrLf &
+                           ProgressLogText("Name.And.Path.Of.The.Target.SWM.File") & Quote & SWMSplitTargetFile & Quote & CrLf &
+                           ProgressLogText("Check.Integrity.Before.Splitting.This.Image") & If(SWMSplitCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf & CrLf &
+                           ProgressLogText("Do.Note.That.If.The.Image.Contains.A.2") & CrLf)
         ' Check the DISM version, as the Windows 7 version doesn't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -2732,16 +1892,16 @@ Public Class ProgressPanel
                 CommandArgs &= " /split-image /imagefile=" & Quote & SWMSplitSourceFile & Quote & " /swmfile=" & Quote & SWMSplitTargetFile & Quote & " /filesize=" & SWMSplitFileSize & If(SWMSplitCheckIntegrity, " /checkintegrity", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -2753,48 +1913,15 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Unmount operation (may not reflect actual operation): " & UMountOp)
         DynaLog.LogMessage("  - Check image integrity before committing changes? " & If(CheckImgIntegrity, "Yes", "No"))
         DynaLog.LogMessage("  - Append changes to new index? " & If(SaveToNewIndex, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Unmounting image..."
-                        currentTask.Text = "Unmounting image file..."
-                    Case "ESN"
-                        allTasks.Text = "Desmontando imagen..."
-                        currentTask.Text = "Desmontando archivo de imagen..."
-                    Case "FRA"
-                        allTasks.Text = "Démontage de l'image en cours..."
-                        currentTask.Text = "Démontage du fichier d'image en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Desmontar imagem..."
-                        currentTask.Text = "Desmontar ficheiro de imagem..."
-                    Case "ITA"
-                        allTasks.Text = "Smontaggio immagine..."
-                        currentTask.Text = "Smontaggio file immagine..."
-                End Select
-            Case 1
-                allTasks.Text = "Unmounting image..."
-                currentTask.Text = "Unmounting image file..."
-            Case 2
-                allTasks.Text = "Desmontando imagen..."
-                currentTask.Text = "Desmontando archivo de imagen..."
-            Case 3
-                allTasks.Text = "Démontage de l'image en cours..."
-                currentTask.Text = "Démontage du fichier d'image en cours..."
-            Case 4
-                allTasks.Text = "Desmontar imagem..."
-                currentTask.Text = "Desmontar ficheiro de imagem..."
-            Case 5
-                allTasks.Text = "Smontaggio immagine..."
-                currentTask.Text = "Smontaggio file immagine..."
-        End Select
+                allTasks.Text = LocalizationService.ForSection("Progress.UnmountImage")("UnmountingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.UnmountImage")("Unmounting.ImageFile.Button")
         If Not UMountLocalDir Then
             DynaLog.LogMessage("The image that was mounted in the project mount directory will not be unmounted. Using mountdir " & Quote & RandomMountDir & Quote & "...")
             MountDir = RandomMountDir
         End If
-        LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
-                           "- Mount directory: " & MountDir & CrLf &
-                           "- Image index: " & UMountImgIndex)
+        LogView.AppendText(CrLf & ProgressLogText("Unmounting.Image.File.From.Mount.Point") & CrLf &
+                           ProgressLogText("Mount.Directory") & MountDir & CrLf &
+                           ProgressLogText("Image.Index") & UMountImgIndex)
         Try
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
@@ -2820,61 +1947,37 @@ Public Class ProgressPanel
                     End If
             End Select
             If UMountOp = 0 Then
-                LogView.AppendText(CrLf & "- Unmount operation: Commit")
+                LogView.AppendText(CrLf & ProgressLogText("Unmount.Operation.Commit"))
                 CommandArgs &= " /commit"
             ElseIf UMountOp = 1 Then
-                LogView.AppendText(CrLf & "- Unmount operation: Discard")
+                LogView.AppendText(CrLf & ProgressLogText("Unmount.Operation.Discard"))
                 CommandArgs &= " /discard"
             End If
             If UMountOp = 0 Then
                 If CheckImgIntegrity Then
-                    LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                    LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.Yes"))
                     CommandArgs &= " /checkintegrity"
                 Else
-                    LogView.AppendText(CrLf & "- Check image integrity? No")
+                    LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.No"))
                 End If
                 If SaveToNewIndex Then
-                    LogView.AppendText(CrLf & "- Append changes to new index? Yes")
+                    LogView.AppendText(CrLf & ProgressLogText("Append.Changes.To.New.Index.Yes"))
                     CommandArgs &= " /append"
                 Else
-                    LogView.AppendText(CrLf & "- Append changes to new index? No")
+                    LogView.AppendText(CrLf & ProgressLogText("Append.Changes.To.New.Index.No"))
                 End If
             End If
             RunProcess(DismProgram, CommandArgs)
         Catch ex As Exception
             ' Let's try this before setting things up here
         End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.UnmountImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -2885,11 +1988,11 @@ Public Class ProgressPanel
 
     Private Sub ShowPackageInformation(pkgInfo As DismPackageInfo)
         LogView.AppendText(CrLf & CrLf &
-                           "- Package name: " & pkgInfo.PackageName & CrLf &
-                           "- Package description: " & pkgInfo.Description & CrLf &
-                           "- Package release type: " & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf &
-                           "- Package is applicable to this image? " & If(pkgInfo.Applicable, "Yes", "No") & CrLf &
-                           "- Package is already installed? " & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, "Yes", "No") & CrLf)
+                           ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf &
+                           ProgressLogText("Package.Description") & pkgInfo.Description & CrLf &
+                           ProgressLogText("Package.Release.Type") & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf &
+                           ProgressLogText("Package.Is.Applicable.To.This.Image") & If(pkgInfo.Applicable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Package.Is.Already.Installed") & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
     End Sub
 
     Private Sub CountPackagesToAdd()
@@ -2905,10 +2008,10 @@ Public Class ProgressPanel
                     pkgCount += 1
                 Next
                 DynaLog.LogMessage("Package count: " & pkgCount)
-                LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
+                LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get packages in all subdirectories. Error message: " & ex.Message)
-                LogView.AppendText(CrLf & "Exception " & ex.GetType().ToString() & " has occurred while enumerating packages. Enumerating packages in the top folder...")
+                LogView.AppendText(CrLf & ProgressLogText("Exception") & ex.GetType().ToString() & ProgressLogText("Has.Occurred.While.Enumerating.Packages.Enumerating.Packages.In"))
                 DynaLog.LogMessage("Getting CAB files...")
                 For Each CabPkg In My.Computer.FileSystem.GetFiles(pkgSource, FileIO.SearchOption.SearchTopLevelOnly, "*.cab")
                     pkgCount += 1
@@ -2918,14 +2021,14 @@ Public Class ProgressPanel
                     pkgCount += 1
                 Next
                 DynaLog.LogMessage("Package count: " & pkgCount)
-                LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
+                LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount)
             End Try
         ElseIf pkgAdditionOp = 1 Then
             DynaLog.LogMessage("Addition operation is selective addition. A package count has already been obtained from the queue.")
-            LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
+            LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount)
         ElseIf pkgAdditionOp = 2 Then
             DynaLog.LogMessage("Addition operation is Update Manifest addition. Only 1 package will be added.")
-            LogView.AppendText(CrLf & "Total number of packages: 1")
+            LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.1"))
         End If
     End Sub
 
@@ -2938,34 +2041,10 @@ Public Class ProgressPanel
             CommandArgs &= " /preventpending"
         End If
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.Packages.AddRecursive")("Gathering.Error.Level.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
-        LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+        LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
     End Sub
 
     Private Sub AddPackages(targetImage As String)
@@ -2977,99 +2056,42 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(pkgAdditionCommit, "Yes", "No"))
         ' Reset internal integers
         pkgCurrentNum = 0
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Adding packages..."
-                        currentTask.Text = "Preparing to add packages..."
-                    Case "ESN"
-                        allTasks.Text = "Añadiendo paquetes..."
-                        currentTask.Text = "Preparándonos para añadir paquetes..."
-                    Case "FRA"
-                        allTasks.Text = "Ajout des paquets en cours..."
-                        currentTask.Text = "Préparation de l'ajout des paquets en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A adicionar pacotes..."
-                        currentTask.Text = "A preparar a adição de pacotes..."
-                    Case "ITA"
-                        allTasks.Text = "Aggiunta pacchetti..."
-                        currentTask.Text = "Preparazione aggiunta pacchetti..."
-                End Select
-            Case 1
-                allTasks.Text = "Adding packages..."
-                currentTask.Text = "Preparing to add packages..."
-            Case 2
-                allTasks.Text = "Añadiendo paquetes..."
-                currentTask.Text = "Preparándonos para añadir paquetes..."
-            Case 3
-                allTasks.Text = "Ajout des paquets en cours..."
-                currentTask.Text = "Préparation de l'ajout des paquets en cours..."
-            Case 4
-                allTasks.Text = "A adicionar pacotes..."
-                currentTask.Text = "A preparar a adição de pacotes..."
-            Case 5
-                allTasks.Text = "Aggiunta pacchetti..."
-                currentTask.Text = "Preparazione aggiunta pacchetti..."
-        End Select
-        LogView.AppendText(CrLf & "Adding packages to mounted image..." & CrLf &
-                           "- Package source: " & pkgSource & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.AddPackages")("AddingPackages.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.AddPackages")("Preparing.Packages.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Adding.Packages.To.Mounted.Image") & CrLf &
+                           ProgressLogText("Package.Source") & pkgSource & CrLf)
         If pkgAdditionOp = 0 Then
-            LogView.AppendText("- Addition operation: recursive")
+            LogView.AppendText(ProgressLogText("Addition.Operation.Recursive"))
         ElseIf pkgAdditionOp = 1 Then
-            LogView.AppendText("- Addition operation: selective")
+            LogView.AppendText(ProgressLogText("Addition.Operation.Selective"))
         End If
         If pkgIgnoreApplicabilityChecks Then
-            LogView.AppendText(CrLf & "- Ignore applicability checks? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Ignore.Applicability.Checks.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Ignore applicability checks? No")
+            LogView.AppendText(CrLf & ProgressLogText("Ignore.Applicability.Checks.No"))
         End If
         If pkgPreventIfPendingOnline Then
-            LogView.AppendText(CrLf & "- Prevent package addition if online actions need to be performed? Yes" & CrLf &
-                               "NOTE: if the mounted image requires that online actions be performed, all packages might fail installation; but the operation might still be successful")
+            LogView.AppendText(CrLf & ProgressLogText("Prevent.Package.Addition.If.Online.Actions.Need.To") & CrLf &
+                               ProgressLogText("NOTE.If.The.Mounted.Image.Requires.That.Online"))
         Else
-            LogView.AppendText(CrLf & "- Prevent package addition if online actions need to be performed? No")
+            LogView.AppendText(CrLf & ProgressLogText("Prevent.Package.Addition.If.Online.Actions.Need.To.2"))
         End If
         If pkgAdditionCommit Then
-            LogView.AppendText(CrLf & "- Commit image after operations are done? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Operations.Are.Done.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Commit image after operations are done? No")
+            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Operations.Are.Done.No"))
         End If
 
         ' Perform package enumeration
-        LogView.AppendText(CrLf & "Enumerating packages to add. Please wait...")
+        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Packages.To.Add.Please.Wait"))
         CountPackagesToAdd()
         Thread.Sleep(2000)      ' Sleep to prevent thrashing
 
         ' Begin package addition
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Adding " & pkgCount & " packages..."
-                    Case "ESN"
-                        currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
-                    Case "FRA"
-                        currentTask.Text = "Ajout de " & pkgCount & " paquets en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "Adicionando " & pkgCount & " pacotes..."
-                    Case "ITA"
-                        currentTask.Text = "Aggiunta di " & pkgCount & " pacchetti..."
-                End Select
-            Case 1
-                currentTask.Text = "Adding " & pkgCount & " packages..."
-            Case 2
-                currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
-            Case 3
-                currentTask.Text = "Ajout de " & pkgCount & " paquets en cours..."
-            Case 4
-                currentTask.Text = "Adicionando " & pkgCount & " pacotes..."
-            Case 5
-                currentTask.Text = "Aggiunta di " & pkgCount & " pacchetti..."
-        End Select
+        currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackages.Item", pkgCount)
         CurrentPB.Style = ProgressBarStyle.Blocks
         LogView.AppendText(CrLf & CrLf &
-                           "Processing " & pkgCount & " packages..." & CrLf)
+                           ProgressLogText("Processing") & pkgCount & ProgressLogText("Packages") & CrLf)
         If pkgAdditionOp = 0 Then
             DynaLog.LogMessage("Addition operation is recursive addition. DISM will scan the package source for packages to add.")
             AddPackagesRecursively(targetImage)
@@ -3084,31 +2106,7 @@ Public Class ProgressPanel
             DynaLog.LogMessage("Preparing to save changes...")
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
             RunOps(8)
         Else
             AllPB.Value = 100
@@ -3122,7 +2120,7 @@ Public Class ProgressPanel
         End If
         If PackageErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some packages.")
-            LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
+            LogView.AppendText(CrLf & ProgressLogText("Some.Packages.Require.A.System.Restart.To.Be"))
         End If
     End Sub
 
@@ -3131,34 +2129,10 @@ Public Class ProgressPanel
         For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & pkgCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A adicionar o pacote " & (x + 1) & " de " & pkgCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Aggiunta del pacchetto " & (x + 1) & " di " & pkgCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
-                Case 2
-                    currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
-                Case 3
-                    currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & pkgCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A adicionar o pacote " & (x + 1) & " de " & pkgCount & "..."
-                Case 5
-                    currentTask.Text = "Aggiunta del pacchetto " & (x + 1) & " di " & pkgCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackage.Item", x + 1, pkgCount)
             CurrentPB.Value = x + 1
             LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & pkgCount)        ' You don't want to see "Package 0 of 407", right?
+                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & pkgCount)        ' You don't want to see "Package 0 of 407", right?
 
             ' Get package information with the DISM API
             DynaLog.LogMessage("Getting information about package file " & Quote & Path.GetFileName(pkgs(x)) & Quote & "...")
@@ -3180,14 +2154,14 @@ Public Class ProgressPanel
                             DynaLog.LogMessage("The package can be added to the Windows image. Determining installation state of package...")
                             If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
                                 DynaLog.LogMessage("The package has already been added at some point.")
-                                LogView.AppendText(CrLf & "Package is already added. Skipping installation of this package...")
+                                LogView.AppendText(CrLf & ProgressLogText("Package.Is.Already.Added.Skipping.Installation.Of.This"))
                                 pkgFailedAdditions += 1
                             End If
                         Else
                             DynaLog.LogMessage("The package cannot be added to the Windows image as it is not applicable.")
                             If Not pkgIgnoreApplicabilityChecks Then
                                 DynaLog.LogMessage("Applicability checks are not ignored.")
-                                LogView.AppendText(CrLf & "Package is not applicable to this image. Skipping installation of this package...")
+                                LogView.AppendText(CrLf & ProgressLogText("Package.Is.Not.Applicable.To.This.Image.Skipping"))
                                 If PackageErrorCodes.Count <= 0 Then
                                     PackageErrorCodes.Add("0x800F8023")
                                 Else
@@ -3198,7 +2172,7 @@ Public Class ProgressPanel
                         End If
                     End Using
                 Else
-                    LogView.AppendText(CrLf & "The package about to be added is a MSU file. Continuing...")
+                    LogView.AppendText(CrLf & ProgressLogText("The.Package.About.To.Be.Added.Is.A"))
                     ' Force these values to continue package addition
                     pkgIsApplicable = True
                     pkgIsInstalled = False
@@ -3224,7 +2198,7 @@ Public Class ProgressPanel
             End Try
             If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
             DynaLog.LogMessage("The package is applicable and has not been installed yet. Adding it...")
-            LogView.AppendText(CrLf & "Processing package...")
+            LogView.AppendText(CrLf & ProgressLogText("Processing.Package"))
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
             If pkgIgnoreApplicabilityChecks Then
                 CommandArgs &= " /ignorecheck"
@@ -3233,9 +2207,9 @@ Public Class ProgressPanel
                 CommandArgs &= " /preventpending"
             End If
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             GetPkgErrorLevel()
-            LogView.AppendText(" Error level: " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.3") & errCode)
             If PackageErrorCodes.Count <= 0 Then
                 PackageErrorCodes.Add(errCode)
             Else
@@ -3243,9 +2217,9 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf)
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
         Next
     End Sub
 
@@ -3253,34 +2227,10 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Addition operation is Update Manifest addition.")
         CurrentPB.Maximum = pkgCount
         CommandArgs = BckArgs
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Adding package 1 of " & pkgCount & "..."
-                    Case "ESN"
-                        currentTask.Text = "Añadiendo paquete 1 de " & pkgCount & "..."
-                    Case "FRA"
-                        currentTask.Text = "Ajout du paquet 1 de " & pkgCount & " en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A adicionar o pacote 1 de " & pkgCount & "..."
-                    Case "ITA"
-                        currentTask.Text = "Aggiunta del pacchetto 1 di " & pkgCount & "..."
-                End Select
-            Case 1
-                currentTask.Text = "Adding package 1 of " & pkgCount & "..."
-            Case 2
-                currentTask.Text = "Añadiendo paquete 1 de " & pkgCount & "..."
-            Case 3
-                currentTask.Text = "Ajout du paquet 1 de " & pkgCount & " en cours..."
-            Case 4
-                currentTask.Text = "A adicionar o pacote 1 de " & pkgCount & "..."
-            Case 5
-                currentTask.Text = "Aggiunta del pacchetto 1 di " & pkgCount & "..."
-        End Select
+        currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackage.Item", 1, pkgCount)
         CurrentPB.Value = 1
-        LogView.AppendText(CrLf & "The package about to be added is a Microsoft Update Manifest (MUM) file.")
-        LogView.AppendText(CrLf & "Processing package...")
+        LogView.AppendText(CrLf & ProgressLogText("The.Package.About.To.Be.Added.Is.A.2"))
+        LogView.AppendText(CrLf & ProgressLogText("Processing.Package"))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(0) & Quote
         If pkgIgnoreApplicabilityChecks Then
             CommandArgs &= " /ignorecheck"
@@ -3289,18 +2239,18 @@ Public Class ProgressPanel
             CommandArgs &= " /preventpending"
         End If
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         GetPkgErrorLevel()
-        LogView.AppendText(" Error level: " & errCode)
+        LogView.AppendText(ProgressLogText("Error.Level.3") & errCode)
         If PackageErrorCodes.Count <= 0 Then
             PackageErrorCodes.Add(errCode)
         Else
             PackageErrorCodes.Add(errCode)
         End If
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf)
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
         Next
     End Sub
 
@@ -3308,72 +2258,15 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to remove packages...")
         DynaLog.LogMessage("- Package removal operation: " & pkgRemovalOp)
         DynaLog.LogMessage("- Amount of packages to remove: " & pkgRemovalCount)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Removing packages..."
-                        currentTask.Text = "Preparing to remove packages..."
-                    Case "ESN"
-                        allTasks.Text = "Eliminando paquetes..."
-                        currentTask.Text = "Preparándonos para eliminar paquetes..."
-                    Case "FRA"
-                        allTasks.Text = "Suppression des paquets en cours..."
-                        currentTask.Text = "Préparation de la suppression des paquets en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A remover pacotes..."
-                        currentTask.Text = "A preparar a remoção de pacotes..."
-                    Case "ITA"
-                        allTasks.Text = "Rimozione pacchetti..."
-                        currentTask.Text = "Preparazione rimozione pacchetti..."
-                End Select
-            Case 1
-                allTasks.Text = "Removing packages..."
-                currentTask.Text = "Preparing to remove packages..."
-            Case 2
-                allTasks.Text = "Eliminando paquetes..."
-                currentTask.Text = "Preparándonos para eliminar paquetes..."
-            Case 3
-                allTasks.Text = "Suppression des paquets en cours..."
-                currentTask.Text = "Préparation de la suppression des paquets en cours..."
-            Case 4
-                allTasks.Text = "A remover pacotes..."
-                currentTask.Text = "A preparar a remoção de pacotes..."
-            Case 5
-                allTasks.Text = "Rimozione pacchetti..."
-                currentTask.Text = "Preparazione rimozione pacchetti..."
-        End Select
-        LogView.AppendText(CrLf & "Removing packages from mounted image..." & CrLf &
-                           "Enumerating packages to remove. Please wait...")
+                allTasks.Text = LocalizationService.ForSection("Progress.RemovePackages")("RemovingPackages.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages")("PrepareRemove.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Removing.Packages.From.Mounted.Image") & CrLf &
+                           ProgressLogText("Enumerating.Packages.To.Remove.Please.Wait"))
         Thread.Sleep(1000)
-        LogView.AppendText(CrLf & "Amount of packages to remove: " & pkgRemovalCount)
+        LogView.AppendText(CrLf & ProgressLogText("Amount.Of.Packages.To.Remove") & pkgRemovalCount)
 
         ' Begin package removal
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Removing packages..."
-                    Case "ESN"
-                        currentTask.Text = "Eliminando paquetes..."
-                    Case "FRA"
-                        currentTask.Text = "Suppression des paquets en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A remover pacotes..."
-                    Case "ITA"
-                        currentTask.Text = "Rimozione pacchetti..."
-                End Select
-            Case 1
-                currentTask.Text = "Removing packages..."
-            Case 2
-                currentTask.Text = "Eliminando paquetes..."
-            Case 3
-                currentTask.Text = "Suppression des paquets en cours..."
-            Case 4
-                currentTask.Text = "A remover pacotes..."
-            Case 5
-                currentTask.Text = "Rimozione pacchetti..."
-        End Select
+                currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages")("RemovingPackages.Item")
         CurrentPB.Maximum = pkgRemovalCount
         If pkgRemovalOp = 0 Then
             DynaLog.LogMessage("Packages that are installed will be removed from the Windows image.")
@@ -3385,9 +2278,9 @@ Public Class ProgressPanel
         End If
         Directory.Delete(Application.StartupPath & "\tempinfo", True)
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf)
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
         Next
         Thread.Sleep(2000)
         AllPB.Value = 100
@@ -3398,7 +2291,7 @@ Public Class ProgressPanel
         End If
         If PackageErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully remove some packages.")
-            LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
+            LogView.AppendText(CrLf & ProgressLogText("Some.Packages.Require.A.System.Restart.To.Be"))
         End If
     End Sub
 
@@ -3406,33 +2299,9 @@ Public Class ProgressPanel
         For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A remover o pacote " & (x + 1) & " de " & pkgRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione del pacchetto " & (x + 1) & " di " & pkgRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A remover o pacote " & (x + 1) & " de " & pkgRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione del pacchetto " & (x + 1) & " di " & pkgRemovalCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages").Format("RemovingPackage.Item", x + 1, pkgRemovalCount)
             LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & pkgRemovalCount)
+                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & pkgRemovalCount)
             CurrentPB.Value = x + 1
             Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
             DynaLog.LogMessage("Getting information about package file " & Quote & Path.GetFileName(pkgRemovalFiles(x)) & Quote & "...")
@@ -3445,13 +2314,13 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Getting package information...")
                     Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgRemovalFiles(x))
                     LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgInfo.PackageName & CrLf)
+                                       ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf)
                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Then
-                        LogView.AppendText("- Package state: installed" & CrLf)
+                        LogView.AppendText(ProgressLogText("Package.State.Installed") & CrLf)
                     ElseIf pkgInfo.PackageState = DismPackageFeatureState.UninstallPending Then
-                        LogView.AppendText("- Package state: an uninstall is pending" & CrLf)
+                        LogView.AppendText(ProgressLogText("Package.State.An.Uninstall.Is.Pending") & CrLf)
                     ElseIf pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
-                        LogView.AppendText("- Package state: an install is pending" & CrLf)
+                        LogView.AppendText(ProgressLogText("Package.State.An.Install.Is.Pending") & CrLf)
                     End If
                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
                         DynaLog.LogMessage("This package is either installed or about to be installed, and can be removed.")
@@ -3484,10 +2353,10 @@ Public Class ProgressPanel
             If Not pkgIsRemovable Then Continue For
             If pkgIsReadyForRemoval Then
                 DynaLog.LogMessage("The package can be removed.")
-                LogView.AppendText(CrLf & "Processing package removal...")
+                LogView.AppendText(CrLf & ProgressLogText("Processing.Package.Removal"))
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
                 RunProcess(DismProgram, CommandArgs)
-                LogView.AppendText(CrLf & "Getting error level...")
+                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
                 errCode = Hex(Decimal.ToInt32(DismExitCode))
                 If DismExitCode = 0 Then
                     pkgSuccessfulRemovals += 1
@@ -3495,9 +2364,9 @@ Public Class ProgressPanel
                     pkgFailedRemovals += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
+                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x.2") & errCode)
                 Else
-                    LogView.AppendText(CrLf & CrLf & " Error level : " & errCode)
+                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.2") & errCode)
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -3514,7 +2383,7 @@ Public Class ProgressPanel
                 End If
             Else
                 DynaLog.LogMessage("The package cannot be removed.")
-                LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
+                LogView.AppendText(CrLf & ProgressLogText("This.Package.Can.T.Be.Removed.Skipping.Removal"))
                 pkgFailedRemovals += 1
                 Continue For
             End If
@@ -3525,33 +2394,9 @@ Public Class ProgressPanel
         For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A remover o pacote " & (x + 1) & " de " & pkgRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione del pacchetto " & (x + 1) & " di " & pkgRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A remover o pacote " & (x + 1) & " de " & pkgRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione del pacchetto " & (x + 1) & " di " & pkgRemovalCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages").Format("RemovingPackage.Item", x + 1, pkgRemovalCount)
             LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & pkgRemovalCount)
+                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & pkgRemovalCount)
             CurrentPB.Value = x + 1
             Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
 
@@ -3565,8 +2410,8 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Getting package information...")
                     Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByName(imgSession, pkgRemovalNames(x))
                     LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgInfo.PackageName & CrLf &
-                                       "- Package state: " & Casters.CastDismPackageState(pkgInfo.PackageState))
+                                       ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf &
+                                       ProgressLogText("Package.State") & Casters.CastDismPackageState(pkgInfo.PackageState))
                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
                         DynaLog.LogMessage("This package is either installed or about to be installed, and can be removed.")
                         pkgIsReadyForRemoval = True
@@ -3598,10 +2443,10 @@ Public Class ProgressPanel
             If Not pkgIsRemovable Then Continue For
             If pkgIsReadyForRemoval Then
                 DynaLog.LogMessage("The package can be removed.")
-                LogView.AppendText(CrLf & "Processing package removal...")
+                LogView.AppendText(CrLf & ProgressLogText("Processing.Package.Removal"))
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
                 RunProcess(DismProgram, CommandArgs)
-                LogView.AppendText(CrLf & "Getting error level...")
+                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
                 errCode = Hex(Decimal.ToInt32(DismExitCode))
                 If DismExitCode = 0 Then
                     pkgSuccessfulRemovals += 1
@@ -3609,9 +2454,9 @@ Public Class ProgressPanel
                     pkgFailedRemovals += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
+                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x.2") & errCode)
                 Else
-                    LogView.AppendText(CrLf & CrLf & " Error level : " & errCode)
+                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.2") & errCode)
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -3628,7 +2473,7 @@ Public Class ProgressPanel
                 End If
             Else
                 DynaLog.LogMessage("The package cannot be removed.")
-                LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
+                LogView.AppendText(CrLf & ProgressLogText("This.Package.Can.T.Be.Removed.Skipping.Removal"))
                 pkgFailedRemovals += 1
                 Continue For
             End If
@@ -3644,145 +2489,64 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Will all parent features be enabled? " & If(featParentIsEnabled, "Yes", "No"))
         DynaLog.LogMessage("- Contact Windows Update for feature enablement (only for active installations)? " & If(featContactWindowsUpdate, "Yes", "No"))
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(featEnablementCommit, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Enabling features..."
-                        currentTask.Text = "Preparing to enable features..."
-                    Case "ESN"
-                        allTasks.Text = "Habilitando características..."
-                        currentTask.Text = "Preparándonos para habilitar características..."
-                    Case "FRA"
-                        allTasks.Text = "Activation des caractéristiques en cours..."
-                        currentTask.Text = "Préparation de l'activation des caractéristiques en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Ativar características..."
-                        currentTask.Text = "A preparar a ativação de características..."
-                    Case "ITA"
-                        allTasks.Text = "Abilitazione funzionalità..."
-                        currentTask.Text = "Preparazione abilitazione funzionalità..."
-                End Select
-            Case 1
-                allTasks.Text = "Enabling features..."
-                currentTask.Text = "Preparing to enable features..."
-            Case 2
-                allTasks.Text = "Habilitando características..."
-                currentTask.Text = "Preparándonos para habilitar características..."
-            Case 3
-                allTasks.Text = "Activation des caractéristiques en cours..."
-                currentTask.Text = "Préparation de l'activation des caractéristiques en cours..."
-            Case 4
-                allTasks.Text = "Ativar características..."
-                currentTask.Text = "A preparar a ativação de características..."
-            Case 5
-                allTasks.Text = "Abilitazione funzionalità..."
-                currentTask.Text = "Preparazione abilitazione funzionalità..."
-        End Select
-        LogView.AppendText(CrLf & "Enabling features..." & CrLf &
-                           "Options:" & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.EnableFeatures")("EnablingFeatures.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures")("PrepareEnable.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Enabling.Features") & CrLf &
+                           ProgressLogText("Options") & CrLf)
         If featisParentPkgNameUsed Then
-            LogView.AppendText("- Use parent package to enable features? Yes")
+            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Enable.Features.Yes"))
         Else
-            LogView.AppendText("- Use parent package to enable features? No")
+            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Enable.Features.No"))
         End If
         If featParentPkgName = "" Then
-            LogView.AppendText(CrLf & "- Parent package name: not specified")
+            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name.Not.Specified"))
         Else
-            LogView.AppendText(CrLf & "- Parent package name: " & Quote & featParentPkgName & Quote)
+            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name") & Quote & featParentPkgName & Quote)
         End If
         If featisSourceSpecified Then
-            LogView.AppendText(CrLf & "- Use feature source? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Use.Feature.Source.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Use feature source? No")
+            LogView.AppendText(CrLf & ProgressLogText("Use.Feature.Source.No"))
         End If
         If featSource = "" Then
-            LogView.AppendText(CrLf & "- Feature source: not specified")
+            LogView.AppendText(CrLf & ProgressLogText("Feature.Source.Not.Specified"))
         Else
-            LogView.AppendText(CrLf & "- Feature source: " & Quote & featSource & Quote)
+            LogView.AppendText(CrLf & ProgressLogText("Feature.Source") & Quote & featSource & Quote)
         End If
         If featParentIsEnabled Then
-            LogView.AppendText(CrLf & "- Enable all parent features? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Enable.All.Parent.Features.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Enable all parent features? No")
+            LogView.AppendText(CrLf & ProgressLogText("Enable.All.Parent.Features.No"))
         End If
         DynaLog.LogMessage("Boot mode of the host system: " & SystemInformation.BootMode)
         If featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode <> BootMode.FailSafe Then
             DynaLog.LogMessage("Host system is booted to normal mode or Safe Mode with networking.")
-            LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.Yes"))
         ElseIf featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe Then
             DynaLog.LogMessage("Host system is booted to Safe Mode.")
-            LogView.AppendText(CrLf & "- Contact Windows Update? No, the system is in Safe Mode")
+            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No.The.System.Is.In"))
         ElseIf featContactWindowsUpdate And Not OnlineMgmt Then
             DynaLog.LogMessage("The active installation is not being managed.")
-            LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
+            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No.This.Is.Not.An"))
         Else
-            LogView.AppendText(CrLf & "- Contact Windows Update? No")
+            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No"))
         End If
         If featEnablementCommit Then
-            LogView.AppendText(CrLf & "- Commit image after enabling features? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Enabling.Features.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Commit image after enabling features? No")
+            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Enabling.Features.No"))
         End If
-        LogView.AppendText(CrLf & CrLf & "Enumerating features to enable...")
+        LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.Features.To.Enable"))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & "Total number of features to enable: " & featEnablementCount)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Enabling features..."
-                    Case "ESN"
-                        currentTask.Text = "Habilitando características..."
-                    Case "FRA"
-                        currentTask.Text = "Activation des caractéristiques en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "Ativar características..."
-                    Case "ITA"
-                        currentTask.Text = "Abilitazione funzionalità..."
-                End Select
-            Case 1
-                currentTask.Text = "Enabling features..."
-            Case 2
-                currentTask.Text = "Habilitando características..."
-            Case 3
-                currentTask.Text = "Activation des caractéristiques en cours..."
-            Case 4
-                currentTask.Text = "Ativar características..."
-            Case 5
-                currentTask.Text = "Abilitazione funzionalità..."
-        End Select
+        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Features.To.Enable") & featEnablementCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures")("EnablingFeatures.Item")
         CurrentPB.Maximum = featEnablementCount
         For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Activation de la caractéristique " & (x + 1) & " de " & featEnablementCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "Ativar a caraterística " & (x + 1) & " de " & featEnablementCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Abilitazione funzionalità " & (x + 1) & " di " & featEnablementCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
-                Case 2
-                    currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
-                Case 3
-                    currentTask.Text = "Activation de la caractéristique " & (x + 1) & " de " & featEnablementCount & " en cours..."
-                Case 4
-                    currentTask.Text = "Ativar a caraterística " & (x + 1) & " de " & featEnablementCount & "..."
-                Case 5
-                    currentTask.Text = "Abilitazione funzionalità " & (x + 1) & " di " & featEnablementCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures").Format("EnablingFeature.Item", x + 1, featEnablementCount)
             LogView.AppendText(CrLf &
-                               "Feature " & (x + 1) & " of " & featEnablementCount)
+                               ProgressLogText("Feature") & (x + 1) & ProgressLogText("Of.Word") & featEnablementCount)
             CurrentPB.Value = x + 1
             DynaLog.LogMessage("Getting information about feature " & Quote & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & Quote & "...")
             Try
@@ -3793,8 +2557,8 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Getting feature information...")
                     Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                     LogView.AppendText(CrLf & CrLf &
-                                       "- Feature name: " & featInfo.FeatureName & CrLf &
-                                       "- Feature description: " & featInfo.Description & CrLf)
+                                       ProgressLogText("Feature.Name") & featInfo.FeatureName & CrLf &
+                                       ProgressLogText("Feature.Description") & featInfo.Description & CrLf)
                 End Using
             Finally
                 Try
@@ -3822,12 +2586,12 @@ Public Class ProgressPanel
                 CommandArgs &= " /limitaccess"
             End If
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             GetFeatErrorLevel()
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -3844,40 +2608,16 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Features") & CrLf)
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Feature no. " & (x + 1) & ": " & FeatureErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Feature.No") & (x + 1) & ": " & FeatureErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If featEnablementCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
             RunOps(8)
         Else
             AllPB.Value = 100
@@ -3889,7 +2629,7 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some features.")
-            LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
+            LogView.AppendText(CrLf & ProgressLogText("Some.Features.Require.A.System.Restart.To.Be"))
         End If
     End Sub
 
@@ -3898,117 +2638,36 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Will a parent package name be used? " & If(featDisablementParentPkgUsed, "Yes", "No"))
         DynaLog.LogMessage("- Parent package name: " & Quote & featDisablementParentPkg & Quote)
         DynaLog.LogMessage("- Remove feature manifest? " & If(featDisablementRemoveManifest, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Disabling features..."
-                        currentTask.Text = "Preparing to disable features..."
-                    Case "ESN"
-                        allTasks.Text = "Deshabilitando características..."
-                        currentTask.Text = "Preparándonos para deshabilitar características..."
-                    Case "FRA"
-                        allTasks.Text = "Désactivation des caractéristiques en cours..."
-                        currentTask.Text = "Préparation de la désactivation des caractéristiques en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Desativar características..."
-                        currentTask.Text = "A preparar a desativação de características..."
-                    Case "ITA"
-                        allTasks.Text = "Disabilitazione funzionalità..."
-                        currentTask.Text = "Preparazione disabilitazione funzionalità..."
-                End Select
-            Case 1
-                allTasks.Text = "Disabling features..."
-                currentTask.Text = "Preparing to disable features..."
-            Case 2
-                allTasks.Text = "Deshabilitando características..."
-                currentTask.Text = "Preparándonos para deshabilitar características..."
-            Case 3
-                allTasks.Text = "Désactivation des caractéristiques en cours..."
-                currentTask.Text = "Préparation de la désactivation des caractéristiques en cours..."
-            Case 4
-                allTasks.Text = "Desativar características..."
-                currentTask.Text = "A preparar a desativação de características..."
-            Case 5
-                allTasks.Text = "Disabilitazione funzionalità..."
-                currentTask.Text = "Preparazione disabilitazione funzionalità..."
-        End Select
-        LogView.AppendText(CrLf & "Disabling features..." & CrLf &
-                           "Options:" & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.DisableFeatures")("Disabling.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures")("PrepareDisable.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Disabling.Features") & CrLf &
+                           ProgressLogText("Options") & CrLf)
         If featDisablementParentPkgUsed Then
-            LogView.AppendText("- Use parent package to disable features? Yes")
+            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Disable.Features.Yes"))
         Else
-            LogView.AppendText("- Use parent package to disable features? No")
+            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Disable.Features.No"))
         End If
         If featDisablementParentPkg = "" Then
-            LogView.AppendText(CrLf & "- Parent package name: not specified")
+            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name.Not.Specified"))
         Else
-            LogView.AppendText(CrLf & "- Parent package name: " & Quote & featDisablementParentPkg & Quote)
+            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name") & Quote & featDisablementParentPkg & Quote)
         End If
         If featDisablementRemoveManifest Then
-            LogView.AppendText(CrLf & "- Remove feature manifest? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Remove.Feature.Manifest.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Remove feature manifest? No")
+            LogView.AppendText(CrLf & ProgressLogText("Remove.Feature.Manifest.No"))
         End If
-        LogView.AppendText(CrLf & CrLf & "Enumerating features to disable...")
+        LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.Features.To.Disable"))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Disabling features..."
-                    Case "ESN"
-                        currentTask.Text = "Deshabilitando características..."
-                    Case "FRA"
-                        currentTask.Text = "Désactivation des caractéristiques en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "Desativar características..."
-                    Case "ITA"
-                        currentTask.Text = "Disabilitazione funzionalità..."
-                End Select
-            Case 1
-                currentTask.Text = "Disabling features..."
-            Case 2
-                currentTask.Text = "Deshabilitando características..."
-            Case 3
-                currentTask.Text = "Désactivation des caractéristiques en cours..."
-            Case 4
-                currentTask.Text = "Desativar características..."
-            Case 5
-                currentTask.Text = "Disabilitazione funzionalità..."
-        End Select
+        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Features.To.Disable") & featDisablementCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures")("Disabling.Item")
         CurrentPB.Maximum = featDisablementCount
         For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Désactivation de la caractéristique " & (x + 1) & " de " & featDisablementCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "Desativar a caraterística " & (x + 1) & " de " & featDisablementCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Disabilitazione funzionalità " & (x + 1) & " di " & featDisablementCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
-                Case 2
-                    currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
-                Case 3
-                    currentTask.Text = "Désactivation de la caractéristique " & (x + 1) & " de " & featDisablementCount & " en cours..."
-                Case 4
-                    currentTask.Text = "Desativar a caraterística " & (x + 1) & " de " & featDisablementCount & "..."
-                Case 5
-                    currentTask.Text = "Disabilitazione funzionalità " & (x + 1) & " di " & featDisablementCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures").Format("DisablingFeature.Item", x + 1, featDisablementCount)
             LogView.AppendText(CrLf &
-                               "Feature " & (x + 1) & " of " & featDisablementCount)
+                               ProgressLogText("Feature") & (x + 1) & ProgressLogText("Of.Word") & featDisablementCount)
             CurrentPB.Value = x + 1
             DynaLog.LogMessage("Getting information about feature " & Quote & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & Quote & "...")
             Try
@@ -4019,8 +2678,8 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Getting feature information...")
                     Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                     LogView.AppendText(CrLf & CrLf &
-                                       "- Feature name: " & featInfo.FeatureName & CrLf &
-                                       "- Feature description: " & featInfo.Description & CrLf)
+                                       ProgressLogText("Feature.Name") & featInfo.FeatureName & CrLf &
+                                       ProgressLogText("Feature.Description") & featInfo.Description & CrLf)
 
                 End Using
             Finally
@@ -4039,7 +2698,7 @@ Public Class ProgressPanel
                 CommandArgs &= " /remove"
             End If
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 featSuccessfulDisablements += 1
@@ -4047,9 +2706,9 @@ Public Class ProgressPanel
                 featFailedDisablements += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -4066,9 +2725,9 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Features") & CrLf)
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Feature no. " & (x + 1) & ": " & FeatureErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Feature.No") & (x + 1) & ": " & FeatureErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If featSuccessfulDisablements > 0 Then
@@ -4078,227 +2737,59 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some features.")
-            LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
+            LogView.AppendText(CrLf & ProgressLogText("Some.Features.Require.A.System.Restart.To.Be"))
         End If
     End Sub
 
     Private Sub CleanupImage(targetImage As String)
         DynaLog.LogMessage("Preparing to clean up the image...")
         DynaLog.LogMessage("Cleanup task: " & CleanupTask)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Cleaning up the image..."
-                    Case "ESN"
-                        allTasks.Text = "Limpiando la imagen..."
-                    Case "FRA"
-                        allTasks.Text = "Nettoyage de l'image en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Limpar a imagem..."
-                    Case "ITA"
-                        allTasks.Text = "Pulizia immagine..."
-                End Select
-            Case 1
-                allTasks.Text = "Cleaning up the image..."
-            Case 2
-                allTasks.Text = "Limpiando la imagen..."
-            Case 3
-                allTasks.Text = "Nettoyage de l'image en cours..."
-            Case 4
-                allTasks.Text = "Limpar a imagem..."
-            Case 5
-                allTasks.Text = "Pulizia immagine..."
-        End Select
+                allTasks.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.Image.Button")
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /cleanup-image"
         Select Case CleanupTask
             Case 0
                 DynaLog.LogMessage("Reverting pending servicing actions to a last known good state...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Reverting pending servicing actions..."
-                            Case "ESN"
-                                currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
-                            Case "FRA"
-                                currentTask.Text = "Annulation des actions de maintenance en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "Reverter acções de manutenção pendentes..."
-                            Case "ITA"
-                                currentTask.Text = "Ripristino azioni assistenza in sospeso..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Reverting pending servicing actions..."
-                    Case 2
-                        currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
-                    Case 3
-                        currentTask.Text = "Annulation des actions de maintenance en cours..."
-                    Case 4
-                        currentTask.Text = "Reverter acções de manutenção pendentes..."
-                    Case 5
-                        currentTask.Text = "Ripristino azioni assistenza in sospeso..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("RevertPending.Button")
                 LogView.AppendText(CrLf &
-                                   "Reverting pending servicing actions...")
+                                   ProgressLogText("Reverting.Pending.Servicing.Actions"))
                 CommandArgs &= " /revertpendingactions"
             Case 1
                 DynaLog.LogMessage("Cleaning up Service Pack backup files...")
                 DynaLog.LogMessage("- Hide Service Packs from Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Cleaning up Service Pack backup files..."
-                            Case "ESN"
-                                currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
-                            Case "FRA"
-                                currentTask.Text = "Nettoyage des fichiers de sauvegarde du Service Pack en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "Limpeza dos ficheiros de cópia de segurança do Service Pack..."
-                            Case "ITA"
-                                currentTask.Text = "Pulizia file backup Service Pack..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Cleaning up Service Pack backup files..."
-                    Case 2
-                        currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
-                    Case 3
-                        currentTask.Text = "Nettoyage des fichiers de sauvegarde du Service Pack en cours..."
-                    Case 4
-                        currentTask.Text = "Limpeza dos ficheiros de cópia de segurança do Service Pack..."
-                    Case 5
-                        currentTask.Text = "Pulizia file backup Service Pack..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.ServicePack.Item")
                 LogView.AppendText(CrLf &
-                                   "Cleaning up Service Pack backup files..." & CrLf &
-                                   "Options:" & CrLf &
-                                   "- Hide Service Packs from the Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
+                                   ProgressLogText("Cleaning.Up.Service.Pack.Backup.Files") & CrLf &
+                                   ProgressLogText("Options") & CrLf &
+                                   ProgressLogText("Hide.Service.Packs.From.The.Installed.Updates.List") & If(CleanupHideSP, ProgressLogText("Yes"), ProgressLogText("No")))
                 CommandArgs &= " /spsuperseded" & If(CleanupHideSP, " /hidesp", "")
             Case 2
                 DynaLog.LogMessage("Cleaning up component store...")
                 DynaLog.LogMessage("- Reset superseded component base? " & If(ResetCompBase, "Yes", "No"))
                 DynaLog.LogMessage("- Defer long operations? " & If(DeferCleanupOps, "Yes", "No"))
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Cleaning up the component store..."
-                            Case "ESN"
-                                currentTask.Text = "Limpiando el almacén de componentes..."
-                            Case "FRA"
-                                currentTask.Text = "Nettoyage du stock de composants en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "Limpar o armazenamento de componentes..."
-                            Case "ITA"
-                                currentTask.Text = "Pulizia archivio componenti..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Cleaning up the component store..."
-                    Case 2
-                        currentTask.Text = "Limpiando el almacén de componentes..."
-                    Case 3
-                        currentTask.Text = "Nettoyage du stock de composants en cours..."
-                    Case 4
-                        currentTask.Text = "Limpar o armazenamento de componentes..."
-                    Case 5
-                        currentTask.Text = "Pulizia archivio componenti..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.Component.Item")
                 LogView.AppendText(CrLf &
-                                   "Cleaning up the component store..." & CrLf &
-                                   "Options:" & CrLf &
-                                   "- Perform superseded component base reset? " & If(ResetCompBase, "Yes", "No") & CrLf &
-                                   "- Defer long-running operations? " & If(DeferCleanupOps, "Yes", "No"))
+                                   ProgressLogText("Cleaning.Up.The.Component.Store") & CrLf &
+                                   ProgressLogText("Options") & CrLf &
+                                   ProgressLogText("Perform.Superseded.Component.Base.Reset") & If(ResetCompBase, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                                   ProgressLogText("Defer.Long.Running.Operations") & If(DeferCleanupOps, ProgressLogText("Yes"), ProgressLogText("No")))
                 CommandArgs &= " /startcomponentcleanup" & If(ResetCompBase, " /resetbase", "") & If(ResetCompBase And DeferCleanupOps, " /defer", "")
             Case 3
                 DynaLog.LogMessage("Analyzing component store...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Analyzing the component store..."
-                            Case "ESN"
-                                currentTask.Text = "Analizando el almacén de componentes..."
-                            Case "FRA"
-                                currentTask.Text = "Analyse du stock de composants en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "Analisando o armazenamento de componentes..."
-                            Case "ITA"
-                                currentTask.Text = "Analisi archivio componenti..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Analyzing the component store..."
-                    Case 2
-                        currentTask.Text = "Analizando el almacén de componentes..."
-                    Case 3
-                        currentTask.Text = "Analyse du stock de composants en cours..."
-                    Case 4
-                        currentTask.Text = "Analisando o armazenamento de componentes..."
-                    Case 5
-                        currentTask.Text = "Analisi archivio componenti..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Analyzing.Component.Item")
                 LogView.AppendText(CrLf &
-                                   "Analyzing the component store...")
+                                   ProgressLogText("Analyzing.The.Component.Store"))
                 CommandArgs &= " /analyzecomponentstore"
             Case 4
                 DynaLog.LogMessage("Checking component store health...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Checking the component store health..."
-                            Case "ESN"
-                                currentTask.Text = "Comprobando la salud del almacén de componentes..."
-                            Case "FRA"
-                                currentTask.Text = "Vérification de l'état de santé du stock de composants en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "Verificar a integridade do armazenamento de componentes..."
-                            Case "ITA"
-                                currentTask.Text = "Controllo stato di salute archivio componenti..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Checking the component store health..."
-                    Case 2
-                        currentTask.Text = "Comprobando la salud del almacén de componentes..."
-                    Case 3
-                        currentTask.Text = "Vérification de l'état de santé du stock de composants en cours..."
-                    Case 4
-                        currentTask.Text = "Verificar a integridade do armazenamento de componentes..."
-                    Case 5
-                        currentTask.Text = "Controllo stato di salute archivio componenti..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Checking.Comp.Store.Item")
                 LogView.AppendText(CrLf &
-                                   "Checking the component store health...")
+                                   ProgressLogText("Checking.The.Component.Store.Health"))
                 CommandArgs &= " /checkhealth"
             Case 5
                 DynaLog.LogMessage("Scanning component store...")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Scanning the component store..."
-                            Case "ESN"
-                                currentTask.Text = "Escaneando el almacén de componentes..."
-                            Case "FRA"
-                                currentTask.Text = "Analyse du stock de composants en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "A analisar o armazenamento de componentes..."
-                            Case "ITA"
-                                currentTask.Text = "Scansione archivio componenti..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Scanning the component store..."
-                    Case 2
-                        currentTask.Text = "Escaneando el almacén de componentes..."
-                    Case 3
-                        currentTask.Text = "Analyse du stock de composants en cours..."
-                    Case 4
-                        currentTask.Text = "A analisar o armazenamento de componentes..."
-                    Case 5
-                        currentTask.Text = "Scansione archivio componenti..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Scanning.Component.Item")
                 LogView.AppendText(CrLf &
-                                   "Scanning the component store...")
+                                   ProgressLogText("Scanning.The.Component.Store"))
                 CommandArgs &= " /scanhealth"
             Case 6
                 DynaLog.LogMessage("Repairing component store...")
@@ -4306,75 +2797,26 @@ Public Class ProgressPanel
                 DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(LimitWUAccess, "Yes", "No"))
                 DynaLog.LogMessage("Boot mode of host system: " & SystemInformation.BootMode)
                 ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Repairing the component store..."
-                            Case "ESN"
-                                currentTask.Text = "Reparando el almacén de componentes..."
-                            Case "FRA"
-                                currentTask.Text = "Réparation du stock de composants en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "Reparar o armazenamento de componentes..."
-                            Case "ITA"
-                                currentTask.Text = "Riparazione archivio componenti..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Repairing the component store..."
-                    Case 2
-                        currentTask.Text = "Reparando el almacén de componentes..."
-                    Case 3
-                        currentTask.Text = "Réparation du stock de composants en cours..."
-                    Case 4
-                        currentTask.Text = "Reparar o armazenamento de componentes..."
-                    Case 5
-                        currentTask.Text = "Riparazione archivio componenti..."
-                End Select
+                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Repairing.Component.Item")
                 LogView.AppendText(CrLf &
-                                   "Repairing the component store..." & CrLf &
-                                   "Options:" & CrLf &
-                                   "- Use different source? " & If(UseCompRepairSource, "Yes (" & Quote & ComponentRepairSource & Quote & ")", "No") & CrLf &
-                                   "- Limit Windows Update access? " & If(LimitWUAccess And OnlineMgmt, "Yes", If(LimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) &
-                                   If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", ""))
+                                   ProgressLogText("Repairing.The.Component.Store") & CrLf &
+                                   ProgressLogText("Options") & CrLf &
+                                   ProgressLogText("Use.Different.Source") & If(UseCompRepairSource, ProgressLogText("Yes.2") & Quote & ComponentRepairSource & Quote & ")", ProgressLogText("No")) & CrLf &
+                                   ProgressLogText("Limit.Windows.Update.Access") & If(LimitWUAccess And OnlineMgmt, ProgressLogText("Yes"), If(LimitWUAccess And Not OnlineMgmt, ProgressLogText("No.This.Is.Not.An.Online.Installation"), ProgressLogText("No"))) &
+                                   If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ProgressLogText("The.System.Is.In.Safe.Mode"), ""))
                 ' Like image captures, cleanup/comp store restore will fail if the source is in the root
                 ' of a volume and is quoted.
                 Dim SourceIsRooted As Boolean = Path.GetPathRoot(ComponentRepairSource) = ComponentRepairSource
                 Dim SourcePath As String = If(SourceIsRooted, ComponentRepairSource, Quote & ComponentRepairSource & Quote)
-                CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
-        End Select
+                CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")        End Select
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -4387,88 +2829,31 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote)
         DynaLog.LogMessage("- Catalog path: " & Quote & ppkgAdditionCatalogPath & Quote)
         DynaLog.LogMessage("- Commit image after finishing? " & If(ppkgAdditionCommit, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Adding provisioning package..."
-                        currentTask.Text = "Adding provisioning package to the image..."
-                    Case "ESN"
-                        allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
-                        currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
-                    Case "FRA"
-                        allTasks.Text = "Ajout d'un paquet de provisionnement en cours..."
-                        currentTask.Text = "Ajout d'un paquet de provisionnement à l'image en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Adicionando pacote de provisionamento..."
-                        currentTask.Text = "Adicionar pacote de aprovisionamento à imagem..."
-                    Case "ITA"
-                        allTasks.Text = "Aggiunta pacchetto approvvigionamento..."
-                        currentTask.Text = "Aggiunta pacchetto approvvigionamento all'immagine..."
-                End Select
-            Case 1
-                allTasks.Text = "Adding provisioning package..."
-                currentTask.Text = "Adding provisioning package to the image..."
-            Case 2
-                allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
-                currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
-            Case 3
-                allTasks.Text = "Ajout d'un paquet de provisionnement en cours..."
-                currentTask.Text = "Ajout d'un paquet de provisionnement à l'image en cours..."
-            Case 4
-                allTasks.Text = "Adicionando pacote de provisionamento..."
-                currentTask.Text = "Adicionar pacote de aprovisionamento à imagem..."
-            Case 5
-                allTasks.Text = "Aggiunta pacchetto approvvigionamento..."
-                currentTask.Text = "Aggiunta pacchetto approvvigionamento all'immagine..."
-        End Select
-        LogView.AppendText("Adding provisioning package to the image..." & CrLf &
-                           "Options:" & CrLf & CrLf &
-                           "- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote & CrLf &
-                           "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf &
-                           "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
+                allTasks.Text = LocalizationService.ForSection("Progress.ProvPackage.Add")("AddingPackage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ProvPackage.Add")("Image.Button")
+        LogView.AppendText(ProgressLogText("Adding.Provisioning.Package.To.The.Image") & CrLf &
+                           ProgressLogText("Options") & CrLf & CrLf &
+                           ProgressLogText("Provisioning.Package") & Quote & ppkgAdditionPackagePath & Quote & CrLf &
+                           ProgressLogText("Catalog.File") & If(ppkgAdditionCatalogPath = "", ProgressLogText("None.Specified.2"), Quote & ppkgAdditionCatalogPath & Quote) & CrLf &
+                           ProgressLogText("Commit.Image.After.Adding.Provisioning.Package") & If(ppkgAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         If ppkgAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
             RunOps(8)
         Else
             AllPB.Value = 100
@@ -4482,149 +2867,68 @@ Public Class ProgressPanel
 
     Private Sub AddProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to add provisioned AppX packages...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Adding AppX packages..."
-                        currentTask.Text = "Preparing to add provisioned AppX packages..."
-                    Case "ESN"
-                        allTasks.Text = "Añadiendo paquetes aprovisionados AppX..."
-                        currentTask.Text = "Preparándonos para añadir paquetes aprovisionados AppX..."
-                    Case "FRA"
-                        allTasks.Text = "Ajout de paquets AppX en cours..."
-                        currentTask.Text = "Préparation de l'ajout de paquets AppX provisionnés en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A adicionar pacotes AppX..."
-                        currentTask.Text = "A preparar a adição de pacotes AppX provisionados..."
-                    Case "ITA"
-                        allTasks.Text = "Aggiunta pacchetti AppX..."
-                        currentTask.Text = "Preparazione aggiunta pacchetti AppX approvvigionati..."
-                End Select
-            Case 1
-                allTasks.Text = "Adding AppX packages..."
-                currentTask.Text = "Preparing to add provisioned AppX packages..."
-            Case 2
-                allTasks.Text = "Añadiendo paquetes aprovisionados AppX..."
-                currentTask.Text = "Preparándonos para añadir paquetes aprovisionados AppX..."
-            Case 3
-                allTasks.Text = "Ajout de paquets AppX en cours..."
-                currentTask.Text = "Préparation de l'ajout de paquets AppX provisionnés en cours..."
-            Case 4
-                allTasks.Text = "A adicionar pacotes AppX..."
-                currentTask.Text = "A preparar a adição de pacotes AppX provisionados..."
-            Case 5
-                allTasks.Text = "Aggiunta pacchetti AppX..."
-                currentTask.Text = "Preparazione aggiunta pacchetti AppX approvvigionati..."
-        End Select
-        LogView.AppendText(CrLf & "Adding provisioned AppX packages..." & CrLf &
-                           "Options:" & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("AddingPackages.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("Preparing.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Adding.Provisioned.APPX.Packages") & CrLf &
+                           ProgressLogText("Options") & CrLf)
         If appxAdditionUseLicenseFile Then
-            LogView.AppendText("- Use a license file for AppX packages? Yes" & CrLf &
-                               "- License file: " & appxAdditionLicenseFile & CrLf)
+            LogView.AppendText(ProgressLogText("Use.A.License.File.For.APPX.Packages.Yes") & CrLf &
+                               ProgressLogText("License.File") & appxAdditionLicenseFile & CrLf)
         Else
-            LogView.AppendText("- Use a license file for AppX packages? No" & CrLf &
-                               "- License file: not using" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.A.License.File.For.APPX.Packages.No") & CrLf &
+                               ProgressLogText("License.File.Not.Using") & CrLf)
         End If
         If appxAdditionUseCustomDataFile Then
-            LogView.AppendText("- Use a custom data file for AppX packages? Yes" & CrLf &
-                               "- Custom data file: " & appxAdditionCustomDataFile & CrLf)
+            LogView.AppendText(ProgressLogText("Use.A.Custom.Data.File.For.APPX.Packages") & CrLf &
+                               ProgressLogText("Custom.Data.File") & appxAdditionCustomDataFile & CrLf)
         Else
-            LogView.AppendText("- Use a custom data file for AppX packages? No" & CrLf &
-                               "- Custom data file: not using" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.A.Custom.Data.File.For.APPX.Packages.2") & CrLf &
+                               ProgressLogText("Custom.Data.File.Not.Using") & CrLf)
         End If
         If appxAdditionUseAllRegions Then
-            LogView.AppendText("- Use all regions for AppX packages? Yes" & CrLf &
-                               "- Package regions: all" & CrLf)
+            LogView.AppendText(ProgressLogText("Use.All.Regions.For.APPX.Packages.Yes") & CrLf &
+                               ProgressLogText("Package.Regions.All") & CrLf)
         Else
-            LogView.AppendText("- Use all regions for AppX packages? No" & CrLf &
-                               "- Package regions: " & Quote & appxAdditionRegions & Quote & CrLf)
+            LogView.AppendText(ProgressLogText("Use.All.Regions.For.APPX.Packages.No") & CrLf &
+                               ProgressLogText("Package.Regions") & Quote & appxAdditionRegions & Quote & CrLf)
         End If
         If appxAdditionCommit Then
-            LogView.AppendText("- Commit image after adding AppX packages? Yes")
+            LogView.AppendText(ProgressLogText("Commit.Image.After.Adding.APPX.Packages.Yes"))
         Else
-            LogView.AppendText("- Commit image after adding AppX packages? No")
+            LogView.AppendText(ProgressLogText("Commit.Image.After.Adding.APPX.Packages.No"))
         End If
-        LogView.AppendText(CrLf & CrLf & "Enumerating AppX packages to add...")
+        LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.APPX.Packages.To.Add"))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & "Total number of packages to add: " & appxAdditionCount)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Adding AppX packages..."
-                    Case "ESN"
-                        currentTask.Text = "Añadiendo paquetes AppX..."
-                    Case "FRA"
-                        currentTask.Text = "Ajout de paquets AppX en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A adicionar pacotes AppX..."
-                    Case "ITA"
-                        currentTask.Text = "Aggiunta pacchetti AppX..."
-                End Select
-            Case 1
-                currentTask.Text = "Adding AppX packages..."
-            Case 2
-                currentTask.Text = "Añadiendo paquetes AppX..."
-            Case 3
-                currentTask.Text = "Ajout de paquets AppX en cours..."
-            Case 4
-                currentTask.Text = "A adicionar pacotes AppX..."
-            Case 5
-                currentTask.Text = "Aggiunta pacchetti AppX..."
-        End Select
+        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.To.Add") & appxAdditionCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("AddingPackages.Item")
         CurrentPB.Maximum = appxAdditionCount
         For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & appxAdditionCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A adicionar pacote " & (x + 1) & " de " & appxAdditionCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Aggiunta pacchetto " & (x + 1) & " di " & appxAdditionCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
-                Case 2
-                    currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
-                Case 3
-                    currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & appxAdditionCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A adicionar pacote " & (x + 1) & " de " & appxAdditionCount & "..."
-                Case 5
-                    currentTask.Text = "Aggiunta pacchetto " & (x + 1) & " di " & appxAdditionCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add").Format("AddingPackage.Item", x + 1, appxAdditionCount)
             LogView.AppendText(CrLf &
-                               "Package " & (x + 1) & " of " & appxAdditionCount)
+                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & appxAdditionCount)
             CurrentPB.Value = x + 1
             DynaLog.LogMessage("Information about the AppX package:")
             DynaLog.LogMessage(appxAdditionPackageList(x).ToString())
             LogView.AppendText(CrLf &
-                               "- AppX package file: " & appxAdditionPackageList(x).PackageFile & CrLf &
-                               "- Application name: " & appxAdditionPackageList(x).PackageName & CrLf &
-                               "- Application publisher: " & appxAdditionPackageList(x).PackagePublisher & CrLf &
-                               "- Application version: " & appxAdditionPackageList(x).PackageVersion & CrLf)
+                               ProgressLogText("APPX.Package.File") & appxAdditionPackageList(x).PackageFile & CrLf &
+                               ProgressLogText("Application.Name") & appxAdditionPackageList(x).PackageName & CrLf &
+                               ProgressLogText("Application.Publisher") & appxAdditionPackageList(x).PackagePublisher & CrLf &
+                               ProgressLogText("Application.Version") & appxAdditionPackageList(x).PackageVersion & CrLf)
             ' Detect if it is an encrypted application
             DynaLog.LogMessage("Extension of AppX package: " & Path.GetExtension(appxAdditionPackageList(x).PackageFile))
             If Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso OnlineMgmt Then
                 DynaLog.LogMessage("The application is encrypted and the active installation is being managed. Adding package using PowerShell...")
                 ' Run PowerShell command. Support will be improved
-                LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Since the program is managing the active installation, a PowerShell command will be run." & CrLf)
+                LogView.AppendText(CrLf & ProgressLogText("The.Application.About.To.Be.Added.Is.An") & CrLf)
                 Dim AppxAuxProc As New Process()
                 AppxAuxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
                 CommandArgs = "-Command Add-AppxPackage -Path '" & appxAdditionPackageList(x).PackageFile & "'"
                 AppxAuxProc.StartInfo.Arguments = CommandArgs
                 AppxAuxProc.Start()
                 AppxAuxProc.WaitForExit()
-                LogView.AppendText(CrLf & "Getting error level...")
+                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
                 If Hex(AppxAuxProc.ExitCode).Length < 8 Then
                     errCode = AppxAuxProc.ExitCode
                 Else
@@ -4636,9 +2940,9 @@ Public Class ProgressPanel
                     appxFailedAdditions += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(" Error level : 0x" & errCode)
+                    LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
                 Else
-                    LogView.AppendText(" Error level : " & errCode)
+                    LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -4657,7 +2961,7 @@ Public Class ProgressPanel
             ElseIf Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not OnlineMgmt Then
                 DynaLog.LogMessage("The application is encrypted but the active installation is not being managed.")
                 ' Continue loop without installing application
-                LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Encrypted packages can only be added to active installations. Skipping this package..." & CrLf)
+                LogView.AppendText(CrLf & ProgressLogText("The.Application.About.To.Be.Added.Is.An.2") & CrLf)
                 Continue For
             Else
                 DynaLog.LogMessage("The application is not encrypted. Continuing addition...")
@@ -4674,30 +2978,30 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Either no license file has been specified or it does not exist in the file system.")
                     If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
                         LogView.AppendText(CrLf &
-                                           "Warning: the license file does not exist. Continuing without one..." & CrLf &
-                                           "         Do note that, if this app requires a license file, it may fail addition." & CrLf &
-                                           "         Also, this may compromise the image.")
+                                           ProgressLogText("Warning.The.License.File.Does.Not.Exist.Continuing") & CrLf &
+                                           ProgressLogText("Do.Note.That.If.This.App.Requires.A") & CrLf &
+                                           ProgressLogText("Also.This.May.Compromise.The.Image"))
                     End If
                     CommandArgs &= " /skiplicense"
                 End If
                 ' Inform user that a package will be installed with dependencies
                 DynaLog.LogMessage("Count of dependencies: " & appxAdditionPackageList(x).PackageSpecifiedDependencies.Count)
                 If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
-                    LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
+                    LogView.AppendText(ProgressLogText("The.Following.Dependency.Packages.Will.Be.Installed.Alongside") & CrLf)
                 End If
                 ' Add dependencies
                 For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
                     DynaLog.LogMessage("Verifying if dependency " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & " exists...")
                     If File.Exists(Dependency.DependencyFile) Then
                         DynaLog.LogMessage("The dependency exists in the file system.")
-                        LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
+                        LogView.AppendText(ProgressLogText("Dependency") & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
                         CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
                     Else
                         DynaLog.LogMessage("The dependency does not exist in the file system.")
                         LogView.AppendText(CrLf &
-                                           "Warning: the dependency" & CrLf &
+                                           ProgressLogText("Warning.The.Dependency") & CrLf &
                                            Quote & Dependency.DependencyFile & Quote & CrLf &
-                                           "does not exist in the file system. Skipping dependency...")
+                                           ProgressLogText("Does.Not.Exist.In.The.File.System.Skipping"))
                         Continue For
                     End If
                 Next
@@ -4707,7 +3011,7 @@ Public Class ProgressPanel
                 ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
                     DynaLog.LogMessage("A custom data file has been specified but it does not exist in the file system.")
                     LogView.AppendText(CrLf &
-                                       "Warning: the custom data file does not exist. Continuing without one...")
+                                       ProgressLogText("Warning.The.Custom.Data.File.Does.Not.Exist"))
                 End If
                 If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And
                    (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
@@ -4736,7 +3040,7 @@ Public Class ProgressPanel
                 End If
                 RunProcess(DismProgram, CommandArgs)
             End If
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             If Hex(DismExitCode).Length < 8 Then
                 errCode = DismExitCode
             Else
@@ -4748,9 +3052,9 @@ Public Class ProgressPanel
                 appxFailedAdditions += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If PackageErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -4767,40 +3071,16 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.APPX.Packages") & CrLf)
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If appxAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
             RunOps(8)
         Else
             AllPB.Value = 100
@@ -4819,19 +3099,19 @@ Public Class ProgressPanel
                 DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & removalStoreApp & Quote & " = 0. This app is not registered to a user")
                 ' Application is not registered to any user
                 LogView.AppendText(CrLf &
-                                   "- Application is registered to a user? No")
+                                   ProgressLogText("Application.Is.Registered.To.A.User.No"))
             Else
                 DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & removalStoreApp & Quote & " > 0. This app is registered to users")
                 ' Application is registered to a user
                 LogView.AppendText(CrLf &
-                                   "- Application is registered to a user? Yes" & CrLf &
-                                   "  The removal of this application may require you to use PowerShell to completely remove it")
+                                   ProgressLogText("Application.Is.Registered.To.A.User.Yes") & CrLf &
+                                   ProgressLogText("The.Removal.Of.This.Application.May.Require.You"))
             End If
         Else
             DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & removalStoreApp & Quote & " = 0. This app is not registered to a user")
             ' Application is not registered to any user
             LogView.AppendText(CrLf &
-                               "- Application is registered to a user? No")
+                               ProgressLogText("Application.Is.Registered.To.A.User.No"))
         End If
     End Sub
 
@@ -4839,80 +3119,23 @@ Public Class ProgressPanel
         Dim extAppxHelperPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "online_appx_removal.ps1")
         If File.Exists(extAppxHelperPath) Then
             DynaLog.LogMessage("AppX removal helper exists. Proceeding with the removal of those bastards!")
-            LogView.AppendText(CrLf & "A PowerShell helper will be used to remove AppX packages. Please wait...")
+            LogView.AppendText(CrLf & ProgressLogText("A.PowerShell.Helper.Will.Be.Used.To.Remove"))
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
                        String.Format("-executionpolicy Bypass -noprofile -nologo -file {0}{1}{0} -appxFullNames {0}{2}{0}", Quote, extAppxHelperPath,
                                      String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))))
-            LogView.AppendText(CrLf & "Log off for the deprovisioning of applications to be fully carried out.")
+            LogView.AppendText(CrLf & ProgressLogText("Log.Off.For.The.Deprovisioning.Of.Applications.To"))
         End If
     End Sub
 
     Private Sub RemoveProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to remove AppX packages...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Removing AppX packages..."
-                        currentTask.Text = "Preparing to remove provisioned AppX packages..."
-                    Case "ESN"
-                        allTasks.Text = "Eliminando paquetes AppX..."
-                        currentTask.Text = "Preparándonos para eliminar paquetes aprovisionados AppX..."
-                    Case "FRA"
-                        allTasks.Text = "Suppression des paquets AppX en cours..."
-                        currentTask.Text = "Préparation de la suppression des paquets AppX en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Removendo pacotes AppX..."
-                        currentTask.Text = "A preparar a remoção de pacotes AppX provisionados..."
-                    Case "ITA"
-                        allTasks.Text = "Rimozione pacchetti AppX..."
-                        currentTask.Text = "Preparazione rimozione pacchetti AppX approvvigionati..."
-                End Select
-            Case 1
-                allTasks.Text = "Removing AppX packages..."
-                currentTask.Text = "Preparing to remove provisioned AppX packages..."
-            Case 2
-                allTasks.Text = "Eliminando paquetes AppX..."
-                currentTask.Text = "Preparándonos para eliminar paquetes aprovisionados AppX..."
-            Case 3
-                allTasks.Text = "Suppression des paquets AppX en cours..."
-                currentTask.Text = "Préparation de la suppression des paquets AppX en cours..."
-            Case 4
-                allTasks.Text = "Removendo pacotes AppX..."
-                currentTask.Text = "A preparar a remoção de pacotes AppX provisionados..."
-            Case 5
-                allTasks.Text = "Rimozione pacchetti AppX..."
-                currentTask.Text = "Preparazione rimozione pacchetti AppX approvvigionati..."
-        End Select
-        LogView.AppendText(CrLf & "Removing provisioned AppX packages..." & CrLf & CrLf &
-                           "Enumerating AppX packages to remove...")
+                allTasks.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("RemovingPackages.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("Preparing.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Removing.Provisioned.APPX.Packages") & CrLf & CrLf &
+                           ProgressLogText("Enumerating.APPX.Packages.To.Remove"))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & "Total number of packages to remove: " & appxRemovalCount)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Removing AppX packages..."
-                    Case "ESN"
-                        currentTask.Text = "Eliminando paquetes AppX..."
-                    Case "FRA"
-                        currentTask.Text = "Suppression des paquets AppX en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "Removendo pacotes AppX..."
-                    Case "ITA"
-                        currentTask.Text = "Rimozione pacchetti AppX..."
-                End Select
-            Case 1
-                currentTask.Text = "Removing AppX packages..."
-            Case 2
-                currentTask.Text = "Eliminando paquetes AppX..."
-            Case 3
-                currentTask.Text = "Suppression des paquets AppX en cours..."
-            Case 4
-                currentTask.Text = "Removendo pacotes AppX..."
-            Case 5
-                currentTask.Text = "Rimozione pacchetti AppX..."
-        End Select
+        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.To.Remove") & appxRemovalCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("RemovingPackages.Item")
         CurrentPB.Maximum = appxRemovalCount
         If OnlineMgmt Then
             RemoveOnlineAppxPackages(appxRemovalPackages)
@@ -4925,46 +3148,22 @@ Public Class ProgressPanel
                 If x + 1 > CurrentPB.Maximum Then Exit For
                 CommandArgs = BckArgs
                 Dim removalStoreApp As String = appxRemovalPackages(x)
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                            Case "ESN"
-                                currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                            Case "FRA"
-                                currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                            Case "ITA"
-                                currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
-                    Case 2
-                        currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
-                    Case 3
-                        currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
-                    Case 4
-                        currentTask.Text = "A remover o pacote " & (x + 1) & " de " & appxRemovalCount & "..."
-                    Case 5
-                        currentTask.Text = "Rimozione pacchetto " & (x + 1) & " di " & appxRemovalCount & "..."
-                End Select
+                currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove").Format("RemovingPackage.Item", x + 1, appxRemovalCount)
                 LogView.AppendText(CrLf &
-                                   "Package " & (x + 1) & " of " & appxRemovalCount)
+                                   ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & appxRemovalCount)
                 CurrentPB.Value = x + 1
                 ' Display package name and DisplayName
                 LogView.AppendText(CrLf &
-                                   "- Package name: " & appxRemovalPackages(x) & CrLf &
-                                   "- Display name: " & appxRemovalPkgNames(x))
+                                   ProgressLogText("Package.Name") & appxRemovalPackages(x) & CrLf &
+                                   ProgressLogText("Display.Name") & appxRemovalPkgNames(x))
                 ' Display whether an application is registered to a user
                 CheckAppRegistrationStatus(removalStoreApp)
                 ' Initialize command. Its syntax is simple, so don't spend too much time determining options
                 LogView.AppendText(CrLf & CrLf &
-                                   "Processing package...")
+                                   ProgressLogText("Processing.Package"))
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 RunProcess(DismProgram, CommandArgs)
-                LogView.AppendText(CrLf & "Getting error level...")
+                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
                 If Hex(DismExitCode).Length < 8 Then
                     errCode = DismExitCode
                 Else
@@ -4976,9 +3175,9 @@ Public Class ProgressPanel
                     appxFailedRemovals += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(" Error level : 0x" & errCode)
+                    LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
                 Else
-                    LogView.AppendText(" Error level : " & errCode)
+                    LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -4995,9 +3194,9 @@ Public Class ProgressPanel
                 End If
             Next
             CurrentPB.Value = CurrentPB.Maximum
-            LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.APPX.Packages") & CrLf)
             For x = 0 To PackageErrorCodes.Count - 1
-                LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PackageErrorCodes(x))
+                LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
             Next
             Thread.Sleep(2000)
             AllPB.Value = 100
@@ -5017,41 +3216,8 @@ Public Class ProgressPanel
     Private Sub SetKeyboardLayeredDriver(targetImage As String)
         DynaLog.LogMessage("Preparing to set keyboard layered driver...")
         DynaLog.LogMessage("Type of new keyboard layered driver: " & KeyboardLayeredDriverType)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Setting layered driver..."
-                        currentTask.Text = "Setting keyboard layered driver..."
-                    Case "ESN"
-                        allTasks.Text = "Estableciendo controlador superpuesto..."
-                        currentTask.Text = "Estableciendo controlador de teclado superpuesto..."
-                    Case "FRA"
-                        allTasks.Text = "Configuration du pilote en couches en cours..."
-                        currentTask.Text = "Configuration du pilote en couches pour le clavier en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Configuração do controlador em camadas..."
-                        currentTask.Text = "Configuração do controlador de teclado em camadas..."
-                    Case "ITA"
-                        allTasks.Text = "Impostazione driver stratificato..."
-                        currentTask.Text = "Impostazione driver stratificato tastiera..."
-                End Select
-            Case 1
-                allTasks.Text = "Setting layered driver..."
-                currentTask.Text = "Setting keyboard layered driver..."
-            Case 2
-                allTasks.Text = "Estableciendo controlador superpuesto..."
-                currentTask.Text = "Estableciendo controlador de teclado superpuesto..."
-            Case 3
-                allTasks.Text = "Configuration du pilote en couches en cours..."
-                currentTask.Text = "Configuration du pilote en couches pour le clavier en cours..."
-            Case 4
-                allTasks.Text = "Configuração do controlador em camadas..."
-                currentTask.Text = "Configuração do controlador de teclado em camadas..."
-            Case 5
-                allTasks.Text = "Impostazione driver stratificato..."
-                currentTask.Text = "Impostazione driver stratificato la tastiera..."
-        End Select
+                allTasks.Text = LocalizationService.ForSection("Progress.LayeredDriver")("SettingDriver.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.LayeredDriver")("Setting.Keyboard.Button")
         currentLay = New KeyboardDrivers(currentKeybLayeredDriverType).LayeredDriver
         newKeybLay = New KeyboardDrivers(KeyboardLayeredDriverType).LayeredDriver
         Dim currentLayout As String = ""
@@ -5088,21 +3254,21 @@ Public Class ProgressPanel
             Case KeyboardDrivers.LayeredKeyboardDriver.J_106109Key
                 newLayout = "Japanese Keyboard (106/109 Key)"
         End Select
-        LogView.AppendText(CrLf & "Setting the keyboard layered driver..." & CrLf &
-                           "- Current keyboard layered driver: " & currentLayout & CrLf &
-                           "- New keyboard layered driver: " & newLayout & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Keyboard.Layered.Driver") & CrLf &
+                           ProgressLogText("Current.Keyboard.Layered.Driver") & currentLayout & CrLf &
+                           ProgressLogText("New.Keyboard.Layered.Driver") & newLayout & CrLf)
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-layereddriver:" & KeyboardLayeredDriverType
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -5117,113 +3283,32 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Capability source: " & Quote & capAdditionSource & Quote)
         DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(capAdditionLimitWUAccess, "Yes", "No"))
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(capAdditionCommit, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Adding capabilities..."
-                        currentTask.Text = "Preparing to add capabilities..."
-                    Case "ESN"
-                        allTasks.Text = "Añadiendo funcionalidades..."
-                        currentTask.Text = "Preparándonos para añadir funcionalidades..."
-                    Case "FRA"
-                        allTasks.Text = "Ajout des capacités en cours..."
-                        currentTask.Text = "Préparation de l'ajout des capacités en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A adicionar capacidades..."
-                        currentTask.Text = "A preparar para adicionar capacidades..."
-                    Case "ITA"
-                        allTasks.Text = "Aggiunta capacità..."
-                        currentTask.Text = "Preparazione aggiunta capacità..."
-                End Select
-            Case 1
-                allTasks.Text = "Adding capabilities..."
-                currentTask.Text = "Preparing to add capabilities..."
-            Case 2
-                allTasks.Text = "Añadiendo funcionalidades..."
-                currentTask.Text = "Preparándonos para añadir funcionalidades..."
-            Case 3
-                allTasks.Text = "Ajout des capacités en cours..."
-                currentTask.Text = "Préparation de l'ajout des capacités en cours..."
-            Case 4
-                allTasks.Text = "A adicionar capacidades..."
-                currentTask.Text = "A preparar para adicionar capacidades..."
-            Case 5
-                allTasks.Text = "Aggiunta capacità..."
-                currentTask.Text = "Preparazione aggiunta capacità..."
-        End Select
+                allTasks.Text = LocalizationService.ForSection("Progress.AddCapabilities")("Add.Capabilities.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities")("PrepareAdd.Button")
         DynaLog.LogMessage("Boot mode of the host system: " & SystemInformation.BootMode)
-        LogView.AppendText(CrLf & "Adding capabilities to mounted image..." & CrLf &
-                           "Options:" & CrLf &
-                           "- Use a source for capability addition? " & If(capAdditionUseSource, "Yes", "No") & CrLf &
-                           "- Capability source: " & If(capAdditionUseSource, Quote & capAdditionSource & Quote, "No source has been provided") & CrLf &
-                           "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess And OnlineMgmt, "Yes", If(capAdditionLimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & If(Not capAdditionLimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", "") & CrLf &
-                           "- Commit image after adding capabilities? " & If(capAdditionCommit, "Yes", "No") & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Adding.Capabilities.To.Mounted.Image") & CrLf &
+                           ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Use.A.Source.For.Capability.Addition") & If(capAdditionUseSource, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Capability.Source") & If(capAdditionUseSource, Quote & capAdditionSource & Quote, ProgressLogText("No.Source.Has.Been.Provided")) & CrLf &
+                           ProgressLogText("Limit.Access.To.Windows.Update") & If(capAdditionLimitWUAccess And OnlineMgmt, ProgressLogText("Yes"), If(capAdditionLimitWUAccess And Not OnlineMgmt, ProgressLogText("No.This.Is.Not.An.Online.Installation"), ProgressLogText("No"))) & If(Not capAdditionLimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ProgressLogText("The.System.Is.In.Safe.Mode"), "") & CrLf &
+                           ProgressLogText("Commit.Image.After.Adding.Capabilities") & If(capAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
         If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
             DynaLog.LogMessage("A source is expected to be used but it does not exist in the file system.")
             LogView.AppendText(CrLf &
-                               "Warning: the specified source does not exist in the file system, and it will be skipped")
+                               ProgressLogText("Warning.The.Specified.Source.Does.Not.Exist.In"))
         End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Adding capabilities..."
-                    Case "ESN"
-                        currentTask.Text = "Añadiendo funcionalidades..."
-                    Case "FRA"
-                        currentTask.Text = "Ajout des capacités en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A adicionar capacidades..."
-                    Case "ITA"
-                        currentTask.Text = "Aggiunta capacità..."
-                End Select
-            Case 1
-                currentTask.Text = "Adding capabilities..."
-            Case 2
-                currentTask.Text = "Añadiendo funcionalidades..."
-            Case 3
-                currentTask.Text = "Ajout des capacités en cours..."
-            Case 4
-                currentTask.Text = "A adicionar capacidades..."
-            Case 5
-                currentTask.Text = "Aggiunta capacità..."
-        End Select
-        LogView.AppendText(CrLf & "Enumerating capabilities to add. Please wait..." & CrLf &
-                           "Total number of capabilities: " & capAdditionCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities")("Add.Capabilities.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Capabilities.To.Add.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Capabilities") & capAdditionCount)
         CurrentPB.Maximum = capAdditionCount
         For x = 0 To Array.LastIndexOf(capAdditionIds, capAdditionLastId)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Ajout de la capacité " & (x + 1) & " de " & capAdditionCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "Adicionar capacidade " & (x + 1) & " de " & capAdditionCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Aggiunta capacità " & (x + 1) & " di " & capAdditionCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
-                Case 2
-                    currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
-                Case 3
-                    currentTask.Text = "Ajout de la capacité " & (x + 1) & " de " & capAdditionCount & " en cours..."
-                Case 4
-                    currentTask.Text = "Adicionar capacidade " & (x + 1) & " de " & capAdditionCount & "..."
-                Case 5
-                    currentTask.Text = "Aggiunta capacità " & (x + 1) & " di " & capAdditionCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities").Format("AddingCapability.Item", x + 1, capAdditionCount)
             CurrentPB.Value = x + 1
             DynaLog.LogMessage("Getting information about capability " & Quote & capAdditionIds(x) & Quote & "...")
             LogView.AppendText(CrLf &
-                               "Capability " & (x + 1) & " of " & capAdditionCount)
+                               ProgressLogText("Capability") & (x + 1) & ProgressLogText("Of.Word") & capAdditionCount)
             ' Get capability information
             ' Try opening the session. If API is not initialized, initialize it
             Try
@@ -5235,9 +3320,9 @@ Public Class ProgressPanel
                     ' Get capability information
                     Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
                     LogView.AppendText(CrLf & CrLf &
-                                       "- Capability identity: " & capInfo.Name & CrLf &
-                                       "- Capability name: " & capInfo.DisplayName & CrLf &
-                                       "- Capability description: " & capInfo.Description & CrLf)
+                                       ProgressLogText("Capability.Identity") & capInfo.Name & CrLf &
+                                       ProgressLogText("Capability.Name") & capInfo.DisplayName & CrLf &
+                                       ProgressLogText("Capability.Description") & capInfo.Description & CrLf)
                 End Using
             Finally
                 Try
@@ -5257,7 +3342,7 @@ Public Class ProgressPanel
             End If
             If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 capSuccessfulAdditions += 1
@@ -5265,9 +3350,9 @@ Public Class ProgressPanel
                 capFailedAdditions += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -5284,40 +3369,16 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected capabilities..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Capabilities") & CrLf)
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatureErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Capability.No") & (x + 1) & ": " & FeatureErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If capAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
             RunOps(8)
         End If
         If capSuccessfulAdditions > 0 Then
@@ -5327,108 +3388,27 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some capabilities.")
-            LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
+            LogView.AppendText(CrLf & ProgressLogText("Some.Capabilities.Require.A.System.Restart.To.Be"))
         End If
     End Sub
 
     Private Sub RemoveCapabilities(targetImage As String)
         DynaLog.LogMessage("Preparing to remove capabilities...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Removing capabilities..."
-                        currentTask.Text = "Preparing to remove capabilities..."
-                    Case "ESN"
-                        allTasks.Text = "Eliminando funcionalidades..."
-                        currentTask.Text = "Preparándonos para eliminar funcionalidades..."
-                    Case "FRA"
-                        allTasks.Text = "Suppression des capacités en cours..."
-                        currentTask.Text = "Préparation de la suppression des capacités en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A remover capacidades..."
-                        currentTask.Text = "A preparar a remoção de capacidades..."
-                    Case "ITA"
-                        allTasks.Text = "Rimozione capacità..."
-                        currentTask.Text = "Preparazione rimozione capacità..."
-                End Select
-            Case 1
-                allTasks.Text = "Removing capabilities..."
-                currentTask.Text = "Preparing to remove capabilities..."
-            Case 2
-                allTasks.Text = "Eliminando funcionalidades..."
-                currentTask.Text = "Preparándonos para eliminar funcionalidades..."
-            Case 3
-                allTasks.Text = "Suppression des capacités en cours..."
-                currentTask.Text = "Préparation de la suppression des capacités en cours..."
-            Case 4
-                allTasks.Text = "A remover capacidades..."
-                currentTask.Text = "A preparar a remoção de capacidades..."
-            Case 5
-                allTasks.Text = "Rimozione capacità..."
-                currentTask.Text = "Preparazione rimozione capacità..."
-        End Select
-        LogView.AppendText(CrLf & "Removing capabilities from mounted image..." & CrLf)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Removing capabilities..."
-                    Case "ESN"
-                        currentTask.Text = "Eliminando funcionalidades..."
-                    Case "FRA"
-                        currentTask.Text = "Suppression des capacités en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A remover capacidades..."
-                    Case "ITA"
-                        currentTask.Text = "Rimozione capacità..."
-                End Select
-            Case 1
-                currentTask.Text = "Removing capabilities..."
-            Case 2
-                currentTask.Text = "Eliminando funcionalidades..."
-            Case 3
-                currentTask.Text = "Suppression des capacités en cours..."
-            Case 4
-                currentTask.Text = "A remover capacidades..."
-            Case 5
-                currentTask.Text = "Rimozione capacità..."
-        End Select
-        LogView.AppendText(CrLf & "Enumerating capabilities to remove. Please wait..." & CrLf &
-                           "Total number of capabilities: " & capRemovalCount)
+                allTasks.Text = LocalizationService.ForSection("Progress.RemoveCapabilities")("Remove.Capabilities.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemoveCaps")("Preparing.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Removing.Capabilities.From.Mounted.Image") & CrLf)
+                currentTask.Text = LocalizationService.ForSection("Progress.RemoveCapabilities")("Remove.Capabilities.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Capabilities.To.Remove.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Capabilities") & capRemovalCount)
         CurrentPB.Maximum = capRemovalCount
         For x = 0 To Array.LastIndexOf(capRemovalIds, capRemovalLastId)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression de la capacité " & (x + 1) & " de " & capRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "Remover a capacidade " & (x + 1) & " de " & capRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione capacità " & (x + 1) & " di " & capRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression de la capacité " & (x + 1) & " de " & capRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "Remover a capacidade " & (x + 1) & " de " & capRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione capacità " & (x + 1) & " di " & capRemovalCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.RemoveCapabilities").Format("Capability.Item", x + 1, capRemovalCount)
             DynaLog.LogMessage("Getting information about capability " & Quote & capRemovalIds(x) & Quote & "...")
             CurrentPB.Value = x + 1
             LogView.AppendText(CrLf &
-                               "Capability " & (x + 1) & " of " & capRemovalCount)
+                               ProgressLogText("Capability") & (x + 1) & ProgressLogText("Of.Word") & capRemovalCount)
             Try
                 DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
@@ -5437,9 +3417,9 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Getting capability information...")
                     Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
                     LogView.AppendText(CrLf & CrLf &
-                                       "- Capability identity: " & capInfo.Name & CrLf &
-                                       "- Capability name: " & capInfo.DisplayName & CrLf &
-                                       "- Capability description: " & capInfo.Description & CrLf)
+                                       ProgressLogText("Capability.Identity") & capInfo.Name & CrLf &
+                                       ProgressLogText("Capability.Name") & capInfo.DisplayName & CrLf &
+                                       ProgressLogText("Capability.Description") & capInfo.Description & CrLf)
                 End Using
             Finally
                 Try
@@ -5451,7 +3431,7 @@ Public Class ProgressPanel
             End Try
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 capSuccessfulRemovals += 1
@@ -5459,9 +3439,9 @@ Public Class ProgressPanel
                 capFailedRemovals += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -5478,9 +3458,9 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected capabilities..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Capabilities") & CrLf)
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatureErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Capability.No") & (x + 1) & ": " & FeatureErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If capSuccessfulRemovals > 0 Then
@@ -5490,7 +3470,7 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully remove some capabilities.")
-            LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
+            LogView.AppendText(CrLf & ProgressLogText("Some.Capabilities.Require.A.System.Restart.To.Be"))
         End If
     End Sub
 
@@ -5505,13 +3485,13 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- EULA destination (if chosen to copy the EULA): " & imgEditionEulaDestination)
         DynaLog.LogMessage("- Accept the EULA? " & If(imgEditionAcceptEula, "Yes", "No"))
         DynaLog.LogMessage("- Product key (if chosen to accept the EULA): " & imgEditionEditionKey)
-        allTasks.Text = "Upgrading the image..."
-        currentTask.Text = "Setting the new image edition..."
-        LogView.AppendText(CrLf & "Setting the new image edition..." & CrLf &
-                           "Options:" & CrLf &
-                           "- New edition: " & imgEditionNewEdition & CrLf &
-                           "- Will the EULA be copied? " & If(imgEditionCopyEula, "Yes, to the following destination: " & imgEditionEulaDestination, "No") & CrLf &
-                           "- Will the EULA be accepted? " & If(imgEditionAcceptEula, "Yes, with the following product key: " & imgEditionEditionKey, "No") & CrLf)
+        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("UpgradingImage.Label")
+        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Setting.New.Image.Label")
+        LogView.AppendText(CrLf & ProgressLogText("Setting.The.New.Image.Edition") & CrLf &
+                           ProgressLogText("Options") & CrLf &
+                           ProgressLogText("New.Edition") & imgEditionNewEdition & CrLf &
+                           ProgressLogText("Will.The.EULA.Be.Copied") & If(imgEditionCopyEula, ProgressLogText("Yes.To.The.Following.Destination") & imgEditionEulaDestination, ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Will.The.EULA.Be.Accepted") & If(imgEditionAcceptEula, ProgressLogText("Yes.With.The.Following.Product.Key") & imgEditionEditionKey, ProgressLogText("No")) & CrLf)
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /set-edition=" & imgEditionNewEdition
         DynaLog.LogMessage("Checking if the active installation is being managed...")
         If OnlineMgmt Then
@@ -5525,16 +3505,16 @@ Public Class ProgressPanel
             DynaLog.LogMessage("The active installation is not being managed. Ignoring other settings...")
         End If
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -5542,23 +3522,23 @@ Public Class ProgressPanel
     Private Sub SetImageProductKey(targetImage As String)
         DynaLog.LogMessage("Preparing to set the product key...")
         DynaLog.LogMessage("- New Product Key: " & pkSetNewProductKey)
-        allTasks.Text = "Setting the product key..."
-        currentTask.Text = "Setting the new product key..."
-        LogView.AppendText(CrLf & "Setting the new product key..." & CrLf &
-                           "Options:" & CrLf &
-                           "- New product key: " & pkSetNewProductKey & CrLf)
+        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("Setting.ProductKey.Label")
+        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Setting.New.ProductKey.Label")
+        LogView.AppendText(CrLf & ProgressLogText("Setting.The.New.Product.Key") & CrLf &
+                           ProgressLogText("Options") & CrLf &
+                           ProgressLogText("New.Product.Key") & pkSetNewProductKey & CrLf)
         CommandArgs &= " /image=" & targetImage & " /norestart /set-productkey=" & pkSetNewProductKey
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -5571,108 +3551,27 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to add OS drivers...")
         DynaLog.LogMessage("- Force installation of unsigned drivers? " & If(drvAdditionForceUnsigned, "Yes", "No"))
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(drvAdditionCommit, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Adding drivers..."
-                        currentTask.Text = "Preparing to add drivers..."
-                    Case "ESN"
-                        allTasks.Text = "Añadiendo controladores..."
-                        currentTask.Text = "Preparándonos para añadir controladores..."
-                    Case "FRA"
-                        allTasks.Text = "Ajout des pilotes en cours..."
-                        currentTask.Text = "Préparation de l'ajout des pilotes en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A adicionar controladores..."
-                        currentTask.Text = "A preparar para adicionar controladores..."
-                    Case "ITA"
-                        allTasks.Text = "Aggiunta driver..."
-                        currentTask.Text = "Preparazione aggiunta driver..."
-                End Select
-            Case 1
-                allTasks.Text = "Adding drivers..."
-                currentTask.Text = "Preparing to add drivers..."
-            Case 2
-                allTasks.Text = "Añadiendo controladores..."
-                currentTask.Text = "Preparándonos para añadir controladores..."
-            Case 3
-                allTasks.Text = "Ajout des pilotes en cours..."
-                currentTask.Text = "Préparation de l'ajout des pilotes en cours..."
-            Case 4
-                allTasks.Text = "A adicionar controladores..."
-                currentTask.Text = "A preparar para adicionar controladores..."
-            Case 5
-                allTasks.Text = "Aggiunta driver..."
-                currentTask.Text = "Preparazione aggiunta driver..."
-        End Select
-        LogView.AppendText(CrLf & "Adding driver packages to mounted image..." & CrLf &
-                           "Options:" & CrLf &
-                           "- Force installation of unsigned drivers? " & If(drvAdditionForceUnsigned, "Yes", "No") & CrLf &
-                           "- Commit image after adding driver packages? " & If(drvAdditionCommit, "Yes", "No") & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.AddDrivers")("AddingDrivers.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers")("Preparing.Drivers.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Adding.Driver.Packages.To.Mounted.Image") & CrLf &
+                           ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Force.Installation.Of.Unsigned.Drivers") & If(drvAdditionForceUnsigned, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                           ProgressLogText("Commit.Image.After.Adding.Driver.Packages") & If(drvAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
         If drvAdditionForceUnsigned Then
             LogView.AppendText(CrLf &
-                               "Warning: the option to force installation of unsigned drivers has been checked. Do note that unsigned drivers might cause instability on the resulting Windows image.")
+                               ProgressLogText("Warning.The.Option.To.Force.Installation.Of.Unsigned"))
         End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Adding drivers..."
-                    Case "ESN"
-                        currentTask.Text = "Añadiendo controladores..."
-                    Case "FRA"
-                        currentTask.Text = "Ajout des pilotes en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A adicionar controladores..."
-                    Case "ITA"
-                        currentTask.Text = "Aggiunta driver..."
-                End Select
-            Case 1
-                currentTask.Text = "Adding drivers..."
-            Case 2
-                currentTask.Text = "Añadiendo controladores..."
-            Case 3
-                currentTask.Text = "Ajout des pilotes en cours..."
-            Case 4
-                currentTask.Text = "A adicionar controladores..."
-            Case 5
-                currentTask.Text = "Aggiunta driver..."
-        End Select
-        LogView.AppendText(CrLf & "Enumerating drivers to add. Please wait..." & CrLf &
-                           "Total number of drivers: " & drvAdditionCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers")("AddingDrivers.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Drivers.To.Add.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Drivers") & drvAdditionCount)
         CurrentPB.Maximum = drvAdditionCount
         For x = 0 To Array.LastIndexOf(drvAdditionPkgs, drvAdditionLastPkg)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Ajout du pilote " & (x + 1) & " de " & drvAdditionCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A adicionar o controlador " & (x + 1) & " de " & drvAdditionCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Aggiunta driver " & (x + 1) & " di " & drvAdditionCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
-                Case 2
-                    currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
-                Case 3
-                    currentTask.Text = "Ajout du pilote " & (x + 1) & " de " & drvAdditionCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A adicionar o controlador " & (x + 1) & " de " & drvAdditionCount & "..."
-                Case 5
-                    currentTask.Text = "Aggiunta driver " & (x + 1) & " di " & drvAdditionCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers").Format("AddingDriver.Item", x + 1, drvAdditionCount)
             CurrentPB.Value = x + 1
             LogView.AppendText(CrLf &
-                               "Driver " & (x + 1) & " of " & drvAdditionCount)
+                               ProgressLogText("Driver") & (x + 1) & ProgressLogText("Of.Word") & drvAdditionCount)
             ' Get driver information
             DynaLog.LogMessage("Checking file system attributes of driver...")
             If Not (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory Then
@@ -5689,23 +3588,23 @@ Public Class ProgressPanel
                         If drvInfoCollection.Count > 0 And drvInfoCollection.Count <= 10 Then
                             For Each drvInfo As DismDriver In drvInfoCollection
                                 LogView.AppendText(CrLf & CrLf &
-                                                   "- Hardware description: " & drvInfo.HardwareDescription & CrLf &
-                                                   "- Hardware ID: " & drvInfo.HardwareId & CrLf &
-                                                   "- Additional IDs" & CrLf &
-                                                   "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf &
-                                                   "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf &
-                                                   "- Hardware manufacturer: " & drvInfo.ManufacturerName & CrLf &
-                                                   "- Hardware architecture: " & Casters.CastDismArchitecture(drvInfo.Architecture))
+                                                   ProgressLogText("Hardware.Description") & drvInfo.HardwareDescription & CrLf &
+                                                   ProgressLogText("Hardware.ID") & drvInfo.HardwareId & CrLf &
+                                                   ProgressLogText("Additional.IDs") & CrLf &
+                                                   ProgressLogText("Compatible.IDs") & drvInfo.CompatibleIds & CrLf &
+                                                   ProgressLogText("Excluded.IDs") & drvInfo.ExcludeIds & CrLf &
+                                                   ProgressLogText("Hardware.Manufacturer") & drvInfo.ManufacturerName & CrLf &
+                                                   ProgressLogText("Hardware.Architecture") & Casters.CastDismArchitecture(drvInfo.Architecture))
                             Next
                         ElseIf drvInfoCollection.Count > 10 Then
                             DynaLog.LogMessage("The driver information contains more than 10 hardware targets.")
                             LogView.AppendText(CrLf & CrLf &
-                                               "This driver file targets more than 10 devices. To avoid creating log files large in size, we will not show information of this driver package, and will proceed anyway." & CrLf &
-                                               "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file:" & CrLf & CrLf &
+                                               ProgressLogText("This.Driver.File.Targets.More.Than.10.Devices") & CrLf &
+                                               ProgressLogText("If.You.Want.To.Get.Information.Of.This") & CrLf & CrLf &
                                                "    " & Path.GetFileName(drvAdditionPkgs(x)))
                         Else
                             LogView.AppendText(CrLf & CrLf &
-                                               "We couldn't get information of this driver package. Proceeding anyway...")
+                                               ProgressLogText("We.Couldn.T.Get.Information.Of.This.Driver"))
                         End If
                     End Using
                 Finally
@@ -5719,7 +3618,7 @@ Public Class ProgressPanel
             Else
                 DynaLog.LogMessage("The driver is a folder. It will be processed recursively.")
                 LogView.AppendText(CrLf & CrLf &
-                                   "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
+                                   ProgressLogText("The.Driver.Package.Currently.About.To.Be.Processed"))
             End If
             DynaLog.LogMessage("Checking current operating mode...")
             Dim isRecursive As Boolean = (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x))
@@ -5762,12 +3661,12 @@ Public Class ProgressPanel
                     CommandArgs &= " /forceunsigned"
                 End If
                 If isRecursive Then
-                    LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
+                    LogView.AppendText(CrLf & ProgressLogText("This.Folder.Will.Be.Scanned.Recursively.Driver.Addition"))
                     CommandArgs &= " /recurse"
                 End If
                 RunProcess(DismProgram, CommandArgs)
             End If
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 drvSuccessfulAdditions += 1
@@ -5775,9 +3674,9 @@ Public Class ProgressPanel
                 drvFailedAdditions += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If PackageErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -5794,40 +3693,16 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Drivers") & CrLf)
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Driver.No") & (x + 1) & ": " & PackageErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If drvAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                Case 2
-                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                Case 3
-                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                Case 4
-                    taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                Case 5
-                    taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
             RunOps(8)
         End If
         If drvSuccessfulAdditions > 0 Then
@@ -5858,107 +3733,26 @@ Public Class ProgressPanel
 
     Private Sub RemoveDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to remove OS drivers...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Removing drivers..."
-                        currentTask.Text = "Preparing to remove drivers..."
-                    Case "ESN"
-                        allTasks.Text = "Eliminando controladores..."
-                        currentTask.Text = "Preparándonos para eliminar controladores..."
-                    Case "FRA"
-                        allTasks.Text = "Suppression des pilotes en cours..."
-                        currentTask.Text = "Préparation de la suppression des pilotes en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A remover controladores..."
-                        currentTask.Text = "A preparar a remoção de controladores..."
-                    Case "ITA"
-                        allTasks.Text = "Rimozione driver..."
-                        currentTask.Text = "Preparazione rimozione driver..."
-                End Select
-            Case 1
-                allTasks.Text = "Removing drivers..."
-                currentTask.Text = "Preparing to remove drivers..."
-            Case 2
-                allTasks.Text = "Eliminando controladores..."
-                currentTask.Text = "Preparándonos para eliminar controladores..."
-            Case 3
-                allTasks.Text = "Suppression des pilotes en cours..."
-                currentTask.Text = "Préparation de la suppression des pilotes en cours..."
-            Case 4
-                allTasks.Text = "A remover controladores..."
-                currentTask.Text = "A preparar a remoção de controladores..."
-            Case 5
-                allTasks.Text = "Rimozione driver..."
-                currentTask.Text = "Preparazione rimozione dei driver..."
-        End Select
-        LogView.AppendText(CrLf & "Removing driver packages from mounted image..." & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("RemovingDrivers.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("Preparing.Drivers.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Removing.Driver.Packages.From.Mounted.Image") & CrLf)
         ' Get all driver packages
         DynaLog.LogMessage("Getting drivers of the Windows image... This can take some time, depending on the amount of drivers installed.")
-        LogView.AppendText(CrLf & "Getting image drivers. This may take some time..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Image.Drivers.This.May.Take.Some.Time") & CrLf)
         GetThirdPartyDrivers()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Removing drivers..."
-                    Case "ESN"
-                        currentTask.Text = "Eliminando controladores..."
-                    Case "FRA"
-                        currentTask.Text = "Suppression des pilotes en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A remover controladores..."
-                    Case "ITA"
-                        currentTask.Text = "Rimozione driver..."
-                End Select
-            Case 1
-                currentTask.Text = "Removing drivers..."
-            Case 2
-                currentTask.Text = "Eliminando controladores..."
-            Case 3
-                currentTask.Text = "Suppression des pilotes en cours..."
-            Case 4
-                currentTask.Text = "A remover controladores..."
-            Case 5
-                currentTask.Text = "Rimozione driver..."
-        End Select
-        LogView.AppendText(CrLf & "Enumerating drivers to remove. Please wait..." & CrLf &
-                           "Total number of drivers: " & drvRemovalCount)
+                currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("RemovingDrivers.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Drivers.To.Remove.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Drivers") & drvRemovalCount)
         CurrentPB.Maximum = drvRemovalCount
         For x = 0 To Array.LastIndexOf(drvRemovalPkgs, drvRemovalLastPkg)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
             Dim driverRemovalPackage As String = drvRemovalPkgs(x)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
-                        Case "ESN"
-                            currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
-                        Case "FRA"
-                            currentTask.Text = "Suppression du pilote " & (x + 1) & " de " & drvRemovalCount & " en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A remover o controlador " & (x + 1) & " de " & drvRemovalCount & "..."
-                        Case "ITA"
-                            currentTask.Text = "Rimozione driver " & (x + 1) & " di " & drvRemovalCount & "..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
-                Case 2
-                    currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
-                Case 3
-                    currentTask.Text = "Suppression du pilote " & (x + 1) & " de " & drvRemovalCount & " en cours..."
-                Case 4
-                    currentTask.Text = "A remover o controlador " & (x + 1) & " de " & drvRemovalCount & "..."
-                Case 5
-                    currentTask.Text = "Rimozione driver " & (x + 1) & " di " & drvRemovalCount & "..."
-            End Select
+            currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers").Format("RemovingDriver.Item", x + 1, drvRemovalCount)
             DynaLog.LogMessage("Getting information about driver file " & Quote & Path.GetFileName(driverRemovalPackage) & Quote & "...")
             CurrentPB.Value = x + 1
             LogView.AppendText(CrLf &
-                               "Driver " & (x + 1) & " of " & drvRemovalCount)
+                               ProgressLogText("Driver") & (x + 1) & ProgressLogText("Of.Word") & drvRemovalCount)
             ' Get driver information
             ShowDriverInformationForRemoval(driverRemovalPackage)
             DynaLog.LogMessage("Checking current operating mode...")
@@ -5986,7 +3780,7 @@ Public Class ProgressPanel
                 CommandArgs &= " /image=" & targetImage & " /remove-driver /driver=" & Quote & driverRemovalPackage & Quote
                 RunProcess(DismProgram, CommandArgs)
             End If
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 drvSuccessfulRemovals += 1
@@ -5994,9 +3788,9 @@ Public Class ProgressPanel
                 drvFailedRemovals += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If PackageErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -6013,9 +3807,9 @@ Public Class ProgressPanel
             End If
         Next
         CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Drivers") & CrLf)
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PackageErrorCodes(x))
+            LogView.AppendText(CrLf & ProgressLogText("Driver.No") & (x + 1) & ": " & PackageErrorCodes(x))
         Next
         Thread.Sleep(2000)
         If drvSuccessfulRemovals > 0 Then
@@ -6030,46 +3824,13 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Export target: " & Quote & drvExportTarget & Quote)
         DynaLog.LogMessage("Export all drivers? " & If(drvExportAllDrvs, "Yes", "No"))
         If Not drvExportAllDrvs Then DynaLog.LogMessage("Class names to use as filter for driver exports: " & drvExportSpecificClassNames.Count)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Exporting drivers..."
-                        currentTask.Text = "Exporting third-party drivers to the specified folder..."
-                    Case "ESN"
-                        allTasks.Text = "Exportando controladores..."
-                        currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
-                    Case "FRA"
-                        allTasks.Text = "Exportation des pilotes en cours..."
-                        currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Exportar controladores..."
-                        currentTask.Text = "Exportar controladores de terceiros para a pasta especificada..."
-                    Case "ITA"
-                        allTasks.Text = "Esportazione driver..."
-                        currentTask.Text = "Esportazione driver terze parti nella cartella specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Exporting drivers..."
-                currentTask.Text = "Exporting third-party drivers to the specified folder..."
-            Case 2
-                allTasks.Text = "Exportando controladores..."
-                currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
-            Case 3
-                allTasks.Text = "Exportation des pilotes en cours..."
-                currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
-            Case 4
-                allTasks.Text = "Exportar controladores..."
-                currentTask.Text = "Exportar controladores de terceiros para a pasta especificada..."
-            Case 5
-                allTasks.Text = "Esportazione driver..."
-                currentTask.Text = "Esportazione driver terze parti nella cartella specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf &
-                           "- Export target: " & Quote & drvExportTarget & Quote & CrLf &
-                           "- Export all drivers, or just those with matching class names? " & If(drvExportAllDrvs, "All Drivers", "Drivers with matching class name") & CrLf &
-                           "- If not all drivers are exported, how many class names are being used? " & drvExportSpecificClassNames.Count & CrLf &
-                           "- On selective driver export, organize results? " & If(drvExportOrganizeClassNameExports, "Yes", "No") & CrLf)
+        allTasks.Text = LocalizationService.ForSection("Progress.ExportDrivers")("ExportingDrivers.Button")
+        currentTask.Text = LocalizationService.ForSection("Progress.ExportDrivers")("ExportThirdParty.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Exporting.Drivers.To.Specified.Folder") & CrLf &
+                           ProgressLogText("Export.Target") & Quote & drvExportTarget & Quote & CrLf &
+                           ProgressLogText("Export.All.Drivers.Or.Just.Those.With.Matching") & If(drvExportAllDrvs, ProgressLogText("All.Drivers"), ProgressLogText("Drivers.With.Matching.Class.Name")) & CrLf &
+                           ProgressLogText("If.Not.All.Drivers.Are.Exported.How.Many.Class.Names") & drvExportSpecificClassNames.Count & CrLf &
+                           ProgressLogText("On.Selective.Driver.Export.Organize.Results") & If(drvExportOrganizeClassNameExports, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
         If drvExportAllDrvs Then
             If drvExportWin7Mode Then
                 Try
@@ -6151,9 +3912,9 @@ Public Class ProgressPanel
                     If driversToExport Is Nothing Then Exit Try
 
                     DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
-                    LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                    LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination"))
                     For Each driverToExport In driversToExport
-                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
                         Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
                         Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
                         CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
@@ -6261,9 +4022,9 @@ Public Class ProgressPanel
                     If driversToExport Is Nothing Then Exit Try
 
                     DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
-                    LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                    LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination"))
                     For Each driverToExport In driversToExport
-                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
                         Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
                         Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
 
@@ -6291,7 +4052,7 @@ Public Class ProgressPanel
                 End Try
             Else
                 Try
-                    LogView.AppendText(CrLf & "Getting image drivers...")
+                    LogView.AppendText(CrLf & ProgressLogText("Getting.Image.Drivers"))
                     DismApi.Initialize(DismLogLevel.LogErrors)
                     Using session As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
                         DynaLog.LogMessage("Getting drivers with DISMAPI...")
@@ -6302,9 +4063,9 @@ Public Class ProgressPanel
                         If driversToExport Is Nothing Then Exit Try
 
                         DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
-                        LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                        LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination"))
                         For Each driverToExport In driversToExport
-                            LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.OriginalFileName) & "...")
+                            LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.OriginalFileName) & "...")
                             Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
                             Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
 
@@ -6340,16 +4101,16 @@ Public Class ProgressPanel
                 End Try
             End If
         End If
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -6404,87 +4165,30 @@ Public Class ProgressPanel
     Private Sub ImportDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to import image drivers...")
         DynaLog.LogMessage("Source type: " & ImportSourceInt)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Importing drivers..."
-                        currentTask.Text = "Preparing to import third-party drivers..."
-                    Case "ESN"
-                        allTasks.Text = "Importando controladores..."
-                        currentTask.Text = "Preparándonos para importar controladores de terceros..."
-                    Case "FRA"
-                        allTasks.Text = "Importation des pilotes en cours..."
-                        currentTask.Text = "Préparation de l'importation de pilotes tiers en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A importar controladores..."
-                        currentTask.Text = "A preparar a importação de controladores de terceiros..."
-                    Case "ITA"
-                        allTasks.Text = "Importazione driver..."
-                        currentTask.Text = "Preparazione importazione driver terze parti..."
-                End Select
-            Case 1
-                allTasks.Text = "Importing drivers..."
-                currentTask.Text = "Preparing to import third-party drivers..."
-            Case 2
-                allTasks.Text = "Importando controladores..."
-                currentTask.Text = "Preparándonos para importar controladores de terceros..."
-            Case 3
-                allTasks.Text = "Importation des pilotes en cours..."
-                currentTask.Text = "Préparation de l'importation de pilotes tiers en cours..."
-            Case 4
-                allTasks.Text = "A importar controladores..."
-                currentTask.Text = "A preparar a importação de controladores de terceiros..."
-            Case 5
-                allTasks.Text = "Importazione dei driver..."
-                currentTask.Text = "Preparazione all'importazione di driver di terze parti..."
-        End Select
-        LogView.AppendText(CrLf & "Importing third party drivers..." & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ImportingDrivers.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("PrepareImport.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Importing.Third.Party.Drivers") & CrLf)
         Select Case ImportSourceInt
             Case 0
-                LogView.AppendText("- Driver import source: Windows image (" & Quote & DrvImport_SourceImage & Quote & ")" & CrLf)
+                LogView.AppendText(ProgressLogText("Driver.Import.Source.Windows.Image") & Quote & DrvImport_SourceImage & Quote & ")" & CrLf)
             Case 1
-                LogView.AppendText("- Driver import source: active installation" & CrLf)
+                LogView.AppendText(ProgressLogText("Driver.Import.Source.Active.Installation") & CrLf)
             Case 2
-                LogView.AppendText("- Driver import source: offline installation (" & Quote & DrvImport_SourceDisk & Quote & ")" & CrLf)
+                LogView.AppendText(ProgressLogText("Driver.Import.Source.Offline.Installation") & Quote & DrvImport_SourceDisk & Quote & ")" & CrLf)
         End Select
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & "Creating temporary folder for driver exports..." & CrLf)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Exporting third-party drivers from driver import source..."
-                    Case "ESN"
-                        currentTask.Text = "Exportando controladores de terceros del origen de importación de controladores..."
-                    Case "FRA"
-                        currentTask.Text = "Exportation de pilotes tiers à partir de la source d'importation des pilotes en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "Exportar controladores de terceiros a partir da fonte de importação de controladores..."
-                    Case "ITA"
-                        currentTask.Text = "Esportazione driver terze parti dalla sorgente importazione driver..."
-                End Select
-            Case 1
-                currentTask.Text = "Exporting third-party drivers from driver import source..."
-            Case 2
-                currentTask.Text = "Exportando controladores de terceros del origen de importación de controladores..."
-            Case 3
-                currentTask.Text = "Exportation de pilotes tiers à partir de la source d'importation des pilotes en cours..."
-            Case 4
-                currentTask.Text = "Exportar controladores de terceiros a partir da fonte de importação de controladores..."
-            Case 5
-                currentTask.Text = "Esportazione di driver di terze parti dall'origine di importazione dei driver..."
-        End Select
+        LogView.AppendText(CrLf & ProgressLogText("Creating.Temporary.Folder.For.Driver.Exports") & CrLf)
+                currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ExportThirdParty.Item")
         Try
             DynaLog.LogMessage("Creating directory where drivers will be exported to...")
             Directory.CreateDirectory(Application.StartupPath & "\export_temp")
         Catch ex As Exception
             DynaLog.LogMessage("Could not create the driver export directory. Error message: " & ex.Message)
-            LogView.AppendText(CrLf & "The temporary folder could not be created. See below for reasons why:" & CrLf & CrLf & ex.ToString() & "-" & ex.Message)
+            LogView.AppendText(CrLf & ProgressLogText("The.Temporary.Folder.Could.Not.Be.Created.See") & CrLf & CrLf & ex.ToString() & "-" & ex.Message)
         End Try
         If Directory.Exists(Application.StartupPath & "\export_temp") Then
             DynaLog.LogMessage("Exporting drivers...")
-            LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
+            LogView.AppendText(CrLf & ProgressLogText("Exporting.Third.Party.Drivers.From.Import.Source") & CrLf)
             Dim importSource As String = ""
             Select Case ImportSourceInt
                 Case 0
@@ -6494,47 +4198,23 @@ Public Class ProgressPanel
             End Select
             CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & importSource) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & "Getting error level...")
+            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
             If Hex(DismExitCode).Length < 8 Then
                 errCode = DismExitCode
             Else
                 errCode = Hex(DismExitCode)
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(" Error level : 0x" & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
             Else
-                LogView.AppendText(" Error level : " & errCode)
+                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
             End If
             If DismExitCode = 0 Then
                 DynaLog.LogMessage("The previous operation succeeded. Adding the drivers...")
                 CurrentPB.Value = CurrentPB.Maximum / 2
                 AllPB.Value = AllPB.Maximum / 2
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                currentTask.Text = "Importing third-party drivers to destination image..."
-                            Case "ESN"
-                                currentTask.Text = "Importando controladores de terceros a la imagen de destino..."
-                            Case "FRA"
-                                currentTask.Text = "Importation des pilotes tiers dans l'image de destination en cours..."
-                            Case "PTB", "PTG"
-                                currentTask.Text = "A importar controladores de terceiros para a imagem de destino..."
-                            Case "ITA"
-                                currentTask.Text = "Importazione driver terze parti nell'immagine destinazione..."
-                        End Select
-                    Case 1
-                        currentTask.Text = "Importing third-party drivers to destination image..."
-                    Case 2
-                        currentTask.Text = "Importando controladores de terceros a la imagen de destino..."
-                    Case 3
-                        currentTask.Text = "Importation des pilotes tiers dans l'image de destination en cours..."
-                    Case 4
-                        currentTask.Text = "A importar controladores de terceiros para a imagem de destino..."
-                    Case 5
-                        currentTask.Text = "Importazione driver di terze parti nell'immagine destinazione..."
-                End Select
-                LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
+                        currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ImportThirdParty.Item")
+                LogView.AppendText(CrLf & ProgressLogText("Importing.Third.Party.Drivers.From.The.Temporary.Export"))
                 CommandArgs = BckArgs
                 If OnlineMgmt Then
                     DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to add the driver...")
@@ -6566,19 +4246,19 @@ Public Class ProgressPanel
                     errCode = Hex(DismExitCode)
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(" Error level : 0x" & errCode)
+                    LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
                 Else
-                    LogView.AppendText(" Error level : " & errCode)
+                    LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
                 End If
                 GetErrorCode(False)
             End If
-            LogView.AppendText(CrLf & "Deleting temporary export directory...")
+            LogView.AppendText(CrLf & ProgressLogText("Deleting.Temporary.Export.Directory"))
             Try
                 DynaLog.LogMessage("Attempting to delete the driver export directory...")
                 Directory.Delete(Application.StartupPath & "\export_temp", True)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not delete driver export directory. Error message: " & ex.Message)
-                LogView.AppendText(CrLf & "We couldn't delete the temporary export directory. You'll need to delete the " & Quote & "export_temp" & Quote & " directory manually.")
+                LogView.AppendText(CrLf & ProgressLogText("We.Couldn.T.Delete.The.Temporary.Export.Directory") & Quote & ProgressLogText("Export.Temp") & Quote & ProgressLogText("Directory.Manually"))
             End Try
         End If
     End Sub
@@ -6590,23 +4270,23 @@ Public Class ProgressPanel
                 For Each drv As DismDriverPackage In drvCollection
                     If drv.PublishedName = driverRemovalPackage Then
                         LogView.AppendText(CrLf & CrLf &
-                                           "- Published name: " & drv.PublishedName & CrLf &
-                                           "- Provider name: " & drv.ProviderName & CrLf &
-                                           "- Class name: " & drv.ClassName & CrLf &
-                                           "- Class description: " & drv.ClassDescription & CrLf &
-                                           "- Class GUID: " & drv.ClassGuid & CrLf &
-                                           "- Version and date: " & drv.Version.ToString() & " / " & drv.Date.ToString() & CrLf &
-                                           "- Is part of the Windows distribution? " & If(drv.InBox, "Yes", "No") & CrLf &
-                                           "- Is critical to the boot process? " & If(drv.BootCritical, "Yes", "No"))
+                                           ProgressLogText("Published.Name") & drv.PublishedName & CrLf &
+                                           ProgressLogText("Provider.Name") & drv.ProviderName & CrLf &
+                                           ProgressLogText("Class.Name") & drv.ClassName & CrLf &
+                                           ProgressLogText("Class.Description") & drv.ClassDescription & CrLf &
+                                           ProgressLogText("Class.GUID") & drv.ClassGuid & CrLf &
+                                           ProgressLogText("Version.And.Date") & drv.Version.ToString() & " / " & drv.Date.ToString() & CrLf &
+                                           ProgressLogText("Is.Part.Of.The.Windows.Distribution") & If(drv.InBox, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+                                           ProgressLogText("Is.Critical.To.The.Boot.Process") & If(drv.BootCritical, ProgressLogText("Yes"), ProgressLogText("No")))
                         If drv.InBox Then
                             DynaLog.LogMessage("This driver is part of the Windows distribution.")
                             LogView.AppendText(CrLf & CrLf &
-                                               "Warning: this driver package is part of the Windows distribution. Some areas may no longer work after this driver has been removed")
+                                               ProgressLogText("Warning.This.Driver.Package.Is.Part.Of.The"))
                         End If
                         If drv.BootCritical Then
                             DynaLog.LogMessage("This driver is critical to the boot process of the Windows image.")
                             LogView.AppendText(CrLf & CrLf &
-                                               "Warning: this driver package is critical to the boot process. The target image may no longer boot or work correctly after this driver has been removed")
+                                               ProgressLogText("Warning.This.Driver.Package.Is.Critical.To.The"))
                         End If
                         Exit For
                     End If
@@ -6629,45 +4309,12 @@ Public Class ProgressPanel
     Private Sub ApplyUnattendedFile(targetImage As String)
         DynaLog.LogMessage("Preparing to apply unattended answer file...")
         DynaLog.LogMessage("Answer file: " & Quote & Path.GetFileName(UnattendedFile) & Quote)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Applying unattended answer file..."
-                        currentTask.Text = "Applying specified unattended answer file to the target image..."
-                    Case "ESN"
-                        allTasks.Text = "Aplicando archivo de respuesta desatendida..."
-                        currentTask.Text = "Aplicando archivo de respuesta desatendida especificado a la imagen de destino..."
-                    Case "FRA"
-                        allTasks.Text = "Appliquer le fichier de réponse sans surveillance en cours..."
-                        currentTask.Text = "Appliquer le fichier de réponse non assisté spécifié à l'image cible en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Aplicar ficheiro de resposta não assistido..."
-                        currentTask.Text = "Aplicar o ficheiro de resposta automática especificado à imagem de destino..."
-                    Case "ITA"
-                        allTasks.Text = "Applicazione file risposta non presidiate..."
-                        currentTask.Text = "Applicazione file risposta non presidiate specificato all'immagine destinazione..."
-                End Select
-            Case 1
-                allTasks.Text = "Applying unattended answer file..."
-                currentTask.Text = "Applying specified unattended answer file to the target image..."
-            Case 2
-                allTasks.Text = "Aplicando archivo de respuesta desatendida..."
-                currentTask.Text = "Aplicando archivo de respuesta desatendida especificado a la imagen de destino..."
-            Case 3
-                allTasks.Text = "Appliquer le fichier de réponse sans surveillance en cours..."
-                currentTask.Text = "Appliquer le fichier de réponse non assisté spécifié à l'image cible en cours..."
-            Case 4
-                allTasks.Text = "Aplicar ficheiro de resposta não assistido..."
-                currentTask.Text = "Aplicar o ficheiro de resposta automática especificado à imagem de destino..."
-            Case 5
-                allTasks.Text = "Applicazione del file di risposta non presidiato..."
-                currentTask.Text = "Applicazione file risposta non presidiata specificato all'immagine destinazione..."
-        End Select
-        LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf &
-                           "- Unattended answer file: " & UnattendedFile)
+                allTasks.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("ApplyAnswerFile.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("Applying.Answer.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Applying.Unattended.Answer.File.Options") & CrLf &
+                           ProgressLogText("Unattended.Answer.File") & UnattendedFile)
         Try
-            LogView.AppendText(CrLf & CrLf & "Creating directories and copying files...")
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Creating.Directories.And.Copying.Files"))
             DynaLog.LogMessage("Copying unattended answer file to the Panther directory of the Windows image...")
             If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
                 Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
@@ -6680,43 +4327,19 @@ Public Class ProgressPanel
                 End If
                 File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             End If
-            LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
+            LogView.AppendText(CrLf & ProgressLogText("The.Unattended.Answer.File.Has.Been.Successfully.Copied"))
             GetErrorCode(True)
         Catch ex As Exception
             DynaLog.LogMessage("Could not copy unattended answer file to targets. Error message: " & ex.Message)
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
             RunProcess(DismProgram, CommandArgs)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
+                    currentTask.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("Gathering.Error.Level.Item")
+            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
             GetErrorCode(False)
             If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
             Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
             End If
         End Try
     End Sub
@@ -6728,55 +4351,22 @@ Public Class ProgressPanel
     Private Sub SetTargetPath(targetImage As String)
         DynaLog.LogMessage("Preparing to set the target path of the Windows PE image...")
         DynaLog.LogMessage("Target path to set: " & Quote & peNewTargetPath & Quote)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Setting the target path..."
-                        currentTask.Text = "Setting the Windows PE target path..."
-                    Case "ESN"
-                        allTasks.Text = "Estableciendo la ruta de destino..."
-                        currentTask.Text = "Estableciendo la ruta de destino de Windows PE..."
-                    Case "FRA"
-                        allTasks.Text = "Configuration du chemin cible en cours..."
-                        currentTask.Text = "Configuration du chemin cible de Windows PE en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A configurar a localização de destino..."
-                        currentTask.Text = "A configurar a localização de destino do Windows PE..."
-                    Case "ITA"
-                        allTasks.Text = "Impostazione percorso destinazione..."
-                        currentTask.Text = "Impostazione percorso destinazione Windows PE..."
-                End Select
-            Case 1
-                allTasks.Text = "Setting the target path..."
-                currentTask.Text = "Setting the Windows PE target path..."
-            Case 2
-                allTasks.Text = "Estableciendo la ruta de destino..."
-                currentTask.Text = "Estableciendo la ruta de destino de Windows PE..."
-            Case 3
-                allTasks.Text = "Configuration du chemin cible en cours..."
-                currentTask.Text = "Configuration du chemin cible de Windows PE en cours..."
-            Case 4
-                allTasks.Text = "A configurar a localização de destino..."
-                currentTask.Text = "A configurar a localização de destino do Windows PE..."
-            Case 5
-                allTasks.Text = "Impostazione percorso destinazione..."
-                currentTask.Text = "Impostazione percorso destinazione di Windows PE..."
-        End Select
-        LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf &
-                           "- New target path: " & Quote & peNewTargetPath & Quote)
+                allTasks.Text = LocalizationService.ForSection("Progress.SetTargetPath")("Setting.Target.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.SetTargetPath")("Setting.Windows.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Windows.PE.Target.Path") & CrLf &
+                           ProgressLogText("New.Target.Path") & Quote & peNewTargetPath & Quote)
         CommandArgs &= " /image=" & targetImage & " /set-targetpath=" & peNewTargetPath
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -6784,55 +4374,22 @@ Public Class ProgressPanel
     Private Sub SetScratchSpace(targetImage As String)
         DynaLog.LogMessage("Preparing to set the scratch space of the Windows PE image...")
         DynaLog.LogMessage("Scratch space to set: " & peNewScratchSpace & " MB")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Setting the scratch space..."
-                        currentTask.Text = "Setting the Windows PE scratch space..."
-                    Case "ESN"
-                        allTasks.Text = "Estableciendo el espacio temporal..."
-                        currentTask.Text = "Estableciendo el espacio temporal de Windows PE..."
-                    Case "FRA"
-                        allTasks.Text = "Configuration de l'espace temporaire en cours..."
-                        currentTask.Text = "Configuration de l'espace temporaire de Windows PE en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A configurar o espaço temporário..."
-                        currentTask.Text = "A configurar o espaço temporário do Windows PE..."
-                    Case "ITA"
-                        allTasks.Text = "Impostazione spazio temporaneo..."
-                        currentTask.Text = "Impostazione spazio temporaneo Windows PE..."
-                End Select
-            Case 1
-                allTasks.Text = "Setting the scratch space..."
-                currentTask.Text = "Setting the Windows PE scratch space..."
-            Case 2
-                allTasks.Text = "Estableciendo el espacio temporal..."
-                currentTask.Text = "Estableciendo el espacio temporal de Windows PE..."
-            Case 3
-                allTasks.Text = "Configuration de l'espace temporaire en cours..."
-                currentTask.Text = "Configuration de l'espace temporaire de Windows PE en cours..."
-            Case 4
-                allTasks.Text = "A configurar o espaço temporário..."
-                currentTask.Text = "A configurar o espaço temporário do Windows PE..."
-            Case 5
-                allTasks.Text = "Impostazione dello spazio temporaneo..."
-                currentTask.Text = "Impostazione dello spazio temporaneo di Windows PE..."
-        End Select
-        LogView.AppendText(CrLf & "Setting the Windows PE scratch space..." & CrLf &
-                           "- New scratch space amount: " & peNewScratchSpace & " MB")
+                allTasks.Text = LocalizationService.ForSection("Progress.ScratchSpace")("Setting.ScratchSpace.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ScratchSpace")("SetScratchSpace.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Windows.PE.Scratch.Space") & CrLf &
+                           ProgressLogText("New.Scratch.Space.Amount") & peNewScratchSpace & " MB")
         CommandArgs &= " /image=" & targetImage & " /set-scratchspace=" & peNewScratchSpace
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Getting error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(" Error level : 0x" & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
         Else
-            LogView.AppendText(" Error level : " & errCode)
+            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
         End If
         GetErrorCode(False)
     End Sub
@@ -6844,149 +4401,50 @@ Public Class ProgressPanel
     Private Sub SetOSUnistallWindow()
         DynaLog.LogMessage("Preparing to set the OS rollback window...")
         DynaLog.LogMessage("New window: " & osUninstDayCount & " day(s)")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Setting the uninstall window..."
-                        currentTask.Text = "Setting the amount of days in which an uninstall can happen..."
-                    Case "ESN"
-                        allTasks.Text = "Estableciendo el margen de desinstalación..."
-                        currentTask.Text = "Estableciendo el número de días en los que puede ocurrir una desinstalación..."
-                    Case "FRA"
-                        allTasks.Text = "Définition de la créneau de désinstallation en cours..."
-                        currentTask.Text = "Définition du nombre de jours au cours desquels une désinstallation peut avoir lieu en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A configurar a janela de desinstalação..."
-                        currentTask.Text = "A configurar o número de dias em que uma desinstalação pode ocorrer..."
-                    Case "ITA"
-                        allTasks.Text = "Impostazione finestra disinstallazione..."
-                        currentTask.Text = "Impostazione numero di giorni in cui può avvenire la disinstallazione..."
-                End Select
-            Case 1
-                allTasks.Text = "Setting the uninstall window..."
-                currentTask.Text = "Setting the amount of days in which an uninstall can happen..."
-            Case 2
-                allTasks.Text = "Estableciendo el margen de desinstalación..."
-                currentTask.Text = "Estableciendo el número de días en los que puede ocurrir una desinstalación..."
-            Case 3
-                allTasks.Text = "Définition de la créneau de désinstallation en cours..."
-                currentTask.Text = "Définition du nombre de jours au cours desquels une désinstallation peut avoir lieu en cours..."
-            Case 4
-                allTasks.Text = "A configurar a janela de desinstalação..."
-                currentTask.Text = "A configurar o número de dias em que uma desinstalação pode ocorrer..."
-            Case 5
-                allTasks.Text = "Impostazione della finestra di disinstallazione..."
-                currentTask.Text = "Impostazione del numero di giorni in cui può avvenire la disinstallazione..."
-        End Select
-        LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
-                           "Number of days: " & osUninstDayCount)
+                allTasks.Text = LocalizationService.ForSection("Progress.RollbackWindow")("SetWindow.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RollbackWindow")("SetDays.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Amount.Of.Days.An.Uninstall.Can") & CrLf &
+                           ProgressLogText("Number.Of.Days") & osUninstDayCount)
         CommandArgs &= " /online /set-osuninstallwindow /value:" & osUninstDayCount
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Gathering error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
     Private Sub RemoveOSUnistall()
         DynaLog.LogMessage("Preparing to remove the OS rollback...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Removing OS rollback ability..."
-                        currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
-                    Case "ESN"
-                        allTasks.Text = "Eliminando la habilidad de desinstalación..."
-                        currentTask.Text = "Eliminando la habilidad para revertir a una instalación anterior de Windows..."
-                    Case "FRA"
-                        allTasks.Text = "Suppression de la possibilité de retour en arrière du système d'exploitation en cours..."
-                        currentTask.Text = "Suppression de la possibilité de revenir à une ancienne installation de Windows en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Remover a capacidade de reversão do SO..."
-                        currentTask.Text = "Remover a capacidade de reverter para uma instalação antiga do Windows..."
-                    Case "ITA"
-                        allTasks.Text = "Rimozione possibilità rollback sistema operativo..."
-                        currentTask.Text = "Rimozione possibilità tornare alla vecchia installazione di Windows..."
-                End Select
-            Case 1
-                allTasks.Text = "Removing OS rollback ability..."
-                currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
-            Case 2
-                allTasks.Text = "Eliminando la habilidad de desinstalación..."
-                currentTask.Text = "Eliminando la habilidad para revertir a una instalación anterior de Windows..."
-            Case 3
-                allTasks.Text = "Suppression de la possibilité de retour en arrière du système d'exploitation en cours..."
-                currentTask.Text = "Suppression de la possibilité de revenir à une ancienne installation de Windows en cours..."
-            Case 4
-                allTasks.Text = "Remover a capacidade de reversão do SO..."
-                currentTask.Text = "Remover a capacidade de reverter para uma instalação antiga do Windows..."
-            Case 5
-                allTasks.Text = "Rimozione opzione fallback al sistema operativo precedente..."
-                currentTask.Text = "Rimozione opzione fallback ad una vecchia installazione di Windows..."
-        End Select
-        LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
+                allTasks.Text = LocalizationService.ForSection("Progress.RemoveRollback")("RemoveRollback.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.RemoveRollback")("RemoveRevert.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Removing.The.Ability.To.Revert.To.An.Old"))
         CommandArgs &= " /online /remove-osuninstall"
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Gathering error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
     Private Sub InitiateOSUnistall()
         DynaLog.LogMessage("Preparing to initiate the OS rollback...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Uninstalling this version of Windows..."
-                        currentTask.Text = "Preparing operating system rollback..."
-                    Case "ESN"
-                        allTasks.Text = "Desinstalando esta versión de Windows..."
-                        currentTask.Text = "Preparando la desinstalación del sistema operativo..."
-                    Case "FRA"
-                        allTasks.Text = "Désinstallation de cette version de Windows en cours..."
-                        currentTask.Text = "Préparation du retour en arrière du système d'exploitation en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Desinstalar esta versão do Windows..."
-                        currentTask.Text = "Preparar a reversão do sistema operativo..."
-                    Case "ITA"
-                        allTasks.Text = "Disinstallazione di questa versione di Windows..."
-                        currentTask.Text = "Preparazione rollback sistema operativo..."
-                End Select
-            Case 1
-                allTasks.Text = "Uninstalling this version of Windows..."
-                currentTask.Text = "Preparing operating system rollback..."
-            Case 2
-                allTasks.Text = "Desinstalando esta versión de Windows..."
-                currentTask.Text = "Preparando la desinstalación del sistema operativo..."
-            Case 3
-                allTasks.Text = "Désinstallation de cette version de Windows en cours..."
-                currentTask.Text = "Préparation du retour en arrière du système d'exploitation en cours..."
-            Case 4
-                allTasks.Text = "Desinstalar esta versão do Windows..."
-                currentTask.Text = "Preparar a reversão do sistema operativo..."
-            Case 5
-                allTasks.Text = "Disinstallazione di questa versione di Windows..."
-                currentTask.Text = "Preparazione del ripristino del sistema operativo..."
-        End Select
-        LogView.AppendText(CrLf & "Preparing operating system rollback...")
+                allTasks.Text = LocalizationService.ForSection("Progress.OSUninstall")("Uninstalling.Version.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.StartRollback")("Preparing.OSRollback.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Preparing.Operating.System.Rollback"))
         CommandArgs = " /online /norestart /initiate-osuninstall"
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & "Gathering error level...")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -7000,52 +4458,19 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Source image index: " & imgConversionIndex)
         DynaLog.LogMessage("- Destination image file: " & Quote & imgDestFile & Quote)
         DynaLog.LogMessage("- Conversion mode: " & imgConversionMode)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Converting image..."
-                        currentTask.Text = "Converting specified image..."
-                    Case "ESN"
-                        allTasks.Text = "Convirtiendo imagen..."
-                        currentTask.Text = "Convirtiendo imagen especificada"
-                    Case "FRA"
-                        allTasks.Text = "Conversion de l'image en cours..."
-                        currentTask.Text = "Conversion de l'image spécifiée en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "A converter imagem..."
-                        currentTask.Text = "A converter a imagem especificada..."
-                    Case "ITA"
-                        allTasks.Text = "Conversione immagine..."
-                        currentTask.Text = "Conversione immagine specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Converting image..."
-                currentTask.Text = "Converting specified image..."
-            Case 2
-                allTasks.Text = "Convirtiendo imagen..."
-                currentTask.Text = "Convirtiendo imagen especificada"
-            Case 3
-                allTasks.Text = "Conversion de l'image en cours..."
-                currentTask.Text = "Conversion de l'image spécifiée en cours..."
-            Case 4
-                allTasks.Text = "A converter imagem..."
-                currentTask.Text = "A converter a imagem especificada..."
-            Case 5
-                allTasks.Text = "Conversione immagine..."
-                currentTask.Text = "Conversione dell'immagine specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Converting image..." & CrLf &
-                           "Options:" & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.ConvertImage")("ConvertingImage.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.ConvertImage")("Converting.Image.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Converting.Image") & CrLf &
+                           ProgressLogText("Options") & CrLf)
 
         ' Gather options
-        LogView.AppendText("- Source image file: " & imgSrcFile & CrLf &
-                           "- Index to convert: " & imgConversionIndex & CrLf &
-                           "- Destination image file: " & imgDestFile & CrLf)
+        LogView.AppendText(ProgressLogText("Source.Image.File") & imgSrcFile & CrLf &
+                           ProgressLogText("Index.To.Convert") & imgConversionIndex & CrLf &
+                           ProgressLogText("Destination.Image.File") & imgDestFile & CrLf)
         If imgConversionMode = 0 Then
-            LogView.AppendText("- Image conversion mode: Windows Imaging (WIM) --> Electronic Software Distribution (ESD)")
+            LogView.AppendText(ProgressLogText("Image.Conversion.Mode.Windows.Imaging.WIM.Electronic.Software"))
         ElseIf imgConversionMode = 1 Then
-            LogView.AppendText("- Image conversion mode: Electronic Software Distribution (ESD) --> Windows Imaging (WIM)")
+            LogView.AppendText(ProgressLogText("Image.Conversion.Mode.Electronic.Software.Distribution.ESD.Windows"))
         End If
 
         ' Run commands
@@ -7066,37 +4491,13 @@ Public Class ProgressPanel
             CommandArgs &= " /compress:max"
         End If
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta del livello di errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.ConvertImage")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -7105,47 +4506,14 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Source image file: " & Quote & imgSwmSource & Quote)
         DynaLog.LogMessage("- Source image index: " & imgMergerIndex)
         DynaLog.LogMessage("- Destination image file: " & Quote & imgWimDestination & Quote)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Merging SWM files..."
-                        currentTask.Text = "Merging SWM files into a WIM file..."
-                    Case "ESN"
-                        allTasks.Text = "Combinando archivos SWM..."
-                        currentTask.Text = "Combinando archivos SWM en un archivo WIM..."
-                    Case "FRA"
-                        allTasks.Text = "Fusion des fichiers SWM en cours..."
-                        currentTask.Text = "Fusion des fichiers SWM dans un fichier WIM en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Combinando ficheiros SWM..."
-                        currentTask.Text = "Combinar ficheiros SWM num ficheiro WIM..."
-                    Case "ITA"
-                        allTasks.Text = "Unione file SWM..."
-                        currentTask.Text = "Unione file SWM in un file WIM..."
-                End Select
-            Case 1
-                allTasks.Text = "Merging SWM files..."
-                currentTask.Text = "Merging SWM files into a WIM file..."
-            Case 2
-                allTasks.Text = "Combinando archivos SWM..."
-                currentTask.Text = "Combinando archivos SWM en un archivo WIM..."
-            Case 3
-                allTasks.Text = "Fusion des fichiers SWM en cours..."
-                currentTask.Text = "Fusion des fichiers SWM dans un fichier WIM en cours..."
-            Case 4
-                allTasks.Text = "Combinando ficheiros SWM..."
-                currentTask.Text = "Combinar ficheiros SWM num ficheiro WIM..."
-            Case 5
-                allTasks.Text = "Unione dei file SWM..."
-                currentTask.Text = "Unione dei file SWM in un file WIM..."
-        End Select
-        LogView.AppendText(CrLf & "Merging SWM files into a WIM file..." & CrLf &
-                           "Options:" & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.MergeSWM")("MergingSwmfiles.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.MergeSWM")("Merging.Swmfiles.WIM.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Merging.SWM.Files.Into.A.WIM.File") & CrLf &
+                           ProgressLogText("Options") & CrLf)
         ' Gather options
-        LogView.AppendText("- Source image file: " & imgSwmSource & CrLf &
-                           "- Target index: " & imgMergerIndex & CrLf &
-                           "- Destination image file: " & imgWimDestination & CrLf)
+        LogView.AppendText(ProgressLogText("Source.Image.File") & imgSwmSource & CrLf &
+                           ProgressLogText("Target.Index") & imgMergerIndex & CrLf &
+                           ProgressLogText("Destination.Image.File") & imgWimDestination & CrLf)
 
         ' Run commands
         Select Case DismVersionChecker.ProductMajorPart
@@ -7160,37 +4528,13 @@ Public Class ProgressPanel
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
         End Select
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.MergeSWM")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -7199,51 +4543,18 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Source image file: " & Quote & SwitchSourceImg & Quote)
         DynaLog.LogMessage("- Source image index: " & SwitchSourceIndex)
         DynaLog.LogMessage("- Target image index: " & SwitchTargetIndex)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Switching image indexes..."
-                        currentTask.Text = "Unmounting source index..."
-                    Case "ESN"
-                        allTasks.Text = "Cambiando índices de imagen..."
-                        currentTask.Text = "Desmontando índice de origen..."
-                    Case "FRA"
-                        allTasks.Text = "Changement d'index de l'image en cours..."
-                        currentTask.Text = "Démontage de l'index original en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Alternar índices de imagem..."
-                        currentTask.Text = "Desmontar índice de origem..."
-                    Case "ITA"
-                        allTasks.Text = "Modifica indici immagine..."
-                        currentTask.Text = "Smontaggio indice sorgente..."
-                End Select
-            Case 1
-                allTasks.Text = "Switching image indexes..."
-                currentTask.Text = "Unmounting source index..."
-            Case 2
-                allTasks.Text = "Cambiando índices de imagen..."
-                currentTask.Text = "Desmontando índice de origen..."
-            Case 3
-                allTasks.Text = "Changement d'index de l'image en cours..."
-                currentTask.Text = "Démontage de l'index original en cours..."
-            Case 4
-                allTasks.Text = "Alternar índices de imagem..."
-                currentTask.Text = "Desmontar índice de origem..."
-            Case 5
-                allTasks.Text = "Modifica indici immagine..."
-                currentTask.Text = "Smontaggio indice sorgente..."
-        End Select
-        LogView.AppendText(CrLf & "Switching image indexes..." & CrLf &
-                           "Options:" & CrLf)
+                allTasks.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Switching.Image.Button")
+                currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Unmounting.Source.Button")
+        LogView.AppendText(CrLf & ProgressLogText("Switching.Image.Indexes") & CrLf &
+                           ProgressLogText("Options") & CrLf)
         ' Gather options
-        LogView.AppendText("- Target mount directory: " & SwitchTarget & CrLf &
-                           "- Source image index: " & SwitchSourceIndex & CrLf &
-                           "- Target image index: " & SwitchTargetIndex & " (" & SwitchTargetIndexName & ")")
+        LogView.AppendText(ProgressLogText("Target.Mount.Directory") & SwitchTarget & CrLf &
+                           ProgressLogText("Source.Image.Index") & SwitchSourceIndex & CrLf &
+                           ProgressLogText("Target.Image.Index") & SwitchTargetIndex & " (" & SwitchTargetIndexName & ")")
         If SwitchCommitSourceIndex Then
-            LogView.AppendText(CrLf & "- Commit source index? Yes")
+            LogView.AppendText(CrLf & ProgressLogText("Commit.Source.Index.Yes"))
         Else
-            LogView.AppendText(CrLf & "- Commit source index? No")
+            LogView.AppendText(CrLf & ProgressLogText("Commit.Source.Index.No"))
         End If
         DynaLog.LogMessage("Unmounting source image whilst saving changes...")
         ' Run commands
@@ -7264,66 +4575,18 @@ Public Class ProgressPanel
             CommandArgs &= " /discard"
         End If
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta del livello di errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
         If Decimal.ToInt32(DismExitCode) <> 0 Then
             DynaLog.LogMessage("Could not save changes to the image. Unmounting image whilst discarding changes...")
-            LogView.AppendText(CrLf & CrLf & "Could not commit changes to the image. Discarding changes...")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Unmounting source index..."
-                        Case "ESN"
-                            currentTask.Text = "Desmontando índice de origen..."
-                        Case "FRA"
-                            currentTask.Text = "Démontage de l'index original en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "Desmontar índice de origem..."
-                        Case "ITA"
-                            currentTask.Text = "Smontaggio indice sorgente..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Unmounting source index..."
-                Case 2
-                    currentTask.Text = "Desmontando índice de origen..."
-                Case 3
-                    currentTask.Text = "Démontage de l'index original en cours..."
-                Case 4
-                    currentTask.Text = "Desmontar índice de origem..."
-                Case 5
-                    currentTask.Text = "Smontaggio indice sorgente..."
-            End Select
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Could.Not.Commit.Changes.To.The.Image.Discarding"))
+                    currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Unmounting.Source.Index.Item")
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -7336,37 +4599,13 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
             End Select
             RunProcess(DismProgram, CommandArgs)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta livello errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta livello errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
+                    currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("CurrentTask.Item")
+            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
             GetErrorCode(False)
             If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
             Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
             End If
             If Decimal.ToInt32(DismExitCode) <> 0 Then
                 DynaLog.LogMessage("Could not unmount the image.")
@@ -7376,42 +4615,9 @@ Public Class ProgressPanel
         AllPB.Value = AllPB.Maximum / taskCount
         currentTCont += 1
         DynaLog.LogMessage("Mounting Windows image...")
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                        currentTask.Text = "Mounting target index..."
-                    Case "ESN"
-                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                        currentTask.Text = "Montando índice de destino..."
-                    Case "FRA"
-                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                        currentTask.Text = "Montage de l'index de ciblage en cours..."
-                    Case "PTB", "PTG"
-                        taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                        currentTask.Text = "A montar o índice de destino..."
-                    Case "ITA"
-                        taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                        currentTask.Text = "Montaggio indice destinazione..."
-                End Select
-            Case 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                currentTask.Text = "Mounting target index..."
-            Case 2
-                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
-                currentTask.Text = "Montando índice de destino..."
-            Case 3
-                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
-                currentTask.Text = "Montage de l'index de ciblage en cours..."
-            Case 4
-                taskCountLbl.Text = "Tarefas: " & currentTCont & "/" & taskCount
-                currentTask.Text = "A montar o índice de destino..."
-            Case 5
-                taskCountLbl.Text = "Attività: " & currentTCont & "/" & TaskList.Count
-                currentTask.Text = "Montaggio indice destinazione..."
-        End Select
-        LogView.AppendText(CrLf & "Mounting image (index: " & SwitchTargetIndex & ")...")
+        taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+        currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Mounting.Target.Index.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Mounting.Image.Index") & SwitchTargetIndex & ")...")
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -7427,37 +4633,13 @@ Public Class ProgressPanel
             CommandArgs &= " /readonly"
         End If
         RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta livello errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
+                currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Gathering.Error.Level.Item")
+        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
         Else
-            LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
         End If
     End Sub
 
@@ -7465,19 +4647,19 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to replace FFU files...")
         DynaLog.LogMessage("- Source file: " & Quote & FFUReplaceSourceFFU & Quote)
         DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
-        allTasks.Text = "Replacing FFU files..."
-        currentTask.Text = "Replacing original FFU file with modified FFU file..."
-        LogView.AppendText(CrLf & "Replacing FFU file " & Quote & FFUReplaceDestinationFFU & Quote & " with " & Quote & FFUReplaceSourceFFU & Quote & "...")
+        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("Replacing.FFU.Files.Label")
+        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Replacing.Original.FFU.Label")
+        LogView.AppendText(CrLf & ProgressLogText("Replacing.FFU.File") & Quote & FFUReplaceDestinationFFU & Quote & ProgressLogText("With") & Quote & FFUReplaceSourceFFU & Quote & "...")
         Try
             If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
             File.Delete(FFUReplaceDestinationFFU)
             File.Move(FFUReplaceSourceFFU, FFUReplaceDestinationFFU)
             IsSuccessful = True
-            LogView.AppendText(CrLf & "The FFU file has been successfully replaced.")
+            LogView.AppendText(CrLf & ProgressLogText("The.FFU.File.Has.Been.Successfully.Replaced"))
         Catch ex As Exception
             DynaLog.LogMessage("FFU files could not be replaced. Error message: " & ex.Message)
             IsSuccessful = False
-            LogView.AppendText(CrLf & "The FFU file could not be replaced: " & ex.Message)
+            LogView.AppendText(CrLf & ProgressLogText("The.FFU.File.Could.Not.Be.Replaced") & ex.Message)
         End Try
     End Sub
 
@@ -7531,7 +4713,7 @@ Public Class ProgressPanel
             Catch ex As Exception
                 DynaLog.LogMessage("Could not create log file. Error message: " & ex.Message)
                 LogView.AppendText(CrLf &
-                                   "Warning: the contents of the log window could not be saved to the log file. Reason: " & ex.Message)
+                                   ProgressLogText("Warning.The.Contents.Of.The.Log.Window.Could") & ex.Message)
                 Exit Sub
             End Try
         End If
@@ -7575,7 +4757,7 @@ Public Class ProgressPanel
                 Catch ex As Exception
                     DynaLog.LogMessage("Could not create log file. Error message: " & ex.Message)
                     LogView.AppendText(CrLf &
-                                       "Warning: the contents of the log window could not be saved to the log file. Reason: " & ex.Message)
+                                       ProgressLogText("Warning.The.Contents.Of.The.Log.Window.Could") & ex.Message)
                     Exit Sub
                 End Try
             End If
@@ -7595,8 +4777,8 @@ Public Class ProgressPanel
         If IsSuccessful Then
             DynaLog.LogMessage("Tasks have been successful.")
             If OperationNum = 9 Then LogView.AppendText(CrLf &
-                               "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf &
-                               "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
+                               ProgressLogText("The.Volume.Images.Have.Been.Deleted.If.You") & Quote & ProgressLogText("Mount.Image") & Quote & ProgressLogText("Option.Or.Use.This.Command.If.You.Want") & CrLf &
+                               ProgressLogText("DISM.Mount.Image.Imagefile") & Quote & imgIndexDeletionSourceImg & Quote & ProgressLogText("Index.Preferred.Index.Mountdir.Preferred.Mountpoint"))
             DynaLog.LogMessage("Saving operation logs...")
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
             SaveDismOutput(Application.StartupPath & "\logs\DISM_Output_" & Date.Now.ToString("yy-MM-dd-HH-mm-ss") & ".log")
@@ -7817,31 +4999,7 @@ Public Class ProgressPanel
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
             End If
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MainForm.MenuDesc.Text = "Ready"
-                        Case "ESN"
-                            MainForm.MenuDesc.Text = "Listo"
-                        Case "FRA"
-                            MainForm.MenuDesc.Text = "Prêt"
-                        Case "PTB", "PTG"
-                            MainForm.MenuDesc.Text = "Pronto"
-                        Case "ITA"
-                            MainForm.MenuDesc.Text = "Pronto"
-                    End Select
-                Case 1
-                    MainForm.MenuDesc.Text = "Ready"
-                Case 2
-                    MainForm.MenuDesc.Text = "Listo"
-                Case 3
-                    MainForm.MenuDesc.Text = "Prêt"
-                Case 4
-                    MainForm.MenuDesc.Text = "Pronto"
-                Case 5
-                    MainForm.MenuDesc.Text = "Pronto"
-            End Select
+            MainForm.MenuDesc.Text = LocalizationService.ForSection("Progress.Background")("Ready.Label")
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             MainForm.StartMountedImageDetector()
@@ -7849,139 +5007,83 @@ Public Class ProgressPanel
         Else
             DynaLog.LogMessage("Tasks have not been successful.")
             Cancel_Button.Visible = True
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label1.Text = "Could not perform image operations"
-                            Label2.Text = "An error has occurred, which stopped the image operations. Please read the log below for more information."
-                        Case "ESN"
-                            Label1.Text = "No se pudieron realizar las operaciones"
-                            Label2.Text = "Ha ocurrido un error, el cual detuvo las operaciones. Lea el registro debajo para más información."
-                        Case "FRA"
-                            Label1.Text = "Impossible d'effectuer des opérations de l'image"
-                            Label2.Text = "Une erreur s'est produite, qui a interrompu les opérations sur l'image. Veuillez lire le journal ci-dessous pour plus d'informations."
-                        Case "PTB", "PTG"
-                            Label1.Text = "Não foi possível efetuar operações de imagem"
-                            Label2.Text = "Ocorreu um erro que interrompeu as operações de imagem. Leia o registo abaixo para obter mais informações."
-                        Case "ITA"
-                            Label1.Text = "Non è stato possibile eseguire operazioni sull'immagine"
-                            Label2.Text = "Si è verificato un errore che ha interrotto le operazioni sull'immagine. Per ulteriori informazioni, consulta il registro sottostante."
-                    End Select
-                Case 1
-                    Label1.Text = "Could not perform image operations"
-                    Label2.Text = "An error has occurred, which stopped the image operations. Please read the log below for more information."
-                Case 2
-                    Label1.Text = "No se pudieron realizar las operaciones"
-                    Label2.Text = "Ha ocurrido un error, el cual detuvo las operaciones. Lea el registro debajo para más información."
-                Case 3
-                    Label1.Text = "Impossible d'effectuer des opérations de l'image"
-                    Label2.Text = "Une erreur s'est produite, qui a interrompu les opérations sur l'image. Veuillez lire le journal ci-dessous pour plus d'informations."
-                Case 4
-                    Label1.Text = "Não foi possível efetuar operações de imagem"
-                    Label2.Text = "Ocorreu um erro que interrompeu as operações de imagem. Leia o registo abaixo para obter mais informações."
-                Case 5
-                    Label1.Text = "Non è stato possibile eseguire operazioni sull'immagine"
-                    Label2.Text = "Si è verificato un errore che ha interrotto le operazioni sull'immagine. Per ulteriori informazioni, consulta il registro sottostante."
-            End Select
+            Label1.Text = LocalizationService.ForSection("Progress.Background")("Perform.Image.Label")
+            Label2.Text = LocalizationService.ForSection("Progress.Background")("Error.Has.Message")
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = AllPB.Maximum
             If Not IsExpanded Then
                 LogButton.PerformClick()
             End If
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Cancel_Button.Text = "OK"
-                        Case "ESN"
-                            Cancel_Button.Text = "Aceptar"
-                        Case "FRA"
-                            Cancel_Button.Text = "OK"
-                        Case "PTB", "PTG"
-                            Cancel_Button.Text = "OK"
-                        Case "ITA"
-                            Cancel_Button.Text = "OK"
-                    End Select
-                Case 1
-                    Cancel_Button.Text = "OK"
-                Case 2
-                    Cancel_Button.Text = "Aceptar"
-                Case 3
-                    Cancel_Button.Text = "OK"
-                Case 4
-                    Cancel_Button.Text = "OK"
-                Case 5
-                    Cancel_Button.Text = "OK"
-            End Select
+            CancelButtonClosesDialog = True
+            Cancel_Button.Text = LocalizationService.ForSection("Progress.Background")("Ok.Button")
             LinkLabel1.Visible = True
             ' Add details for error codes
             DynaLog.LogMessage("Error code: " & errCode)
             If errCode = "C1420126" Then
                 ' An image that was selected for mounting is already mounted
-                LogView.AppendText(CrLf & "The specified image is already mounted. This command works for " & Quote & "orphaned" & Quote & " images")
+                LogView.AppendText(CrLf & ProgressLogText("The.Specified.Image.Is.Already.Mounted.This.Command") & Quote & ProgressLogText("Orphaned") & Quote & ProgressLogText("Images"))
             ElseIf errCode = "C142010C" Then
                 ' The image, with read-only permissions, was attempted to be written
-                LogView.AppendText(CrLf & "The program tried to save changes to an image that was mounted as read-only. " & CrLf &
-                                          "To solve this, close this dialog, and click " & Quote & "Tools > Remount image with write permissions" & Quote & CrLf &
-                                          "Do note that, if the image came from an installation medium, you may need to copy the source file to perform modifications to it.")
+                LogView.AppendText(CrLf & ProgressLogText("The.Program.Tried.To.Save.Changes.To.An") & CrLf &
+                                          ProgressLogText("To.Solve.This.Close.This.Dialog.And.Click") & Quote & ProgressLogText("Tools.Remount.Image.With.Write.Permissions") & Quote & CrLf &
+                                          ProgressLogText("Do.Note.That.If.The.Image.Came.From"))
             ElseIf errCode = "C1420117" Then
                 ' Some applications (or hidden processes) have open handles on the mount dir
-                LogView.AppendText(CrLf & "The program tried to unmount the image, but some applications or processes have opened files or directories of the image." & CrLf &
-                                          "Make sure no application or process is using the directories or files of the image." & CrLf &
-                                          "If the error occurred at the end of the operation (e.g., at 100%), and you were trying to save the changes; they might already be saved, and can be safe to continue discarding changes.")
+                LogView.AppendText(CrLf & ProgressLogText("The.Program.Tried.To.Unmount.The.Image.But") & CrLf &
+                                          ProgressLogText("Make.Sure.No.Application.Or.Process.Is.Using") & CrLf &
+                                          ProgressLogText("If.The.Error.Occurred.At.The.End.Of"))
             ElseIf errCode = "C142011D" Then
                 ' A partial unmount or an in-progress mount operation happened
-                LogView.AppendText(CrLf & "The mounted image cannot be committed back into the source file." & CrLf &
-                                          "A partial unmount might have happened, or the image was still being mounted." & CrLf &
-                                          "If the image was unmounted whilst saving changes, the commit probably succeeded. Please validate this. If this is the case, proceed with unmounting the image discarding changes.")
+                LogView.AppendText(CrLf & ProgressLogText("The.Mounted.Image.Cannot.Be.Committed.Back.Into") & CrLf &
+                                          ProgressLogText("A.Partial.Unmount.Might.Have.Happened.Or.The") & CrLf &
+                                          ProgressLogText("If.The.Image.Was.Unmounted.Whilst.Saving.Changes"))
             ElseIf errCode = "C1510111" Then
                 ' The specified image, that was marked to mount with read-write permissions, came from a read-only source (e.g., a Windows installation disc)
-                LogView.AppendText(CrLf & "The source file comes from a read-only source. You cannot mount it with read-write permissions." & CrLf &
-                                          "Please re-specify the image in the mount dialog whilst checking the " & Quote & "Read-only" & Quote & " check box. You can also try copying the source image to a folder with read-write permissions.")
+                LogView.AppendText(CrLf & ProgressLogText("The.Source.File.Comes.From.A.Read.Only") & CrLf &
+                                          ProgressLogText("Please.Re.Specify.The.Image.In.The.Mount") & Quote & ProgressLogText("Read.Only") & Quote & ProgressLogText("Check.Box.You.Can.Also.Try.Copying.The"))
             ElseIf errCode = "00000087" Then
                 ' Internal errors
-                LogView.AppendText(CrLf & "There is essential data that was not picked internally by the operation. This may be a bug in the software or a feature may be incomplete.")
+                LogView.AppendText(CrLf & ProgressLogText("There.Is.Essential.Data.That.Was.Not.Picked"))
             ElseIf OperationNum = 26 Then
                 ' No packages have been added successfully
-                LogView.AppendText(CrLf & "No packages have been added successfully. Try looking up the error codes on the Internet")
+                LogView.AppendText(CrLf & ProgressLogText("No.Packages.Have.Been.Added.Successfully.Try.Looking"))
             ElseIf OperationNum = 27 Then
                 ' No packages have been removed successfully
-                LogView.AppendText(CrLf & "No packages have been removed successfully. Try looking up the error codes on the Internet")
+                LogView.AppendText(CrLf & ProgressLogText("No.Packages.Have.Been.Removed.Successfully.Try.Looking"))
             ElseIf OperationNum = 30 Then
                 ' No features have been enabled successfully
-                LogView.AppendText(CrLf & "No features have been enabled successfully. Try looking up the error codes on the Internet")
+                LogView.AppendText(CrLf & ProgressLogText("No.Features.Have.Been.Enabled.Successfully.Try.Looking"))
             ElseIf OperationNum = 31 Then
                 ' No features have been disabled successfully
-                LogView.AppendText(CrLf & "No features have been disabled successfully. Try looking up the error codes on the Internet")
+                LogView.AppendText(CrLf & ProgressLogText("No.Features.Have.Been.Disabled.Successfully.Try.Looking"))
             ElseIf OperationNum = 78 Then
                 ' Cause is undetermined
-                LogView.AppendText(CrLf & "Either this operation has failed or some drivers were not installed. Consider reloading this project or mode to see whether there are driver changes." & CrLf & CrLf &
-                                   "If there are driver changes, consider reading the driver installation logs, stored in the INF directory of the target image. Otherwise, export the drivers you want to add from the source image and add them to the target image manually." & CrLf & CrLf &
-                                   "You can also manually customize the export directory by deleting the drivers you don't need. This may be another way to fix this problem, but you will need to temporarily pause the driver addition procedure before it scans the export directory (this can be done by selecting anything from the DISM command prompt window that appears when performing an operation)")
+                LogView.AppendText(CrLf & ProgressLogText("Either.This.Operation.Has.Failed.Or.Some.Drivers") & CrLf & CrLf &
+                                   ProgressLogText("If.There.Are.Driver.Changes.Consider.Reading.The") & CrLf & CrLf &
+                                   ProgressLogText("You.Can.Also.Manually.Customize.The.Export.Directory"))
             ElseIf errCode = "00000001" Then
 
             ElseIf errCode = "C000013A" Then
                 ' Keyboard interrupt (Ctrl-C) or forced program closure. The former may not trigger this error, as it may trigger error 1223
-                LogView.AppendText(CrLf & "The program has suffered a keyboard interrupt, or a forced program closure. The operation has been cancelled. If you have done it accidentally, you may run it again")
+                LogView.AppendText(CrLf & ProgressLogText("The.Program.Has.Suffered.A.Keyboard.Interrupt.Or"))
             ElseIf errCode = "C2FE0101" Then
                 ' This happens on operation numbers 90, 91, and 92; related to Microsoft Edge servicing, if the components have already been installed.
                 ' Since these operation numbers are meant for different things, detect them
                 If OperationNum = 90 Then
-                    LogView.AppendText(CrLf & "The Microsoft Edge components have already been installed in this image. There isn't anything to do here.")
+                    LogView.AppendText(CrLf & ProgressLogText("The.Microsoft.Edge.Components.Have.Already.Been.Installed"))
                 ElseIf OperationNum = 91 Then
-                    LogView.AppendText(CrLf & "The Microsoft Edge browser has already been installed in this image. There isn't anything to do here.")
+                    LogView.AppendText(CrLf & ProgressLogText("The.Microsoft.Edge.Browser.Has.Already.Been.Installed"))
                 ElseIf OperationNum = 92 Then
-                    LogView.AppendText(CrLf & "The Microsoft Edge WebView2 component has already been installed in this image. There isn't anything to do here.")
+                    LogView.AppendText(CrLf & ProgressLogText("The.Microsoft.Edge.WebView2.Component.Has.Already.Been"))
                 End If
             ElseIf errCode = "800F0806" Then
                 ' There are pending image operations
-                LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
+                LogView.AppendText(CrLf & ProgressLogText("The.Operation.Could.Not.Be.Performed.Because.This"))
             ElseIf errCode = "BC2" Then
                 DynaLog.LogMessage("The task has succeded but requires a restart...")
                 If OperationNum = 86 Then
                     DynaLog.LogMessage("Rollback initiated. Restarting system automatically in 10 seconds...")
-                    LogView.AppendText(CrLf & "The rollback process has started. Your system needs to be restarted in order to continue. It will restart automatically in 10 seconds. Make sure you have saved your work.")
+                    LogView.AppendText(CrLf & ProgressLogText("The.Rollback.Process.Has.Started.Your.System.Needs"))
                     Dim restartProc As New Process()
                     restartProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\shutdown.exe"
                     restartProc.StartInfo.Arguments = "/r /t 10 /c " & Quote & "Shutdown initiated by DISMTools" & Quote
@@ -7989,7 +5091,7 @@ Public Class ProgressPanel
                     restartProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     restartProc.Start()
                 Else
-                    LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
+                    LogView.AppendText(CrLf & ProgressLogText("The.Specified.Operation.Completed.Successfully.But.Requires.A"))
                 End If
             Else
                 Try
@@ -7997,35 +5099,11 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & CrLf & exitDesc.Message)
                 Catch ex As Exception
                     ' Errors that weren't added to the database
-                    LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
+                    LogView.AppendText(CrLf & ProgressLogText("This.Error.Has.Not.Yet.Been.Added.To"))
                 End Try
             End If
-            LogView.AppendText(CrLf & CrLf & "For detailed information, consider reading the DISM operation logs.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MainForm.MenuDesc.Text = "Ready"
-                        Case "ESN"
-                            MainForm.MenuDesc.Text = "Listo"
-                        Case "FRA"
-                            MainForm.MenuDesc.Text = "Prêt"
-                        Case "PTB", "PTG"
-                            MainForm.MenuDesc.Text = "Pronto"
-                        Case "ITA"
-                            MainForm.MenuDesc.Text = "Pronto"
-                    End Select
-                Case 1
-                    MainForm.MenuDesc.Text = "Ready"
-                Case 2
-                    MainForm.MenuDesc.Text = "Listo"
-                Case 3
-                    MainForm.MenuDesc.Text = "Prêt"
-                Case 4
-                    MainForm.MenuDesc.Text = "Pronto"
-                Case 5
-                    MainForm.MenuDesc.Text = "Pronto"
-            End Select
+            LogView.AppendText(CrLf & CrLf & ProgressLogText("For.Detailed.Information.Consider.Reading.The.DISM.Operation"))
+            MainForm.MenuDesc.Text = LocalizationService.ForSection("Progress.Background")("Ready.Item")
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
             SaveDismOutput(Application.StartupPath & "\logs\DISM_Output_" & Date.Now.ToString("yy-MM-dd-HH-mm-ss") & ".log")
@@ -8049,101 +5127,15 @@ Public Class ProgressPanel
     Private Sub ProgressPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         EnableExperiments = MainForm.EnableExperiments
         DynaLog.LogMessage("Preparing to start image operations...")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Progress"
-                        Label1.Text = "Image operations in progress..."
-                        Label2.Text = "Please wait while the following tasks are done. This may take some time."
-                        Cancel_Button.Text = "Cancel"
-                        LogButton.Text = If(Not IsExpanded, "Show log", "Hide log")
-                        LinkLabel1.Text = "Show DISM log file (advanced)"
-                        allTasks.Text = "Please wait..."
-                        currentTask.Text = "Please wait..."
-                    Case "ESN"
-                        Text = "Progreso"
-                        Label1.Text = "Operaciones en progreso..."
-                        Label2.Text = "Espere mientras las siguientes tareas se realizan. Esto puede llevar algo de tiempo."
-                        Cancel_Button.Text = "Cancelar"
-                        LogButton.Text = If(Not IsExpanded, "Mostrar registro", "Ocultar registro")
-                        LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
-                        allTasks.Text = "Por favor, espere..."
-                        currentTask.Text = "Por favor, espere..."
-                    Case "FRA"
-                        Text = "Avancement"
-                        Label1.Text = "Opérations de l'image en cours..."
-                        Label2.Text = "Veuillez patienter pendant que les tâches suivantes sont effectuées. Cela peut prendre un certain temps."
-                        Cancel_Button.Text = "Annuler"
-                        LogButton.Text = If(Not IsExpanded, "Afficher le journal", "Cacher le journal")
-                        LinkLabel1.Text = "Afficher le fichier journal DISM (avancé)"
-                        allTasks.Text = "Veuillez patienter..."
-                        currentTask.Text = "Veuillez patienter..."
-                    Case "PTB", "PTG"
-                        Text = "Progresso"
-                        Label1.Text = "Operações de imagem em curso..."
-                        Label2.Text = "Aguarde enquanto as seguintes tarefas são efectuadas. Isto pode demorar algum tempo"
-                        Cancel_Button.Text = "Cancelar"
-                        LogButton.Text = If(Not IsExpanded, " Mostrar registo", "Ocultar registo")
-                        LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
-                        allTasks.Text = "Aguarde..."
-                        currentTask.Text = "Por favor, aguarde..."
-                    Case "ITA"
-                        Text = "Progresso"
-                        Label1.Text = "Operazioni immagine..."
-                        Label2.Text = "Attendi mentre vengono eseguite le operazioni. L'operazione potrebbe richiedere del tempo"
-                        Cancel_Button.Text = "Annulla"
-                        LogButton.Text = If(Not IsExpanded, " Visualizza registro", "Nascondi registro")
-                        LinkLabel1.Text = "Visualizza il file registro DISM (avanzato)"
-                        allTasks.Text = "Attendi..."
-                        currentTask.Text = "Attendi..."
-                End Select
-            Case 1
-                Text = "Progress"
-                Label1.Text = "Image operations in progress..."
-                Label2.Text = "Please wait while the following tasks are done. This may take some time."
-                Cancel_Button.Text = "Cancel"
-                LogButton.Text = If(Not IsExpanded, "Show log", "Hide log")
-                LinkLabel1.Text = "Show DISM log file (advanced)"
-                allTasks.Text = "Please wait..."
-                currentTask.Text = "Please wait..."
-            Case 2
-                Text = "Progreso"
-                Label1.Text = "Operaciones en progreso..."
-                Label2.Text = "Espere mientras las siguientes tareas se realizan. Esto puede llevar algo de tiempo."
-                Cancel_Button.Text = "Cancelar"
-                LogButton.Text = If(Not IsExpanded, "Mostrar registro", "Ocultar registro")
-                LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
-                allTasks.Text = "Por favor, espere..."
-                currentTask.Text = "Por favor, espere..."
-            Case 3
-                Text = "Avancement"
-                Label1.Text = "Opérations de l'image en cours..."
-                Label2.Text = "Veuillez patienter pendant que les tâches suivantes sont effectuées. Cela peut prendre un certain temps."
-                Cancel_Button.Text = "Annuler"
-                LogButton.Text = If(Not IsExpanded, "Afficher le journal", "Cacher le journal")
-                LinkLabel1.Text = "Afficher le fichier journal DISM (avancé)"
-                allTasks.Text = "Veuillez patienter..."
-                currentTask.Text = "Veuillez patienter..."
-            Case 4
-                Text = "Progresso"
-                Label1.Text = "Operações de imagem em curso..."
-                Label2.Text = "Aguarde enquanto as seguintes tarefas são efectuadas. Isto pode demorar algum tempo"
-                Cancel_Button.Text = "Cancelar"
-                LogButton.Text = If(Not IsExpanded, " Mostrar registo", "Ocultar registo")
-                LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
-                allTasks.Text = "Aguarde..."
-                currentTask.Text = "Por favor, aguarde..."
-            Case 5
-                Text = "Progresso"
-                Label1.Text = "Operazioni immagine..."
-                Label2.Text = "Attendi mentre vengono eseguite le operazioni. L'operazione potrebbe richiedere del tempo"
-                Cancel_Button.Text = "Annulla"
-                LogButton.Text = If(Not IsExpanded, " Visualizza registro", "Nascondi registro")
-                LinkLabel1.Text = "Visualizza il file registro DISM (avanzato)"
-                allTasks.Text = "Attendi..."
-                currentTask.Text = "Attendi..."
-        End Select
+        Text = LocalizationService.ForSection("Progress")("Progress.Label")
+        Label1.Text = LocalizationService.ForSection("Progress")("Image.Operations.Label")
+        Label2.Text = LocalizationService.ForSection("Progress")("Wait.Tasks.Label")
+        CancelButtonClosesDialog = False
+        Cancel_Button.Text = LocalizationService.ForSection("Progress")("Cancel.Button")
+        LogButton.Text = If(Not IsExpanded, LocalizationService.ForSection("Progress")("ShowLog.Label"), LocalizationService.ForSection("Progress")("HideLog.Label"))
+        LinkLabel1.Text = LocalizationService.ForSection("Progress")("Show.Dismlog.File.Link")
+        allTasks.Text = LocalizationService.ForSection("Progress")("Wait.Label")
+        currentTask.Text = LocalizationService.ForSection("Progress")("CurrentTask.Label")
         PrepareAllReporters()
         If MainForm.ExpandedProgressPanel AndAlso Not IsExpanded Then
             LogButton.PerformClick()
@@ -8158,7 +5150,6 @@ Public Class ProgressPanel
         MainForm.bwBackgroundProcessAction = 0
         MainForm.bwGetImageInfo = True
         MainForm.bwGetAdvImgInfo = True
-        Language = MainForm.Language
         AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
         If MainForm.CurrentImage IsNot Nothing Then
@@ -8193,7 +5184,7 @@ Public Class ProgressPanel
             ' Make form visible sooner. We may have to set more things up here,
             ' but we'll see
             Visible = True
-            LogView.AppendText("Cancelling background processes...")
+            LogView.AppendText(ProgressLogText("Cancelling.Background.Processes"))
             MainForm.ImgBW.CancelAsync()
             While MainForm.ImgBW.IsBusy
                 Application.DoEvents()
@@ -8229,31 +5220,7 @@ Public Class ProgressPanel
             LogView.Font = New Font("Consolas", 11.25)
         End Try
         DISM_LogView.Font = LogView.Font
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
-                    Case "ESN"
-                        MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
-                    Case "FRA"
-                        MainForm.MenuDesc.Text = "Exécution d'opérations sur les images en cours. Veuillez patienter..."
-                    Case "PTB", "PTG"
-                        MainForm.MenuDesc.Text = "Realização de operações de imagem. Por favor, aguarde..."
-                    Case "ITA"
-                        MainForm.MenuDesc.Text = "Esecuzione operazioni sulle immagini..."
-                End Select
-            Case 1
-                MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
-            Case 2
-                MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
-            Case 3
-                MainForm.MenuDesc.Text = "Exécution d'opérations sur les images en cours. Veuillez patienter..."
-            Case 4
-                MainForm.MenuDesc.Text = "Realização de operações de imagem. Por favor, aguarde..."
-            Case 5
-                MainForm.MenuDesc.Text = "Esecuzione operazioni sulle immagini..."
-        End Select
+        MainForm.MenuDesc.Text = LocalizationService.ForSection("Progress")("Performing.Image.Ops.Button")
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(3)
         If Debugger.IsAttached Then
             IsDebugged = True
@@ -8299,31 +5266,7 @@ Public Class ProgressPanel
         If TaskList.Count >= 2 Then
             DynaLog.LogMessage("More than 2 tasks will be made.")
             AllPB.Maximum = TaskList.Count * 100
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
-                        Case "FRA"
-                            taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
-                        Case "PTB", "PTG"
-                            taskCountLbl.Text = "Tarefas: 1/" & TaskList.Count
-                        Case "ITA"
-                            taskCountLbl.Text = "Attività: 1/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
-                Case 2
-                    taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
-                Case 3
-                    taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
-                Case 4
-                    taskCountLbl.Text = "Tarefas: 1/" & TaskList.Count
-                Case 5
-                    taskCountLbl.Text = "Attività: 1/" & TaskList.Count
-            End Select
+            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("TaskCount.Label", TaskList.Count)
             OperationNum = 1000
         Else
             DynaLog.LogMessage("Getting the tasks of the specified operation...")
@@ -8336,7 +5279,7 @@ Public Class ProgressPanel
             RegistryControlPanel.Close()
             If RegistryControlPanel.Visible Then
                 DynaLog.LogMessage("Second check determined the image registry control panel is still open. Cannot continue performing tasks until it's closed")
-                LogView.AppendText(CrLf & "The image registry hives need to be unloaded before continuing to perform the task.")
+                LogView.AppendText(CrLf & ProgressLogText("The.Image.Registry.Hives.Need.To.Be.Unloaded"))
             End If
         End If
         If Not RegistryControlPanel.Visible Then
@@ -8362,10 +5305,10 @@ Public Class ProgressPanel
         Catch ex As Exception
             If Not File.Exists(SystemEditor) Then
                 DynaLog.LogMessage("The system editor was not found on this system.")
-                LogView.AppendText(CrLf & "System editor was not found")
+                LogView.AppendText(CrLf & ProgressLogText("System.Editor.Was.Not.Found"))
             ElseIf Not File.Exists(Application.StartupPath & "\logs\" & dateStr) Or Not File.Exists(LogPath) Then
                 DynaLog.LogMessage("The log file is not found on this system.")
-                LogView.AppendText(CrLf & "The log file was not found")
+                LogView.AppendText(CrLf & ProgressLogText("The.Log.File.Was.Not.Found"))
             End If
         End Try
     End Sub
@@ -8375,31 +5318,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        MainForm.MenuDesc.Text = "Ready"
-                    Case "ESN"
-                        MainForm.MenuDesc.Text = "Listo"
-                    Case "FRA"
-                        MainForm.MenuDesc.Text = "Prêt"
-                    Case "PTB", "PTG"
-                        MainForm.MenuDesc.Text = "Pronto"
-                    Case "ITA"
-                        MainForm.MenuDesc.Text = "Pronto"
-                End Select
-            Case 1
-                MainForm.MenuDesc.Text = "Ready"
-            Case 2
-                MainForm.MenuDesc.Text = "Listo"
-            Case 3
-                MainForm.MenuDesc.Text = "Prêt"
-            Case 4
-                MainForm.MenuDesc.Text = "Pronto"
-            Case 5
-                MainForm.MenuDesc.Text = "Pronto"
-        End Select
+        MainForm.MenuDesc.Text = LocalizationService.ForSection("Progress.Close")("Ready.Label")
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.StartMountedImageDetector()
     End Sub
@@ -8426,61 +5345,13 @@ Public Class ProgressPanel
 
     Private Sub LogSwitcherPic1_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic1.MouseHover
         Dim olcText As String = ""
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        olcText = "Operation Logs"
-                    Case "ESN"
-                        olcText = "Registros de operación"
-                    Case "FRA"
-                        olcText = "Journal des opérations"
-                    Case "PTB", "PTG"
-                        olcText = "Registos de operações"
-                    Case "ITA"
-                        olcText = "Registri operazioni"
-                End Select
-            Case 1
-                olcText = "Operation Logs"
-            Case 2
-                olcText = "Registros de operación"
-            Case 3
-                olcText = "Journal des opérations"
-            Case 4
-                olcText = "Registos de operações"
-            Case 5
-                olcText = "Registri operazioni"
-        End Select
+                olcText = LocalizationService.ForSection("Progress.Logs.Operation")("Label")
         WindowHelper.DisplayToolTip(sender, olcText)
     End Sub
 
     Private Sub LogSwitcherPic2_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic2.MouseHover
         Dim olcText As String = ""
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        olcText = "DISM Output"
-                    Case "ESN"
-                        olcText = "Salida de DISM"
-                    Case "FRA"
-                        olcText = "Sortie DISM"
-                    Case "PTB", "PTG"
-                        olcText = "Saída DISM"
-                    Case "ITA"
-                        olcText = "Output DISM"
-                End Select
-            Case 1
-                olcText = "DISM Output"
-            Case 2
-                olcText = "Salida de DISM"
-            Case 3
-                olcText = "Sortie DISM"
-            Case 4
-                olcText = "Saída DISM"
-            Case 5
-                olcText = "Uscita DISM"
-        End Select
+                olcText = LocalizationService.ForSection("Progress.Logs.DismOutput")("Label")
         WindowHelper.DisplayToolTip(sender, olcText)
     End Sub
 

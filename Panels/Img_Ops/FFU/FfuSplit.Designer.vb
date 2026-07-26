@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class FfuSplit
     Inherits System.Windows.Forms.Form
 
@@ -65,7 +65,7 @@ Partial Class FfuSplit
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.FFUSplit")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -76,7 +76,7 @@ Partial Class FfuSplit
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUSplit")("Cancel.Button")
         '
         'ImageTaskHeader1
         '
@@ -99,7 +99,7 @@ Partial Class FfuSplit
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox1.TabIndex = 29
-        Me.CheckBox1.Text = "Check image integrity"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.FFUSplit")("Integrity.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'NumericUpDown1
@@ -119,7 +119,7 @@ Partial Class FfuSplit
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 26
-        Me.Button2.Text = "Browse..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.FFUSplit")("Browse.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -129,7 +129,7 @@ Partial Class FfuSplit
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 27
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.FFUSplit")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label5
@@ -141,8 +141,7 @@ Partial Class FfuSplit
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(603, 34)
         Me.Label5.TabIndex = 22
-        Me.Label5.Text = "Do note that, to accommodate a large file in the image, a split image file may be" & _
-    " larger than the specified value"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.FFUSplit")("LargeFile.Note.Message")
         '
         'Label4
         '
@@ -151,7 +150,7 @@ Partial Class FfuSplit
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(183, 13)
         Me.Label4.TabIndex = 23
-        Me.Label4.Text = "Maximum size of split images (in MB):"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.FFUSplit")("Maximum.Size.Images.Label")
         '
         'Label3
         '
@@ -160,7 +159,7 @@ Partial Class FfuSplit
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(225, 13)
         Me.Label3.TabIndex = 24
-        Me.Label3.Text = "Name and path of the destination split image:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.FFUSplit")("Name.Path.Destination.Label")
         '
         'TextBox2
         '
@@ -176,7 +175,7 @@ Partial Class FfuSplit
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(110, 13)
         Me.Label2.TabIndex = 25
-        Me.Label2.Text = "Source image to split:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.FFUSplit")("Source.Image.Label")
         '
         'TextBox1
         '
@@ -187,13 +186,13 @@ Partial Class FfuSplit
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "SFU files|*.sfu"
-        Me.SaveFileDialog1.Title = "Specify the target location of the split images:"
+        Me.SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUSplit")("Sfufiles.Filter")
+        Me.SaveFileDialog1.Title = LocalizationService.ForSection("Designer.FFUSplit")("Target.Location.Title")
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Full Flash Utility files|*.ffu"
-        Me.OpenFileDialog1.Title = "Specify the source WIM file to split:"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUSplit")("Full.Flash.Utility.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.FFUSplit")("Source.WIM.File.Title")
         '
         'FfuSplit
         '
@@ -221,7 +220,7 @@ Partial Class FfuSplit
         Me.Name = "FfuSplit"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Split FFU images"
+        Me.Text = LocalizationService.ForSection("Designer.FFUSplit")("SplitFfuimages.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

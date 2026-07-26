@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Net
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO.Compression
@@ -49,7 +49,7 @@ Public Class MainForm
     End Sub
 
     Private Sub minBox_MouseHover(sender As Object, e As EventArgs) Handles minBox.MouseHover
-        btnToolTip.SetToolTip(sender, "Minimize")
+        btnToolTip.SetToolTip(sender, LocalizationService.ForSection("Updater.Main")("Minimize.Label"))
     End Sub
 
     Private Sub minBox_Click(sender As Object, e As EventArgs) Handles minBox.Click
@@ -73,7 +73,7 @@ Public Class MainForm
     End Sub
 
     Private Sub closeBox_MouseHover(sender As Object, e As EventArgs) Handles closeBox.MouseHover
-        btnToolTip.SetToolTip(sender, "Close")
+        btnToolTip.SetToolTip(sender, LocalizationService.ForSection("Updater.Main")("Close.Label"))
     End Sub
 
     Private Sub closeBox_Click(sender As Object, e As EventArgs) Handles closeBox.Click
@@ -107,7 +107,7 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Control.CheckForIllegalCrossThreadCalls = False
         If File.Exists(Application.StartupPath & "\portable") Then IsPortable = True
-        Label1.Text = "DISMTools Update Check System - Version " & Application.ProductVersion
+        Label1.Text = LocalizationService.ForSection("Updater.Main").Format("DISM.Tools.Update.Label", Application.ProductVersion)
         If Directory.Exists(Application.StartupPath & "\new") Then Directory.Delete(Application.StartupPath & "\new", True)
         GetArguments()
         Try
@@ -172,7 +172,7 @@ Public Class MainForm
 
     Sub GetArguments()
         If Environment.GetCommandLineArgs.Length = 1 Then
-            MsgBox("The branch parameter is necessary to be able to check for updates", vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("Updater.Main.Messages")("BranchRequired.Message"), vbOKOnly + vbCritical, Text)
             Environment.Exit(1)
         Else
             Dim args() As String = Environment.GetCommandLineArgs()
@@ -198,7 +198,7 @@ Public Class MainForm
         ProgressBar1.Value = e.ProgressPercentage
         Label4.Text = msg
         If e.ProgressPercentage = 100 Then
-            Label3.Text = "Update information"
+            Label3.Text = LocalizationService.ForSection("Updater.Main")("UpdateInfo.Label")
             Label6.Text = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").FileVersion.ToString() & " → " & latestVer
             Panel1.Visible = True
             Label4.Visible = False
@@ -212,7 +212,7 @@ Public Class MainForm
             Try
                 client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt-update-files/refs/heads/main/" & If(branch.Contains("pre"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
-                MsgBox("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, Text)
+                MsgBox(LocalizationService.ForSection("Updater.Main.Messages").Format("Couldn.Tfetch.Label", ex.Status.ToString()), vbOKOnly + vbCritical, Text)
                 Environment.Exit(1)
             End Try
             If File.Exists(Application.StartupPath & "\info.ini") Then
@@ -247,7 +247,7 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\DISMTools.exe") Then
             Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
             If fv = latestVer Or New Version(fv) > New Version(latestVer) Then
-                MsgBox("There aren't any updates available", vbOKOnly + vbInformation, Text)
+                MsgBox(LocalizationService.ForSection("Updater.Main.Messages")("Updates.Available.None.Label"), vbOKOnly + vbInformation, Text)
                 End
             Else
                 ReleaseFetcherBW.ReportProgress(100)
@@ -284,7 +284,7 @@ Public Class MainForm
         UpdaterBW.ReportProgress(5)
         DownloadAsync().Wait()
         Threading.Thread.Sleep(500)
-        Label10.Text = "Downloading the update"
+        Label10.Text = LocalizationService.ForSection("Updater.Main")("Downloading.Update.Label")
         Label10.ForeColor = Color.Gray
         Label11.ForeColor = ForeColor
         Label12.ForeColor = Color.Gray
@@ -298,7 +298,7 @@ Public Class MainForm
         PictureBox3.Visible = False
         PictureBox4.Visible = False
         PrepareUpdateInstallation()
-        Label11.Text = "Preparing update installation"
+        Label11.Text = LocalizationService.ForSection("Updater.Main")("Prepare.Update.Install.Label")
         Label10.ForeColor = Color.Gray
         Label11.ForeColor = Color.Gray
         Label12.ForeColor = ForeColor
@@ -312,7 +312,7 @@ Public Class MainForm
         PictureBox3.Visible = False
         PictureBox4.Visible = False
         InstallUpdate()
-        Label12.Text = "Installing the update"
+        Label12.Text = LocalizationService.ForSection("Updater.Main")("InstallingUpdate.Label")
         PictureBox1.Visible = True
         PictureBox2.Visible = True
         PictureBox3.Visible = True
@@ -347,7 +347,7 @@ Public Class MainForm
 
     Private Sub UpdaterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UpdaterBW.RunWorkerCompleted
         If e.Error IsNot Nothing Then
-            MsgBox(e.Error.ToString() & CrLf & CrLf & "Your current version of DISMTools may no longer work correctly if you continue using it. It is recommended that you download the latest version manually and extract/install it manually." & CrLf & CrLf & "Do not worry. Your settings are kept intact.", vbOKOnly + vbExclamation, Text)
+            MsgBox(e.Error.ToString() & CrLf & CrLf & LocalizationService.ForSection("Updater.Main.Validation")("CurrentVersion.Warning"), vbOKOnly + vbExclamation, Text)
             ' Stop process launch
             Exit Sub
         End If
@@ -369,7 +369,7 @@ Public Class MainForm
 
     Async Function DownloadReleaseAsync(url As String, path As String, worker As System.ComponentModel.BackgroundWorker) As Task(Of Integer)
         AddHandler ReleaseDownloader.DownloadProgressChanged, Sub(sender, e)
-                                                                  Label10.Text = "Downloading the update (" & e.ProgressPercentage & "%)"
+                                                                  Label10.Text = LocalizationService.ForSection("Updater.Main").Format("Downloading.Download.Label", e.ProgressPercentage)
                                                                   worker.ReportProgress(e.ProgressPercentage)
                                                               End Sub
         Dim data As Byte() = Await ReleaseDownloader.DownloadDataTaskAsync(url)
@@ -402,7 +402,7 @@ Public Class MainForm
             UpdaterBW.ReportProgress(25)
             ExpandContents()
         End If
-        Label11.Text = "Preparing update installation (80%)"
+        Label11.Text = LocalizationService.ForSection("Updater.Main")("Preparing.Install.Item")
         msg = "Waiting for processes to close..."
         UpdaterBW.ReportProgress(47.5)
         CloseMainProcess()
@@ -438,7 +438,7 @@ Public Class MainForm
                     End If
                     ExtractedEntries += 1
                     Dim progress As Double = CDbl(ExtractedEntries / TotalEntries)
-                    Label11.Text = "Preparing update installation (" & Math.Round(80 * progress, 0) & "%)"
+                    Label11.Text = LocalizationService.ForSection("Updater.Main").Format("Preparing.Install.Label", Math.Round(80 * progress, 0))
                 Next
             End Using
         Catch ex As Exception
@@ -455,7 +455,7 @@ Public Class MainForm
                 Application.DoEvents()
                 Threading.Thread.Sleep(500)
             Loop
-            Label11.Text = "Preparing update installation (100%)"
+            Label11.Text = LocalizationService.ForSection("Updater.Main")("Prepare.Update.Install.Item")
             Exit Sub
         Else
             Dim Procs() As Process = Process.GetProcessesByName("DISMTools")
@@ -466,13 +466,13 @@ Public Class MainForm
                     Threading.Thread.Sleep(500)
                 Loop
             Next
-            Label11.Text = "Preparing update installation (100%)"
+            Label11.Text = LocalizationService.ForSection("Updater.Main")("Prepare.Update.Install.Item")
             Exit Sub
         End If
     End Sub
 
     Sub BackupInstallation()
-        Label12.Text = "Installing the update (0%)"
+        Label12.Text = LocalizationService.ForSection("Updater.Main")("Installing.Update.Item")
         FileCount = Directory.GetFiles(Application.StartupPath, "*", SearchOption.AllDirectories).Length
         CopiedFiles = 0
         FileCount -= (1 + If(Directory.Exists(Application.StartupPath & "\logs"), Directory.GetFiles(Application.StartupPath & "\logs", "*", SearchOption.AllDirectories).Length, 0) + _
@@ -483,7 +483,7 @@ Public Class MainForm
         For Each DLLFile In Directory.GetFiles(Application.StartupPath, "*.dll")
             File.Copy(DLLFile, Path.Combine(Application.StartupPath, "old", Path.GetFileName(DLLFile)), True)
             CopiedFiles += 1
-            Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
+            Label12.Text = LocalizationService.ForSection("Updater.Main").Format("Installing.Update.Label", Math.Round(30 * (CopiedFiles / FileCount), 0))
         Next
         DirCopy(Application.StartupPath & "\AutoReload", Application.StartupPath & "\old\AutoReload", True, False)
         DirCopy(Application.StartupPath & "\AutoUnattend", Application.StartupPath & "\old\AutoUnattend", True, False)
@@ -496,7 +496,7 @@ Public Class MainForm
         File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE", True)
         File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe", True)
         CopiedFiles += 2
-        Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
+        Label12.Text = LocalizationService.ForSection("Updater.Main").Format("Installing.Update.Label", Math.Round(30 * (CopiedFiles / FileCount), 0))
     End Sub
 
     Sub DirCopy(sourceDir As String, destDir As String, ovr As Boolean, Backup As Boolean)
@@ -513,7 +513,7 @@ Public Class MainForm
                 Dim tempPath As String = Path.Combine(destDir, DirFile.Name)
                 DirFile.CopyTo(tempPath, ovr)
                 CopiedFiles += 1
-                Label12.Text = "Installing the update (" & If(Backup, Math.Round(30 * (CopiedFiles / FileCount), 0), 30 + Math.Round(70 * (CopiedFiles / FileCount), 0)) & "%)"
+                Label12.Text = LocalizationService.ForSection("Updater.Main").Format("Installing.Update.Label", If(Backup, Math.Round(30 * (CopiedFiles / FileCount), 0), 30 + Math.Round(70 * (CopiedFiles / FileCount), 0)))
             Next
             Dim dirs As DirectoryInfo() = dir.GetDirectories()
             For Each subDir As DirectoryInfo In dirs
@@ -548,7 +548,7 @@ Public Class MainForm
             If Installer.ExitCode <> 0 Then
                 Debug.WriteLine("An error occured installing the new version.")
             End If
-            Label12.Text = "Installing the update (100%)"
+            Label12.Text = LocalizationService.ForSection("Updater.Main")("InstallingComplete.Item")
             Exit Sub
         End If
         ' Count everything in there except for DISMTools.zip and the portable file
@@ -558,7 +558,7 @@ Public Class MainForm
             If Path.GetFileName(rootFile) <> "DISMTools.zip" And Path.GetFileName(rootFile) <> "portable" Then
                 File.Copy(rootFile, Path.Combine(Application.StartupPath, Path.GetFileName(rootFile)), True)
                 CopiedFiles += 1
-                Label12.Text = "Installing the update (" & 30 + Math.Round(70 * (CopiedFiles / FileCount), 0) & "%)"
+                Label12.Text = LocalizationService.ForSection("Updater.Main").Format("Installing.Update.Label", 30 + Math.Round(70 * (CopiedFiles / FileCount), 0))
             End If
         Next
         DirCopy(Application.StartupPath & "\new\AutoReload", Application.StartupPath & "\AutoReload", True, False)

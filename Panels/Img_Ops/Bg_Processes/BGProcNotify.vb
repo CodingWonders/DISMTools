@@ -1,4 +1,4 @@
-﻿Imports System.Threading
+Imports System.Threading
 
 Public Class BGProcNotify
 
@@ -6,41 +6,8 @@ Public Class BGProcNotify
 
     Private Sub BGProcNotify_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Opacity = 100
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label1.Text = "This project has been loaded successfully"
-                        Label2.Text = "The program is now gathering image information in the background. This may take some time."
-                    Case "ESN"
-                        Label1.Text = "Este proyecto ha sido cargado satisfactoriamente"
-                        Label2.Text = "El programa está recopilando información de la imagen en segundo plano. Esto podría llevar algo de tiempo."
-                    Case "FRA"
-                        Label1.Text = "Ce projet a été chargé avec succès"
-                        Label2.Text = "Le programme recueille maintenant des informations sur l'image en arrière-plan. Cela peut prendre un certain temps."
-                    Case "PTB", "PTG"
-                        Label1.Text = "Este projeto foi carregado com sucesso"
-                        Label2.Text = "O programa está agora a recolher informações sobre a imagem em segundo plano. Isto pode demorar algum tempo"
-                    Case "ITA"
-                        Label1.Text = "Il progetto è stato caricato con successo"
-                        Label2.Text = "Il programma sta raccogliendo informazioni sull'immagine in background. Questa operazione potrebbe richiedere del tempo"
-                End Select
-            Case 1
-                Label1.Text = "This project has been loaded successfully"
-                Label2.Text = "The program is now gathering image information in the background. This may take some time."
-            Case 2
-                Label1.Text = "Este proyecto ha sido cargado satisfactoriamente"
-                Label2.Text = "El programa está recopilando información de la imagen en segundo plano. Esto podría llevar algo de tiempo."
-            Case 3
-                Label1.Text = "Ce projet a été chargé avec succès"
-                Label2.Text = "Le programme recueille maintenant des informations sur l'image en arrière-plan. Cela peut prendre un certain temps."
-            Case 4
-                Label1.Text = "Este projeto foi carregado com sucesso"
-                Label2.Text = "O programa está agora a recolher informações sobre a imagem em segundo plano. Isto pode demorar algum tempo"
-            Case 5
-                Label1.Text = "Il progetto è stato caricato con successo"
-                Label2.Text = "Il programma sta raccogliendo informazioni sull'immagine in background. Questa operazione potrebbe richiedere del tempo"
-        End Select
+        Label1.Text = LocalizationService.ForSection("BGProcNotify")("Project.Loaded.Done.Label")
+        Label2.Text = LocalizationService.ForSection("BGProcNotify")("Gathering.Image.Label")
         If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
             Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - (7 + MainForm.StatusStrip.Height))
         ElseIf Environment.OSVersion.Version.Major = 6 Then

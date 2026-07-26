@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AddProvAppxPackage
     Inherits System.Windows.Forms.Form
 
@@ -116,7 +116,7 @@ Partial Class AddProvAppxPackage
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.AppxProvision")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -127,7 +127,7 @@ Partial Class AddProvAppxPackage
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.AppxProvision")("Cancel.Button")
         '
         'AppxDetailsPanel
         '
@@ -158,8 +158,7 @@ Partial Class AddProvAppxPackage
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(527, 30)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Select an entry in the list view to show the details of an app and to configure a" & _
-    "ddition settings"
+        Me.Label6.Text = LocalizationService.ForSection("Designer.AppxProvision")("Entry.List.View.Message")
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AppxFilePanel
@@ -195,7 +194,7 @@ Partial Class AddProvAppxPackage
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(434, 13)
         Me.Label9.TabIndex = 0
-        Me.Label9.Text = "AppxVersion"
+        Me.Label9.Text = LocalizationService.ForSection("Designer.AppxProvision")("AppxVersion.Label")
         '
         'Label8
         '
@@ -207,7 +206,7 @@ Partial Class AddProvAppxPackage
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(434, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "AppxPublisher"
+        Me.Label8.Text = LocalizationService.ForSection("Designer.AppxProvision")("AppxPublisher.Label")
         '
         'Label7
         '
@@ -219,7 +218,7 @@ Partial Class AddProvAppxPackage
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(434, 19)
         Me.Label7.TabIndex = 0
-        Me.Label7.Text = "AppxTitle"
+        Me.Label7.Text = LocalizationService.ForSection("Designer.AppxProvision")("AppxTitle.Label")
         '
         'TableLayoutPanel2
         '
@@ -250,7 +249,7 @@ Partial Class AddProvAppxPackage
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(119, 22)
         Me.Button9.TabIndex = 3
-        Me.Button9.Text = "Remove selected entry"
+        Me.Button9.Text = LocalizationService.ForSection("Designer.AppxProvision")("Remove.Selected.Entry.Button")
         Me.Button9.UseVisualStyleBackColor = True
         '
         'Button3
@@ -262,7 +261,7 @@ Partial Class AddProvAppxPackage
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(120, 22)
         Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Remove all entries"
+        Me.Button3.Text = LocalizationService.ForSection("Designer.AppxProvision")("Remove.Entries.Button")
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button2
@@ -273,7 +272,7 @@ Partial Class AddProvAppxPackage
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(119, 22)
         Me.Button2.TabIndex = 1
-        Me.Button2.Text = "Add folder..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.AppxProvision")("AddFolder.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button1
@@ -284,7 +283,7 @@ Partial Class AddProvAppxPackage
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(119, 22)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Add file..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.AppxProvision")("AddFile.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'ListView1
@@ -304,27 +303,27 @@ Partial Class AddProvAppxPackage
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "File/Folder"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.AppxProvision")("FileFolder.Column")
         Me.ColumnHeader1.Width = 343
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Type"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.AppxProvision")("Type.Column")
         Me.ColumnHeader2.Width = 120
         '
         'ColumnHeader3
         '
-        Me.ColumnHeader3.Text = "Application name"
+        Me.ColumnHeader3.Text = LocalizationService.ForSection("Designer.AppxProvision")("ApplicationName.Column")
         Me.ColumnHeader3.Width = 139
         '
         'ColumnHeader4
         '
-        Me.ColumnHeader4.Text = "Application publisher"
+        Me.ColumnHeader4.Text = LocalizationService.ForSection("Designer.AppxProvision")("App.Publisher.Column")
         Me.ColumnHeader4.Width = 275
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Application version"
+        Me.ColumnHeader5.Text = LocalizationService.ForSection("Designer.AppxProvision")("App.Version.Column")
         Me.ColumnHeader5.Width = 162
         '
         'Label2
@@ -335,8 +334,7 @@ Partial Class AddProvAppxPackage
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(507, 30)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dro" & _
-    "pping them to the list view below:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.AppxProvision")("Packages.Required.Message")
         '
         'GroupBox2
         '
@@ -348,7 +346,7 @@ Partial Class AddProvAppxPackage
         Me.GroupBox2.Size = New System.Drawing.Size(504, 221)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "AppX dependencies"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.AppxProvision")("AppxDependencies.Group")
         '
         'Panel3
         '
@@ -398,7 +396,7 @@ Partial Class AddProvAppxPackage
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(156, 22)
         Me.Button4.TabIndex = 2
-        Me.Button4.Text = "Remove all dependencies"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.AppxProvision")("Remove.Dependencies.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button5
@@ -410,7 +408,7 @@ Partial Class AddProvAppxPackage
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(155, 22)
         Me.Button5.TabIndex = 1
-        Me.Button5.Text = "Remove dependency"
+        Me.Button5.Text = LocalizationService.ForSection("Designer.AppxProvision")("RemoveDependency.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button6
@@ -421,7 +419,7 @@ Partial Class AddProvAppxPackage
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(155, 22)
         Me.Button6.TabIndex = 0
-        Me.Button6.Text = "Add dependency..."
+        Me.Button6.Text = LocalizationService.ForSection("Designer.AppxProvision")("AddDependency.Button")
         Me.Button6.UseVisualStyleBackColor = True
         '
         'Label3
@@ -432,8 +430,7 @@ Partial Class AddProvAppxPackage
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(491, 30)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If s" & _
-    "o, you can specify a list of dependencies now:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.AppxProvision")("Package.Message")
         '
         'CheckBox1
         '
@@ -443,7 +440,7 @@ Partial Class AddProvAppxPackage
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(110, 17)
         Me.CheckBox1.TabIndex = 7
-        Me.CheckBox1.Text = "Custom data file:"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.AppxProvision")("CustomDataFile.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -464,7 +461,7 @@ Partial Class AddProvAppxPackage
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 9
-        Me.Button7.Text = "Browse..."
+        Me.Button7.Text = LocalizationService.ForSection("Designer.AppxProvision")("Browse.Button")
         Me.Button7.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -485,7 +482,7 @@ Partial Class AddProvAppxPackage
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(75, 23)
         Me.Button8.TabIndex = 9
-        Me.Button8.Text = "Browse..."
+        Me.Button8.Text = LocalizationService.ForSection("Designer.AppxProvision")("Browse.Button")
         Me.Button8.UseVisualStyleBackColor = True
         '
         'GroupBox3
@@ -499,7 +496,7 @@ Partial Class AddProvAppxPackage
         Me.GroupBox3.Size = New System.Drawing.Size(504, 143)
         Me.GroupBox3.TabIndex = 5
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "AppX regions"
+        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.AppxProvision")("AppxRegions.Group")
         '
         'CheckBox4
         '
@@ -510,7 +507,7 @@ Partial Class AddProvAppxPackage
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(185, 17)
         Me.CheckBox4.TabIndex = 9
-        Me.CheckBox4.Text = "Make app available for all regions"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.AppxProvision")("App.Available.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'LinkLabel1
@@ -525,8 +522,7 @@ Partial Class AddProvAppxPackage
         Me.LinkLabel1.Size = New System.Drawing.Size(445, 37)
         Me.LinkLabel1.TabIndex = 8
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "App regions need to be in the form of ISO 3166-1 Alpha 2 or Alpha-3 codes. To lea" & _
-    "rn more about these codes, click here"
+        Me.LinkLabel1.Text = LocalizationService.ForSection("Designer.AppxProvision")("App.Regions.Form.Message")
         Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'TextBox3
@@ -547,7 +543,7 @@ Partial Class AddProvAppxPackage
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(445, 13)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.AppxProvision")("Multiple.App.Regions.Label")
         '
         'CheckBox2
         '
@@ -556,38 +552,37 @@ Partial Class AddProvAppxPackage
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox2.TabIndex = 10
-        Me.CheckBox2.Text = "Commit image after adding AppX packages"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.AppxProvision")("CommitImage.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'AppxFileOFD
         '
-        Me.AppxFileOFD.Filter = "Applications|*.appx;*.appxbundle;*.msix;*.msixbundle|Application Installer packag" & _
-    "e|*.appinstaller"
+        Me.AppxFileOFD.Filter = LocalizationService.ForSection("Designer.AppxProvision")("MSIX.Packages.Filter")
         Me.AppxFileOFD.Multiselect = True
         Me.AppxFileOFD.SupportMultiDottedExtensions = True
-        Me.AppxFileOFD.Title = "Specify the AppX files to add provisioning for"
+        Me.AppxFileOFD.Title = LocalizationService.ForSection("Designer.AppxProvision")("Files.Title")
         '
         'AppxDependencyOFD
         '
-        Me.AppxDependencyOFD.Filter = "Dependency files|*.appx;*.msix"
+        Me.AppxDependencyOFD.Filter = LocalizationService.ForSection("Designer.AppxProvision")("DependencyFiles.Filter")
         Me.AppxDependencyOFD.SupportMultiDottedExtensions = True
-        Me.AppxDependencyOFD.Title = "Browse for files applications depend on"
+        Me.AppxDependencyOFD.Title = LocalizationService.ForSection("Designer.AppxProvision")("Browse.Dependencies.Title")
         '
         'LicenseFileOFD
         '
-        Me.LicenseFileOFD.Filter = "XML licenses|*.xml"
+        Me.LicenseFileOFD.Filter = LocalizationService.ForSection("Designer.AppxProvision")("Xmllicenses.Filter")
         Me.LicenseFileOFD.SupportMultiDottedExtensions = True
-        Me.LicenseFileOFD.Title = "Specify a license file"
+        Me.LicenseFileOFD.Title = LocalizationService.ForSection("Designer.AppxProvision")("LicenseFile.Title")
         '
         'CustomDataFileOFD
         '
-        Me.CustomDataFileOFD.Filter = "All files|*.*"
+        Me.CustomDataFileOFD.Filter = LocalizationService.ForSection("Designer.AppxProvision")("CustomData.Filter")
         Me.CustomDataFileOFD.SupportMultiDottedExtensions = True
-        Me.CustomDataFileOFD.Title = "Specify a custom data file"
+        Me.CustomDataFileOFD.Title = LocalizationService.ForSection("Designer.AppxProvision")("CustomData.File.Title")
         '
         'UnpackedAppxFolderFBD
         '
-        Me.UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
+        Me.UnpackedAppxFolderFBD.Description = LocalizationService.ForSection("Designer.AppxProvision")("Folder.Required.Description")
         Me.UnpackedAppxFolderFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'AppxScanner
@@ -637,7 +632,7 @@ Partial Class AddProvAppxPackage
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(82, 17)
         Me.CheckBox3.TabIndex = 10
-        Me.CheckBox3.Text = "License file:"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.AppxProvision")("LicenseFile.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'Panel2
@@ -652,12 +647,12 @@ Partial Class AddProvAppxPackage
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Do not configure stub preference", "Install application as a stub package", "Install application as a full package"})
+        Me.ComboBox1.Items.AddRange(New Object() {LocalizationService.ForSection("Designer.AppxProvision")("Configure.Stub.Item"), LocalizationService.ForSection("Designer.AppxProvision")("Install.Stub.Package.Item"), LocalizationService.ForSection("Designer.AppxProvision")("Install.Full.Package.Item")})
         Me.ComboBox1.Location = New System.Drawing.Point(131, 10)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(364, 21)
         Me.ComboBox1.TabIndex = 12
-        Me.ComboBox1.Text = "Do not configure stub preference"
+        Me.ComboBox1.Text = LocalizationService.ForSection("Designer.AppxProvision")("Configure.Stub.Item")
         '
         'Label4
         '
@@ -668,7 +663,7 @@ Partial Class AddProvAppxPackage
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(115, 13)
         Me.Label4.TabIndex = 11
-        Me.Label4.Text = "Stub preference:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.AppxProvision")("StubPreference.Label")
         '
         'Button10
         '
@@ -677,7 +672,7 @@ Partial Class AddProvAppxPackage
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(32, 23)
         Me.Button10.TabIndex = 12
-        Me.Button10.Text = "..."
+        Me.Button10.Text = LocalizationService.ForSection("Designer.AppxProvision")("Value.Button")
         Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.Button10.UseVisualStyleBackColor = True
         '
@@ -718,7 +713,7 @@ Partial Class AddProvAppxPackage
         Me.Name = "AddProvAppxPackage"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Add provisioned AppX packages"
+        Me.Text = LocalizationService.ForSection("Designer.AppxProvision")("Add.Prov.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.AppxDetailsPanel.ResumeLayout(False)
         Me.NoAppxFilePanel.ResumeLayout(False)

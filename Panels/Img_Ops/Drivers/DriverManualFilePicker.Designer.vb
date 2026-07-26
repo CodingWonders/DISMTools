@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DriverManualFilePicker
     Inherits System.Windows.Forms.Form
 
@@ -59,7 +59,7 @@ Partial Class DriverManualFilePicker
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.DriverFilePicker")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -70,7 +70,7 @@ Partial Class DriverManualFilePicker
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.DriverFilePicker")("Cancel.Button")
         '
         'Label1
         '
@@ -81,8 +81,7 @@ Partial Class DriverManualFilePicker
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(599, 30)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Below is a recursive listing of all drivers in the directory you are specifying. " & _
-    "From this list, pick the drivers you want to add and click OK."
+        Me.Label1.Text = LocalizationService.ForSection("Designer.DriverFilePicker")("RecursiveListing.Message")
         '
         'Button1
         '
@@ -92,7 +91,7 @@ Partial Class DriverManualFilePicker
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Refresh"
+        Me.Button1.Text = LocalizationService.ForSection("Designer.DriverFilePicker")("Refresh.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label2
@@ -102,7 +101,7 @@ Partial Class DriverManualFilePicker
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(367, 29)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Directory status"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.DriverFilePicker")("DirectoryStatus.Label")
         '
         'ScanBW
         '
@@ -156,7 +155,7 @@ Partial Class DriverManualFilePicker
         Me.Name = "DriverManualFilePicker"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Choose driver files in directory"
+        Me.Text = LocalizationService.ForSection("Designer.DriverFilePicker")("Driver.Files.Choose.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)

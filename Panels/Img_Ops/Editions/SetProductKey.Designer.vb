@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SetImageKey
     Inherits System.Windows.Forms.Form
 
@@ -56,7 +56,7 @@ Partial Class SetImageKey
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.SetProductKey")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -67,7 +67,7 @@ Partial Class SetImageKey
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.SetProductKey")("Cancel.Button")
         '
         'ImageTaskHeader1
         '
@@ -91,8 +91,7 @@ Partial Class SetImageKey
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(435, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Type the product key that you want to set to your Windows image, including the da" & _
-    "shes:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.SetProductKey")("Type.ProductKey.Label")
         '
         'TextBox1
         '
@@ -110,7 +109,7 @@ Partial Class SetImageKey
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(146, 23)
         Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Validate key"
+        Me.Button1.Text = LocalizationService.ForSection("Designer.SetProductKey")("ValidateKey.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'Label2
@@ -122,8 +121,7 @@ Partial Class SetImageKey
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(599, 43)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "If you want to check if your product key is valid for the Windows image, click Va" & _
-    "lidate key. This will also check the syntax of your key."
+        Me.Label2.Text = LocalizationService.ForSection("Designer.SetProductKey")("Check.ProductKey.Message")
         '
         'SetImageKey
         '
@@ -145,7 +143,7 @@ Partial Class SetImageKey
         Me.Name = "SetImageKey"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Set product key"
+        Me.Text = LocalizationService.ForSection("Designer.SetProductKey")("SetProductKey.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

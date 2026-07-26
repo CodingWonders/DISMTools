@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DriverFileInfoDlg
     Inherits System.Windows.Forms.Form
 
@@ -55,7 +55,7 @@ Partial Class DriverFileInfoDlg
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.DriverFileInfo")("Ok.Button")
         '
         'Copy_Button
         '
@@ -66,7 +66,7 @@ Partial Class DriverFileInfoDlg
         Me.Copy_Button.Name = "Copy_Button"
         Me.Copy_Button.Size = New System.Drawing.Size(67, 23)
         Me.Copy_Button.TabIndex = 1
-        Me.Copy_Button.Text = "Copy"
+        Me.Copy_Button.Text = LocalizationService.ForSection("Designer.DriverFileInfo")("Copy.Button")
         '
         'ListView1
         '
@@ -83,12 +83,12 @@ Partial Class DriverFileInfoDlg
         '
         'ColumnHeader1
         '
-        Me.ColumnHeader1.Text = "Property"
+        Me.ColumnHeader1.Text = LocalizationService.ForSection("Designer.DriverFileInfo")("Property.Column")
         Me.ColumnHeader1.Width = 117
         '
         'ColumnHeader2
         '
-        Me.ColumnHeader2.Text = "Value"
+        Me.ColumnHeader2.Text = LocalizationService.ForSection("Designer.DriverFileInfo")("Value.Column")
         Me.ColumnHeader2.Width = 327
         '
         'Label1
@@ -100,7 +100,7 @@ Partial Class DriverFileInfoDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(600, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Information of driver file:"
+        Me.Label1.Text = LocalizationService.ForSection("Designer.DriverFileInfo")("Driver.File.Label")
         '
         'DriverFileInfoDlg
         '
@@ -118,7 +118,7 @@ Partial Class DriverFileInfoDlg
         Me.Name = "DriverFileInfoDlg"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Driver file information"
+        Me.Text = LocalizationService.ForSection("Designer.DriverFileInfo")("Driver.File.Label.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

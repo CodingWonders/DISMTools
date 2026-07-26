@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ImgApply
     Inherits System.Windows.Forms.Form
 
@@ -93,7 +93,7 @@ Partial Class ImgApply
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
         Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
+        Me.OK_Button.Text = LocalizationService.ForSection("Designer.ImgApply")("Ok.Button")
         '
         'Cancel_Button
         '
@@ -104,7 +104,7 @@ Partial Class ImgApply
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
+        Me.Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgApply")("Cancel.Button")
         '
         'GroupBox1
         '
@@ -117,7 +117,7 @@ Partial Class ImgApply
         Me.GroupBox1.Size = New System.Drawing.Size(659, 64)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Source"
+        Me.GroupBox1.Text = LocalizationService.ForSection("Designer.ImgApply")("Source.Group")
         '
         'Button1
         '
@@ -126,7 +126,7 @@ Partial Class ImgApply
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = LocalizationService.ForSection("Designer.ImgApply")("Browse.Button")
         Me.Button1.UseVisualStyleBackColor = True
         '
         'UseMountedImgBtn
@@ -136,7 +136,7 @@ Partial Class ImgApply
         Me.UseMountedImgBtn.Name = "UseMountedImgBtn"
         Me.UseMountedImgBtn.Size = New System.Drawing.Size(114, 23)
         Me.UseMountedImgBtn.TabIndex = 2
-        Me.UseMountedImgBtn.Text = "Use mounted image"
+        Me.UseMountedImgBtn.Text = LocalizationService.ForSection("Designer.ImgApply")("Mounted.Image.Label")
         Me.UseMountedImgBtn.UseVisualStyleBackColor = True
         '
         'TextBox1
@@ -153,7 +153,7 @@ Partial Class ImgApply
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(92, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Source image file:"
+        Me.Label2.Text = LocalizationService.ForSection("Designer.ImgApply")("SourceImageFile.Label")
         '
         'GroupBox2
         '
@@ -172,7 +172,7 @@ Partial Class ImgApply
         Me.GroupBox2.Size = New System.Drawing.Size(659, 201)
         Me.GroupBox2.TabIndex = 6
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Options"
+        Me.GroupBox2.Text = LocalizationService.ForSection("Designer.ImgApply")("Options.Group")
         '
         'ComboBox1
         '
@@ -189,7 +189,7 @@ Partial Class ImgApply
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(152, 17)
         Me.CheckBox8.TabIndex = 0
-        Me.CheckBox8.Text = "Apply extended attributes"
+        Me.CheckBox8.Text = LocalizationService.ForSection("Designer.ImgApply")("Extended.Attributes.CheckBox")
         Me.CheckBox8.UseVisualStyleBackColor = True
         '
         'CheckBox7
@@ -199,7 +199,7 @@ Partial Class ImgApply
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(167, 17)
         Me.CheckBox7.TabIndex = 0
-        Me.CheckBox7.Text = "Apply image in compact mode"
+        Me.CheckBox7.Text = LocalizationService.ForSection("Designer.ImgApply")("Image.Compact.Mode.CheckBox")
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'Label3
@@ -209,7 +209,7 @@ Partial Class ImgApply
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(70, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Image index:"
+        Me.Label3.Text = LocalizationService.ForSection("Designer.ImgApply")("ImageIndex.Label")
         '
         'CheckBox6
         '
@@ -218,7 +218,7 @@ Partial Class ImgApply
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox6.TabIndex = 0
-        Me.CheckBox6.Text = "Append image with WIMBoot configuration"
+        Me.CheckBox6.Text = LocalizationService.ForSection("Designer.ImgApply")("Append.Image.WIM.CheckBox")
         Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'CheckBox5
@@ -229,7 +229,7 @@ Partial Class ImgApply
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(194, 17)
         Me.CheckBox5.TabIndex = 0
-        Me.CheckBox5.Text = "Validate image for Trusted Desktop"
+        Me.CheckBox5.Text = LocalizationService.ForSection("Designer.ImgApply")("Validate.Image.CheckBox")
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
         'CheckBox4
@@ -239,7 +239,7 @@ Partial Class ImgApply
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(125, 17)
         Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = "Reference SWM files"
+        Me.CheckBox4.Text = LocalizationService.ForSection("Designer.ImgApply")("Reference.Swmfiles.CheckBox")
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox3
@@ -251,7 +251,7 @@ Partial Class ImgApply
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(273, 17)
         Me.CheckBox3.TabIndex = 0
-        Me.CheckBox3.Text = "Use the reparse point tag fix"
+        Me.CheckBox3.Text = LocalizationService.ForSection("Designer.ImgApply")("Reparse.Point.Tag.CheckBox")
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -261,7 +261,7 @@ Partial Class ImgApply
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(54, 17)
         Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = "Verify"
+        Me.CheckBox2.Text = LocalizationService.ForSection("Designer.ImgApply")("Verify.CheckBox")
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'CheckBox1
@@ -271,7 +271,7 @@ Partial Class ImgApply
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Check image integrity"
+        Me.CheckBox1.Text = LocalizationService.ForSection("Designer.ImgApply")("Integrity.CheckBox")
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'GroupBox3
@@ -284,7 +284,7 @@ Partial Class ImgApply
         Me.GroupBox3.Size = New System.Drawing.Size(659, 62)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Destination"
+        Me.GroupBox3.Text = LocalizationService.ForSection("Designer.ImgApply")("Destination.Group")
         '
         'Label5
         '
@@ -293,7 +293,7 @@ Partial Class ImgApply
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(111, 13)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Destination directory:"
+        Me.Label5.Text = LocalizationService.ForSection("Designer.ImgApply")("Destination.Dir.Label")
         '
         'Button2
         '
@@ -302,7 +302,7 @@ Partial Class ImgApply
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Browse..."
+        Me.Button2.Text = LocalizationService.ForSection("Designer.ImgApply")("Browse.Button")
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -314,8 +314,8 @@ Partial Class ImgApply
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "WIM files|*.wim|SWM files|*.swm|ESD files|*.esd"
-        Me.OpenFileDialog1.Title = "Please specify the source image to apply"
+        Me.OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.ImgApply")("WIM.Files.Wimswm.Filter")
+        Me.OpenFileDialog1.Title = LocalizationService.ForSection("Designer.ImgApply")("Source.Image.Required.Title")
         '
         'GroupBox4
         '
@@ -325,7 +325,7 @@ Partial Class ImgApply
         Me.GroupBox4.Size = New System.Drawing.Size(319, 339)
         Me.GroupBox4.TabIndex = 6
         Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "SWM file pattern"
+        Me.GroupBox4.Text = LocalizationService.ForSection("Designer.ImgApply")("SwmfilePattern.Group")
         '
         'SWMFilePanelContainer
         '
@@ -372,7 +372,7 @@ Partial Class ImgApply
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
         Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 17)
-        Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Text = LocalizationService.ForSection("Designer.ImgApply")("Status.InitialLabel")
         '
         'Panel1
         '
@@ -400,7 +400,7 @@ Partial Class ImgApply
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(145, 23)
         Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Scan pattern"
+        Me.Button5.Text = LocalizationService.ForSection("Designer.ImgApply")("ScanPattern.Button")
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Button4
@@ -410,7 +410,7 @@ Partial Class ImgApply
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(145, 23)
         Me.Button4.TabIndex = 2
-        Me.Button4.Text = "Use name of the image"
+        Me.Button4.Text = LocalizationService.ForSection("Designer.ImgApply")("Name.Image.Button")
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label4
@@ -420,11 +420,11 @@ Partial Class ImgApply
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(87, 13)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Namimg pattern:"
+        Me.Label4.Text = LocalizationService.ForSection("Designer.ImgApply")("NamingPattern.Label")
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = "Please specify the destination directory to apply the image to:"
+        Me.FolderBrowserDialog1.Description = LocalizationService.ForSection("Designer.ImgApply")("DestinationDir.Description")
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
         'ImageTaskHeader1
@@ -461,7 +461,7 @@ Partial Class ImgApply
         Me.Name = "ImgApply"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Apply an image"
+        Me.Text = LocalizationService.ForSection("Designer.ImgApply")("ApplyImage.Label")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
