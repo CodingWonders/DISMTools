@@ -132,8 +132,6 @@ Partial Class PrgAbout
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(377, 41)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks t" & _
-    "o a GUI."
         '
         'Label15
         '
