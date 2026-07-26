@@ -65,6 +65,7 @@ jobs:
           $ghAction = "yes"
           $solutionDir = "$((Get-Location).Path)\"
           $projectDir = "$((Get-Location).Path)\"
+          $targetDir = (Get-Location).Path + "\bin\Debug\"
           iex "$($solutionDir)CheckMissingDlls.ps1"
           $logPath = Join-Path (Get-Location).Path "artifacts\msbuild.log"
           msbuild DISMTools.vbproj `
