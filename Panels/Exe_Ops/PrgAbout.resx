@@ -117,4 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="LinkLabel6.Text" xml:space="preserve">
+    <value>One more time, we celebrate the anniversary of the DISMTools project. It has been 4 years worth of innovation, innovation that couldn't have been possible without you.
+
+Today is the time to celebrate, and you know we're gonna do it right. Start singing!</value>
+  </data>
 </root>
