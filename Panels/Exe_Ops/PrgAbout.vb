@@ -16,7 +16,7 @@ Public Class PrgAbout
         If Not resized Then ResizeImage()
         Text = LocalizationService.ForSection("PrgAbout")("AboutProgram.Label")
         Label1.Text = LocalizationService.ForSection("PrgAbout").Format("DISM.Tools.Version.Label", My.Application.Info.Version.ToString(), If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), ""))
-        Label2.Text = My.Application.Info.Copyright
+        Label2.Text = LocalizationService.ForSection("PrgAbout").Format("Copyright.Label", My.Application.Info.Copyright)
         Label3.Text = LocalizationService.ForSection("PrgAbout")("ResourcesUsed.Label")
         Label4.Text = LocalizationService.ForSection("PrgAbout")("Resources.Label")
         Label5.Text = LocalizationService.ForSection("PrgAbout")("Fluency.Label")
