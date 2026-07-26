@@ -58,7 +58,7 @@ Public Class SectionLocalizer
     Private ReadOnly SectionNameValue As String
 
     Friend Sub New(sectionName As String)
-        If String.IsNullOrWhiteSpace(sectionName) Then Throw New ArgumentException("Localization section name cannot be empty.", NameOf(sectionName))
+        If String.IsNullOrWhiteSpace(sectionName) Then Throw New ArgumentException("Localization section name cannot be empty.", "sectionName")
         SectionNameValue = sectionName.Trim()
     End Sub
 
@@ -790,8 +790,8 @@ Module LocalizationService
     End Sub
 
     Private Function CombineKey(sectionName As String, itemName As String) As String
-        If String.IsNullOrWhiteSpace(sectionName) Then Throw New ArgumentException("Localization section name cannot be empty.", NameOf(sectionName))
-        If String.IsNullOrWhiteSpace(itemName) Then Throw New ArgumentException("Localization item name cannot be empty.", NameOf(itemName))
+        If String.IsNullOrWhiteSpace(sectionName) Then Throw New ArgumentException("Localization section name cannot be empty.", "sectionName")
+        If String.IsNullOrWhiteSpace(itemName) Then Throw New ArgumentException("Localization item name cannot be empty.", "itemName")
         Return sectionName.Trim().TrimEnd("."c) & "." & itemName.Trim().TrimStart("."c)
     End Function
 
@@ -855,7 +855,7 @@ Module LocalizationService
             For Each frame As StackFrame In trace.GetFrames()
                 Dim method = frame.GetMethod()
                 If method Is Nothing OrElse method.DeclaringType Is Nothing Then Continue For
-                If method.DeclaringType.Name = NameOf(LocalizationService) OrElse method.DeclaringType.Name = NameOf(SectionLocalizer) Then Continue For
+                If method.DeclaringType.Name = "LocalizationService" OrElse method.DeclaringType.Name = "SectionLocalizer" Then Continue For
 
                 Dim fileName As String = frame.GetFileName()
                 Dim lineNumber As Integer = frame.GetFileLineNumber()
