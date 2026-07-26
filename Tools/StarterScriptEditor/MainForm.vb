@@ -1,5 +1,5 @@
-Imports StarterScript.Classes
-Imports StarterScript.Classes.ColorUtilities
+Imports StarterScriptEditor.Classes
+Imports StarterScriptEditor.Classes.ColorUtilities
 Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
