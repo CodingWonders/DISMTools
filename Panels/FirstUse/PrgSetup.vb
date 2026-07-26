@@ -254,6 +254,10 @@ Public Class PrgSetup
     End Sub
 
     Private Sub PrgSetup_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' The first-use setup always starts in English.
+        MainForm.LanguageCode = LocalizationService.DefaultCultureCode
+        LocalizationService.SetLanguageByCultureCode(MainForm.LanguageCode)
+
         ' Generate new settings file and load it
         MainForm.GenerateDTSettings()
         MainForm.LoadDTSettings(1)
