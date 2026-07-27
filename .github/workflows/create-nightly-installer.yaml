@@ -1,0 +1,164 @@
+name: Build and publish DISMTools release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Release type
+        required: true
+        default: prerelease
+        type: choice
+        options:
+          - prerelease
+          - release
+          - draft
+      release_tag:
+        description: Optional release tag (leave empty to generate one)
+        required: false
+        type: string
+      release_name:
+        description: Optional release name (leave empty to use the tag)
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  build-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out selected branch
+        uses: actions/checkout@v4
+        with:
+          submodules: "true"
+          lfs: "true"
+          fetch-depth: 0
+
+      - name: Verify Git LFS package archive
+        shell: pwsh
+        run: |
+          $packageArchive = Get-Item ".\pkgsrc.zip"
+          if ($packageArchive.Length -lt 1MB) {
+            throw "pkgsrc.zip is not the Git LFS archive. File size: $($packageArchive.Length) bytes."
+          }
+          $signature = [System.IO.File]::ReadAllBytes($packageArchive.FullName)[0..1]
+          if ($signature[0] -ne 0x50 -or $signature[1] -ne 0x4B) {
+            throw "pkgsrc.zip does not have a valid ZIP signature."
+          }
+
+      - name: Set up MSBuild
+        uses: microsoft/Setup-MSBuild@v2
+
+      - name: Prepare NuGet packages
+        shell: pwsh
+        run: .\nugetpkgprep.bat
+
+      - name: Build application and installer
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path ".\artifacts" -Force | Out-Null
+          $ghAction = "yes"
+          $solutionDir = "$((Get-Location).Path)\"
+          $projectDir = "$((Get-Location).Path)\"
+          $targetDir = (Get-Location).Path + "\bin\Debug\"
+          iex "$($solutionDir)CheckMissingDlls.ps1"
+          $logPath = Join-Path (Get-Location).Path "artifacts\msbuild.log"
+          msbuild DISMTools.vbproj `
+            /p:Configuration=Debug `
+            /p:DeployOnBuild=true `
+            /p:SolutionDir=$solutionDir `
+            /p:ProjectDir=$projectDir `
+            /bl:artifacts\build.binlog `
+            "/flp:logfile=$logPath;verbosity=diagnostic"
+          if ($LASTEXITCODE -ne 0) {
+            throw "MSBuild failed with exit code $LASTEXITCODE."
+          }
+
+      - name: Create release files
+        shell: pwsh
+        run: |
+          $portableOutput = ".\bin\Debug"
+          $installerOutput = ".\Installer\Output\dt_setup.exe"
+          if (-not (Test-Path "$portableOutput\DISMTools.exe")) {
+            throw "DISMTools.exe was not produced."
+          }
+          if (-not (Test-Path $installerOutput)) {
+            throw "dt_setup.exe was not produced."
+          }
+          if ((Test-Path ".\portable") -and -not (Test-Path "$portableOutput\portable")) {
+            Copy-Item ".\portable" "$portableOutput\portable" -Force
+          }
+          Compress-Archive `
+            -Path "$portableOutput\*" `
+            -DestinationPath ".\artifacts\DISMTools.zip" `
+            -CompressionLevel Optimal `
+            -Force
+          Copy-Item $installerOutput ".\artifacts\dt_setup.exe" -Force
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: DISMTools-release-assets-${{ github.run_number }}
+          path: |
+            artifacts\DISMTools.zip
+            artifacts\dt_setup.exe
+            artifacts\msbuild.log
+            artifacts\build.binlog
+          if-no-files-found: error
+
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          REQUESTED_TAG: ${{ inputs.release_tag }}
+          REQUESTED_NAME: ${{ inputs.release_name }}
+        run: |
+          $assemblyInfo = Get-Content ".\My Project\AssemblyInfo.vb" -Raw
+          if ($assemblyInfo -notmatch 'AssemblyFileVersion\("([^"]+)"\)') {
+            throw "Could not determine the DISMTools file version."
+          }
+          $fileVersion = $Matches[1]
+          $versionParts = $fileVersion.Split(".")
+          $publicVersion = ($versionParts[0..2] -join ".")
+          $datePart = Get-Date -Format "yyMMdd"
+          $generatedTag = "v$($publicVersion)_$($datePart).${{ github.run_number }}"
+          $tag = if ([string]::IsNullOrWhiteSpace($env:REQUESTED_TAG)) {
+            $generatedTag
+          } else {
+            $env:REQUESTED_TAG.Trim()
+          }
+          $releaseName = if ([string]::IsNullOrWhiteSpace($env:REQUESTED_NAME)) {
+            $tag
+          } else {
+            $env:REQUESTED_NAME.Trim()
+          }
+          $releaseArgs = @(
+            "release", "create", $tag,
+            ".\artifacts\DISMTools.zip",
+            ".\artifacts\dt_setup.exe",
+            "--repo", $env:GITHUB_REPOSITORY,
+            "--target", $env:GITHUB_SHA,
+            "--title", $releaseName,
+            "--notes", "Automated DISMTools build from branch $env:GITHUB_REF_NAME at commit $env:GITHUB_SHA. Application file version: $fileVersion."
+          )
+          switch ($env:RELEASE_TYPE) {
+            "prerelease" { $releaseArgs += "--prerelease" }
+            "draft" { $releaseArgs += "--draft" }
+            "release" { }
+            default { throw "Unsupported release type: $env:RELEASE_TYPE" }
+          }
+          & gh @releaseArgs
+          if ($LASTEXITCODE -ne 0) {
+            throw "GitHub release creation failed with exit code $LASTEXITCODE."
+          }
+          $releaseUrl = gh release view $tag --repo $env:GITHUB_REPOSITORY --json url --jq ".url"
+          "### Published release" >> $env:GITHUB_STEP_SUMMARY
+          "- Release: [$tag]($releaseUrl)" >> $env:GITHUB_STEP_SUMMARY
+          "- Application version: $fileVersion" >> $env:GITHUB_STEP_SUMMARY
+          "- Assets: DISMTools.zip, dt_setup.exe" >> $env:GITHUB_STEP_SUMMARY
