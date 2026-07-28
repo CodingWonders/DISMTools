@@ -1,0 +1,16 @@
+﻿Language: Batch
+Name: Prevent Installation of Expedited Device Applications
+Description: This script prevents installation of device companion software when plugging in a new device or receiving a new driver.
+Customizable: No
+@ECHO OFF
+REM This script turns off the ability for the operating system to install
+REM device companion software when plugging in a new device or when updating a driver
+REM from Windows Update. For example, if you have a LG monitor, add this
+REM script to prevent installation of LG software and promoted applications, such
+REM as McAfee.
+
+REM Note that this will not prevent you from receiving hardware drivers; it will
+REM only prevent installing manufacturer-provided applications that act as companions
+REM to the device driver.
+
+REG ADD "HKLM\Software\Microsoft\Windows\CurrentVersion\Device Metadata" /F /V PreventDeviceMetadataFromNetwork /T REG_DWORD /D 1
