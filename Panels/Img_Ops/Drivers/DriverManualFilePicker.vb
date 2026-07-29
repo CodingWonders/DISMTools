@@ -7,41 +7,33 @@ Public Class DriverManualFilePicker
     Public DriverDir As String = ""
     Dim Language As Integer
 
+    Private InfFiles As New List(Of String)
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        DynaLog.LogMessage("Items checked for addition: " & CheckedListBox1.CheckedItems.Count)
-        If CheckedListBox1.CheckedItems.Count <= 0 Then Exit Sub
+        DynaLog.LogMessage("Items checked for addition: " & ListView1.CheckedItems.Count)
+        If ListView1.CheckedItems.Count <= 0 Then Exit Sub
         DynaLog.LogMessage("Adding selected items...")
         Dim SelectedDrivers As New List(Of String)
         For Each DrvItem As ListViewItem In AddDrivers.ListView1.Items
             SelectedDrivers.Add(DrvItem.SubItems(0).Text)
         Next
-        If CheckedListBox1.Items.Count > 0 Then
-            For Each Item In CheckedListBox1.CheckedItems
-                If SelectedDrivers.Contains(Item) Then Continue For
+        If ListView1.Items.Count > 0 Then
+            For Each Item As ListViewItem In ListView1.CheckedItems
+                If SelectedDrivers.Contains(Item.Text) Then Continue For
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "File"}))
-                            Case "ESN"
-                                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Archivo"}))
-                            Case "FRA"
-                                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Fichier"}))
-                            Case "PTB", "PTG"
-                                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Ficheiro"}))
-                            Case "ITA"
-                                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "File"}))
+                            Case "ENU", "ENG" : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "File"}))
+                            Case "ESN" : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "Archivo"}))
+                            Case "FRA" : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "Fichier"}))
+                            Case "PTB", "PTG" : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "Ficheiro"}))
+                            Case "ITA" : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "File"}))
                         End Select
-                    Case 1
-                        AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "File"}))
-                    Case 2
-                        AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Archivo"}))
-                    Case 3
-                        AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Fichier"}))
-                    Case 4
-                        AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Ficheiro"}))
-                    Case 5
-                        AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "File"}))
+                    Case 1 : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "File"}))
+                    Case 2 : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "Archivo"}))
+                    Case 3 : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "Fichier"}))
+                    Case 4 : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "Ficheiro"}))
+                    Case 5 : AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, "File"}))
                 End Select
             Next
         End If
@@ -56,8 +48,8 @@ Public Class DriverManualFilePicker
 
     Private Sub DriverManualFilePicker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Language = MainForm.Language
-        Control.CheckForIllegalCrossThreadCalls = False
-        CheckedListBox1.Items.Clear()
+        InfFiles.Clear()
+        ListView1.Items.Clear()
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -125,8 +117,9 @@ Public Class DriverManualFilePicker
         End Select
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
-        CheckedListBox1.BackColor = CurrentTheme.SectionBackgroundColor
-        CheckedListBox1.ForeColor = ForeColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.ForeColor = ForeColor
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(574)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -138,120 +131,67 @@ Public Class DriverManualFilePicker
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label2.Text = "Scanning directory..." & CrLf & _
-                                      "Driver files found thus far: " & CheckedListBox1.Items.Count
-                    Case "ESN"
-                        Label2.Text = "Escaneando directorio..." & CrLf & _
-                                      "Archivos de controladores encontrados por ahora: " & CheckedListBox1.Items.Count
-                    Case "FRA"
-                        Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
-                                      "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
-                    Case "PTB", "PTG"
-                        Label2.Text = "Pesquisar diretório..." & CrLf & _
-                                      "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
-                    Case "ITA"
-                        Label2.Text = "Scansione della cartella..." & CrLf & _
-                                      "File di driver trovati finora: " & CheckedListBox1.Items.Count
+                    Case "ENU", "ENG" : Label2.Text = "Scanning directory..."
+                    Case "ESN" : Label2.Text = "Escaneando directorio..."
+                    Case "FRA" : Label2.Text = "Scannage du répertoire en cours..."
+                    Case "PTB", "PTG" : Label2.Text = "Pesquisar diretório..."
+                    Case "ITA" : Label2.Text = "Scansione della cartella..."
                 End Select
-            Case 1
-                Label2.Text = "Scanning directory..." & CrLf & _
-                              "Driver files found thus far: " & CheckedListBox1.Items.Count
-            Case 2
-                Label2.Text = "Escaneando directorio..." & CrLf & _
-                              "Archivos de controladores encontrados por ahora: " & CheckedListBox1.Items.Count
-            Case 3
-                Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
-                              "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
-            Case 4
-                Label2.Text = "Pesquisar diretório..." & CrLf & _
-                              "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
-            Case 5
-                Label2.Text = "Scansione della cartella..." & CrLf & _
-                              "File di driver trovati finora: " & CheckedListBox1.Items.Count
+            Case 1 : Label2.Text = "Scanning directory..."
+            Case 2 : Label2.Text = "Escaneando directorio..."
+            Case 3 : Label2.Text = "Scannage du répertoire en cours..."
+            Case 4 : Label2.Text = "Pesquisar diretório..."
+            Case 5 : Label2.Text = "Scansione della cartella..." 
         End Select
         For Each DrvFile In Directory.GetFiles(DriverDir, "*.inf", SearchOption.AllDirectories)
-            CheckedListBox1.Items.Add(DrvFile)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label2.Text = "Scanning directory..." & CrLf & _
-                                          "Driver files found thus far: " & CheckedListBox1.Items.Count
-                        Case "ESN"
-                            Label2.Text = "Escaneando directorio..." & CrLf & _
-                                          "Archivos de controladores encontrados por ahora: " & CheckedListBox1.Items.Count
-                        Case "FRA"
-                            Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
-                                          "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
-                        Case "PTB", "PTG"
-                            Label2.Text = "Pesquisar diretório..." & CrLf & _
-                                          "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
-                        Case "ITA"
-                            Label2.Text = "Scansione della cartella..." & CrLf & _
-                                          "File di driver trovati finora: " & CheckedListBox1.Items.Count
-                    End Select
-                Case 1
-                    Label2.Text = "Scanning directory..." & CrLf & _
-                                  "Driver files found thus far: " & CheckedListBox1.Items.Count
-                Case 2
-                    Label2.Text = "Escaneando directorio..." & CrLf & _
-                                  "Archivos de controladores encontrados por ahora: " & CheckedListBox1.Items.Count
-                Case 3
-                    Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
-                                  "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
-                Case 4
-                    Label2.Text = "Pesquisar diretório..." & CrLf & _
-                                  "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
-                Case 5
-                    Label2.Text = "Scansione della cartella..." & CrLf & _
-                                  "File di driver trovati finora: " & CheckedListBox1.Items.Count
-            End Select
+            InfFiles.Add(DrvFile)
         Next
-        DynaLog.LogMessage("Items detected in directory: " & CheckedListBox1.Items.Count)
+        DynaLog.LogMessage("Items detected in directory: " & ListView1.Items.Count)
     End Sub
 
     Private Sub ScanBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ScanBW.RunWorkerCompleted
+        ListView1.Items.AddRange(InfFiles.Select(Function(infFile) New ListViewItem(New String() {infFile})).ToArray())
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Label2.Text = "Directory scan complete." & CrLf & _
-                                      "Driver files found: " & CheckedListBox1.Items.Count
+                                      "Driver files found: " & ListView1.Items.Count
                     Case "ESN"
                         Label2.Text = "Escaneo del directorio completado." & CrLf & _
-                                      "Archivos de controladores encontrados: " & CheckedListBox1.Items.Count
+                                      "Archivos de controladores encontrados: " & ListView1.Items.Count
                     Case "FRA"
                         Label2.Text = "Scannage du répertoire terminé." & CrLf & _
-                                      "Fichiers de pilotes trouvés : " & CheckedListBox1.Items.Count
+                                      "Fichiers de pilotes trouvés : " & ListView1.Items.Count
                     Case "PTB", "PTG"
                         Label2.Text = "Pesquisa de diretório concluída." & CrLf & _
-                                      "Ficheiros de controladores encontrados: " & CheckedListBox1.Items.Count
+                                      "Ficheiros de controladores encontrados: " & ListView1.Items.Count
                     Case "ITA"
                         Label2.Text = "Scansione della directory completata." & CrLf & _
-                                      "File driver trovati: " & CheckedListBox1.Items.Count
+                                      "File driver trovati: " & ListView1.Items.Count
                 End Select
             Case 1
                 Label2.Text = "Directory scan complete." & CrLf & _
-                              "Driver files found: " & CheckedListBox1.Items.Count
+                              "Driver files found: " & ListView1.Items.Count
             Case 2
                 Label2.Text = "Escaneo del directorio completado." & CrLf & _
-                              "Archivos de controladores encontrados: " & CheckedListBox1.Items.Count
+                              "Archivos de controladores encontrados: " & ListView1.Items.Count
             Case 3
                 Label2.Text = "Scannage du répertoire terminé." & CrLf & _
-                              "Fichiers de pilotes trouvés : " & CheckedListBox1.Items.Count
+                              "Fichiers de pilotes trouvés : " & ListView1.Items.Count
             Case 4
                 Label2.Text = "Pesquisa de diretório concluída." & CrLf & _
-                              "Ficheiros de controladores encontrados: " & CheckedListBox1.Items.Count
+                              "Ficheiros de controladores encontrados: " & ListView1.Items.Count
             Case 5
                 Label2.Text = "Scansione della directory completata." & CrLf & _
-                              "File driver trovati: " & CheckedListBox1.Items.Count
+                              "File driver trovati: " & ListView1.Items.Count
         End Select
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         DynaLog.LogMessage("Preparing to refresh results...")
-        CheckedListBox1.Items.Clear()
+        InfFiles.Clear()
+        ListView1.Items.Clear()
         If DriverDir <> "" And Directory.Exists(DriverDir) Then ScanBW.RunWorkerAsync()
     End Sub
 End Class

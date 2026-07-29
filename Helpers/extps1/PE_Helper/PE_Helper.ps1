@@ -736,6 +736,8 @@ function Start-PECustomization
                 Write-Host "Copying Driver Installation Module..."
                 New-Item -Path "$imagePath\Tools\DIM" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$imagePath\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                New-Item -Path "$imagePath\Tools\BDE-GUI" -ItemType Directory | Out-Null
+                Copy-Item -Path "$((Get-Location).Path)\tools\BDE-GUI\*" -Destination "$imagePath\Tools\BDE-GUI" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Write-Host "First-party tools have been successfully copied."
             }
             catch
@@ -778,10 +780,11 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
+            $codename = "infinity"
             if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
-                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$(Get-Content -Path "$((Get-Location).Path)\version")"
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$(Get-Content -Path "$((Get-Location).Path)\version")"
             } else {
-                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$((Get-Date).ToString('yyMMdd-HHmm'))"
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$((Get-Date).ToString('yyMMdd-HHmm'))"
             }
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Registry changed."
@@ -865,7 +868,7 @@ function Start-PECustomization
                 foreach ($sysDriver in $sysDrivers) {
                     try {
                         $curDrvIndex = $sysDrivers.IndexOf($sysDriver)
-                        Write-Progress -Activity "Installing system drivers..." -Status "Exporting driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($sysDriver.OriginalFileName))`"..." -PercentComplete ((($curDrvIndex / $drvCount) * 100) / 2)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Exporting driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($sysDriver.OriginalFileName))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                         $sysDriverSourcePath = [IO.Path]::GetDirectoryName("$($sysDriver.OriginalFileName)")
                         $sysDriverTargetPath = "$rootDriverPath\$([IO.Path]::GetFileName($sysDriver.OriginalFileName))_$([Random]::new().Next([int]::MaxValue))"
                         New-Item -Path "$sysDriverTargetPath" -ItemType Directory | Out-Null
@@ -885,7 +888,7 @@ function Start-PECustomization
                 foreach ($infFile in $infFiles) {
                     try {
                         $curDrvIndex = $infFiles.IndexOf($infFile)
-                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (50 + ((($curDrvIndex / $drvCount) * 100) / 2))
+                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                         if ((Start-DismCommand -Verb Add-Driver -ImagePath "$imagePath" -DriverAdditionFile "$($infFile.FullName)" -DriverAdditionRecurse $false) -eq $true)
                         {
                             $successfulInstallations++
@@ -909,6 +912,8 @@ function Start-PECustomization
                     $winpeDriverRootPath = "$imagePath\CWS_DRVS"
                     New-Item -Path "$winpeDriverRootPath" -ItemType Directory | Out-Null
                     New-Item -Path "$imagePath\DT_InstDrvs.txt" | Out-Null
+                    # WDSHC rescans and re-adds the drivers, which we don't want.
+                    New-Item -Path "$imagePath\essential_drivers_exported" | Out-Null
                     Copy-Item -Path "$rootDriverPath\*.*" -Destination "$winpeDriverRootPath" -Recurse -Force
                     foreach ($successfulDriver in $successfulDrivers) {
                         $successfulDriver.Replace("$env:SYSTEMDRIVE", "X:") | Out-File "$imagePath\DT_InstDrvs.txt" -Encoding utf8 -Append
@@ -2659,7 +2664,7 @@ function Start-ProjectDevelopment {
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
                 Write-Host "Beginning customizations..."
-                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true) -eq $false)
+                if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true -includeSysDrivers $false) -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
                     Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null

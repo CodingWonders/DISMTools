@@ -14,13 +14,14 @@ Public Class PrgAbout
 
     Private Sub PrgAbout_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not resized Then ResizeImage()
+        Label2.Text = My.Application.Info.Copyright
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "About this program"
                         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
+
                         Label3.Text = "These resources and components were used in the creation of this program:"
                         Label4.Text = "Resources"
                         Label5.Text = "Fluency"
@@ -51,7 +52,7 @@ Public Class PrgAbout
                     Case "ESN"
                         Text = "Acerca de este programa"
                         Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
+
                         Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                         Label4.Text = "Recursos"
                         Label5.Text = "Fluency"
@@ -83,7 +84,7 @@ Public Class PrgAbout
                     Case "FRA"
                         Text = "À propos de ce programme"
                         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
+
                         Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                         Label4.Text = "Ressources"
                         Label5.Text = "Fluency"
@@ -115,7 +116,7 @@ Public Class PrgAbout
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
                         Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
+
                         Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                         Label4.Text = "Recursos"
                         Label5.Text = "Fluency"
@@ -147,7 +148,7 @@ Public Class PrgAbout
                     Case "ITA"
                         Text = "Informazioni su questo programma"
                         Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie ad un'interfaccia grafica"
+
                         Label3.Text = "Per la creazione di questo programma sono stati usate queste risorse e componenti:"
                         Label4.Text = "Risorse"
                         Label5.Text = "Fluency"
@@ -180,7 +181,7 @@ Public Class PrgAbout
             Case 1
                 Text = "About this program"
                 Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
+
                 Label3.Text = "These resources and components were used in the creation of this program:"
                 Label4.Text = "Resources"
                 Label5.Text = "Fluency"
@@ -212,7 +213,7 @@ Public Class PrgAbout
             Case 2
                 Text = "Acerca de este programa"
                 Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
+
                 Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                 Label4.Text = "Recursos"
                 Label5.Text = "Fluency"
@@ -244,7 +245,7 @@ Public Class PrgAbout
             Case 3
                 Text = "À propos de ce programme"
                 Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
+
                 Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                 Label4.Text = "Ressources"
                 Label5.Text = "Fluency"
@@ -276,7 +277,7 @@ Public Class PrgAbout
             Case 4
                 Text = "Acerca deste programa"
                 Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
+
                 Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                 Label4.Text = "Recursos"
                 Label5.Text = "Fluency"
@@ -308,7 +309,7 @@ Public Class PrgAbout
             Case 5
                 Text = "Informazioni su questo programma"
                 Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
+
                 Label3.Text = "Per la creazione di questo programma sono stati usate queste risorse e componenti:"
                 Label4.Text = "Risorse"
                 Label5.Text = "Fluency"
@@ -654,6 +655,7 @@ Public Class PrgAbout
             Exit Sub
         End Try
         If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
+        OK_Button.PerformClick()
     End Sub
 
     Private Sub PictureBox5_MouseHover(sender As Object, e As EventArgs) Handles PictureBox5.MouseHover
@@ -686,5 +688,9 @@ Public Class PrgAbout
 
     Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click
         Process.Start("https://discord.gg/5TxEmKXNwu")
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        Process.Start("https://www.youtube.com/watch?v=FGBhQbmPwH8")
     End Sub
 End Class

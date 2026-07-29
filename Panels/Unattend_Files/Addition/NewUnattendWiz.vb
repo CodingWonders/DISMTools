@@ -768,6 +768,7 @@ Public Class NewUnattendWiz
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ToolStripButton1.Width = WindowHelper.ScaleLogical(96)
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor

@@ -150,7 +150,7 @@ Public Class MainForm
 
     Dim IsCompatible As Boolean = True
 
-    Dim SysVer As Version
+    Dim SysVer As New Version
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
     Public SkipUpdates As Boolean                                        ' Same for this one
@@ -350,7 +350,6 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been requested by the user or by DTUCS. Migrating settings...")
                     MigrationForm.ShowDialog()
-                    Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been disabled. Unless you are testing a build straight out of the build process, a configuration file may be incompatible")
                     NoMigration = True
@@ -590,7 +589,9 @@ Public Class MainForm
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC" & CrLf &
+                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software, DaleCooper.")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -613,8 +614,11 @@ Public Class MainForm
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
+        DynaLog.LogMessage("- DynaLog Log Viewer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- DISMTools Theme Designer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
         DynaLog.BeginLogging()
-        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
+        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S --------")
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -670,7 +674,6 @@ Public Class MainForm
             End Try
         End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
-        Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
@@ -14848,8 +14851,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
             ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ImgInfoSaveDlg.OnlineMode = OnlineManagement
-            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.OnlineMode = False
+            ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
