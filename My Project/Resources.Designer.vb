@@ -2265,15 +2265,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''-- Bugfixes in preview releases
-        '''
-        '''- Fixed an issue where removed features would appear in the wrong place
-        '''- Fixed a minor UI issue where the proper user principal name (UPN) would not be shown when selecting a user in the ADDS domain join wizard
-        '''- Fixed a minor UI issue where the NT logon path of a domain user would not be shown when launching the ADDS domain join wizard for the first time
-        '''- Fixed some HiDPI issues
-        '''- Fixed an issue where, when managing the active installation, the v [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.8_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
