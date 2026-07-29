@@ -23,6 +23,8 @@ Partial Class PECustomizerDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PECustomizerDialog))
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"install.wim", "7.83 GB", "29/07/2026"}, -1)
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"install_apps.wim", "10.4 GB", "18/07/2026"}, -1)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -61,9 +63,20 @@ Partial Class PECustomizerDialog
         Me.Label11 = New System.Windows.Forms.Label()
         Me.CheckBox6 = New System.Windows.Forms.CheckBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
-        Me.Label13 = New System.Windows.Forms.Label()
+        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.ListView2 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -73,6 +86,8 @@ Partial Class PECustomizerDialog
         Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.TabPage4.SuspendLayout()
+        Me.TabPage5.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -412,6 +427,7 @@ Partial Class PECustomizerDialog
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.TabPage4)
+        Me.TabControl1.Controls.Add(Me.TabPage5)
         Me.TabControl1.Location = New System.Drawing.Point(34, 144)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -507,6 +523,18 @@ Partial Class PECustomizerDialog
         Me.TabPage4.Text = "Unattended Deployments"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
+        'Label13
+        '
+        Me.Label13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Location = New System.Drawing.Point(12, 60)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(508, 128)
+        Me.Label13.TabIndex = 5
+        Me.Label13.Text = resources.GetString("Label13.Text")
+        Me.Label13.Visible = False
+        '
         'Label12
         '
         Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -531,17 +559,122 @@ Partial Class PECustomizerDialog
         Me.ComboBox3.TabIndex = 6
         Me.ComboBox3.Text = "Ask me how to resolve the conflict"
         '
-        'Label13
+        'TabPage5
         '
-        Me.Label13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TabPage5.Controls.Add(Me.GroupBox2)
+        Me.TabPage5.Controls.Add(Me.CheckBox7)
+        Me.TabPage5.Controls.Add(Me.Label14)
+        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage5.Name = "TabPage5"
+        Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage5.Size = New System.Drawing.Size(548, 256)
+        Me.TabPage5.TabIndex = 4
+        Me.TabPage5.Text = "Installation Media"
+        Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'Label14
+        '
+        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label13.AutoEllipsis = True
-        Me.Label13.Location = New System.Drawing.Point(12, 60)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(508, 128)
-        Me.Label13.TabIndex = 5
-        Me.Label13.Text = resources.GetString("Label13.Text")
-        Me.Label13.Visible = False
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(12, 12)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(508, 30)
+        Me.Label14.TabIndex = 6
+        Me.Label14.Text = "Configure the behavior of the operating system installer when scanning your ISO f" & _
+    "iles for available Windows images. These settings only take effect when performi" & _
+    "ng local installations."
+        '
+        'CheckBox7
+        '
+        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.Location = New System.Drawing.Point(12, 48)
+        Me.CheckBox7.Name = "CheckBox7"
+        Me.CheckBox7.Size = New System.Drawing.Size(383, 17)
+        Me.CheckBox7.TabIndex = 7
+        Me.CheckBox7.Text = "Include boot images when scanning ISO files for available Windows images"
+        Me.CheckBox7.UseVisualStyleBackColor = True
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.ListView2)
+        Me.GroupBox2.Controls.Add(Me.ComboBox4)
+        Me.GroupBox2.Controls.Add(Me.Label16)
+        Me.GroupBox2.Controls.Add(Me.Label15)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 71)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(508, 179)
+        Me.GroupBox2.TabIndex = 8
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Image Selector Settings"
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Location = New System.Drawing.Point(10, 24)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(488, 42)
+        Me.Label15.TabIndex = 6
+        Me.Label15.Text = resources.GetString("Label15.Text")
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Items.AddRange(New Object() {"Allow me to select the image file to deploy", "Automatically deploy the biggest image file", "Automatically deploy the most recent image file (based on file modification dates" & _
+                ")"})
+        Me.ComboBox4.Location = New System.Drawing.Point(13, 69)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(485, 21)
+        Me.ComboBox4.TabIndex = 7
+        Me.ComboBox4.Text = "Allow me to select the image file to deploy"
+        '
+        'Label16
+        '
+        Me.Label16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(10, 96)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(51, 13)
+        Me.Label16.TabIndex = 6
+        Me.Label16.Text = "Example:"
+        '
+        'ListView2
+        '
+        Me.ListView2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
+        Me.ListView2.FullRowSelect = True
+        Me.ListView2.GridLines = True
+        Me.ListView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.ListView2.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2})
+        Me.ListView2.Location = New System.Drawing.Point(13, 113)
+        Me.ListView2.Name = "ListView2"
+        Me.ListView2.Size = New System.Drawing.Size(485, 60)
+        Me.ListView2.TabIndex = 8
+        Me.ListView2.UseCompatibleStateImageBehavior = False
+        Me.ListView2.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "File Name"
+        Me.ColumnHeader3.Width = 256
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Size"
+        Me.ColumnHeader4.Width = 96
+        '
+        'ColumnHeader5
+        '
+        Me.ColumnHeader5.Text = "Last Modified"
+        Me.ColumnHeader5.Width = 96
         '
         'PECustomizerDialog
         '
@@ -575,6 +708,10 @@ Partial Class PECustomizerDialog
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
         Me.TabPage4.ResumeLayout(False)
+        Me.TabPage5.ResumeLayout(False)
+        Me.TabPage5.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -620,5 +757,16 @@ Partial Class PECustomizerDialog
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents ComboBox3 As System.Windows.Forms.ComboBox
     Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents TabPage5 As System.Windows.Forms.TabPage
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents ListView2 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ComboBox4 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label16 As System.Windows.Forms.Label
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox7 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label14 As System.Windows.Forms.Label
 
 End Class
