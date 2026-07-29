@@ -106,7 +106,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_0.8.1"
+    Public dtBranch As String = "dt_pre_infinity_mk2"
     Public dt_codeName As String = "InfinityMk2"
 
     ' Arrays and other variables used on background processes
@@ -204,6 +204,7 @@ Public Class MainForm
     Public PEHelper_CopyToVentoy As Boolean = False     ' Whether to copy new ISO files to Ventoy drives automatically
     Public PEHelper_Use2023EFI As Boolean = False       ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
     Public PEHelper_IncludeSysDrvs As Boolean = True    ' Whether to include SCSI adapters and network controllers in the DTPE
+    Public PEHelper_MaxConcurrentISO As Integer = 2     ' Limit for concurrent ISO file creation
 
     ' Web Search Settings
     Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
@@ -354,7 +355,6 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been requested by the user or by DTUCS. Migrating settings...")
                     MigrationForm.ShowDialog()
-                    Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been disabled. Unless you are testing a build straight out of the build process, a configuration file may be incompatible")
                     NoMigration = True
@@ -596,7 +596,7 @@ Public Class MainForm
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC" & CrLf &
-                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software.")
+                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software, DaleCooper.")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -681,7 +681,6 @@ Public Class MainForm
             End Try
         End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
-        Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
@@ -1601,6 +1600,7 @@ Public Class MainForm
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
                 PEHelper_IncludeSysDrvs = (CInt(ImgOpKey.GetValue("PEHelper.IncludeSysDrvs")) = 1)
+                PEHelper_MaxConcurrentISO = CInt(ImgOpKey.GetValue("PEHelper.MaxConcurrentISO"))
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
                 PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 HumanizeDates = CInt(ImgOpKey.GetValue("HumanizeDates", 1)) = 1
@@ -1733,6 +1733,7 @@ Public Class MainForm
                     PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
                     PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
                     PEHelper_IncludeSysDrvs = CInt(settingData("ImgOps")("PEHelper.IncludeSysDrvs")) = 1
+                    PEHelper_MaxConcurrentISO = CInt(settingData("ImgOps")("PEHelper.MaxConcurrentISO"))
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
                     PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
@@ -1845,12 +1846,8 @@ Public Class MainForm
                 End Try
             End If
         End If
-        If AppxDisplayNameFormatOnRemoval < 0 OrElse AppxDisplayNameFormatOnRemoval > 2 Then
-            AppxDisplayNameFormatOnRemoval = 1
-        End If
-        If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
-            InvalidSettingsTSMI.Visible = True
-        End If
+        If AppxDisplayNameFormatOnRemoval < 0 OrElse AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 1
+        If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then InvalidSettingsTSMI.Visible = True
         If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then PartTableOverridePreference = 0
         If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then UEFICA23Preference = 0
         If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then WDSHCConnAttempts = 5
@@ -1865,6 +1862,8 @@ Public Class MainForm
 
         End Try
         WriteDefaultPEPolicy()
+
+        If PEHelper_MaxConcurrentISO < 1 OrElse PEHelper_MaxConcurrentISO > 10 Then PEHelper_MaxConcurrentISO = 2
     End Sub
 
     Public Sub WriteDefaultPEPolicy()
@@ -1951,6 +1950,7 @@ Public Class MainForm
                            "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
                            "PEHelper_IncludeSysDrvs             =    " & PEHelper_IncludeSysDrvs & CrLf &
+                           "PEHelper_MaxConcurrentISO           =    " & PEHelper_MaxConcurrentISO & CrLf &
                            "NoRestart                           =    " & SysNoRestart & CrLf &
                            "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
                            "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
@@ -4176,6 +4176,8 @@ Public Class MainForm
         settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & Quote)
         settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", 0)
         settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", 0)
+        settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", 1)
+        settingsData("ImgOps").AddKey("PEHelper.MaxConcurrentISO", 2)
         settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
         settingsData("ImgOps").AddKey("PreventSystemFromSleeping", 1)
         settingsData("ImgOps").AddKey("HumanizeDates", 1)
@@ -4275,6 +4277,8 @@ Public Class MainForm
         ImgOpKey.SetValue("PEHelper.UnattendedFile", "", RegistryValueKind.String)
         ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PEHelper.MaxConcurrentISO", 2, RegistryValueKind.DWord)
         ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PreventSystemFromSleeping", 1, RegistryValueKind.DWord)
         ImgOpKey.SetValue("HumanizeDates", 1, RegistryValueKind.DWord)
@@ -4355,7 +4359,7 @@ Public Class MainForm
             Dim parser As New FileIniDataParser(),
                 settingsData As New IniData()
             settingsData.Sections.AddSection("Program")
-            settingsData("Program").AddKey("DismExe", Quote & DismExe & Quote)
+            settingsData("Program").AddKey("DismExe", Quote & DismExe.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Program").AddKey("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0))
             settingsData.Sections.AddSection("Personalization")
             settingsData("Personalization").AddKey("ColorMode", ColorMode)
@@ -4370,10 +4374,10 @@ Public Class MainForm
             settingsData("Personalization").AddKey("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0))
             settingsData("Personalization").AddKey("ShowDateAndTime", If(ShowDateAndTime, 1, 0))
             settingsData.Sections.AddSection("Logs")
-            settingsData("Logs").AddKey("LogFile", Quote & LogFile & Quote)
+            settingsData("Logs").AddKey("LogFile", Quote & LogFile.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Logs").AddKey("LogLevel", LogLevel)
             settingsData("Logs").AddKey("AutoLogs", If(AutoLogs, 1, 0))
-            settingsData("Logs").AddKey("SystemEditor", Quote & SystemEditor & Quote)
+            settingsData("Logs").AddKey("SystemEditor", Quote & SystemEditor.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Logs").AddKey("EnableDynaLog", If(EnableDynaLog, 1, 0))
             settingsData.Sections.AddSection("ImgOps")
             settingsData("ImgOps").AddKey("Quiet", If(QuietOperations, 1, 0))
@@ -4383,6 +4387,7 @@ Public Class MainForm
             settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
             settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
             settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", If(PEHelper_IncludeSysDrvs, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.MaxConcurrentISO", PEHelper_MaxConcurrentISO)
             settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
             settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
             settingsData("ImgOps").AddKey("HumanizeDates", If(HumanizeDates, 1, 0))
@@ -4488,6 +4493,7 @@ Public Class MainForm
                 ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", PEHelper_IncludeSysDrvs, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.MaxConcurrentISO", PEHelper_MaxConcurrentISO, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("HumanizeDates", HumanizeDates, RegistryValueKind.DWord)

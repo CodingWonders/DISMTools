@@ -88,6 +88,7 @@ Public Class CustomRuleDetailsDialog
 
     Private Sub RuleExpressionTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RuleExpressionTextBox.TextChanged
         If CurrentCustomRule IsNot Nothing Then CurrentCustomRule.RuleExpression = RuleExpressionTextBox.Text
+        RegexTesterButton.Enabled = RuleExpressionTextBox.Text <> ""
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged

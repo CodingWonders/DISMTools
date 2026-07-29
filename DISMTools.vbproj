@@ -1466,6 +1466,7 @@
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Display Bugcheck Parameters.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Batch script file locks.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Prevent Installation of Expedited Device Applications.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Remove File System MAX_PATH length limit.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
@@ -2350,7 +2351,7 @@ IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.ex
 :: Copy BDE-GUI utilities
 IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI" (
 	MD "bin\extps1\PE_Helper\tools\BDE-GUI"
-	FOR %25%25A IN (ps1 bat cmd) DO xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI\*.%25%25A" "bin\extps1\PE_Helper\tools\BDE-GUI" /CEHYI
+	FOR %25%25A IN (ps1 bat cmd png) DO xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI\*.%25%25A" "bin\extps1\PE_Helper\tools\BDE-GUI" /CEHYI
 )
 
 :: Copy Tour

@@ -18,7 +18,7 @@ Public Class ISOCreator
     Dim adkDownloadSuccess As Boolean
 
     ' Job manager for concurrent ISO creation tasks
-    Private Shared _jobManager As IsoCreationJobManager = New IsoCreationJobManager(maxConcurrentTasks:=5)
+    Private Shared _jobManager As IsoCreationJobManager = New IsoCreationJobManager(maxConcurrentTasks:=MainForm.PEHelper_MaxConcurrentISO)
     Private _currentJobId As Integer = -1
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -403,6 +403,8 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Copy to Ventoy? " & MainForm.PEHelper_CopyToVentoy)
         DynaLog.LogMessage("- Use new EFI boot binaries? " & MainForm.PEHelper_Use2023EFI)
         DynaLog.LogMessage("- Include System Drivers? " & MainForm.PEHelper_IncludeSysDrvs)
+        DynaLog.LogMessage("- " & MainForm.PEHelper_MaxConcurrentISO & " ISO file(s) can be created at the same time")
+        _jobManager = New IsoCreationJobManager(MainForm.PEHelper_MaxConcurrentISO)
 
         ' get build time to show on watermark
         Try
@@ -1027,6 +1029,13 @@ Public Class ISOCreator
                 GroupBox1.Enabled = True
                 IdlePanel.Visible = True
                 ISOProgressPanel.Visible = False
+
+                ' Delete ISOTASKS
+                Try
+                    Directory.Delete(String.Format("{0}\ISOTASKS", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), True)
+                Catch ex As Exception
+
+                End Try
             End If
         End If
     End Sub

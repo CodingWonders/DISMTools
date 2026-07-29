@@ -19,6 +19,251 @@ Public Class Options
     Private AutoReloadServiceInstalled As Boolean
     Private AutoReloadService As WindowsService
 
+    Private Class ProcessorFamilyCategory
+
+        Public Property Beefiness As ProcessorFamilyBeefiness
+        Public Property Family As Integer
+
+        Public Sub New(family As Integer, beefiness As ProcessorFamilyBeefiness)
+            Me.Family = family
+            Me.Beefiness = beefiness
+        End Sub
+
+    End Class
+
+    Private Enum ProcessorFamilyBeefiness As Integer
+        Potato = 0
+        Average = 1
+        Beefy = 2
+    End Enum
+
+    ' Processor families that we know the performance of. Family numbers derive from
+    ' version 3.9 of the SMBIOS specification, from 2025:
+    ' https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.9.0.pdf
+    Private Const CPU_INTEL_CORE_DUO As Integer = 40,
+                  CPU_INTEL_CORE_DUO_M As Integer = 41,
+                  CPU_INTEL_CORE_SOLO As Integer = 42,
+                  CPU_INTEL_ATOM As Integer = 43,
+                  CPU_INTEL_CORE_M As Integer = 44,
+                  CPU_INTEL_CORE_M3 As Integer = 45,
+                  CPU_INTEL_CORE_M5 As Integer = 46,
+                  CPU_INTEL_CORE_M7 As Integer = 47,
+                  CPU_AMD_TURION_2_ULTRA_DUALCORE_MOBILE_M As Integer = 56,
+                  CPU_AMD_TURION_2_DUALCORE_MOBILE_M As Integer = 57,
+                  CPU_AMD_ATHLON_2_DUALCORE_M As Integer = 58,
+                  CPU_AMD_OPTERON_6100 As Integer = 59,
+                  CPU_AMD_OPTERON_4100 As Integer = 60,
+                  CPU_AMD_OPTERON_6200 As Integer = 61,
+                  CPU_AMD_OPTERON_4200 As Integer = 62,
+                  CPU_AMD_FX As Integer = 63,
+                  CPU_AMD_C As Integer = 70,
+                  CPU_AMD_E As Integer = 71,
+                  CPU_AMD_A As Integer = 72,
+                  CPU_AMD_G As Integer = 73,
+                  CPU_AMD_Z As Integer = 74,
+                  CPU_AMD_R As Integer = 75,
+                  CPU_AMD_OPTERON_4300 As Integer = 76,
+                  CPU_AMD_OPTERON_6300 As Integer = 77,
+                  CPU_AMD_OPTERON_3300 As Integer = 78,
+                  CPU_AMD_FIREPRO As Integer = 79,
+                  CPU_AMD_ATHLON_X4_QUADCORE As Integer = 102,
+                  CPU_AMD_OPTERON_X1000 As Integer = 103,
+                  CPU_AMD_OPTERON_X2000_APU As Integer = 104,
+                  CPU_AMD_OPTERON_A As Integer = 105,
+                  CPU_AMD_OPTERON_X3000_APU As Integer = 106,
+                  CPU_AMD_ZEN As Integer = 107,
+                  CPU_AMD_ATHLON_64 As Integer = 131,
+                  CPU_AMD_OPTERON As Integer = 132,
+                  CPU_AMD_SEMPRON As Integer = 133,
+                  CPU_AMD_TURION_64_MOBILE As Integer = 134,
+                  CPU_AMD_OPTERON_DUALCORE As Integer = 135,
+                  CPU_AMD_ATHLON_64_X2_DUALCORE As Integer = 136,
+                  CPU_AMD_TURION_64_X2_MOBILE As Integer = 137,
+                  CPU_AMD_OPTERON_QUADCORE As Integer = 138,
+                  CPU_AMD_OPTERON_MK3 As Integer = 139,
+                  CPU_AMD_PHENOM_FX_QUADCORE As Integer = 140,
+                  CPU_AMD_PHENOM_X4_QUADCORE As Integer = 141,
+                  CPU_AMD_PHENOM_X2_DUALCORE As Integer = 142,
+                  CPU_AMD_ATHLON_X2_DUALCORE As Integer = 143,
+                  CPU_INTEL_XEON_3200_QUADCORE As Integer = 161,
+                  CPU_INTEL_XEON_3000_DUALCORE As Integer = 162,
+                  CPU_INTEL_XEON_5300_QUADCORE As Integer = 163,
+                  CPU_INTEL_XEON_5100_DUALCORE As Integer = 164,
+                  CPU_INTEL_XEON_5000_DUALCORE As Integer = 165,
+                  CPU_INTEL_XEON_LV_DUALCORE As Integer = 166,
+                  CPU_INTEL_XEON_ULV_DUALCORE As Integer = 167,
+                  CPU_INTEL_XEON_7100_DUALCORE As Integer = 168,
+                  CPU_INTEL_XEON_5400_QUADCORE As Integer = 169,
+                  CPU_INTEL_XEON_QUADCORE As Integer = 170,
+                  CPU_INTEL_XEON_5200_DUALCORE As Integer = 171,
+                  CPU_INTEL_XEON_7200_DUALCORE As Integer = 172,
+                  CPU_INTEL_XEON_7300_QUADCORE As Integer = 173,
+                  CPU_INTEL_XEON_7400_QUADCORE As Integer = 174,
+                  CPU_INTEL_XEON_7400_MULTICORE As Integer = 175,
+                  CPU_INTEL_PENTIUM3_XEON As Integer = 176,
+                  CPU_INTEL_PENTIUM3_SPEEDSTEP As Integer = 177,
+                  CPU_INTEL_PENTIUM4 As Integer = 178,
+                  CPU_INTEL_XEON As Integer = 179,
+                  CPU_INTEL_XEON_MP As Integer = 181,
+                  CPU_AMD_ATHLON_XP As Integer = 182,
+                  CPU_AMD_ATHLON_MP As Integer = 183,
+                  CPU_INTEL_PENTIUM_M As Integer = 185,
+                  CPU_INTEL_CELERON_D As Integer = 186,
+                  CPU_INTEL_PENTIUM_D As Integer = 187,
+                  CPU_INTEL_PENTIUM_D_EXTREME As Integer = 188,
+                  CPU_INTEL_CORE_SOLO_2 As Integer = 189,
+                  CPU_INTEL_CORE2_DUO As Integer = 191,
+                  CPU_INTEL_CORE2_SOLO As Integer = 192,
+                  CPU_INTEL_CORE2_EXTREME As Integer = 193,
+                  CPU_INTEL_CORE2_QUAD As Integer = 194,
+                  CPU_INTEL_CORE2_EXTREME_M As Integer = 195,
+                  CPU_INTEL_CORE2_DUO_M As Integer = 196,
+                  CPU_INTEL_CORE2_SOLO_M As Integer = 197,
+                  CPU_INTEL_CORE_I7 As Integer = 198,
+                  CPU_INTEL_CELERON_DUALCORE As Integer = 199,
+                  CPU_INTEL_CORE_I5 As Integer = 205,
+                  CPU_INTEL_CORE_I3 As Integer = 206,
+                  CPU_INTEL_CORE_I9 As Integer = 207,
+                  CPU_INTEL_XEON_D As Integer = 208,
+                  CPU_INTEL_XEON_3400_MULTICORE As Integer = 224,
+                  CPU_AMD_OPTERON_3000 As Integer = 228,
+                  CPU_AMD_SEMPRON_2 As Integer = 229,
+                  CPU_AMD_OPTERON_QUADCORE_EMBEDDED As Integer = 230,
+                  CPU_AMD_PHENOM_TRICORE As Integer = 231,
+                  CPU_AMD_TURION_ULTRA_DUALCORE_MOBILE As Integer = 232,
+                  CPU_AMD_TURION_DUALCORE_MOBILE As Integer = 233,
+                  CPU_AMD_ATHLON_DUALCORE As Integer = 234,
+                  CPU_AMD_SEMPRON_SI As Integer = 235,
+                  CPU_AMD_PHENOM_2 As Integer = 236,
+                  CPU_AMD_ATHLON_2 As Integer = 237,
+                  CPU_AMD_OPTERON_SIXCORE As Integer = 238,
+                  CPU_AMD_SEMPRON_M As Integer = 239,
+                  CPU_ARMV7 As Integer = 256,
+                  CPU_ARMV8 As Integer = 257,
+                  CPU_ARMV9 As Integer = 258,
+                  CPU_ARMRESERVED As Integer = 259,
+                  CPU_INTEL_CORE_3_RAPTORLAKE As Integer = 768,
+                  CPU_INTEL_CORE_5_RAPTORLAKE As Integer = 769,
+                  CPU_INTEL_CORE_7_RAPTORLAKE As Integer = 770,
+                  CPU_INTEL_CORE_9_RAPTORLAKE As Integer = 771,
+                  CPU_INTEL_CORE_ULTRA3 As Integer = 772,
+                  CPU_INTEL_CORE_ULTRA5 As Integer = 773,
+                  CPU_INTEL_CORE_ULTRA7 As Integer = 774,
+                  CPU_INTEL_CORE_ULTRA9 As Integer = 775
+
+    Private SpecialProcessorFamilies As New List(Of ProcessorFamilyCategory) From {
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_DUO, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_DUO_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_SOLO, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_ATOM, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_M3, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_M5, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_M7, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_TURION_2_ULTRA_DUALCORE_MOBILE_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_TURION_2_DUALCORE_MOBILE_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_2_DUALCORE_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_6100, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_4100, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_6200, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_4200, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_FX, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_C, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_E, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_A, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_G, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_Z, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_R, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_4300, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_6300, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_3300, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_FIREPRO, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_X4_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_X1000, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_X2000_APU, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_A, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_X3000_APU, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_ZEN, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_64, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_SEMPRON, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_TURION_64_MOBILE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_64_X2_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_TURION_64_X2_MOBILE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_MK3, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_PHENOM_FX_QUADCORE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_AMD_PHENOM_X4_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_PHENOM_X2_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_X2_DUALCORE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_3200_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_3000_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_5300_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_5100_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_5000_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_LV_DUALCORE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_ULV_DUALCORE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_7100_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_5400_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_QUADCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_5200_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_7200_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_7300_QUADCORE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_7400_QUADCORE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_7400_MULTICORE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM3_XEON, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM3_SPEEDSTEP, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM4, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_MP, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_XP, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_MP, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CELERON_D, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_D, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_D_EXTREME, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_SOLO_2, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_DUO, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_SOLO, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_EXTREME, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_QUAD, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_EXTREME_M, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_DUO_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE2_SOLO_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_I7, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CELERON_DUALCORE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_I5, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_I3, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_I9, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_D, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_XEON_3400_MULTICORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_3000, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_SEMPRON_2, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_QUADCORE_EMBEDDED, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_PHENOM_TRICORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_TURION_ULTRA_DUALCORE_MOBILE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_TURION_DUALCORE_MOBILE, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_DUALCORE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_SEMPRON_SI, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_AMD_PHENOM_2, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_ATHLON_2, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_AMD_OPTERON_SIXCORE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_AMD_SEMPRON_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_ARMV7, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_ARMV8, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_ARMV9, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_ARMRESERVED, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_3_RAPTORLAKE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_5_RAPTORLAKE, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_7_RAPTORLAKE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_9_RAPTORLAKE, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_ULTRA3, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_ULTRA5, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_ULTRA7, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_CORE_ULTRA9, ProcessorFamilyBeefiness.Beefy)
+    }
+
     Private Sub DetermineSettingValidity()
         DynaLog.LogMessage("Validating settings...")
         If TextBox1.Text = "" Then
@@ -221,6 +466,8 @@ Public Class Options
         MainForm.PreventSystemFromSleeping = CheckBox8.Checked
         MainForm.HumanizeDates = CheckBox1.Checked
         MainForm.LockUnlockedVolumes = CheckBox25.Checked
+
+        MainForm.PEHelper_MaxConcurrentISO = NumericUpDown2.Value
     End Sub
 
     Private Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1510,6 +1757,8 @@ Public Class Options
         LightThemesCB.ForeColor = CurrentTheme.ForegroundColor
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
+        NumericUpDown2.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown2.ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1671,6 +1920,8 @@ Public Class Options
         CheckBox8.Checked = MainForm.PreventSystemFromSleeping
         CheckBox1.Checked = MainForm.HumanizeDates
         CheckBox25.Checked = MainForm.LockUnlockedVolumes
+
+        NumericUpDown2.Value = MainForm.PEHelper_MaxConcurrentISO
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -2722,5 +2973,29 @@ Public Class Options
 
     Private Sub DTProjAssocCB_CheckedChanged(sender As Object, e As EventArgs) Handles DTProjAssocCB.CheckedChanged
         CheckBox11.Enabled = DTProjAssocCB.Checked
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        ' Compare by processor family
+        Try
+            Dim processorFamilyMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Family FROM Win32_Processor")
+            If processorFamilyMOC IsNot Nothing Then
+                Dim processorFamily As Integer = WMIHelper.GetObjectValue(processorFamilyMOC(0), "Family")
+                Dim processorDetails As ProcessorFamilyCategory = SpecialProcessorFamilies.FirstOrDefault(Function(procFamily) procFamily.Family = processorFamily)
+
+                If processorDetails IsNot Nothing Then
+                    Select Case processorDetails.Beefiness
+                        Case ProcessorFamilyBeefiness.Potato : NumericUpDown2.Value = 2
+                        Case ProcessorFamilyBeefiness.Average : NumericUpDown2.Value = 5
+                        Case ProcessorFamilyBeefiness.Beefy : NumericUpDown2.Value = 10
+                    End Select
+
+                    MessageBox.Show(String.Format("Based on your processor's specifications, the program has been configured to support up to {1} concurrent ISO creation tasks.{0}{0}" &
+                                                  "Apart from your processor, consider other specifications in your system that may become bottlenecks, such as disk I/O, or memory bandwidth.", Environment.NewLine, NumericUpDown2.Value), ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class

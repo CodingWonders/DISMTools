@@ -23,4 +23,8 @@ Public Class BDELib
         Return VolumeHelper.UnlockEncryptedVolumeWithNumericalPassword(PersistentVolumeId, NumericalPassword)
     End Function
 
+    Public Shared Function GetVolumeConversionStatus(PersistentVolumeId As String, Optional PrecisionFactor As Integer = 4) As ConversionStatus
+        Return VolumeHelper.GetVolumeConversionStatus(PersistentVolumeId, PrecisionFactor)
+    End Function
+
 End Class

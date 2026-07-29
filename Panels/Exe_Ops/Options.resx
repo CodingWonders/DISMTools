@@ -167,6 +167,11 @@ Package 1 of 128</value>
   <metadata name="LogSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>233, 17</value>
   </metadata>
+  <data name="Label35.Text" xml:space="preserve">
+    <value>Note that, the more ISO files you create at the same time, the more CPU-intensive the task will get. Consider your machine's specifications before setting the slider. You must close and reopen the ISO creation task for your changes to be carried over.
+
+For the majority of systems, a value of 2 is fine. For more performant systems, you may increase this value.</value>
+  </data>
   <data name="Label32.Text" xml:space="preserve">
     <value>This is only available when managing active installations.
 When getting information about AppX packages, DISMTools can map the IDs and names of the local accounts in this system to tell you which users an application is registered to more precisely.</value>
