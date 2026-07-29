@@ -2267,15 +2267,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed issues with some image tasks targeting rooted paths
+        '''- Fixed some HiDPI issues
         '''
         '''New features:
         '''
-        '''- You can now create multiple ISO files at the same time
-        '''- The set of wallpapers for the Preinstallation Environment has been updated to reflect the 4th anniversary of the project
-        '''- Tooling for locking and unlocking BitLocker encrypted volumes has been introduced
-        '''- You can now unlock BitLocker encrypted volumes from the offline installation management mode
-        '''- You can now switch between offline installations more  [resto de la cadena truncado]&quot;;.
+        '''- The maximum amount of concurrent ISO creation tasks can now be configured up to a value of 10
+        '''- The Preinstallation Environment has received support for encrypting and decrypting, as well as getting information about, encryptable volumes
+        '''- The Sysprep Preparation Tool has been updated with BitLocker volume detection
+        '''- The &quot;Prevent companion device software installation&quot; Starter Script has been introduced
+        '''- When performing driver exports, multi [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
