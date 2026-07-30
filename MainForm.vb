@@ -4463,11 +4463,9 @@ Public Class MainForm
             Try
                 ' Tell settings file to use this method
                 DynaLog.LogMessage("Forcing save to registry in INI File...")
-                Dim SettingRtb As New RichTextBox() With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                }
-                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
-                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                Dim SettingContents As String = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                SettingContents = SettingContents.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingContents, ASCII)
                 DynaLog.LogMessage("Setting key values...")
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
@@ -11862,10 +11860,8 @@ Public Class MainForm
                 DynaLog.LogMessage("An AppX manifest file exists in the main directory. There are no variations of any kind")
                 ' Read from manifest
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("Logo") Then
                         DynaLog.LogMessage("We have a possible logo...")
                         Dim SplitPaths As New List(Of String)
@@ -11904,10 +11900,8 @@ Public Class MainForm
                     If Not folder.Contains("neutral") Then
                         DynaLog.LogMessage("We have a possible folder candidate. Reading manifest...")
                         ' Read from manifest
-                        Dim ManFile As New RichTextBox() With {
-                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
-                        }
-                        For Each line In ManFile.Lines
+                        Dim ManFileLines As String() = File.ReadAllLines(folder & "AppxManifest.xml")
+                        For Each line In ManFileLines
                             If line.Contains("Logo") Then
                                 DynaLog.LogMessage("Returning logo...")
                                 Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
@@ -11974,10 +11968,8 @@ Public Class MainForm
             DynaLog.LogMessage("Checking if AppX manifest exists...")
             If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(suitableFolderName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("<Logo>") Then
                         Dim SplitPaths As New List(Of String)
                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
