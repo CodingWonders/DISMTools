@@ -83,6 +83,7 @@ Public Class AIResults
 
         DataGridView1.DefaultCellStyle.BackColor = BackColor
         DataGridView1.DefaultCellStyle.ForeColor = ForeColor
+        DataGridView1.BackgroundColor = BackColor
     End Sub
 
     Private Function SortResults(ByVal result1 As AutoInspectionResult, ByVal result2 As AutoInspectionResult) As Integer
