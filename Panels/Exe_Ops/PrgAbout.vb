@@ -268,7 +268,8 @@ Public Class PrgAbout
             MsgBox(LocalizationService.ForSection("PrgAbout.UpdateCheck").Format("Couldn.Tdownload.Message", ex.Status.ToString()), vbOKOnly + vbCritical, UpdCheckBtn.Text)
             Exit Sub
         End Try
-        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id & " " & LocalizationService.GetLanguageCommandLineArgument())
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
+        OK_Button.PerformClick()
     End Sub
 
     Private Sub PictureBox5_MouseHover(sender As Object, e As EventArgs) Handles PictureBox5.MouseHover
