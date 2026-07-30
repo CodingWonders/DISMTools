@@ -21,36 +21,31 @@ Public Class PECustomizerDialog
         ' Now let's deal with the policies
         Dim PartTableOverridePreference As String = ""
         Select Case ComboBox1.SelectedIndex
-            Case 0
-                PartTableOverridePreference = "NoOverride"
-            Case 1
-                PartTableOverridePreference = "AlwaysMBR"
-            Case 2
-                PartTableOverridePreference = "AlwaysGPT"
+            Case 0 : PartTableOverridePreference = "NoOverride"
+            Case 1 : PartTableOverridePreference = "AlwaysMBR"
+            Case 2 : PartTableOverridePreference = "AlwaysGPT"
         End Select
         Dim UEFICA23Preference As String = ""
         Select Case ComboBox2.SelectedIndex
-            Case 0
-                UEFICA23Preference = "AskUser"
-            Case 1
-                UEFICA23Preference = "UseNever"
-            Case 2
-                UEFICA23Preference = "UseAlways"
+            Case 0 : UEFICA23Preference = "AskUser"
+            Case 1 : UEFICA23Preference = "UseNever"
+            Case 2 : UEFICA23Preference = "UseAlways"
         End Select
         Dim AnswerFileConflictResponse As String = ""
         Select Case ComboBox3.SelectedIndex
-            Case 0
-                AnswerFileConflictResponse = "AskUser"
-            Case 1
-                AnswerFileConflictResponse = "PreferISO"
-            Case 2
-                AnswerFileConflictResponse = "PreferWIM"
+            Case 0 : AnswerFileConflictResponse = "AskUser"
+            Case 1 : AnswerFileConflictResponse = "PreferISO"
+            Case 2 : AnswerFileConflictResponse = "PreferWIM"
+        End Select
+        Dim ImageSelectorDefaultOptionStr As String = "AskUser"
+        Select Case ComboBox4.SelectedIndex
+            Case 0 : ImageSelectorDefaultOptionStr = "AskUser"
+            Case 1 : ImageSelectorDefaultOptionStr = "LargestFirst"
+            Case 2 : ImageSelectorDefaultOptionStr = "MostRecentFirst"
         End Select
 
         ' Control the selected layout; if it is invalid then fall back to US
-        If SelectedKeyboardLayoutCode = "" OrElse Not KeyboardLayoutDictionary.ContainsKey(SelectedKeyboardLayoutCode) Then
-            SelectedKeyboardLayoutCode = "00000409"
-        End If
+        If SelectedKeyboardLayoutCode = "" OrElse Not KeyboardLayoutDictionary.ContainsKey(SelectedKeyboardLayoutCode) Then SelectedKeyboardLayoutCode = "00000409"
 
         Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
                                                   "[HKEY_LOCAL_MACHINE\WINPESOFT\DISMTools\Preinstallation Environment\Policies]{0}" &
@@ -64,10 +59,13 @@ Public Class PECustomizerDialog
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
                                                   "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
                                                   "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
-                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}",
+                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}" &
+                                                  "{1}ScanBootImages{1}=dword:0000000{13}{0}" &
+                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}",
                                                   CrLf, Quote, If(CheckBox2.Checked, 1, 0), UEFICA23Preference, PartTableOverridePreference,
                                                   Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0),
-                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant(), SelectedKeyboardLayoutCode, If(CheckBox6.Checked, 1, 0), AnswerFileConflictResponse)
+                                                  If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant(), SelectedKeyboardLayoutCode,
+                                                  If(CheckBox6.Checked, 1, 0), AnswerFileConflictResponse, If(CheckBox7.Checked, 1, 0), ImageSelectorDefaultOptionStr)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg"), regContents)
         Catch ex As Exception
@@ -91,36 +89,31 @@ Public Class PECustomizerDialog
             ' Now let's deal with the policies
             Dim PartTableOverridePreference As String = ""
             Select Case ComboBox1.SelectedIndex
-                Case 0
-                    PartTableOverridePreference = "NoOverride"
-                Case 1
-                    PartTableOverridePreference = "AlwaysMBR"
-                Case 2
-                    PartTableOverridePreference = "AlwaysGPT"
+                Case 0 : PartTableOverridePreference = "NoOverride"
+                Case 1 : PartTableOverridePreference = "AlwaysMBR"
+                Case 2 : PartTableOverridePreference = "AlwaysGPT"
             End Select
             Dim UEFICA23Preference As String = ""
             Select Case ComboBox2.SelectedIndex
-                Case 0
-                    UEFICA23Preference = "AskUser"
-                Case 1
-                    UEFICA23Preference = "UseNever"
-                Case 2
-                    UEFICA23Preference = "UseAlways"
+                Case 0 : UEFICA23Preference = "AskUser"
+                Case 1 : UEFICA23Preference = "UseNever"
+                Case 2 : UEFICA23Preference = "UseAlways"
             End Select
             Dim AnswerFileConflictResponse As String = ""
             Select Case ComboBox3.SelectedIndex
-                Case 0
-                    AnswerFileConflictResponse = "AskUser"
-                Case 1
-                    AnswerFileConflictResponse = "PreferISO"
-                Case 2
-                    AnswerFileConflictResponse = "PreferWIM"
+                Case 0 : AnswerFileConflictResponse = "AskUser"
+                Case 1 : AnswerFileConflictResponse = "PreferISO"
+                Case 2 : AnswerFileConflictResponse = "PreferWIM"
+            End Select
+            Dim ImageSelectorDefaultOptionStr As String = "AskUser"
+            Select Case ComboBox4.SelectedIndex
+                Case 0 : ImageSelectorDefaultOptionStr = "AskUser"
+                Case 1 : ImageSelectorDefaultOptionStr = "LargestFirst"
+                Case 2 : ImageSelectorDefaultOptionStr = "MostRecentFirst"
             End Select
 
             ' Control the selected layout; if it is invalid then fall back to US
-            If SelectedKeyboardLayoutCode = "" OrElse Not KeyboardLayoutDictionary.ContainsKey(SelectedKeyboardLayoutCode) Then
-                SelectedKeyboardLayoutCode = "00000409"
-            End If
+            If SelectedKeyboardLayoutCode = "" OrElse Not KeyboardLayoutDictionary.ContainsKey(SelectedKeyboardLayoutCode) Then SelectedKeyboardLayoutCode = "00000409"
 
             MainForm.ShowWatermark = CheckBox2.Checked
             MainForm.UEFICA23Preference = ComboBox2.SelectedIndex
@@ -133,6 +126,8 @@ Public Class PECustomizerDialog
             MainForm.KeyboardLayoutCode = SelectedKeyboardLayoutCode
             MainForm.KeyboardLayoutOverrideExistingLayout = CheckBox6.Checked
             MainForm.AnswerFileConflictResponse = ComboBox3.SelectedIndex
+            MainForm.ScanBootImages = CheckBox7.Checked
+            MainForm.ImageSelectorDefaultOption = ComboBox4.SelectedIndex
             Return True
         Catch ex As Exception
             Return False
@@ -173,26 +168,33 @@ Public Class PECustomizerDialog
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox2.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox4.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown2.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView2.BackColor = CurrentTheme.SectionBackgroundColor
         TabPage1.BackColor = CurrentTheme.SectionBackgroundColor
         TabPage2.BackColor = CurrentTheme.SectionBackgroundColor
         TabPage3.BackColor = CurrentTheme.SectionBackgroundColor
         TabPage4.BackColor = CurrentTheme.SectionBackgroundColor
+        TabPage5.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
+        GroupBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         ComboBox2.ForeColor = ForeColor
         ComboBox3.ForeColor = ForeColor
+        ComboBox4.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        ListView2.ForeColor = ForeColor
         TabPage1.ForeColor = ForeColor
         TabPage2.ForeColor = ForeColor
         TabPage3.ForeColor = ForeColor
         TabPage4.ForeColor = ForeColor
+        TabPage5.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
