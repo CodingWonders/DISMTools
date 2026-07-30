@@ -1042,7 +1042,7 @@ Public Class ImgInfoSaveDlg
                             registrationStatus = "No"
                         End If
                         Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
-                        Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
+                        Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
                         Dim instDir As String = ""
                         For Each folder In pkgDirs
                             If Not folder.Contains("neutral") Then
@@ -1072,10 +1072,8 @@ Public Class ImgInfoSaveDlg
                         End Try
                         If assetDir <> "" Then
                             If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                Dim ManFile As New RichTextBox() With {
-                                    .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                }
-                                For Each line In ManFile.Lines
+                                Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                                For Each line In ManFileLines
                                     If line.Contains("<Logo>") Then
                                         Dim SplitPaths As New List(Of String)
                                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -1087,17 +1085,15 @@ Public Class ImgInfoSaveDlg
                                 Next
                             End If
                         Else
-                            If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
-                                Dim ManFile As New RichTextBox() With {
-                                    .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
-                                }
-                                For Each line In ManFile.Lines
+                            If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
+                                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
+                                For Each line In ManFileLines
                                     If line.Contains("<Logo>") Then
                                         Dim SplitPaths As New List(Of String)
                                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                         SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                         Dim newPath As String = String.Join("\", SplitPaths)
-                                        logoAssetDir = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
+                                        logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
                                         Exit For
                                     End If
                                 Next
@@ -1220,7 +1216,7 @@ Public Class ImgInfoSaveDlg
                                         registrationStatus = "No"
                                     End If
                                     Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
-                                    Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
+                                    Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
                                     Dim instDir As String = ""
                                     For Each folder In pkgDirs
                                         If Not folder.Contains("neutral") Then
@@ -1250,10 +1246,8 @@ Public Class ImgInfoSaveDlg
                                     End Try
                                     If assetDir <> "" Then
                                         If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                            Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -1265,17 +1259,15 @@ Public Class ImgInfoSaveDlg
                                             Next
                                         End If
                                     Else
-                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
+                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                                     SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                                     Dim newPath As String = String.Join("\", SplitPaths)
-                                                    logoAssetDir = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
+                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
                                                     Exit For
                                                 End If
                                             Next
@@ -1369,10 +1361,8 @@ Public Class ImgInfoSaveDlg
                                     End Try
                                     If assetDir <> "" Then
                                         If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                            Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -1384,17 +1374,15 @@ Public Class ImgInfoSaveDlg
                                             Next
                                         End If
                                     Else
-                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
+                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                                     SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                                     Dim newPath As String = String.Join("\", SplitPaths)
-                                                    logoAssetDir = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim()
+                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim()
                                                     Exit For
                                                 End If
                                             Next
