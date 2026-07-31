@@ -20,7 +20,6 @@ Public Class MountedImgMgr
         Button4.Text = LocalizationService.ForSection("MountedImgMgr")("Open.Mount.Dir.Button")
         Button5.Text = LocalizationService.ForSection("MountedImgMgr")("Remove.VolumeImages.Button")
         Button6.Text = LocalizationService.ForSection("MountedImgMgr")("LoadProject.Button")
-        ListView1.Columns(5).Text = LocalizationService.ForSection("MountedImgMgr")("VersiN.Column")
         CheckForIllegalCrossThreadCalls = False
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
