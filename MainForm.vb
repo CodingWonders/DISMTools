@@ -11667,17 +11667,24 @@ Public Class MainForm
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image unmount dialog...")
-        If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
-            DynaLog.LogMessage("This is the image the user is managing here")
+        ' We default to the current image but, if we have the mounted image manager open, we'll check
+        If MountedImgMgr.ListView1.FocusedItem IsNot Nothing Then
+            If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
+                DynaLog.LogMessage("This is the image the user is managing here")
+                ImgUMount.RadioButton1.Checked = True
+                ImgUMount.RadioButton2.Checked = False
+                ImgUMount.TextBox1.Text = ""
+            Else
+                DynaLog.LogMessage("This is an image different from the one the user is managing here")
+                ImgUMount.RadioButton1.Checked = False
+                ImgUMount.RadioButton2.Checked = True
+                ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+                ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+            End If
+        Else
             ImgUMount.RadioButton1.Checked = True
             ImgUMount.RadioButton2.Checked = False
             ImgUMount.TextBox1.Text = ""
-        Else
-            DynaLog.LogMessage("This is an image different from the one the user is managing here")
-            ImgUMount.RadioButton1.Checked = False
-            ImgUMount.RadioButton2.Checked = True
-            ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         End If
         ImgUMount.ShowDialog(Me)
     End Sub
