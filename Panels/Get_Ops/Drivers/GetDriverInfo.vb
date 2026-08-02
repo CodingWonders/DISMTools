@@ -712,9 +712,16 @@ Public Class GetDriverInfo
                                 Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe temporaneamente bloccarsi"
                         End Select
                         Application.DoEvents()
-                        Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile)
-                        DynaLog.LogMessage("Information collection count: " & drvInfoCollection.Count)
-                        If drvInfoCollection.Count > 0 Then DriverInfoList.Add(drvInfoCollection)
+                        ' Pesky computer manufacturer companies like HP have INF files that are not drivers. Work around
+                        ' those. HP: horrible products that are "oddly satisfying"
+                        Try
+                            Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile),
+                                UniqueHardwareCount As Integer = drvInfoCollection.Distinct().Count
+                            DynaLog.LogMessage("Information collection count: " & UniqueHardwareCount)
+                            If UniqueHardwareCount > 0 Then DriverInfoList.Add(drvInfoCollection)
+                        Catch ex As Exception
+                            ' Information could not be obtained. Continue
+                        End Try
                     End If
                 Next
             End Using
