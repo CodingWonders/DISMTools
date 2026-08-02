@@ -215,6 +215,9 @@ Public Class InfoSaveResults
                                                           "                    if (link.textContent.indexOf(" & Quote & "We have ended" & Quote & ") === 0) {" & CrLf &
                                                           "                        return;" & CrLf &
                                                           "                    }" & CrLf &
+                                                          "                    if (heading.tagName == " & Quote & "H4" & Quote & ") {" & CrLf &
+                                                          "                        link.style.fontSize = " & Quote & "0.75em" & Quote & ";" & CrLf &
+                                                          "                    }" & CrLf &
                                                           "                    sidebar.appendChild(link);" & CrLf &
                                                           "                }" & CrLf &
                                                           "            });" & CrLf & CrLf &
