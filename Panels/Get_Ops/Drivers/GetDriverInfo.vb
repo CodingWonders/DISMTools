@@ -690,26 +690,26 @@ Public Class GetDriverInfo
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                     Case "ENU", "ENG"
-                                        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                                     Case "ESN"
-                                        Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                        Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                                     Case "FRA"
-                                        Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                        Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..."
                                     Case "PTB", "PTG"
-                                        Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                        Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                                     Case "ITA"
-                                        Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe temporaneamente bloccarsi"
+                                        Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                                 End Select
                             Case 1
-                                Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                             Case 2
-                                Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                             Case 3
-                                Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..."
                             Case 4
-                                Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                             Case 5
-                                Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe temporaneamente bloccarsi"
+                                Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..."
                         End Select
                         Application.DoEvents()
                         ' Pesky computer manufacturer companies like HP have INF files that are not drivers. Work around
@@ -847,9 +847,10 @@ Public Class GetDriverInfo
             DynaLog.LogMessage("There is only 1 item selected.")
             JumpTo = -1
             ComboBox1.Text = ""
-            Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
-            DynaLog.LogMessage("Showing " & CurrentDriverCollection.Count & " entry/ies...")
-            ComboBox1.Items.AddRange(CurrentDriverCollection.Select(Function(DriverPackageInfo) String.Format("{0} - {1} ({2})", CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1, DriverPackageInfo.HardwareDescription, DriverPackageInfo.HardwareId)).ToArray())
+            Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex),
+                UniqueHardwareTargets As List(Of DismDriver) = CurrentDriverCollection.Distinct().ToList()
+            DynaLog.LogMessage("Showing " & UniqueHardwareTargets.Count & " entry/ies...")
+            ComboBox1.Items.AddRange(UniqueHardwareTargets.Select(Function(DriverPackageInfo) String.Format("{0} - {1} ({2})", UniqueHardwareTargets.IndexOf(DriverPackageInfo) + 1, DriverPackageInfo.HardwareDescription, DriverPackageInfo.HardwareId)).ToArray())
         End If
     End Sub
 
@@ -874,36 +875,37 @@ Public Class GetDriverInfo
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         Try
             If ListBox1.SelectedItems.Count = 1 Then
-                DynaLog.LogMessage("Amount of hardware targets of selected driver file: " & DriverInfoList(ListBox1.SelectedIndex).Count)
+                DynaLog.LogMessage("Amount of hardware targets of selected driver file: " & DriverInfoList(ListBox1.SelectedIndex).Distinct().Count)
                 JumpToPanel.Visible = False
                 NoDrvPanel.Visible = False
                 DrvPackageInfoPanel.Visible = True
                 Button2.Enabled = True
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then
+                    Dim hwCount As Integer = DriverInfoList(ListBox1.SelectedIndex).Distinct().Count
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                    Label7.Text = "Hardware target 1 of " & hwCount
                                 Case "ESN"
-                                    Label7.Text = "Hardware de destino 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                    Label7.Text = "Hardware de destino 1 de " & hwCount
                                 Case "FRA"
-                                    Label7.Text = "Cible matérielle 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                    Label7.Text = "Cible matérielle 1 de " & hwCount
                                 Case "PTB", "PTG"
-                                    Label7.Text = "Equipamento-alvo 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                    Label7.Text = "Equipamento-alvo 1 de " & hwCount
                                 Case "ITA"
-                                    Label7.Text = "Destinazione hardware 1 di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                    Label7.Text = "Destinazione hardware 1 di " & hwCount
                             End Select
                         Case 1
-                            Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Hardware target 1 of " & hwCount
                         Case 2
-                            Label7.Text = "Hardware de destino 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Hardware de destino 1 de " & hwCount
                         Case 3
-                            Label7.Text = "Cible matérielle 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Cible matérielle 1 de " & hwCount
                         Case 4
-                            Label7.Text = "Equipamento-alvo 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Equipamento-alvo 1 de " & hwCount
                         Case 5
-                            Label7.Text = "Destinazione hardware 1 di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Destinazione hardware 1 di " & hwCount
                     End Select
                 End If
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
@@ -965,30 +967,31 @@ Public Class GetDriverInfo
             DynaLog.LogMessage("Switching to the previous hardware target...")
             DisplayDriverInformation(CurrentHWTarget - 1)
             CurrentHWTarget -= 1
+            Dim hwCount As Integer = DriverInfoList(ListBox1.SelectedIndex).Distinct().Count
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & hwCount
                         Case "ESN"
-                            Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & hwCount
                         Case "FRA"
-                            Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & hwCount
                         Case "PTB", "PTG"
-                            Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & hwCount
                         Case "ITA"
-                            Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & hwCount
                     End Select
                 Case 1
-                    Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Hardware target " & CurrentHWTarget & " of " & hwCount
                 Case 2
-                    Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & hwCount
                 Case 3
-                    Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & hwCount
                 Case 4
-                    Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & hwCount
                 Case 5
-                    Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & hwCount
             End Select
             Button5.Enabled = True
             If CurrentHWTarget = 1 Then Button4.Enabled = False
@@ -1000,30 +1003,31 @@ Public Class GetDriverInfo
             DynaLog.LogMessage("Switching to the next hardware target...")
             DisplayDriverInformation(CurrentHWTarget + 1)
             CurrentHWTarget += 1
+            Dim hwCount As Integer = DriverInfoList(ListBox1.SelectedIndex).Distinct().Count
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & hwCount
                         Case "ESN"
-                            Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & hwCount
                         Case "FRA"
-                            Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & hwCount
                         Case "PTB", "PTG"
-                            Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & hwCount
                         Case "ITA"
-                            Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & hwCount
                     End Select
                 Case 1
-                    Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Hardware target " & CurrentHWTarget & " of " & hwCount
                 Case 2
-                    Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & hwCount
                 Case 3
-                    Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & hwCount
                 Case 4
-                    Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & hwCount
                 Case 5
-                    Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & hwCount
             End Select
             Button4.Enabled = True
             If CurrentHWTarget = DriverInfoList(ListBox1.SelectedIndex).Count Then Button5.Enabled = False
@@ -1123,30 +1127,31 @@ Public Class GetDriverInfo
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         JumpTo = ComboBox1.SelectedIndex + 1
         If JumpTo < 1 Then Exit Sub
+        Dim hwCount As Integer = DriverInfoList(ListBox1.SelectedIndex).Distinct().Count
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Label7.Text = "Hardware target " & JumpTo & " of " & hwCount
                     Case "ESN"
-                        Label7.Text = "Hardware de destino " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Label7.Text = "Hardware de destino " & JumpTo & " de " & hwCount
                     Case "FRA"
-                        Label7.Text = "Cible matérielle " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Label7.Text = "Cible matérielle " & JumpTo & " de " & hwCount
                     Case "PTB", "PTG"
-                        Label7.Text = "Equipamento-alvo " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Label7.Text = "Equipamento-alvo " & JumpTo & " de " & hwCount
                     Case "ITA"
-                        Label7.Text = "Destinazione hardware " & JumpTo & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Label7.Text = "Destinazione hardware " & JumpTo & " di " & hwCount
                 End Select
             Case 1
-                Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Label7.Text = "Hardware target " & JumpTo & " of " & hwCount
             Case 2
-                Label7.Text = "Hardware de destino " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Label7.Text = "Hardware de destino " & JumpTo & " de " & hwCount
             Case 3
-                Label7.Text = "Cible matérielle " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Label7.Text = "Cible matérielle " & JumpTo & " de " & hwCount
             Case 4
-                Label7.Text = "Equipamento-alvo " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Label7.Text = "Equipamento-alvo " & JumpTo & " de " & hwCount
             Case 5
-                Label7.Text = "Destinazione hardware " & JumpTo & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Label7.Text = "Destinazione hardware " & JumpTo & " di " & hwCount
         End Select
         CurrentHWTarget = JumpTo
         DisplayDriverInformation(JumpTo)

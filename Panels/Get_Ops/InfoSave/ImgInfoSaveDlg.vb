@@ -1951,7 +1951,7 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetDriverFileInformation] Creating image session...")
             ReportChanges(msg, 0)
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
-                Contents &= GetParagraph("Information summary for " & DriverPkgs.Count & " driver package(s):", ParagraphStyle.Bold) & CrLf
+                Contents &= GetHeader("Information summary for " & DriverPkgs.Count & " driver package(s):", HeaderSize.Header3) & CrLf
                 For Each drvPkg In DriverPkgs
                     Select Case MainForm.Language
                         Case 0
@@ -1980,28 +1980,33 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
                     If File.Exists(drvPkg) Then
-                        Contents &= GetHeader("Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & "", HeaderSize.Header3) & CrLf
-                        Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
-                        If drvInfoCollection.Count > 0 Then
-                            Contents &= GetParagraph("Information summary for " & drvInfoCollection.Count & " hardware target(s):", ParagraphStyle.Bold) & CrLf &
-                                GetTableHeader(New String() {"Hardware description",
-                                                             "Hardware ID",
-                                                             "Compatible IDs",
-                                                             "Exclude IDs",
-                                                             "Hardware manufacturer",
-                                                             "Architecture"}.ToList())
-                            For Each hwTarget As DismDriver In drvInfoCollection
-                                Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
-                                                                      hwTarget.HardwareId,
-                                                                      If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
-                                                                      If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
-                                                                      hwTarget.ManufacturerName,
-                                                                      Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
-                            Next
-                            Contents &= CrLf
-                        Else
-                            Contents &= GetParagraph("This file contains no hardware targets. It could be invalid.", ParagraphStyle.Bold) & CrLf
-                        End If
+                        Try
+                            Contents &= GetHeader("Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & " (" & Path.GetFileName(drvPkg) & ")", HeaderSize.Header4) & CrLf
+                            Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
+                            Dim hwCount As Integer = drvInfoCollection.Distinct().Count
+                            If hwCount > 0 Then
+                                Contents &= GetParagraph("Information summary for " & hwCount & " hardware target(s):", ParagraphStyle.Bold) & CrLf &
+                                    GetTableHeader(New String() {"Hardware description",
+                                                                 "Hardware ID",
+                                                                 "Compatible IDs",
+                                                                 "Exclude IDs",
+                                                                 "Hardware manufacturer",
+                                                                 "Architecture"}.ToList())
+                                For Each hwTarget As DismDriver In drvInfoCollection.Distinct()
+                                    Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
+                                                                          String.Format("{0} ({1})", hwTarget.HardwareId, MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(hwTarget.HardwareId), "Look up")),
+                                                                          If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
+                                                                          If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
+                                                                          hwTarget.ManufacturerName,
+                                                                          Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
+                                Next
+                                Contents &= CrLf
+                            Else
+                                Contents &= GetParagraph("This file contains no hardware targets. It could be invalid.", ParagraphStyle.Bold) & CrLf
+                            End If
+                        Catch ex As Exception
+                            Contents &= GetParagraph("This driver file could not be processed.")
+                        End Try
                     End If
                 Next
             End Using
