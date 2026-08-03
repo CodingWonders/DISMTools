@@ -22,7 +22,6 @@ Partial Class PrgAbout
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrgAbout))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -65,7 +64,6 @@ Partial Class PrgAbout
         Me.UpdCheckBtn = New System.Windows.Forms.Button()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
-        Me.LinkLabel6 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
@@ -130,7 +128,7 @@ Partial Class PrgAbout
         Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Location = New System.Drawing.Point(23, 144)
+        Me.Label2.Location = New System.Drawing.Point(23, 119)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(377, 41)
         Me.Label2.TabIndex = 4
@@ -615,26 +613,6 @@ Partial Class PrgAbout
         Me.PictureBox5.TabIndex = 11
         Me.PictureBox5.TabStop = False
         '
-        'LinkLabel6
-        '
-        Me.LinkLabel6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel6.AutoEllipsis = True
-        Me.LinkLabel6.BackColor = System.Drawing.Color.Transparent
-        Me.LinkLabel6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel6.ForeColor = System.Drawing.Color.Black
-        Me.LinkLabel6.LinkArea = New System.Windows.Forms.LinkArea(241, 14)
-        Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel6.LinkColor = System.Drawing.Color.Green
-        Me.LinkLabel6.Location = New System.Drawing.Point(23, 224)
-        Me.LinkLabel6.Name = "LinkLabel6"
-        Me.LinkLabel6.Size = New System.Drawing.Size(377, 133)
-        Me.LinkLabel6.TabIndex = 13
-        Me.LinkLabel6.TabStop = True
-        Me.LinkLabel6.Text = resources.GetString("LinkLabel6.Text")
-        Me.LinkLabel6.TextAlign = System.Drawing.ContentAlignment.BottomLeft
-        Me.LinkLabel6.UseCompatibleTextRendering = True
-        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -642,7 +620,6 @@ Partial Class PrgAbout
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.aboutscr_bg
         Me.ClientSize = New System.Drawing.Size(844, 441)
-        Me.Controls.Add(Me.LinkLabel6)
         Me.Controls.Add(Me.PictureBox5)
         Me.Controls.Add(Me.UpdCheckBtn)
         Me.Controls.Add(Me.PictureBox4)
@@ -722,6 +699,5 @@ Partial Class PrgAbout
     Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
     Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
-    Friend WithEvents LinkLabel6 As System.Windows.Forms.LinkLabel
 
 End Class
