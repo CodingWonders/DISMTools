@@ -1378,20 +1378,15 @@ Public Class GetDriverInfo
         If MainForm.CurrentImage.ImageDrivers.Count > 0 Then
             Dim FilteredDrivers As IEnumerable(Of DismDriverPackage) = Nothing
             Select Case driverSearchMode
-                Case SearchMode.OriginalFileName
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
-                Case SearchMode.ProviderName
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                Case SearchMode.OriginalFileName : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
+                Case SearchMode.ProviderName : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
                 Case SearchMode.ClassName
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
-                Case SearchMode.InBox
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.InBox)
-                Case SearchMode.NoInBox
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.InBox)
-                Case SearchMode.BootCritical
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.BootCritical)
-                Case SearchMode.NoBootCritical
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.BootCritical)
+                    Dim ReferenceClassNames As String() = sQuery.Replace("classname:", "").Replace("cn:", "").Split(";").Select(Function(cn) cn.ToLower()).ToArray()
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) ReferenceClassNames.Contains(Driver.ClassName.ToLower()))
+                Case SearchMode.InBox : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.InBox)
+                Case SearchMode.NoInBox : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.InBox)
+                Case SearchMode.BootCritical : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.BootCritical)
+                Case SearchMode.NoBootCritical : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.BootCritical)
                 Case SearchMode.DateField
                     ' We guess the SUBMODE by the operator used
                     Try
@@ -1405,18 +1400,10 @@ Public Class GetDriverInfo
                         Dim convertedField As Object = Nothing
                         If {"eq", "ne", "gt", "ge", "lt", "le"}.Contains(searchOperator.ToLower()) Then
                             ' Perform date conversion
-                            If Not Date.TryParseExact(field, dateComparatorFormats, Nothing, Globalization.DateTimeStyles.None, convertedField) Then
-                                convertedField = New Date(1970, 1, 1, 0, 0, 0)
-                            End If
+                            If Not Date.TryParseExact(field, dateComparatorFormats, Nothing, Globalization.DateTimeStyles.None, convertedField) Then convertedField = New Date(1970, 1, 1, 0, 0, 0)
                         Else
                             ' Perform integer conversion
-                            If Not Integer.TryParse(field, convertedField) Then
-                                If searchOperator.EndsWith("y", StringComparison.OrdinalIgnoreCase) Then
-                                    convertedField = 1970
-                                Else
-                                    convertedField = 1
-                                End If
-                            End If
+                            If Not Integer.TryParse(field, convertedField) Then convertedField = If(searchOperator.EndsWith("y", StringComparison.OrdinalIgnoreCase), 1970, 1)
                         End If
                         Select Case searchOperator.ToLower()
                             Case "eqy" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year = CInt(convertedField))
@@ -1442,12 +1429,9 @@ Public Class GetDriverInfo
                     Catch ex As Exception
                         FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
                     End Try
-                Case SearchMode.NotSigned
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature <> DismDriverSignature.Signed)
-                Case SearchMode.Signed
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature = DismDriverSignature.Signed)
-                Case Else
-                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+                Case SearchMode.NotSigned : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature <> DismDriverSignature.Signed)
+                Case SearchMode.Signed : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature = DismDriverSignature.Signed)
+                Case Else : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End Select
             If FilteredDrivers IsNot Nothing Then
                 ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
