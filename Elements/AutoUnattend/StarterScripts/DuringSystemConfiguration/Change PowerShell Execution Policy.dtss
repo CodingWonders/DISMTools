@@ -12,7 +12,7 @@ REM - RemoteSigned
 REM - Bypass
 REM - AllSigned
 REM Note that this will only take effect on Windows PowerShell (version 5.1, or the
-REM built-in version of PowerShell), but not on the modern .NET-based PowerShell 7.
+REM built-in version of PowerShell), but not on PowerShell 7.
 
 SET "_PWSHExecutionPolicy=Unrestricted"
 
@@ -20,10 +20,13 @@ REM To learn more about PowerShell execution policies for any version of PowerSh
 REM (not just Windows PowerShell), refer to the following Help documentation page:
 REM https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1
 
-REM Any value other than those defined above will still be set, but it will not be valid
-REM for PowerShell. In that case, you can either run the script again as an administrator,
-REM or run Set-ExecutionPolicy <policy> from within PowerShell as an administrator.
+REM To configure policies at any time, run Set-ExecutionPolicy <policy> from within
+REM PowerShell as an administrator.
 
 IF NOT DEFINED _PWSHExecutionPolicy SET "_PWSHExecutionPolicy=Unrestricted"
 
-REG ADD "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /F /V "ExecutionPolicy" /T REG_SZ /D "%_PWSHExecutionPolicy%"
+FOR %%A IN (Unrestricted Undefined Restricted RemoteSigned Bypass AllSigned) DO (
+    IF /I "%_PWSHExecutionPolicy%" == "%%A" (
+        REG ADD "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /F /V "ExecutionPolicy" /T REG_SZ /D "%_PWSHExecutionPolicy%"
+    )
+)
