@@ -90,7 +90,7 @@
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.6.0.0\lib\net472\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.6.1.0\lib\net472\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.15.2, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.15.2\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
