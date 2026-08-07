@@ -154,6 +154,12 @@ if not defined imagename (
 	set imagename=Windows
 )
 
+set /p imagedesc=Provide a custom description. To continue with a default description, press ENTER without typing anything: 
+if not defined imagedesc (
+    IF %_DEBUG% EQU 1 echo Destination description not provided. Continuing with default description.
+	set imagedesc=!imagename!
+)
+
 echo Capturing Windows installation to the target WIM file. This can take a long time, depending on the computer's speed.
 call :create_config_list %sourcedrive%
 
@@ -164,7 +170,8 @@ IF %_DEBUG% EQU 1 echo   Destination file : %destdrive%:\%destfile%
 IF %_DEBUG% EQU 1 echo   Source directory : %sourcedrive%:\
 IF %_DEBUG% EQU 1 echo   Scratch directory: %destdrive%:\
 IF %_DEBUG% EQU 1 echo   Image Name       : %imagename%
-dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
+IF %_DEBUG% EQU 1 echo   Image Description: %imagedesc%
+dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /description="%imagedesc%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
 if %ERRORLEVEL% equ 0 (
 	set succeeded=true
 	if exist "%SYSTEMDRIVE%\SysprepPrepTool" call :sysprep_hotinstall_remove_temp_files
