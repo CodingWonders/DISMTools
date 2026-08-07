@@ -370,9 +370,7 @@ icon=autorun.ico
 '@
             $autoRunContents | Out-File -FilePath "$taskRoot\media\autorun.inf" -Encoding utf8 -Force
         }
-        Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
-        Start-Sleep -Seconds 5
-        Write-Host "Creating ISO file..."
+        Write-Host "The ISO file structure has been successfully created. Creating ISO file..."
         $isoCreationSuccessful = if ($bootEx) { New-WinPEIso -taskRoot "$taskRoot" -peToolsPath $peToolsPath -isoLocation $isoPath -bootex } else { New-WinPEIso -taskRoot "$taskRoot" -peToolsPath $peToolsPath -isoLocation $isoPath }
         if (-not ($isoCreationSuccessful))
         {
