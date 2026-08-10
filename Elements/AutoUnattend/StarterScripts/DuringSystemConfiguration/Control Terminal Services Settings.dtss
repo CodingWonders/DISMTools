@@ -1,0 +1,51 @@
+﻿Language: Batch
+Name: Control Remote Desktop parameters
+Description: This script allows you to pre-load configurations for Remote Desktop/Terminal Services sessions
+Customizable: Yes
+@ECHO OFF
+
+REM This script allows you to configure Remote Desktop settings for new systems,
+REM based on the following settings:
+
+REM Determines whether to enable Remote Desktop:
+REM - 1 -- Enabled
+REM - 0 -- Disabled
+SET _RdpEnabled=1
+REM Determines whether to enable Network Level Authentication for Remote Desktop
+REM sessions:
+REM - 1 -- Enabled
+REM - 0 -- Disabled
+REM Disable this only if you experience connection issues with the hosts you connect to
+REM that are fixed by disabling Network Level Authentication.
+SET _RDS_NLA=1
+
+REM Keep in mind that, for Windows systems with cumulative updates from April 2026
+REM and later, you will see warnings if you connect to RDP files that either you or
+REM a colleague or associate have made. If you rely on these connections and have
+REM verified that they point to secure hosts, either use the "Disable warnings for
+REM unsigned RDP files" Starter Script alongside this one, or sign your RDP files with
+REM a self-signed certificate. Grab the RDP file signing script (RDPSIGN.ps1) from the
+REM following site to get started with signing RDP files:
+REM https://github.com/CodingWonders/MyScripts/blob/main/Windows/rdpsign.ps1
+
+REM leave the rest of the script as is
+
+IF NOT DEFINED _RdpEnabled SET _RdpEnabled=1
+IF NOT DEFINED _RDS_NLA SET _RDS_NLA=1
+
+IF %_RdpEnabled% LSS 0 SET _RdpEnabled=0
+IF %_RdpEnabled% GTR 1 SET _RdpEnabled=1
+IF %_RDS_NLA% LSS 0 SET _RDS_NLA=0
+IF %_RDS_NLA% GTR 1 SET _RDS_NLA=1
+
+REG ADD "HKLM\System\CurrentControlSet\Control\Remote Assistance" /F /V fAllowToGetHelp /T REG_DWORD /D 0
+
+REM Enable RDP
+IF %_RdpEnabled% EQU 0 REG ADD "HKLM\System\CurrentControlSet\Control\Terminal Server" /F /V fDenyTSConnections /T REG_DWORD /D 1
+IF %_RdpEnabled% EQU 1 REG ADD "HKLM\System\CurrentControlSet\Control\Terminal Server" /F /V fDenyTSConnections /T REG_DWORD /D 0
+
+REM Enable NLA
+REG ADD "HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /F /V UserAuthentication /T REG_DWORD /D %_RDS_NLA%
+
+REG ADD "HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /F /V SecurityLayer /T REG_DWORD /D 2
+REG ADD "HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /F /V fAllowSecProtocolNegotiation /T REG_DWORD /D 1
