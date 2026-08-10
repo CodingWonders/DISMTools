@@ -490,6 +490,9 @@ Public Class MainForm
                 Case Keys.R
                     ' Find & Replace dialog
                     InvokeFindDialog(True)
+                Case Keys.T
+                    ' CTRL + ALT + T: Document Outline
+                    If e.Alt Then InvokeDocumentOutlineDialog()
             End Select
         End If
     End Sub
