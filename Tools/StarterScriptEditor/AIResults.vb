@@ -111,10 +111,10 @@ Public Class AIResults
         If DataGridView1.SelectedRows.Count = 1 Then
             If Not CheckBox1.Checked Then CheckBox1.Checked = True
             Dim result As AutoInspectionResult = CType(DataGridView1.Rows(DataGridView1.CurrentRow.Index).DataBoundItem, AutoInspectionResult)
-            MainForm.TextBox3.Select(result.OccurrenceIndex, result.OccurrenceLength)
+            MainForm.tbScriptCode.Select(result.OccurrenceIndex, result.OccurrenceLength)
             MainForm.Focus()
-            MainForm.TextBox3.Focus()
-            MainForm.TextBox3.ScrollToCaret()
+            MainForm.tbScriptCode.Focus()
+            MainForm.tbScriptCode.ScrollToCaret()
 
             MainForm.UpdateCaretPosition()
         End If

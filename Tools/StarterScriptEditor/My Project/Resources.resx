@@ -149,6 +149,9 @@ set "API_URI=https://your-service-here.com/API_KEY"</value>
   <data name="example_finegrained_pat_key" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\github_keys\finegrained_pat\example_finegrained_pat_key.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="find" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\find.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="finegrained_pat_confirm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\github_keys\finegrained_pat\finegrained_pat_confirm.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -187,6 +190,12 @@ set "API_URI=https://your-service-here.com/API_KEY"</value>
   </data>
   <data name="openfile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\openfile.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pin.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pin_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pin_dark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RegexCheatsheet" xml:space="preserve">
     <value>Character Classes:
@@ -228,6 +237,9 @@ Common Examples:
 ^[A-Za-z]+$           Only letters
 ^\w+@\w+.\w+$         Basic email
 ^\d{4}-\d{2}-\d{2}$   Date YYYY-MM-DD</value>
+  </data>
+  <data name="replace" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\replace.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="savefile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\savefile.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
