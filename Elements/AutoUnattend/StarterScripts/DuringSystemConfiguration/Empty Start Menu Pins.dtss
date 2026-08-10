@@ -1,0 +1,6 @@
+﻿Language: Batch
+Name: Empty Start Menu Pins for Windows 11
+Description: This script clears start menu pins on Windows 11 systems.
+Customizable: No
+@ECHO OFF
+REG ADD "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Start" /v ConfigureStartPins /t REG_SZ /d "{ \"pinnedList\": [] }" /f
