@@ -164,7 +164,7 @@ Namespace My
             Try
                 DynaLog.LogMessage("Restarting mounted image detector...")
                 Threading.Thread.Sleep(1000)
-                If Not DISMTools.MainForm.MountedImageDetectorBW.IsBusy Then Call DISMTools.MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                Call DISMTools.MainForm.MountedImageDetectorBW.RunWorkerAsync()
                 Threading.Thread.Sleep(250)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not restart mounted image detector. Error message: " & ex.Message)
