@@ -1120,8 +1120,10 @@ Public Class ProjProperties
                         FeatUpd = "25H2 (Selenium)"
                     Case 27789 To 28999
                         FeatUpd = "26H1 (Bromine)"
-                    Case Is >= 29000
+                    Case 29000 To 29617
                         FeatUpd = "26H2 (Krypton)"
+                    Case Is >= 29630
+                        FeatUpd = "27H1 (Rubidium)"
                 End Select
             Case Else
                 Exit Sub

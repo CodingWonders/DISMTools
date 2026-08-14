@@ -40,7 +40,11 @@ Public Class Options
     ' Processor families that we know the performance of. Family numbers derive from
     ' version 3.9 of the SMBIOS specification, from 2025:
     ' https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.9.0.pdf
-    Private Const CPU_INTEL_CORE_DUO As Integer = 40,
+    Private Const CPU_INTEL_PENTIUM_3 As Integer = 17,
+                  CPU_INTEL_CELERON_M As Integer = 20,
+                  CPU_INTEL_PENTIUM_4_HT As Integer = 21,
+                  CPU_INTEL As Integer = 22,
+                  CPU_INTEL_CORE_DUO As Integer = 40,
                   CPU_INTEL_CORE_DUO_M As Integer = 41,
                   CPU_INTEL_CORE_SOLO As Integer = 42,
                   CPU_INTEL_ATOM As Integer = 43,
@@ -152,6 +156,10 @@ Public Class Options
                   CPU_INTEL_CORE_ULTRA9 As Integer = 775
 
     Private SpecialProcessorFamilies As New List(Of ProcessorFamilyCategory) From {
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_3, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_CELERON_M, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_4_HT, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_CORE_DUO, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_CORE_DUO_M, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_CORE_SOLO, ProcessorFamilyBeefiness.Potato),
@@ -214,15 +222,15 @@ Public Class Options
         New ProcessorFamilyCategory(CPU_INTEL_XEON_7400_MULTICORE, ProcessorFamilyBeefiness.Beefy),
         New ProcessorFamilyCategory(CPU_INTEL_PENTIUM3_XEON, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_PENTIUM3_SPEEDSTEP, ProcessorFamilyBeefiness.Potato),
-        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM4, ProcessorFamilyBeefiness.Average),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM4, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_XEON, ProcessorFamilyBeefiness.Average),
         New ProcessorFamilyCategory(CPU_INTEL_XEON_MP, ProcessorFamilyBeefiness.Beefy),
         New ProcessorFamilyCategory(CPU_AMD_ATHLON_XP, ProcessorFamilyBeefiness.Average),
         New ProcessorFamilyCategory(CPU_AMD_ATHLON_MP, ProcessorFamilyBeefiness.Average),
         New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_M, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_CELERON_D, ProcessorFamilyBeefiness.Potato),
-        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_D, ProcessorFamilyBeefiness.Average),
-        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_D_EXTREME, ProcessorFamilyBeefiness.Beefy),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_D, ProcessorFamilyBeefiness.Potato),
+        New ProcessorFamilyCategory(CPU_INTEL_PENTIUM_D_EXTREME, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_CORE_SOLO_2, ProcessorFamilyBeefiness.Potato),
         New ProcessorFamilyCategory(CPU_INTEL_CORE2_DUO, ProcessorFamilyBeefiness.Average),
         New ProcessorFamilyCategory(CPU_INTEL_CORE2_SOLO, ProcessorFamilyBeefiness.Potato),

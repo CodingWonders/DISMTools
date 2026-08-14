@@ -27,4 +27,9 @@ Public Class BDELib
         Return VolumeHelper.GetVolumeConversionStatus(PersistentVolumeId, PrecisionFactor)
     End Function
 
+    Public Shared Async Function StartVolumeDecryption(PersistentVolumeId As String, Optional DecryptionProgressReporter As Action(Of ConversionStatus) = Nothing) As Task(Of UInteger)
+        Dim decryptionResult As UInteger = Await VolumeHelper.StartVolumeDecryption(PersistentVolumeId, DecryptionProgressReporter)
+        Return decryptionResult
+    End Function
+
 End Class

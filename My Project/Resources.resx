@@ -991,16 +991,25 @@ A "contributor" is any person that distributes its contribution under this licen
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed some HiDPI issues
+- Fixed an issue that would cause HotInstall to throw an exception when performing disk space checks with certain directories
+- When getting information about drivers, drivers that can't be processed will now be skipped
+- Hardware targets for driver files no longer show up more than once per INF section
+- Fixed an issue where notifications would not be displayed
+- Fixed some exceptions
 
 New features:
 
-- The maximum amount of concurrent ISO creation tasks can now be configured up to a value of 10
-- The Preinstallation Environment has received support for encrypting and decrypting, as well as getting information about, encryptable volumes
-- The Sysprep Preparation Tool has been updated with BitLocker volume detection
-- The "Prevent companion device software installation" Starter Script has been introduced
-- When performing driver exports, multiple class names can now be selected
-- Target exported drivers can now be organized in folders named after their class names</value>
+- A new policy has been added to configure image file scanning options in the operating system installer
+- Volume auto-unlock policies are now supported by BDE-GUI
+- When capturing a Windows image, a description can now be added
+- New Starter Scripts have been introduced, and some existing ones have been improved
+- The Starter Script Editor has seen the ability to find and replace text in script code, and to navigate the outline of code. It now allows you to type more script code, up to 2 billion characters
+- Feature update detection support has been added for the Rubidium WaaS semester
+- A search engine lookup link is now displayed next to a device's hardware ID in driver information reports
+- Driver filters now support multiple class names
+- The installer now uses Inno Setup 7.1
+- 7-Zip has been updated to version 26.02
+- The managed DISM API has been updated to version 6.1.0</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -2267,15 +2267,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed some HiDPI issues
+        '''- Fixed an issue that would cause HotInstall to throw an exception when performing disk space checks with certain directories
+        '''- When getting information about drivers, drivers that can&apos;t be processed will now be skipped
+        '''- Hardware targets for driver files no longer show up more than once per INF section
+        '''- Fixed an issue where notifications would not be displayed
+        '''- Fixed some exceptions
         '''
         '''New features:
         '''
-        '''- The maximum amount of concurrent ISO creation tasks can now be configured up to a value of 10
-        '''- The Preinstallation Environment has received support for encrypting and decrypting, as well as getting information about, encryptable volumes
-        '''- The Sysprep Preparation Tool has been updated with BitLocker volume detection
-        '''- The &quot;Prevent companion device software installation&quot; Starter Script has been introduced
-        '''- When performing driver exports, multi [resto de la cadena truncado]&quot;;.
+        '''- A new policy has been added to configure image file scanning options in the operatin [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

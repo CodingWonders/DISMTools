@@ -71,6 +71,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.IO.Pipelines, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.IO.Pipelines.10.0.9\lib\net462\System.IO.Pipelines.dll</HintPath>
     </Reference>
@@ -167,6 +168,19 @@
     <Compile Include="CustomRules\CustomRuleDetailsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="EditorEX\EditorDialogs\DocumentOutlineViewer.Designer.vb">
+      <DependentUpon>DocumentOutlineViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\DocumentOutlineViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\FindReplaceDialog.Designer.vb">
+      <DependentUpon>FindReplaceDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\FindReplaceDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\FunctionSignatures\VisualBasicFunctionSignatureParam.vb" />
     <Compile Include="Helpers\StarterScriptHelper.vb" />
     <Compile Include="InspectionProgressDialog.Designer.vb">
       <DependentUpon>InspectionProgressDialog.vb</DependentUpon>
@@ -243,6 +257,14 @@
       <SubType>Designer</SubType>
       <DependentUpon>CustomRuleDetailsDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditorEX\EditorDialogs\DocumentOutlineViewer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DocumentOutlineViewer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditorEX\EditorDialogs\FindReplaceDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FindReplaceDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InspectionProgressDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InspectionProgressDialog.vb</DependentUpon>
@@ -309,6 +331,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\find.png" />
+    <None Include="Resources\replace.png" />
+    <None Include="Resources\pin_dark.png" />
+    <None Include="Resources\pin.png" />
     <None Include="Resources\inspection\windowpin\topright.png" />
     <None Include="Resources\inspection\windowpin\topleft.png" />
     <None Include="Resources\inspection\windowpin\bottomright.png" />

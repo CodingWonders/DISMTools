@@ -230,6 +230,8 @@ Public Class MainForm
     Public KeyboardLayoutCode As String = "00000409"
     Public KeyboardLayoutOverrideExistingLayout As Boolean = False
     Public AnswerFileConflictResponse As Integer = 0
+    Public ScanBootImages As Boolean = False
+    Public ImageSelectorDefaultOption As Integer = 0
 
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
@@ -1668,6 +1670,8 @@ Public Class MainForm
                 KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
                 KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
                 AnswerFileConflictResponse = CInt(PEPolicyKey.GetValue("AnswerFileConflictResponse", 0))
+                ScanBootImages = CInt(PEPolicyKey.GetValue("ScanBootImages", 0)) = 1
+                ImageSelectorDefaultOption = CInt(PEPolicyKey.GetValue("ImageSelectorDefaultOption", 0))
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1790,6 +1794,8 @@ Public Class MainForm
                     KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
                     KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
                     AnswerFileConflictResponse = CInt(settingData("PEPolicy")("AnswerFileConflictResponse"))
+                    ScanBootImages = CInt(settingData("PEPolicy")("ScanBootImages")) = 1
+                    ImageSelectorDefaultOption = CInt(settingData("PEPolicy")("ImageSelectorDefaultOption"))
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1853,6 +1859,7 @@ Public Class MainForm
         If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then WDSHCConnAttempts = 5
         If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then PXEServerPort = 8080
         If AnswerFileConflictResponse < 0 OrElse AnswerFileConflictResponse > 2 Then AnswerFileConflictResponse = 0
+        If ImageSelectorDefaultOption < 0 OrElse ImageSelectorDefaultOption > 2 Then ImageSelectorDefaultOption = 0
         Try
             Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
             Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
@@ -1869,30 +1876,27 @@ Public Class MainForm
     Public Sub WriteDefaultPEPolicy()
         Dim PartTableOverridePreferenceStr As String = "NoOverride"
         Select Case PartTableOverridePreference
-            Case 0
-                PartTableOverridePreferenceStr = "NoOverride"
-            Case 1
-                PartTableOverridePreferenceStr = "AlwaysMBR"
-            Case 2
-                PartTableOverridePreferenceStr = "AlwaysGPT"
+            Case 0 : PartTableOverridePreferenceStr = "NoOverride"
+            Case 1 : PartTableOverridePreferenceStr = "AlwaysMBR"
+            Case 2 : PartTableOverridePreferenceStr = "AlwaysGPT"
         End Select
         Dim UEFICA23PreferenceStr As String = "AskUser"
         Select Case UEFICA23Preference
-            Case 0
-                UEFICA23PreferenceStr = "AskUser"
-            Case 1
-                UEFICA23PreferenceStr = "UseNever"
-            Case 2
-                UEFICA23PreferenceStr = "UseAlways"
+            Case 0 : UEFICA23PreferenceStr = "AskUser"
+            Case 1 : UEFICA23PreferenceStr = "UseNever"
+            Case 2 : UEFICA23PreferenceStr = "UseAlways"
         End Select
         Dim AnswerFileConflictResponseStr As String = "AskUser"
         Select Case AnswerFileConflictResponse
-            Case 0
-                AnswerFileConflictResponseStr = "AskUser"
-            Case 1
-                AnswerFileConflictResponseStr = "PreferISO"
-            Case 2
-                AnswerFileConflictResponseStr = "PreferWIM"
+            Case 0 : AnswerFileConflictResponseStr = "AskUser"
+            Case 1 : AnswerFileConflictResponseStr = "PreferISO"
+            Case 2 : AnswerFileConflictResponseStr = "PreferWIM"
+        End Select
+        Dim ImageSelectorDefaultOptionStr As String = "AskUser"
+        Select Case ImageSelectorDefaultOption
+            Case 0 : ImageSelectorDefaultOptionStr = "AskUser"
+            Case 1 : ImageSelectorDefaultOptionStr = "LargestFirst"
+            Case 2 : ImageSelectorDefaultOptionStr = "MostRecentFirst"
         End Select
 
         Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
@@ -1907,10 +1911,13 @@ Public Class MainForm
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
                                                   "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
                                                   "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
-                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}",
+                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}" &
+                                                  "{1}ScanBootImages{1}=dword:0000000{13}{0}" &
+                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr)
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode,
+                                                  If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr, If(ScanBootImages, 1, 0), ImageSelectorDefaultOptionStr)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1993,7 +2000,9 @@ Public Class MainForm
                            "PXEServerPort                       =    " & PXEServerPort & CrLf &
                            "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
                            "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout & CrLf &
-                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse)
+                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse & CrLf &
+                           "ScanBootImages                      =    " & ScanBootImages & CrLf &
+                           "ImageSelectorDefaultOption          =    " & ImageSelectorDefaultOption)
     End Sub
 
 #Region "Background Processes"
@@ -4231,6 +4240,8 @@ Public Class MainForm
         settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
         settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
         settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", 0)
+        settingsData("PEPolicy").AddKey("ScanBootImages", 0)
+        settingsData("PEPolicy").AddKey("ImageSelectorDefaultOption", 0)
         parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4341,6 +4352,8 @@ Public Class MainForm
         PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
         PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("ScanBootImages", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("ImageSelectorDefaultOption", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4442,17 +4455,17 @@ Public Class MainForm
             settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
             settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
             settingsData("PEPolicy").AddKey("AnswerFileConflictResponse", AnswerFileConflictResponse)
+            settingsData("PEPolicy").AddKey("ScanBootImages", If(ScanBootImages, 1, 0))
+            settingsData("PEPolicy").AddKey("ImageSelectorDefaultOption", ImageSelectorDefaultOption)
             parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         Else
             DynaLog.LogMessage("Attempting to write to registry...")
             Try
                 ' Tell settings file to use this method
                 DynaLog.LogMessage("Forcing save to registry in INI File...")
-                Dim SettingRtb As New RichTextBox() With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                }
-                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
-                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                Dim SettingContents As String = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                SettingContents = SettingContents.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingContents, ASCII)
                 DynaLog.LogMessage("Setting key values...")
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
@@ -4569,6 +4582,8 @@ Public Class MainForm
                 PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
                 PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
                 PEPolicyKey.SetValue("AnswerFileConflictResponse", AnswerFileConflictResponse, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("ScanBootImages", ScanBootImages, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("ImageSelectorDefaultOption", ImageSelectorDefaultOption, RegistryValueKind.DWord)
                 PEPolicyKey.Close()
                 Key.Close()
             Catch ex As Exception
@@ -11652,17 +11667,24 @@ Public Class MainForm
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image unmount dialog...")
-        If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
-            DynaLog.LogMessage("This is the image the user is managing here")
+        ' We default to the current image but, if we have the mounted image manager open, we'll check
+        If MountedImgMgr.ListView1.FocusedItem IsNot Nothing Then
+            If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
+                DynaLog.LogMessage("This is the image the user is managing here")
+                ImgUMount.RadioButton1.Checked = True
+                ImgUMount.RadioButton2.Checked = False
+                ImgUMount.TextBox1.Text = ""
+            Else
+                DynaLog.LogMessage("This is an image different from the one the user is managing here")
+                ImgUMount.RadioButton1.Checked = False
+                ImgUMount.RadioButton2.Checked = True
+                ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+                ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+            End If
+        Else
             ImgUMount.RadioButton1.Checked = True
             ImgUMount.RadioButton2.Checked = False
             ImgUMount.TextBox1.Text = ""
-        Else
-            DynaLog.LogMessage("This is an image different from the one the user is managing here")
-            ImgUMount.RadioButton1.Checked = False
-            ImgUMount.RadioButton2.Checked = True
-            ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         End If
         ImgUMount.ShowDialog(Me)
     End Sub
@@ -11845,10 +11867,8 @@ Public Class MainForm
                 DynaLog.LogMessage("An AppX manifest file exists in the main directory. There are no variations of any kind")
                 ' Read from manifest
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("Logo") Then
                         DynaLog.LogMessage("We have a possible logo...")
                         Dim SplitPaths As New List(Of String)
@@ -11887,10 +11907,8 @@ Public Class MainForm
                     If Not folder.Contains("neutral") Then
                         DynaLog.LogMessage("We have a possible folder candidate. Reading manifest...")
                         ' Read from manifest
-                        Dim ManFile As New RichTextBox() With {
-                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
-                        }
-                        For Each line In ManFile.Lines
+                        Dim ManFileLines As String() = File.ReadAllLines(folder & "AppxManifest.xml")
+                        For Each line In ManFileLines
                             If line.Contains("Logo") Then
                                 DynaLog.LogMessage("Returning logo...")
                                 Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
@@ -11957,10 +11975,8 @@ Public Class MainForm
             DynaLog.LogMessage("Checking if AppX manifest exists...")
             If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(suitableFolderName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("<Logo>") Then
                         Dim SplitPaths As New List(Of String)
                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()

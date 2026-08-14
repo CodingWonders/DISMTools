@@ -91,11 +91,15 @@ Public Class DriverFilterAssistantDialog
                 AppliedQuery = String.Format("prov:{0}", TextBox3.Text)
             Case 3
                 ' Class Name
-                If ComboBox2.SelectedItem = "-----------------" Then
-                    MessageBox.Show("This class name is not valid.", Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                If SelectedClassNamesLB.Items.Count < 1 Then
+                    MessageBox.Show("Please specify class names to export and try again.", Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
                     Exit Sub
                 End If
-                AppliedQuery = String.Format("cn:{0}", ComboBox2.SelectedItem)
+                If SelectedClassNamesLB.Items.Contains("-----------------") Then
+                    MessageBox.Show("One or more class names are not valid.", Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                    Exit Sub
+                End If
+                AppliedQuery = String.Format("cn:{0}", String.Join(";", SelectedClassNamesLB.Items.Cast(Of String)().Distinct().ToArray()))
             Case 4
                 ' Inbox Status
                 AppliedQuery = If(CheckBox1.Checked, "inbox:", "noinbox:")
@@ -158,6 +162,8 @@ Public Class DriverFilterAssistantDialog
         NumericUpDown1.ForeColor = ForeColor
         DateTimePicker1.BackColor = BackColor
         DateTimePicker1.ForeColor = ForeColor
+        SelectedClassNamesLB.BackColor = CurrentTheme.SectionBackgroundColor
+        SelectedClassNamesLB.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -213,5 +219,34 @@ Public Class DriverFilterAssistantDialog
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
         Label8.Text = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox2.SelectedIndex).Value
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Try
+            If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
+                Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox2.SelectedIndex)
+                If SelectedClassInfo.Value IsNot Nothing Then SelectedClassNamesLB.Items.Add(SelectedClassInfo.Key)
+            Else
+                ' We are using a class name that is not in the default set; accept it anyway,
+                ' but don't show any notes because we don't know where these are, or whether
+                ' they are localized.
+                SelectedClassNamesLB.Items.Add(ComboBox2.SelectedItem)
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Try
+            SelectedClassNamesLB.Items.Remove(SelectedClassNamesLB.SelectedItem)
+        Catch ex As Exception
+
+        End Try
+        Button3.Enabled = False
+    End Sub
+
+    Private Sub SelectedClassNamesLB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SelectedClassNamesLB.SelectedIndexChanged
+        Button3.Enabled = SelectedClassNamesLB.SelectedItems.Count = 1
     End Sub
 End Class

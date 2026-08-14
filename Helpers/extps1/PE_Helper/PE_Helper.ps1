@@ -370,9 +370,7 @@ icon=autorun.ico
 '@
             $autoRunContents | Out-File -FilePath "$taskRoot\media\autorun.inf" -Encoding utf8 -Force
         }
-        Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
-        Start-Sleep -Seconds 5
-        Write-Host "Creating ISO file..."
+        Write-Host "The ISO file structure has been successfully created. Creating ISO file..."
         $isoCreationSuccessful = if ($bootEx) { New-WinPEIso -taskRoot "$taskRoot" -peToolsPath $peToolsPath -isoLocation $isoPath -bootex } else { New-WinPEIso -taskRoot "$taskRoot" -peToolsPath $peToolsPath -isoLocation $isoPath }
         if (-not ($isoCreationSuccessful))
         {
@@ -837,7 +835,7 @@ function Start-PECustomization
         }
         try
         {
-            $policyVersion = "0.8.0.26063"
+            $policyVersion = "0.8.1.26082"
 
             Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
             Write-Host "Initializing default Preinstallation Environment policy..."
@@ -855,6 +853,8 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutCode /t REG_SZ /d "00000409"
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v KeyboardLayoutOverrideExistingLayout /t REG_DWORD /d 0
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v AnswerFileConflictResponse /t REG_SZ /d "AskUser"
+            reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v ScanBootImages /t REG_DWORD /d 0
+            reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v ImageSelectorDefaultOption /t REG_SZ /d "AskUser"
 
             # Adapt the policy files to point to the image's unique registry hives
             $nobomEnc = New-Object System.Text.UTF8Encoding $false
@@ -1987,23 +1987,50 @@ function Get-WimIndexes
     #>
     Import-Module Dism
     $wimPath = ""
-    if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -gt 1)
-    {
-        Write-Host "`nMultiple installation images have been found in this installation medium. Please select an image file from the list and press ENTER."
-        Write-Host "`nDo note that, after the selection of an image, you may not be able to go back."
-        (Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim") | Out-Host
-        $wimPath = Read-Host "Choose the image file to apply"
-        $wimPath = "$((Get-Location).Path)sources\$wimPath"
-        if (($wimPath -eq "") -or (-not (Test-Path "$wimPath" -PathType Leaf)))
-        {
-            do {
+
+    $bootImagesIncluded = (Get-PolicyValue -PolicyName "ScanBootImages" -DefaultPolicyValue 0 -ValidOptions @(0, 1)) -eq 1
+
+    $imageCount = 0
+    $imageFiles = $null
+    if ($bootImagesIncluded) {
+        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim"
+    } else {
+        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim"
+    }
+    $imageCount = $imageFiles.Count
+
+    $imageSelectorBehavior = Get-PolicyValue -PolicyName "ImageSelectorDefaultOption" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "LargestFirst", "MostRecentFirst")
+    # If the behavior is to select the most recent image and boot images are included in the scan, boot.wim
+    # will always be chosen because it is the most recent. Exclude boot.wim from scans if so.
+    if (($bootImagesIncluded) -and ($imageSelectorBehavior -eq "MostRecentFirst")) {
+        $bootImagesIncluded = $false
+        $imageCount -= 1
+    }
+
+    if ($imageCount -gt 1) {
+        switch ($imageSelectorBehavior) {
+            "AskUser" {
+                Write-Host "`nMultiple installation images have been found in this installation medium. Please select an image file from the list and press ENTER."
+                Write-Host "`nDo note that, after the selection of an image, you may not be able to go back."
+                $imageFiles | Out-Host
                 $wimPath = Read-Host "Choose the image file to apply"
                 $wimPath = "$((Get-Location).Path)sources\$wimPath"
-            } until (($wimPath -ne "") -and (Test-Path "$wimPath" -PathType Leaf))
+                if (($wimPath -eq "") -or (-not (Test-Path "$wimPath" -PathType Leaf)))
+                {
+                    do {
+                        $wimPath = Read-Host "Choose the image file to apply"
+                        $wimPath = "$((Get-Location).Path)sources\$wimPath"
+                    } until (($wimPath -ne "") -and (Test-Path "$wimPath" -PathType Leaf))
+                }
+            }
+            "LargestFirst" {
+                $wimPath = ($imageFiles | Sort-Object -Property Length -Descending | Select-Object -First 1).FullName
+            }
+            "MostRecentFirst" {
+                $wimPath = ($imageFiles | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1).FullName
+            }
         }
-    }
-    elseif ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -eq 1)
-    {
+    } elseif ($imageCount -eq 1) {
         $wimPath = "$((Get-Location).Path)sources\install.wim"
     }
     $imageInformation = (Get-WindowsImage -ImagePath "$wimPath")

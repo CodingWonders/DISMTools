@@ -1042,7 +1042,7 @@ Public Class ImgInfoSaveDlg
                             registrationStatus = "No"
                         End If
                         Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
-                        Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
+                        Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
                         Dim instDir As String = ""
                         For Each folder In pkgDirs
                             If Not folder.Contains("neutral") Then
@@ -1072,10 +1072,8 @@ Public Class ImgInfoSaveDlg
                         End Try
                         If assetDir <> "" Then
                             If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                Dim ManFile As New RichTextBox() With {
-                                    .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                }
-                                For Each line In ManFile.Lines
+                                Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                                For Each line In ManFileLines
                                     If line.Contains("<Logo>") Then
                                         Dim SplitPaths As New List(Of String)
                                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -1087,17 +1085,15 @@ Public Class ImgInfoSaveDlg
                                 Next
                             End If
                         Else
-                            If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
-                                Dim ManFile As New RichTextBox() With {
-                                    .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
-                                }
-                                For Each line In ManFile.Lines
+                            If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
+                                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
+                                For Each line In ManFileLines
                                     If line.Contains("<Logo>") Then
                                         Dim SplitPaths As New List(Of String)
                                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                         SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                         Dim newPath As String = String.Join("\", SplitPaths)
-                                        logoAssetDir = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
+                                        logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
                                         Exit For
                                     End If
                                 Next
@@ -1220,7 +1216,7 @@ Public Class ImgInfoSaveDlg
                                         registrationStatus = "No"
                                     End If
                                     Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
-                                    Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
+                                    Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
                                     Dim instDir As String = ""
                                     For Each folder In pkgDirs
                                         If Not folder.Contains("neutral") Then
@@ -1250,10 +1246,8 @@ Public Class ImgInfoSaveDlg
                                     End Try
                                     If assetDir <> "" Then
                                         If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                            Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -1265,17 +1259,15 @@ Public Class ImgInfoSaveDlg
                                             Next
                                         End If
                                     Else
-                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
+                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                                     SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                                     Dim newPath As String = String.Join("\", SplitPaths)
-                                                    logoAssetDir = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
+                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
                                                     Exit For
                                                 End If
                                             Next
@@ -1369,10 +1361,8 @@ Public Class ImgInfoSaveDlg
                                     End Try
                                     If assetDir <> "" Then
                                         If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                            Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -1384,17 +1374,15 @@ Public Class ImgInfoSaveDlg
                                             Next
                                         End If
                                     Else
-                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
+                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
+                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
+                                            For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                                     SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                                     Dim newPath As String = String.Join("\", SplitPaths)
-                                                    logoAssetDir = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim()
+                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim()
                                                     Exit For
                                                 End If
                                             Next
@@ -1963,7 +1951,7 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetDriverFileInformation] Creating image session...")
             ReportChanges(msg, 0)
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
-                Contents &= GetParagraph("Information summary for " & DriverPkgs.Count & " driver package(s):", ParagraphStyle.Bold) & CrLf
+                Contents &= GetHeader("Information summary for " & DriverPkgs.Count & " driver package(s):", HeaderSize.Header3) & CrLf
                 For Each drvPkg In DriverPkgs
                     Select Case MainForm.Language
                         Case 0
@@ -1992,28 +1980,33 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
                     If File.Exists(drvPkg) Then
-                        Contents &= GetHeader("Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & "", HeaderSize.Header3) & CrLf
-                        Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
-                        If drvInfoCollection.Count > 0 Then
-                            Contents &= GetParagraph("Information summary for " & drvInfoCollection.Count & " hardware target(s):", ParagraphStyle.Bold) & CrLf &
-                                GetTableHeader(New String() {"Hardware description",
-                                                             "Hardware ID",
-                                                             "Compatible IDs",
-                                                             "Exclude IDs",
-                                                             "Hardware manufacturer",
-                                                             "Architecture"}.ToList())
-                            For Each hwTarget As DismDriver In drvInfoCollection
-                                Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
-                                                                      hwTarget.HardwareId,
-                                                                      If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
-                                                                      If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
-                                                                      hwTarget.ManufacturerName,
-                                                                      Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
-                            Next
-                            Contents &= CrLf
-                        Else
-                            Contents &= GetParagraph("This file contains no hardware targets. It could be invalid.", ParagraphStyle.Bold) & CrLf
-                        End If
+                        Try
+                            Contents &= GetHeader("Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & " (" & Path.GetFileName(drvPkg) & ")", HeaderSize.Header4) & CrLf
+                            Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
+                            Dim hwCount As Integer = drvInfoCollection.Distinct().Count
+                            If hwCount > 0 Then
+                                Contents &= GetParagraph("Information summary for " & hwCount & " hardware target(s):", ParagraphStyle.Bold) & CrLf &
+                                    GetTableHeader(New String() {"Hardware description",
+                                                                 "Hardware ID",
+                                                                 "Compatible IDs",
+                                                                 "Exclude IDs",
+                                                                 "Hardware manufacturer",
+                                                                 "Architecture"}.ToList())
+                                For Each hwTarget As DismDriver In drvInfoCollection.Distinct()
+                                    Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
+                                                                          String.Format("{0} ({1})", hwTarget.HardwareId, MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(hwTarget.HardwareId), "Look up")),
+                                                                          If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
+                                                                          If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
+                                                                          hwTarget.ManufacturerName,
+                                                                          Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
+                                Next
+                                Contents &= CrLf
+                            Else
+                                Contents &= GetParagraph("This file contains no hardware targets. It could be invalid.", ParagraphStyle.Bold) & CrLf
+                            End If
+                        Catch ex As Exception
+                            Contents &= GetParagraph("This driver file could not be processed.")
+                        End Try
                     End If
                 Next
             End Using

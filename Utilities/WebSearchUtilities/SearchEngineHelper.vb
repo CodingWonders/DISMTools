@@ -36,7 +36,7 @@
                 SearchQuery = SearchQuery.Replace(ControlChars.Quote, "%22")
             End If
 
-            Process.Start(String.Format(selectedEngine.SearchURI, SearchQuery.Replace(" ", "%20")))
+            Process.Start(String.Format(selectedEngine.SearchURI, SearchQuery.Replace(" ", "%20").Replace("&", "%26")))
         End If
     End Sub
 
@@ -44,7 +44,7 @@
         Dim selectedEngine As SearchEngine = SearchEngines.FirstOrDefault(Function(engine) engine.AIPermission = SearchEngine.AIPermissionType.Mixed AndAlso engine.Name.IndexOf("Google Search", StringComparison.OrdinalIgnoreCase) > -1)
         If selectedEngine Is Nothing Then Return ""
 
-        Return String.Format(selectedEngine.SearchURI, SearchQuery.Replace(Quote, "%22").Replace(" ", "%20"))
+        Return String.Format(selectedEngine.SearchURI, SearchQuery.Replace(Quote, "%22").Replace(" ", "%20").Replace("&", "%26"))
     End Function
 
 End Module
