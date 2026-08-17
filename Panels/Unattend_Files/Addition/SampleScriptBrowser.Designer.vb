@@ -53,9 +53,9 @@ Partial Class SampleScriptBrowser
         Me.ScriptCodeFSPanel = New System.Windows.Forms.Panel()
         Me.RichTextBox2 = New System.Windows.Forms.RichTextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.ExitFSModeBtn = New System.Windows.Forms.Button()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
@@ -182,8 +182,8 @@ Partial Class SampleScriptBrowser
         '
         'ScriptDetailsContainerPanel
         '
-        Me.ScriptDetailsContainerPanel.Controls.Add(Me.ScriptDetailsPanel)
         Me.ScriptDetailsContainerPanel.Controls.Add(Me.ScriptDetailsNoSelectedPanel)
+        Me.ScriptDetailsContainerPanel.Controls.Add(Me.ScriptDetailsPanel)
         Me.ScriptDetailsContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ScriptDetailsContainerPanel.Location = New System.Drawing.Point(320, 0)
         Me.ScriptDetailsContainerPanel.Name = "ScriptDetailsContainerPanel"
@@ -367,6 +367,20 @@ Partial Class SampleScriptBrowser
         Me.Panel1.Size = New System.Drawing.Size(688, 48)
         Me.Panel1.TabIndex = 8
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox1.Location = New System.Drawing.Point(487, 12)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(72, 23)
+        Me.CheckBox1.TabIndex = 10
+        Me.CheckBox1.Text = "Word Wrap"
+        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'Label9
         '
         Me.Label9.AutoSize = True
@@ -386,20 +400,6 @@ Partial Class SampleScriptBrowser
         Me.ExitFSModeBtn.TabIndex = 8
         Me.ExitFSModeBtn.Text = "Go back"
         Me.ExitFSModeBtn.UseVisualStyleBackColor = True
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CheckBox1.Location = New System.Drawing.Point(487, 12)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(72, 23)
-        Me.CheckBox1.TabIndex = 10
-        Me.CheckBox1.Text = "Word Wrap"
-        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'SampleScriptBrowser
         '
