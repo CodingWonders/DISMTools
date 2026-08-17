@@ -1278,6 +1278,7 @@ Partial Class GetDriverInfo
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Filter = "Driver files|*.inf"
+        Me.OpenFileDialog1.Multiselect = True
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Locate driver files"
         '

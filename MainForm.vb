@@ -3537,7 +3537,7 @@ Public Class MainForm
         FailedBGProcResultDic.Add(bgProcTitle, errorEx)
     End Sub
 
-    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As DismException = Nothing, Optional GeneralException As Exception = Nothing)
+    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As Exception = Nothing, Optional GeneralException As Exception = Nothing)
         Dim errorEx As Exception = Nothing
         If APIException IsNot Nothing Then errorEx = New Exception(String.Format("DISM API Task Error: {0}", New Win32Exception(APIException.HResult).Message), APIException)
         If GeneralException IsNot Nothing Then errorEx = New Exception(String.Format("DISM Task Error: {0}", New Win32Exception(GeneralException.HResult).Message), GeneralException)
@@ -3633,9 +3633,14 @@ Public Class MainForm
                         pkgReleaseTypeString <> "" AndAlso
                         pkgInstallTimeString <> "" Then
 
+                    Dim pkgInstallTime As DateTime
+                    If Not DateTime.TryParse(pkgInstallTimeString, CultureInfo.CurrentCulture, DateTimeStyles.None, pkgInstallTime) Then
+                        pkgInstallTime = Date.MinValue
+                    End If
+
                     CurrentImage.ImagePackages_Backup.Add(New ImagePackage(pkgNameString,
                                                                                  Casters.CastDismPackageStateString(pkgStateString),
-                                                                                 New Date(pkgInstallTimeString),
+                                                                                 pkgInstallTime,
                                                                                  Casters.CastDismReleaseTypeString(pkgReleaseTypeString)))
                     pkgNameString = ""
                     pkgStateString = ""
