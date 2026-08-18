@@ -2212,6 +2212,7 @@ Public Class ImgInfoSaveDlg
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.DisableCloseCapability(handle)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Height = WindowHelper.ScaleLogical(200)     ' tweak the height manually because Windows ain't doin' it!
@@ -2675,7 +2676,12 @@ Public Class ImgInfoSaveDlg
         If Debugger.IsAttached Then Process.Start(SaveTarget)
         InfoSaveResults.FilePath = SaveTarget
         MainForm.StartMountedImageDetector()
+        WindowHelper.EnableCloseCapability(handle)
         Close()
     End Sub
 
+    Private Sub ImgInfoSaveDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        e.Cancel = True
+        Exit Sub
+    End Sub
 End Class
