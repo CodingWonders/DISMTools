@@ -58,6 +58,8 @@ Public Class ImgInfoSaveDlg
 
     Dim OSVer As Version
 
+    Private IsBusy As Boolean = False
+
     Private Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -2518,6 +2520,7 @@ Public Class ImgInfoSaveDlg
         End Select
 
         ' Begin performing operations
+        IsBusy = True
         Select Case SaveTask
             Case 0
                 Contents &= GetListItems(New String() {"Information tasks: get complete image information"}.ToList()) & CrLf & CrLf
@@ -2668,11 +2671,13 @@ Public Class ImgInfoSaveDlg
         ReportChanges(saveMsg, ProgressBar1.Maximum)
         TaskbarHelper.SetIndicatorState(ProgressBar1.Maximum, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
 
+        IsBusy = False
+
         ' Enable the logger again
         DynaLog.EnableLogging()
 
         ' Save the file
-        If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
+        If Contents <> "" Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget)
         InfoSaveResults.FilePath = SaveTarget
         MainForm.StartMountedImageDetector()
@@ -2681,7 +2686,9 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Private Sub ImgInfoSaveDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        e.Cancel = True
-        Exit Sub
+        If IsBusy Then
+            e.Cancel = True
+            Exit Sub
+        End If
     End Sub
 End Class
