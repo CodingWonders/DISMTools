@@ -2158,16 +2158,12 @@ Public Class ImgInfoSaveDlg
 
                 Dim peruserServiceStatus As String = ""
                 If {80, 96}.Contains(service.Type) Then
-                    If service.UserServiceFlags = Integer.MinValue Then
-                        peruserServiceStatus = "Undefined"
-                    Else
-                        peruserServiceStatus = service.UserServiceFlags
-                    End If
+                    peruserServiceStatus = If(service.UserServiceFlags = Integer.MinValue, "Undefined", service.UserServiceFlags)
                 Else
                     peruserServiceStatus = "Not a per-user service"
                 End If
 
-                Contents &= GetHeader(String.Format("Information for service: {0}", service.Name), HeaderSize.Header3) & CrLf &
+                Contents &= GetHeader(String.Format("Service: {0}", service.Name), HeaderSize.Header4) & CrLf &
                     GetListItems({String.Format("Service Display Name: {0}", service.DisplayName),
                                   String.Format("Service Description: {0}", service.Description),
                                   String.Format("Image Path: {0}", service.ImagePath),
@@ -2177,7 +2173,7 @@ Public Class ImgInfoSaveDlg
                                   String.Format("Service Type: {0}", service.TypeToString()),
                                   String.Format("Per-user Service Flags: {0}", peruserServiceStatus),
                                   String.Format("Group: {0}", service.Group)}.ToList()) & CrLf &
-                          GetParagraph("Windows NT&reg; privileges:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Windows NT&trade; privileges:", ParagraphStyle.Bold) & CrLf &
                           GetTableHeader({"Privilege Name", "Privilege Display Name", "Privilege Description"}.ToList()) &
                           String.Join("", service.RequiredPrivileges.Select(Function(privilege) GetTableRow({privilege.ConstantNameText, privilege.ConstantUserRight, privilege.ConstantDescription}.ToList()))) & CrLf &
                           GetParagraph("Error Control:", ParagraphStyle.Bold) & CrLf &
