@@ -1,0 +1,14 @@
+﻿Language: Batch
+Name: Set a custom lock screen background
+Description: This script configures a lock screen background in the target system environment.
+Customizable: Yes
+@ECHO OFF
+
+REM The variable below points to the path, relative to where the image is mounted at,
+REM of the image to set as a lock screen background. It must be a JPG file; PNG files
+REM are not supported. If the file does not exist in the target image, the lock screen
+REM background will not be applied.
+
+SET "_LockScreenBackground=<path to background here>"
+
+IF EXIST "%_LockScreenBackground%" REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /F /V LockScreenImagePath /T REG_SZ /D "%_LockScreenBackground%"
