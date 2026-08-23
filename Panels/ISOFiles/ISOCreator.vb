@@ -951,11 +951,18 @@ Public Class ISOCreator
 
     Private Sub UpdateJobCountDisplay()
         ' Update the display to show active and queued job counts
-        Dim activeCount = _jobManager.GetActiveTaskCount()
-        Dim queuedCount = _jobManager.GetQueuedTaskCount()
+        Dim activeCount As Integer = _jobManager.GetActiveTaskCount()
+        Dim queuedCount As Integer = _jobManager.GetQueuedTaskCount()
+
+        Dim FileStrSingular As String = "file",
+            FileStrPlural As String = "files",
+            VerbSingular As String = "is",
+            VerbPlural As String = "are"
 
         If activeCount > 0 OrElse queuedCount > 0 Then
-            Label8.Text = String.Format("{0} ISO files are being created right now. {1} ISO files will be created soon.", activeCount, queuedCount)
+            Label8.Text = String.Format("{0} ISO {1} {2} being created right now. {3} ISO {4} will be created soon.",
+                                        activeCount, If(activeCount <> 1, FileStrPlural, FileStrSingular), If(activeCount <> 1, VerbPlural, VerbSingular),
+                                        queuedCount, If(queuedCount <> 1, FileStrPlural, FileStrSingular))
             DynaLog.LogMessage(String.Format("Job status: {0} active, {1} queued", activeCount, queuedCount))
 
             ' show in lists
