@@ -214,6 +214,8 @@ Public Class OfflineInstDriveLister
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Timer1.Enabled = True
 
+        UnlockNoticeLabel.Visible = False
+
         ColumnHeader1.Width = WindowHelper.ScaleLogical(68)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(128)
         ColumnHeader3.Width = WindowHelper.ScaleLogical(70)
