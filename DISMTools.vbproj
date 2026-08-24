@@ -1461,6 +1461,8 @@
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Current Power Plan Timeout Values.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Server Processor Scheduling.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Control Terminal Services Settings.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Automatic BitLocker Encryption.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Fast Startup.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Shutdown Event Tracker.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Unsigned RDP Warnings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Windows Admin Center banner.dtss" />

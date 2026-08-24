@@ -1,0 +1,6 @@
+﻿Language: Batch
+Name: Disable Fast Startup
+Description: This script disables Fast Startup, which causes systems to never shut down fully when shutting them down.
+Customizable: No
+@ECHO OFF
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /F /V HiberbootEnabled /T REG_DWORD /D 0
