@@ -916,7 +916,7 @@ function Start-PECustomization
                 Write-Host "==================================================================="
                 Write-Host "Installing drivers..."
                 $curDrvIndex = 0
-                $infFiles = Get-ChildItem -Path "$rootDriverPath" -Recurse -Filter "*.inf"
+                $infFiles = Get-ChildItem -Path "$rootDriverPath" -Recurse -File -Filter "*.inf"
                 $infCount = $infFiles.Count
                 $successfulInstallations = 0
                 $failedInstallations = 0
