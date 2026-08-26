@@ -1012,10 +1012,12 @@ Public Class MainForm
                             languageCode = "it"
                     End Select
 
-                    tourServer.StartServer()
-                    If tourServer.IsListenerAlive() Then
-                        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
-                        TourActionsTSMI.Visible = True
+                    If tourServer IsNot Nothing Then
+                        tourServer.StartServer()
+                        If tourServer.IsListenerAlive() Then
+                            Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                            TourActionsTSMI.Visible = True
+                        End If
                     End If
                 End If
             End If
@@ -10937,10 +10939,14 @@ Public Class MainForm
             EnableDynaLog = True
             DynaLog.EnableLogging()
         End If
-        If tourServer.IsListenerAlive() Then
+        If tourServer IsNot Nothing AndAlso tourServer.IsListenerAlive() Then
             DynaLog.LogMessage("Tour is active. Attempting to shut down server...")
             tourServer.StopServer()
             TourActionsTSMI.Visible = False
+        End If
+        If videoServer IsNot Nothing AndAlso videoServer.IsListenerAlive() Then
+            DynaLog.LogMessage("Video server is active. Attempting to shut down server...")
+            videoServer.StopServer()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
         StopMountedImageDetector()
@@ -14731,9 +14737,11 @@ Public Class MainForm
                 MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
-            If Not videoServer.IsListenerAlive Then videoServer.StartServer()
-            If videoServer.IsListenerAlive() Then
-                Process.Start("http://localhost:2026/videoplay.html")
+            If videoServer IsNot Nothing Then
+                If Not videoServer.IsListenerAlive Then videoServer.StartServer()
+                If videoServer.IsListenerAlive() Then
+                    Process.Start("http://localhost:2026/videoplay.html")
+                End If
             End If
         End If
     End Sub
