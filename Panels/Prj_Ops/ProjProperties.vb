@@ -1133,22 +1133,22 @@ Public Class ProjProperties
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                        imgVersion.Text &= " (feature update: " & FeatUpd & ")"
                     Case "ESN"
-                        imgVersion.Text &= CrLf & "(act. de características: " & FeatUpd & ")"
+                        imgVersion.Text &= " (act. de características: " & FeatUpd & ")"
                     Case "FRA"
-                        imgVersion.Text &= CrLf & "(m-à-j des caractéristiques: " & FeatUpd & ")"
+                        imgVersion.Text &= " (m-à-j des caractéristiques: " & FeatUpd & ")"
                     Case "PTB", "PTG"
                         imgVersion.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
                     Case "ITA"
                         imgVersion.Text &= " (aggiornamento della caratteristica: " & FeatUpd & ")"
                 End Select
             Case 1
-                imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                imgVersion.Text &= " (feature update: " & FeatUpd & ")"
             Case 2
-                imgVersion.Text &= CrLf & "(act. de características: " & FeatUpd & ")"
+                imgVersion.Text &= " (act. de características: " & FeatUpd & ")"
             Case 3
-                imgVersion.Text &= CrLf & "(m-à-j des caractéristiques: " & FeatUpd & ")"
+                imgVersion.Text &= " (m-à-j des caractéristiques: " & FeatUpd & ")"
             Case 4
                 imgVersion.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
             Case 5
