@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2567,6 +2567,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuring the DHCP Scopes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dhcp-server-has-been-unauthorized-and-cannot-be-re-authorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DHCP server has been unauthorized and cannot be re-authorized
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3345,6 +3362,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuring the DHCP Scopes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dhcp-server-has-been-unauthorized-and-cannot-be-re-authorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DHCP server has been unauthorized and cannot be re-authorized
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3383,11 +3417,17 @@
 <li>DHCP (Dynamic Host Configuration Protocol)</li>
 <li>Windows Deployment Services</li>
 </ul>
-<p><strong>NOTE:</strong> you can have a different server that acts as the DHCP server. In that case, you only need the WDS role:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can have a different server that acts as the DHCP server. In that case, you only need the WDS role:</p>
+</div>
 <p>You should be able to determine whether they are installed by simply searching for the management tools:</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_req.png" data-desc-position="bottom"><img alt="DHCP Requirement" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_req.png"></a></p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_req.png" data-desc-position="bottom"><img alt="WDS Requirement" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_req.png"></a></p>
-<p><strong>NOTE:</strong> if you don't use WDS, do not install the WDS role. This guide assumes that you will use WDS. However, DHCP is still required for PXE booting.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don't use WDS, do not install the WDS role. This guide assumes that you will use WDS. However, DHCP is still required for PXE booting.</p>
+</div>
 <p>If not present, it's time to assess the current situation of the server. To do this:</p>
 <ol>
 <li>Go to Server Manager</li>
@@ -3445,13 +3485,20 @@
 </ol>
 <p>Finally, configure the server to use the new switch:</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_connect_to_switch.png" data-desc-position="bottom"><img alt="Connect To Switch" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_connect_to_switch.png"></a></p>
-<p>Turn on the server VM and run <code>ipconfig /all</code> to make sure the virtual network adapter is detecting the address used by Internet Connection Sharing as the default gateway. If so, then try pinging it:</p>
+<p>After that step, all further steps apply to all conditions, regardless of the switch.</p>
+<p>On the server, run <code>ipconfig /all</code> to make sure the network adapter is grabbing IP and gateway addresses. If so, then try pinging the gateway:</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_ipconfig.png" data-desc-position="bottom"><img alt="Connect To Switch" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_ipconfig.png"></a></p>
-<p>Configure the static IP address for the DHCP server to the values you see in ipconfig.</p>
+<p>Configure the static IP address for the DHCP server to the values you see in ipconfig. If you want to set up a domain, configure the DNS settings to their current values as well.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_static_ip.png" data-desc-position="bottom"><img alt="Static IP" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_static_ip.png"></a></p>
+<div class="admonition note">
+<p class="admonition-title">For virtual switches only</p>
 <p>If the server can ping your computer, then you have a working vSwitch. You can now hook up the rest of the virtual machines you would like to use to that vSwitch.</p>
+</div>
 <h2 id="configuring-the-dhcp-scopes">Configuring the DHCP Scopes</h2>
-<p><strong>NOTE:</strong> the contents of this section, introduced in earlier 0.7 Previews, have been moved to the WDS guide in order to show setups that work with other providers and not just WDS. This guide will only cover how to set up DHCP scopes for PXE.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The contents of this section, introduced in earlier 0.7 Previews, have been moved to the WDS guide in order to show setups that work with other providers and not just WDS. This guide will only cover how to set up DHCP scopes for PXE.</p>
+</div>
 <p>A DHCP server, in order to automatically assign IP addresses to clients, needs to have scopes with lengths that can contain the maximum amount of clients to use. If you already configured scopes, you can skip this step. Otherwise, keep reading.</p>
 <p>Open the DHCP management tool, select your server, then go to IPv4. We'll create a basic IPv4 scope using a unicast transmission (more common).</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_panel.png" data-desc-position="bottom"><img alt="DHCPv4 panel" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_panel.png"></a></p>
@@ -3486,7 +3533,7 @@
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_scope_options_menu_item.png" data-desc-position="bottom"><img alt="Configure Options" src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_scope_options_menu_item.png"></a></p>
 </li>
 <li>
-<p>Then, configure the following options as follows based on your deployment solution:</p>
+<p>Then, configure the following options as follows based on your deployment solution (Option 67 is optional):</p>
 <table>
 <thead>
 <tr>
@@ -3519,6 +3566,17 @@
 <li>
 <p>Finally, right-click the scope and click "Activate"</p>
 </li>
+</ol>
+<h3 id="dhcp-server-has-been-unauthorized-and-cannot-be-re-authorized">DHCP server has been unauthorized and cannot be re-authorized</h3>
+<p>I have only seen this happen on Active Directory domains where the domain controller is also the DHCP server.</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/adds_dhcp_authorize.png" data-desc-position="bottom"><img src="../../../../../res/img_tasks/tools/isocreator/netinstall/wds/adds_dhcp_authorize.png"></a>
+</p>
+
+<ol>
+<li>Go to Active Directory Sites and Services (<code>dssite.msc</code>)</li>
+<li>In the MMC snap-in, go to Services &gt; NetServices, select your DHCP server from the list and delete it</li>
+<li>In the DHCP snap-in (<code>dhcpmgmt.msc</code>), re-authorize the server</li>
 </ol>
 <h2 id="final-remarks">Final remarks</h2>
 <p>You can configure the aforementioned settings either in this scope or globally. In any case, if you want to use both platforms, you should prepare scripts that automate these tasks. Here's an example of how to do it:</p>
@@ -3579,7 +3637,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.suggest"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       
