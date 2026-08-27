@@ -2265,17 +2265,14 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''- Fixed an issue that would cause HotInstall to throw an exception when performing disk space checks with certain directories
-        '''- When getting information about drivers, drivers that can&apos;t be processed will now be skipped
-        '''- Hardware targets for driver files no longer show up more than once per INF section
-        '''- Fixed an issue where notifications would not be displayed
-        '''- Fixed some exceptions
+        '''--- Bugfixes
         '''
-        '''New features:
-        '''
-        '''- A new policy has been added to configure image file scanning options in the operatin [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
+        '''- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
+        '''- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
+        '''- Fixed issues with some image tasks targeting root [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
