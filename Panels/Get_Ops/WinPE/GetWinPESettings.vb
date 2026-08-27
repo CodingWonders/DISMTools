@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
 Imports System.ComponentModel
@@ -16,31 +16,7 @@ Public Class GetWinPESettings
         If regExitCode <> 0 Then
             DynaLog.LogMessage("Could not load the hive.")
             DynaLog.LogMessage("Error message: " & New Win32Exception(regExitCode).Message)
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label5.Text = "Could not get value"
-                        Case "ESN"
-                            Label5.Text = "No se pudo obtener el valor"
-                        Case "FRA"
-                            Label5.Text = "Impossible d'obtenir la valeur"
-                        Case "PTB", "PTG"
-                            Label5.Text = "Não foi possível obter o valor"
-                        Case "ITA"
-                            Label5.Text = "Impossibile ottenere il valore"
-                    End Select
-                Case 1
-                    Label5.Text = "Could not get value"
-                Case 2
-                    Label5.Text = "No se pudo obtener el valor"
-                Case 3
-                    Label5.Text = "Impossible d'obtenir la valeur"
-                Case 4
-                    Label5.Text = "Não foi possível obter o valor"
-                Case 5
-                    Label5.Text = "Impossibile ottenere il valore"
-            End Select
+            Label5.Text = LocalizationService.ForSection("WinPESettings.GetPESettings")("GetValue.Label")
             Button1.Visible = False
         End If
         DynaLog.LogMessage("Loading SYSTEM hive of WinPE image...")
@@ -49,60 +25,12 @@ Public Class GetWinPESettings
         If regExitCode <> 0 Then
             DynaLog.LogMessage("Could not load the hive.")
             DynaLog.LogMessage("Error message: " & New Win32Exception(regExitCode).Message)
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label6.Text = "Could not get value"
-                        Case "ESN"
-                            Label6.Text = "No se pudo obtener el valor"
-                        Case "FRA"
-                            Label6.Text = "Impossible d'obtenir la valeur"
-                        Case "PTB", "PTG"
-                            Label6.Text = "Não foi possível obter o valor"
-                        Case "ITA"
-                            Label6.Text = "Impossibile ottenere il valore"
-                    End Select
-                Case 1
-                    Label6.Text = "Could not get value"
-                Case 2
-                    Label6.Text = "No se pudo obtener el valor"
-                Case 3
-                    Label6.Text = "Impossible d'obtenir la valeur"
-                Case 4
-                    Label6.Text = "Não foi possível obter o valor"
-                Case 5
-                    Label6.Text = "Impossibile ottenere il valore"
-            End Select
+            Label6.Text = LocalizationService.ForSection("WinPESettings.GetPESettings")("GetValue.Label")
             Button2.Visible = False
         End If
         Try
             Dim msg As String = ""
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Could not get value"
-                        Case "ESN"
-                            msg = "No se pudo obtener el valor"
-                        Case "FRA"
-                            msg = "Impossible d'obtenir la valeur"
-                        Case "PTB", "PTG"
-                            msg = "Não foi possível obter o valor"
-                        Case "ITA"
-                            msg = "Impossibile ottenere il valore"
-                    End Select
-                Case 1
-                    msg = "Could not get value"
-                Case 2
-                    msg = "No se pudo obtener el valor"
-                Case 3
-                    msg = "Impossible d'obtenir la valeur"
-                Case 4
-                    msg = "Não foi possível obter o valor"
-                Case 5
-                    msg = "Impossibile ottenere il valore"
-            End Select
+            msg = LocalizationService.ForSection("WinPESettings.GetPESettings")("GetValue.Message")
             DynaLog.LogMessage("Getting target path...")
             ' Get target path first
             Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
@@ -144,111 +72,15 @@ Public Class GetWinPESettings
             Close()
             Exit Sub
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Get Windows PE settings"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "These are the Windows PE settings for this image:"
-                        Label3.Text = "Target path:"
-                        Label4.Text = "Scratch space:"
-                        Button1.Text = "Change..."
-                        Button2.Text = "Change..."
-                        Button4.Text = "Save..."
-                        OK_Button.Text = "OK"
-                    Case "ESN"
-                        Text = "Obtener configuraciones de Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Estas son las configuraciones de Windows PE para esta imagen:"
-                        Label3.Text = "Carpeta de destino:"
-                        Label4.Text = "Espacio temporal:"
-                        Button1.Text = "Cambiar..."
-                        Button2.Text = "Cambiar..."
-                        OK_Button.Text = "Aceptar"
-                        Button4.Text = "Guardar..."
-                    Case "FRA"
-                        Text = "Obtenir les paramètres de Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Il s'agit des paramètres Windows PE pour cette image :"
-                        Label3.Text = "Chemin cible :"
-                        Label4.Text = "Espace temporaire :"
-                        Button1.Text = "Changer..."
-                        Button2.Text = "Changer..."
-                        OK_Button.Text = "OK"
-                        Button4.Text = "Sauvegarder..."
-                    Case "PTB", "PTG"
-                        Text = "Obter as configurações do Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Estas são as configurações do Windows PE para esta imagem:"
-                        Label3.Text = "Localização do destino:"
-                        Label4.Text = "Espaço temporário:"
-                        Button1.Text = "Alterar..."
-                        Button2.Text = "Alterar..."
-                        Button4.Text = "Guardar..."
-                        OK_Button.Text = "OK"
-                    Case "ITA"
-                        Text = "Ottieni le impostazioni di Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Queste sono le impostazioni di Windows PE per questa immagine:"
-                        Label3.Text = "Percorso di destinazione:"
-                        Label4.Text = "Spazio temporaneo:"
-                        Button1.Text = "Cambia..."
-                        Button2.Text = "Cambia..."
-                        Button4.Text = "Salva..."
-                        OK_Button.Text = "OK"
-                End Select
-            Case 1
-                Text = "Get Windows PE settings"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "These are the Windows PE settings for this image:"
-                Label3.Text = "Target path:"
-                Label4.Text = "Scratch space:"
-                Button1.Text = "Change..."
-                Button2.Text = "Change..."
-                OK_Button.Text = "OK"
-                Button4.Text = "Save..."
-            Case 2
-                Text = "Obtener configuraciones de Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Estas son las configuraciones de Windows PE para esta imagen:"
-                Label3.Text = "Carpeta de destino:"
-                Label4.Text = "Espacio temporal:"
-                Button1.Text = "Cambiar..."
-                Button2.Text = "Cambiar..."
-                OK_Button.Text = "Aceptar"
-                Button4.Text = "Guardar..."
-            Case 3
-                Text = "Obtenir les paramètres de Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Il s'agit des paramètres Windows PE pour cette image :"
-                Label3.Text = "Chemin cible :"
-                Label4.Text = "Espace temporaire :"
-                Button1.Text = "Changer..."
-                Button2.Text = "Changer..."
-                OK_Button.Text = "OK"
-                Button4.Text = "Sauvegarder..."
-            Case 4
-                Text = "Obter as configurações do Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Estas são as configurações do Windows PE para esta imagem:"
-                Label3.Text = "Localização do destino:"
-                Label4.Text = "Espaço temporário:"
-                Button1.Text = "Alterar..."
-                Button2.Text = "Alterar..."
-                Button4.Text = "Guardar..."
-                OK_Button.Text = "OK"
-            Case 5
-                Text = "Ottieni le impostazioni di Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Queste sono le impostazioni di Windows PE per questa immagine:"
-                Label3.Text = "Percorso di destinazione:"
-                Label4.Text = "Spazio temporaneo:"
-                Button1.Text = "Cambia..."
-                Button2.Text = "Cambia..."
-                Button4.Text = "Salva..."
-                OK_Button.Text = "OK"
-        End Select
+        Text = LocalizationService.ForSection("WinPESettings")("Get.Windows.Pesettings.Label")
+        ImageTaskHeader1.ItemText = Text
+        Label2.Text = LocalizationService.ForSection("WinPESettings")("Windows.Label")
+        Label3.Text = LocalizationService.ForSection("WinPESettings")("TargetPath.Label")
+        Label4.Text = LocalizationService.ForSection("WinPESettings")("ScratchSpace.Label")
+        Button1.Text = LocalizationService.ForSection("WinPESettings")("Change.Button")
+        Button2.Text = LocalizationService.ForSection("WinPESettings")("Change.Button")
+        OK_Button.Text = LocalizationService.ForSection("WinPESettings")("Ok.Button")
+        Button4.Text = LocalizationService.ForSection("WinPESettings")("Save.Button")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

@@ -19,6 +19,7 @@ Namespace My
         Private debounceInterval As TimeSpan = TimeSpan.FromSeconds(2)
 
         Private Sub Start(sender As Object, e As EventArgs) Handles Me.Startup
+            LocalizationService.Initialize()
             DynaLog.LogMessage("Adding startup event handlers...")
             AddHandler Microsoft.Win32.SystemEvents.UserPreferenceChanged, AddressOf SysEvts_UserPreferenceChanged
             AddHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanging, AddressOf SysEvts_DisplaySettingsChanging
@@ -184,4 +185,3 @@ Namespace My
 
 
 End Namespace
-

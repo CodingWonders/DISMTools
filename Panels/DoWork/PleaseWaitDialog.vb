@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
@@ -29,31 +29,7 @@ Public Class PleaseWaitDialog
                 Label2.Size = New Size(WindowHelper.ScaleLogical(343), WindowHelper.ScaleLogical(43))
                 Label2.Font = New Font("Segoe UI", 11.25)
         End Select
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label1.Text = "Please wait..."
-                    Case "ESN"
-                        Label1.Text = "Espere..."
-                    Case "FRA"
-                        Label1.Text = "Veuillez patienter..."
-                    Case "PTB", "PTG"
-                        Label1.Text = "Por favor, aguarde..."
-                    Case "ITA"
-                        Label1.Text = "Attendi..."
-                End Select
-            Case 1
-                Label1.Text = "Please wait..."
-            Case 2
-                Label1.Text = "Espere..."
-            Case 3
-                Label1.Text = "Veuillez patienter..."
-            Case 4
-                Label1.Text = "Por favor, aguarde..."
-            Case 5
-                Label1.Text = "Attendi..."
-        End Select
+        Label1.Text = LocalizationService.ForSection("Wait")("Wait.Label")
         Visible = True
         Panel1.BorderStyle = BorderStyle.None
         Panel1.BackColor = CurrentTheme.SectionBackgroundColor
@@ -92,8 +68,8 @@ Public Class PleaseWaitDialog
                 ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox23.Text)).ToString().Replace(" +00:00", "").Trim()
             Catch ex As Exception
                 DynaLog.LogMessage("Could not perform UNIX Epoch conversion. Error message: " & ex.Message)
-                ProjectValueLoadForm.EpochRTB2.Text = "Not available"
-                ProjectValueLoadForm.EpochRTB3.Text = "Not available"
+                ProjectValueLoadForm.EpochRTB2.Text = LocalizationService.ForSection("Wait")("NotAvailable.Label")
+                ProjectValueLoadForm.EpochRTB3.Text = LocalizationService.ForSection("Wait")("ProjectValue.Label")
             End Try
             If Debugger.IsAttached Then
                 ProjectValueLoadForm.ShowDialog(MainForm)
@@ -139,8 +115,8 @@ Public Class PleaseWaitDialog
                 ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox23.Text)).ToString().Replace(" +00:00", "").Trim()
             Catch ex As Exception
                 DynaLog.LogMessage("Could not perform UNIX Epoch conversion. Error message: " & ex.Message)
-                ProjectValueLoadForm.EpochRTB2.Text = "Not available"
-                ProjectValueLoadForm.EpochRTB3.Text = "Not available"
+                ProjectValueLoadForm.EpochRTB2.Text = LocalizationService.ForSection("Wait")("NotAvailable.Label")
+                ProjectValueLoadForm.EpochRTB3.Text = LocalizationService.ForSection("Wait")("ProjectValue.Label")
             End Try
             If Debugger.IsAttached Then
                 ProjectValueLoadForm.ShowDialog(MainForm)

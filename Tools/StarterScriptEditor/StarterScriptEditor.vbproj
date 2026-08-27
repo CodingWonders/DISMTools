@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -143,6 +143,11 @@
     <Compile Include="Classes\AutoInspection\AutoInspectionResult.vb" />
     <Compile Include="Classes\AutoInspection\AutoInspectionRule.vb" />
     <Compile Include="Classes\AutoInspection\AutoInspectionRuleSeverity.vb" />
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="RuntimeFormLocalization.vb" />
+    <Compile Include="..\..\Utilities\Language\LocalizationService.vb">
+      <Link>Utilities\LocalizationService.vb</Link>
+    </Compile>
     <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
     <Compile Include="Classes\ScriptVersion.vb" />
     <Compile Include="Classes\StarterScript.vb" />

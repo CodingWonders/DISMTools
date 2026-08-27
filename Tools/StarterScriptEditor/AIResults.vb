@@ -22,7 +22,7 @@ Public Class AIResults
 
     Private Sub AIResults_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Results.Count < 1 Then
-            MessageBox.Show("This code does not appear to have any security violations.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.AIResults.Messages")("NoViolations.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Close()
             Exit Sub
         End If

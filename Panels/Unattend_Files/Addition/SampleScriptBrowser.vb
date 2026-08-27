@@ -20,7 +20,7 @@ Public Class SampleScriptBrowser
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If OptionsCustomizable Then
-            MessageBox.Show("After this script is imported, please check its code for any options that you can set. That way you can customize its behavior.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("Unattend.Scripts")("ImportDone.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
@@ -172,7 +172,7 @@ Public Class SampleScriptBrowser
             If File.Exists(dtssTargetPath) Then Return ParseStarterScript(dtssTargetPath)
         Catch ex As Exception
             DynaLog.LogMessage("Could not parse DTSS Library Item: " & ex.Message)
-            MessageBox.Show("Could not download script code. Please try again later.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(LocalizationService.ForSection("Panels.Unattend.Scripts")("DownloadFailed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
         Return obtainedStarterScript
@@ -196,7 +196,7 @@ Public Class SampleScriptBrowser
 
         If Not Await LoadAllStarterScripts() Then
             ' starter scripts could not be loaded. stop
-            MessageBox.Show("The starter scripts could not be loaded.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(LocalizationService.ForSection("Unattend.Scripts")("Loaded.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             DialogResult = Windows.Forms.DialogResult.Cancel
             Close()
             Exit Sub
@@ -239,7 +239,7 @@ Public Class SampleScriptBrowser
 
                 Label3.Text = script.Name
                 Label4.Text = script.Description
-                Label5.Text = String.Format("Language: {0}", script.Language)
+                Label5.Text = LocalizationService.ForSection("Designer.ScriptBrowser").Format("Language.Value.Label", script.Language)
                 RichTextBox1.Text = script.ScriptCode
                 RichTextBox2.Text = script.ScriptCode
 
@@ -266,9 +266,9 @@ Public Class SampleScriptBrowser
     End Sub
 
     Private Sub CreateStarterScriptBtn_Click(sender As Object, e As EventArgs) Handles CreateStarterScriptBtn.Click
-        If File.Exists(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")) Then
-            Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"),
-                          String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & ControlChars.Quote))
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScript.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScript.exe"),
+                          String.Format("/userdata={0} {1}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & ControlChars.Quote, LocalizationService.GetLanguageCommandLineArgument()))
             TableLayoutPanel1.Enabled = False
             WindowHelper.DisableCloseCapability(Handle)
             SSETimer.Enabled = True
@@ -280,12 +280,15 @@ Public Class SampleScriptBrowser
         Dim targetSS As StarterScript = GetScriptFromIndex(ListView1.FocusedItem.Index)
         If targetSS IsNot Nothing Then
             Select Case targetSS.Language.ToLower()
-                Case "batch" : ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd"
-                Case "powershell" : ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
-                Case Else : ScriptCodeExporterSFD.Filter = "All Files|*.*"
+                Case "batch"
+                    ScriptCodeExporterSFD.Filter = LocalizationService.ForSection("Panels.Unattend.Scripts")("BatchScripts.Filter")
+                Case "powershell"
+                    ScriptCodeExporterSFD.Filter = LocalizationService.ForSection("Panels.Unattend.Scripts")("Power.Shell.Filter")
+                Case Else
+                    ScriptCodeExporterSFD.Filter = LocalizationService.ForSection("Panels.Unattend.Scripts")("AllFiles.Filter")
             End Select
         Else
-            ScriptCodeExporterSFD.Filter = "All Files|*.*"
+            ScriptCodeExporterSFD.Filter = LocalizationService.ForSection("Panels.Unattend.Scripts")("AllFiles.SecondFilter")
         End If
         ScriptCodeExporterSFD.ShowDialog(Me)
     End Sub
@@ -319,12 +322,18 @@ Public Class SampleScriptBrowser
         ' Show all items in the combobox
         RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
         ComboBox1.Items.Clear()
-        ComboBox1.Items.AddRange({"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
+        Dim ScriptBrowserLocalizer = LocalizationService.ForSection("Designer.ScriptBrowser")
+        ComboBox1.Items.AddRange({
+            ScriptBrowserLocalizer("System.Config.Item"),
+            ScriptBrowserLocalizer("First.User.Logs.Item"),
+            ScriptBrowserLocalizer("Whenever.User.Logs.Item"),
+            ScriptBrowserLocalizer("Scripts.Defined.User.Item")
+        })
 
         If Not Await LoadAllStarterScripts() Then
             ' starter scripts could not be loaded. stop
             AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
-            MessageBox.Show("The starter scripts could not be refreshed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(LocalizationService.ForSection("Unattend.Scripts")("Refreshed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged

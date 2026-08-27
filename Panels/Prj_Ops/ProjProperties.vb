@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
@@ -41,65 +41,19 @@ Public Class ProjProperties
             imgName.Text = MainForm.CurrentImage.ImageFile
             imgIndex.Text = MainForm.CurrentImage.ImageIndex
             imgMountDir.Text = MainForm.CurrentImage.ImageMountDirectory
-            imgMountedStatus.Text = MainForm.CurrentImage.MountStatusToString(MainForm.Language)
+            imgMountedStatus.Text = MainForm.CurrentImage.MountStatusToString()
             RecoverButton.Visible = MainForm.CurrentImage.ImageMountStatus = DismMountStatus.Invalid
             RemountImgBtn.Visible = MainForm.CurrentImage.ImageMountStatus = DismMountStatus.NeedsRemount
             imgVersion.Text = MainForm.CurrentImage.ImageVersion.ToString()
             DetectFeatureUpdate(MainForm.CurrentImage.ImageVersion)
             imgMountedName.Text = MainForm.CurrentImage.ImageName
             imgMountedDesc.Text = MainForm.CurrentImage.ImageDescription
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                        Case "ESN"
-                            imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                        Case "FRA"
-                            imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize, True) & ")"
-                        Case "PTB", "PTG"
-                            imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                        Case "ITA"
-                            imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                    End Select
-                Case 1
-                    imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                Case 2
-                    imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                Case 3
-                    imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize, True) & ")"
-                Case 4
-                    imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-                Case 5
-                    imgSize.Text = MainForm.CurrentImage.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize) & ")"
-            End Select
+            Dim isFrenchSizeText As Boolean = LocalizationService.CurrentCultureCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)
+            Dim readableImageSize As String = If(isFrenchSizeText, Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize, True), Converters.BytesToReadableSize(MainForm.CurrentImage.ImageSize))
+            imgSize.Text = LocalizationService.ForSection("ProjProps").Format("Bytes.Item", MainForm.CurrentImage.ImageSize.ToString("N0"), readableImageSize)
 
             imgArch.Text = Casters.CastDismArchitecture(MainForm.CurrentImage.ImageArchitecture, True)
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Undefined by the image")
-                        Case "ESN"
-                            imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "No definida por la imagen")
-                        Case "FRA"
-                            imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Non défini par l'image")
-                        Case "PTB", "PTG"
-                            imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Não definido pela imagem")
-                        Case "ITA"
-                            imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Non definito dall'immagine")
-                    End Select
-                Case 1
-                    imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Undefined by the image")
-                Case 2
-                    imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "No definida por la imagen")
-                Case 3
-                    imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Non défini par l'image")
-                Case 4
-                    imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Não definido pela imagem")
-                Case 5
-                    imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, "Non definito dall'immagine")
-            End Select
+            imgHal.Text = If(Not MainForm.CurrentImage.ImageHal = "", MainForm.CurrentImage.ImageHal, LocalizationService.ForSection("ProjectProps.Image")("UndefinedImage.Label"))
             imgSPBuild.Text = MainForm.CurrentImage.ImageVersion.Revision
             imgSPLvl.Text = MainForm.CurrentImage.ImageSpLevel
             imgEdition.Text = MainForm.CurrentImage.ImageEditionId
@@ -109,58 +63,10 @@ Public Class ProjProperties
             imgSysRoot.Text = MainForm.CurrentImage.ImageSystemRoot
             DynaLog.LogMessage("Language count: " & MainForm.CurrentImage.ImageLanguages.Count)
             For Each language In MainForm.CurrentImage.ImageLanguages
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", default", "") & ")")
-                            Case "ESN"
-                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
-                            Case "FRA"
-                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", défaut", "") & ")")
-                            Case "PTB", "PTG"
-                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
-                            Case "ITA"
-                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
-                        End Select
-                    Case 1
-                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", default", "") & ")")
-                    Case 2
-                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
-                    Case 3
-                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", défaut", "") & ")")
-                    Case 4
-                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
-                    Case 5
-                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
-                End Select
+                LanguageList.Items.Add(language.Name & LocalizationService.ForSection("ProjectProps.Image")("OpenParenthesis.Label") & language.DisplayName & If(MainForm.CurrentImage.ImageDefaultLanguage.Name = language.Name, LocalizationService.ForSection("ProjectProps.Image")("Default.Label"), "") & LocalizationService.ForSection("ProjectProps.Image")("CloseParenthesis.Label"))
             Next
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            imgFormat.Text = Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper() & " file"
-                        Case "ESN"
-                            imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                        Case "FRA"
-                            imgFormat.Text = "Fichier " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                        Case "PTB", "PTG"
-                            imgFormat.Text = "Ficheiro " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                        Case "ITA"
-                            imgFormat.Text = "File " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                    End Select
-                Case 1
-                    imgFormat.Text = Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper() & " file"
-                Case 2
-                    imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                Case 3
-                    imgFormat.Text = "Fichier " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                Case 4
-                    imgFormat.Text = "Ficheiro " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-                Case 5
-                    imgFormat.Text = "File " & Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper()
-            End Select
-            imgRW.Text = MainForm.CurrentImage.MountModeToString(MainForm.Language)
+            imgFormat.Text = LocalizationService.ForSection("ProjectProps.Image").Format("File.Label", Path.GetExtension(MainForm.CurrentImage.ImageFile).Replace(".", "").Trim().ToUpper())
+            imgRW.Text = MainForm.CurrentImage.MountModeToString()
             RWRemountBtn.Visible = MainForm.CurrentImage.ImageMountMode = DismMountMode.ReadOnly
             imgDirs.Text = MainForm.CurrentImage.ImageDirectoryCount
             imgFiles.Text = MainForm.CurrentImage.ImageFileCount
@@ -212,396 +118,42 @@ Public Class ProjProperties
     End Sub
 
     Private Sub ProjProperties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label4.Text = "Getting project and image information. Please wait..."
-                        Label5.Text = "Name:"
-                        Label6.Text = "Location:"
-                        Label7.Text = "Creation date:"
-                        Label8.Text = "Project GUID:"
-                        Label13.Text = "Mount directory:"
-                        Label14.Text = "Image index:"
-                        Label15.Text = "Image file:"
-                        Label20.Text = "Image present on project?"
-                        Label22.Text = "Image status:"
-                        Label25.Text = "Version:"
-                        Label27.Text = "Name:"
-                        Label29.Text = "Description:"
-                        Label31.Text = "Size:"
-                        Label33.Text = "Supports WIMBoot?"
-                        Label35.Text = "Architecture:"
-                        Label39.Text = "Service Pack build:"
-                        Label41.Text = "Service Pack level:"
-                        Label43.Text = "Edition:"
-                        Label45.Text = "Product type:"
-                        Label47.Text = "Product suite:"
-                        Label49.Text = "System root directory:"
-                        Label51.Text = "Directory count:"
-                        Label53.Text = "File count:"
-                        Label55.Text = "Creation date:"
-                        Label57.Text = "Modification date:"
-                        Label58.Text = "Installed languages:"
-                        Label60.Text = "File format:"
-                        Label62.Text = "Image R/W permissions:"
-                        RecoverButton.Text = "Recover"
-                        RemountImgBtn.Text = "Reload"
-                        RWRemountBtn.Text = "Remount with write permissions"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        LinkLabel2.Text = "Many properties cannot be seen because an image has not yet been mounted. Once you mount it, detailed information will be shown here. Click here to mount an image"
-                    Case "ESN"
-                        Label4.Text = "Obteniendo información del proyecto y la imagen. Espere..."
-                        Label5.Text = "Nombre:"
-                        Label6.Text = "Ubicación:"
-                        Label7.Text = "Fecha de creación:"
-                        Label8.Text = "GUID del proyecto:"
-                        Label13.Text = "Directorio de montaje:"
-                        Label14.Text = "Índice de imagen:"
-                        Label15.Text = "Archivo de imagen:"
-                        Label20.Text = "¿La imagen está presente en el proyecto?"
-                        Label22.Text = "Estado de imagen:"
-                        Label25.Text = "Versión:"
-                        Label27.Text = "Nombre:"
-                        Label29.Text = "Descripción:"
-                        Label31.Text = "Tamaño:"
-                        Label33.Text = "¿Soporta WIMBoot?"
-                        Label35.Text = "Arquitectura:"
-                        Label39.Text = "Compilación de Service Pack:"
-                        Label41.Text = "Nivel de Service Pack:"
-                        Label43.Text = "Edición:"
-                        Label45.Text = "Tipo de producto:"
-                        Label47.Text = "Suite de producto:"
-                        Label49.Text = "Directorio de raíz del sistema:"
-                        Label51.Text = "Número de directorios:"
-                        Label53.Text = "Número de archivos:"
-                        Label55.Text = "Fecha de creación:"
-                        Label57.Text = "Fecha de modificación:"
-                        Label58.Text = "Idiomas instalados:"
-                        Label60.Text = "Formato de archivo:"
-                        Label62.Text = "Permisos de L/E de imagen:"
-                        RecoverButton.Text = "Recuperar"
-                        RemountImgBtn.Text = "Recargar"
-                        RWRemountBtn.Text = "Recargar con permisos de escritura"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        LinkLabel2.Text = "Las propiedades no pueden ser obtenidas porque aún no se ha montado una imagen. Cuando lo haga, información detallada aparecerá aquí. Haga clic aquí para montar una imagen"
-                    Case "FRA"
-                        Label4.Text = "Obtention des informations sur les projets et les images en cours. Veuillez patienter..."
-                        Label5.Text = "Nom :"
-                        Label6.Text = "Lieu :"
-                        Label7.Text = "Date de création :"
-                        Label8.Text = "GUID du projet :"
-                        Label13.Text = "Répertoire de montage :"
-                        Label14.Text = "Index de l'image :"
-                        Label15.Text = "Fichier de l'image :"
-                        Label20.Text = "Image présente sur le projet ?"
-                        Label22.Text = "État de l'image :"
-                        Label25.Text = "Version :"
-                        Label27.Text = "Nom :"
-                        Label29.Text = "Description :"
-                        Label31.Text = "Taille :"
-                        Label33.Text = "Supporte WIMBoot ?"
-                        Label35.Text = "Architecture :"
-                        Label39.Text = "Compilation du Service Pack :"
-                        Label41.Text = "Niveau du Service Pack :"
-                        Label43.Text = "Édition :"
-                        Label45.Text = "Type de produit :"
-                        Label47.Text = "Suite du produit :"
-                        Label49.Text = "Répertoire racine du système :"
-                        Label51.Text = "Nombre de répertoires :"
-                        Label53.Text = "Nombre de fichiers :"
-                        Label55.Text = "Date de création :"
-                        Label57.Text = "Date de modification :"
-                        Label58.Text = "Langues installées :"
-                        Label60.Text = "Format du fichier :"
-                        Label62.Text = "Droits L/E de l'image :"
-                        RecoverButton.Text = "Récupérer"
-                        RemountImgBtn.Text = "Recharger"
-                        RWRemountBtn.Text = "Remonter avec les droits d'écriture"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        LinkLabel2.Text = "De nombreuses propriétés ne sont pas visibles car l'image n'a pas encore été montée. Une fois l'image montée, des informations détaillées s'afficheront ici. Cliquez ici pour monter une image"
-                    Case "PTB", "PTG"
-                        Label4.Text = "Obter informações sobre o projeto e a imagem. Aguarde..."
-                        Label5.Text = "Nome:"
-                        Label6.Text = "Localização:"
-                        Label7.Text = "Data de criação:"
-                        Label8.Text = "GUID do projeto:"
-                        Label13.Text = "Diretório de montagem:"
-                        Label14.Text = "Índice da imagem:"
-                        Label15.Text = "Ficheiro de imagem:"
-                        Label20.Text = "Imagem presente no projeto?"
-                        Label22.Text = "Estado da imagem:"
-                        Label25.Text = "Versão:"
-                        Label27.Text = "Nome:"
-                        Label29.Text = "Descrição:"
-                        Label31.Text = "Tamanho:"
-                        Label33.Text = "Suporta WIMBoot?"
-                        Label35.Text = "Arquitetura:"
-                        Label39.Text = "Service Pack build:"
-                        Label41.Text = "Nível do Service Pack:"
-                        Label43.Text = "Edição:"
-                        Label45.Text = "Tipo de produto:"
-                        Label47.Text = "Conjunto de produtos:"
-                        Label49.Text = "Diretório raiz do sistema:"
-                        Label51.Text = "Contagem de directórios:"
-                        Label53.Text = "Contagem de ficheiros:"
-                        Label55.Text = "Data de criação:"
-                        Label57.Text = "Data de modificação:"
-                        Label58.Text = "Idiomas instalados:"
-                        Label60.Text = "Formato do ficheiro:"
-                        Label62.Text = "Permissões de imagem R/W:"
-                        RecoverButton.Text = "Recuperar"
-                        RemountImgBtn.Text = "Recarregar"
-                        RWRemountBtn.Text = "Remontar com permissões de escrita"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        LinkLabel2.Text = "Muitas propriedades não podem ser vistas porque a imagem ainda não foi montada. Depois de a montar, serão mostradas aqui informações detalhadas. Clique aqui para montar uma imagem"
-                    Case "ITA"
-                        Label4.Text = "Ottenere informazioni sul progetto e sull'immagine. Attendere..."
-                        Label5.Text = "Nome:"
-                        Label6.Text = " Ubicazione:"
-                        Label7.Text = "Data di creazione:"
-                        Label8.Text = "GUID del progetto:"
-                        Label13.Text = "Directory di montaggio:"
-                        Label14.Text = "Indice immagine:"
-                        Label15.Text = "File immagine:"
-                        Label20.Text = "Immagine presente nel progetto?"
-                        Label22.Text = "Stato immagine:"
-                        Label25.Text = "Versione:"
-                        Label27.Text = "Nome:"
-                        Label29.Text = "Descrizione:"
-                        Label31.Text = "Dimensione:"
-                        Label33.Text = "Supporta WIMBoot?"
-                        Label35.Text = "Architettura:"
-                        Label39.Text = "Service Pack build:"
-                        Label41.Text = "Livello del Service Pack:"
-                        Label43.Text = "Edizione:"
-                        Label45.Text = "Tipo di prodotto:"
-                        Label47.Text = "Suite di prodotti:"
-                        Label49.Text = " Cartella principale del sistema:"
-                        Label51.Text = "Numero di cartelle:"
-                        Label53.Text = "Numero di file:"
-                        Label55.Text = "Data di creazione:"
-                        Label57.Text = "Data di modifica:"
-                        Label58.Text = "Lingue installate:"
-                        Label60.Text = "Formato file:"
-                        Label62.Text = "Autorizzazioni R/W immagine:"
-                        RecoverButton.Text = "Recupera"
-                        RemountImgBtn.Text = "Ricaricare"
-                        RWRemountBtn.Text = "Rimonta con i permessi di scrittura"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        LinkLabel2.Text = "Molte proprietà non possono essere visualizzate perché l'immagine non è ancora stata montata. Una volta montata, le informazioni dettagliate saranno mostrate qui. Fare clic qui per montare un'immagine"
-                End Select
-            Case 1
-                Label4.Text = "Getting project and image information. Please wait..."
-                Label5.Text = "Name:"
-                Label6.Text = "Location:"
-                Label7.Text = "Creation time and date:"
-                Label8.Text = "Project GUID:"
-                Label13.Text = "Mount directory:"
-                Label14.Text = "Image index:"
-                Label15.Text = "Image file:"
-                Label20.Text = "Image present on project?"
-                Label22.Text = "Image status:"
-                Label25.Text = "Version:"
-                Label27.Text = "Name:"
-                Label29.Text = "Description:"
-                Label31.Text = "Size:"
-                Label33.Text = "Supports WIMBoot?"
-                Label35.Text = "Architecture:"
-                Label39.Text = "Service Pack build:"
-                Label41.Text = "Service Pack level:"
-                Label43.Text = "Edition:"
-                Label45.Text = "Product type:"
-                Label47.Text = "Product suite:"
-                Label49.Text = "System root directory:"
-                Label51.Text = "Directory count:"
-                Label53.Text = "File count:"
-                Label55.Text = "Creation date:"
-                Label57.Text = "Modification date:"
-                Label58.Text = "Installed languages:"
-                Label60.Text = "File format:"
-                Label62.Text = "Image R/W permissions:"
-                RecoverButton.Text = "Recover"
-                RemountImgBtn.Text = "Reload"
-                RWRemountBtn.Text = "Remount with write permissions"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                LinkLabel2.Text = "Many properties cannot be seen because an image has not yet been mounted. Once you mount it, detailed information will be shown here. Click here to mount an image"
-            Case 2
-                Label4.Text = "Obteniendo información del proyecto y la imagen. Espere..."
-                Label5.Text = "Nombre:"
-                Label6.Text = "Ubicación:"
-                Label7.Text = "Fecha de creación:"
-                Label8.Text = "GUID del proyecto:"
-                Label13.Text = "Directorio de montaje:"
-                Label14.Text = "Índice de imagen:"
-                Label15.Text = "Archivo de imagen:"
-                Label20.Text = "¿La imagen está presente en el proyecto?"
-                Label22.Text = "Estado de imagen:"
-                Label25.Text = "Versión:"
-                Label27.Text = "Nombre:"
-                Label29.Text = "Descripción:"
-                Label31.Text = "Tamaño:"
-                Label33.Text = "¿Soporta WIMBoot?"
-                Label35.Text = "Arquitectura:"
-                Label39.Text = "Compilación de Service Pack:"
-                Label41.Text = "Nivel de Service Pack:"
-                Label43.Text = "Edición:"
-                Label45.Text = "Tipo de producto:"
-                Label47.Text = "Suite de producto:"
-                Label49.Text = "Directorio de raíz del sistema:"
-                Label51.Text = "Número de directorios:"
-                Label53.Text = "Número de archivos:"
-                Label55.Text = "Fecha de creación:"
-                Label57.Text = "Fecha de modificación:"
-                Label58.Text = "Idiomas instalados:"
-                Label60.Text = "Formato de archivo:"
-                Label62.Text = "Permisos de L/E de imagen:"
-                RecoverButton.Text = "Recuperar"
-                RemountImgBtn.Text = "Recargar"
-                RWRemountBtn.Text = "Recargar con permisos de escritura"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                LinkLabel2.Text = "Las propiedades no pueden ser obtenidas porque aún no se ha montado una imagen. Cuando lo haga, información detallada aparecerá aquí. Haga clic aquí para montar una imagen"
-            Case 3
-                Label4.Text = "Obtention des informations sur les projets et les images en cours. Veuillez patienter..."
-                Label5.Text = "Nom :"
-                Label6.Text = "Lieu :"
-                Label7.Text = "Date de création :"
-                Label8.Text = "GUID du projet :"
-                Label13.Text = "Répertoire de montage :"
-                Label14.Text = "Index de l'image :"
-                Label15.Text = "Fichier de l'image :"
-                Label20.Text = "Image présente sur le projet ?"
-                Label22.Text = "État de l'image :"
-                Label25.Text = "Version :"
-                Label27.Text = "Nom :"
-                Label29.Text = "Description :"
-                Label31.Text = "Taille :"
-                Label33.Text = "Supporte WIMBoot ?"
-                Label35.Text = "Architecture :"
-                Label39.Text = "Compilation du Service Pack :"
-                Label41.Text = "Niveau du Service Pack :"
-                Label43.Text = "Édition :"
-                Label45.Text = "Type de produit :"
-                Label47.Text = "Suite du produit :"
-                Label49.Text = "Répertoire racine du système :"
-                Label51.Text = "Nombre de répertoires :"
-                Label53.Text = "Nombre de fichiers :"
-                Label55.Text = "Date de création :"
-                Label57.Text = "Date de modification :"
-                Label58.Text = "Langues installées :"
-                Label60.Text = "Format du fichier :"
-                Label62.Text = "Droits L/E de l'image :"
-                RecoverButton.Text = "Récupérer"
-                RemountImgBtn.Text = "Recharger"
-                RWRemountBtn.Text = "Remonter avec les droits d'écriture"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                LinkLabel2.Text = "De nombreuses propriétés ne sont pas visibles car l'image n'a pas encore été montée. Une fois l'image montée, des informations détaillées s'afficheront ici. Cliquez ici pour monter une image"
-            Case 4
-                Label4.Text = "Obter informações sobre o projeto e a imagem. Aguarde..."
-                Label5.Text = "Nome:"
-                Label6.Text = "Localização:"
-                Label7.Text = "Data de criação:"
-                Label8.Text = "GUID do projeto:"
-                Label13.Text = "Diretório de montagem:"
-                Label14.Text = "Índice da imagem:"
-                Label15.Text = "Ficheiro de imagem:"
-                Label20.Text = "Imagem presente no projeto?"
-                Label22.Text = "Estado da imagem:"
-                Label25.Text = "Versão:"
-                Label27.Text = "Nome:"
-                Label29.Text = "Descrição:"
-                Label31.Text = "Tamanho:"
-                Label33.Text = "Suporta WIMBoot?"
-                Label35.Text = "Arquitetura:"
-                Label39.Text = "Service Pack build:"
-                Label41.Text = "Nível do Service Pack:"
-                Label43.Text = "Edição:"
-                Label45.Text = "Tipo de produto:"
-                Label47.Text = "Conjunto de produtos:"
-                Label49.Text = "Diretório raiz do sistema:"
-                Label51.Text = "Contagem de directórios:"
-                Label53.Text = "Contagem de ficheiros:"
-                Label55.Text = "Data de criação:"
-                Label57.Text = "Data de modificação:"
-                Label58.Text = "Idiomas instalados:"
-                Label60.Text = "Formato do ficheiro:"
-                Label62.Text = "Permissões de imagem R/W:"
-                RecoverButton.Text = "Recuperar"
-                RemountImgBtn.Text = "Recarregar"
-                RWRemountBtn.Text = "Remontar com permissões de escrita"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                LinkLabel2.Text = "Muitas propriedades não podem ser vistas porque a imagem ainda não foi montada. Depois de a montar, serão mostradas aqui informações detalhadas. Clique aqui para montar uma imagem"
-            Case 5
-                Label4.Text = "Ottenere informazioni sul progetto e sull'immagine. Attendere..."
-                Label5.Text = "Nome:"
-                Label6.Text = " Ubicazione:"
-                Label7.Text = "Data di creazione:"
-                Label8.Text = "GUID del progetto:"
-                Label13.Text = "Directory di montaggio:"
-                Label14.Text = "Indice immagine:"
-                Label15.Text = "File immagine:"
-                Label20.Text = "Immagine presente nel progetto?"
-                Label22.Text = "Stato immagine:"
-                Label25.Text = "Versione:"
-                Label27.Text = "Nome:"
-                Label29.Text = "Descrizione:"
-                Label31.Text = "Dimensione:"
-                Label33.Text = "Supporta WIMBoot?"
-                Label35.Text = "Architettura:"
-                Label39.Text = "Service Pack build:"
-                Label41.Text = "Livello del Service Pack:"
-                Label43.Text = "Edizione:"
-                Label45.Text = "Tipo di prodotto:"
-                Label47.Text = "Suite di prodotti:"
-                Label49.Text = " Cartella principale del sistema:"
-                Label51.Text = "Numero di cartelle:"
-                Label53.Text = "Numero di file:"
-                Label55.Text = "Data di creazione:"
-                Label57.Text = "Data di modifica:"
-                Label58.Text = "Lingue installate:"
-                Label60.Text = "Formato file:"
-                Label62.Text = "Autorizzazioni R/W immagine:"
-                RecoverButton.Text = "Recupera"
-                RemountImgBtn.Text = "Ricaricare"
-                RWRemountBtn.Text = "Rimonta con i permessi di scrittura"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                LinkLabel2.Text = "Molte proprietà non possono essere visualizzate perché l'immagine non è ancora stata montata. Una volta montata, le informazioni dettagliate saranno mostrate qui. Fare clic qui per montare un'immagine"
-        End Select
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        ImageTaskHeader1.ItemText = "Properties"
-                    Case "ESN"
-                        ImageTaskHeader1.ItemText = "Propiedades"
-                    Case "FRA"
-                        ImageTaskHeader1.ItemText = "Propriétés"
-                    Case "PTB", "PTG"
-                        ImageTaskHeader1.ItemText = "Propriedades"
-                    Case "ITA"
-                        ImageTaskHeader1.ItemText = "Proprietà"
-                End Select
-            Case 1
-                ImageTaskHeader1.ItemText = "Properties"
-            Case 2
-                ImageTaskHeader1.ItemText = "Propiedades"
-            Case 3
-                ImageTaskHeader1.ItemText = "Propriétés"
-            Case 4
-                ImageTaskHeader1.ItemText = "Propriedades"
-            Case 5
-                ImageTaskHeader1.ItemText = "Proprietà"
-        End Select
+        Label4.Text = LocalizationService.ForSection("ProjProps")("Getting.Project.Image.Label")
+        Label5.Text = LocalizationService.ForSection("ProjProps")("Name.Label")
+        Label6.Text = LocalizationService.ForSection("ProjProps")("Location.Label")
+        Label7.Text = LocalizationService.ForSection("ProjProps")("Creation.Time.Date.Label")
+        Label8.Text = LocalizationService.ForSection("ProjProps")("ProjectGUID.Label")
+        Label13.Text = LocalizationService.ForSection("ProjProps")("MountDirectory.Label")
+        Label14.Text = LocalizationService.ForSection("ProjProps")("ImageIndex.Label")
+        Label15.Text = LocalizationService.ForSection("ProjProps")("ImageFile.Label")
+        Label20.Text = LocalizationService.ForSection("ProjProps")("Image.Present.Project.Label")
+        Label22.Text = LocalizationService.ForSection("ProjProps")("ImageStatus.Label")
+        Label25.Text = LocalizationService.ForSection("ProjProps")("Version.Label")
+        Label27.Text = LocalizationService.ForSection("ProjProps")("Name.Label")
+        Label29.Text = LocalizationService.ForSection("ProjProps")("Description.Label")
+        Label31.Text = LocalizationService.ForSection("ProjProps")("Size.Label")
+        Label33.Text = LocalizationService.ForSection("ProjProps")("Supports.WIM.Boot.Label")
+        Label35.Text = LocalizationService.ForSection("ProjProps")("Architecture.Label")
+        Label39.Text = LocalizationService.ForSection("ProjProps")("ServicePackBuild.Label")
+        Label41.Text = LocalizationService.ForSection("ProjProps")("ServicePackLevel.Label")
+        Label43.Text = LocalizationService.ForSection("ProjProps")("Edition.Label")
+        Label45.Text = LocalizationService.ForSection("ProjProps")("ProductType.Label")
+        Label47.Text = LocalizationService.ForSection("ProjProps")("ProductSuite.Label")
+        Label49.Text = LocalizationService.ForSection("ProjProps")("System.Root.Dir.Label")
+        Label51.Text = LocalizationService.ForSection("ProjProps")("DirectoryCount.Label")
+        Label53.Text = LocalizationService.ForSection("ProjProps")("FileCount.Label")
+        Label55.Text = LocalizationService.ForSection("ProjProps")("CreationDate.Label")
+        Label57.Text = LocalizationService.ForSection("ProjProps")("ModificationDate.Label")
+        Label58.Text = LocalizationService.ForSection("ProjProps")("Installed.Languages.Label")
+        Label60.Text = LocalizationService.ForSection("ProjProps")("FileFormat.Label")
+        Label62.Text = LocalizationService.ForSection("ProjProps")("Image.Rwpermissions.Label")
+        RecoverButton.Text = LocalizationService.ForSection("ProjProps")("Recover.Label")
+        RemountImgBtn.Text = LocalizationService.ForSection("ProjProps")("Reload.Label")
+        RWRemountBtn.Text = LocalizationService.ForSection("ProjProps")("Remount.Write.Label")
+        OK_Button.Text = LocalizationService.ForSection("ProjProps")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ProjProps")("Cancel.Button")
+        LinkLabel2.Text = LocalizationService.ForSection("ProjProps")("Many.Cannot.Seen.Message")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("ProjProps")("Props.Label")
         ' Set program colors
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
@@ -648,31 +200,7 @@ Public Class ProjProperties
         End If
         If MainForm.IsImageMounted Then
             DynaLog.LogMessage("An image is mounted.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label19.Text = "Yes"
-                        Case "ESN"
-                            Label19.Text = "Sí"
-                        Case "FRA"
-                            Label19.Text = "Oui"
-                        Case "PTB", "PTG"
-                            Label19.Text = "Sim"
-                        Case "ITA"
-                            Label19.Text = "Sì"
-                    End Select
-                Case 1
-                    Label19.Text = "Yes"
-                Case 2
-                    Label19.Text = "Sí"
-                Case 3
-                    Label19.Text = "Oui"
-                Case 4
-                    Label19.Text = "Sim"
-                Case 5
-                    Label19.Text = "Sì"
-            End Select
+            Label19.Text = LocalizationService.ForSection("ProjProps")("Yes.Button")
             DetectImageProperties()
             If imgMountedName.Text = "<undefined>" Then
                 DynaLog.LogMessage("Getting name and edition...")
@@ -725,276 +253,30 @@ Public Class ProjProperties
             Panel3.Visible = False
         Else
             DynaLog.LogMessage("An image is not mounted.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            Label19.Text = "No"
-                        Case "ESN"
-                            Label19.Text = "No"
-                        Case "FRA"
-                            Label19.Text = "Non"
-                        Case "PTB", "PTG"
-                            Label19.Text = "Não"
-                        Case "ITA"
-                            Label19.Text = "No"
-                    End Select
-                Case 1
-                    Label19.Text = "No"
-                Case 2
-                    Label19.Text = "No"
-                Case 3
-                    Label19.Text = "Non"
-                Case 4
-                    Label19.Text = "Não"
-                Case 5
-                    Label19.Text = "No"
-            End Select
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            imgMountDir.Text = "Not available"
-                            imgIndex.Text = "Not available"
-                            imgName.Text = "Not available"
-                            imgMountedStatus.Text = "Not available"
-                            imgVersion.Text = "Not available"
-                            imgMountedName.Text = "Not available"
-                            imgMountedDesc.Text = "Not available"
-                            imgSize.Text = "Not available"
-                            imgWimBootStatus.Text = "Not available"
-                            imgArch.Text = "Not available"
-                            imgHal.Text = "Not available"
-                            imgSPBuild.Text = "Not available"
-                            imgSPLvl.Text = "Not available"
-                            imgEdition.Text = "Not available"
-                            imgPType.Text = "Not available"
-                            imgPSuite.Text = "Not available"
-                            imgSysRoot.Text = "Not available"
-                            imgDirs.Text = "Not available"
-                            imgFiles.Text = "Not available"
-                            imgCreation.Text = "Not available"
-                            imgModification.Text = "Not available"
-                            imgFormat.Text = "Not available"
-                            imgRW.Text = "Not available"
-                        Case "ESN"
-                            imgMountDir.Text = "No disponible"
-                            imgIndex.Text = "No disponible"
-                            imgName.Text = "No disponible"
-                            imgMountedStatus.Text = "No disponible"
-                            imgVersion.Text = "No disponible"
-                            imgMountedName.Text = "No disponible"
-                            imgMountedDesc.Text = "No disponible"
-                            imgSize.Text = "No disponible"
-                            imgWimBootStatus.Text = "No disponible"
-                            imgArch.Text = "No disponible"
-                            imgHal.Text = "No disponible"
-                            imgSPBuild.Text = "No disponible"
-                            imgSPLvl.Text = "No disponible"
-                            imgEdition.Text = "No disponible"
-                            imgPType.Text = "No disponible"
-                            imgPSuite.Text = "No disponible"
-                            imgSysRoot.Text = "No disponible"
-                            imgDirs.Text = "No disponible"
-                            imgFiles.Text = "No disponible"
-                            imgCreation.Text = "No disponible"
-                            imgModification.Text = "No disponible"
-                            imgFormat.Text = "No disponible"
-                            imgRW.Text = "No disponible"
-                        Case "FRA"
-                            imgMountDir.Text = "Non disponible"
-                            imgIndex.Text = "Non disponible"
-                            imgName.Text = "Non disponible"
-                            imgMountedStatus.Text = "Non disponible"
-                            imgVersion.Text = "Non disponible"
-                            imgMountedName.Text = "Non disponible"
-                            imgMountedDesc.Text = "Non disponible"
-                            imgSize.Text = "Non disponible"
-                            imgWimBootStatus.Text = "Non disponible"
-                            imgArch.Text = "Non disponible"
-                            imgHal.Text = "Non disponible"
-                            imgSPBuild.Text = "Non disponible"
-                            imgSPLvl.Text = "Non disponible"
-                            imgEdition.Text = "Non disponible"
-                            imgPType.Text = "Non disponible"
-                            imgPSuite.Text = "Non disponible"
-                            imgSysRoot.Text = "Non disponible"
-                            imgDirs.Text = "Non disponible"
-                            imgFiles.Text = "Non disponible"
-                            imgCreation.Text = "Non disponible"
-                            imgModification.Text = "Non disponible"
-                            imgFormat.Text = "Non disponible"
-                            imgRW.Text = "Non disponible"
-                        Case "PTB", "PTG"
-                            imgMountDir.Text = "Não disponível"
-                            imgIndex.Text = "Não disponível"
-                            imgName.Text = "Não disponível"
-                            imgMountedStatus.Text = "Não disponível"
-                            imgVersion.Text = "Não disponível"
-                            imgMountedName.Text = "Não disponível"
-                            imgMountedDesc.Text = "Não disponível"
-                            imgSize.Text = "Não disponível"
-                            imgWimBootStatus.Text = "Não disponível"
-                            imgArch.Text = "Não disponível"
-                            imgHal.Text = "Não disponível"
-                            imgSPBuild.Text = "Não disponível"
-                            imgSPLvl.Text = "Não disponível"
-                            imgEdition.Text = "Não disponível"
-                            imgPType.Text = "Não disponível"
-                            imgPSuite.Text = "Não disponível"
-                            imgSysRoot.Text = "Não disponível"
-                            imgDirs.Text = "Não disponível"
-                            imgFiles.Text = "Não disponível"
-                            imgCreation.Text = "Não disponível"
-                            imgModification.Text = "Não disponível"
-                            imgFormat.Text = "Não disponível"
-                            imgRW.Text = "Não disponível"
-                        Case "ITA"
-                            imgMountDir.Text = "Non disponibile"
-                            imgIndex.Text = "Non disponibile"
-                            imgName.Text = "Non disponibile"
-                            imgMountedStatus.Text = "Non disponibile"
-                            imgVersion.Text = "Non disponibile"
-                            imgMountedName.Text = "Non disponibile"
-                            imgMountedDesc.Text = "Non disponibile"
-                            imgSize.Text = "Non disponibile"
-                            imgWimBootStatus.Text = "Non disponibile"
-                            imgArch.Text = "Non disponibile"
-                            imgHal.Text = "Non disponibile"
-                            imgSPBuild.Text = "Non disponibile"
-                            imgSPLvl.Text = "Non disponibile"
-                            imgEdition.Text = "Non disponibile"
-                            imgPType.Text = "Non disponibile"
-                            imgPSuite.Text = "Non disponibile"
-                            imgSysRoot.Text = "Non disponibile"
-                            imgDirs.Text = "Non disponibile"
-                            imgFiles.Text = "Non disponibile"
-                            imgCreation.Text = "Non disponibile"
-                            imgModification.Text = "Non disponibile"
-                            imgFormat.Text = "Non disponibile"
-                            imgRW.Text = "Non disponibile"
-                    End Select
-                Case 1
-                    imgMountDir.Text = "Not available"
-                    imgIndex.Text = "Not available"
-                    imgName.Text = "Not available"
-                    imgMountedStatus.Text = "Not available"
-                    imgVersion.Text = "Not available"
-                    imgMountedName.Text = "Not available"
-                    imgMountedDesc.Text = "Not available"
-                    imgSize.Text = "Not available"
-                    imgWimBootStatus.Text = "Not available"
-                    imgArch.Text = "Not available"
-                    imgHal.Text = "Not available"
-                    imgSPBuild.Text = "Not available"
-                    imgSPLvl.Text = "Not available"
-                    imgEdition.Text = "Not available"
-                    imgPType.Text = "Not available"
-                    imgPSuite.Text = "Not available"
-                    imgSysRoot.Text = "Not available"
-                    imgDirs.Text = "Not available"
-                    imgFiles.Text = "Not available"
-                    imgCreation.Text = "Not available"
-                    imgModification.Text = "Not available"
-                    imgFormat.Text = "Not available"
-                    imgRW.Text = "Not available"
-                Case 2
-                    imgMountDir.Text = "No disponible"
-                    imgIndex.Text = "No disponible"
-                    imgName.Text = "No disponible"
-                    imgMountedStatus.Text = "No disponible"
-                    imgVersion.Text = "No disponible"
-                    imgMountedName.Text = "No disponible"
-                    imgMountedDesc.Text = "No disponible"
-                    imgSize.Text = "No disponible"
-                    imgWimBootStatus.Text = "No disponible"
-                    imgArch.Text = "No disponible"
-                    imgHal.Text = "No disponible"
-                    imgSPBuild.Text = "No disponible"
-                    imgSPLvl.Text = "No disponible"
-                    imgEdition.Text = "No disponible"
-                    imgPType.Text = "No disponible"
-                    imgPSuite.Text = "No disponible"
-                    imgSysRoot.Text = "No disponible"
-                    imgDirs.Text = "No disponible"
-                    imgFiles.Text = "No disponible"
-                    imgCreation.Text = "No disponible"
-                    imgModification.Text = "No disponible"
-                    imgFormat.Text = "No disponible"
-                    imgRW.Text = "No disponible"
-                Case 3
-                    imgMountDir.Text = "Non disponible"
-                    imgIndex.Text = "Non disponible"
-                    imgName.Text = "Non disponible"
-                    imgMountedStatus.Text = "Non disponible"
-                    imgVersion.Text = "Non disponible"
-                    imgMountedName.Text = "Non disponible"
-                    imgMountedDesc.Text = "Non disponible"
-                    imgSize.Text = "Non disponible"
-                    imgWimBootStatus.Text = "Non disponible"
-                    imgArch.Text = "Non disponible"
-                    imgHal.Text = "Non disponible"
-                    imgSPBuild.Text = "Non disponible"
-                    imgSPLvl.Text = "Non disponible"
-                    imgEdition.Text = "Non disponible"
-                    imgPType.Text = "Non disponible"
-                    imgPSuite.Text = "Non disponible"
-                    imgSysRoot.Text = "Non disponible"
-                    imgDirs.Text = "Non disponible"
-                    imgFiles.Text = "Non disponible"
-                    imgCreation.Text = "Non disponible"
-                    imgModification.Text = "Non disponible"
-                    imgFormat.Text = "Non disponible"
-                    imgRW.Text = "Non disponible"
-                Case 4
-                    imgMountDir.Text = "Não disponível"
-                    imgIndex.Text = "Não disponível"
-                    imgName.Text = "Não disponível"
-                    imgMountedStatus.Text = "Não disponível"
-                    imgVersion.Text = "Não disponível"
-                    imgMountedName.Text = "Não disponível"
-                    imgMountedDesc.Text = "Não disponível"
-                    imgSize.Text = "Não disponível"
-                    imgWimBootStatus.Text = "Não disponível"
-                    imgArch.Text = "Não disponível"
-                    imgHal.Text = "Não disponível"
-                    imgSPBuild.Text = "Não disponível"
-                    imgSPLvl.Text = "Não disponível"
-                    imgEdition.Text = "Não disponível"
-                    imgPType.Text = "Não disponível"
-                    imgPSuite.Text = "Não disponível"
-                    imgSysRoot.Text = "Não disponível"
-                    imgDirs.Text = "Não disponível"
-                    imgFiles.Text = "Não disponível"
-                    imgCreation.Text = "Não disponível"
-                    imgModification.Text = "Não disponível"
-                    imgFormat.Text = "Não disponível"
-                    imgRW.Text = "Não disponível"
-                Case 5
-                    imgMountDir.Text = "Non disponibile"
-                    imgIndex.Text = "Non disponibile"
-                    imgName.Text = "Non disponibile"
-                    imgMountedStatus.Text = "Non disponibile"
-                    imgVersion.Text = "Non disponibile"
-                    imgMountedName.Text = "Non disponibile"
-                    imgMountedDesc.Text = "Non disponibile"
-                    imgSize.Text = "Non disponibile"
-                    imgWimBootStatus.Text = "Non disponibile"
-                    imgArch.Text = "Non disponibile"
-                    imgHal.Text = "Non disponibile"
-                    imgSPBuild.Text = "Non disponibile"
-                    imgSPLvl.Text = "Non disponibile"
-                    imgEdition.Text = "Non disponibile"
-                    imgPType.Text = "Non disponibile"
-                    imgPSuite.Text = "Non disponibile"
-                    imgSysRoot.Text = "Non disponibile"
-                    imgDirs.Text = "Non disponibile"
-                    imgFiles.Text = "Non disponibile"
-                    imgCreation.Text = "Non disponibile"
-                    imgModification.Text = "Non disponibile"
-                    imgFormat.Text = "Non disponibile"
-                    imgRW.Text = "Non disponibile"
-            End Select
+            Label19.Text = LocalizationService.ForSection("ProjProps")("No.Button")
+            imgMountDir.Text = LocalizationService.ForSection("ProjProps")("ImgMount.Label")
+            imgIndex.Text = LocalizationService.ForSection("ProjProps")("ImgIndex.Label")
+            imgName.Text = LocalizationService.ForSection("ProjProps")("ImgName.Label")
+            imgMountedStatus.Text = LocalizationService.ForSection("ProjProps")("NotAvailable.Label")
+            imgVersion.Text = LocalizationService.ForSection("ProjProps")("ImgVersion.Label")
+            imgMountedName.Text = LocalizationService.ForSection("ProjProps")("NotAvailable.Label")
+            imgMountedDesc.Text = LocalizationService.ForSection("ProjProps")("ImgMounted.Label")
+            imgSize.Text = LocalizationService.ForSection("ProjProps")("ImgSize.Label")
+            imgWimBootStatus.Text = LocalizationService.ForSection("ProjProps")("ImgWIM.Label")
+            imgArch.Text = LocalizationService.ForSection("ProjProps")("NotAvailable.Label")
+            imgHal.Text = LocalizationService.ForSection("ProjProps")("ImgHal.Label")
+            imgSPBuild.Text = LocalizationService.ForSection("ProjProps")("ImgSP.Label")
+            imgSPLvl.Text = LocalizationService.ForSection("ProjProps")("NotAvailable.Label")
+            imgEdition.Text = LocalizationService.ForSection("ProjProps")("ImgEdition.Label")
+            imgPType.Text = LocalizationService.ForSection("ProjProps")("NotAvailable.Label")
+            imgPSuite.Text = LocalizationService.ForSection("ProjProps")("ImgP.Label")
+            imgSysRoot.Text = LocalizationService.ForSection("ProjProps")("ImgSys.Label")
+            imgDirs.Text = LocalizationService.ForSection("ProjProps")("ImgDirs.Label")
+            imgFiles.Text = LocalizationService.ForSection("ProjProps")("ImgFiles.Label")
+            imgCreation.Text = LocalizationService.ForSection("ProjProps")("ImgCreation.Label")
+            imgModification.Text = LocalizationService.ForSection("ProjProps")("ImgModification.Label")
+            imgFormat.Text = LocalizationService.ForSection("ProjProps")("ImgFormat.Label")
+            imgRW.Text = LocalizationService.ForSection("ProjProps")("ImgRW.Label")
             Panel3.Visible = True
             Label4.Visible = False
         End If
@@ -1124,31 +406,7 @@ Public Class ProjProperties
     End Sub
 
     Private Sub Label37_MouseHover(sender As Object, e As EventArgs) Handles Label37.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        WindowHelper.DisplayToolTip(sender, "Hardware Abstraction Layer")
-                    Case "ESN"
-                        WindowHelper.DisplayToolTip(sender, "Capa de abstracción de hardware")
-                    Case "FRA"
-                        WindowHelper.DisplayToolTip(sender, "Couche d'abstraction du matériel")
-                    Case "PTB", "PTG"
-                        WindowHelper.DisplayToolTip(sender, "Camada de abstração de hardware")
-                    Case "ITA"
-                        WindowHelper.DisplayToolTip(sender, "Livello di astrazione hardware")
-                End Select
-            Case 1
-                WindowHelper.DisplayToolTip(sender, "Hardware Abstraction Layer")
-            Case 2
-                WindowHelper.DisplayToolTip(sender, "Capa de abstracción de hardware")
-            Case 3
-                WindowHelper.DisplayToolTip(sender, "Couche d'abstraction du matériel")
-            Case 4
-                WindowHelper.DisplayToolTip(sender, "Camada de abstração de hardware")
-            Case 5
-                WindowHelper.DisplayToolTip(sender, "Livello di astrazione hardware")
-        End Select
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ProjProps.Tooltip")("Hardware.Abstraction.Label"))
     End Sub
 
     Private Sub FfuInfoBtn_Click(sender As Object, e As EventArgs) Handles FfuInfoBtn.Click

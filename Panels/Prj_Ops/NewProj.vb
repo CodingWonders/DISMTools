@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.RegularExpressions
@@ -19,62 +19,14 @@ Public Class NewProj
         If Not Directory.Exists(TextBox2.Text) Then
             DynaLog.LogMessage("The project path does not exist. Asking user whether or not to create it...")
             Dim msg As String = ""
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "The directory: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "does not exist. Do you want to create it?"
-                        Case "ESN"
-                            msg = "El directorio: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "no existe. ¿Desea crearlo?"
-                        Case "FRA"
-                            msg = "Le répertoire : " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "n'existe pas. Voulez-vous le créer ?"
-                        Case "PTB", "PTG"
-                            msg = "O diretório: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "Deseja criá-lo?"
-                        Case "ITA"
-                            msg = "La cartella: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "non esiste. Si desidera crearla?"
-                    End Select
-                Case 1
-                    msg = "The directory: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "does not exist. Do you want to create it?"
-                Case 2
-                    msg = "El directorio: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "no existe. ¿Desea crearlo?"
-                Case 3
-                    msg = "Le répertoire : " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "n'existe pas. Voulez-vous le créer ?"
-                Case 4
-                    msg = "O diretório: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "Deseja criá-lo?"
-                Case 5
-                    msg = "La cartella: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "non esiste. Si desidera crearla?"
-            End Select
+            msg = LocalizationService.ForSection("NewProj.Validation").Format("Dir.Exist.Create.Message", TextBox2.Text)
             If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("The user has decided to create the folder. Attempting to create it...")
                 Try
                     Directory.CreateDirectory(TextBox2.Text)
                 Catch ex As Exception
                     DynaLog.LogMessage("Could not create the folder. Error message: " & ex.Message)
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "We could not create the project directory for you due to: " & CrLf & ex.ToString() & "; " & ex.Message
-                                Case "ESN"
-                                    msg = "No pudimos crear el directorio del proyecto porque: " & CrLf & ex.ToString() & "; " & ex.Message
-                                Case "FRA"
-                                    msg = "Nous n'avons pas pu créer le répertoire du projet pour vous pour les raisons suivantes : " & CrLf & ex.ToString() & "; " & ex.Message
-                                Case "PTB", "PTG"
-                                    msg = "Não foi possível criar o diretório do projeto para si devido a: " & CrLf & ex.ToString() & "; " & ex.Message
-                                Case "ITA"
-                                    msg = "Non è stato possibile creare la cartella del progetto a causa di: " & CrLf & ex.ToString() & "; " & ex.Message
-                            End Select
-                        Case 1
-                            msg = "We could not create the project directory for you due to: " & CrLf & ex.ToString() & "; " & ex.Message
-                        Case 2
-                            msg = "No pudimos crear el directorio del proyecto porque: " & CrLf & ex.ToString() & "; " & ex.Message
-                        Case 3
-                            msg = "Nous n'avons pas pu créer le répertoire du projet pour vous pour les raisons suivantes : " & CrLf & ex.ToString() & "; " & ex.Message
-                        Case 4
-                            msg = "Não foi possível criar o diretório do projeto para si devido a: " & CrLf & ex.ToString() & "; " & ex.Message
-                        Case 5
-                            msg = "Non è stato possibile creare la cartella del progetto a causa di: " & CrLf & ex.ToString() & "; " & ex.Message
-                    End Select
+                    msg = LocalizationService.ForSection("NewProj.Validation").Format("Create.Project.Dir.Message", ex.ToString(), ex.Message)
                     MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Exit Sub
                 End Try
@@ -108,131 +60,17 @@ Public Class NewProj
     End Sub
 
     Private Sub NewProj_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Create a new project"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Please specify the options to create a new project:"
-                        Label3.Text = "Name*:"
-                        Label4.Text = "Location*:"
-                        Label5.Text = "The fields that end in * are required"
-                        Button1.Text = "Browse..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        GroupBox1.Text = "Project"
-                        FolderBrowserDialog1.Description = "Please select a folder to store this project:"
-                    Case "ESN"
-                        Text = "Crear un nuevo proyecto"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Especifique las opciones para crear un nuevo proyecto:"
-                        Label3.Text = "Nombre*:"
-                        Label4.Text = "Ubicación*:"
-                        Label5.Text = "Los campos que terminen en * son necesarios"
-                        Button1.Text = "Examinar..."
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        GroupBox1.Text = "Proyecto"
-                        FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
-                    Case "FRA"
-                        Text = "Créer un nouveau projet"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Veuillez spécifier les options pour créer un nouveau projet :"
-                        Label3.Text = "Nom* :"
-                        Label4.Text = "Emplacement* :"
-                        Label5.Text = "Les champs se terminant par * sont obligatoires"
-                        Button1.Text = "Parcourir..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        GroupBox1.Text = "Projet"
-                        FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
-                    Case "PTB", "PTG"
-                        Text = "Criar um novo projeto"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
-                        Label3.Text = "Nome*:"
-                        Label4.Text = "Localização*:"
-                        Label5.Text = "Os campos que terminam em * são obrigatórios"
-                        Button1.Text = "Navegar..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        GroupBox1.Text = "Projeto"
-                        FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
-                    Case "ITA"
-                        Text = "Crea un nuovo progetto"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
-                        Label3.Text = "Nome*:"
-                        Label4.Text = "Ubicazione*:"
-                        Label5.Text = "I campi che terminano con * sono obbligatori"
-                        Button1.Text = "Sfoglia..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        GroupBox1.Text = "Progetto"
-                        FolderBrowserDialog1.Description = "Selezionare una cartella per memorizzare questo progetto:"
-                End Select
-            Case 1
-                Text = "Create a new project"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Please specify the options to create a new project:"
-                Label3.Text = "Name*:"
-                Label4.Text = "Location*:"
-                Label5.Text = "The fields that end in * are required"
-                Button1.Text = "Browse..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                GroupBox1.Text = "Project"
-                FolderBrowserDialog1.Description = "Please select a folder to store this project:"
-            Case 2
-                Text = "Crear un nuevo proyecto"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Especifique las opciones para crear un nuevo proyecto:"
-                Label3.Text = "Nombre*:"
-                Label4.Text = "Ubicación*:"
-                Label5.Text = "Los campos que terminen en * son necesarios"
-                Button1.Text = "Examinar..."
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                GroupBox1.Text = "Proyecto"
-                FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
-            Case 3
-                Text = "Créer un nouveau projet"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Veuillez spécifier les options pour créer un nouveau projet :"
-                Label3.Text = "Nom* :"
-                Label4.Text = "Emplacement* :"
-                Label5.Text = "Les champs se terminant par * sont obligatoires"
-                Button1.Text = "Parcourir..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                GroupBox1.Text = "Projet"
-                FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
-            Case 4
-                Text = "Criar um novo projeto"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
-                Label3.Text = "Nome*:"
-                Label4.Text = "Localização*:"
-                Label5.Text = "Os campos que terminam em * são obrigatórios"
-                Button1.Text = "Navegar..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                GroupBox1.Text = "Projeto"
-                FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
-            Case 5
-                Text = "Crea un nuovo progetto"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
-                Label3.Text = "Nome*:"
-                Label4.Text = "Ubicazione*:"
-                Label5.Text = "I campi che terminano con * sono obbligatori"
-                Button1.Text = "Sfoglia..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                GroupBox1.Text = "Progetto"
-                FolderBrowserDialog1.Description = "Selezionare una cartella per memorizzare questo progetto:"
-        End Select
+        Text = LocalizationService.ForSection("NewProj")("Create.Project.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("NewProj").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("NewProj")("Options.Required.Label")
+        Label3.Text = LocalizationService.ForSection("NewProj")("Name.Label")
+        Label4.Text = LocalizationService.ForSection("NewProj")("Location.Label")
+        Label5.Text = LocalizationService.ForSection("NewProj")("Fields.End.Required.Label")
+        Button1.Text = LocalizationService.ForSection("NewProj")("Browse.Button")
+        OK_Button.Text = LocalizationService.ForSection("NewProj")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("NewProj")("Cancel.Button")
+        GroupBox1.Text = LocalizationService.ForSection("NewProj")("Project.Group")
+        FolderBrowserDialog1.Description = LocalizationService.ForSection("NewProj")("Folder.Store.Description")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

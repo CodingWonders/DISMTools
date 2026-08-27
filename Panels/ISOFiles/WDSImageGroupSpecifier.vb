@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.Xml.Serialization
 
 Public Class WDSImageGroupSpecifier
@@ -9,7 +9,7 @@ Public Class WDSImageGroupSpecifier
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         ' If we chose to create the image group we'll do that first, then we select it
         If RadioButton2.Checked AndAlso Not CreateWdsImageGroup(TextBox1.Text) Then
-            MessageBox.Show("The specified WDS image group could not be created.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(LocalizationService.ForSection("ISOFiles.WDSImageGroup")("Image.Label"), Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
         
@@ -42,7 +42,7 @@ Public Class WDSImageGroupSpecifier
                 End If
             End If
         Catch ex As Exception
-            MsgBox("Could not get image groups.", vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("ISOFiles.WDSImageGroup")("Get.Image.Groups.Label"), vbOKOnly + vbCritical, Text)
         End Try
     End Sub
 

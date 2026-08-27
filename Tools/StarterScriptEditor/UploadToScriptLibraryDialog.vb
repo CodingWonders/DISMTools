@@ -28,11 +28,11 @@ Public Class UploadToScriptLibraryDialog
 #If VBC_VER >= 10.0 Then        ' VS2010 introduced async/await
     Private Async Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ValidateGitHubApiKey(TextBox1.Text) Then
-            MessageBox.Show("You have not provided a valid GitHub API key.", "GitHub API Key", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("InvalidApiKey.Message"), LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("ApiKey.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
         If IsUploading Then
-            MessageBox.Show("Wait until the current upload operation finishes.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("UploadInProgress.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
         IsUploading = True
@@ -69,10 +69,10 @@ Public Class UploadToScriptLibraryDialog
 #Else
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ValidateGitHubApiKey(TextBox1.Text) Then
-            MessageBox.Show("You have not provided a valid GitHub API key.", "GitHub API Key", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("InvalidApiKey.Message"), LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("ApiKey.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
-        MessageBox.Show("This function is not supported on this version of the Starter Script Editor (NET2REL). You need to launch the .NET 4.8 version.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("UnsupportedVersion.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
         If CheckBox3.Checked Then EncryptApiKey()
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
@@ -80,10 +80,10 @@ Public Class UploadToScriptLibraryDialog
 #End If
 
     Private Sub EncryptApiKey()
-        If Key_PWD = "" Then Key_PWD = InputBox("Enter a password to use when saving the API key to an encrypted file. Strong passwords, with high entropy, are recommended. " & _
-                                                "Please make a copy of the password you specify here, as you will need it when decrypting the file.", "Enter a Password")
+        If Key_PWD = "" Then Key_PWD = InputBox(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("EnterPassword.Message"),
+                                                LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("EnterPassword.Title"))
         If Key_PWD = "" Then
-            MessageBox.Show("A password must be provided to store your API key file with the highest security.", "Password not entered", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("PasswordRequired.Message"), LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("PasswordRequired.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
@@ -92,7 +92,7 @@ Public Class UploadToScriptLibraryDialog
     End Sub
 
     Private Sub DecryptApiKey()
-        If Key_PWD = "" Then Key_PWD = InputBox("Enter the password used to save the API key to the encrypted file:", "Enter your Password")
+        If Key_PWD = "" Then Key_PWD = InputBox(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("DecryptPassword.Message"), LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("DecryptPassword.Title"))
         If Key_PWD <> "" Then
             DecryptionBW.RunWorkerAsync()
             ShowCryptoProgressMessage(False)
@@ -101,11 +101,11 @@ Public Class UploadToScriptLibraryDialog
 
     Private Sub ShowCryptoProgressMessage(ByVal Encrypted As Boolean)
         If Encrypted Then
-            CryptographicProgressDialog.ProgressLabel.Text = "Please wait while we save your API key."
+            CryptographicProgressDialog.ProgressLabel.Text = LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("SavingApiKey.Message")
         Else
-            CryptographicProgressDialog.ProgressLabel.Text = "Please wait while we load your API key."
+            CryptographicProgressDialog.ProgressLabel.Text = LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("LoadingApiKey.Message")
         End If
-        CryptographicProgressDialog.ProgressLabel.Text &= " This may take some time, depending on the performance of your computer."
+        CryptographicProgressDialog.ProgressLabel.Text &= LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("CryptoDuration.Suffix")
         CryptographicProgressDialog.ShowDialog(Me)
     End Sub
 
@@ -133,7 +133,7 @@ Public Class UploadToScriptLibraryDialog
 
 #Else
         If Environment.OSVersion.Version.Major < 10 Then
-            MessageBox.Show("Uploading scripts to the library is only supported on Windows 10 and newer versions.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("UnsupportedOs.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Close()
             Exit Sub
         End If
@@ -175,10 +175,7 @@ Public Class UploadToScriptLibraryDialog
     End Sub
 
     Private Sub PreventLeaks_InfoBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreventLeaks_InfoBtn.Click
-        MessageBox.Show(String.Format("If your starter script contains confidential information, you can prevent leaking it by doing one of the following:{0}" & _
-                                              "- Do not include passwords, API keys, tokens, or other credentials directly inside scripts before uploading{0}" & _
-                                              "- Remove sensitive system information such as usernames, computer names, internal server addresses, network shares, and local file paths from scripts{0}" & _
-                                              "- Review scripts for commands that expose confidential data, such as registry exports, environment variable dumps, or logging/output statements containing sensitive information", Environment.NewLine), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        MessageBox.Show(LocalizationService.ForSection("StarterScript.UploadLibrary.Messages")("PreventLeaks.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub PreventLeaks_InspectBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreventLeaks_InspectBtn.Click

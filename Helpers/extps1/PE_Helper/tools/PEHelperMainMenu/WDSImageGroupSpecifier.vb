@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.Xml.Serialization
 Imports System.IO
 
@@ -10,7 +10,7 @@ Public Class WDSImageGroupSpecifier
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         ' If we chose to create the image group we'll do that first, then we select it
         If RadioButton2.Checked AndAlso Not CreateWdsImageGroup(TextBox1.Text) Then
-            MessageBox.Show("The specified WDS image group could not be created.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(LocalizationService.ForSection("PEHelper.WDSImageGroup")("CreateFailed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
@@ -43,7 +43,7 @@ Public Class WDSImageGroupSpecifier
                 End If
             End If
         Catch ex As Exception
-            MsgBox("Could not get image groups.", vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("PEHelper.WDSImageGroup")("LoadFailed.Message"), vbOKOnly + vbCritical, Text)
         End Try
     End Sub
 
@@ -93,53 +93,14 @@ Public Class WDSImageGroupSpecifier
     End Function
 
     Private Sub WDSImageGroupSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENU", "ENG"
-                Text = "Specify a group in your WDS server..."
-                Label1.Text = "Choose an action:"
-                Label2.Text = "This group already exists."
-                RadioButton1.Text = "Upload this image to the following WDS image group:"
-                RadioButton2.Text = "Create the following WDS image group for me and upload this image there:"
-                Refresh_Button.Text = "Refresh"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-            Case "ESN"
-                Text = "Especificar un grupo en su servidor WDS..."
-                Label1.Text = "Escoja una acción:"
-                Label2.Text = "Este grupo ya existe."
-                RadioButton1.Text = "Subir esta imagen al siguiente grupo de WDS:"
-                RadioButton2.Text = "Crear el siguiente grupo de WDS por mí y subir esta imagen ahí:"
-                Refresh_Button.Text = "Actuaizar"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-            Case "FRA"
-                Text = "Spécifiez un groupe sur votre serveur WDS..."
-                Label1.Text = "Choisissez une action :"
-                Label2.Text = "Ce groupe existe déjà."
-                RadioButton1.Text = "Télécharger cette image dans le groupe d'images WDS suivant :"
-                RadioButton2.Text = "Créer le groupe d'images WDS suivant pour moi et y télécharger cette image :"
-                Refresh_Button.Text = "Actualiser"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-            Case "PTB", "PTG"
-                Text = "Especifique um grupo no seu servidor WDS..."
-                Label1.Text = "Escolha uma ação:"
-                Label2.Text = "Este grupo já existe."
-                RadioButton1.Text = "Carregar esta imagem para o seguinte grupo de imagens WDS:"
-                RadioButton2.Text = "Criar o seguinte grupo de imagens WDS para mim e carregar esta imagem para lá:"
-                Refresh_Button.Text = "Atualizar"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-            Case "ITA"
-                Text = "Specificare un gruppo nel proprio server WDS..."
-                Label1.Text = "Scegliere un'azione:"
-                Label2.Text = "Questo gruppo esiste già."
-                RadioButton1.Text = "Carica questa immagine nel seguente gruppo di immagini WDS:"
-                RadioButton2.Text = "Crea per me il seguente gruppo di immagini WDS e carica questa immagine lì:"
-                Refresh_Button.Text = "Aggiorna"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annulla"
-        End Select
+        Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("SpecifyGroup.Button")
+        Label1.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("Action.Choose.Label")
+        Label2.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("Already.Exists.Label")
+        RadioButton1.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("Upload.RadioButton")
+        RadioButton2.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("CreateGroup.RadioButton")
+        Refresh_Button.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("Refresh.Button")
+        OK_Button.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("PEHelper.WDSImageGroup")("Cancel.Button")
         ComboBox1.Items.Clear()
         GetWdsGroups()
         Try

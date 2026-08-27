@@ -143,7 +143,7 @@ Public Class MainForm
 
     Private Sub LoadScriptFile(ByVal ScriptFile As String)
         If Not File.Exists(ScriptFile) Then
-            MsgBox("The script file does not exist.", vbOKOnly + vbExclamation)
+            MsgBox(LocalizationService.ForSection("StarterScript")("FileMissing.Label"), vbOKOnly + vbExclamation)
             Exit Sub
         End If
 
@@ -162,10 +162,10 @@ Public Class MainForm
         CurrentScript = StarterScriptHelper.LoadScriptFile(ScriptFile, CodeBlockStartingIndex)
 
         SavedScriptPath = ScriptFile
-        Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
+        Text = String.Format(LocalizationService.ForSection("StarterScript")("Window.Title"), Path.GetFileName(SavedScriptPath))
 
         If (File.GetAttributes(ScriptFile) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
-            MessageBox.Show("This script file has been loaded with read-only privileges. If you make changes to this script, you must save them to a new script file or enable write access for this script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript")("ReadOnlyFile.Message"), LocalizationService.ForSection("StarterScript")("Editor.Label"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             roMode = True
             ToolStripButton5.Enabled = True
         End If
@@ -173,8 +173,7 @@ Public Class MainForm
 
     Private Sub SaveScriptFile(ByVal ScriptFile As String, Optional ByVal DefaultScriptVersion As Boolean = True)
         If DefaultScriptVersion AndAlso ScriptVer < ScriptVersion.Infinity Then
-            If MessageBox.Show("The starter script had been created with an earlier version of the Starter Script Editor and will be saved with properties that will make it compatible with the current format. After this is done, the starter script will no longer be compatible with earlier versions of DISMTools or the Starter Script Editor." & CrLf & CrLf & _
-                               "Do you want to save this file?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+            If MessageBox.Show(LocalizationService.ForSection("StarterScript")("AlreadyCreated.Message"), LocalizationService.ForSection("StarterScript")("Dialog.Title"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
                 NotWillingToSave = True
                 Exit Sub
             End If
@@ -196,12 +195,12 @@ Public Class MainForm
             End If
 
             SavedScriptPath = ScriptFile
-            Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
+            Text = String.Format(LocalizationService.ForSection("StarterScript")("Window.Title"), Path.GetFileName(SavedScriptPath))
             Modified = False
             roMode = False
             ToolStripButton5.Enabled = False
         Catch ex As Exception
-            MessageBox.Show("Changes could not be saved to the script file. Make sure write access is present in the file. " & CrLf & CrLf & ex.Message & CrLf & CrLf & "To enable write access for this file, use the respective button in the toolbar.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript").Format("SaveFailed.Message", ex.Message), LocalizationService.ForSection("StarterScript")("SaveError.Label"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             NotWillingToSave = True
         End Try
     End Sub
@@ -210,7 +209,7 @@ Public Class MainForm
         AIResults.CheckBox1.Checked = False
         NotWillingToSave = False
         If Modified Then
-            Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            Select Case MessageBox.Show(LocalizationService.ForSection("StarterScript")("SaveChanges.Label"), LocalizationService.ForSection("StarterScript")("Dialog.Title"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 Case Windows.Forms.DialogResult.Yes
                     ToolStripButton3.PerformClick()
                     If NotWillingToSave Then Exit Sub
@@ -275,7 +274,7 @@ Public Class MainForm
         AIResults.CheckBox1.Checked = False
         NotWillingToSave = False
         If Modified Then
-            Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            Select Case MessageBox.Show(LocalizationService.ForSection("StarterScript")("SaveChanges.Message"), LocalizationService.ForSection("StarterScript")("Dialog.Title"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 Case Windows.Forms.DialogResult.Yes
                     ToolStripButton3.PerformClick()
                     If NotWillingToSave Then Exit Sub
@@ -291,7 +290,7 @@ Public Class MainForm
         ToolStripButton5.Enabled = False
         ScriptVer = ScriptVersion.Infinity
         SavedScriptPath = ""
-        Text = "Starter Script Editor"
+        Text = LocalizationService.ForSection("StarterScript")("Window.Default")
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -334,26 +333,15 @@ Public Class MainForm
         AIResults.CheckBox1.Checked = False
 #If VBC_VER >= 9.0 Then
 #If DEBUG Then
-        MsgBox(String.Format("DISMTools Starter Script Editor version {0} ({1}_DEBUG)" & CrLf & CrLf & "{2}", _
-                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
-                SSECodeName.ToUpper(), _
-                My.Application.Info.Copyright), _
-            vbOKOnly + vbInformation, "About")
+        MsgBox(LocalizationService.ForSection("StarterScript").Format("DebugEditor.Label", My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), SSECodeName.ToUpper(), My.Application.Info.Copyright), vbOKOnly + vbInformation, LocalizationService.ForSection("StarterScript")("About.Label"))
 #Else
-        MsgBox(String.Format("DISMTools Starter Script Editor version {0}" & CrLf & CrLf & "{1}", _
-                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
-                My.Application.Info.Copyright), _
-            vbOKOnly + vbInformation, "About")
+        MsgBox(LocalizationService.ForSection("StarterScript").Format("Editor.Message", My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), My.Application.Info.Copyright), vbOKOnly + vbInformation, LocalizationService.ForSection("StarterScript")("About.Label"))
 #End If
 #Else
 #If DEBUG Then
-        MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL ({1}_DEBUG)" & CrLf & CrLf & "{2}", _
-                My.Application.Info.Version.ToString(), SSECodeName.ToUpper(), My.Application.Info.Copyright), _
-            vbOKOnly + vbInformation, "About")
+        MsgBox(LocalizationService.ForSection("StarterScript").Format("DebugVersion.Message", My.Application.Info.Version.ToString(), SSECodeName.ToUpper(), My.Application.Info.Copyright), vbOKOnly + vbInformation, LocalizationService.ForSection("StarterScript")("About.Label"))
 #Else
-        MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL" & CrLf & CrLf & "{1}", _
-                My.Application.Info.Version.ToString(), My.Application.Info.Copyright), _
-            vbOKOnly + vbInformation, "About")
+        MsgBox(LocalizationService.ForSection("StarterScript").Format("Version.Message", My.Application.Info.Version.ToString(), My.Application.Info.Copyright), vbOKOnly + vbInformation, LocalizationService.ForSection("StarterScript")("About.Label"))
 #End If
 #End If
     End Sub
@@ -388,7 +376,7 @@ Public Class MainForm
         ElseIf expectedJScriptExtensions.Contains(scriptExtension) Then
             comboLanguage.SelectedIndex = 3
         Else
-            MessageBox.Show("This script is not supported by the Starter Script Editor.", "Unrecognized script", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript")("SupportedScript.Label"), LocalizationService.ForSection("StarterScript")("Unrecognized.Label"), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
@@ -397,7 +385,7 @@ Public Class MainForm
             tbScriptCode.Text = scriptContents
             UpdateCaretPosition()
         Catch ex As Exception
-            MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript")("LoadFailed.Label"), LocalizationService.ForSection("StarterScript")("ReadFailed.Label"), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
@@ -521,12 +509,12 @@ Public Class MainForm
             roMode = False
             ToolStripButton5.Enabled = False
         Catch ex As Exception
-            MessageBox.Show("Could not enable write access for this script file. Make sure that the script is not in read-only media.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("StarterScript")("WriteAccess.Message"), LocalizationService.ForSection("StarterScript")("Dialog.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub CheckBox2_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Check this option if this script contains settings that can be configured by the user" & CrLf & "after importing the starter script from the Starter Script Browser.")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("StarterScript")("CheckScript.Message"))
     End Sub
 
     Private Sub ToolStripButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton6.Click
@@ -549,7 +537,7 @@ Public Class MainForm
         Do Until fontConfigured
             Try
                 If EditorFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                    If Not IsMonospacedFont(EditorFD.Font.Name) AndAlso MessageBox.Show("You have selected a non-monospaced font. Text may not look correctly. Do you want to continue?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                    If Not IsMonospacedFont(EditorFD.Font.Name) AndAlso MessageBox.Show(LocalizationService.ForSection("StarterScript")("NonMonospace.Message"), LocalizationService.ForSection("StarterScript")("Dialog.Title"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
                         Exit Sub
                     End If
                     tbScriptCode.Font = EditorFD.Font
@@ -557,7 +545,7 @@ Public Class MainForm
                 fontConfigured = True
             Catch arEx As ArgumentException
                 ' The user may have selected a non-TrueType font
-                MessageBox.Show(arEx.Message, "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MessageBox.Show(arEx.Message, LocalizationService.ForSection("StarterScript")("Dialog.Title"), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End Try
         Loop
     End Sub

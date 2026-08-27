@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Dism
+Imports Microsoft.Dism
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Management
@@ -41,13 +41,11 @@ Public Class MainForm
     Dim installPath As String
 
     Sub ChangeLanguage(LanguageCode As String)
-        If Not File.Exists(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini")) Then
-            LanguageCode = "en"
-        End If
-        LoadLanguageFile(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini"))
-        BackButton.Text = GetValueFromLanguageData("Common.Common_Back")
-        NextButton.Text = GetValueFromLanguageData("Common.Common_Next")
-        ExitButton.Text = GetValueFromLanguageData("Common.Common_Cancel")
+        Dim languageFile As String = GetInstallerLanguageFilePath(LanguageCode)
+        LoadLanguageFile(languageFile)
+        BackButton.Text = GetValueFromLanguageData("MainForm.NavigationBackButtonText")
+        NextButton.Text = GetValueFromLanguageData("MainForm.NavigationNextButtonText")
+        ExitButton.Text = GetValueFromLanguageData("MainForm.NavigationExitButtonText")
         BootMgrEntryName = GetValueFromLanguageData("MainForm.BootMgrEntryName")
         Text = GetValueFromLanguageData("MainForm.WndTitle")
         Label1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Header")
@@ -65,10 +63,15 @@ Public Class MainForm
         Label9.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageVersion")
         Label10.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageArchitecture")
         GroupBox2.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageInfoGroup")
+        ListView1.Columns(0).Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_IndexColumnHeader")
         ListView1.Columns(1).Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageName")
         ListView1.Columns(2).Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageDescription")
         ListView1.Columns(3).Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageVersion")
         ListView1.Columns(4).Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_InstallImageArchitecture")
+        Label13.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageArchitecturePlaceholder")
+        Label12.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageVersionPlaceholder")
+        Label11.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_BootImageNamePlaceholder")
+        Label6.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_ComputerArchitecturePlaceholder")
         Label7.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_ImageArchitectureMismatchError")
         Label5.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_ComputerArchitecture")
         Label14.Text = GetValueFromLanguageData("MainForm.ReviewImageInfo_DIM_Notice")
@@ -112,7 +115,7 @@ Public Class MainForm
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
         Visible = False
-        ChangeLanguage(My.Computer.Info.InstalledUICulture.TwoLetterISOLanguageName)
+        ChangeLanguage(ResolveInstallerLanguageCode())
 
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
@@ -888,7 +891,7 @@ Public Class MainForm
     Private Sub InstallerBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles InstallerBW.ProgressChanged
         Label19.Text = ProgressMessage
         ProgressBar1.Value = e.ProgressPercentage
-        Label34.Text = "API Progress: " & DismProgressPercentage & "%"
+        Label34.Text = String.Format(GetValueFromLanguageData("MainForm.PreparationPanel_ApiProgress"), DismProgressPercentage)
     End Sub
 
     Private Sub InstallerBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles InstallerBW.RunWorkerCompleted
@@ -1003,26 +1006,9 @@ Public Class MainForm
             Dim imageInfoCollection As DismImageInfoCollection = GetImageInformation(installPath)
             If imageInfoCollection IsNot Nothing Then
                 Dim imageCount As Integer = imageInfoCollection.Count
-                TextContents &= "Information summary for " & imageCount & " image(s):" & CrLf & CrLf
+                TextContents &= String.Format(GetValueFromLanguageData("MainForm.ImageInformationSummary_Header"), imageCount) & CrLf & CrLf
                 For Each imageInfo As DismImageInfo In imageInfoCollection
-                    TextContents &= String.Format("Image {0} of {1}:" & CrLf & CrLf &
-                                                  "    - Image version: {2}" & CrLf &
-                                                  "    - Image name: {3}" & CrLf &
-                                                  "    - Image description: {4}" & CrLf &
-                                                  "    - Image size: {5} bytes ({6})" & CrLf &
-                                                  "    - Architecture: {7}" & CrLf &
-                                                  "    - HAL: {8}" & CrLf &
-                                                  "    - Service Pack build: {9}" & CrLf &
-                                                  "    - Service Pack level: {10}" & CrLf &
-                                                  "    - Edition: {11}" & CrLf &
-                                                  "    - Installation Type: {12}" & CrLf &
-                                                  "    - Product type: {13}" & CrLf &
-                                                  "    - Product suite: {14}" & CrLf &
-                                                  "    - System root directory: {15}" & CrLf &
-                                                  "    - File count: {16} file(s) in {17} folder(s)" & CrLf &
-                                                  "    - Creation date: {18}" & CrLf &
-                                                  "    - Modification date: {19}" & CrLf &
-                                                  "    - Languages: {20}" & CrLf & CrLf,
+                    TextContents &= String.Format(GetValueFromLanguageData("MainForm.ImageInformationSummary_ImageBlock"),
                                                   imageInfoCollection.IndexOf(imageInfo) + 1, imageCount,
                                                   imageInfo.ProductVersion.ToString(),
                                                   imageInfo.ImageName,

@@ -74,7 +74,11 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Utilities\Language\LocalizationService.vb">
+      <Link>Utilities\LocalizationService.vb</Link>
+    </Compile>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="RuntimeFormLocalization.vb" />
     <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
     <Compile Include="Classes\DynaLogEvent.vb" />
     <Compile Include="ColorModeRenderers\DarkModeRenderer.vb" />

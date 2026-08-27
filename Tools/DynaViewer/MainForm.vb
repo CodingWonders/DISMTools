@@ -190,10 +190,10 @@ Public Class MainForm
             AddHandler ComboBox2.SelectedIndexChanged, AddressOf ComboBox2_SelectedIndexChanged
             AddHandler TextBox2.TextChanged, AddressOf TextBox2_TextChanged
         Else
-            MsgBox("The file " & Quote & DynaLogFile & Quote & " does not exist.", vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("DynaViewer.Messages").Format("FileExist.Label", DynaLogFile), vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
-        Label2.Text = String.Format("Processed entries: {0}. Double-click an entry to get its information.", LogEvents.Count)
+        Label2.Text = String.Format(LocalizationService.ForSection("DynaViewer")("Proced.Entries.Double.Label"), LogEvents.Count)
         Label2.Visible = True
     End Sub
 
@@ -235,7 +235,7 @@ Public Class MainForm
                     Cursor = Cursors.Arrow
                     Button2.Enabled = True
                 ElseIf Not CommandArgument.StartsWith("/", StringComparison.OrdinalIgnoreCase) AndAlso Not File.Exists(CommandArgument) Then
-                    MsgBox("The file " & Quote & CommandArgument & Quote & " does not exist.", vbOKOnly + vbCritical, Text)
+                    MsgBox(LocalizationService.ForSection("DynaViewer.Messages").Format("File.NotFound.Message", CommandArgument), vbOKOnly + vbCritical, Text)
                     Exit Sub
                 Else
                     If CommandArgument.StartsWith("/selectfirst=", StringComparison.OrdinalIgnoreCase) Then
@@ -291,15 +291,9 @@ Public Class MainForm
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
 #If VBC_VER >= 9.0 Then
-        MsgBox(String.Format("DynaLog Log Viewer (DynaViewer) version {0}" & CrLf & CrLf & "{1}", _
-                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), _
-                My.Application.Info.Copyright), _
-            vbOKOnly + vbInformation, Text)
+        MsgBox(LocalizationService.ForSection("DynaViewer.Messages").Format("Log.Version.Label", My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), My.Application.Info.Copyright), vbOKOnly + vbInformation, Text)
 #Else
-        MsgBox(String.Format("DynaLog Log Viewer (DynaViewer) version {0}_NET2REL" & CrLf & CrLf & "{1}", _
-                My.Application.Info.Version.ToString(), _
-                My.Application.Info.Copyright), _
-            vbOKOnly + vbInformation, Text)
+        MsgBox(LocalizationService.ForSection("DynaViewer.Messages").Format("About.Version.Message", My.Application.Info.Version.ToString(), My.Application.Info.Copyright), vbOKOnly + vbInformation, Text)
 #End If
     End Sub
 
@@ -422,11 +416,11 @@ Public Class MainForm
     End Sub
 
     Private Sub RegexCB_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RegexCB.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Use regular expressions")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("DynaViewer")("Regex.Expressions.Label"))
     End Sub
 
     Private Sub CaseSensitiveCB_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CaseSensitiveCB.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Match case")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("DynaViewer")("MatchCase.Label"))
     End Sub
 
     Private Sub RegexCB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RegexCB.CheckedChanged
@@ -465,7 +459,7 @@ Public Class MainForm
             ListView1.Items.Clear()
             Cursor = Cursors.WaitCursor
 
-            Label2.Text = "Please wait while the events are being filtered... Change filters to cancel current operation."
+            Label2.Text = LocalizationService.ForSection("DynaViewer.Main")("EventsFiltering.Message")
         End If
     End Sub
 
@@ -513,12 +507,11 @@ Public Class MainForm
 #End If
         End If
 
-        Label2.Text = String.Format("Processed entries: {0}{1}. Double-click an entry to get its information.", LogEvents.Count, _
-                                    IIf(IsViewFiltered, String.Format("; Filtered entries: {0}", FilteredLogEvents.Count), ""))
+        Label2.Text = String.Format(LocalizationService.ForSection("DynaViewer")("Processed.Entries.Message"), LogEvents.Count, _
+                                    IIf(IsViewFiltered, String.Format(LocalizationService.ForSection("DynaViewer")("FilteredEntries.Suffix"), FilteredLogEvents.Count), ""))
     End Sub
 
     Private Sub RegexFailureBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RegexFailureBtn.Click
-        MessageBox.Show(String.Format("The regular expression, {1} , has not been written correctly. The cheatsheet can help you with the queries.{0}{0}    Error message: {2}", Environment.NewLine, TextBox2.Text, regexException.Message), _
-                        "Regular expression failure", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        MessageBox.Show(LocalizationService.ForSection("DynaViewer.Messages").Format("RegexInvalid.Message", Environment.NewLine, TextBox2.Text, regexException.Message), LocalizationService.ForSection("DynaViewer.Messages")("Regex.Failure.Label"), MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Sub
 End Class

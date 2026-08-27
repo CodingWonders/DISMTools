@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Dism
+Imports Microsoft.Dism
 
 Public Class WDSInstallImageCopy
 
@@ -12,20 +12,18 @@ Public Class WDSInstallImageCopy
         DynaLog.LogMessage("- Source image to add to WDS: " & Quote & TextBox1.Text & Quote)
         DynaLog.LogMessage("- Group to add image to: " & Quote & TextBox2.Text & Quote)
         If TextBox1.Text = "" OrElse Not File.Exists(TextBox1.Text) Then
-            MsgBox("Either the source image file does not exist or you haven't provided any image file. Please specify a valid image file and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Either.Source.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox2.Text = "" Then
-            MsgBox("No group has been specified. Please specify a new or an existing WDS group and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Group.Has.None.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If ListView1.CheckedItems.Count < 1 Then
-            MsgBox("No images have been selected for addition to your WDS server.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Images.Have.None.Label"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If MsgBox("Make sure that the image you are adding has been prepared with Sysprep." & CrLf & CrLf &
-                  "If you have not done so, click No, prepare the image, and start the process again. You don't have to close this window." & CrLf & CrLf &
-                  "Do you want to add this image to your WDS server?", vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
+        If MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Image.Add.Message"), vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
             Exit Sub
         End If
         OK_Button.Enabled = False
@@ -45,7 +43,7 @@ Public Class WDSInstallImageCopy
     Private Sub WDSInstallImageCopy_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If WindowsServiceHelper.GetOnlineSystemServiceInformationByName("WDSServer") Is Nothing Then
             ' We are either not running this on Windows Server, or we are, but without the WDS role
-            MsgBox("This wizard does not support this computer. Make sure that this computer is running Windows Server and that it has the Windows Deployment Services role installed.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Wizard.Support.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Close()
             Exit Sub
         End If
@@ -125,37 +123,13 @@ Public Class WDSInstallImageCopy
 
                 ' Block all boot images (or at least warn)
                 If ImageInfoCollection.Any(Function(ImageInfo) ImageInfo.EditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)) Then
-                    MsgBox("A boot image has been detected. You should not use these as installation images in your server.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
+                    MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Boot.Image.Detected.Message"), vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                 End If
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ESN"
-                            msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "FRA"
-                            msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "PTB", "PTG"
-                            msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ITA"
-                            msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                    End Select
-                Case 1
-                    msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 2
-                    msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 3
-                    msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 4
-                    msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 5
-                    msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-            End Select
+            msg = LocalizationService.ForSection("WDSImageCopy.ImageInfo").Format("Gather.ImageFile.Message", ex.ToString(), ex.Message, Hex(ex.HResult))
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -224,12 +198,12 @@ Public Class WDSInstallImageCopy
         ISOProgressPanel.Visible = True
         If e.ProgressPercentage < 100 Then
             WindowHelper.DisableCloseCapability(Handle)
-            Label8.Text = "Uploading images..."
+            Label8.Text = LocalizationService.ForSection("WDSImageCopy.Progress")("UploadingImages.Label")
             ProgressBar1.Style = ProgressBarStyle.Marquee
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
         Else
             WindowHelper.EnableCloseCapability(Handle)
-            If success Then Label8.Text = "Image uploads done."
+            If success Then Label8.Text = LocalizationService.ForSection("WDSImageCopy.Progress")("Image.Uploads.Done.Label")
             ProgressBar1.Style = ProgressBarStyle.Blocks
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         End If
@@ -239,7 +213,7 @@ Public Class WDSInstallImageCopy
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         DynaLog.LogMessage("The process has finished.")
         DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
-        MsgBox(If(success, "The images were uploaded successfully.", "The images were not uploaded successfully."),
+        MsgBox(If(success, LocalizationService.ForSection("WDSImageCopy.Messages")("UploadSuccessful.Label"), LocalizationService.ForSection("WDSImageCopy.Messages")("Images.Uploaded.Done.Label")),
                vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True

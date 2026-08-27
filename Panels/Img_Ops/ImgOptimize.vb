@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class ImgOptimize
 
@@ -8,7 +8,7 @@ Public Class ImgOptimize
 
         If TextBox1.Text = "" OrElse Not Directory.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("The source mount directory has not been specified or it does not exist in the file system.")
-            MsgBox("Please specify the mount directory of the image you want to optimize and try again. Also, make sure that that path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("ImageOps.Optimize.Messages")("Mount.Dir.Required.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
 

@@ -5,6 +5,14 @@ Imports System.Management
 
 Public Class DiskSpaceChecker
 
+    Private Function DSCText(Key As String, ParamArray values() As Object) As String
+        Dim template As String = GetValueFromLanguageData("DiskSpaceChecker." & Key)
+        If values IsNot Nothing AndAlso values.Length > 0 Then
+            Return String.Format(template, values)
+        End If
+        Return template
+    End Function
+
     Dim progressMessage As String = ""
 
     Dim reportContents As String = ""
@@ -16,48 +24,50 @@ Public Class DiskSpaceChecker
 
     Sub ListObtainedDisks(DriveObjects As ManagementObjectCollection)
         If DriveObjects Is Nothing Then
-            Throw New Exception("A null-valued object collection has been passed for the drive report")
+            Throw New Exception(DSCText("ReportNullDriveCollection"))
         End If
         DynaLog.LogMessage("Count of obtained disks: " & DriveObjects.Count)
-        reportContents &= "Amount of local disks and partitions in the host system: " & DriveObjects.Count & CrLf & CrLf
+        reportContents &= DSCText("ReportLocalDiskCount", DriveObjects.Count) & CrLf & CrLf
         If DriveObjects.Count > 0 Then
             DynaLog.LogMessage("Saving obtained disks to report...")
             For Each DriveObject As ManagementObject In DriveObjects
-                reportContents &= "Information for Disk " & GetObjectValue(DriveObject, "DiskIndex") & ", Partition " & (GetObjectValue(DriveObject, "Index") + 1) & CrLf &
-                                  "- Drive total size: " & GetObjectValue(DriveObject, "Size") & " bytes (~" & Converters.BytesToReadableSize(GetObjectValue(DriveObject, "Size")) & ")" & CrLf &
-                                  "- Boot partition? " & If(GetObjectValue(DriveObject, "BootPartition"), "Yes", "No") & CrLf &
-                                  "- Primary partition? " & If(GetObjectValue(DriveObject, "PrimaryPartition"), "Yes", "No") & CrLf & CrLf
+                reportContents &= DSCText("ReportDiskInfo", GetObjectValue(DriveObject, "DiskIndex"),
+                                              GetObjectValue(DriveObject, "Index") + 1,
+                                              GetObjectValue(DriveObject, "Size"),
+                                              Converters.BytesToReadableSize(GetObjectValue(DriveObject, "Size")),
+                                              If(GetObjectValue(DriveObject, "BootPartition"), DSCText("ReportYes"), DSCText("ReportNo")),
+                                              If(GetObjectValue(DriveObject, "PrimaryPartition"), DSCText("ReportYes"), DSCText("ReportNo"))) & CrLf & CrLf
             Next
         End If
     End Sub
 
     Sub ListSpaceComparison(ImageNames As List(Of String), ImageSizes As List(Of Long), Drives As ManagementObjectCollection)
         If ImageNames.Count = 0 Then
-            Throw New Exception("No names have been passed")
+            Throw New Exception(DSCText("ReportNoNames"))
         End If
         If ImageSizes.Count = 0 Then
-            Throw New Exception("No sizes have been passed")
+            Throw New Exception(DSCText("ReportNoSizes"))
         End If
         If Drives.Count = 0 Then
-            Throw New Exception("No fixed drives have been passed")
+            Throw New Exception(DSCText("ReportNoFixedDrives"))
         End If
 
         DynaLog.LogMessage("Comparing spaces of images and drives...")
         DynaLog.LogMessage("- Count of images: " & ImageNames.Count)
         DynaLog.LogMessage("- Count of drives: " & Drives.Count)
 
-        reportContents &= "Comparison of sizes:" & CrLf & CrLf
+        reportContents &= DSCText("ReportSizeComparison") & CrLf & CrLf
 
         DynaLog.LogMessage("Comparing spaces for drives...")
         For Each Drive As ManagementObject In Drives
-            reportContents &= "- Disk, with volume label " & Quote & GetObjectValue(Drive, "VolumeName") & Quote & " (" & GetObjectValue(Drive, "DeviceID") & "):" & CrLf
+            reportContents &= DSCText("ReportDiskWithVolumeLabel", Quote & GetObjectValue(Drive, "VolumeName") & Quote, GetObjectValue(Drive, "DeviceID")) & CrLf
             For Each ImageSize In ImageSizes
                 If GetObjectValue(Drive, "Size") > ImageSize Then
                     DynaLog.LogMessage("This image can be installed here.")
-                    reportContents &= "  - " & Quote & ImageNames(ImageSizes.IndexOf(ImageSize)) & Quote & " (index " & ImageSizes.IndexOf(ImageSize) + 1 & ") can be installed on this disk because there is enough free space." & CrLf
+                    reportContents &= DSCText("ReportCanInstall", Quote & ImageNames(ImageSizes.IndexOf(ImageSize)) & Quote, ImageSizes.IndexOf(ImageSize) + 1) & CrLf
                 Else
                     DynaLog.LogMessage("This image cannot be installed here.")
-                    reportContents &= "  - " & Quote & ImageNames(ImageSizes.IndexOf(ImageSize)) & Quote & " (index " & ImageSizes.IndexOf(ImageSize) + 1 & ") cannot be installed on this disk because there is not enough free space." & CrLf
+                    reportContents &= DSCText("ReportCannotInstall", Quote & ImageNames(ImageSizes.IndexOf(ImageSize)) & Quote, ImageSizes.IndexOf(ImageSize) + 1) & CrLf
                 End If
             Next
         Next
@@ -101,9 +111,9 @@ Public Class DiskSpaceChecker
     End Function
 
     Sub InitializeReport()
-        reportContents = "Disk Space Checker Report" & CrLf &
+        reportContents = DSCText("ReportTitle") & CrLf &
             "==========================" & CrLf &
-            "Report generated by HotInstall (version " & My.Application.Info.Version.ToString() & ")" & CrLf & CrLf
+            DSCText("ReportGeneratedBy", My.Application.Info.Version.ToString()) & CrLf & CrLf
     End Sub
 
     Sub ListFreeSpace(FreeSpace As Long, SpaceToCompare As Long, Optional SystemDriveMO As ManagementObject = Nothing)
@@ -112,23 +122,23 @@ Public Class DiskSpaceChecker
         DynaLog.LogMessage("- Referenced space: " & SpaceToCompare)
         If SystemDriveMO IsNot Nothing Then
             DynaLog.LogMessage("System drive management object is something. We select the drive")
-            reportContents &= "The system drive is mounted to " & GetObjectValue(SystemDriveMO, "DeviceID") & CrLf & CrLf
+            reportContents &= DSCText("ReportSystemDrive", GetObjectValue(SystemDriveMO, "DeviceID")) & CrLf & CrLf
         End If
 
         DynaLog.LogMessage("Saving information to report...")
-        reportContents &= "Disc image files will be copied to the system drive shown above:" & CrLf &
-                          "- The total size of the disc image files is " & SpaceToCompare & " bytes (~" & Converters.BytesToReadableSize(SpaceToCompare) & ")" & CrLf &
-                          "- The free space on this drive is " & FreeSpace & " bytes (~" & Converters.BytesToReadableSize(FreeSpace) & ")" & CrLf & CrLf
+        reportContents &= DSCText("ReportCopyPlan") & CrLf &
+                          DSCText("ReportTotalImageSize", SpaceToCompare, Converters.BytesToReadableSize(SpaceToCompare)) & CrLf &
+                          DSCText("ReportFreeSpace", FreeSpace, Converters.BytesToReadableSize(FreeSpace)) & CrLf & CrLf
 
-        reportContents &= Converters.BytesToReadableSize(FreeSpace) & " > " & Converters.BytesToReadableSize(SpaceToCompare) & " ? " & If(FreeSpace > SpaceToCompare, "Yes", "No") & CrLf &
-                          Converters.BytesToReadableSize(FreeSpace) & " > " & Converters.BytesToReadableSize(SpaceToCompare * 2) & " ? " & If(FreeSpace > SpaceToCompare, "Yes", "No") & CrLf & CrLf
+        reportContents &= Converters.BytesToReadableSize(FreeSpace) & " > " & Converters.BytesToReadableSize(SpaceToCompare) & " ? " & If(FreeSpace > SpaceToCompare, DSCText("ReportYes"), DSCText("ReportNo")) & CrLf &
+                          Converters.BytesToReadableSize(FreeSpace) & " > " & Converters.BytesToReadableSize(SpaceToCompare * 2) & " ? " & If(FreeSpace > SpaceToCompare * 2, DSCText("ReportYes"), DSCText("ReportNo")) & CrLf & CrLf
 
         If FreeSpace < (SpaceToCompare * 2) Then
-            reportContents &= "There may not be enough space to copy the disc image files to this drive." & CrLf & CrLf
+            reportContents &= DSCText("ReportMayNotHaveEnoughSpace") & CrLf & CrLf
         ElseIf FreeSpace < SpaceToCompare Then
-            reportContents &= "There is not enough space to copy the disc image files to this drive." & CrLf & CrLf
+            reportContents &= DSCText("ReportNotEnoughSpace") & CrLf & CrLf
         Else
-            reportContents &= "There is plenty of space to copy the disc image files to this drive." & CrLf & CrLf
+            reportContents &= DSCText("ReportPlentyOfSpace") & CrLf & CrLf
         End If
     End Sub
 
@@ -167,7 +177,7 @@ Public Class DiskSpaceChecker
                 DynaLog.LogMessage("Folder Size: " & FolderSize & " bytes")
                 If FreeSpaceOnSystemDrive < FolderSize Then
                     DynaLog.LogMessage("Free space is lower than folder size.")
-                    Throw New Exception("There is not enough space to copy the disc image files to the system drive. Please free up some space and try again.")
+                    Throw New Exception(DSCText("ReportNotEnoughSystemDriveSpace"))
                 End If
                 ' Get information about the installation image and compare the expanded sizes of all indexes with the total space of all fixed drives
                 progressMessage = GetValueFromLanguageData("DiskSpaceChecker.DSC_GetImageFileInfo")
@@ -192,7 +202,7 @@ Public Class DiskSpaceChecker
                 End If
             End If
         Else
-            Throw New Exception("We could not detect available fixed drives in your system")
+            Throw New Exception(DSCText("ReportFixedDrivesNotDetected"))
         End If
     End Sub
 
@@ -235,7 +245,7 @@ Public Class DiskSpaceChecker
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         Dim success As Boolean = True
         If e.Error IsNot Nothing Then
-            If e.Error.Message.StartsWith("WARNING ONLY: ", StringComparison.OrdinalIgnoreCase) Then
+            If e.Error.Message.StartsWith(DSCText("ReportWarningOnlyPrefix"), StringComparison.OrdinalIgnoreCase) Then
                 MsgBox(e.Error.Message, vbOKOnly + vbExclamation, Text)
             Else
                 success = False

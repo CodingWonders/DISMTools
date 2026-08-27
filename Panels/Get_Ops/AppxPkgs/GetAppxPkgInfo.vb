@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
@@ -26,201 +26,24 @@ Public Class GetAppxPkgInfoDlg
     End Enum
 
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Get AppX package information"
-                        ImageTaskHeader1.ItemText = Text
-                        Label36.Text = "AppX package information"
-                        Label37.Text = "Select an installed AppX package on the left to view its information here"
-                        Label22.Text = "Package name:"
-                        Label24.Text = "Application display name:"
-                        Label26.Text = "Architecture:"
-                        Label31.Text = "Resource ID:"
-                        Label41.Text = "Version:"
-                        Label43.Text = "Is registered to any user?"
-                        Label4.Text = "Installation directory:"
-                        Label6.Text = "Package manifest location:"
-                        Label8.Text = "Store logo asset directory:"
-                        Label9.Text = "Main store logo asset:"
-                        Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
-                        LinkLabel1.Text = "This asset is not the one I'm looking for"
-                        Button2.Text = "Save..."
-                        SearchBox1.cueBanner = "Type here to search for an application..."
-                    Case "ESN"
-                        Text = "Obtener información de paquetes AppX"
-                        ImageTaskHeader1.ItemText = Text
-                        Label36.Text = "Información de paquete AppX"
-                        Label37.Text = "Seleccione un paquete AppX instalado en la izquierda para ver su información aquí"
-                        Label22.Text = "Nombre de paquete:"
-                        Label24.Text = "Nombre de aplicación a mostrar:"
-                        Label26.Text = "Arquitectura:"
-                        Label31.Text = "ID de recurso:"
-                        Label41.Text = "Versión:"
-                        Label43.Text = "¿Está registrado a algún usuario?"
-                        Label4.Text = "Directorio de instalación:"
-                        Label6.Text = "Ubicación del manifiesto del paquete:"
-                        Label8.Text = "Directorio de recursos de logotipos de Tienda:"
-                        Label9.Text = "Recurso de logotipos de Tienda principal:"
-                        Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
-                        LinkLabel1.Text = "Este recurso no es el que estaba buscando"
-                        Button2.Text = "Guardar..."
-                        SearchBox1.cueBanner = "Escriba aquí para buscar una aplicación..."
-                    Case "FRA"
-                        Text = "Obtenir des informations sur les paquets AppX"
-                        ImageTaskHeader1.ItemText = Text
-                        Label36.Text = "Informations sur le paquet AppX"
-                        Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
-                        Label22.Text = "Nom du paquet :"
-                        Label24.Text = "Nom d'affichage de l'application :"
-                        Label26.Text = "Architecture :"
-                        Label31.Text = "ID de la ressource :"
-                        Label41.Text = "Version :"
-                        Label43.Text = "Est-il enregistré au nom d'un utilisateur ?"
-                        Label4.Text = "Répertoire d'installation :"
-                        Label6.Text = "Emplacement du manifeste du paquet :"
-                        Label8.Text = "Répertoire du logo du magasin :"
-                        Label9.Text = "Logo du magasin principal :"
-                        Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
-                        LinkLabel1.Text = "Cette ressource n'est pas celle que je recherche"
-                        Button2.Text = "Sauvegarder..."
-                        SearchBox1.cueBanner = "Tapez ici pour rechercher une application..."
-                    Case "PTB", "PTG"
-                        Text = "Obter informações do pacote AppX"
-                        ImageTaskHeader1.ItemText = Text
-                        Label36.Text = "Informações do pacote AppX"
-                        Label37.Text = "Seleccione um pacote AppX instalado à esquerda para ver as suas informações aqui"
-                        Label22.Text = "Nome do pacote:"
-                        Label24.Text = "Nome de apresentação da aplicação:"
-                        Label26.Text = "Arquitetura:"
-                        Label31.Text = "ID do recurso:"
-                        Label41.Text = "Versão:"
-                        Label43.Text = "Está registada para algum utilizador?"
-                        Label4.Text = "Diretório de instalação:"
-                        Label6.Text = "Localização do manifesto do pacote:"
-                        Label8.Text = "Diretório de activos do logótipo da loja:"
-                        Label9.Text = "Ativo do logótipo principal da loja:"
-                        Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
-                        LinkLabel1.Text = "Este recurso não é o que estou à procura"
-                        Button2.Text = "Guardar..."
-                        SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
-                    Case "ITA"
-                        Text = "Verifica informazioni pacchetto AppX"
-                        ImageTaskHeader1.ItemText = Text
-                        Label36.Text = "Informazioni pacchetti AppX"
-                        Label37.Text = "Seleziona un pacchetto AppX installato a sinistra per visualizzarne qui le informazioni"
-                        Label22.Text = "Nome pacchetto:"
-                        Label24.Text = "Nome applicazione visualizzato:"
-                        Label26.Text = "Architettura:"
-                        Label31.Text = "ID risorsa:"
-                        Label41.Text = "Versione:"
-                        Label43.Text = "È registrato a qualche utente?"
-                        Label4.Text = "Cartella installazione:"
-                        Label6.Text = "Percorso manifesto pacchetto:"
-                        Label8.Text = "Cartella risorse logo negozio:"
-                        Label9.Text = "Asset principale logo negozio:"
-                        Label10.Text = "Questa risorsa è stata rilevata da DISMTools in base alle sue dimensioni, il che può portare ad un risultato errato. Se ciò accade, segnala il problema nel repository GitHub"
-                        LinkLabel1.Text = "Questa risorsa non è quella cercata"
-                        Button2.Text = "Salva..."
-                        SearchBox1.cueBanner = "Digita qui per cercare un'applicazione..."
-                End Select
-            Case 1
-                Text = "Get AppX package information"
-                ImageTaskHeader1.ItemText = Text
-                Label36.Text = "AppX package information"
-                Label37.Text = "Select an installed AppX package on the left to view its information here"
-                Label22.Text = "Package name:"
-                Label24.Text = "Application display name:"
-                Label26.Text = "Architecture:"
-                Label31.Text = "Resource ID:"
-                Label41.Text = "Version:"
-                Label43.Text = "Is registered to any user?"
-                Label4.Text = "Installation directory:"
-                Label6.Text = "Package manifest location:"
-                Label8.Text = "Store logo asset directory:"
-                Label9.Text = "Main store logo asset:"
-                Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
-                LinkLabel1.Text = "This asset is not the one I'm looking for"
-                Button2.Text = "Save..."
-                SearchBox1.cueBanner = "Type here to search for an application..."
-            Case 2
-                Text = "Obtener información de paquetes AppX"
-                ImageTaskHeader1.ItemText = Text
-                Label36.Text = "Información de paquete AppX"
-                Label37.Text = "Seleccione un paquete AppX instalado en la izquierda para ver su información aquí"
-                Label22.Text = "Nombre de paquete:"
-                Label24.Text = "Nombre de aplicación a mostrar:"
-                Label26.Text = "Arquitectura:"
-                Label31.Text = "ID de recurso:"
-                Label41.Text = "Versión:"
-                Label43.Text = "¿Está registrado a algún usuario?"
-                Label4.Text = "Directorio de instalación:"
-                Label6.Text = "Ubicación del manifiesto del paquete:"
-                Label8.Text = "Directorio de recursos de logotipos de Tienda:"
-                Label9.Text = "Recurso de logotipos de Tienda principal:"
-                Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
-                LinkLabel1.Text = "Este recurso no es el que estaba buscando"
-                Button2.Text = "Guardar..."
-                SearchBox1.cueBanner = "Escriba aquí para buscar una aplicación..."
-            Case 3
-                Text = "Obtenir des informations sur les paquets AppX"
-                ImageTaskHeader1.ItemText = Text
-                Label36.Text = "Informations sur le paquet AppX"
-                Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
-                Label22.Text = "Nom du paquet :"
-                Label24.Text = "Nom d'affichage de l'application :"
-                Label26.Text = "Architecture :"
-                Label31.Text = "ID de la ressource :"
-                Label41.Text = "Version :"
-                Label43.Text = "Est-il enregistré au nom d'un utilisateur ?"
-                Label4.Text = "Répertoire d'installation :"
-                Label6.Text = "Emplacement du manifeste du paquet :"
-                Label8.Text = "Répertoire du logo du magasin :"
-                Label9.Text = "Logo du magasin principal :"
-                Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
-                LinkLabel1.Text = "Cette ressource n'est pas celle que je recherche"
-                Button2.Text = "Sauvegarder..."
-                SearchBox1.cueBanner = "Tapez ici pour rechercher une application..."
-            Case 4
-                Text = "Obter informações do pacote AppX"
-                ImageTaskHeader1.ItemText = Text
-                Label36.Text = "Informações do pacote AppX"
-                Label37.Text = "Seleccione um pacote AppX instalado à esquerda para ver as suas informações aqui"
-                Label22.Text = "Nome do pacote:"
-                Label24.Text = "Nome de apresentação da aplicação:"
-                Label26.Text = "Arquitetura:"
-                Label31.Text = "ID do recurso:"
-                Label41.Text = "Versão:"
-                Label43.Text = "Está registada para algum utilizador?"
-                Label4.Text = "Diretório de instalação:"
-                Label6.Text = "Localização do manifesto do pacote:"
-                Label8.Text = "Diretório de activos do logótipo da loja:"
-                Label9.Text = "Ativo do logótipo principal da loja:"
-                Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
-                LinkLabel1.Text = "Este recurso não é o que estou à procura"
-                Button2.Text = "Guardar..."
-                SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
-            Case 5
-                Text = "Verifica informazioni sul pacchetto AppX"
-                ImageTaskHeader1.ItemText = Text
-                Label36.Text = "Informazioni pacchetti AppX"
-                Label37.Text = "Seleziona un pacchetto AppX installato a sinistra per visualizzarne qui le informazioni"
-                Label22.Text = "Nome pacchetto:"
-                Label24.Text = "Nome applicazione visualizzato:"
-                Label26.Text = "Architettura:"
-                Label31.Text = "ID risorsa:"
-                Label41.Text = "Versione:"
-                Label43.Text = "È registrato a qualche utente?"
-                Label4.Text = "Cartella installazione:"
-                Label6.Text = "Percorso manifesto pacchetto:"
-                Label8.Text = "Cartella risorse logo negozio:"
-                Label9.Text = "Asset principale logo negozio:"
-                Label10.Text = "Questa risorsa è stata rilevata da DISMTools in base alle sue dimensioni, il che può portare ad un risultato errato. Se ciò accade, segnala il problema nel repository GitHub"
-                LinkLabel1.Text = "Questa risorsa non è quella cercata"
-                Button2.Text = "Salva..."
-                SearchBox1.cueBanner = "Digita qui per cercare un'applicazione..."
-        End Select
+        Text = LocalizationService.ForSection("Get.AppX")("AppX.Package.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("Get.AppX").Format("Image.Task.Header.Label", Text)
+        Label36.Text = LocalizationService.ForSection("Get.AppX")("AppX.Package.Label.Label")
+        Label37.Text = LocalizationService.ForSection("Get.AppX")("Installed.AppX.Label")
+        Label22.Text = LocalizationService.ForSection("Get.AppX")("PackageName.Label")
+        Label24.Text = LocalizationService.ForSection("Get.AppX")("Display.Name.Label")
+        Label26.Text = LocalizationService.ForSection("Get.AppX")("Architecture.Label")
+        Label31.Text = LocalizationService.ForSection("Get.AppX")("ResourceID.Label")
+        Label41.Text = LocalizationService.ForSection("Get.AppX")("Version.Label")
+        Label43.Text = LocalizationService.ForSection("Get.AppX")("Registered.User.Label")
+        Label4.Text = LocalizationService.ForSection("Get.AppX")("Install.Dir.Label")
+        Label6.Text = LocalizationService.ForSection("Get.AppX")("Package.Manifest.Label")
+        Label8.Text = LocalizationService.ForSection("Get.AppX")("StoreLogo.Asset.Dir.Label")
+        Label9.Text = LocalizationService.ForSection("Get.AppX")("Main.StoreLogo.Asset.Label")
+        Label10.Text = LocalizationService.ForSection("Get.AppX")("Asset.Guessed.DISM.Message")
+        LinkLabel1.Text = LocalizationService.ForSection("Get.AppX")("Asset.One.IM.Link")
+        Button2.Text = LocalizationService.ForSection("Get.AppX")("Save.Button")
+        SearchBox1.cueBanner = LocalizationService.ForSection("Get.AppX")("Type.Search.Label")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -420,31 +243,7 @@ Public Class GetAppxPkgInfoDlg
             End If
 
             If IsPackageRegistered Then
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label42.Text = "Yes"
-                            Case "ESN"
-                                Label42.Text = "Sí"
-                            Case "FRA"
-                                Label42.Text = "Oui"
-                            Case "PTB", "PTG"
-                                Label42.Text = "Sim"
-                            Case "ITA"
-                                Label42.Text = "Sì"
-                        End Select
-                    Case 1
-                        Label42.Text = "Yes"
-                    Case 2
-                        Label42.Text = "Sí"
-                    Case 3
-                        Label42.Text = "Oui"
-                    Case 4
-                        Label42.Text = "Sim"
-                    Case 5
-                        Label42.Text = "Sì"
-                End Select
+                Label42.Text = LocalizationService.ForSection("Get.AppX.PackageList")("Yes.Button")
                 If MainForm.OnlineManagement AndAlso Not MainForm.NoNTSamMappings Then
                     DynaLog.LogMessage("Online installation management mode has been detected and we're expected to map SAM information. Proceeding...")
                     Try
@@ -458,31 +257,7 @@ Public Class GetAppxPkgInfoDlg
                     End Try
                 End If
             Else
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label42.Text = "No"
-                            Case "ESN"
-                                Label42.Text = "No"
-                            Case "FRA"
-                                Label42.Text = "Non"
-                            Case "PTB", "PTG"
-                                Label42.Text = "Não"
-                            Case "ITA"
-                                Label42.Text = "No"
-                        End Select
-                    Case 1
-                        Label42.Text = "No"
-                    Case 2
-                        Label42.Text = "No"
-                    Case 3
-                        Label42.Text = "Non"
-                    Case 4
-                        Label42.Text = "Não"
-                    Case 5
-                        Label42.Text = "No"
-                End Select
+                Label42.Text = LocalizationService.ForSection("Get.AppX.PackageList")("No.Button")
             End If
 
             DynaLog.LogMessage("Getting AppX main Store logo asset...")
@@ -571,7 +346,7 @@ Public Class GetAppxPkgInfoDlg
                 End If
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get some information about this application. Error message: " & ex.Message)
-                MsgBox("Could not get some information about this application.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+                MsgBox(LocalizationService.ForSection("AppxPackages.Info.Messages")("Get.Label"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             End Try
             Panel4.Visible = True
             Panel7.Visible = False

@@ -33,9 +33,9 @@ Public Class CustomRuleDetailsDialog
         If CurrentCustomRule Is Nothing Then
             ' we're creating a new rule
             CurrentCustomRule = New AutoInspectionRule()
-            Text = "Add Custom Inspection Rule"
+            Text = LocalizationService.ForSection("StarterScript.CustomRuleDetails.Messages")("Add.Title")
         Else
-            Text = "Modify Custom Inspection Rule"
+            Text = LocalizationService.ForSection("StarterScript.CustomRuleDetails.Messages")("Modify.Title")
         End If
 
         RuleNameTextBox.Text = CurrentCustomRule.RuleName
@@ -121,19 +121,19 @@ Public Class CustomRuleDetailsDialog
             ExpressionTester = New Regex(RuleExpressionTextBox.Text, RegexOptions.Compiled Or RegexOptions.Multiline Or RegexOptions.IgnoreCase)
             ExpressionMatches = ExpressionTester.Matches(RuleExpressionTesterTextBox.Text)
 
-            MatchCountLabel.Text = String.Format("{0} match{1}", ExpressionMatches.Count, IIf(ExpressionMatches.Count <> 1, "es", ""))
+            MatchCountLabel.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails").Format("MatchCount.Label", ExpressionMatches.Count)
 
             ' Select the first match.
             SelectMatch(0)
         Catch regexEx As ArgumentException
-            MessageBox.Show("This expression is malformed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            MatchCountLabel.Text = "0 matches"
+            MessageBox.Show(LocalizationService.ForSection("StarterScript.CustomRuleDetails.Messages")("MalformedExpression.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MatchCountLabel.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails").Format("MatchCount.Label", 0)
 
             RegexPrevMatchButton.Enabled = False
             RegexNextMatchButton.Enabled = False
         Catch ex As Exception
             ' ignore, but still care about
-            MatchCountLabel.Text = "0 matches"
+            MatchCountLabel.Text = LocalizationService.ForSection("StarterScript.Designer.CustomRuleDetails").Format("MatchCount.Label", 0)
 
             RegexPrevMatchButton.Enabled = False
             RegexNextMatchButton.Enabled = False

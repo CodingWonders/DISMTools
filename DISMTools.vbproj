@@ -247,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="RuntimeFormLocalization.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
@@ -1046,7 +1047,8 @@
     <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
-    <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
+    <Compile Include="Utilities\Language\LanguageHelper.vb" />
+    <Compile Include="Utilities\Language\LocalizationService.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
@@ -1631,6 +1633,24 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="language\de-DE.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\en-US.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\es-ES.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\fr-FR.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\it-IT.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="language\pt-PT.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -2229,7 +2249,7 @@
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
-    <Folder Include="Utilities\LanguageUtilities\LanguageFiles\" />
+    <Folder Include="Utilities\Language\LanguageFiles\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
   <ItemGroup>

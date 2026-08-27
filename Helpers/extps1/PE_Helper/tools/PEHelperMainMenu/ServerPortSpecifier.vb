@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 
@@ -37,10 +37,10 @@ Public Class ServerPortSpecifier
             netstatProc.WaitForExit()
             If netstatProc.ExitCode = 0 Then
                 ' This port is in use
-                MessageBox.Show(String.Format("The specified port, {0}, is already in use.", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(LocalizationService.ForSection("PEHelper.ServerPort").Format("Already.Message", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else
                 ' This port is free
-                MessageBox.Show(String.Format("The specified port, {0}, is not in use.", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(LocalizationService.ForSection("PEHelper.ServerPort").Format("InvalidPort.Message", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         End Using
     End Sub

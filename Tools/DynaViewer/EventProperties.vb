@@ -80,8 +80,6 @@ Public Class EventProperties
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        MsgBox("The above field can be empty if the caller does not have a parent, or if the logging system was called by the method in the program with the GetParentCaller parameter set to false." & CrLf & CrLf & _
-        "As a developer, you can log events without getting the parent caller like this:" & CrLf & CrLf & _
-        "    DynaLog.LogMessage(" & Quote & "Event Message" & Quote & ", False)", vbOKOnly + vbInformation, "Event Parent Caller")
+        MsgBox(LocalizationService.ForSection("DynaViewer.EventProps")("Field.Empty.Caller.Message"), vbOKOnly + vbInformation, LocalizationService.ForSection("DynaViewer.EventProps")("Parent.Caller.Title"))
     End Sub
 End Class
