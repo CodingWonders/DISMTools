@@ -37,7 +37,7 @@ Public Class DocumentOutlineViewer
         InternalTB.Text = EditorControl.Text
 
         Select Case LanguageMode
-            Case DO_LM_BATCH : refEx = "^:.*"
+            Case DO_LM_BATCH : refEx = "^\s*:(?![:])(?<Name>[A-Za-z_][\w-]*)\b"
             Case DO_LM_POWERSHELL : refEx = "\b(?<Kind>function|filter)\s+(?<Scope>global:|local:|script:|private:)?(?<Name>[A-Za-z_][\w-]*)\s*(\{|\()"
             Case DO_LM_VBSCRIPT : refEx = "\b(?<Modifier>Public\s+Default\s+|Private\s+Default\s+|Public\s+|Private\s+|Default\s+)?(?<Kind>Sub|Function)\s+(?<Name>[A-Za-z_][\w]*)\s*\((?<Params>[^)]*)\)"
             Case DO_LM_JSCRIPT : refEx = "(?<Declaration>\bfunction\s+(?<DeclName>[A-Za-z_$][\w$]*)\s*\((?<DeclParams>[^)]*)\))|(?<Assignment>\b(?:var|let|const)?\s*(?<AssignName>[A-Za-z_$][\w$.]*)\s*=\s*function\b\s*\((?<AssignParams>[^)]*\))"
@@ -52,6 +52,7 @@ Public Class DocumentOutlineViewer
                 idx As Integer = 0
             For Each FunctionDeclarationMatch As Match In FunctionDeclarationMatches
                 Dim MatchName As String = FunctionDeclarationMatch.Value.TrimStart(":").TrimEnd("{")
+                If LanguageMode = DO_LM_BATCH Then MatchName = Regex.Replace(MatchName, "\r\n", "", RegexOptions.IgnoreCase)
                 If LanguageMode = DO_LM_VBSCRIPT Then MatchName = Regex.Replace(MatchName, "\b(?<Modifier>Public\s+Default\s+|Private\s+Default\s+|Public\s+|Private\s+|Default\s+)?(?<Kind>Sub|Function)\s+", "", RegexOptions.IgnoreCase)
                 If LanguageMode = DO_LM_POWERSHELL Then MatchName = Regex.Replace(MatchName, "\b(?:function|filter)\s+(?:global:|local:|script:|private:)?", "", RegexOptions.IgnoreCase Or RegexOptions.Multiline).Trim(ControlChars.Cr, ControlChars.Lf, ControlChars.CrLf)
                 Matches(idx) = MatchName
