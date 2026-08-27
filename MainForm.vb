@@ -106,7 +106,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_infinity_mk2"
+    Public dtBranch As String = "dt_pre_infinity_mk2_relcndid"
     Public dt_codeName As String = "InfinityMk2"
 
     ' Arrays and other variables used on background processes
@@ -903,10 +903,12 @@ Public Class MainForm
 
                     Dim languageCode As String = LocalizationService.GetDocumentationLanguageCode()
 
-                    tourServer.StartServer()
-                    If tourServer.IsListenerAlive() Then
-                        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
-                        TourActionsTSMI.Visible = True
+                    If tourServer IsNot Nothing Then
+                        tourServer.StartServer()
+                        If tourServer.IsListenerAlive() Then
+                            Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                            TourActionsTSMI.Visible = True
+                        End If
                     End If
                 End If
             End If
@@ -2792,7 +2794,7 @@ Public Class MainForm
         FailedBGProcResultDic.Add(bgProcTitle, errorEx)
     End Sub
 
-    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As DismException = Nothing, Optional GeneralException As Exception = Nothing)
+    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As Exception = Nothing, Optional GeneralException As Exception = Nothing)
         Dim errorEx As Exception = Nothing
         If APIException IsNot Nothing Then errorEx = New Exception(String.Format("DISM API Task Error: {0}", New Win32Exception(APIException.HResult).Message), APIException)
         If GeneralException IsNot Nothing Then errorEx = New Exception(String.Format("DISM Task Error: {0}", New Win32Exception(GeneralException.HResult).Message), GeneralException)
@@ -2888,9 +2890,14 @@ Public Class MainForm
                         pkgReleaseTypeString <> "" AndAlso
                         pkgInstallTimeString <> "" Then
 
+                    Dim pkgInstallTime As DateTime
+                    If Not DateTime.TryParse(pkgInstallTimeString, CultureInfo.CurrentCulture, DateTimeStyles.None, pkgInstallTime) Then
+                        pkgInstallTime = Date.MinValue
+                    End If
+
                     CurrentImage.ImagePackages_Backup.Add(New ImagePackage(pkgNameString,
                                                                                  Casters.CastDismPackageStateString(pkgStateString),
-                                                                                 New Date(pkgInstallTimeString),
+                                                                                 pkgInstallTime,
                                                                                  Casters.CastDismReleaseTypeString(pkgReleaseTypeString)))
                     pkgNameString = ""
                     pkgStateString = ""
@@ -3719,11 +3726,9 @@ Public Class MainForm
             Try
                 ' Tell settings file to use this method
                 DynaLog.LogMessage("Forcing save to registry in INI File...")
-                Dim SettingRtb As New RichTextBox() With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                }
-                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
-                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                Dim SettingContents As String = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                SettingContents = SettingContents.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingContents, ASCII)
                 DynaLog.LogMessage("Setting key values...")
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
@@ -6326,10 +6331,14 @@ Public Class MainForm
             EnableDynaLog = True
             DynaLog.EnableLogging()
         End If
-        If tourServer.IsListenerAlive() Then
+        If tourServer IsNot Nothing AndAlso tourServer.IsListenerAlive() Then
             DynaLog.LogMessage("Tour is active. Attempting to shut down server...")
             tourServer.StopServer()
             TourActionsTSMI.Visible = False
+        End If
+        If videoServer IsNot Nothing AndAlso videoServer.IsListenerAlive() Then
+            DynaLog.LogMessage("Video server is active. Attempting to shut down server...")
+            videoServer.StopServer()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
         StopMountedImageDetector()
@@ -6803,17 +6812,24 @@ Public Class MainForm
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image unmount dialog...")
-        If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
-            DynaLog.LogMessage("This is the image the user is managing here")
+        ' We default to the current image but, if we have the mounted image manager open, we'll check
+        If MountedImgMgr.ListView1.FocusedItem IsNot Nothing Then
+            If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
+                DynaLog.LogMessage("This is the image the user is managing here")
+                ImgUMount.RadioButton1.Checked = True
+                ImgUMount.RadioButton2.Checked = False
+                ImgUMount.TextBox1.Text = ""
+            Else
+                DynaLog.LogMessage("This is an image different from the one the user is managing here")
+                ImgUMount.RadioButton1.Checked = False
+                ImgUMount.RadioButton2.Checked = True
+                ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+                ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+            End If
+        Else
             ImgUMount.RadioButton1.Checked = True
             ImgUMount.RadioButton2.Checked = False
             ImgUMount.TextBox1.Text = ""
-        Else
-            DynaLog.LogMessage("This is an image different from the one the user is managing here")
-            ImgUMount.RadioButton1.Checked = False
-            ImgUMount.RadioButton2.Checked = True
-            ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         End If
         ImgUMount.ShowDialog(Me)
     End Sub
@@ -6996,10 +7012,8 @@ Public Class MainForm
                 DynaLog.LogMessage("An AppX manifest file exists in the main directory. There are no variations of any kind")
                 ' Read from manifest
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("Logo") Then
                         DynaLog.LogMessage("We have a possible logo...")
                         Dim SplitPaths As New List(Of String)
@@ -7038,10 +7052,8 @@ Public Class MainForm
                     If Not folder.Contains("neutral") Then
                         DynaLog.LogMessage("We have a possible folder candidate. Reading manifest...")
                         ' Read from manifest
-                        Dim ManFile As New RichTextBox() With {
-                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
-                        }
-                        For Each line In ManFile.Lines
+                        Dim ManFileLines As String() = File.ReadAllLines(folder & "AppxManifest.xml")
+                        For Each line In ManFileLines
                             If line.Contains("Logo") Then
                                 DynaLog.LogMessage("Returning logo...")
                                 Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
@@ -7108,10 +7120,8 @@ Public Class MainForm
             DynaLog.LogMessage("Checking if AppX manifest exists...")
             If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(suitableFolderName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("<Logo>") Then
                         Dim SplitPaths As New List(Of String)
                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -8843,9 +8853,11 @@ Public Class MainForm
                 MsgBox(LocalizationService.ForSection("Main.Messages")("DISM.Tools.Modify.Message"), vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
-            If Not videoServer.IsListenerAlive Then videoServer.StartServer()
-            If videoServer.IsListenerAlive() Then
-                Process.Start("http://localhost:2026/videoplay.html")
+            If videoServer IsNot Nothing Then
+                If Not videoServer.IsListenerAlive Then videoServer.StartServer()
+                If videoServer.IsListenerAlive() Then
+                    Process.Start("http://localhost:2026/videoplay.html")
+                End If
             End If
         End If
     End Sub

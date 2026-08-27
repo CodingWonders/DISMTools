@@ -279,8 +279,4 @@ Public Class PrgAbout
     Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click
         Process.Start("https://discord.gg/5TxEmKXNwu")
     End Sub
-
-    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
-        Process.Start("https://www.youtube.com/watch?v=FGBhQbmPwH8")
-    End Sub
 End Class

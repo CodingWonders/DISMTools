@@ -30,13 +30,13 @@ Partial Class AppInstallerDownloader
         Me.StatusLbl = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CopyUri_Button = New System.Windows.Forms.Button()
         Me.downUriLbl = New System.Windows.Forms.Label()
         Me.downETALbl = New System.Windows.Forms.Label()
         Me.downSpdLbl = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.CopyUri_Button = New System.Windows.Forms.Button()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -103,6 +103,16 @@ Partial Class AppInstallerDownloader
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Transfer details"
         '
+        'CopyUri_Button
+        '
+        Me.CopyUri_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CopyUri_Button.Location = New System.Drawing.Point(543, 40)
+        Me.CopyUri_Button.Name = "CopyUri_Button"
+        Me.CopyUri_Button.Size = New System.Drawing.Size(75, 23)
+        Me.CopyUri_Button.TabIndex = 2
+        Me.CopyUri_Button.Text = "Copy"
+        Me.CopyUri_Button.UseVisualStyleBackColor = True
+        '
         'downUriLbl
         '
         Me.downUriLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -167,23 +177,12 @@ Partial Class AppInstallerDownloader
         Me.Label3.Text = "Please wait..."
         Me.Label3.Visible = False
         '
-        'CopyUri_Button
-        '
-        Me.CopyUri_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CopyUri_Button.Location = New System.Drawing.Point(543, 40)
-        Me.CopyUri_Button.Name = "CopyUri_Button"
-        Me.CopyUri_Button.Size = New System.Drawing.Size(75, 23)
-        Me.CopyUri_Button.TabIndex = 2
-        Me.CopyUri_Button.Text = "Copy"
-        Me.CopyUri_Button.UseVisualStyleBackColor = True
-        '
         'AppInstallerDownloader
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.ClientSize = New System.Drawing.Size(704, 281)
-        Me.ControlBox = False
         Me.Controls.Add(Me.Cancel_Button)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.StatusLbl)

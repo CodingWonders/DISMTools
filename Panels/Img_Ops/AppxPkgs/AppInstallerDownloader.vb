@@ -45,6 +45,7 @@ Public Class AppInstallerDownloader
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.DisableCloseCapability(handle)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Height = WindowHelper.ScaleLogical(320)
@@ -168,6 +169,7 @@ Public Class AppInstallerDownloader
     End Sub
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
+        WindowHelper.EnableCloseCapability(Handle)
         If Not e.Cancelled AndAlso e.Error IsNot Nothing Then
             DownloadError = e.Error
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then

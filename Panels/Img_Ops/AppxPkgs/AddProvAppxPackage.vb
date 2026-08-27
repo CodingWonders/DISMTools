@@ -250,7 +250,25 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        AppxFileOFD.ShowDialog(Me)
+        If AppxFileOFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Getting selected file names...")
+            DynaLog.LogMessage("Selected files: " & AppxFileOFD.FileNames.Count)
+            If AppxFileOFD.FileNames.Count > 0 Then
+                For Each AppxFile In AppxFileOFD.FileNames
+                    DynaLog.LogMessage("Determining extension of file " & Quote & Path.GetFileName(AppxFile) & Quote & "...")
+                    If Path.GetExtension(AppxFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                        DynaLog.LogMessage("Selected file is of APPINSTALLER format. Preparing to parse XML file and downloading main package...")
+                        If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                        AppInstallerDownloader.AppInstallerFile = AppxFile
+                        If Not File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                        DynaLog.LogMessage("Detecting if main package exists and scanning it...")
+                        If File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFile.Replace(".appinstaller", ".appxbundle").Trim())
+                        Continue For
+                    End If
+                    ScanAppxPackage(False, AppxFile)
+                Next
+            End If
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -300,26 +318,6 @@ Public Class AddProvAppxPackage
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         AppxDependencyOFD.ShowDialog(Me)
-    End Sub
-
-    Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
-        DynaLog.LogMessage("Getting selected file names...")
-        DynaLog.LogMessage("Selected files: " & AppxFileOFD.FileNames.Count)
-        If AppxFileOFD.FileNames.Count > 0 Then
-            For Each AppxFile In AppxFileOFD.FileNames
-                DynaLog.LogMessage("Determining extension of file " & Quote & Path.GetFileName(AppxFile) & Quote & "...")
-                If Path.GetExtension(AppxFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                    DynaLog.LogMessage("Selected file is of APPINSTALLER format. Preparing to parse XML file and downloading main package...")
-                    If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                    AppInstallerDownloader.AppInstallerFile = AppxFile
-                    If Not File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                    DynaLog.LogMessage("Detecting if main package exists and scanning it...")
-                    If File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFile.Replace(".appinstaller", ".appxbundle").Trim())
-                    Continue For
-                End If
-                ScanAppxPackage(False, AppxFile)
-            Next
-        End If
     End Sub
 
     Private Sub AppxDependencyOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxDependencyOFD.FileOk

@@ -1802,6 +1802,7 @@ Partial Class GetPkgInfoDlg
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Filter = "CAB files|*.cab"
+        Me.OpenFileDialog1.Multiselect = True
         Me.OpenFileDialog1.Title = "Locate package files"
         '
         'ImageTaskHeader1

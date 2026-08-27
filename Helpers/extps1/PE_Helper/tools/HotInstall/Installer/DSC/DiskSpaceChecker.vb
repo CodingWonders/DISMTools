@@ -83,9 +83,27 @@ Public Class DiskSpaceChecker
         DynaLog.LogMessage("- File to exclude: " & ExcludedFile)
         Dim DirectorySize As Long = 0
         If Directory.Exists(DirectoryName) Then
-            For Each FileInDir In Directory.GetFiles(DirectoryName, "*", SearchOption.AllDirectories)
-                If Path.GetFileName(FileInDir).Equals(ExcludedFile, StringComparison.OrdinalIgnoreCase) Then Continue For
-                DirectorySize += New FileInfo(FileInDir).Length
+            ' Get directories in the root first. We may have a "System Volume Information" in there. If so,
+            ' it will cause DSC to fail.
+            Dim SubDirsInDir As IEnumerable(Of String) = Directory.EnumerateDirectories(DirectoryName, "*", SearchOption.TopDirectoryOnly).Where(Function(dir) Not {"System Volume Information"}.Contains(dir)),
+                FilesInDir As IEnumerable(Of String) = Directory.EnumerateFiles(DirectoryName, "*.*", SearchOption.TopDirectoryOnly).Where(Function(item) Not Path.GetFileName(item).Equals(ExcludedFile, StringComparison.OrdinalIgnoreCase))
+
+            For Each FileInDir In FilesInDir
+                Try
+                    DirectorySize += New FileInfo(FileInDir).Length
+                Catch ex As Exception
+                    ' don't count it
+                End Try
+            Next
+
+            For Each SubDirInDir In SubDirsInDir
+                Try
+                    For Each FileInDir In Directory.EnumerateFiles(SubDirInDir, "*", SearchOption.AllDirectories).Where(Function(item) Not Path.GetFileName(item).Equals(ExcludedFile, StringComparison.OrdinalIgnoreCase))
+                        DirectorySize += New FileInfo(FileInDir).Length
+                    Next
+                Catch ex As Exception
+                    ' don't count it
+                End Try
             Next
         End If
         DynaLog.LogMessage("Reported size: " & DirectorySize & " bytes")

@@ -2265,17 +2265,14 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''- Fixed some HiDPI issues
+        '''--- Bugfixes
         '''
-        '''New features:
-        '''
-        '''- The maximum amount of concurrent ISO creation tasks can now be configured up to a value of 10
-        '''- The Preinstallation Environment has received support for encrypting and decrypting, as well as getting information about, encryptable volumes
-        '''- The Sysprep Preparation Tool has been updated with BitLocker volume detection
-        '''- The &quot;Prevent companion device software installation&quot; Starter Script has been introduced
-        '''- When performing driver exports, multi [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
+        '''- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
+        '''- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
+        '''- Fixed issues with some image tasks targeting root [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

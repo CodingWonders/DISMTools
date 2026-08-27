@@ -1,0 +1,23 @@
+﻿Language: Batch
+Name: Configure Windows Server processor scheduling
+Description: This script allows you to configure how a server system allocates hardware resources
+Customizable: Yes
+@ECHO OFF
+
+REM This script allows you to configure processor scheduling on Windows Server systems
+REM to prioritize either foreground applications or background services.
+
+REM Set the following variable to one of the following values:
+REM - 0 -- foreground applications have the most priority
+REM - 1 -- background services have the most priority (default on Server installations)
+SET _ApplicationPriority=0
+
+REM leave the rest of the script as is
+IF NOT DEFINED _ApplicationPriority SET _ApplicationPriority=0
+
+IF %_ApplicationPriority% LSS 0 SET _ApplicationPriority=0
+IF %_ApplicationPriority% GTR 1 SET _ApplicationPriority=1
+
+REM for foreground apps, value is 38; for background svcs, value is 24
+IF %_ApplicationPriority% EQU 0 REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /F /V Win32PrioritySeparation /T REG_DWORD /D 38
+IF %_ApplicationPriority% EQU 1 REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /F /V Win32PrioritySeparation /T REG_DWORD /D 24

@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2870,6 +2870,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#bitlocker-utilities-bdemgr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BitLocker Utilities (bdemgr)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3387,6 +3398,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#bitlocker-utilities-bdemgr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BitLocker Utilities (bdemgr)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3416,7 +3438,7 @@
 </p>
 
 <h2 id="available-scripts">Available scripts</h2>
-<p>Currently, 4 scripts are included:</p>
+<p>These are the available scripts in the Preinstallation Environment:</p>
 <h3 id="initialize-networking-initializenetworkbat">Initialize Networking (<code>initializenetwork.bat</code>)</h3>
 <p>This script initializes the networking stack in the Preinstallation Environment for use with network-ready applications, and also enables the firewall.</p>
 <h3 id="full-disk-copy-fullcopybat">Full Disk Copy (<code>fullcopy.bat</code>)</h3>
@@ -3428,7 +3450,7 @@
 <li>Wait for the process to complete</li>
 </ol>
 <h3 id="capture-image-imagecapturebat">Capture Image (<code>imagecapture.bat</code>)</h3>
-<p>This script captures a Windows system drive into a WIM file that can be used later. In DISMTools 0.7.2 and later, this tool can be launched automatically after Sysprep completes, using the <a href="../exttools/sysprep.html">Sysprep Preparation Tool</a>.</p>
+<p>This script captures a Windows system drive into a WIM file that can be used later. This tool can also be launched automatically after Sysprep completes, using the <a href="../exttools/sysprep.html">Sysprep Preparation Tool</a>.</p>
 <p>Usage:</p>
 <ol>
 <li>Enter the source drive letter (the Windows installation to capture), or an action to perform:<ul>
@@ -3439,7 +3461,8 @@
 </li>
 <li>Enter the destination drive letter (where to save the WIM file)</li>
 <li>Enter the WIM file name (for example, <code>install.wim</code>)</li>
-<li>Enter the image name (for example, <code>Windows 11 Pro</code>)</li>
+<li>Enter the image name (for example, <code>Windows 11 Pro</code>), or continue with default values by pressing ENTER</li>
+<li>Enter the image description (for example, <code>Windows 11 Pro</code>), or continue with default values by pressing ENTER</li>
 <li>Wait for the process to complete</li>
 </ol>
 <p>After DISM completes, you will see a result screen.</p>
@@ -3476,6 +3499,50 @@
 <li>Provide the letter of the volume to copy boot files from</li>
 <li>Wait for the tool to do its work, and restart the computer</li>
 </ol>
+<h3 id="bitlocker-utilities-bdemgr">BitLocker Utilities (<code>bdemgr</code>)</h3>
+<p>This set of scripts allows you to manage BitLocker-encrypted drives in the Preinstallation Environment. Use one of the following commands (or aliases) depending on what you want to do:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">Alias</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>bdemgr info</code></td>
+<td style="text-align: left;"><code>bdeinfo</code></td>
+<td style="text-align: left;">Displays information about the BitLocker-encrypted drive</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>bdemgr unlock</code></td>
+<td style="text-align: left;"><code>bdeunlock</code></td>
+<td style="text-align: left;">Unlocks the BitLocker-encrypted drive</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>bdemgr lock</code></td>
+<td style="text-align: left;"><code>bdelock</code></td>
+<td style="text-align: left;">Locks the BitLocker-encrypted drive</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>bdemgr encrypt</code></td>
+<td style="text-align: left;"><code>bdeencrypt</code></td>
+<td style="text-align: left;">Encrypts the drive with BitLocker</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>bdemgr decrypt</code></td>
+<td style="text-align: left;"><code>bdedecrypt</code></td>
+<td style="text-align: left;">Decrypts the BitLocker-encrypted drive</td>
+</tr>
+</tbody>
+</table>
+<p>For more general information about BitLocker utilities, simply type <code>bdemgr</code>. For each task, select the volume to perform the operation on, and follow the instructions.</p>
+<p>For encryption and decryption tasks, you will have to wait for the process to complete. The time you will have to wait depends on the used disk space and the speed of the drive. Real-time progress is displayed in the encryption and decryption windows.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is recommended that you perform the encryption or decryption tasks as soon as you load the Preinstallation Environment. If a drive is very slow, it can take longer than the allotted 72 hours (3 days) that the Preinstallation Environment is available. If the environment restarts before the process completes, you will have to start over.</p>
+</div>
 
 
 
@@ -3528,7 +3595,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["search.suggest"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

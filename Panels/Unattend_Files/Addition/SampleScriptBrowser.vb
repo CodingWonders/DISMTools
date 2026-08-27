@@ -363,4 +363,8 @@ Public Class SampleScriptBrowser
             ToggleScriptPreviewFSMode(False)
         End If
     End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        RichTextBox2.WordWrap = CheckBox1.Checked
+    End Sub
 End Class

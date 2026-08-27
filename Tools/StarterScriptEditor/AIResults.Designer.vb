@@ -213,11 +213,11 @@ Partial Class AIResults
         '
         'ScannedRuleDataGridViewTextBoxColumn
         '
+        Me.ScannedRuleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ScannedRuleDataGridViewTextBoxColumn.DataPropertyName = "ScannedRule"
         Me.ScannedRuleDataGridViewTextBoxColumn.HeaderText = "Scanned Rule"
         Me.ScannedRuleDataGridViewTextBoxColumn.Name = "ScannedRuleDataGridViewTextBoxColumn"
         Me.ScannedRuleDataGridViewTextBoxColumn.ReadOnly = True
-        Me.ScannedRuleDataGridViewTextBoxColumn.Width = 840
         '
         'AutoInspectionResultBindingSource
         '

@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -22,7 +22,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3223,6 +3223,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#navigating-through-your-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Navigating through your code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharing-your-starter-scripts-with-the-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sharing your starter scripts with the world
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3334,6 +3362,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#navigating-through-your-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Navigating through your code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharing-your-starter-scripts-with-the-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sharing your starter scripts with the world
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3437,6 +3493,59 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_changever.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_changever.png"></a>
 </p>
 
+<h3 id="navigating-through-your-code">Navigating through your code</h3>
+<p>When working with large script codebases, it may be hard to find the code you are looking for. Pressing Ctrl + F will open the search dialog.</p>
+<p>The Find dialog operates in 2 modes: <em>Find</em>, and <em>Find &amp; Replace</em>. To invoke the latter mode, either toggle the "Replace Mode" button, or press Ctrl + R. Both operation modes can operate in either case-sensitive mode, regex mode, or both.</p>
+<p>Use the "Find Next" and "Find Previous" buttons to navigate through the results of your search. Press "Find All" to display all occurrences of your search term in a list.</p>
+<p>When you're in the "Find &amp; Replace" mode, with content selected, you can click "Replace" to replace the selected occurrence and advance to the next occurrence (or wrap around to the first occurrence if you were at the last one), or click "Replace All" to replace all occurrences of your search term in the script code.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Replace operations are irreversible. There is no undo functionality.</p>
+</div>
+<p align="center">
+    </p><table>
+        <tbody><tr>
+            <td>
+                <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_find.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_find.png"></a>
+            </td>
+            <td>
+                <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_find_replace.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_find_replace.png"></a>
+            </td>
+        </tr>
+        <tr>
+            <td><i>Find mode</i></td>
+            <td><i>Find &amp; Replace mode</i></td>
+        </tr>
+    </tbody></table>
+<p></p>
+
+<p>When your script contains functions or labels, you can easily jump to them by clicking the "Document Outline" button in the main window, or by pressing Ctrl + Alt + T.</p>
+<p>Independently of the language you are using, you can configure the language mode of the Document Outline viewer to one of the 4 supported languages. Then, select a function or label from the "Navigate to function/label" field. Finally, click "Navigate":</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_outline.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_outline.png"></a>
+</p>
+
+<p>For VBScript code, selecting a function will also show you details about its signature:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_outline_vbs.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_outline_vbs.png"></a>
+</p>
+
+<h3 id="sharing-your-starter-scripts-with-the-world">Sharing your starter scripts with the world</h3>
+<p>Leverage the Starter Script Library to make your starter scripts available to the world. To upload your starter script to the Starter Script Library, click "Upload Script" and follow the instructions. You will need to have a GitHub account to upload your starter script, plus an API key. Both steps are explained by the Starter Script Editor.</p>
+<p>To prevent leaking sensitive information, you should perform inspection of your starter script. Leverage automated inspection features in the Starter Script Editor to check for sensitive information, such as API keys, passwords, and other secrets. Click "Inspect Script Security" to perform the inspection. If any sensitive information is found, you will see results:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_automated_inspection_ttip.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_automated_inspection_ttip.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_automated_inspection_results.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_automated_inspection_results.png"></a>
+</p>
+
+<p>Double-click an entry to jump to the line where the sensitive information was found. By default, the Starter Script Editor contains 100 rules for detecting sensitive information, but you can add your own rules by clicking "Customize Inspection Rules". Define your custom rules by using regular expressions. Here is an example of a custom rule:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/exttools/sse/sse_custom_rule_editor.png" data-desc-position="bottom"><img src="../../res/img_tasks/exttools/sse/sse_custom_rule_editor.png"></a>
+</p>
+
 <h2 id="running-on-older-versions-of-windows">Running on older versions of Windows</h2>
 <p>DISMTools includes 2 versions of the Starter Script Editor that contain the same feature set but target different frameworks:</p>
 <ul>
@@ -3474,7 +3583,7 @@ A: Why not?
 <tbody>
 <tr>
 <td style="text-align: center;">1.2</td>
-<td style="text-align: center;">0.8.0 Preview 4+</td>
+<td style="text-align: center;">0.8   Preview 4+</td>
 <td>Added a customizable field for better telling the user about customizable settings</td>
 </tr>
 <tr>
@@ -3541,7 +3650,7 @@ A: Why not?
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

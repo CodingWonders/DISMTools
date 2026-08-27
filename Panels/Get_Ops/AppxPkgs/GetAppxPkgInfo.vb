@@ -295,10 +295,8 @@ Public Class GetAppxPkgInfoDlg
             If assetDir <> "" Then
                 DynaLog.LogMessage("Getting full asset directory...")
                 If File.Exists(assetDir & "\AppxManifest.xml") Then
-                    Dim ManFile As New RichTextBox() With {
-                        .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                    }
-                    For Each line In ManFile.Lines
+                    Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                    For Each line In ManFileLines
                         If line.Contains("<Logo>") Then
                             Dim SplitPaths As New List(Of String)
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -312,10 +310,8 @@ Public Class GetAppxPkgInfoDlg
             Else
                 DynaLog.LogMessage("Getting full asset directory...")
                 If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml") Then
-                    Dim ManFile As New RichTextBox() With {
-                        .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
-                    }
-                    For Each line In ManFile.Lines
+                    Dim ManFileLines As String() = File.ReadAllLines(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
+                    For Each line In ManFileLines
                         If line.Contains("<Logo>") Then
                             Dim SplitPaths As New List(Of String)
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()

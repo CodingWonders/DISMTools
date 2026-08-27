@@ -28,6 +28,16 @@ Partial Class DriverFilterAssistantDialog
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.FilterTypeContainerPanel = New System.Windows.Forms.Panel()
+        Me.ClassNameFilterPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.SelectedClassNamesLB = New System.Windows.Forms.ListBox()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.CNDetailsTLP = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.DateFilterPanel = New System.Windows.Forms.Panel()
         Me.DateFilterSuboperatorContainerPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -48,12 +58,6 @@ Partial Class DriverFilterAssistantDialog
         Me.InboxStatusFilterPanel = New System.Windows.Forms.Panel()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.ClassNameFilterPanel = New System.Windows.Forms.Panel()
-        Me.CNDetailsTLP = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.ProviderNameFilterPanel = New System.Windows.Forms.Panel()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -67,6 +71,9 @@ Partial Class DriverFilterAssistantDialog
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.FilterTypeContainerPanel.SuspendLayout()
+        Me.ClassNameFilterPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.CNDetailsTLP.SuspendLayout()
         Me.DateFilterPanel.SuspendLayout()
         Me.DateFilterSuboperatorContainerPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -76,8 +83,6 @@ Partial Class DriverFilterAssistantDialog
         Me.SignatureStatusFilterPanel.SuspendLayout()
         Me.BootCriticalStatusFilterPanel.SuspendLayout()
         Me.InboxStatusFilterPanel.SuspendLayout()
-        Me.ClassNameFilterPanel.SuspendLayout()
-        Me.CNDetailsTLP.SuspendLayout()
         Me.ProviderNameFilterPanel.SuspendLayout()
         Me.OriginalFileNameFilterPanel.SuspendLayout()
         Me.PublishedNameFilterPanel.SuspendLayout()
@@ -92,7 +97,7 @@ Partial Class DriverFilterAssistantDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 240)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(466, 304)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -146,19 +151,133 @@ Partial Class DriverFilterAssistantDialog
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FilterTypeContainerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.FilterTypeContainerPanel.Controls.Add(Me.ClassNameFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.DateFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.SignatureStatusFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.BootCriticalStatusFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.InboxStatusFilterPanel)
-        Me.FilterTypeContainerPanel.Controls.Add(Me.ClassNameFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.ProviderNameFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.OriginalFileNameFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.PublishedNameFilterPanel)
         Me.FilterTypeContainerPanel.Controls.Add(Me.NoFilterTypeSelectedPanel)
         Me.FilterTypeContainerPanel.Location = New System.Drawing.Point(15, 56)
         Me.FilterTypeContainerPanel.Name = "FilterTypeContainerPanel"
-        Me.FilterTypeContainerPanel.Size = New System.Drawing.Size(597, 181)
+        Me.FilterTypeContainerPanel.Size = New System.Drawing.Size(597, 245)
         Me.FilterTypeContainerPanel.TabIndex = 6
+        '
+        'ClassNameFilterPanel
+        '
+        Me.ClassNameFilterPanel.Controls.Add(Me.Panel1)
+        Me.ClassNameFilterPanel.Controls.Add(Me.Button3)
+        Me.ClassNameFilterPanel.Controls.Add(Me.Button2)
+        Me.ClassNameFilterPanel.Controls.Add(Me.CNDetailsTLP)
+        Me.ClassNameFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ClassNameFilterPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ClassNameFilterPanel.Name = "ClassNameFilterPanel"
+        Me.ClassNameFilterPanel.Size = New System.Drawing.Size(595, 243)
+        Me.ClassNameFilterPanel.TabIndex = 4
+        Me.ClassNameFilterPanel.Visible = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.SelectedClassNamesLB)
+        Me.Panel1.Location = New System.Drawing.Point(12, 12)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(568, 95)
+        Me.Panel1.TabIndex = 7
+        '
+        'SelectedClassNamesLB
+        '
+        Me.SelectedClassNamesLB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SelectedClassNamesLB.FormattingEnabled = True
+        Me.SelectedClassNamesLB.IntegralHeight = False
+        Me.SelectedClassNamesLB.Location = New System.Drawing.Point(0, 0)
+        Me.SelectedClassNamesLB.Name = "SelectedClassNamesLB"
+        Me.SelectedClassNamesLB.Size = New System.Drawing.Size(568, 95)
+        Me.SelectedClassNamesLB.TabIndex = 0
+        '
+        'Button3
+        '
+        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button3.Enabled = False
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button3.Location = New System.Drawing.Point(440, 211)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(140, 23)
+        Me.Button3.TabIndex = 5
+        Me.Button3.Text = "Remove Class Name"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(294, 211)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(140, 23)
+        Me.Button2.TabIndex = 6
+        Me.Button2.Text = "Add Class Name"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'CNDetailsTLP
+        '
+        Me.CNDetailsTLP.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CNDetailsTLP.ColumnCount = 2
+        Me.CNDetailsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.9656391!))
+        Me.CNDetailsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.0343628!))
+        Me.CNDetailsTLP.Controls.Add(Me.Label6, 0, 0)
+        Me.CNDetailsTLP.Controls.Add(Me.Label7, 0, 1)
+        Me.CNDetailsTLP.Controls.Add(Me.Label8, 1, 1)
+        Me.CNDetailsTLP.Controls.Add(Me.ComboBox2, 1, 0)
+        Me.CNDetailsTLP.Location = New System.Drawing.Point(12, 118)
+        Me.CNDetailsTLP.Name = "CNDetailsTLP"
+        Me.CNDetailsTLP.RowCount = 2
+        Me.CNDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.CNDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.CNDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.CNDetailsTLP.Size = New System.Drawing.Size(568, 87)
+        Me.CNDetailsTLP.TabIndex = 2
+        '
+        'Label6
+        '
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(3, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(124, 29)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Class Name:"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label7
+        '
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Location = New System.Drawing.Point(3, 29)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(124, 58)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "Class Name Notes:"
+        '
+        'Label8
+        '
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label8.Location = New System.Drawing.Point(133, 29)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(432, 58)
+        Me.Label8.TabIndex = 0
+        '
+        'ComboBox2
+        '
+        Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Location = New System.Drawing.Point(133, 3)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(432, 21)
+        Me.ComboBox2.TabIndex = 1
         '
         'DateFilterPanel
         '
@@ -168,7 +287,7 @@ Partial Class DriverFilterAssistantDialog
         Me.DateFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DateFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.DateFilterPanel.Name = "DateFilterPanel"
-        Me.DateFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.DateFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.DateFilterPanel.TabIndex = 8
         Me.DateFilterPanel.Visible = False
         '
@@ -280,7 +399,7 @@ Partial Class DriverFilterAssistantDialog
         Me.SignatureStatusFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SignatureStatusFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.SignatureStatusFilterPanel.Name = "SignatureStatusFilterPanel"
-        Me.SignatureStatusFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.SignatureStatusFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.SignatureStatusFilterPanel.TabIndex = 7
         Me.SignatureStatusFilterPanel.Visible = False
         '
@@ -310,7 +429,7 @@ Partial Class DriverFilterAssistantDialog
         Me.BootCriticalStatusFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.BootCriticalStatusFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.BootCriticalStatusFilterPanel.Name = "BootCriticalStatusFilterPanel"
-        Me.BootCriticalStatusFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.BootCriticalStatusFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.BootCriticalStatusFilterPanel.TabIndex = 6
         Me.BootCriticalStatusFilterPanel.Visible = False
         '
@@ -340,7 +459,7 @@ Partial Class DriverFilterAssistantDialog
         Me.InboxStatusFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InboxStatusFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.InboxStatusFilterPanel.Name = "InboxStatusFilterPanel"
-        Me.InboxStatusFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.InboxStatusFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.InboxStatusFilterPanel.TabIndex = 5
         Me.InboxStatusFilterPanel.Visible = False
         '
@@ -363,72 +482,6 @@ Partial Class DriverFilterAssistantDialog
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "Inbox Status:"
         '
-        'ClassNameFilterPanel
-        '
-        Me.ClassNameFilterPanel.Controls.Add(Me.CNDetailsTLP)
-        Me.ClassNameFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ClassNameFilterPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ClassNameFilterPanel.Name = "ClassNameFilterPanel"
-        Me.ClassNameFilterPanel.Size = New System.Drawing.Size(595, 179)
-        Me.ClassNameFilterPanel.TabIndex = 4
-        Me.ClassNameFilterPanel.Visible = False
-        '
-        'CNDetailsTLP
-        '
-        Me.CNDetailsTLP.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CNDetailsTLP.ColumnCount = 2
-        Me.CNDetailsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.9656391!))
-        Me.CNDetailsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.0343628!))
-        Me.CNDetailsTLP.Controls.Add(Me.Label6, 0, 0)
-        Me.CNDetailsTLP.Controls.Add(Me.Label7, 0, 1)
-        Me.CNDetailsTLP.Controls.Add(Me.Label8, 1, 1)
-        Me.CNDetailsTLP.Controls.Add(Me.ComboBox2, 1, 0)
-        Me.CNDetailsTLP.Location = New System.Drawing.Point(12, 12)
-        Me.CNDetailsTLP.Name = "CNDetailsTLP"
-        Me.CNDetailsTLP.RowCount = 2
-        Me.CNDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.57724!))
-        Me.CNDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.4227676!))
-        Me.CNDetailsTLP.Size = New System.Drawing.Size(568, 123)
-        Me.CNDetailsTLP.TabIndex = 2
-        '
-        'Label6
-        '
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(3, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(124, 29)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Class Name:"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label7
-        '
-        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label7.Location = New System.Drawing.Point(3, 29)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(124, 94)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Class Name Notes:"
-        '
-        'Label8
-        '
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label8.Location = New System.Drawing.Point(133, 29)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(432, 94)
-        Me.Label8.TabIndex = 0
-        '
-        'ComboBox2
-        '
-        Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(133, 3)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(432, 21)
-        Me.ComboBox2.TabIndex = 1
-        '
         'ProviderNameFilterPanel
         '
         Me.ProviderNameFilterPanel.Controls.Add(Me.TextBox3)
@@ -436,7 +489,7 @@ Partial Class DriverFilterAssistantDialog
         Me.ProviderNameFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ProviderNameFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.ProviderNameFilterPanel.Name = "ProviderNameFilterPanel"
-        Me.ProviderNameFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.ProviderNameFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.ProviderNameFilterPanel.TabIndex = 3
         Me.ProviderNameFilterPanel.Visible = False
         '
@@ -465,7 +518,7 @@ Partial Class DriverFilterAssistantDialog
         Me.OriginalFileNameFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.OriginalFileNameFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.OriginalFileNameFilterPanel.Name = "OriginalFileNameFilterPanel"
-        Me.OriginalFileNameFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.OriginalFileNameFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.OriginalFileNameFilterPanel.TabIndex = 2
         Me.OriginalFileNameFilterPanel.Visible = False
         '
@@ -494,7 +547,7 @@ Partial Class DriverFilterAssistantDialog
         Me.PublishedNameFilterPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PublishedNameFilterPanel.Location = New System.Drawing.Point(0, 0)
         Me.PublishedNameFilterPanel.Name = "PublishedNameFilterPanel"
-        Me.PublishedNameFilterPanel.Size = New System.Drawing.Size(595, 179)
+        Me.PublishedNameFilterPanel.Size = New System.Drawing.Size(595, 243)
         Me.PublishedNameFilterPanel.TabIndex = 1
         Me.PublishedNameFilterPanel.Visible = False
         '
@@ -522,7 +575,7 @@ Partial Class DriverFilterAssistantDialog
         Me.NoFilterTypeSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.NoFilterTypeSelectedPanel.Location = New System.Drawing.Point(0, 0)
         Me.NoFilterTypeSelectedPanel.Name = "NoFilterTypeSelectedPanel"
-        Me.NoFilterTypeSelectedPanel.Size = New System.Drawing.Size(595, 179)
+        Me.NoFilterTypeSelectedPanel.Size = New System.Drawing.Size(595, 243)
         Me.NoFilterTypeSelectedPanel.TabIndex = 0
         '
         'Label2
@@ -531,7 +584,7 @@ Partial Class DriverFilterAssistantDialog
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(0, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(595, 179)
+        Me.Label2.Size = New System.Drawing.Size(595, 243)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Choose a filter to use for driver searches."
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -542,7 +595,7 @@ Partial Class DriverFilterAssistantDialog
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(624, 281)
+        Me.ClientSize = New System.Drawing.Size(624, 345)
         Me.Controls.Add(Me.FilterTypeContainerPanel)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.Label1)
@@ -557,6 +610,9 @@ Partial Class DriverFilterAssistantDialog
         Me.Text = "Filter driver information"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.FilterTypeContainerPanel.ResumeLayout(False)
+        Me.ClassNameFilterPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.CNDetailsTLP.ResumeLayout(False)
         Me.DateFilterPanel.ResumeLayout(False)
         Me.DateFilterPanel.PerformLayout()
         Me.DateFilterSuboperatorContainerPanel.ResumeLayout(False)
@@ -571,8 +627,6 @@ Partial Class DriverFilterAssistantDialog
         Me.BootCriticalStatusFilterPanel.PerformLayout()
         Me.InboxStatusFilterPanel.ResumeLayout(False)
         Me.InboxStatusFilterPanel.PerformLayout()
-        Me.ClassNameFilterPanel.ResumeLayout(False)
-        Me.CNDetailsTLP.ResumeLayout(False)
         Me.ProviderNameFilterPanel.ResumeLayout(False)
         Me.ProviderNameFilterPanel.PerformLayout()
         Me.OriginalFileNameFilterPanel.ResumeLayout(False)
@@ -627,5 +681,9 @@ Partial Class DriverFilterAssistantDialog
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents DatePanel As System.Windows.Forms.Panel
     Friend WithEvents DateTimePicker1 As System.Windows.Forms.DateTimePicker
+    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents SelectedClassNamesLB As System.Windows.Forms.ListBox
 
 End Class

@@ -250,6 +250,8 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'Label14
         '
+        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label14.AutoEllipsis = True
         Me.Label14.Location = New System.Drawing.Point(17, 66)
         Me.Label14.Name = "Label14"
@@ -291,6 +293,8 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'Label12
         '
+        Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoEllipsis = True
         Me.Label12.Location = New System.Drawing.Point(16, 46)
         Me.Label12.Name = "Label12"
@@ -353,6 +357,8 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'Label17
         '
+        Me.Label17.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label17.AutoEllipsis = True
         Me.Label17.Location = New System.Drawing.Point(17, 66)
         Me.Label17.Name = "Label17"
@@ -394,6 +400,8 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'Label19
         '
+        Me.Label19.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label19.AutoEllipsis = True
         Me.Label19.Location = New System.Drawing.Point(17, 66)
         Me.Label19.Name = "Label19"
@@ -435,6 +443,8 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'Label15
         '
+        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label15.AutoEllipsis = True
         Me.Label15.Location = New System.Drawing.Point(16, 46)
         Me.Label15.Name = "Label15"
@@ -529,11 +539,14 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'PictureBox1
         '
+        Me.PictureBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.Image = Global.StarterScriptEditor.My.Resources.Resources.github_account_settings
         Me.PictureBox1.Location = New System.Drawing.Point(180, 90)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(281, 176)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
@@ -604,11 +617,14 @@ Partial Class ApiKeyGenerationStepsWizard
         '
         'PictureBox4
         '
+        Me.PictureBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox4.Image = Global.StarterScriptEditor.My.Resources.Resources.generate_pat
         Me.PictureBox4.Location = New System.Drawing.Point(157, 116)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(326, 166)
-        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox4.TabIndex = 2
         Me.PictureBox4.TabStop = False
         '

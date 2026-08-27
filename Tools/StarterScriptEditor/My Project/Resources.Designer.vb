@@ -136,6 +136,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property find() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("find", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property finegrained_pat_confirm() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("finegrained_pat_confirm", resourceCulture)
@@ -233,6 +240,20 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property pin() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("pin", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property pin_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("pin_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         '''<summary>
         '''  Looks up a localized string similar to Character Classes:
         '''.        Any character except newline
@@ -263,6 +284,13 @@ Namespace My.Resources
         Friend ReadOnly Property RegexCheatsheet() As String
             Get
                 Return ResourceManager.GetString("RegexCheatsheet", resourceCulture)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property replace() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("replace", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         

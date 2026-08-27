@@ -222,68 +222,37 @@ Public Class GetImgInfoDlg
         Select Case SysVer.Major
             Case 10
                 Select Case SysVer.Build
-                    Case 9650 To 10240
-                        FeatUpd = "1507 (Threshold 1)"
-                    Case 10525 To 10587     ' 10587 is a Post-RTM build of Windows 10 November Update
-                        FeatUpd = "1511 (Threshold 2)"
-                    Case 11065 To 14393
-                        FeatUpd = "1607 (Redstone 1)"
-                    Case 14832 To 15063
-                        FeatUpd = "1703 (Redstone 2)"
-                    Case 15140 To 16299
-                        FeatUpd = "1709 (Redstone 3)"
-                    Case 16251 To 17134
-                        FeatUpd = "1803 (Redstone 4)"
-                    Case 17604 To 17763
-                        FeatUpd = "1809 (Redstone 5)"
-                    Case 18204 To 18362
-                        FeatUpd = "1903 (Titanium)"
-                    Case Is = 18362
-                        If SysVer.Revision >= 10000 Then
-                            FeatUpd = "1909 (Vanadium)"
-                        Else
-                            FeatUpd = "1903 (Titanium)"
-                        End If
-                    Case Is = 18363
-                        FeatUpd = "1909 (Vanadium)"
-                    Case 18826 To 19041
-                        FeatUpd = "2004 (Vibranium)"
-                    Case 19041 To 19489
-                        FeatUpd = "2004+ (Vibranium)"
-                    Case 19489 To 19645
-                        FeatUpd = "2004 (Manganese)"
-                    Case 20124 To 20279
-                        FeatUpd = "21H1 (Iron)"
-                    Case 20282 To 20348
-                        FeatUpd = "21H2 (Iron)"
-                    Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
-                        FeatUpd = "21H2 (Cobalt)"
-                    Case 22350 To 22630     ' This goes until Windows 11 build 22631 (2022 Update Moment 4)
-                        FeatUpd = "22H2 (Nickel)"
-                    Case 22631 To 22634
-                        FeatUpd = "23H2 (Nickel)"
-                    Case 22635 To 23400
-                        FeatUpd = "23H2 (Nickel Moment 5)"
-                    Case 23401 To 25000
-                        FeatUpd = "Dev (Nickel)"
-                    Case 25057 To 25238
-                        FeatUpd = "23H1 (Copper)"
-                    Case 25240 To 25400     ' 25400 is a relative number. 25398 is the final build of Zinc
-                        FeatUpd = "23H2 (Zinc)"
-                    Case 25801 To 25941
-                        FeatUpd = "24H1 (Gallium)"
-                    Case 25942 To 26199
-                        FeatUpd = "24H2 (Germanium)"
-                    Case 26200 To 27500
-                        FeatUpd = "25H2 (Germanium)"
-                    Case 27501 To 27686
-                        FeatUpd = "25H1 (Dilithium)"
-                    Case 27687 To 27788
-                        FeatUpd = "25H2 (Selenium)"
-                    Case 27789 To 28999
-                        FeatUpd = "26H1 (Bromine)"
-                    Case Is >= 29000
-                        FeatUpd = "26H2 (Krypton)"
+                    Case 9650 To 10240 : FeatUpd = "1507 (Threshold 1)"
+                    Case 10525 To 10587 : FeatUpd = "1511 (Threshold 2)"
+                    Case 11065 To 14393 : FeatUpd = "1607 (Redstone 1)"
+                    Case 14832 To 15063 : FeatUpd = "1703 (Redstone 2)"
+                    Case 15140 To 16299 : FeatUpd = "1709 (Redstone 3)"
+                    Case 16251 To 17134 : FeatUpd = "1803 (Redstone 4)"
+                    Case 17604 To 17763 : FeatUpd = "1809 (Redstone 5)"
+                    Case 18204 To 18362 : FeatUpd = "1903 (Titanium)"
+                    Case Is = 18362 : FeatUpd = If(SysVer.Revision >= 10000, "1909 (Vanadium)", "1903 (Titanium)")
+                    Case Is = 18363 : FeatUpd = "1909 (Vanadium)"
+                    Case 18826 To 19041 : FeatUpd = "2004 (Vibranium)"
+                    Case 19041 To 19489 : FeatUpd = "2004+ (Vibranium)"
+                    Case 19489 To 19645 : FeatUpd = "2004 (Manganese)"
+                    Case 20124 To 20279 : FeatUpd = "21H1 (Iron)"
+                    Case 20282 To 20348 : FeatUpd = "21H2 (Iron)"
+                    Case 21242 To 22000 : FeatUpd = "21H2 (Cobalt)"
+                    Case 22350 To 22630 : FeatUpd = "22H2 (Nickel)"
+                    Case 22631 To 22634 : FeatUpd = "23H2 (Nickel)"
+                    Case 22635 To 23400 : FeatUpd = "23H2 (Nickel Moment 5)"
+                    Case 23401 To 25000 : FeatUpd = "Dev (Nickel)"
+                    Case 25057 To 25238 : FeatUpd = "23H1 (Copper)"
+                    Case 25240 To 25400 : FeatUpd = "23H2 (Zinc)"
+                    Case 25801 To 25941 : FeatUpd = "24H1 (Gallium)"
+                    Case 25942 To 26199 : FeatUpd = "24H2 (Germanium)"
+                    Case 26200 To 26299 : FeatUpd = "25H2 (Germanium)"
+                    Case 26300 To 27500 : FeatUpd = "26H2 (Germanium)"
+                    Case 27501 To 27686 : FeatUpd = "25H1 (Dilithium)"
+                    Case 27687 To 27788 : FeatUpd = "25H2 (Selenium)"
+                    Case 27789 To 28999 : FeatUpd = "26H1 (Bromine)"
+                    Case 29000 To 29617 : FeatUpd = "26H2 (Krypton)"
+                    Case Is >= 29630 : FeatUpd = "27H1 (Rubidium)"
                 End Select
             Case Else
                 Exit Sub
