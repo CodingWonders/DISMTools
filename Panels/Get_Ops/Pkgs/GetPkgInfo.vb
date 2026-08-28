@@ -1205,26 +1205,26 @@ Public Class GetPkgInfoDlg
                                     Case 0
                                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                             Case "ENU", "ENG"
-                                                Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                                Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                             Case "ESN"
-                                                Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                                Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                             Case "FRA"
-                                                Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                                Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..."
                                             Case "PTB", "PTG"
-                                                Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                                Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                             Case "ITA"
-                                                Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
+                                                Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                         End Select
                                     Case 1
-                                        Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                        Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                     Case 2
-                                        Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                        Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                     Case 3
-                                        Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
+                                        Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..."
                                     Case 4
-                                        Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                        Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                     Case 5
-                                        Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
+                                        Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..."
                                 End Select
                                 Application.DoEvents()
                                 Dim pkgInfoEx As DismPackageInfoEx = Nothing
@@ -1248,6 +1248,8 @@ Public Class GetPkgInfoDlg
             Catch DISMEx As DismException
                 DynaLog.LogMessage("Could not get package file information. Error message: " & DISMEx.Message)
                 MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not get package file information. Error message: " & ex.Message)
             Finally
                 Try
                     DismApi.Shutdown()
@@ -1427,7 +1429,12 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog(Me)
+        If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            ListBox1.Items.AddRange(OpenFileDialog1.FileNames)
+            Button3.Enabled = True
+            Button4.Enabled = True
+            GetPackageFileInformation()
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -1465,13 +1472,6 @@ Public Class GetPkgInfoDlg
         Button4.Enabled = False
         NoPkgPanel.Visible = True
         PackageFileInfoPanel.Visible = False
-    End Sub
-
-    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        ListBox1.Items.Add(OpenFileDialog1.FileName)
-        Button3.Enabled = True
-        Button4.Enabled = True
-        GetPackageFileInformation()
     End Sub
 
     Private Sub GetPkgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing

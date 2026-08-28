@@ -106,7 +106,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_infinity_mk2"
+    Public dtBranch As String = "dt_pre_infinity_mk2_relcndid"
     Public dt_codeName As String = "InfinityMk2"
 
     ' Arrays and other variables used on background processes
@@ -1012,10 +1012,12 @@ Public Class MainForm
                             languageCode = "it"
                     End Select
 
-                    tourServer.StartServer()
-                    If tourServer.IsListenerAlive() Then
-                        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
-                        TourActionsTSMI.Visible = True
+                    If tourServer IsNot Nothing Then
+                        tourServer.StartServer()
+                        If tourServer.IsListenerAlive() Then
+                            Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                            TourActionsTSMI.Visible = True
+                        End If
                     End If
                 End If
             End If
@@ -3537,7 +3539,7 @@ Public Class MainForm
         FailedBGProcResultDic.Add(bgProcTitle, errorEx)
     End Sub
 
-    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As DismException = Nothing, Optional GeneralException As Exception = Nothing)
+    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As Exception = Nothing, Optional GeneralException As Exception = Nothing)
         Dim errorEx As Exception = Nothing
         If APIException IsNot Nothing Then errorEx = New Exception(String.Format("DISM API Task Error: {0}", New Win32Exception(APIException.HResult).Message), APIException)
         If GeneralException IsNot Nothing Then errorEx = New Exception(String.Format("DISM Task Error: {0}", New Win32Exception(GeneralException.HResult).Message), GeneralException)
@@ -3633,9 +3635,14 @@ Public Class MainForm
                         pkgReleaseTypeString <> "" AndAlso
                         pkgInstallTimeString <> "" Then
 
+                    Dim pkgInstallTime As DateTime
+                    If Not DateTime.TryParse(pkgInstallTimeString, CultureInfo.CurrentCulture, DateTimeStyles.None, pkgInstallTime) Then
+                        pkgInstallTime = Date.MinValue
+                    End If
+
                     CurrentImage.ImagePackages_Backup.Add(New ImagePackage(pkgNameString,
                                                                                  Casters.CastDismPackageStateString(pkgStateString),
-                                                                                 New Date(pkgInstallTimeString),
+                                                                                 pkgInstallTime,
                                                                                  Casters.CastDismReleaseTypeString(pkgReleaseTypeString)))
                     pkgNameString = ""
                     pkgStateString = ""
@@ -10932,10 +10939,14 @@ Public Class MainForm
             EnableDynaLog = True
             DynaLog.EnableLogging()
         End If
-        If tourServer.IsListenerAlive() Then
+        If tourServer IsNot Nothing AndAlso tourServer.IsListenerAlive() Then
             DynaLog.LogMessage("Tour is active. Attempting to shut down server...")
             tourServer.StopServer()
             TourActionsTSMI.Visible = False
+        End If
+        If videoServer IsNot Nothing AndAlso videoServer.IsListenerAlive() Then
+            DynaLog.LogMessage("Video server is active. Attempting to shut down server...")
+            videoServer.StopServer()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
         StopMountedImageDetector()
@@ -14726,9 +14737,11 @@ Public Class MainForm
                 MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
-            If Not videoServer.IsListenerAlive Then videoServer.StartServer()
-            If videoServer.IsListenerAlive() Then
-                Process.Start("http://localhost:2026/videoplay.html")
+            If videoServer IsNot Nothing Then
+                If Not videoServer.IsListenerAlive Then videoServer.StartServer()
+                If videoServer.IsListenerAlive() Then
+                    Process.Start("http://localhost:2026/videoplay.html")
+                End If
             End If
         End If
     End Sub

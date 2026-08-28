@@ -892,6 +892,8 @@ function Start-PECustomization
                 if (-not (Test-Path -Path "$rootDriverPath")) {
                     New-Item -Path "$rootDriverPath" -ItemType Directory | Out-Null
                 }
+                $successfulExports = 0
+                $failedExports = 0
                 Write-Host "Exporting available drivers..."
                 foreach ($sysDriver in $sysDrivers) {
                     try {
@@ -901,13 +903,20 @@ function Start-PECustomization
                         $sysDriverTargetPath = "$rootDriverPath\$([IO.Path]::GetFileName($sysDriver.OriginalFileName))_$([Random]::new().Next([int]::MaxValue))"
                         New-Item -Path "$sysDriverTargetPath" -ItemType Directory | Out-Null
                         Copy-Item -Path "$sysDriverSourcePath\*.*" -Destination "$sysDriverTargetPath" -Recurse -Force
+                        $successfulExports++
                     } catch {
                         Write-Host "Could not export driver $($sysDriver.OriginalFileName)."
+                        $failedExports++
                     }
                 }
+                Write-Host "==================================================================="
+                Write-Host "Driver export summary:"
+                Write-Host "- Successful driver exports: $successfulExports"
+                Write-Host "- Failed driver exports: $failedExports"
+                Write-Host "==================================================================="
                 Write-Host "Installing drivers..."
                 $curDrvIndex = 0
-                $infFiles = Get-ChildItem -Path "$rootDriverPath" -Recurse -Filter "*.inf"
+                $infFiles = Get-ChildItem -Path "$rootDriverPath" -Recurse -File -Filter "*.inf"
                 $infCount = $infFiles.Count
                 $successfulInstallations = 0
                 $failedInstallations = 0
@@ -916,7 +925,7 @@ function Start-PECustomization
                 foreach ($infFile in $infFiles) {
                     try {
                         $curDrvIndex = $infFiles.IndexOf($infFile)
-                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
+                        Write-Progress -Activity "Installing system drivers..." -Status "Installing driver $($curDrvIndex + 1) of $($infCount): `"$([IO.Path]::GetFileName($infFile.FullName))`"..."
                         if ((Start-DismCommand -Verb Add-Driver -ImagePath "$imagePath" -DriverAdditionFile "$($infFile.FullName)" -DriverAdditionRecurse $false) -eq $true)
                         {
                             $successfulInstallations++

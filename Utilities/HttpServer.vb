@@ -16,12 +16,17 @@ Public Class DTHttpServer
 
     Private ReadOnly _rootDir As String
     Private ReadOnly _tcpPort As Integer
-    Private _listener As HttpListener = New HttpListener()
+    Private _listener As HttpListener
     Private _cts As CancellationTokenSource
 
     Public Sub New(RootDirectory As String, TCPPort As Integer)
-        _rootDir = RootDirectory
-        _tcpPort = TCPPort
+        Try
+            _rootDir = RootDirectory
+            _tcpPort = TCPPort
+            _listener = New HttpListener()
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Public Sub StartServer()
@@ -48,7 +53,7 @@ Public Class DTHttpServer
     End Sub
 
     Public Function IsListenerAlive() As Boolean
-        Return _listener.IsListening
+        Return If(_listener IsNot Nothing, _listener.IsListening, False)
     End Function
 
     Public Function GetTcpPort() As Integer

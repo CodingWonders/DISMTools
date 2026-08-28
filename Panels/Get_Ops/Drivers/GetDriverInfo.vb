@@ -543,14 +543,12 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog(Me)
-    End Sub
-
-    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        ListBox1.Items.Add(OpenFileDialog1.FileName)
-        Button3.Enabled = True
-        Button8.Enabled = True
-        GetDriverInformation()
+        If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            ListBox1.Items.AddRange(OpenFileDialog1.FileNames)
+            Button3.Enabled = True
+            Button8.Enabled = True
+            GetDriverInformation()
+        End If
     End Sub
 
     Private Sub InstalledDriverLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles InstalledDriverLink.LinkClicked

@@ -36,6 +36,9 @@ Partial Class SampleScriptBrowser
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ScriptDetailsContainerPanel = New System.Windows.Forms.Panel()
+        Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.ScriptDetailsPanel = New System.Windows.Forms.Panel()
         Me.EnterFSModeBtn = New System.Windows.Forms.Button()
         Me.ExportScriptCodeBtn = New System.Windows.Forms.Button()
@@ -45,24 +48,21 @@ Partial Class SampleScriptBrowser
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
         Me.ScriptCodeExporterSFD = New System.Windows.Forms.SaveFileDialog()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ScriptCodeFSPanel = New System.Windows.Forms.Panel()
         Me.RichTextBox2 = New System.Windows.Forms.RichTextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.ExitFSModeBtn = New System.Windows.Forms.Button()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
         Me.ScriptStageSelectionPanel.SuspendLayout()
         Me.ScriptDetailsContainerPanel.SuspendLayout()
-        Me.ScriptDetailsPanel.SuspendLayout()
         Me.ScriptDetailsNoSelectedPanel.SuspendLayout()
+        Me.ScriptDetailsPanel.SuspendLayout()
         Me.ScriptCodeFSPanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -190,6 +190,40 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsContainerPanel.Size = New System.Drawing.Size(688, 513)
         Me.ScriptDetailsContainerPanel.TabIndex = 3
         '
+        'ScriptDetailsNoSelectedPanel
+        '
+        Me.ScriptDetailsNoSelectedPanel.Controls.Add(Me.Label2)
+        Me.ScriptDetailsNoSelectedPanel.Controls.Add(Me.Label8)
+        Me.ScriptDetailsNoSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ScriptDetailsNoSelectedPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ScriptDetailsNoSelectedPanel.Name = "ScriptDetailsNoSelectedPanel"
+        Me.ScriptDetailsNoSelectedPanel.Size = New System.Drawing.Size(688, 513)
+        Me.ScriptDetailsNoSelectedPanel.TabIndex = 0
+        '
+        'Label2
+        '
+        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Font = New System.Drawing.Font("Tahoma", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(102, 107)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(481, 96)
+        Me.Label2.TabIndex = 0
+        Me.Label2.Text = "Select a script to view its information."
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label8
+        '
+        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(16, 214)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(656, 192)
+        Me.Label8.TabIndex = 0
+        Me.Label8.Text = resources.GetString("Label8.Text")
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'ScriptDetailsPanel
         '
         Me.ScriptDetailsPanel.Controls.Add(Me.EnterFSModeBtn)
@@ -290,40 +324,6 @@ Partial Class SampleScriptBrowser
         Me.Label3.TabIndex = 1
         Me.Label3.Text = "Script Name"
         '
-        'ScriptDetailsNoSelectedPanel
-        '
-        Me.ScriptDetailsNoSelectedPanel.Controls.Add(Me.Label2)
-        Me.ScriptDetailsNoSelectedPanel.Controls.Add(Me.Label8)
-        Me.ScriptDetailsNoSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ScriptDetailsNoSelectedPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ScriptDetailsNoSelectedPanel.Name = "ScriptDetailsNoSelectedPanel"
-        Me.ScriptDetailsNoSelectedPanel.Size = New System.Drawing.Size(688, 513)
-        Me.ScriptDetailsNoSelectedPanel.TabIndex = 0
-        '
-        'Label2
-        '
-        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label2.AutoEllipsis = True
-        Me.Label2.Font = New System.Drawing.Font("Tahoma", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(102, 107)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(481, 96)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Select a script to view its information."
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label8
-        '
-        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(16, 214)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(656, 192)
-        Me.Label8.TabIndex = 0
-        Me.Label8.Text = resources.GetString("Label8.Text")
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        '
         'ScriptCodeExporterSFD
         '
         Me.ScriptCodeExporterSFD.Title = "Export Script Code"
@@ -367,6 +367,20 @@ Partial Class SampleScriptBrowser
         Me.Panel1.Size = New System.Drawing.Size(688, 48)
         Me.Panel1.TabIndex = 8
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox1.Location = New System.Drawing.Point(487, 12)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(72, 23)
+        Me.CheckBox1.TabIndex = 10
+        Me.CheckBox1.Text = "Word Wrap"
+        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'Label9
         '
         Me.Label9.AutoSize = True
@@ -386,20 +400,6 @@ Partial Class SampleScriptBrowser
         Me.ExitFSModeBtn.TabIndex = 8
         Me.ExitFSModeBtn.Text = "Go back"
         Me.ExitFSModeBtn.UseVisualStyleBackColor = True
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CheckBox1.Location = New System.Drawing.Point(487, 12)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(72, 23)
-        Me.CheckBox1.TabIndex = 10
-        Me.CheckBox1.Text = "Word Wrap"
-        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'SampleScriptBrowser
         '
@@ -427,9 +427,9 @@ Partial Class SampleScriptBrowser
         Me.ScriptStageSelectionPanel.ResumeLayout(False)
         Me.ScriptStageSelectionPanel.PerformLayout()
         Me.ScriptDetailsContainerPanel.ResumeLayout(False)
+        Me.ScriptDetailsNoSelectedPanel.ResumeLayout(False)
         Me.ScriptDetailsPanel.ResumeLayout(False)
         Me.ScriptDetailsPanel.PerformLayout()
-        Me.ScriptDetailsNoSelectedPanel.ResumeLayout(False)
         Me.ScriptCodeFSPanel.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()

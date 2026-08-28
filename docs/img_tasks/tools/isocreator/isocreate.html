@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3435,7 +3435,7 @@
 <li>(Optional) <strong>Choose an unattended answer file to apply</strong></li>
 <li><strong>Choose the target location of the ISO file.</strong> If the target image exists, you will be asked if you want to replace it when clicking Create</li>
 </ol>
-<p>With DISMTools 0.6.1 and later, you can also specify 2 options:</p>
+<p>Additional options can be specified:</p>
 <ul>
 <li><strong>Copy to Ventoy drives</strong> lets you take advantage of your <a href="https://ventoy.net/en">Ventoy</a> drives for operating system installation. After the ISO is generated, it will be copied automatically to all Ventoy drives you have plugged into your computer</li>
 <li><strong>Use newly-signed boot binaries</strong> will make the ISO files that you create ship with EFI boot binaries signed with the <em>Windows UEFI CA 2023</em> code-signing certificate. This is not checked by default because of reasons that are mentioned later in this document</li>
@@ -3449,8 +3449,8 @@
 <ul>
 <li>To verify in PowerShell, run this command:</li>
 </ul>
-<p><code>powershell linenums="1"
-[System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes) -match 'Windows UEFI CA 2023'</code></p>
+<div class="language-powershell highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="no">[System.Text.Encoding]</span><span class="p">::</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetString</span><span class="p">((</span><span class="nb">Get-SecureBootUEFI</span> <span class="n">db</span><span class="p">).</span><span class="n">bytes</span><span class="p">)</span> <span class="o">-match</span> <span class="s1">'Windows UEFI CA 2023'</span>
+</span></code></pre></div></td></tr></tbody></table></div>
 <p align="center">
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="https://techcommunity.microsoft.com/t5/s/gxcuf89792/images/bS00MTIxNzM1LTU3MzgxN2kwQ0ZBNzNGQ0FEMjU2RTBE?revision=7" data-desc-position="bottom"><img src="https://techcommunity.microsoft.com/t5/s/gxcuf89792/images/bS00MTIxNzM1LTU3MzgxN2kwQ0ZBNzNGQ0FEMjU2RTBE?revision=7"></a>   
     </p><p align="center"><i>Example output of command. Source: Microsoft Tech Community</i></p>
@@ -3498,7 +3498,10 @@
 </ol>
 <p>The installation process is different if you use the PXE Helpers.</p>
 <h3 id="choosing-an-installation-method">Choosing an installation method</h3>
-<p><strong>NOTE:</strong> the following screen will not appear if you started the installation with HotInstall</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following screen will not appear if you started the installation with HotInstall</p>
+</div>
 <p>When you boot up the Preinstallation Environment, you will be presented with a screen that lets you choose your preferred installation method, whether it is a local installation or a network-based one.</p>
 <ul>
 <li>Type <code>1</code> and press Enter to start a local installation</li>
@@ -3532,7 +3535,7 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy.png"></a>
 </p>
 
-<p><strong>Policy version:</strong> <em>0.8.0.26063</em></p>
+<p><strong>Policy version:</strong> <em>0.8.1.26082</em></p>
 <ul>
 <li><strong>Custom wallpaper</strong>: allows you to set a custom wallpaper (in JPG format) for the Preinstallation Environment, using the wallpaper overrides introduced in version 0.7.3. You can pick any image you like, but you can also go with your current wallpaper, assuming it's in JPG format.</li>
 <li><strong>Show version information on the top-left corner of the primary screen</strong>: this will show the version of the Preinstallation Environment in the top-left corner of the primary screen, like this:</li>
@@ -3612,6 +3615,18 @@
     <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_answerfile_review.png" data-desc-position="bottom"><img src="../../../res/img_tasks/tools/isocreator/dt_pe/policy/dt_pe_policy_answerfile_review.png"></a>
 </p>
 
+<ul>
+<li><strong>Include boot image files when scanning ISO files for available Windows images</strong>: this allows you to include boot image files in installation media scans. This is a <code>REG_DWORD</code> policy with valid values of <code>0</code> or <code>1</code>, and a default value of <code>0</code>. Invalid values will be reset to <code>0</code>.</li>
+<li>
+<p><strong>Default image file selection</strong>: this defines what image file to deploy by default if installation media contains multiple images. The available options are:</p>
+<ul>
+<li><em>Ask me to select the image file to deploy</em></li>
+<li><em>Automatically deploy the largest image file</em></li>
+<li><em>Automatically deploy the most recent image file (based on file modification dates)</em></li>
+</ul>
+<p>This is a <code>REG_SZ</code> policy with valid values of <code>AskUser</code>, <code>LargestFirst</code>, or <code>MostRecentFirst</code>, and a default value of <code>AskUser</code>. When the most recent image file option is used, boot image scanning is not considered. If this policy is set to an option other than asking the user, it will select the image file and continue with it without allowing the user to return to the image selector to select another file. Invalid values will be reset to <code>AskUser</code>.</p>
+</li>
+</ul>
 <p>Preinstallation Environment policies are stored in the system registry, under <code>HKEY_LOCAL_MACHINE\SOFTWARE\DISMTools\Preinstallation Environment\Policies</code>. The policies use the following names in the registry:</p>
 <table>
 <thead>
@@ -3658,12 +3673,20 @@
 <td><code>KeyboardLayoutCode</code></td>
 </tr>
 <tr>
+<td>Unattended answer file conflict resolution</td>
+<td><code>AnswerFileConflictResponse</code></td>
+</tr>
+<tr>
 <td>Override keyboard layouts used by target images with the one I select here</td>
 <td><code>KeyboardLayoutOverrideExistingLayout</code></td>
 </tr>
 <tr>
-<td>Unattended answer file conflict resolution</td>
-<td><code>AnswerFileConflictResponse</code></td>
+<td>Include boot image files when scanning ISO files for available Windows images</td>
+<td><code>ScanBootImages</code></td>
+</tr>
+<tr>
+<td>Default image file selection</td>
+<td><code>ImageSelectorDefaultOption</code></td>
 </tr>
 </tbody>
 </table>
@@ -3724,7 +3747,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

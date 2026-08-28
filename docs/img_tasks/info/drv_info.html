@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3445,7 +3445,10 @@
 <p>You can go back to the main screen by clicking the link on the top left</p>
 </li>
 </ul>
-<p><strong>NOTE:</strong> the amount of installed drivers that are listed is determined by the background process settings. By default, drivers that come with the Windows distribution aren't listed, to decrease the time background processes take when getting driver information. The program will give you the option to configure these processes to detect all drivers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The amount of installed drivers that are listed is determined by the background process settings. By default, drivers that come with the Windows distribution aren't listed, to decrease the time background processes take when getting driver information. The program will give you the option to configure these processes to detect all drivers.</p>
+</div>
 <h2 id="going-through-hardware-targets">Going through hardware targets</h2>
 <p>A driver package (file) may target multiple devices. Thus, knowing more about a specific target may take a long time and be more complicated.</p>
 <p>When that is the case, DISMTools lets you easily go through all targets thanks to the controls on the top.</p>
@@ -3467,53 +3470,46 @@
 <p>You can save this information to a report file by clicking the Save button on the bottom right and specifying a target file. Do note that this option is disabled in the driver file view if no drivers were specified.</p>
 <p>Also note that, if you have background processes configured to not detect all drivers, you will be asked if you want to save the information of all of them.</p>
 <h2 id="search-filters">Search filters</h2>
-<p>DISMTools 0.5 introduced search filters and functionality to search through installed drivers. When performing your search queries, you can use the following filters to specify where you want to search, depending on which version of DISMTools you are using:</p>
+<p>When performing your search queries, you can use the following filters to specify where you want to search:</p>
 <table>
 <thead>
 <tr>
 <th>Filter</th>
 <th>Description</th>
-<th>Version introduced</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>og:</code></td>
 <td>Search through the original file names of the drivers</td>
-<td>0.5</td>
 </tr>
 <tr>
 <td><code>prov:</code></td>
 <td>Filter by the provider name of a driver</td>
-<td>0.7.3 Preview 2</td>
 </tr>
 <tr>
 <td><code>cn:</code>, <code>classname:</code></td>
 <td>Filter by the class name of a driver</td>
-<td>0.7.3 Preview 2</td>
 </tr>
 <tr>
 <td><code>inbox:</code>, <code>noinbox:</code></td>
 <td>Filter by driver inbox status</td>
-<td>0.7.3 Preview 2</td>
 </tr>
 <tr>
 <td><code>bc:</code>, <code>nobc:</code></td>
 <td>Filter by driver boot critical status</td>
-<td>0.7.3 Preview 2</td>
 </tr>
 <tr>
 <td><code>date:</code></td>
 <td>Filter by driver release date</td>
-<td>0.7.3 Preview 4</td>
 </tr>
 <tr>
 <td><code>sig:</code>, <code>nosig:</code></td>
 <td>Filter by driver signature status</td>
-<td>0.7.3 Preview 4</td>
 </tr>
 </tbody>
 </table>
+<p>When filtering drivers by <em>class name</em>, you can specify multiple class names by separating them with a semicolon.</p>
 <p>When filtering drivers by <em>date</em>, you have to use one of the following PowerShell-like sub-operators in this format:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>date:&lt;sub-operator&gt;[comparer]-&lt;field&gt;
 </span></code></pre></div>
@@ -3581,6 +3577,10 @@
 <td><code>cn:scsiadapter</code> or <code>classname:scsiadapter</code></td>
 </tr>
 <tr>
+<td>Show installed SCSI adapters and network adapters</td>
+<td><code>cn:scsiadapter;net</code> or <code>classname:scsiadapter;net</code></td>
+</tr>
+<tr>
 <td>Show installed drivers released before 2020</td>
 <td><code>date:lt-01/01/2020</code> or <code>date:lty-2020</code></td>
 </tr>
@@ -3591,7 +3591,7 @@
 </tbody>
 </table>
 <h2 id="filter-assistants">Filter assistants</h2>
-<p>DISMTools 0.8 introduces filter assistants that allow you to quickly write the queries. To invoke the driver filter assistant, click the wand next to the search box. Then, select the field you want to filter by, and values, and the program will automatically generate the query for you.</p>
+<p>To invoke the driver filter assistant, click the wand next to the search box. Then, select the field you want to filter by, and values, and the program will automatically generate the query for you.</p>
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="infodlgs.html">Image information dialogs</a></li>
@@ -3648,7 +3648,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

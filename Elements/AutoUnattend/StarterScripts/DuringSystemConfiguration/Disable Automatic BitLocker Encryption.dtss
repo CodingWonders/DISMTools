@@ -1,0 +1,6 @@
+﻿Language: Batch
+Name: Prevent Automatic BitLocker Drive Encryption
+Description: This script disables automatic device encryption during system setup.
+Customizable: No
+@ECHO OFF
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\BitLocker" /F /V PreventDeviceEncryption /T REG_DWORD /D 1

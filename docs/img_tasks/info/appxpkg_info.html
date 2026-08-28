@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1044,6 +1044,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Searching through this information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search filters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3343,6 +3360,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Searching through this information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search filters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3380,7 +3414,10 @@
 
 <p>With DISMTools you can get the information about the installed AppX packages in Windows images and installations of every type.</p>
 <p><em>This action is supported on DISMTools 0.3.1 and newer.</em></p>
-<p><strong>NOTE:</strong> this action is not supported on Windows images and installations earlier than Windows 8 or Server 2012</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This action is not supported on Windows images and installations earlier than Windows 8 or Server 2012</p>
+</div>
 <h2 id="usage">Usage</h2>
 <ul>
 <li>When the dialog is launched for the first time in the execution of the program, you'll only see a listing of all AppX packages</li>
@@ -3391,7 +3428,34 @@
 <p>DISMTools tries to detect the main store logo asset when you select an AppX package. Do note that the program makes guesses as to what is the main asset, and those guesses may be incorrect.</p>
 <p>If you are given an incorrect store logo asset, please report an issue <a href="https://github.com/CodingWonders/DISMTools/issues/new?assignees=CodingWonders&amp;labels=bug&amp;projects=&amp;template=store-logo-asset-preview-issue.md&amp;title=">here</a>. Do note that you need a GitHub account to report feedback.</p>
 <h2 id="searching-through-this-information">Searching through this information</h2>
-<p>DISMTools 0.5 introduced search capabilities that let you search through installed AppX packages on Windows images and offline installations. DISMTools 0.7.3 improves this functionality by supporting active installations.</p>
+<p>To find specific AppX packages by name, use the search box.</p>
+<h3 id="search-filters">Search filters</h3>
+<p>You can filter AppX package information by registration status by using one of the following filters:</p>
+<ul>
+<li><code>regto:anyone</code> shows all AppX packages that have been registered to, at least, one user</li>
+<li><code>regto:noone</code> shows all AppX packages that have not been registered to any user</li>
+<li><code>regto:me</code> shows all AppX packages that have been registered to the current user</li>
+<li>
+<p><code>regto:&lt;user&gt;</code> shows all AppX packages that have been registered to a specific user, where <code>&lt;user&gt;</code> can be one of the following values:</p>
+<ul>
+<li>A user name</li>
+<li>A user's Security Identifier (SID)</li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Registration filters by user name or SID are only accessible if DISMTools is configured to map registration information to users in a system.</p>
+</div>
+<p>Use the filter assistant, by clicking the wand next to the search box, to easily find the user you want to filter by:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/info/appxpkg_info_regto_modes.png" data-desc-position="bottom"><img src="../../res/img_tasks/info/appxpkg_info_regto_modes.png"></a>
+</p>
+
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../res/img_tasks/info/appxpkg_info_regto_users.png" data-desc-position="bottom"><img src="../../res/img_tasks/info/appxpkg_info_regto_users.png"></a>
+</p>
+
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="infodlgs.html">Image information dialogs</a></li>
@@ -3448,7 +3512,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

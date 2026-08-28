@@ -58,6 +58,8 @@ Public Class ImgInfoSaveDlg
 
     Dim OSVer As Version
 
+    Private IsBusy As Boolean = False
+
     Private Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -2156,16 +2158,12 @@ Public Class ImgInfoSaveDlg
 
                 Dim peruserServiceStatus As String = ""
                 If {80, 96}.Contains(service.Type) Then
-                    If service.UserServiceFlags = Integer.MinValue Then
-                        peruserServiceStatus = "Undefined"
-                    Else
-                        peruserServiceStatus = service.UserServiceFlags
-                    End If
+                    peruserServiceStatus = If(service.UserServiceFlags = Integer.MinValue, "Undefined", service.UserServiceFlags)
                 Else
                     peruserServiceStatus = "Not a per-user service"
                 End If
 
-                Contents &= GetHeader(String.Format("Information for service: {0}", service.Name), HeaderSize.Header3) & CrLf &
+                Contents &= GetHeader(String.Format("Service: {0}", service.Name), HeaderSize.Header4) & CrLf &
                     GetListItems({String.Format("Service Display Name: {0}", service.DisplayName),
                                   String.Format("Service Description: {0}", service.Description),
                                   String.Format("Image Path: {0}", service.ImagePath),
@@ -2175,7 +2173,7 @@ Public Class ImgInfoSaveDlg
                                   String.Format("Service Type: {0}", service.TypeToString()),
                                   String.Format("Per-user Service Flags: {0}", peruserServiceStatus),
                                   String.Format("Group: {0}", service.Group)}.ToList()) & CrLf &
-                          GetParagraph("Windows NT&reg; privileges:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Windows NT&trade; privileges:", ParagraphStyle.Bold) & CrLf &
                           GetTableHeader({"Privilege Name", "Privilege Display Name", "Privilege Description"}.ToList()) &
                           String.Join("", service.RequiredPrivileges.Select(Function(privilege) GetTableRow({privilege.ConstantNameText, privilege.ConstantUserRight, privilege.ConstantDescription}.ToList()))) & CrLf &
                           GetParagraph("Error Control:", ParagraphStyle.Bold) & CrLf &
@@ -2212,6 +2210,7 @@ Public Class ImgInfoSaveDlg
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.DisableCloseCapability(handle)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         Height = WindowHelper.ScaleLogical(200)     ' tweak the height manually because Windows ain't doin' it!
@@ -2517,6 +2516,7 @@ Public Class ImgInfoSaveDlg
         End Select
 
         ' Begin performing operations
+        IsBusy = True
         Select Case SaveTask
             Case 0
                 Contents &= GetListItems(New String() {"Information tasks: get complete image information"}.ToList()) & CrLf & CrLf
@@ -2667,15 +2667,24 @@ Public Class ImgInfoSaveDlg
         ReportChanges(saveMsg, ProgressBar1.Maximum)
         TaskbarHelper.SetIndicatorState(ProgressBar1.Maximum, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
 
+        IsBusy = False
+
         ' Enable the logger again
         DynaLog.EnableLogging()
 
         ' Save the file
-        If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
+        If Contents <> "" Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget)
         InfoSaveResults.FilePath = SaveTarget
         MainForm.StartMountedImageDetector()
+        WindowHelper.EnableCloseCapability(handle)
         Close()
     End Sub
 
+    Private Sub ImgInfoSaveDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If IsBusy Then
+            e.Cancel = True
+            Exit Sub
+        End If
+    End Sub
 End Class

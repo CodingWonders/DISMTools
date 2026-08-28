@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3487,7 +3487,10 @@
 </tr>
 </tbody>
 </table>
-<p><strong>NOTE:</strong> if you are adding provisioned AppX packages to an online installation, you may need to enable sideloading of applications. Otherwise, you may get error code <code>0xc1570113</code>. More information can be found <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/sideload-apps-with-dism-s14?view=windows-11#configure-pcs-for-developing-windows-apps">here</a>. You may also need to properly <strong>register the application to the operating system</strong> for it to fully work, a guide for which is explained later in this page.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are adding provisioned AppX packages to an online installation, you may need to enable sideloading of applications. Otherwise, you may get error code <code>0xc1570113</code>. More information can be found <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/sideload-apps-with-dism-s14?view=windows-11#configure-pcs-for-developing-windows-apps">here</a>. You may also need to properly <strong>register the application to the operating system</strong> for it to fully work, a guide for which is explained later in this page.</p>
+</div>
 <p><i>This action is supported on DISMTools 0.2 and newer</i></p>
 <h2 id="usage">Usage</h2>
 <ul>
@@ -3512,11 +3515,17 @@
 <li>If you want, you can <strong>provide a custom data file</strong></li>
 <li>If you want to provision applications in some regions, specify them, separated by a semi-colon (;); following the <a href="https://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1 Alpha 2</a> or <a href="https://en.wikipedia.org/wiki/ISO_3166-1">Alpha 3</a> codes</li>
 </ul>
-<p><strong>NOTE:</strong> specifying a region requires DISM for Windows 10 and/or a Windows 10 or later image.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Specifying a region requires DISM for Windows 10 and/or a Windows 10 or later image.</p>
+</div>
 <ul>
 <li><strong><i>New to DISMTools 0.5.1 and later!</i></strong> If you want, you can configure <strong>stub package preferences</strong> for your applications. Think of these as temporary packages that download the full version of an application. Setting an application to use the full package will explicitly install the full version of the package.</li>
 </ul>
-<p><strong>NOTE:</strong> you can only configure stub package preferences if the following criteria are met:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can only configure stub package preferences if the following criteria are met:</p>
+</div>
 <p>I. The DISM version used and the Windows image serviced are Windows 10 and later</p>
 <p>II. The application contains stub packages</p>
 <ul>
@@ -3615,7 +3624,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       
