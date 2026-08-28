@@ -1,4 +1,4 @@
-$version = "0.8.1"
+$version = "0.8.2"
 
 Write-Host "DISMTools $version - FOG Module Preparation"
 Write-Host "(c) 2025-2026. CodingWonders Software"

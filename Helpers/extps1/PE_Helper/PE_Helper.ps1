@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -139,7 +139,7 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.8.1"
+    $version = "0.8.2"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
@@ -797,7 +797,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT_$imageID\DISMTools" /f
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
-            $codename = "infinity_mk2"
+            $codename = "infinity_mk3"
             if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
                 reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$(Get-Content -Path "$((Get-Location).Path)\version")"
             } else {
@@ -2651,7 +2651,7 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.8.1"
+    $version = "0.8.2"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
