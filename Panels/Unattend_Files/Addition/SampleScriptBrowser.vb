@@ -1,5 +1,8 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports System.Net
+Imports System.Threading.Tasks
+Imports System.Text.Json
 
 Public Class SampleScriptBrowser
 
@@ -12,6 +15,7 @@ Public Class SampleScriptBrowser
     Private SysConfigScripts As New List(Of StarterScript)
     Private FirstUserLogonScripts As New List(Of StarterScript)
     Private UserFirstLogonScripts As New List(Of StarterScript)
+    Private ScriptLibraryItems As New List(Of StarterScriptLibraryItem)
     Private UserScripts As New List(Of StarterScript)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -62,7 +66,7 @@ Public Class SampleScriptBrowser
         Return starterScript
     End Function
 
-    Private Function LoadAllStarterScripts() As Boolean
+    Private Function LoadAllStarterScripts() As Task(Of Boolean)
         DynaLog.LogMessage("Preparing to load all scripts...")
         If Not Debugger.IsAttached Then DynaLog.DisableLogging()
 
@@ -70,7 +74,7 @@ Public Class SampleScriptBrowser
         If Not Directory.Exists(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")) Then
             DynaLog.LogMessage("The starter script directory does not exist.")
             ' we can't continue
-            Return False
+            Return Task.FromResult(False)
         End If
 
         ' Now, we load the ones that are applied during system configuration
@@ -95,28 +99,44 @@ Public Class SampleScriptBrowser
         Else
             ' The userdata part does not exist. Remove user-defined scripts option from the list
             Try
-                ComboBox1.Items.RemoveAt(3)
+                ComboBox1.Items.RemoveAt(4)
             Catch ex As Exception
 
             End Try
         End If
 
-        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
+        ' We start grabbing scripts from the Library
+        Try
+            Dim StarterScriptLibraryIndexUri As String = "https://raw.githubusercontent.com/CodingWonders/StarterScriptLibrary/refs/heads/main/ScriptIndex.json"
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Dim scriptIndexBytes As Task(Of Byte()) = Task.FromResult(Of Byte())(client.DownloadData(New Uri(StarterScriptLibraryIndexUri)))
+                Dim jsonOptions As New JsonSerializerOptions With {
+                    .PropertyNameCaseInsensitive = True
+                }
 
-        Return True
+                Using doc As JsonDocument = JsonDocument.Parse(scriptIndexBytes.Result)
+                    Dim scripts As StarterScriptIndex = JsonSerializer.Deserialize(Of StarterScriptIndex)(doc.RootElement.GetRawText(), jsonOptions)
+                    ScriptLibraryItems = scripts.scripts
+                End Using
+
+            End Using
+        Catch ex As Exception
+
+        End Try
+
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
+        Return Task.FromResult(True)
     End Function
 
     Private Sub ShowScriptsInStage(StageContext As Integer)
         ListView1.Items.Clear()
         Select Case StageContext
-            Case 0
-                ListView1.Items.AddRange(SysConfigScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
-            Case 1
-                ListView1.Items.AddRange(FirstUserLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
-            Case 2
-                ListView1.Items.AddRange(UserFirstLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
-            Case 3
-                ListView1.Items.AddRange(UserScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 0 : ListView1.Items.AddRange(SysConfigScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 1 : ListView1.Items.AddRange(FirstUserLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 2 : ListView1.Items.AddRange(UserFirstLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 3 : ListView1.Items.AddRange(ScriptLibraryItems.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 4 : ListView1.Items.AddRange(UserScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
         End Select
         FinalScriptStage = StageContext
     End Sub
@@ -124,14 +144,11 @@ Public Class SampleScriptBrowser
     Private Function GetScriptFromIndex(index As Integer) As StarterScript
         Try
             Select Case FinalScriptStage
-                Case 0
-                    Return SysConfigScripts.ElementAtOrDefault(index)
-                Case 1
-                    Return FirstUserLogonScripts.ElementAtOrDefault(index)
-                Case 2
-                    Return UserFirstLogonScripts.ElementAtOrDefault(index)
-                Case 3
-                    Return UserScripts.ElementAtOrDefault(index)
+                Case 0 : Return SysConfigScripts.ElementAtOrDefault(index)
+                Case 1 : Return FirstUserLogonScripts.ElementAtOrDefault(index)
+                Case 2 : Return UserFirstLogonScripts.ElementAtOrDefault(index)
+                Case 3 : Return GetAndParseScriptFromLibrary(ScriptLibraryItems.ElementAtOrDefault(index))
+                Case 4 : Return UserScripts.ElementAtOrDefault(index)
             End Select
         Catch ex As Exception
 
@@ -139,11 +156,34 @@ Public Class SampleScriptBrowser
         Return Nothing
     End Function
 
-    Private Sub SampleScriptBrowser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Function GetAndParseScriptFromLibrary(ScriptLibraryItem As StarterScriptLibraryItem) As StarterScript
+        Dim obtainedStarterScript As StarterScript = Nothing
+
+        Dim dtssUri As New Uri(String.Format("https://raw.githubusercontent.com/CodingWonders/StarterScriptLibrary/refs/heads/main/{0}", ScriptLibraryItem.FileName))
+        Dim dtssTargetPathRoot As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DTSSLib"),
+            dtssTargetPath As String = Path.Combine(dtssTargetPathRoot, ScriptLibraryItem.FileName)
+        Try
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Dim dtssText As String = client.DownloadString(dtssUri)
+                If Not Directory.Exists(dtssTargetPathRoot) Then Directory.CreateDirectory(dtssTargetPathRoot)
+                File.WriteAllText(dtssTargetPath, dtssText, System.Text.Encoding.UTF8)
+            End Using
+            If File.Exists(dtssTargetPath) Then Return ParseStarterScript(dtssTargetPath)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not parse DTSS Library Item: " & ex.Message)
+            MessageBox.Show("Could not download script code. Please try again later.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        Return obtainedStarterScript
+    End Function
+
+    Private Async Sub SampleScriptBrowser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Clear existing items
         SysConfigScripts.Clear()
         FirstUserLogonScripts.Clear()
         UserFirstLogonScripts.Clear()
+        ScriptLibraryItems.Clear()
         UserScripts.Clear()
 
         ToggleScriptPreviewFSMode(False)
@@ -154,7 +194,7 @@ Public Class SampleScriptBrowser
         ' this keeps on being enabled; disable it
         OK_Button.Enabled = False
 
-        If Not LoadAllStarterScripts() Then
+        If Not Await LoadAllStarterScripts() Then
             ' starter scripts could not be loaded. stop
             MessageBox.Show("The starter scripts could not be loaded.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             DialogResult = Windows.Forms.DialogResult.Cancel
@@ -240,12 +280,9 @@ Public Class SampleScriptBrowser
         Dim targetSS As StarterScript = GetScriptFromIndex(ListView1.FocusedItem.Index)
         If targetSS IsNot Nothing Then
             Select Case targetSS.Language.ToLower()
-                Case "batch"
-                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd"
-                Case "powershell"
-                    ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
-                Case Else
-                    ScriptCodeExporterSFD.Filter = "All Files|*.*"
+                Case "batch" : ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd"
+                Case "powershell" : ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
+                Case Else : ScriptCodeExporterSFD.Filter = "All Files|*.*"
             End Select
         Else
             ScriptCodeExporterSFD.Filter = "All Files|*.*"
@@ -273,7 +310,7 @@ Public Class SampleScriptBrowser
         End If
     End Sub
 
-    Private Sub TriggerStarterScriptEnumRefresh()
+    Private Async Sub TriggerStarterScriptEnumRefresh()
         ' Clear existing items
         SysConfigScripts.Clear()
         FirstUserLogonScripts.Clear()
@@ -284,7 +321,7 @@ Public Class SampleScriptBrowser
         ComboBox1.Items.Clear()
         ComboBox1.Items.AddRange({"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
 
-        If Not LoadAllStarterScripts() Then
+        If Not Await LoadAllStarterScripts() Then
             ' starter scripts could not be loaded. stop
             AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
             MessageBox.Show("The starter scripts could not be refreshed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -316,5 +353,9 @@ Public Class SampleScriptBrowser
         If e.KeyCode = Keys.Escape AndAlso ScriptCodeFSPanel.Visible Then
             ToggleScriptPreviewFSMode(False)
         End If
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        RichTextBox2.WordWrap = CheckBox1.Checked
     End Sub
 End Class

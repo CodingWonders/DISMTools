@@ -39,6 +39,7 @@ Partial Class OfflineInstDriveLister
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.UnlockNoticeLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -159,6 +160,17 @@ Partial Class OfflineInstDriveLister
         '
         Me.Timer1.Interval = 60000
         '
+        'UnlockNoticeLabel
+        '
+        Me.UnlockNoticeLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.UnlockNoticeLabel.AutoSize = True
+        Me.UnlockNoticeLabel.Location = New System.Drawing.Point(93, 348)
+        Me.UnlockNoticeLabel.Name = "UnlockNoticeLabel"
+        Me.UnlockNoticeLabel.Size = New System.Drawing.Size(390, 13)
+        Me.UnlockNoticeLabel.TabIndex = 4
+        Me.UnlockNoticeLabel.Text = "You will be prompted to enter the recovery key for this drive when you click OK."
+        Me.UnlockNoticeLabel.Visible = False
+        '
         'OfflineInstDriveLister
         '
         Me.AcceptButton = Me.OK_Button
@@ -166,6 +178,7 @@ Partial Class OfflineInstDriveLister
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(824, 381)
+        Me.Controls.Add(Me.UnlockNoticeLabel)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button1)
@@ -180,6 +193,7 @@ Partial Class OfflineInstDriveLister
         Me.Text = "Choose a disk"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -197,5 +211,6 @@ Partial Class OfflineInstDriveLister
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents UnlockNoticeLabel As System.Windows.Forms.Label
 
 End Class

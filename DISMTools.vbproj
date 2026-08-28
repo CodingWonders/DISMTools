@@ -84,10 +84,13 @@
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Markdig, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.3.1\lib\net462\Markdig.dll</HintPath>
+      <HintPath>packages\Markdig.1.3.2\lib\net462\Markdig.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.6.0.0\lib\net472\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.6.1.0\lib\net472\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.15.2, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.15.2\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -144,6 +147,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO.Pipelines, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.Pipelines.10.0.9\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
     <Reference Include="System.Management">
       <Private>True</Private>
     </Reference>
@@ -193,6 +199,20 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Text.Encodings.Web, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.10.0.9\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Json.10.0.9\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.6.2\lib\net462\System.ValueTuple.dll</HintPath>
+      <SpecificVersion>True</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms">
       <Private>True</Private>
     </Reference>
@@ -254,6 +274,7 @@
     <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
     <Compile Include="Elements\AutoUnattend\Scripts\PostInstallScript.vb" />
     <Compile Include="Elements\AutoUnattend\StarterScripts\StarterScript.vb" />
+    <Compile Include="Elements\AutoUnattend\StarterScripts\StarterScriptLibraryItem.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
@@ -278,6 +299,8 @@
     <Compile Include="Elements\InfinityHome\InfinityFact.vb" />
     <Compile Include="Elements\IniParserConfigurators\FfuIniParserConfiguration.vb" />
     <Compile Include="Elements\IniParserConfigurators\SettingsParserConfiguration.vb" />
+    <Compile Include="Elements\ISOCreation\IsoCreationJobManager.vb" />
+    <Compile Include="Elements\ISOCreation\IsoCreationTask.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -314,6 +337,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Panels\BDE\LockVolumeDialog.Designer.vb">
+      <DependentUpon>LockVolumeDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\BDE\LockVolumeDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\BDE\UnlockVolumeDialog.Designer.vb">
+      <DependentUpon>UnlockVolumeDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\BDE\UnlockVolumeDialog.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\ConfigLists\AddListEntryDlg.Designer.vb">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
@@ -422,6 +457,12 @@
       <DependentUpon>GetFeatureInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\AppxFilterAssistantDialog.Designer.vb">
+      <DependentUpon>AppxFilterAssistantDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\FilterAssistants\AppxFilterAssistantDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.Designer.vb">
@@ -1045,6 +1086,12 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\BDE\LockVolumeDialog.resx">
+      <DependentUpon>LockVolumeDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\BDE\UnlockVolumeDialog.resx">
+      <DependentUpon>UnlockVolumeDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\ConfigLists\AddListEntryDlg.resx">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
     </EmbeddedResource>
@@ -1098,6 +1145,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Features\GetFeatureInfo.resx">
       <DependentUpon>GetFeatureInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\AppxFilterAssistantDialog.resx">
+      <DependentUpon>AppxFilterAssistantDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\FilterAssistants\CapabilityFilterAssistantDialog.resx">
       <DependentUpon>CapabilityFilterAssistantDialog.vb</DependentUpon>
@@ -1409,13 +1459,21 @@
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Change PowerShell Execution Policy.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Current Power Plan Timeout Values.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Server Processor Scheduling.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Control Terminal Services Settings.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Automatic BitLocker Encryption.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Fast Startup.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Shutdown Event Tracker.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Unsigned RDP Warnings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Windows Admin Center banner.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Windows Plaform Binary Table.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Display Bugcheck Parameters.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Empty Start Menu Pins.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Batch script file locks.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Prevent Installation of Expedited Device Applications.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Remove File System MAX_PATH length limit.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set a custom lock screen image.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Configure Git folders for File Explorer.dtss" />
@@ -2186,10 +2244,16 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Tools\BDELib\BDELib.vbproj">
+      <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
+      <Name>BDELib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 SET CREATE_SAMPLE_USERDATA="Yes"
@@ -2290,6 +2354,12 @@ IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.ex
 	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
 )
 
+:: Copy BDE-GUI utilities
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI" (
+	MD "bin\extps1\PE_Helper\tools\BDE-GUI"
+	FOR %25%25A IN (ps1 bat cmd png) DO xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\BDE-GUI\*.%25%25A" "bin\extps1\PE_Helper\tools\BDE-GUI" /CEHYI
+)
+
 :: Copy Tour
 IF EXIST "$(SolutionDir)tour" (
 	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
@@ -2325,7 +2395,7 @@ IF %25COPY_DOCS%25=="Yes" (
 IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	echo Creating sample userdata structure...
 	IF NOT EXIST "userdata" (md "userdata")
-	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts) DO (
+	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts sse_config_rules) DO (
 		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
 	)
 )

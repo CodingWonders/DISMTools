@@ -214,6 +214,8 @@ Partial Class GetPkgInfoDlg
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Location = New System.Drawing.Point(129, 231)
         Me.Label4.Name = "Label4"
@@ -224,6 +226,8 @@ Partial Class GetPkgInfoDlg
         '
         'Label3
         '
+        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoEllipsis = True
         Me.Label3.Location = New System.Drawing.Point(129, 93)
         Me.Label3.Name = "Label3"
@@ -1798,6 +1802,7 @@ Partial Class GetPkgInfoDlg
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Filter = "CAB files|*.cab"
+        Me.OpenFileDialog1.Multiselect = True
         Me.OpenFileDialog1.Title = "Locate package files"
         '
         'ImageTaskHeader1

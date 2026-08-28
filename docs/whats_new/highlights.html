@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -365,10 +365,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
-  <a href="#the-pe-helper-configurable-and-more-powerful-than-ever" class="md-nav__link">
+  <a href="#the-pe-helper-do-more-at-once" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The PE Helper: configurable and more powerful than ever
+        The PE Helper: do more at once
       
     </span>
   </a>
@@ -376,10 +376,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#unattended-answer-file-creation-now-super-powered" class="md-nav__link">
+  <a href="#unattended-answer-file-creation-empowering-social-based-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unattended answer file creation: now super-powered
+        Unattended answer file creation: empowering social-based IT
       
     </span>
   </a>
@@ -402,6 +402,17 @@
     <span class="md-ellipsis">
       
         Overall refinements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thanks-to-the-contributors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thanks to the contributors
       
     </span>
   </a>
@@ -3307,10 +3318,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
-  <a href="#the-pe-helper-configurable-and-more-powerful-than-ever" class="md-nav__link">
+  <a href="#the-pe-helper-do-more-at-once" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The PE Helper: configurable and more powerful than ever
+        The PE Helper: do more at once
       
     </span>
   </a>
@@ -3318,10 +3329,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#unattended-answer-file-creation-now-super-powered" class="md-nav__link">
+  <a href="#unattended-answer-file-creation-empowering-social-based-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unattended answer file creation: now super-powered
+        Unattended answer file creation: empowering social-based IT
       
     </span>
   </a>
@@ -3350,6 +3361,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#thanks-to-the-contributors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thanks to the contributors
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3370,47 +3392,35 @@
 <h1 id="release-highlights">Release highlights</h1>
 <p>This new version of DISMTools comes with new features that enhance image management and servicing tasks. Here are some of its key changes.</p>
 <p>If you want to take a look at everything that has changed though, check out the <a href="https://github.com/CodingWonders/DISMTools/releases/latest">release notes page</a> for more information.</p>
-<h2 id="the-pe-helper-configurable-and-more-powerful-than-ever">The PE Helper: configurable and more powerful than ever</h2>
-<p>DISMTools 0.8 introduces several changes to the PE Helper and its components that make it more configurable to suit your needs. With the introduction of policies, it is much easier to configure the behavior of the DISMTools Preinstallation Environment. There are 10 policies available to you, ranging from keyboard layouts (which you can now set as defaults), to the behavior of the PE Helper when it comes to partition table overrides, to the behavior of PXE Helpers, and more. You can configure these quickly using a convenient UI, and you can even make these permanent by saving them to program configuration.</p>
-<p>The PXE Helpers have also been improved. You can now set the default port for the server components, and it is much easier to upload installation images to a WDS server, from both DISMTools and the Autorun application in the disc. Additionally, the WDS Helper Client now supports partition table overrides, similarly to the PE Helper; and now shows you installation images and image groups graphically, making it easier to select the image you want to install.</p>
-<p>The Sysprep Preparation Tool has also been improved. With support for <code>CopyProfile</code>, you can now make most changes made to the administrator account profile be copied to the default user profile, so that new user profiles will enjoy the same customizations. For example, any settings changed in the File Explorer (such as the launch folder) will be copied to the default user profile. It also supports removing AppX packages that can cause Sysprep to fail from a machine before preparing it.</p>
+<h2 id="the-pe-helper-do-more-at-once">The PE Helper: do more at once</h2>
+<p>DISMTools 0.8.1 offers new functionality to the PE Helper. Concurrent ISO creation is now supported, allowing you to create multiple bootable ISOs at once (the maximum amount of tasks being configurable up to 10).</p>
+<p>The Preinstallation Environment also offers better integration with BitLocker encrypted volumes, with a suite of tools designed for you to work with such volumes. Unlock, lock, encrypt, decrypt, and query information about your encrypted volumes; all from one environment. BitLocker integration doesn't stop at the Preinstallation Environment. The Sysprep Preparation Tool can now detect if the system volume is encrypted and will decrypt it before running Sysprep.</p>
+<p>The PE Helper also includes policies for installation images, in case your media contains multiple installation images, so it automatically picks either the largest file, or the most recent one, depending on your preference.</p>
+<p>Additionally, when capturing images, you can now specify descriptions.</p>
 <p align="center">
   <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/whats_new/WhatsNew_1.png" data-desc-position="bottom"><img src="../res/whats_new/WhatsNew_1.png"></a>
 </p>
 
-<h2 id="unattended-answer-file-creation-now-super-powered">Unattended answer file creation: now super-powered</h2>
-<p>Unattended answer file features have seen several, and major, improvements with version 0.8.</p>
-<p>When joining domains, you can now pick user account objects that are not necessarily in organizational units. But, when they are, you will also see them sorted alphabetically. More account checks have been added, mainly to detect those that don't require a password. And, to test domain name resolution, you can quickly invoke <code>nslookup</code> using your provided domain suffix.</p>
-<p>Moving on to starter scripts, there are <strong>more than 25 starter scripts available to you</strong>. You can also create your starter scripts using your Visual Basic scripts or JScript files, if you still depend on said scripts, and you can do so more comfortably with the new functionality in the Starter Script Editor, such as dark mode support. If one script needs to run before or after a set of scripts, you can quickly change the order of execution to suit your needs.</p>
-<p>Next, when creating local user accounts, you can now configure their display names separately. You should use a custom display name when you have an account whose name contains either spaces or special characters, to avoid issues with certain programs or scripts and environment variables, and potentially more issues. For example, for a user named <em>John Doe</em> you can use an account name of <em>johndoe</em> and use the former name as the display name.</p>
-<p>Finally, when applying unattended answer files, you now have control over whether to copy them to the image's Sysprep directory.</p>
+<h2 id="unattended-answer-file-creation-empowering-social-based-it">Unattended answer file creation: empowering social-based IT</h2>
+<p>Unattended answer file features have seen several, and major, improvements with version 0.8.1.</p>
+<p>Starter Scripts have been added to prevent automatic device installation, and to allow further customizations. Your Starter Scripts can also be uploaded to a new free service: the <em>Starter Script Library</em>. If you think your script is useful to others, you can upload it to the library and share it with the community.</p>
+<p>To offer functionality to upload to the Starter Script Library, the Starter Script Editor has been improved. Additionally, it allows you to scan your script code for security issues (using 100 pre-defined rules, as well as the rules you make), find and replace text, and navigate through the document outline (with function signature support for VBScript code).</p>
 <p align="center">
   <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/whats_new/WhatsNew_2.png" data-desc-position="bottom"><img src="../res/whats_new/WhatsNew_2.png"></a>
 </p>
 
-<p>Learn more about the improved answer file features:</p>
-<ul>
-<li><a href="../img_tasks/unattend/unatt_create.html#active-directory-domain-services-domain-join">Domain join</a></li>
-<li><a href="../img_tasks/unattend/unatt_create.html#starter-script-reference">Starter scripts</a></li>
-</ul>
 <h2 id="work-more-comfortably-with-windows-images">Work more comfortably with Windows images</h2>
-<p>DISMTools 0.8 introduces several improvements to core Windows image management flows that make working with images more comfortable.</p>
-<p>With the information filter assistants, you can search information about Windows images much more easily. These assistants are available in the feature, capability, and driver information dialogs; and are there to help you quickly find the information you are looking for. Need to filter drivers by class name? You are just a few clicks away from doing that. Want to find a specific set of enabled features with a specific name? You can do that too.</p>
-<p>Several parts of the program have been improved in terms of performance. You can now load and switch between projects and modes much faster. Saving service changes is also much faster, and saving information now happens asynchronously, giving you a smoother experience.</p>
-<p>You can now save system service information to reports similar to the ones you can save for images. You can also mark services for deletion (<em>though don't go mad and delete every service. Don't</em>).</p>
-<p>A major improvement is the support for <strong>Full Flash Utility (FFU)</strong> files, as another entry in sector-based Windows images, suitable for both desktop and mobile system provisioning (<em>though only desktop provisioning is supported as mobile provisioning is for Windows phones</em>). Variants of popular tasks, such as applying images or capturing images, have been introduced to support FFU files, and the program can now also show you information about them (such as the physical disk layout); giving you the edge. A new task has also been introduced to optimize Windows images, and also has a variant for FFU files.</p>
-<p>Need to export certain drivers from an active installation? You can now export drivers using a class name filter. Class name filter selectors also detect third-party classes defined by drivers. For example, if you want to export <a href="https://en.wikipedia.org/wiki/Neural_processing_unit">NPU</a> and compute accelerator devices, you can now do that by filtering for the <em>ComputeAccelerator</em> class. Finally, exporting and viewing information about drivers now works with Windows 7 images.</p>
-<p align="center">
-  <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/whats_new/WhatsNew_3.png" data-desc-position="bottom"><img src="../res/whats_new/WhatsNew_3.png"></a>
-</p>
-
+<p>DISMTools 0.8.1 introduces several improvements to core Windows image management flows that make working with images more comfortable.</p>
+<p>Offline installation management capabilities have been improved to allow you to quickly switch between different drives. It also detects BitLocker encrypted volumes and will prompt you to unlock them before proceeding with the operation. Once an installation has already been managed, an encrypted drive can be locked automatically, if you prefer to do so.</p>
+<p>Information tasks have seen several improvements. AppX package information of active installations can now be filtered by registration status, to get packages that are registered to any user, to your user, to a specific user, or to no user at all. Driver information tasks now allow you to specify multiple class names, as well as select multiple driver files in file pickers. Non-driver INF files are now skipped more gracefully, and driver file information reports allow you to jump between driver files as sections in reports. You can also look up the hardware IDs online from your report.</p>
+<p>Driver export tasks have been improved to support multiple driver class names, while allowing you to organize the exported drivers into subfolders based on their class names.</p>
 <h2 id="overall-refinements">Overall refinements</h2>
 <p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, the program is more reliable and components have been updated to their latest versions.</p>
 <!-- Room for more features -->
 
-<h1 id="thanks-to-the-contributors">Thanks to the contributors</h1>
+<h2 id="thanks-to-the-contributors">Thanks to the contributors</h2>
 <p>The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:</p>
-<p><a href="https://github.com/TackleBarry80">TackleBarry80</a>, <a href="https://github.com/Dede333">Dede333</a>, <a href="https://github.com/charlezmmonroe-byte">charlezmmonroe-byte</a></p>
+<p><a href="https://github.com/Deadstar95">Deadstar95 (<em>DaleCooper</em>)</a>, <a href="https://github.com/Abs313a">Abs313a</a></p>
 <p>To contribute to the software, you can report issues or suggestions in any channel you prefer (via the <a href="https://forums.mydigitallife.net/threads/dismtools.87263/">MDL forum thread</a>, via the <a href="https://github.com/CodingWonders/DISMTools">GitHub repository</a>, or via any announcements on the <a href="https://reddit.com/r/DISMTools">DISMTools subreddit</a> or on the <a href="https://reddit.com/r/Windows">Windows</a>, <a href="https://reddit.com/r/Windows11">Windows11</a> and <a href="https://reddit.com/r/Windows10">Windows10</a> subreddits (as comments)) or submit new code changes (read the <a href="https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md">contribution guidelines</a> for more information).</p>
 
 
@@ -3464,7 +3474,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

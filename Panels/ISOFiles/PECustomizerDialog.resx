@@ -127,4 +127,7 @@ Therefore, you should manually review each of the answer files when you encounte
 
 If you use bootable media creation solutions, such as Rufus, configure them so they don't override your answer file.</value>
   </data>
+  <data name="Label15.Text" xml:space="preserve">
+    <value>Installation media may contain multiple installation images that you may have added, in addition to the one originally included. In such cases, a selector appears. Change the behavior of this image selector by configuring the setting below.</value>
+  </data>
 </root>

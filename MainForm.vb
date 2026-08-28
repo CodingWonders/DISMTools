@@ -22,6 +22,8 @@ Imports System.Threading.Tasks
 Imports System.Globalization
 Imports DISMTools.Elements.InfinityHome
 Imports System.Text.RegularExpressions
+Imports BDELib.BDELib
+Imports BDELib.Classes
 
 Public Class MainForm
 
@@ -104,8 +106,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "Infinity"
+    Public dtBranch As String = "dt_pre_infinity_mk2_relcndid"
+    Public dt_codeName As String = "InfinityMk2"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
@@ -150,12 +152,13 @@ Public Class MainForm
 
     Dim IsCompatible As Boolean = True
 
-    Dim SysVer As Version
+    Dim SysVer As New Version
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
     Public SkipUpdates As Boolean                                        ' Same for this one
 
     Public drivePath As String = ""
+    Public InBitLockerMode As Boolean = False
 
     Public EnableExperiments As Boolean
 
@@ -201,6 +204,7 @@ Public Class MainForm
     Public PEHelper_CopyToVentoy As Boolean = False     ' Whether to copy new ISO files to Ventoy drives automatically
     Public PEHelper_Use2023EFI As Boolean = False       ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
     Public PEHelper_IncludeSysDrvs As Boolean = True    ' Whether to include SCSI adapters and network controllers in the DTPE
+    Public PEHelper_MaxConcurrentISO As Integer = 2     ' Limit for concurrent ISO file creation
 
     ' Web Search Settings
     Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
@@ -226,10 +230,13 @@ Public Class MainForm
     Public KeyboardLayoutCode As String = "00000409"
     Public KeyboardLayoutOverrideExistingLayout As Boolean = False
     Public AnswerFileConflictResponse As Integer = 0
+    Public ScanBootImages As Boolean = False
+    Public ImageSelectorDefaultOption As Integer = 0
 
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
     Public HumanizeDates As Boolean = True                  ' Whether to display all date fields in a human-readable format
+    Public LockUnlockedVolumes As Boolean = True            ' Whether to lock unlocked bitlocker volumes after ending offline management
 
     Public ReinitializeCurImage As Boolean = True
 
@@ -350,7 +357,6 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been requested by the user or by DTUCS. Migrating settings...")
                     MigrationForm.ShowDialog()
-                    Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting migration has been disabled. Unless you are testing a build straight out of the build process, a configuration file may be incompatible")
                     NoMigration = True
@@ -590,7 +596,9 @@ Public Class MainForm
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Sysprep Preparation Tool: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software. Testing helped by Real-MullaC" & CrLf &
+                           "  BDE-GUI: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software, DaleCooper.")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -613,8 +621,13 @@ Public Class MainForm
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.LogMessage("- Active Directory Object Picker: Armand du Plessis, Tulpep")
+        DynaLog.LogMessage("- DynaLog Log Viewer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- DISMTools Theme Designer: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- Starter Script Editor: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Starter Script Library: (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software. Testing made by Abs and DaleCooper")
+        DynaLog.LogMessage("- BitLocker Drive Encryption Managed Library (BDELib): (c) " & GetCopyrightTimespan(2026, Date.Now.Year) & " CodingWonders Software")
         DynaLog.BeginLogging()
-        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
+        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S --------")
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -670,7 +683,6 @@ Public Class MainForm
             End Try
         End If
         If Not Debugger.IsAttached Then SplashScreen.Show()
-        Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
@@ -1000,10 +1012,12 @@ Public Class MainForm
                             languageCode = "it"
                     End Select
 
-                    tourServer.StartServer()
-                    If tourServer.IsListenerAlive() Then
-                        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
-                        TourActionsTSMI.Visible = True
+                    If tourServer IsNot Nothing Then
+                        tourServer.StartServer()
+                        If tourServer.IsListenerAlive() Then
+                            Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                            TourActionsTSMI.Visible = True
+                        End If
                     End If
                 End If
             End If
@@ -1590,9 +1604,11 @@ Public Class MainForm
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
                 PEHelper_IncludeSysDrvs = (CInt(ImgOpKey.GetValue("PEHelper.IncludeSysDrvs")) = 1)
+                PEHelper_MaxConcurrentISO = CInt(ImgOpKey.GetValue("PEHelper.MaxConcurrentISO"))
                 AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
                 PreventSystemFromSleeping = CInt(ImgOpKey.GetValue("PreventSystemFromSleeping", 1)) = 1
                 HumanizeDates = CInt(ImgOpKey.GetValue("HumanizeDates", 1)) = 1
+                LockUnlockedVolumes = CInt(ImgOpKey.GetValue("LockUnlockedVolumes", 1)) = 1
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1656,6 +1672,8 @@ Public Class MainForm
                 KeyboardLayoutCode = PEPolicyKey.GetValue("KeyboardLayoutCode", "00000409")
                 KeyboardLayoutOverrideExistingLayout = CInt(PEPolicyKey.GetValue("KeyboardLayoutOverrideExistingLayout", 0)) = 1
                 AnswerFileConflictResponse = CInt(PEPolicyKey.GetValue("AnswerFileConflictResponse", 0))
+                ScanBootImages = CInt(PEPolicyKey.GetValue("ScanBootImages", 0)) = 1
+                ImageSelectorDefaultOption = CInt(PEPolicyKey.GetValue("ImageSelectorDefaultOption", 0))
                 PEPolicyKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1721,9 +1739,11 @@ Public Class MainForm
                     PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
                     PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
                     PEHelper_IncludeSysDrvs = CInt(settingData("ImgOps")("PEHelper.IncludeSysDrvs")) = 1
+                    PEHelper_MaxConcurrentISO = CInt(settingData("ImgOps")("PEHelper.MaxConcurrentISO"))
                     AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
                     PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
                     HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
+                    LockUnlockedVolumes = CInt(settingData("ImgOps")("LockUnlockedVolumes")) = 1
                     If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
                     If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
                     UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
@@ -1776,6 +1796,8 @@ Public Class MainForm
                     KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
                     KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
                     AnswerFileConflictResponse = CInt(settingData("PEPolicy")("AnswerFileConflictResponse"))
+                    ScanBootImages = CInt(settingData("PEPolicy")("ScanBootImages")) = 1
+                    ImageSelectorDefaultOption = CInt(settingData("PEPolicy")("ImageSelectorDefaultOption"))
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1832,17 +1854,14 @@ Public Class MainForm
                 End Try
             End If
         End If
-        If AppxDisplayNameFormatOnRemoval < 0 OrElse AppxDisplayNameFormatOnRemoval > 2 Then
-            AppxDisplayNameFormatOnRemoval = 1
-        End If
-        If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
-            InvalidSettingsTSMI.Visible = True
-        End If
+        If AppxDisplayNameFormatOnRemoval < 0 OrElse AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 1
+        If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then InvalidSettingsTSMI.Visible = True
         If PartTableOverridePreference < 0 OrElse PartTableOverridePreference > 2 Then PartTableOverridePreference = 0
         If UEFICA23Preference < 0 OrElse UEFICA23Preference > 2 Then UEFICA23Preference = 0
         If WDSHCConnAttempts < 2 OrElse WDSHCConnAttempts > 16 Then WDSHCConnAttempts = 5
         If PXEServerPort < 80 OrElse PXEServerPort > 65535 Then PXEServerPort = 8080
         If AnswerFileConflictResponse < 0 OrElse AnswerFileConflictResponse > 2 Then AnswerFileConflictResponse = 0
+        If ImageSelectorDefaultOption < 0 OrElse ImageSelectorDefaultOption > 2 Then ImageSelectorDefaultOption = 0
         Try
             Dim KeyboardLayoutRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Keyboard Layouts", False)
             Dim KeyboardLayoutCodes As String() = KeyboardLayoutRk.GetSubKeyNames()
@@ -1852,35 +1871,34 @@ Public Class MainForm
 
         End Try
         WriteDefaultPEPolicy()
+
+        If PEHelper_MaxConcurrentISO < 1 OrElse PEHelper_MaxConcurrentISO > 10 Then PEHelper_MaxConcurrentISO = 2
     End Sub
 
     Public Sub WriteDefaultPEPolicy()
         Dim PartTableOverridePreferenceStr As String = "NoOverride"
         Select Case PartTableOverridePreference
-            Case 0
-                PartTableOverridePreferenceStr = "NoOverride"
-            Case 1
-                PartTableOverridePreferenceStr = "AlwaysMBR"
-            Case 2
-                PartTableOverridePreferenceStr = "AlwaysGPT"
+            Case 0 : PartTableOverridePreferenceStr = "NoOverride"
+            Case 1 : PartTableOverridePreferenceStr = "AlwaysMBR"
+            Case 2 : PartTableOverridePreferenceStr = "AlwaysGPT"
         End Select
         Dim UEFICA23PreferenceStr As String = "AskUser"
         Select Case UEFICA23Preference
-            Case 0
-                UEFICA23PreferenceStr = "AskUser"
-            Case 1
-                UEFICA23PreferenceStr = "UseNever"
-            Case 2
-                UEFICA23PreferenceStr = "UseAlways"
+            Case 0 : UEFICA23PreferenceStr = "AskUser"
+            Case 1 : UEFICA23PreferenceStr = "UseNever"
+            Case 2 : UEFICA23PreferenceStr = "UseAlways"
         End Select
         Dim AnswerFileConflictResponseStr As String = "AskUser"
         Select Case AnswerFileConflictResponse
-            Case 0
-                AnswerFileConflictResponseStr = "AskUser"
-            Case 1
-                AnswerFileConflictResponseStr = "PreferISO"
-            Case 2
-                AnswerFileConflictResponseStr = "PreferWIM"
+            Case 0 : AnswerFileConflictResponseStr = "AskUser"
+            Case 1 : AnswerFileConflictResponseStr = "PreferISO"
+            Case 2 : AnswerFileConflictResponseStr = "PreferWIM"
+        End Select
+        Dim ImageSelectorDefaultOptionStr As String = "AskUser"
+        Select Case ImageSelectorDefaultOption
+            Case 0 : ImageSelectorDefaultOptionStr = "AskUser"
+            Case 1 : ImageSelectorDefaultOptionStr = "LargestFirst"
+            Case 2 : ImageSelectorDefaultOptionStr = "MostRecentFirst"
         End Select
 
         Dim regContents As String = String.Format("Windows Registry Editor Version 5.00{0}{0}" &
@@ -1895,10 +1913,13 @@ Public Class MainForm
                                                   "{1}PXEServerPort{1}=dword:{9}{0}" &
                                                   "{1}KeyboardLayoutCode{1}={1}{10}{1}{0}" &
                                                   "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
-                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}",
+                                                  "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}" &
+                                                  "{1}ScanBootImages{1}=dword:0000000{13}{0}" &
+                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
-                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode, If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr)
+                                                  If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode,
+                                                  If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr, If(ScanBootImages, 1, 0), ImageSelectorDefaultOptionStr)
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1938,10 +1959,12 @@ Public Class MainForm
                            "PEHelper_CopyToVentoy               =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI                 =    " & PEHelper_Use2023EFI & CrLf &
                            "PEHelper_IncludeSysDrvs             =    " & PEHelper_IncludeSysDrvs & CrLf &
+                           "PEHelper_MaxConcurrentISO           =    " & PEHelper_MaxConcurrentISO & CrLf &
                            "NoRestart                           =    " & SysNoRestart & CrLf &
                            "AppxRemovalDisplayNameFrmt          =    " & AppxDisplayNameFormatOnRemoval & CrLf &
                            "PreventSystemFromSleeping           =    " & PreventSystemFromSleeping & CrLf &
                            "HumanizeDates                       =    " & HumanizeDates & CrLf &
+                           "LockUnlockedVolumes                 =    " & LockUnlockedVolumes & CrLf &
                            "UseScratch                          =    " & UseScratch & CrLf &
                            "AutoScratch                         =    " & AutoScrDir & CrLf &
                            "ScratchDirLocation                  =    " & Quote & ScratchDir & Quote & CrLf &
@@ -1979,7 +2002,9 @@ Public Class MainForm
                            "PXEServerPort                       =    " & PXEServerPort & CrLf &
                            "KeyboardLayoutCode                  =    " & KeyboardLayoutCode & CrLf &
                            "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout & CrLf &
-                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse)
+                           "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse & CrLf &
+                           "ScanBootImages                      =    " & ScanBootImages & CrLf &
+                           "ImageSelectorDefaultOption          =    " & ImageSelectorDefaultOption)
     End Sub
 
 #Region "Background Processes"
@@ -3514,7 +3539,7 @@ Public Class MainForm
         FailedBGProcResultDic.Add(bgProcTitle, errorEx)
     End Sub
 
-    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As DismException = Nothing, Optional GeneralException As Exception = Nothing)
+    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As Exception = Nothing, Optional GeneralException As Exception = Nothing)
         Dim errorEx As Exception = Nothing
         If APIException IsNot Nothing Then errorEx = New Exception(String.Format("DISM API Task Error: {0}", New Win32Exception(APIException.HResult).Message), APIException)
         If GeneralException IsNot Nothing Then errorEx = New Exception(String.Format("DISM Task Error: {0}", New Win32Exception(GeneralException.HResult).Message), GeneralException)
@@ -3610,9 +3635,14 @@ Public Class MainForm
                         pkgReleaseTypeString <> "" AndAlso
                         pkgInstallTimeString <> "" Then
 
+                    Dim pkgInstallTime As DateTime
+                    If Not DateTime.TryParse(pkgInstallTimeString, CultureInfo.CurrentCulture, DateTimeStyles.None, pkgInstallTime) Then
+                        pkgInstallTime = Date.MinValue
+                    End If
+
                     CurrentImage.ImagePackages_Backup.Add(New ImagePackage(pkgNameString,
                                                                                  Casters.CastDismPackageStateString(pkgStateString),
-                                                                                 New Date(pkgInstallTimeString),
+                                                                                 pkgInstallTime,
                                                                                  Casters.CastDismReleaseTypeString(pkgReleaseTypeString)))
                     pkgNameString = ""
                     pkgStateString = ""
@@ -4162,9 +4192,12 @@ Public Class MainForm
         settingsData("ImgOps").AddKey("PEHelper.UnattendedFile", Quote & Quote)
         settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", 0)
         settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", 0)
+        settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", 1)
+        settingsData("ImgOps").AddKey("PEHelper.MaxConcurrentISO", 2)
         settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", 1)
         settingsData("ImgOps").AddKey("PreventSystemFromSleeping", 1)
         settingsData("ImgOps").AddKey("HumanizeDates", 1)
+        settingsData("ImgOps").AddKey("LockUnlockedVolumes", 1)
         settingsData.Sections.AddSection("ScratchDir")
         settingsData("ScratchDir").AddKey("UseScratch", 0)
         settingsData("ScratchDir").AddKey("AutoScratch", 1)
@@ -4214,6 +4247,8 @@ Public Class MainForm
         settingsData("PEPolicy").AddKey("PXEServerPort", 8080)
         settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
         settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", 0)
+        settingsData("PEPolicy").AddKey("ScanBootImages", 0)
+        settingsData("PEPolicy").AddKey("ImageSelectorDefaultOption", 0)
         parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4260,9 +4295,12 @@ Public Class MainForm
         ImgOpKey.SetValue("PEHelper.UnattendedFile", "", RegistryValueKind.String)
         ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PEHelper.MaxConcurrentISO", 2, RegistryValueKind.DWord)
         ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PreventSystemFromSleeping", 1, RegistryValueKind.DWord)
         ImgOpKey.SetValue("HumanizeDates", 1, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("LockUnlockedVolumes", 1, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4321,6 +4359,8 @@ Public Class MainForm
         PEPolicyKey.SetValue("AutoUnattendCopytoSysprep", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
         PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("ScanBootImages", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("ImageSelectorDefaultOption", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -4339,7 +4379,7 @@ Public Class MainForm
             Dim parser As New FileIniDataParser(),
                 settingsData As New IniData()
             settingsData.Sections.AddSection("Program")
-            settingsData("Program").AddKey("DismExe", Quote & DismExe & Quote)
+            settingsData("Program").AddKey("DismExe", Quote & DismExe.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Program").AddKey("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0))
             settingsData.Sections.AddSection("Personalization")
             settingsData("Personalization").AddKey("ColorMode", ColorMode)
@@ -4354,10 +4394,10 @@ Public Class MainForm
             settingsData("Personalization").AddKey("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0))
             settingsData("Personalization").AddKey("ShowDateAndTime", If(ShowDateAndTime, 1, 0))
             settingsData.Sections.AddSection("Logs")
-            settingsData("Logs").AddKey("LogFile", Quote & LogFile & Quote)
+            settingsData("Logs").AddKey("LogFile", Quote & LogFile.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Logs").AddKey("LogLevel", LogLevel)
             settingsData("Logs").AddKey("AutoLogs", If(AutoLogs, 1, 0))
-            settingsData("Logs").AddKey("SystemEditor", Quote & SystemEditor & Quote)
+            settingsData("Logs").AddKey("SystemEditor", Quote & SystemEditor.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Logs").AddKey("EnableDynaLog", If(EnableDynaLog, 1, 0))
             settingsData.Sections.AddSection("ImgOps")
             settingsData("ImgOps").AddKey("Quiet", If(QuietOperations, 1, 0))
@@ -4367,9 +4407,11 @@ Public Class MainForm
             settingsData("ImgOps").AddKey("PEHelper.CopyToVentoy", If(PEHelper_CopyToVentoy, 1, 0))
             settingsData("ImgOps").AddKey("PEHelper.Use2023EFI", If(PEHelper_Use2023EFI, 1, 0))
             settingsData("ImgOps").AddKey("PEHelper.IncludeSysDrvs", If(PEHelper_IncludeSysDrvs, 1, 0))
+            settingsData("ImgOps").AddKey("PEHelper.MaxConcurrentISO", PEHelper_MaxConcurrentISO)
             settingsData("ImgOps").AddKey("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval)
             settingsData("ImgOps").AddKey("PreventSystemFromSleeping", If(PreventSystemFromSleeping, 1, 0))
             settingsData("ImgOps").AddKey("HumanizeDates", If(HumanizeDates, 1, 0))
+            settingsData("ImgOps").AddKey("LockUnlockedVolumes", If(LockUnlockedVolumes, 1, 0))
             settingsData.Sections.AddSection("ScratchDir")
             settingsData("ScratchDir").AddKey("UseScratch", If(UseScratch, 1, 0))
             settingsData("ScratchDir").AddKey("AutoScratch", If(AutoScrDir, 1, 0))
@@ -4420,17 +4462,17 @@ Public Class MainForm
             settingsData("PEPolicy").AddKey("KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote)
             settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", If(KeyboardLayoutOverrideExistingLayout, 1, 0))
             settingsData("PEPolicy").AddKey("AnswerFileConflictResponse", AnswerFileConflictResponse)
+            settingsData("PEPolicy").AddKey("ScanBootImages", If(ScanBootImages, 1, 0))
+            settingsData("PEPolicy").AddKey("ImageSelectorDefaultOption", ImageSelectorDefaultOption)
             parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         Else
             DynaLog.LogMessage("Attempting to write to registry...")
             Try
                 ' Tell settings file to use this method
                 DynaLog.LogMessage("Forcing save to registry in INI File...")
-                Dim SettingRtb As New RichTextBox() With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                }
-                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
-                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                Dim SettingContents As String = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                SettingContents = SettingContents.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Replace("SaveOnSettingsIni = 1", "SaveOnSettingsIni = 0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingContents, ASCII)
                 DynaLog.LogMessage("Setting key values...")
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
@@ -4471,9 +4513,11 @@ Public Class MainForm
                 ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PEHelper.IncludeSysDrvs", PEHelper_IncludeSysDrvs, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("PEHelper.MaxConcurrentISO", PEHelper_MaxConcurrentISO, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("PreventSystemFromSleeping", PreventSystemFromSleeping, RegistryValueKind.DWord)
                 ImgOpKey.SetValue("HumanizeDates", HumanizeDates, RegistryValueKind.DWord)
+                ImgOpKey.SetValue("LockUnlockedVolumes", LockUnlockedVolumes, RegistryValueKind.DWord)
                 ImgOpKey.Close()
                 DynaLog.LogMessage("Configuring scratch directory settings...")
                 Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
@@ -4545,6 +4589,8 @@ Public Class MainForm
                 PEPolicyKey.SetValue("KeyboardLayoutCode", KeyboardLayoutCode, RegistryValueKind.String)
                 PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", KeyboardLayoutOverrideExistingLayout, RegistryValueKind.DWord)
                 PEPolicyKey.SetValue("AnswerFileConflictResponse", AnswerFileConflictResponse, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("ScanBootImages", ScanBootImages, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("ImageSelectorDefaultOption", ImageSelectorDefaultOption, RegistryValueKind.DWord)
                 PEPolicyKey.Close()
                 Key.Close()
             Catch ex As Exception
@@ -9241,7 +9287,6 @@ Public Class MainForm
                 Label44.Text = "(Installazione offline)"
         End Select
         Panel2.Visible = False
-        ManageOfflineInstallationToolStripMenuItem.Enabled = False
         DynaLog.LogMessage("Setting mount directory to disk...")
         MountDir = ImageDrive
         DynaLog.LogMessage("Beginning background processes...")
@@ -9393,11 +9438,14 @@ Public Class MainForm
         Button29.Enabled = True
         Panel2.Visible = True
         BGProcDetails.Hide()
-        ManageOfflineInstallationToolStripMenuItem.Enabled = True
         DynaLog.LogMessage("Clearing completion state of background processes...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
+        If LockUnlockedVolumes AndAlso InBitLockerMode Then
+            LockVolumeDialog.DriveLetter = drivePath
+            LockVolumeDialog.ShowDialog(Me)
+        End If
     End Sub
 
     Sub EndOnlineManagement()
@@ -10891,10 +10939,14 @@ Public Class MainForm
             EnableDynaLog = True
             DynaLog.EnableLogging()
         End If
-        If tourServer.IsListenerAlive() Then
+        If tourServer IsNot Nothing AndAlso tourServer.IsListenerAlive() Then
             DynaLog.LogMessage("Tour is active. Attempting to shut down server...")
             tourServer.StopServer()
             TourActionsTSMI.Visible = False
+        End If
+        If videoServer IsNot Nothing AndAlso videoServer.IsListenerAlive() Then
+            DynaLog.LogMessage("Video server is active. Attempting to shut down server...")
+            videoServer.StopServer()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
         StopMountedImageDetector()
@@ -11626,17 +11678,24 @@ Public Class MainForm
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image unmount dialog...")
-        If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
-            DynaLog.LogMessage("This is the image the user is managing here")
+        ' We default to the current image but, if we have the mounted image manager open, we'll check
+        If MountedImgMgr.ListView1.FocusedItem IsNot Nothing Then
+            If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
+                DynaLog.LogMessage("This is the image the user is managing here")
+                ImgUMount.RadioButton1.Checked = True
+                ImgUMount.RadioButton2.Checked = False
+                ImgUMount.TextBox1.Text = ""
+            Else
+                DynaLog.LogMessage("This is an image different from the one the user is managing here")
+                ImgUMount.RadioButton1.Checked = False
+                ImgUMount.RadioButton2.Checked = True
+                ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+                ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+            End If
+        Else
             ImgUMount.RadioButton1.Checked = True
             ImgUMount.RadioButton2.Checked = False
             ImgUMount.TextBox1.Text = ""
-        Else
-            DynaLog.LogMessage("This is an image different from the one the user is managing here")
-            ImgUMount.RadioButton1.Checked = False
-            ImgUMount.RadioButton2.Checked = True
-            ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         End If
         ImgUMount.ShowDialog(Me)
     End Sub
@@ -11819,10 +11878,8 @@ Public Class MainForm
                 DynaLog.LogMessage("An AppX manifest file exists in the main directory. There are no variations of any kind")
                 ' Read from manifest
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("Logo") Then
                         DynaLog.LogMessage("We have a possible logo...")
                         Dim SplitPaths As New List(Of String)
@@ -11861,10 +11918,8 @@ Public Class MainForm
                     If Not folder.Contains("neutral") Then
                         DynaLog.LogMessage("We have a possible folder candidate. Reading manifest...")
                         ' Read from manifest
-                        Dim ManFile As New RichTextBox() With {
-                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
-                        }
-                        For Each line In ManFile.Lines
+                        Dim ManFileLines As String() = File.ReadAllLines(folder & "AppxManifest.xml")
+                        For Each line In ManFileLines
                             If line.Contains("Logo") Then
                                 DynaLog.LogMessage("Returning logo...")
                                 Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
@@ -11931,10 +11986,8 @@ Public Class MainForm
             DynaLog.LogMessage("Checking if AppX manifest exists...")
             If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
                 DynaLog.LogMessage("Reading AppX manifest...")
-                Dim ManFile As New RichTextBox() With {
-                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
-                }
-                For Each line In ManFile.Lines
+                Dim ManFileLines As String() = File.ReadAllLines(suitableFolderName & "\AppxManifest.xml")
+                For Each line In ManFileLines
                     If line.Contains("<Logo>") Then
                         Dim SplitPaths As New List(Of String)
                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -14684,9 +14737,11 @@ Public Class MainForm
                 MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
-            If Not videoServer.IsListenerAlive Then videoServer.StartServer()
-            If videoServer.IsListenerAlive() Then
-                Process.Start("http://localhost:2026/videoplay.html")
+            If videoServer IsNot Nothing Then
+                If Not videoServer.IsListenerAlive Then videoServer.StartServer()
+                If videoServer.IsListenerAlive() Then
+                    Process.Start("http://localhost:2026/videoplay.html")
+                End If
             End If
         End If
     End Sub
@@ -14848,8 +14903,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
             ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
-            ImgInfoSaveDlg.OnlineMode = OnlineManagement
-            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.OnlineMode = False
+            ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
@@ -14862,7 +14917,6 @@ Public Class MainForm
     End Sub
 
     Private Sub CreateDiscImageWithThisFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageWithThisFileToolStripMenuItem.Click
-        If ISOCreator.BackgroundWorker1.IsBusy Then Exit Sub
         DynaLog.LogMessage("Opening ISO creator...")
         ISOCreator.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
         If ISOCreator.Visible Then

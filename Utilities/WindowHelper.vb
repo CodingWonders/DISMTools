@@ -135,6 +135,8 @@ Public Class WindowHelper
     Private Shared notificationBalloon As NotifyIcon
 
     Public Shared Sub DisplayNotificationBalloon(balloonIcon As ToolTipIcon, balloonCaption As String, balloonMessage As String)
+        If notificationBalloon IsNot Nothing Then notificationBalloon.Dispose()
+
         notificationBalloon = New NotifyIcon() With {
             .BalloonTipIcon = balloonIcon,
             .Icon = CType(New System.ComponentModel.ComponentResourceManager(GetType(MainForm)).GetObject("$this.Icon"), System.Drawing.Icon),
@@ -143,8 +145,17 @@ Public Class WindowHelper
             .BalloonTipText = balloonMessage,
             .Visible = True
         }
+
+        AddHandler notificationBalloon.BalloonTipClosed, AddressOf OnBalloonClosed
+        AddHandler notificationBalloon.BalloonTipClicked, AddressOf OnBalloonClosed
+
         notificationBalloon.ShowBalloonTip(5000)
-        notificationBalloon.Visible = False
+    End Sub
+
+    Private Shared Sub OnBalloonClosed(sender As Object, e As EventArgs)
+        Dim icon As NotifyIcon = DirectCast(sender, NotifyIcon)
+        icon.Visible = False
+        icon.Dispose()
     End Sub
 
     Public Shared Sub CheckAllItems(lv As ListView)

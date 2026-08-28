@@ -23,42 +23,51 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
-        Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SystemCM_TSMI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripButton8 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton()
-        Me.EditorFD = New System.Windows.Forms.FontDialog()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton
+        Me.ColorModeTSDDB = New System.Windows.Forms.ToolStripDropDownButton
+        Me.LightCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.DarkCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.SystemCM_TSMI = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripButton8 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
+        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
+        Me.ToolStripButton9 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
+        Me.ToolStripButton10 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton11 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator
+        Me.ToolStripButton12 = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton13 = New System.Windows.Forms.ToolStripButton
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel
+        Me.Panel1 = New System.Windows.Forms.Panel
+        Me.tbScriptCode = New System.Windows.Forms.TextBox
+        Me.Panel2 = New System.Windows.Forms.Panel
+        Me.Button3 = New System.Windows.Forms.Button
+        Me.Label6 = New System.Windows.Forms.Label
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox
+        Me.Button2 = New System.Windows.Forms.Button
+        Me.Button1 = New System.Windows.Forms.Button
+        Me.Label5 = New System.Windows.Forms.Label
+        Me.Label4 = New System.Windows.Forms.Label
+        Me.Label3 = New System.Windows.Forms.Label
+        Me.tbScriptDescription = New System.Windows.Forms.TextBox
+        Me.Label2 = New System.Windows.Forms.Label
+        Me.tbScriptName = New System.Windows.Forms.TextBox
+        Me.comboLanguage = New System.Windows.Forms.ComboBox
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
+        Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog
+        Me.EditorFD = New System.Windows.Forms.FontDialog
         Me.ToolStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -69,10 +78,10 @@ Partial Class MainForm
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB, Me.ToolStripButton8, Me.ToolStripSeparator1, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripButton7})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ColorModeTSDDB, Me.ToolStripButton8, Me.ToolStripSeparator1, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripButton7, Me.ToolStripSeparator2, Me.ToolStripButton9, Me.ToolStripSeparator3, Me.ToolStripButton10, Me.ToolStripButton11, Me.ToolStripSeparator4, Me.ToolStripButton12, Me.ToolStripButton13})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1264, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1272, 25)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -102,8 +111,6 @@ Partial Class MainForm
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton3.Text = "Save Starter Script File... (Ctrl + S)"
-        Me.ToolStripButton3.ToolTipText = "Save Starter Script File... (Ctrl + S)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hold down SHIFT while clicking the icon t" & _
-    "o specify the target version for the starter script while saving."
         '
         'ToolStripButton4
         '
@@ -129,19 +136,19 @@ Partial Class MainForm
         'LightCM_TSMI
         '
         Me.LightCM_TSMI.Name = "LightCM_TSMI"
-        Me.LightCM_TSMI.Size = New System.Drawing.Size(112, 22)
+        Me.LightCM_TSMI.Size = New System.Drawing.Size(120, 22)
         Me.LightCM_TSMI.Text = "Light"
         '
         'DarkCM_TSMI
         '
         Me.DarkCM_TSMI.Name = "DarkCM_TSMI"
-        Me.DarkCM_TSMI.Size = New System.Drawing.Size(112, 22)
+        Me.DarkCM_TSMI.Size = New System.Drawing.Size(120, 22)
         Me.DarkCM_TSMI.Text = "Dark"
         '
         'SystemCM_TSMI
         '
         Me.SystemCM_TSMI.Name = "SystemCM_TSMI"
-        Me.SystemCM_TSMI.Size = New System.Drawing.Size(112, 22)
+        Me.SystemCM_TSMI.Size = New System.Drawing.Size(120, 22)
         Me.SystemCM_TSMI.Text = "System"
         '
         'ToolStripButton8
@@ -186,16 +193,51 @@ Partial Class MainForm
         Me.ToolStripButton7.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton7.Text = "Change Editor Font..."
         '
-        'Button2
+        'ToolStripSeparator2
         '
-        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(612, 6)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(128, 23)
-        Me.Button2.TabIndex = 2
-        Me.Button2.Text = "Normalize Spacing"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButton9
+        '
+        Me.ToolStripButton9.Image = Global.StarterScriptEditor.My.Resources.Resources.upload
+        Me.ToolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton9.Name = "ToolStripButton9"
+        Me.ToolStripButton9.Size = New System.Drawing.Size(90, 22)
+        Me.ToolStripButton9.Text = "Upload Script"
+        Me.ToolStripButton9.ToolTipText = "Upload Script to the Library... (Ctrl + U)"
+        '
+        'ToolStripButton10
+        '
+        Me.ToolStripButton10.Image = Global.StarterScriptEditor.My.Resources.Resources.inspect_security
+        Me.ToolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton10.Name = "ToolStripButton10"
+        Me.ToolStripButton10.Size = New System.Drawing.Size(135, 22)
+        Me.ToolStripButton10.Text = "Inspect Script Security"
+        Me.ToolStripButton10.ToolTipText = resources.GetString("ToolStripButton10.ToolTipText")
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButton12
+        '
+        Me.ToolStripButton12.Image = Global.StarterScriptEditor.My.Resources.Resources.find
+        Me.ToolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton12.Name = "ToolStripButton12"
+        Me.ToolStripButton12.Size = New System.Drawing.Size(59, 22)
+        Me.ToolStripButton12.Text = "Find..."
+        Me.ToolStripButton12.ToolTipText = "Find text in script code (CTRL + F)"
+        '
+        'ToolStripButton13
+        '
+        Me.ToolStripButton13.Image = Global.StarterScriptEditor.My.Resources.Resources.replace
+        Me.ToolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton13.Name = "ToolStripButton13"
+        Me.ToolStripButton13.Size = New System.Drawing.Size(77, 22)
+        Me.ToolStripButton13.Text = "Replace..."
+        Me.ToolStripButton13.ToolTipText = "Find and replace text in script code with other text (CTRL + R)"
         '
         'TableLayoutPanel1
         '
@@ -208,9 +250,9 @@ Partial Class MainForm
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.Padding = New System.Windows.Forms.Padding(8)
         Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle)
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1264, 656)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1272, 668)
         Me.TableLayoutPanel1.TabIndex = 1
         '
         'Label1
@@ -231,56 +273,69 @@ Partial Class MainForm
         Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.TextBox2, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.tbScriptDescription, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.TextBox1, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox1, 1, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.tbScriptName, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.comboLanguage, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.CheckBox2, 1, 3)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(11, 50)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 5
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle)
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1242, 595)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1250, 607)
         Me.TableLayoutPanel2.TabIndex = 1
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.TextBox3)
+        Me.Panel1.Controls.Add(Me.tbScriptCode)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(195, 106)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1044, 486)
+        Me.Panel1.Size = New System.Drawing.Size(1052, 498)
         Me.Panel1.TabIndex = 8
         '
-        'TextBox3
+        'tbScriptCode
         '
-        Me.TextBox3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox3.Font = New System.Drawing.Font("Lucida Console", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox3.Location = New System.Drawing.Point(0, 0)
-        Me.TextBox3.Multiline = True
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox3.Size = New System.Drawing.Size(1044, 450)
-        Me.TextBox3.TabIndex = 0
-        Me.TextBox3.WordWrap = False
+        Me.tbScriptCode.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbScriptCode.Font = New System.Drawing.Font("Lucida Console", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tbScriptCode.Location = New System.Drawing.Point(0, 0)
+        Me.tbScriptCode.MaxLength = 2147483647
+        Me.tbScriptCode.Multiline = True
+        Me.tbScriptCode.Name = "tbScriptCode"
+        Me.tbScriptCode.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.tbScriptCode.Size = New System.Drawing.Size(1052, 462)
+        Me.tbScriptCode.TabIndex = 0
+        Me.tbScriptCode.WordWrap = False
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.Button3)
         Me.Panel2.Controls.Add(Me.Label6)
         Me.Panel2.Controls.Add(Me.CheckBox1)
         Me.Panel2.Controls.Add(Me.Button2)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 450)
+        Me.Panel2.Location = New System.Drawing.Point(0, 462)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1044, 36)
+        Me.Panel2.Size = New System.Drawing.Size(1052, 36)
         Me.Panel2.TabIndex = 1
+        '
+        'Button3
+        '
+        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button3.Location = New System.Drawing.Point(486, 6)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(128, 23)
+        Me.Button3.TabIndex = 3
+        Me.Button3.Text = "Document Outline"
+        Me.Button3.UseVisualStyleBackColor = True
         '
         'Label6
         '
@@ -297,7 +352,7 @@ Partial Class MainForm
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
         Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CheckBox1.Location = New System.Drawing.Point(746, 6)
+        Me.CheckBox1.Location = New System.Drawing.Point(754, 6)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(89, 23)
         Me.CheckBox1.TabIndex = 1
@@ -305,11 +360,22 @@ Partial Class MainForm
         Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'Button2
+        '
+        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(620, 6)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(128, 23)
+        Me.Button2.TabIndex = 2
+        Me.Button2.Text = "Normalize Spacing"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(841, 6)
+        Me.Button1.Location = New System.Drawing.Point(849, 6)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(200, 23)
         Me.Button1.TabIndex = 2
@@ -323,7 +389,7 @@ Partial Class MainForm
         Me.Label5.Location = New System.Drawing.Point(3, 103)
         Me.Label5.Name = "Label5"
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label5.Size = New System.Drawing.Size(186, 492)
+        Me.Label5.Size = New System.Drawing.Size(186, 504)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "Script Code:"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -350,13 +416,13 @@ Partial Class MainForm
         Me.Label3.Text = "Script Description:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'TextBox2
+        'tbScriptDescription
         '
-        Me.TextBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox2.Location = New System.Drawing.Point(195, 30)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(1044, 21)
-        Me.TextBox2.TabIndex = 3
+        Me.tbScriptDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbScriptDescription.Location = New System.Drawing.Point(195, 30)
+        Me.tbScriptDescription.Name = "tbScriptDescription"
+        Me.tbScriptDescription.Size = New System.Drawing.Size(1052, 21)
+        Me.tbScriptDescription.TabIndex = 3
         '
         'Label2
         '
@@ -369,23 +435,23 @@ Partial Class MainForm
         Me.Label2.Text = "Script Name:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'TextBox1
+        'tbScriptName
         '
-        Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox1.Location = New System.Drawing.Point(195, 3)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(1044, 21)
-        Me.TextBox1.TabIndex = 1
+        Me.tbScriptName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbScriptName.Location = New System.Drawing.Point(195, 3)
+        Me.tbScriptName.Name = "tbScriptName"
+        Me.tbScriptName.Size = New System.Drawing.Size(1052, 21)
+        Me.tbScriptName.TabIndex = 1
         '
-        'ComboBox1
+        'comboLanguage
         '
-        Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript (obsolete)", "JScript (obsolete)"})
-        Me.ComboBox1.Location = New System.Drawing.Point(195, 57)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(1044, 21)
-        Me.ComboBox1.TabIndex = 5
+        Me.comboLanguage.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.comboLanguage.FormattingEnabled = True
+        Me.comboLanguage.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript (obsolete)", "JScript (obsolete)"})
+        Me.comboLanguage.Location = New System.Drawing.Point(195, 57)
+        Me.comboLanguage.Name = "comboLanguage"
+        Me.comboLanguage.Size = New System.Drawing.Size(1052, 21)
+        Me.comboLanguage.TabIndex = 5
         '
         'CheckBox2
         '
@@ -408,15 +474,29 @@ Partial Class MainForm
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vb" & _
-    "s;*.vbe;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
+        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vbs;*.v" & _
+            "be;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
         Me.OpenFileDialog2.Title = "Import Existing Script"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButton11
+        '
+        Me.ToolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ToolStripButton11.Image = CType(resources.GetObject("ToolStripButton11.Image"), System.Drawing.Image)
+        Me.ToolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton11.Name = "ToolStripButton11"
+        Me.ToolStripButton11.Size = New System.Drawing.Size(154, 22)
+        Me.ToolStripButton11.Text = "Customize Inspection Rules..."
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.ClientSize = New System.Drawing.Size(1272, 693)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -453,11 +533,11 @@ Partial Class MainForm
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents tbScriptDescription As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
-    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
+    Friend WithEvents tbScriptName As System.Windows.Forms.TextBox
+    Friend WithEvents comboLanguage As System.Windows.Forms.ComboBox
+    Friend WithEvents tbScriptCode As System.Windows.Forms.TextBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Button1 As System.Windows.Forms.Button
@@ -476,5 +556,14 @@ Partial Class MainForm
     Friend WithEvents EditorFD As System.Windows.Forms.FontDialog
     Friend WithEvents ToolStripButton8 As System.Windows.Forms.ToolStripButton
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton9 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton10 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton11 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton12 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton13 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 
 End Class

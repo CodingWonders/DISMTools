@@ -167,6 +167,13 @@ Module AppxHelper
         Return pkgName
     End Function
 
+    ''' <summary>
+    ''' Determines whether a package is registered for any user.
+    ''' </summary>
+    ''' <param name="MountDirectory">The mount directory where the base package repository root path resides.</param>
+    ''' <param name="imgAppxPackage">The <see cref="DismAppxPackage"/> or <see cref="ImageAppxPackage"/> class object containing the package name to query</param>
+    ''' <returns>Whether the package is registered</returns>
+    ''' <remarks></remarks>
     Public Function IsPackageRegistered(MountDirectory As String, imgAppxPackage As Object) As Boolean
         If PackageRepositoryRootPath = "" Then
             DynaLog.LogMessage("Getting package repository root path...")
@@ -189,6 +196,51 @@ Module AppxHelper
         Else
             Return False
         End If
+    End Function
+
+    ''' <summary>
+    ''' Gets information about registration of a specific AppX package.
+    ''' </summary>
+    ''' <param name="MountDirectory">The mount directory where the base package repository root path resides.</param>
+    ''' <param name="imgAppxPackage">The <see cref="DismAppxPackage"/> or <see cref="ImageAppxPackage"/> class object containing the package name to query</param>
+    ''' <returns>A key-value pair containing information about package registration. The key for each item represents the user's Security Identifier (SID), while the value represents the name of said user.</returns>
+    ''' <remarks></remarks>
+    Public Function GetRegistrationPckgdepSidInfo(MountDirectory As String, imgAppxPackage As Object) As Dictionary(Of String, String)
+        If PackageRepositoryRootPath = "" Then
+            DynaLog.LogMessage("Getting package repository root path...")
+            PackageRepositoryRootPath = GetAppxPackageRepositoryRootPath(MountDirectory)
+            If PackageRepositoryRootPath = "" Then PackageRepositoryRootPath = String.Format("{0}\ProgramData\Microsoft\Windows\AppRepository", MountDirectory)
+            DynaLog.LogMessage("AppX Package Repository Root: " & PackageRepositoryRootPath)
+        End If
+
+        If imgAppxPackage Is Nothing Then Return New Dictionary(Of String, String)
+
+        Dim RegisteredSidInfo As New Dictionary(Of String, String)
+
+        Dim PackageEntryInRepository As String = ""
+        If TypeOf imgAppxPackage Is ImageAppxPackage Then
+            PackageEntryInRepository = Path.Combine(PackageRepositoryRootPath, "Packages", CType(imgAppxPackage, ImageAppxPackage).PackageFullName)
+        ElseIf TypeOf imgAppxPackage Is DismAppxPackage Then
+            PackageEntryInRepository = Path.Combine(PackageRepositoryRootPath, "Packages", CType(imgAppxPackage, DismAppxPackage).PackageName)
+        End If
+
+        If Directory.Exists(PackageEntryInRepository) Then
+            Dim pckgdeps As IEnumerable(Of String) = Directory.EnumerateFiles(PackageEntryInRepository, "*.pckgdep", SearchOption.TopDirectoryOnly)
+            For Each pckgdep In pckgdeps
+                Dim SID As String = Path.GetFileNameWithoutExtension(pckgdep),
+                    userName As String = ""
+
+                Dim UserMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Name FROM Win32_UserAccount WHERE SID = {0}{1}{0}", Quote, SID))
+                If UserMOC Is Nothing Then Continue For
+
+                userName = WMIHelper.GetObjectValue(UserMOC(0), "Name")
+                RegisteredSidInfo.Add(Path.GetFileNameWithoutExtension(pckgdep), userName)
+            Next
+        Else
+            Return New Dictionary(Of String, String)
+        End If
+
+        Return RegisteredSidInfo
     End Function
 
 End Module

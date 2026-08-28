@@ -162,6 +162,9 @@ Public Class MountedImgMgr
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
+        ' If the mounted image detector is not running, run it
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then MainForm.StartMountedImageDetector()
+
         ' Subscribe to MainForm event to get updates
         AddHandler MainForm.MountedImagesUpdated, AddressOf OnMountedImagesUpdated
 

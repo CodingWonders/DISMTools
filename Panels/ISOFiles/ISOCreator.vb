@@ -5,25 +5,27 @@ Imports Microsoft.Dism
 Imports DISMTools.Utilities
 Imports System.Net
 Imports Microsoft.Win32
+Imports System.Threading.Tasks
+Imports DISMTools.Elements.ISOCreation
 
 Public Class ISOCreator
 
     Dim ImageInfoCollection As DismImageInfoCollection
     Dim ISOMsg As String = ""
-    Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
     Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/615540bc-be0b-433a-b91b-1f2b0642bb24/adk/adksetup.exe", "https://download.microsoft.com/download/2472e9a0-7c74-4ffd-a3e4-27ed1fa30d30/adkwinpeaddons/adkwinpesetup.exe"}
     Dim adkDownloadSuccess As Boolean
+
+    ' Job manager for concurrent ISO creation tasks
+    Private Shared _jobManager As IsoCreationJobManager = New IsoCreationJobManager(maxConcurrentTasks:=MainForm.PEHelper_MaxConcurrentISO)
+    Private _currentJobId As Integer = -1
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        progressMessages(0) = "Status"
-                        progressMessages(1) = "Creating ISO file. This can take some time. Please wait..."
-                        progressMessages(2) = "The ISO file has been created"
                         Text = "Create an ISO file"
                         ImageTaskHeader1.ItemText = Text
                         Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
@@ -31,8 +33,6 @@ Public Class ISOCreator
                         Label4.Text = "Image file to add to ISO file:"
                         Label6.Text = "Architecture:"
                         Label7.Text = "Target ISO location:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "You can do other things while the ISO is being created. Come back here anytime for an updated status."
                         Button1.Text = "Browse..."
                         Button2.Text = "Pick..."
                         Button3.Text = "Browse..."
@@ -53,9 +53,6 @@ Public Class ISOCreator
                         CheckBox3.Text = "Use newly-signed boot binaries"
                         CheckBox4.Text = "Include essential drivers from this system"
                     Case "ESN"
-                        progressMessages(0) = "Estado"
-                        progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
-                        progressMessages(2) = "El archivo ISO ha sido creado"
                         Text = "Crear un archivo ISO"
                         ImageTaskHeader1.ItemText = Text
                         Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
@@ -63,8 +60,6 @@ Public Class ISOCreator
                         Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
                         Label6.Text = "Arquitectura:"
                         Label7.Text = "Ubicación del archivo ISO de destino:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "Puede hacer otras cosas mientras se crea el archivo ISO. Vuelva aquí para ver un estado actualizado."
                         Button1.Text = "Examinar..."
                         Button2.Text = "Escoger..."
                         Button3.Text = "Examinar..."
@@ -85,9 +80,6 @@ Public Class ISOCreator
                         CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
                         CheckBox4.Text = "Incluir controladores esenciales de este sistema"
                     Case "FRA"
-                        progressMessages(0) = "Statut"
-                        progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
-                        progressMessages(2) = "Le fichier ISO a été créé"
                         Text = "Créer un fichier ISO"
                         ImageTaskHeader1.ItemText = Text
                         Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
@@ -95,8 +87,6 @@ Public Class ISOCreator
                         Label4.Text = "Fichier image à ajouter au fichier ISO :"
                         Label6.Text = "Architecture :"
                         Label7.Text = "Emplacement ISO cible :"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "Vous pouvez faire d'autres choses pendant la création de l'ISO. Revenez ici à tout moment pour obtenir une mise à jour de l'état."
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Choisir..."
                         Button3.Text = "Parcourir..."
@@ -117,9 +107,6 @@ Public Class ISOCreator
                         CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
                         CheckBox4.Text = "Inclure les pilotes indispensables de ce système"
                     Case "PTB", "PTG"
-                        progressMessages(0) = "Estado"
-                        progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
-                        progressMessages(2) = "O ficheiro ISO foi criado"
                         Text = "Criar um ficheiro ISO"
                         ImageTaskHeader1.ItemText = Text
                         Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
@@ -127,8 +114,6 @@ Public Class ISOCreator
                         Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
                         Label6.Text = "Arquitetura:"
                         Label7.Text = "Localização ISO de destino:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "Pode fazer outras coisas enquanto o ISO está a ser criado. Volte aqui em qualquer altura para obter um estado atualizado."
                         Button1.Text = "Procurar..."
                         Button2.Text = "Escolher..."
                         Button3.Text = "Procurar..."
@@ -149,9 +134,6 @@ Public Class ISOCreator
                         CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
                         CheckBox4.Text = "Incluir os controladores essenciais deste sistema"
                     Case "ITA"
-                        progressMessages(0) = "Stato"
-                        progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
-                        progressMessages(2) = "Il file ISO è stato creato"
                         Text = "Creare un file ISO"
                         ImageTaskHeader1.ItemText = Text
                         Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
@@ -159,8 +141,6 @@ Public Class ISOCreator
                         Label4.Text = "File immagine da aggiungere al file ISO:"
                         Label6.Text = "Architettura:"
                         Label7.Text = "Posizione ISO di destinazione:"
-                        Label8.Text = progressMessages(0)
-                        Label9.Text = "È possibile fare altre cose mentre la ISO viene creata. Tornare qui in qualsiasi momento per uno stato aggiornato"
                         Button1.Text = "Sfoglia..."
                         Button2.Text = "Scegli..."
                         Button3.Text = "Sfoglia..."
@@ -182,9 +162,6 @@ Public Class ISOCreator
                         CheckBox4.Text = "Includi i driver essenziali di questo sistema"
                 End Select
             Case 1
-                progressMessages(0) = "Status"
-                progressMessages(1) = "Creating ISO file. This can take some time. Please wait..."
-                progressMessages(2) = "The ISO file has been created"
                 Text = "Create an ISO file"
                 ImageTaskHeader1.ItemText = Text
                 Label2.Text = "The ISO file creation wizard lets you quickly create a disc image file that you can use to test the changes made to your Windows image. A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
@@ -192,8 +169,6 @@ Public Class ISOCreator
                 Label4.Text = "Image file to add to ISO file:"
                 Label6.Text = "Architecture:"
                 Label7.Text = "Target ISO location:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "You can do other things while the ISO is being created. Come back here anytime for an updated status."
                 Button1.Text = "Browse..."
                 Button2.Text = "Pick..."
                 Button3.Text = "Browse..."
@@ -214,9 +189,6 @@ Public Class ISOCreator
                 CheckBox3.Text = "Use newly-signed boot binaries"
                 CheckBox4.Text = "Include essential drivers from this system"
             Case 2
-                progressMessages(0) = "Estado"
-                progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
-                progressMessages(2) = "El archivo ISO ha sido creado"
                 Text = "Crear un archivo ISO"
                 ImageTaskHeader1.ItemText = Text
                 Label2.Text = "El asistente de creación de archivos ISO le permite crear un archivo de imagen de disco rápidamente y que puede utilizar para probar los cambios hechos a su imagen de Windows. Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
@@ -224,8 +196,6 @@ Public Class ISOCreator
                 Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
                 Label6.Text = "Arquitectura:"
                 Label7.Text = "Ubicación del archivo ISO de destino:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "Puede hacer otras cosas mientras se crea el archivo ISO. Vuelva aquí para ver un estado actualizado."
                 Button1.Text = "Examinar..."
                 Button2.Text = "Escoger..."
                 Button3.Text = "Examinar..."
@@ -246,9 +216,6 @@ Public Class ISOCreator
                 CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
                 CheckBox4.Text = "Incluir controladores esenciales de este sistema"
             Case 3
-                progressMessages(0) = "Statut"
-                progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
-                progressMessages(2) = "Le fichier ISO a été créé"
                 Text = "Créer un fichier ISO"
                 ImageTaskHeader1.ItemText = Text
                 Label2.Text = "L'assistant de création de fichier ISO vous permet de créer rapidement un fichier image de disque que vous pouvez utiliser pour tester les modifications apportées à votre image Windows. Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
@@ -256,8 +223,6 @@ Public Class ISOCreator
                 Label4.Text = "Fichier image à ajouter au fichier ISO :"
                 Label6.Text = "Architecture :"
                 Label7.Text = "Emplacement ISO cible :"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "Vous pouvez faire d'autres choses pendant la création de l'ISO. Revenez ici à tout moment pour obtenir une mise à jour de l'état."
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Choisir..."
                 Button3.Text = "Parcourir..."
@@ -278,9 +243,6 @@ Public Class ISOCreator
                 CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
                 CheckBox4.Text = "Inclure les pilotes indispensables de ce système"
             Case 4
-                progressMessages(0) = "Estado"
-                progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
-                progressMessages(2) = "O ficheiro ISO foi criado"
                 Text = "Criar um ficheiro ISO"
                 ImageTaskHeader1.ItemText = Text
                 Label2.Text = "O assistente de criação de ficheiros ISO permite-lhe criar rapidamente um ficheiro de imagem de disco que pode utilizar para testar as alterações efectuadas à sua imagem do Windows. Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
@@ -288,8 +250,6 @@ Public Class ISOCreator
                 Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
                 Label6.Text = "Arquitetura:"
                 Label7.Text = "Localização ISO de destino:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "Pode fazer outras coisas enquanto o ISO está a ser criado. Volte aqui em qualquer altura para obter um estado atualizado."
                 Button1.Text = "Procurar..."
                 Button2.Text = "Escolher..."
                 Button3.Text = "Procurar..."
@@ -310,9 +270,6 @@ Public Class ISOCreator
                 CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
                 CheckBox4.Text = "Incluir os controladores essenciais deste sistema"
             Case 5
-                progressMessages(0) = "Stato"
-                progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
-                progressMessages(2) = "Il file ISO è stato creato"
                 Text = "Creare un file ISO"
                 ImageTaskHeader1.ItemText = Text
                 Label2.Text = "La creazione guidata del file ISO consente di creare rapidamente un file immagine del disco da utilizzare per testare le modifiche apportate all'immagine di Windows. Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
@@ -320,8 +277,6 @@ Public Class ISOCreator
                 Label4.Text = "File immagine da aggiungere al file ISO:"
                 Label6.Text = "Architettura:"
                 Label7.Text = "Posizione ISO di destinazione:"
-                Label8.Text = progressMessages(0)
-                Label9.Text = "È possibile fare altre cose mentre la ISO viene creata. Tornare qui in qualsiasi momento per uno stato aggiornato"
                 Button1.Text = "Sfoglia..."
                 Button2.Text = "Scegli..."
                 Button3.Text = "Sfoglia..."
@@ -348,11 +303,13 @@ Public Class ISOCreator
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        CreationJobsLV.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        CreationJobsLV.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
@@ -446,6 +403,16 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Copy to Ventoy? " & MainForm.PEHelper_CopyToVentoy)
         DynaLog.LogMessage("- Use new EFI boot binaries? " & MainForm.PEHelper_Use2023EFI)
         DynaLog.LogMessage("- Include System Drivers? " & MainForm.PEHelper_IncludeSysDrvs)
+        DynaLog.LogMessage("- " & MainForm.PEHelper_MaxConcurrentISO & " ISO file(s) can be created at the same time")
+        _jobManager = New IsoCreationJobManager(MainForm.PEHelper_MaxConcurrentISO)
+
+        ' get build time to show on watermark
+        Try
+            Dim buildTime As String = BuildGetter.RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm")
+            File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "version"), buildTime)
+        Catch ex As Exception
+
+        End Try
 
         If MainForm.PEHelper_UnattendedFile <> "" AndAlso File.Exists(MainForm.PEHelper_UnattendedFile) Then
             DynaLog.LogMessage("Unattended answer file has been specified and exists. Using it...")
@@ -467,6 +434,13 @@ Public Class ISOCreator
         ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(64)
+        ColumnHeader7.Width = WindowHelper.ScaleLogical(960)
+        ColumnHeader8.Width = WindowHelper.ScaleLogical(128)
+
+        ' Hook into job manager events
+        AddHandler _jobManager.JobStatusChanged, AddressOf JobManager_JobStatusChanged
+        AddHandler _jobManager.JobProgressChanged, AddressOf JobManager_JobProgressChanged
     End Sub
 
     Private Sub DownloadADK()
@@ -550,10 +524,10 @@ Public Class ISOCreator
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
                 ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1),
-                                                                                                                       imageinfo.ImageName,
-                                                                                                                       imageinfo.ImageDescription,
-                                                                                                                       imageinfo.ProductVersion.ToString(),
-                                                                                                                       casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
+                                                                                                                       ImageInfo.ImageName,
+                                                                                                                       ImageInfo.ImageDescription,
+                                                                                                                       ImageInfo.ProductVersion.ToString(),
+                                                                                                                       Casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
@@ -693,6 +667,14 @@ Public Class ISOCreator
         If MsgBox(ISOMsg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
             Exit Sub
         End If
+
+        ' If we have already started a job targeting the specified destination, we cancel
+        If _jobManager.JobQueue.Any(Function(job) job.Value.DestinationIsoFile.Equals(TextBox3.Text, StringComparison.OrdinalIgnoreCase)) Or
+            _jobManager.ActiveTasks.Any(Function(job) job.Value.DestinationIsoFile.Equals(TextBox3.Text, StringComparison.OrdinalIgnoreCase)) Then
+            MessageBox.Show("You have already started an ISO creation job targeting the destination ISO file. Wait until that job has completed and try again.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
         If File.Exists(TextBox3.Text) Then
             Select Case MainForm.Language
                 Case 0
@@ -729,104 +711,28 @@ Public Class ISOCreator
                 Exit Sub
             End If
         End If
-        OK_Button.Enabled = False
         Cancel_Button.Enabled = False
-        GroupBox1.Enabled = False
-        BackgroundWorker1.RunWorkerAsync()
+
+        ' Queue the ISO creation job in the job manager
+        Dim architecture As IsoArchitecture = GetArchitectureFromString(ComboBox1.SelectedItem.ToString())
+        Dim unattFile As String = If(CheckBox1.Checked, TextBox4.Text, "")
+
+        _currentJobId = _jobManager.QueueJob(TextBox1.Text, TextBox3.Text, architecture, unattFile, CheckBox2.Checked, CheckBox3.Checked, CheckBox4.Checked)
+
+        DynaLog.LogMessage("ISO creation job queued with ID: " & _currentJobId)
     End Sub
 
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-        BackgroundWorker1.ReportProgress(0)
-        DynaLog.LogMessage("Starting PE Helper...")
-        DynaLog.LogMessage("- Task: generate ISO")
-        DynaLog.LogMessage("- Architecture: " & ComboBox1.SelectedItem)
-        DynaLog.LogMessage("- Image file to test: " & Quote & TextBox1.Text & Quote)
-        DynaLog.LogMessage("- Unattended answer file to try: " & Quote & TextBox4.Text & Quote)
-        DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
-        DynaLog.LogMessage("- Copy the ISO file to Ventoy drives afterwards? " & If(CheckBox2.Checked, "Yes", "No"))
-        DynaLog.LogMessage("- Use boot binaries signed with Windows UEFI CA 2023? " & If(CheckBox3.Checked, "Yes", "No"))
-        DynaLog.LogMessage("- Include system essential drivers (SCSI adapters/network controllers)? " & If(CheckBox4.Checked, "Yes", "No"))
-        Dim ISOCreator As New Process()
-        ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ' Disable the unattended answer file thing if not willing to use
-        Dim unattFile As String = TextBox4.Text
-        If Not CheckBox1.Checked Then
-            unattFile = ""
-        End If
-
-        ' get build time to show on watermark
-        Try
-            Dim buildTime As String = BuildGetter.RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm")
-            File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "version"), buildTime)
-        Catch ex As Exception
-
-        End Try
-
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & If(CheckBox2.Checked, " -copyToVentoy", "") & If(CheckBox3.Checked, " -bootex", "") & If(CheckBox4.Checked, " -includeSysDrivers", "")
-        ISOCreator.Start()
-        ISOCreator.WaitForExit()
-        DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
-        success = (ISOCreator.ExitCode = 0)
-        BackgroundWorker1.ReportProgress(100)
-    End Sub
-
-    Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
-        IdlePanel.Visible = False
-        ISOProgressPanel.Visible = True
-        If e.ProgressPercentage < 100 Then
-            WindowHelper.DisableCloseCapability(Handle)
-            Label8.Text = progressMessages(1)
-            ProgressBar1.Style = ProgressBarStyle.Marquee
-            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
-        Else
-            WindowHelper.EnableCloseCapability(Handle)
-            If success Then Label8.Text = progressMessages(2)
-            ProgressBar1.Style = ProgressBarStyle.Blocks
-            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
-        End If
-        ProgressBar1.Value = e.ProgressPercentage
-    End Sub
-
-    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
-        DynaLog.LogMessage("The PE Helper has finished.")
-        DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
-        Dim msg As String = ""
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        msg = If(success, "The ISO file has been created successfully", "Failed to create the ISO file")
-                    Case "ESN"
-                        msg = If(success, "El archivo ISO ha sido creado satisfactoriamente", "No pudimos crear el archivo ISO")
-                    Case "FRA"
-                        msg = If(success, "Le fichier ISO a été créé avec succès", "Le processus de création de l'ISO a échoué")
-                    Case "PTB", "PTG"
-                        msg = If(success, "O ficheiro ISO foi criado com êxito", "O processo de criação do ISO falhou")
-                    Case "ITA"
-                        msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
-                End Select
-            Case 1
-                msg = If(success, "The ISO file has been created successfully", "Failed to create the ISO file")
-            Case 2
-                msg = If(success, "El archivo ISO ha sido creado satisfactoriamente", "No pudimos crear el archivo ISO")
-            Case 3
-                msg = If(success, "Le fichier ISO a été créé avec succès", "Le processus de création de l'ISO a échoué")
-            Case 4
-                msg = If(success, "O ficheiro ISO foi criado com êxito", "O processo de criação do ISO falhou")
-            Case 5
-                msg = If(success, "Il file ISO è stato creato con successo", "La creazione del file ISO non è riuscita")
+    Private Function GetArchitectureFromString(architectureString As String) As IsoArchitecture
+        Select Case architectureString.ToLower()
+            Case "x86" : Return IsoArchitecture.X86
+            Case "amd64" : Return IsoArchitecture.AMD64
+            Case "arm64" : Return IsoArchitecture.ARM64
+            Case Else : Return IsoArchitecture.X86
         End Select
-        WindowHelper.DisplayNotificationBalloon(If(success, ToolTipIcon.Info, ToolTipIcon.Warning), ImageTaskHeader1.ItemText, msg)
-        OK_Button.Enabled = True
-        Cancel_Button.Enabled = True
-        GroupBox1.Enabled = True
-        IdlePanel.Visible = True
-        ISOProgressPanel.Visible = False
-    End Sub
+    End Function
 
     Private Sub ISOCreator_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If BackgroundWorker1.IsBusy Then
+        If _jobManager.GetActiveTaskCount() > 0 Then
             DynaLog.LogMessage("The PE Helper is busy. Cancelling exit...")
             e.Cancel = True
             Beep()
@@ -852,6 +758,8 @@ Public Class ISOCreator
         End If
 
         RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+        RemoveHandler _jobManager.JobStatusChanged, AddressOf JobManager_JobStatusChanged
+        RemoveHandler _jobManager.JobProgressChanged, AddressOf JobManager_JobProgressChanged
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -873,27 +781,17 @@ Public Class ISOCreator
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                    Case "ESN"
-                        Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                    Case "FRA"
-                        Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                    Case "PTB", "PTG"
-                        Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                    Case "ITA"
-                        Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+                    Case "ENU", "ENG" : Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                    Case "ESN" : Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                    Case "FRA" : Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                    Case "PTB", "PTG" : Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                    Case "ITA" : Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
                 End Select
-            Case 1
-                Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-            Case 2
-                Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-            Case 3
-                Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-            Case 4
-                Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-            Case 5
-                Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+            Case 1 : Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+            Case 2 : Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+            Case 3 : Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+            Case 4 : Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+            Case 5 : Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
         End Select
     End Sub
 
@@ -925,7 +823,7 @@ Public Class ISOCreator
             Graphics.FromImage(bm).Clear(ListView1.BackColor)
             ListView1.BackgroundImage = bm
         End If
-        If BackgroundWorker1.IsBusy Then
+        If _jobManager.GetActiveTaskCount() > 0 Then
             WindowHelper.DisableCloseCapability(Handle)
         End If
     End Sub
@@ -1049,6 +947,125 @@ Public Class ISOCreator
 
             End Try
         End If
+    End Sub
+
+    Private Sub UpdateJobCountDisplay()
+        ' Update the display to show active and queued job counts
+        Dim activeCount As Integer = _jobManager.GetActiveTaskCount()
+        Dim queuedCount As Integer = _jobManager.GetQueuedTaskCount()
+
+        Dim FileStrSingular As String = "file",
+            FileStrPlural As String = "files",
+            VerbSingular As String = "is",
+            VerbPlural As String = "are"
+
+        If activeCount > 0 OrElse queuedCount > 0 Then
+            Label8.Text = String.Format("{0} ISO {1} {2} being created right now. {3} ISO {4} will be created soon.",
+                                        activeCount, If(activeCount <> 1, FileStrPlural, FileStrSingular), If(activeCount <> 1, VerbPlural, VerbSingular),
+                                        queuedCount, If(queuedCount <> 1, FileStrPlural, FileStrSingular))
+            DynaLog.LogMessage(String.Format("Job status: {0} active, {1} queued", activeCount, queuedCount))
+
+            ' show in lists
+            Dim CurrentJobQueue As List(Of KeyValuePair(Of Integer, IsoCreationTask)) = _jobManager.JobQueue,
+                ActiveJobQueue As List(Of KeyValuePair(Of Integer, IsoCreationTask)) = _jobManager.ActiveTasks
+
+            CreationJobsLV.Items.Clear()
+            CreationJobsLV.Items.AddRange(CurrentJobQueue.Select(Function(job) New ListViewItem(New String() {job.Key, job.Value.DestinationIsoFile, "Queued"})).ToArray())
+            CreationJobsLV.Items.AddRange(ActiveJobQueue.Select(Function(job) New ListViewItem(New String() {job.Key, job.Value.DestinationIsoFile, "Running"})).ToArray())
+        Else
+            IdlePanel.Visible = True
+            ISOProgressPanel.Visible = False
+
+            CreationJobsLV.Items.Clear()
+        End If
+    End Sub
+
+    Private Sub JobManager_JobStatusChanged(jobId As Integer, status As JobStatus)
+        ' This event is fired when a job status changes
+        DynaLog.LogMessage("Job " & jobId & " status changed to: " & status.ToString())
+
+        ' Update job count display
+        UpdateJobCountDisplay()
+
+        Select Case status
+            Case JobStatus.Queued
+                DynaLog.LogMessage("ISO creation task is queued")
+            Case JobStatus.Running
+                DynaLog.LogMessage("ISO creation task is now running")
+                IdlePanel.Visible = False
+                ISOProgressPanel.Visible = True
+                WindowHelper.DisableCloseCapability(Handle)
+
+                ' Disable close if any tasks are running
+                If _jobManager.GetActiveTaskCount() > 0 Then
+                    WindowHelper.DisableCloseCapability(Handle)
+                End If
+            Case JobStatus.Completed
+                DynaLog.LogMessage("ISO creation task completed successfully")
+                success = True
+
+                ' Get ISO path from job metadata
+                Dim metadata = _jobManager.GetJobMetadata(jobId)
+                ShowJobCompletionMessage(True, If(metadata IsNot Nothing, metadata.DestinationIsoFile, ""))
+
+                ' Enable close only if no more tasks are running
+                If _jobManager.GetActiveTaskCount() = 0 Then
+                    WindowHelper.EnableCloseCapability(Handle)
+                End If
+            Case JobStatus.Failed
+                DynaLog.LogMessage("ISO creation task failed")
+                success = False
+
+                ' Get ISO path from job metadata
+                Dim metadata = _jobManager.GetJobMetadata(jobId)
+                ShowJobCompletionMessage(False, If(metadata IsNot Nothing, metadata.DestinationIsoFile, ""))
+
+                ' Enable close only if no more tasks are running
+                If _jobManager.GetActiveTaskCount() = 0 Then
+                    WindowHelper.EnableCloseCapability(Handle)
+                End If
+        End Select
+    End Sub
+
+    Private Sub JobManager_JobProgressChanged(jobId As Integer, isRunning As Boolean)
+        If Not isRunning Then
+            ' Job has finished, re-enable buttons only if no other jobs are running
+            If _jobManager.GetActiveTaskCount() = 0 Then
+                OK_Button.Enabled = True
+                Cancel_Button.Enabled = True
+                GroupBox1.Enabled = True
+                IdlePanel.Visible = True
+                ISOProgressPanel.Visible = False
+
+                ' Delete ISOTASKS
+                Try
+                    Directory.Delete(String.Format("{0}\ISOTASKS", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), True)
+                Catch ex As Exception
+
+                End Try
+            End If
+        End If
+    End Sub
+
+    Private Sub ShowJobCompletionMessage(isSuccess As Boolean, isoFilePath As String)
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG" : msg = If(isSuccess, String.Format("The ISO file {0}{1}{0} has been created successfully.", Quote, Path.GetFileName(isoFilePath)), "Failed to create the ISO file")
+                    Case "ESN" : msg = If(isSuccess, String.Format("El archivo ISO {0}{1}{0} ha sido creado satisfactoriamente.", Quote, Path.GetFileName(isoFilePath)), "No pudimos crear el archivo ISO")
+                    Case "FRA" : msg = If(isSuccess, String.Format("Le fichier ISO {0}{1}{0} a été créé avec succès.", Quote, Path.GetFileName(isoFilePath)), "Le processus de création de l'ISO a échoué")
+                    Case "PTB", "PTG" : msg = If(isSuccess, String.Format("O ficheiro ISO {0}{1}{0} foi criado com êxito.", Quote, Path.GetFileName(isoFilePath)), "O processo de criação do ISO falhou")
+                    Case "ITA" : msg = If(isSuccess, String.Format("Il file ISO {0}{1}{0} è stato creato con successo.", Quote, Path.GetFileName(isoFilePath)), "La creazione del file ISO non è riuscita")
+                End Select
+            Case 1 : msg = If(isSuccess, String.Format("The ISO file {0}{1}{0} has been created successfully.", Quote, Path.GetFileName(isoFilePath)), "Failed to create the ISO file")
+            Case 2 : msg = If(isSuccess, String.Format("El archivo ISO {0}{1}{0} ha sido creado satisfactoriamente.", Quote, Path.GetFileName(isoFilePath)), "No pudimos crear el archivo ISO")
+            Case 3 : msg = If(isSuccess, String.Format("Le fichier ISO {0}{1}{0} a été créé avec succès.", Quote, Path.GetFileName(isoFilePath)), "Le processus de création de l'ISO a échoué")
+            Case 4 : msg = If(isSuccess, String.Format("O ficheiro ISO {0}{1}{0} foi criado com êxito.", Quote, Path.GetFileName(isoFilePath)), "O processo de criação do ISO falhou")
+            Case 5 : msg = If(isSuccess, String.Format("Il file ISO {0}{1}{0} è stato creato con successo.", Quote, Path.GetFileName(isoFilePath)), "La creazione del file ISO non è riuscita")
+        End Select
+
+        WindowHelper.DisplayNotificationBalloon(If(isSuccess, ToolTipIcon.Info, ToolTipIcon.Warning), ImageTaskHeader1.ItemText, msg)
     End Sub
 
     Private Sub ADKDownloaderBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ADKDownloaderBW.DoWork

@@ -13,6 +13,9 @@ Add-Type -Language CSharp -TypeDefinition @"
     }
 "@
 
+# Disable Windows Spotlight
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /F /V DisableWindowsSpotlightFeatures /T REG_DWORD /D 1
+
 $SPI_SETDESKWALLPAPER = 0x0014          # This sets the desktop wallpaper
 $SPIF_UPDATEINIFILE = 0x01              # This writes the change to the user profile
 $SPIF_SENDCHANGE = 0x02                 # This broadcasts a WM_SETTINGCHANGE message

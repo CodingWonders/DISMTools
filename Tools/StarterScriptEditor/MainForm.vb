@@ -11,7 +11,7 @@ Public Class MainForm
     Private CurrentScript As StarterScript
     Private SupportedLanguageList As New List(Of String)
 
-    Private UserDataScriptFolder As String
+    Public UserDataScriptFolder As String
 
     Private Modified As Boolean
     Private SavedScriptPath As String
@@ -22,19 +22,6 @@ Public Class MainForm
     Public CurrentColorMode As ColorThemeMode
 
     Private Const SSECodeName As String = "Luffy"
-
-    Private Enum ScriptVersion As Integer
-        ''' <summary>
-        ''' Starter scripts for the DISMTools 0.7 Series (0.7.2, 0.7.3)
-        ''' </summary>
-        ''' <remarks></remarks>
-        Seven = 0
-        ''' <summary>
-        ''' Starter scripts for the DISMTools 0.8 Series
-        ''' </summary>
-        ''' <remarks></remarks>
-        Infinity = 1
-    End Enum
 
     Private ScriptVer As ScriptVersion = ScriptVersion.Infinity
 
@@ -87,14 +74,14 @@ Public Class MainForm
                 Exit Sub
         End Select
 
-        TextBox1.BackColor = BackColor
-        TextBox1.ForeColor = ForeColor
-        TextBox2.BackColor = BackColor
-        TextBox2.ForeColor = ForeColor
-        TextBox3.BackColor = BackColor
-        TextBox3.ForeColor = ForeColor
-        ComboBox1.BackColor = BackColor
-        ComboBox1.ForeColor = ForeColor
+        tbScriptName.BackColor = BackColor
+        tbScriptName.ForeColor = ForeColor
+        tbScriptDescription.BackColor = BackColor
+        tbScriptDescription.ForeColor = ForeColor
+        tbScriptCode.BackColor = BackColor
+        tbScriptCode.ForeColor = ForeColor
+        comboLanguage.BackColor = BackColor
+        comboLanguage.ForeColor = ForeColor
         ColorModeTSDDB.ForeColor = ForeColor
 
         If NewColorMode = ColorThemeMode.Light Then
@@ -119,7 +106,7 @@ Public Class MainForm
                 End If
             ElseIf arg.StartsWith("/dtss", StringComparison.OrdinalIgnoreCase) Then
                 ' This parameter determines the path to a DTSS
-                Dim dtssPath As String = arg.Replace("/dtss=", "")
+                Dim dtssPath As String = Regex.Replace(arg, "\/dtss=", "", RegexOptions.IgnoreCase)
 
                 If File.Exists(dtssPath) Then
                     LoadScriptFile(dtssPath)
@@ -127,6 +114,11 @@ Public Class MainForm
                     ' Loading the script file will make the modification factor true; we don't want that
                     Modified = False
                 End If
+            ElseIf arg.StartsWith("/convert", StringComparison.OrdinalIgnoreCase) Then
+                Dim sourcePath As String = Regex.Replace(arg, "\/convert=", "", RegexOptions.IgnoreCase)
+
+                BulkScriptConversionDialog.SourceScriptPath = sourcePath
+                BulkScriptConversionDialog.ShowDialog()
             End If
         Next
     End Sub
@@ -136,16 +128,16 @@ Public Class MainForm
     End Function
 
     Private Sub UpdateScriptProperties()
-        TextBox1.Text = CurrentScript.Name
-        TextBox2.Text = CurrentScript.Description
+        tbScriptName.Text = CurrentScript.Name
+        tbScriptDescription.Text = CurrentScript.Description
         ' If our list of languages does NOT contain our language, we assume it's
         ' the first item
         If Not SupportedLanguageList.Contains(CurrentScript.Language.ToLower()) Then
-            ComboBox1.SelectedIndex = 0
+            comboLanguage.SelectedIndex = 0
         Else
-            ComboBox1.SelectedItem = CurrentScript.Language
+            comboLanguage.SelectedItem = CurrentScript.Language
         End If
-        TextBox3.Text = CurrentScript.Code
+        tbScriptCode.Text = CurrentScript.Code
         CheckBox2.Checked = CurrentScript.OptionsCustomizable
     End Sub
 
@@ -157,8 +149,9 @@ Public Class MainForm
 
         roMode = False
         ToolStripButton5.Enabled = False
-        Dim scriptFileContents As String() = File.ReadAllLines(ScriptFile)
 
+        ' Read the file here first so we can guess the version
+        Dim scriptFileContents As String() = File.ReadAllLines(ScriptFile)
         ScriptVer = ScriptVersion.Seven
         Dim CodeBlockStartingIndex As Integer = 3
         If scriptFileContents(3).StartsWith("Customizable:", StringComparison.OrdinalIgnoreCase) Then
@@ -166,26 +159,8 @@ Public Class MainForm
             CodeBlockStartingIndex = 4
         End If
 
-        ' Script Format:
-        ' <Language>
-        ' <Name>
-        ' <Description>
-        ' <Customizable> (0.8+)
-        ' <code>
-        Dim scriptLang As String = scriptFileContents(0).Replace("Language: ", "")
-        Dim scriptName As String = scriptFileContents(1).Replace("Name: ", "")
-        Dim scriptDescription As String = scriptFileContents(2).Replace("Description: ", "")
-        Dim scriptOptionsCustomizable As Boolean = scriptFileContents(3).Equals("Customizable: Yes", StringComparison.OrdinalIgnoreCase)
-#If VBC_VER >= 9.0 Then
-        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, New List(Of String)(scriptFileContents).Skip(CodeBlockStartingIndex).ToArray()), scriptOptionsCustomizable)
-#Else
-        ' NDPv2 and earlier do not support LINQ statements.
-        Dim ScriptCodeLines As New List(Of String)
-        For x As Integer = CodeBlockStartingIndex To scriptFileContents.Length - 1
-            ScriptCodeLines.Add(scriptFileContents(x))
-        Next
-        CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, ScriptCodeLines.ToArray()), scriptOptionsCustomizable)
-#End If
+        CurrentScript = StarterScriptHelper.LoadScriptFile(ScriptFile, CodeBlockStartingIndex)
+
         SavedScriptPath = ScriptFile
         Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
 
@@ -214,24 +189,10 @@ Public Class MainForm
         End If
 
         Try
-            Dim customizableStr As String
-            If CurrentScript.OptionsCustomizable Then
-                customizableStr = "Yes"
-            Else
-                customizableStr = "No"
-            End If
-
             If Not DefaultScriptVersion AndAlso ScriptVer = ScriptVersion.Seven Then
-                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
-                "Name: {2}{1}" & _
-                "Description: {3}{1}" & _
-                "{4}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, CurrentScript.Code), UTF8)
+                If Not StarterScriptHelper.SaveStarterScript(ScriptFile, CurrentScript, ScriptVersion.Seven) Then Throw New Exception()
             Else
-                File.WriteAllText(ScriptFile, String.Format("Language: {0}{1}" & _
-                "Name: {2}{1}" & _
-                "Description: {3}{1}" & _
-                "Customizable: {4}{1}" & _
-                "{5}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, customizableStr, CurrentScript.Code), UTF8)
+                If Not StarterScriptHelper.SaveStarterScript(ScriptFile, CurrentScript, ScriptVersion.Infinity) Then Throw New Exception()
             End If
 
             SavedScriptPath = ScriptFile
@@ -246,6 +207,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
+        AIResults.CheckBox1.Checked = False
         NotWillingToSave = False
         If Modified Then
             Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
@@ -261,12 +223,13 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
-        If TextBox1.Text = "" Then
+        AIResults.CheckBox1.Checked = False
+        If tbScriptName.Text = "" Then
             MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             NotWillingToSave = True
             Exit Sub
         End If
-        If TextBox2.Text = "" Then
+        If tbScriptDescription.Text = "" Then
             MessageBox.Show("You must provide a description for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             NotWillingToSave = True
             Exit Sub
@@ -299,9 +262,17 @@ Public Class MainForm
         UpdateCaretPosition()
 
         Modified = False
+
+#If VBC_VER < 10.0 Then
+#If Not Debug Then
+        ToolStripButton9.Visible = False
+        ToolStripSeparator3.Visible = False
+#End If
+#End If
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
+        AIResults.CheckBox1.Checked = False
         NotWillingToSave = False
         If Modified Then
             Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
@@ -334,18 +305,18 @@ Public Class MainForm
         SaveScriptFile(SaveFileDialog1.FileName, ScriptVer = ScriptVersion.Infinity)
     End Sub
 
-    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
-        CurrentScript.Name = TextBox1.Text
+    Private Sub tbScriptName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbScriptName.TextChanged
+        CurrentScript.Name = tbScriptName.Text
         Modified = True
     End Sub
 
-    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
-        CurrentScript.Description = TextBox2.Text
+    Private Sub tbScriptDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbScriptDescription.TextChanged
+        CurrentScript.Description = tbScriptDescription.Text
         Modified = True
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
-        CurrentScript.Language = ComboBox1.SelectedItem
+    Private Sub comboLanguage_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboLanguage.SelectedIndexChanged
+        CurrentScript.Language = comboLanguage.SelectedItem
         Modified = True
     End Sub
 
@@ -354,12 +325,13 @@ Public Class MainForm
         Modified = True
     End Sub
 
-    Private Sub TextBox3_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox3.TextChanged
-        CurrentScript.Code = TextBox3.Text
+    Private Sub tbScriptCode_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbScriptCode.TextChanged
+        CurrentScript.Code = tbScriptCode.Text
         Modified = True
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
+        AIResults.CheckBox1.Checked = False
 #If VBC_VER >= 9.0 Then
 #If DEBUG Then
         MsgBox(String.Format("DISMTools Starter Script Editor version {0} ({1}_DEBUG)" & CrLf & CrLf & "{2}", _
@@ -387,14 +359,14 @@ Public Class MainForm
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        OpenFileDialog2.FilterIndex = ComboBox1.SelectedIndex + 1
+        OpenFileDialog2.FilterIndex = comboLanguage.SelectedIndex + 1
         OpenFileDialog2.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog2_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
         If Not File.Exists(OpenFileDialog2.FileName) Then Exit Sub
 
-        If TextBox3.Text <> "" Then
+        If tbScriptCode.Text <> "" Then
             If MessageBox.Show("Importing the selected script will replace existing contents of your script.", "Import Existing Script", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) = Windows.Forms.DialogResult.Cancel Then
                 Exit Sub
             End If
@@ -408,13 +380,13 @@ Public Class MainForm
         expectedVbScriptExtensions.AddRange(New String(3) {".vbs", ".vbe", ".wsf", ".wsc"})
         expectedJScriptExtensions.AddRange(New String(1) {".js", ".jse"})
         If expectedBatchExtensions.Contains(scriptExtension) Then
-            ComboBox1.SelectedIndex = 0
+            comboLanguage.SelectedIndex = 0
         ElseIf scriptExtension.ToLower() = ".ps1" Then
-            ComboBox1.SelectedIndex = 1
+            comboLanguage.SelectedIndex = 1
         ElseIf expectedVbScriptExtensions.Contains(scriptExtension) Then
-            ComboBox1.SelectedIndex = 2
+            comboLanguage.SelectedIndex = 2
         ElseIf expectedJScriptExtensions.Contains(scriptExtension) Then
-            ComboBox1.SelectedIndex = 3
+            comboLanguage.SelectedIndex = 3
         Else
             MessageBox.Show("This script is not supported by the Starter Script Editor.", "Unrecognized script", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
@@ -422,7 +394,7 @@ Public Class MainForm
 
         Try
             Dim scriptContents As String = File.ReadAllText(scriptFileName)
-            TextBox3.Text = scriptContents
+            tbScriptCode.Text = scriptContents
             UpdateCaretPosition()
         Catch ex As Exception
             MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -431,23 +403,23 @@ Public Class MainForm
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
-        TextBox3.WordWrap = CheckBox1.Checked
+        tbScriptCode.WordWrap = CheckBox1.Checked
         Label6.Visible = Not CheckBox1.Checked
         UpdateCaretPosition()
     End Sub
 
-    Private Sub TextBox3_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyDown
+    Private Sub tbScriptCode_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbScriptCode.KeyDown
         UpdateCaretPosition()
     End Sub
 
-    Private Sub TextBox3_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TextBox3.MouseUp
+    Private Sub tbScriptCode_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tbScriptCode.MouseUp
         UpdateCaretPosition()
     End Sub
 
-    Private Sub UpdateCaretPosition()
-        Dim caret As Integer = TextBox3.SelectionStart, _
-            line As Integer = TextBox3.GetLineFromCharIndex(caret), _
-            column As Integer = caret - TextBox3.GetFirstCharIndexFromLine(line)
+    Public Sub UpdateCaretPosition()
+        Dim caret As Integer = tbScriptCode.SelectionStart, _
+            line As Integer = tbScriptCode.GetLineFromCharIndex(caret), _
+            column As Integer = caret - tbScriptCode.GetFirstCharIndexFromLine(line)
 
         Label6.Text = String.Format("Ln {0}, Col {1}", line + 1, column + 1)
     End Sub
@@ -455,6 +427,9 @@ Public Class MainForm
     Private Sub MainForm_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         NotWillingToSave = False
         If Modified Then
+            ' EditorEX dialogs have to go away
+            If FindReplaceDialog IsNot Nothing Then FindReplaceDialog.Close()
+            If DocumentOutlineViewer IsNot Nothing Then DocumentOutlineViewer.Close()
             Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 Case Windows.Forms.DialogResult.Yes
                     ToolStripButton3.PerformClick()
@@ -468,6 +443,20 @@ Public Class MainForm
             End Select
         End If
 
+    End Sub
+
+    Private Sub InvokeFindDialog(Optional ByVal FindAndReplace As Boolean = False)
+        FindReplaceDialog.EditorControl = tbScriptCode
+        FindReplaceDialog.MyParent = Me
+        FindReplaceDialog.ReplaceMode = FindAndReplace
+        If FindReplaceDialog.Visible Then
+            If FindReplaceDialog.WindowState = FormWindowState.Minimized Then FindReplaceDialog.WindowState = FormWindowState.Normal
+            FindReplaceDialog.BringToFront()
+            FindReplaceDialog.Focus()
+            Exit Sub
+        End If
+        FindReplaceDialog.Location = New Point(Left + WindowHelper.ScaleLogical(32), Top + WindowHelper.ScaleLogical(32))
+        FindReplaceDialog.Show()
     End Sub
 
     Private Sub MainForm_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
@@ -487,6 +476,23 @@ Public Class MainForm
                         ' Save item
                         ToolStripButton3.PerformClick()
                     End If
+#If VBC_VER >= 10.0 Then
+                Case Keys.U
+                    ' Upload to Script Library
+                    ToolStripButton9.PerformClick()
+#End If
+                Case Keys.I
+                    ' Inspect Code
+                    ToolStripButton10.PerformClick()
+                Case Keys.F
+                    ' Find dialog
+                    InvokeFindDialog()
+                Case Keys.R
+                    ' Find & Replace dialog
+                    InvokeFindDialog(True)
+                Case Keys.T
+                    ' CTRL + ALT + T: Document Outline
+                    If e.Alt Then InvokeDocumentOutlineDialog()
             End Select
         End If
     End Sub
@@ -504,6 +510,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
+        AIResults.CheckBox1.Checked = False
         EnableWriteAccess()
     End Sub
 
@@ -523,6 +530,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton6.Click
+        AIResults.CheckBox1.Checked = False
         ScriptVersionChooser.RadioButton1.Checked = ScriptVer = ScriptVersion.Infinity
         ScriptVersionChooser.RadioButton2.Checked = ScriptVer = ScriptVersion.Seven
         If ScriptVersionChooser.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -535,7 +543,8 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
-        EditorFD.Font = TextBox3.Font
+        AIResults.CheckBox1.Checked = False
+        EditorFD.Font = tbScriptCode.Font
         Dim fontConfigured As Boolean = False
         Do Until fontConfigured
             Try
@@ -543,7 +552,7 @@ Public Class MainForm
                     If Not IsMonospacedFont(EditorFD.Font.Name) AndAlso MessageBox.Show("You have selected a non-monospaced font. Text may not look correctly. Do you want to continue?", "Starter Script Editor", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
                         Exit Sub
                     End If
-                    TextBox3.Font = EditorFD.Font
+                    tbScriptCode.Font = EditorFD.Font
                 End If
                 fontConfigured = True
             Catch arEx As ArgumentException
@@ -573,12 +582,13 @@ Public Class MainForm
     End Function
 
     Private Sub ToolStripButton8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton8.Click
-        If TextBox1.Text = "" Then
+        AIResults.CheckBox1.Checked = False
+        If tbScriptName.Text = "" Then
             MessageBox.Show("You must provide a name for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             NotWillingToSave = True
             Exit Sub
         End If
-        If TextBox2.Text = "" Then
+        If tbScriptDescription.Text = "" Then
             MessageBox.Show("You must provide a description for this starter script.", "Starter Script Editor", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             NotWillingToSave = True
             Exit Sub
@@ -592,6 +602,50 @@ Public Class MainForm
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        TextBox3.Text = Regex.Replace(TextBox3.Text, ControlChars.Tab, "    ")
+        tbScriptCode.Text = Regex.Replace(tbScriptCode.Text, ControlChars.Tab, "    ")
+    End Sub
+
+    Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton9.Click
+        AIResults.Close()
+        UploadToScriptLibraryDialog.StarterScriptToUpload = CurrentScript
+        UploadToScriptLibraryDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub ToolStripButton10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton10.Click
+        AIResults.Close()
+        InspectionProgressDialog.ScriptCode = CurrentScript.Code
+        InspectionProgressDialog.ShowDialog(Me)
+        AIResults.Results = InspectionProgressDialog.InspectionResults
+        AIResults.Show()
+    End Sub
+
+    Private Sub ToolStripButton11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton11.Click
+        AIResults.CheckBox1.Checked = False
+        AICustomRuleViewer.Show()
+    End Sub
+
+    Private Sub ToolStripButton12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton12.Click
+        InvokeFindDialog()
+    End Sub
+
+    Private Sub ToolStripButton13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton13.Click
+        InvokeFindDialog(True)
+    End Sub
+
+    Private Sub InvokeDocumentOutlineDialog()
+        DocumentOutlineViewer.comboLangMode.SelectedIndex = comboLanguage.SelectedIndex
+        DocumentOutlineViewer.EditorControl = tbScriptCode
+        DocumentOutlineViewer.MyParent = Me
+        If DocumentOutlineViewer.Visible Then
+            If DocumentOutlineViewer.WindowState = FormWindowState.Minimized Then DocumentOutlineViewer.WindowState = FormWindowState.Normal
+            DocumentOutlineViewer.BringToFront()
+            DocumentOutlineViewer.Focus()
+            Exit Sub
+        End If
+        DocumentOutlineViewer.Show()
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        InvokeDocumentOutlineDialog()
     End Sub
 End Class

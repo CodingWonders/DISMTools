@@ -61,10 +61,45 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.IO.Pipelines, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Pipelines.10.0.9\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Encodings.Web.10.0.9\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Json.10.0.9\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.6.2\lib\net462\System.ValueTuple.dll</HintPath>
+      <SpecificVersion>True</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -80,12 +115,79 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIResults.Designer.vb">
+      <DependentUpon>AIResults.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AIResults.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AIResultWindowPinDialog.Designer.vb">
+      <DependentUpon>AIResultWindowPinDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AIResultWindowPinDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiKeyGenerationStepsWizard.Designer.vb">
+      <DependentUpon>ApiKeyGenerationStepsWizard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ApiKeyGenerationStepsWizard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BulkScriptConversionDialog.Designer.vb">
+      <DependentUpon>BulkScriptConversionDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BulkScriptConversionDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\AutoInspection\AutoInspectionProgressReport.vb" />
+    <Compile Include="Classes\AutoInspection\AutoInspectionResult.vb" />
+    <Compile Include="Classes\AutoInspection\AutoInspectionRule.vb" />
+    <Compile Include="Classes\AutoInspection\AutoInspectionRuleSeverity.vb" />
     <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
+    <Compile Include="Classes\ScriptVersion.vb" />
     <Compile Include="Classes\StarterScript.vb" />
     <Compile Include="ColorModeRenderers\DarkModeRenderer.vb" />
     <Compile Include="ColorModeRenderers\LightModeRenderer.vb" />
     <Compile Include="ColorTables\DarkModeColorTable.vb" />
     <Compile Include="ColorTables\LightModeColorTable.vb" />
+    <Compile Include="CryptographicProgressDialog.Designer.vb">
+      <DependentUpon>CryptographicProgressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CryptographicProgressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomRules\AICustomRuleViewer.Designer.vb">
+      <DependentUpon>AICustomRuleViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CustomRules\AICustomRuleViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomRules\CustomRuleDetailsDialog.Designer.vb">
+      <DependentUpon>CustomRuleDetailsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CustomRules\CustomRuleDetailsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\DocumentOutlineViewer.Designer.vb">
+      <DependentUpon>DocumentOutlineViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\DocumentOutlineViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\FindReplaceDialog.Designer.vb">
+      <DependentUpon>FindReplaceDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\FindReplaceDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditorEX\EditorDialogs\FunctionSignatures\VisualBasicFunctionSignatureParam.vb" />
+    <Compile Include="Helpers\StarterScriptHelper.vb" />
+    <Compile Include="InspectionProgressDialog.Designer.vb">
+      <DependentUpon>InspectionProgressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="InspectionProgressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -114,10 +216,59 @@
     <Compile Include="ScriptVersionChooser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UploadToScriptLibraryDialog.Designer.vb">
+      <DependentUpon>UploadToScriptLibraryDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UploadToScriptLibraryDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utilities\AIHelper.vb" />
     <Compile Include="Utilities\BuildGetter.vb" />
+    <Compile Include="Utilities\CryptographyHelper.vb" />
+    <Compile Include="Utilities\GitHubClient.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AIResults.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AIResults.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AIResultWindowPinDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AIResultWindowPinDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiKeyGenerationStepsWizard.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ApiKeyGenerationStepsWizard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BulkScriptConversionDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BulkScriptConversionDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CryptographicProgressDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CryptographicProgressDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomRules\AICustomRuleViewer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AICustomRuleViewer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomRules\CustomRuleDetailsDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CustomRuleDetailsDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditorEX\EditorDialogs\DocumentOutlineViewer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DocumentOutlineViewer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditorEX\EditorDialogs\FindReplaceDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FindReplaceDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InspectionProgressDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>InspectionProgressDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -131,6 +282,10 @@
     <EmbeddedResource Include="ScriptVersionChooser.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ScriptVersionChooser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UploadToScriptLibraryDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UploadToScriptLibraryDialog.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +302,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\about.png" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +315,9 @@
     <None Include="Resources\openfile.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AutoInspectRules.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -172,6 +331,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\find.png" />
+    <None Include="Resources\replace.png" />
+    <None Include="Resources\pin_dark.png" />
+    <None Include="Resources\pin.png" />
+    <None Include="Resources\inspection\windowpin\topright.png" />
+    <None Include="Resources\inspection\windowpin\topleft.png" />
+    <None Include="Resources\inspection\windowpin\bottomright.png" />
+    <None Include="Resources\inspection\windowpin\bottomleft.png" />
+    <None Include="Resources\inspect_security.png" />
+    <None Include="Resources\inspection\inspect_medium_severity.png" />
+    <None Include="Resources\inspection\inspect_low_severity.png" />
+    <None Include="Resources\inspection\inspect_high_severity.png" />
+    <None Include="My Project\DataSources\StarterScriptEditor.Classes.AutoInspection.AutoInspectionResult.datasource" />
+    <None Include="Resources\github_keys\github_account_settings.png" />
+    <None Include="Resources\github_keys\generate_pat.png" />
+    <None Include="Resources\github_keys\account_dev_settings.png" />
+    <None Include="Resources\github_keys\finegrained_pat\finegrained_pat_params_2.png" />
+    <None Include="Resources\github_keys\finegrained_pat\finegrained_pat_params_1.png" />
+    <None Include="Resources\github_keys\finegrained_pat\finegrained_pat_confirm.png" />
+    <None Include="Resources\github_keys\finegrained_pat\example_finegrained_pat_key.png" />
+    <None Include="Resources\github_keys\classic_pat\generate_token.png" />
+    <None Include="Resources\github_keys\classic_pat\example_classic_pat_key.png" />
+    <None Include="Resources\github_keys\github_devapps_tokens.png" />
+    <None Include="Resources\github_keys\classic_pat\classic_pat_params.png" />
+    <None Include="Resources\upload.png" />
     <None Include="Resources\savefileas.png" />
     <None Include="Resources\changefont.png" />
     <None Include="Resources\targetversion.png" />

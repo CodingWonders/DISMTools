@@ -35,6 +35,7 @@ Partial Class Options
         Me.Label46 = New System.Windows.Forms.Label()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.CheckBox24 = New System.Windows.Forms.CheckBox()
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
         Me.DTSSEditAssocCB = New System.Windows.Forms.CheckBox()
         Me.Button9 = New System.Windows.Forms.Button()
@@ -168,6 +169,7 @@ Partial Class Options
         Me.Label70 = New System.Windows.Forms.Label()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox25 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.Panel7 = New System.Windows.Forms.Panel()
@@ -257,7 +259,11 @@ Partial Class Options
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
-        Me.CheckBox24 = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -349,6 +355,7 @@ Partial Class Options
         Me.FlowLayoutPanel8.SuspendLayout()
         Me.Panel11.SuspendLayout()
         Me.Panel12.SuspendLayout()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -468,6 +475,16 @@ Partial Class Options
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(748, 256)
         Me.Panel2.TabIndex = 12
+        '
+        'CheckBox24
+        '
+        Me.CheckBox24.AutoSize = True
+        Me.CheckBox24.Location = New System.Drawing.Point(110, 160)
+        Me.CheckBox24.Name = "CheckBox24"
+        Me.CheckBox24.Size = New System.Drawing.Size(226, 19)
+        Me.CheckBox24.TabIndex = 2
+        Me.CheckBox24.Text = "Set custom file icons for starter scripts"
+        Me.CheckBox24.UseVisualStyleBackColor = True
         '
         'CheckBox11
         '
@@ -1712,8 +1729,8 @@ Partial Class Options
         '
         'ValueContainer
         '
-        Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
+        Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Controls.Add(Me.Options_Startup)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
@@ -1753,10 +1770,15 @@ Partial Class Options
         '
         'Panel6
         '
+        Me.Panel6.Controls.Add(Me.Button8)
+        Me.Panel6.Controls.Add(Me.NumericUpDown2)
+        Me.Panel6.Controls.Add(Me.Label6)
         Me.Panel6.Controls.Add(Me.LinkLabel4)
         Me.Panel6.Controls.Add(Me.TableLayoutPanel3)
         Me.Panel6.Controls.Add(Me.ComboBox8)
         Me.Panel6.Controls.Add(Me.Label71)
+        Me.Panel6.Controls.Add(Me.Label35)
+        Me.Panel6.Controls.Add(Me.Label1)
         Me.Panel6.Controls.Add(Me.Label70)
         Me.Panel6.Controls.Add(Me.CheckBox2)
         Me.Panel6.Controls.Add(Me.Label32)
@@ -1764,12 +1786,13 @@ Partial Class Options
         Me.Panel6.Controls.Add(Me.CheckBox23)
         Me.Panel6.Controls.Add(Me.CheckBox3)
         Me.Panel6.Controls.Add(Me.Label18)
+        Me.Panel6.Controls.Add(Me.CheckBox25)
         Me.Panel6.Controls.Add(Me.CheckBox1)
         Me.Panel6.Controls.Add(Me.CheckBox8)
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(728, 464)
+        Me.Panel6.Size = New System.Drawing.Size(728, 640)
         Me.Panel6.TabIndex = 0
         '
         'LinkLabel4
@@ -1777,7 +1800,7 @@ Partial Class Options
         Me.LinkLabel4.AutoSize = True
         Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel4.Location = New System.Drawing.Point(18, 438)
+        Me.LinkLabel4.Location = New System.Drawing.Point(18, 606)
         Me.LinkLabel4.Name = "LinkLabel4"
         Me.LinkLabel4.Size = New System.Drawing.Size(397, 15)
         Me.LinkLabel4.TabIndex = 12
@@ -1793,7 +1816,7 @@ Partial Class Options
         Me.TableLayoutPanel3.Controls.Add(Me.Label73, 1, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Label74, 0, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.Label75, 1, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 386)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 554)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -1848,7 +1871,7 @@ Partial Class Options
         '
         Me.ComboBox8.FormattingEnabled = True
         Me.ComboBox8.Items.AddRange(New Object() {"Display name only", "Display name, then friendly display name", "Friendly display name only"})
-        Me.ComboBox8.Location = New System.Drawing.Point(20, 330)
+        Me.ComboBox8.Location = New System.Drawing.Point(20, 498)
         Me.ComboBox8.Name = "ComboBox8"
         Me.ComboBox8.Size = New System.Drawing.Size(686, 23)
         Me.ComboBox8.TabIndex = 10
@@ -1856,7 +1879,7 @@ Partial Class Options
         'Label71
         '
         Me.Label71.AutoSize = True
-        Me.Label71.Location = New System.Drawing.Point(17, 362)
+        Me.Label71.Location = New System.Drawing.Point(17, 530)
         Me.Label71.Name = "Label71"
         Me.Label71.Size = New System.Drawing.Size(54, 15)
         Me.Label71.TabIndex = 9
@@ -1865,7 +1888,7 @@ Partial Class Options
         'Label70
         '
         Me.Label70.AutoSize = True
-        Me.Label70.Location = New System.Drawing.Point(18, 308)
+        Me.Label70.Location = New System.Drawing.Point(18, 476)
         Me.Label70.Name = "Label70"
         Me.Label70.Size = New System.Drawing.Size(384, 15)
         Me.Label70.TabIndex = 9
@@ -1889,6 +1912,16 @@ Partial Class Options
         Me.CheckBox23.TabIndex = 6
         Me.CheckBox23.Text = "Map system accounts to application registration information"
         Me.CheckBox23.UseVisualStyleBackColor = True
+        '
+        'CheckBox25
+        '
+        Me.CheckBox25.AutoSize = True
+        Me.CheckBox25.Location = New System.Drawing.Point(21, 308)
+        Me.CheckBox25.Name = "CheckBox25"
+        Me.CheckBox25.Size = New System.Drawing.Size(445, 19)
+        Me.CheckBox25.TabIndex = 13
+        Me.CheckBox25.Text = "Lock unlocked BitLocker volumes when exiting offline installation management"
+        Me.CheckBox25.UseVisualStyleBackColor = True
         '
         'CheckBox1
         '
@@ -1916,7 +1949,7 @@ Partial Class Options
         Me.Panel7.Controls.Add(Me.CheckBox14)
         Me.Panel7.Controls.Add(Me.Label48)
         Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
-        Me.Panel7.Location = New System.Drawing.Point(0, 464)
+        Me.Panel7.Location = New System.Drawing.Point(0, 640)
         Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(728, 172)
@@ -1941,7 +1974,7 @@ Partial Class Options
         Me.Panel21.Controls.Add(Me.Label69)
         Me.Panel21.Controls.Add(Me.Label67)
         Me.Panel21.Controls.Add(Me.Label68)
-        Me.Panel21.Location = New System.Drawing.Point(0, 636)
+        Me.Panel21.Location = New System.Drawing.Point(0, 812)
         Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel21.Name = "Panel21"
         Me.Panel21.Size = New System.Drawing.Size(728, 256)
@@ -2889,15 +2922,53 @@ Partial Class Options
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 6
         '
-        'CheckBox24
+        'Label1
         '
-        Me.CheckBox24.AutoSize = True
-        Me.CheckBox24.Location = New System.Drawing.Point(110, 160)
-        Me.CheckBox24.Name = "CheckBox24"
-        Me.CheckBox24.Size = New System.Drawing.Size(226, 19)
-        Me.CheckBox24.TabIndex = 2
-        Me.CheckBox24.Text = "Set custom file icons for starter scripts"
-        Me.CheckBox24.UseVisualStyleBackColor = True
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(18, 341)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(444, 15)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "When creating ISO files, allow me to create the following amount at the same time" & _
+    ":"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(151, 373)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(185, 15)
+        Me.Label6.TabIndex = 14
+        Me.Label6.Text = "Concurrent ISO file creation tasks:"
+        '
+        'NumericUpDown2
+        '
+        Me.NumericUpDown2.Location = New System.Drawing.Point(342, 371)
+        Me.NumericUpDown2.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
+        Me.NumericUpDown2.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown2.Name = "NumericUpDown2"
+        Me.NumericUpDown2.Size = New System.Drawing.Size(72, 23)
+        Me.NumericUpDown2.TabIndex = 15
+        Me.NumericUpDown2.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'Label35
+        '
+        Me.Label35.AutoEllipsis = True
+        Me.Label35.Location = New System.Drawing.Point(38, 401)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(666, 64)
+        Me.Label35.TabIndex = 9
+        Me.Label35.Text = resources.GetString("Label35.Text")
+        '
+        'Button8
+        '
+        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button8.Location = New System.Drawing.Point(420, 371)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(158, 23)
+        Me.Button8.TabIndex = 16
+        Me.Button8.Text = "Determine..."
+        Me.Button8.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -3043,6 +3114,7 @@ Partial Class Options
         Me.Panel11.ResumeLayout(False)
         Me.Panel11.PerformLayout()
         Me.Panel12.ResumeLayout(False)
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3281,5 +3353,11 @@ Partial Class Options
     Friend WithEvents DTProjAssocCB As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox24 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox25 As System.Windows.Forms.CheckBox
+    Friend WithEvents NumericUpDown2 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents Label35 As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Button8 As System.Windows.Forms.Button
 
 End Class

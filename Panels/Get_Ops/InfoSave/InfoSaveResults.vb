@@ -215,6 +215,9 @@ Public Class InfoSaveResults
                                                           "                    if (link.textContent.indexOf(" & Quote & "We have ended" & Quote & ") === 0) {" & CrLf &
                                                           "                        return;" & CrLf &
                                                           "                    }" & CrLf &
+                                                          "                    if (heading.tagName == " & Quote & "H4" & Quote & ") {" & CrLf &
+                                                          "                        link.style.fontSize = " & Quote & "0.75em" & Quote & ";" & CrLf &
+                                                          "                    }" & CrLf &
                                                           "                    sidebar.appendChild(link);" & CrLf &
                                                           "                }" & CrLf &
                                                           "            });" & CrLf & CrLf &
@@ -271,16 +274,6 @@ Public Class InfoSaveResults
         End If
     End Sub
 
-    Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
-        ' TODO When using google to look up items online what we get is a cookie consent prompt that gets rid of our udm=14 thing, therefore showing google results with AI overview crap. Either find a way to pass in udm=14 or stop using google search. This CANNOT be replicated with saved reports, only here.
-
-        If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
-            DynaLog.LogMessage("An external link has been clicked. Opening it in the default browser...")
-            Process.Start(e.Url.AbsoluteUri)
-            WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
-        End If
-    End Sub
-
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         SaveFileDialog1.ShowDialog(Me)
     End Sub
@@ -293,6 +286,14 @@ Public Class InfoSaveResults
             Catch ex As Exception
 
             End Try
+        End If
+    End Sub
+
+    Private Sub WebBrowser1_Navigating(sender As Object, e As WebBrowserNavigatingEventArgs) Handles WebBrowser1.Navigating
+        If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("An external link has been clicked. Opening it in the default browser...")
+            Process.Start(e.Url.AbsoluteUri)
+            WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
         End If
     End Sub
 End Class

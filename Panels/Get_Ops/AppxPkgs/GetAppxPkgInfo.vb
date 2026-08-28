@@ -14,6 +14,17 @@ Public Class GetAppxPkgInfoDlg
     Private FilteredAppxPackages As IEnumerable(Of DismAppxPackage)
     Private FilteredAppxPackages_Backup As IEnumerable(Of ImageAppxPackage)
 
+    Private SidInformation As New Dictionary(Of String, Dictionary(Of String, String))
+
+    Enum SearchMode As Integer
+        None
+        RegisteredToNoOne
+        RegisteredToAnyone
+        RegisteredToMe
+        RegisteredToSid
+        RegisteredToName
+    End Enum
+
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -218,6 +229,7 @@ Public Class GetAppxPkgInfoDlg
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
+        WizardBtn.Image = GetGlyphResource("assistant")
         If SplitContainer2.SplitterDistance = 440 Then
             SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         End If
@@ -251,9 +263,24 @@ Public Class GetAppxPkgInfoDlg
         End If
         SearchBox1.Text = ""
 
+        SidInformation.Clear()
+        If MainForm.OnlineManagement Then
+            If Not Debugger.IsAttached Then DynaLog.DisableLogging()
+            For Each ListItem In ListBox1.Items
+                SidInformation.Add(ListItem, AppxHelper.GetRegistrationPckgdepSidInfo(MainForm.MountDir,
+                                                                                      If(MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count,
+                                                                                         MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListBox1.Items.IndexOf(ListItem)),
+                                                                                         MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListBox1.Items.IndexOf(ListItem)))))
+
+            Next
+            If Not Debugger.IsAttached Then DynaLog.EnableLogging()
+        End If
+
         AppxHelper.ClearRootPaths()
         AppxHelper.SetRootPaths(MainForm.MountDir)
         ImageTaskHeader1.HideWindowTitle(handle)
+
+        WizardBtn.Enabled = MainForm.OnlineManagement
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
@@ -385,9 +412,11 @@ Public Class GetAppxPkgInfoDlg
             ' Get exclusive things that can't be obtained with the DISM API
             Dim IsPackageRegistered As Boolean
             If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
-                IsPackageRegistered = AppxHelper.IsPackageRegistered(MainForm.MountDir, MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListBox1.SelectedIndex))
+                IsPackageRegistered = AppxHelper.IsPackageRegistered(MainForm.MountDir,
+                                                                     If(SearchBox1.Text <> "", FilteredAppxPackages_Backup.ElementAtOrDefault(ListBox1.SelectedIndex), MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListBox1.SelectedIndex)))
             Else
-                IsPackageRegistered = AppxHelper.IsPackageRegistered(MainForm.MountDir, MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListBox1.SelectedIndex))
+                IsPackageRegistered = AppxHelper.IsPackageRegistered(MainForm.MountDir,
+                                                                     If(SearchBox1.Text <> "", FilteredAppxPackages.ElementAtOrDefault(ListBox1.SelectedIndex), MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListBox1.SelectedIndex)))
             End If
 
             If IsPackageRegistered Then
@@ -491,10 +520,8 @@ Public Class GetAppxPkgInfoDlg
             If assetDir <> "" Then
                 DynaLog.LogMessage("Getting full asset directory...")
                 If File.Exists(assetDir & "\AppxManifest.xml") Then
-                    Dim ManFile As New RichTextBox() With {
-                        .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                    }
-                    For Each line In ManFile.Lines
+                    Dim ManFileLines As String() = File.ReadAllLines(assetDir & "\AppxManifest.xml")
+                    For Each line In ManFileLines
                         If line.Contains("<Logo>") Then
                             Dim SplitPaths As New List(Of String)
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -508,10 +535,8 @@ Public Class GetAppxPkgInfoDlg
             Else
                 DynaLog.LogMessage("Getting full asset directory...")
                 If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml") Then
-                    Dim ManFile As New RichTextBox() With {
-                        .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
-                    }
-                    For Each line In ManFile.Lines
+                    Dim ManFileLines As String() = File.ReadAllLines(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
+                    For Each line In ManFileLines
                         If line.Contains("<Logo>") Then
                             Dim SplitPaths As New List(Of String)
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
@@ -587,23 +612,59 @@ Public Class GetAppxPkgInfoDlg
         Process.Start("https://github.com/CodingWonders/DISMTools/issues/new?assignees=CodingWonders&labels=bug&projects=&template=store-logo-asset-preview-issue.md&title=")
     End Sub
 
-    Sub SearchPackages(sQuery As String)
+    Sub SearchPackages(sQuery As String, Optional appxSearchMode As SearchMode = SearchMode.None)
         DynaLog.LogMessage("Search query: " & sQuery)
-        If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages.Count = 0 OrElse
-            MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
-            FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) AppxPackage.PackageFullName.ToLower().Contains(sQuery.ToLower()))
-            ListBox1.Items.AddRange(FilteredAppxPackages_Backup.Select(Function(AppxPackage) AppxPackage.PackageFullName).ToArray())
+        Dim IsBackupCollectionUsed As Boolean = False
+
+        If appxSearchMode > SearchMode.RegisteredToAnyone AndAlso MainForm.NoNTSamMappings Then appxSearchMode = SearchMode.None
+
+        If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages.Count = 0 OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+            IsBackupCollectionUsed = True
+
+            ' If we need the information from the system when it comes to user account names and security identifiers,
+            ' we'll grab it.
+            Select Case appxSearchMode
+                Case SearchMode.RegisteredToAnyone : FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) AppxHelper.IsPackageRegistered(MainForm.MountDir, AppxPackage))
+                Case SearchMode.RegisteredToNoOne : FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) Not AppxHelper.IsPackageRegistered(MainForm.MountDir, AppxPackage))
+                Case SearchMode.RegisteredToMe : FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) SidInformation(AppxPackage.PackageFullName).Values.Any(Function(val) val IsNot Nothing AndAlso val.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase)))
+                Case SearchMode.RegisteredToSid : FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) SidInformation(AppxPackage.PackageFullName).Keys.Any(Function(key) key IsNot Nothing AndAlso key.Equals(sQuery.Split(":")(1), StringComparison.OrdinalIgnoreCase)))
+                Case SearchMode.RegisteredToName : FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) SidInformation(AppxPackage.PackageFullName).Values.Any(Function(val) val IsNot Nothing AndAlso val.Equals(sQuery.Split(":")(1), StringComparison.OrdinalIgnoreCase)))
+                Case SearchMode.None : FilteredAppxPackages_Backup = MainForm.CurrentImage.ImageAppxPackages_Backup.Where(Function(AppxPackage) AppxPackage.PackageFullName.ToLower().Contains(sQuery.ToLower()))
+            End Select
         Else
-            FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) AppxPackage.PackageName.ToLower().Contains(sQuery.ToLower()))
+            IsBackupCollectionUsed = False
+
+            Select Case appxSearchMode
+                Case SearchMode.RegisteredToAnyone : FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) AppxHelper.IsPackageRegistered(MainForm.MountDir, AppxPackage))
+                Case SearchMode.RegisteredToNoOne : FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) Not AppxHelper.IsPackageRegistered(MainForm.MountDir, AppxPackage))
+                Case SearchMode.RegisteredToMe : FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) SidInformation(AppxPackage.PackageName).Values.Any(Function(val) val IsNot Nothing AndAlso val.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase)))
+                Case SearchMode.RegisteredToSid : FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) SidInformation(AppxPackage.PackageName).Keys.Any(Function(key) key IsNot Nothing AndAlso key.Equals(sQuery.Split(":")(1), StringComparison.OrdinalIgnoreCase)))
+                Case SearchMode.RegisteredToName : FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) SidInformation(AppxPackage.PackageName).Values.Any(Function(val) val IsNot Nothing AndAlso val.Equals(sQuery.Split(":")(1), StringComparison.OrdinalIgnoreCase)))
+                Case SearchMode.None : FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) AppxPackage.PackageName.ToLower().Contains(sQuery.ToLower()))
+            End Select
+
             FilteredAppxPackages_Backup = Enumerable.Repeat(Of ImageAppxPackage)(Nothing, FilteredAppxPackages.Count)
-            ListBox1.Items.AddRange(FilteredAppxPackages.Select(Function(AppxPackage) AppxPackage.PackageName).ToArray())
         End If
+
+        ListBox1.Items.AddRange(If(IsBackupCollectionUsed, FilteredAppxPackages_Backup.Select(Function(AppxPackage) AppxPackage.PackageFullName), FilteredAppxPackages.Select(Function(AppxPackage) AppxPackage.PackageName)).ToArray())
     End Sub
 
     Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
         ListBox1.Items.Clear()
         If SearchBox1.Text <> "" Then
-            SearchPackages(SearchBox1.Text)
+            Dim modeToUse As SearchMode = SearchMode.None
+            If SearchBox1.Text.StartsWith("regto:", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+                ' Determine based on second field
+                Dim RegistrationParts As String() = SearchBox1.Text.Split(":")
+                Select Case RegistrationParts(1)
+                    Case "anyone" : modeToUse = SearchMode.RegisteredToAnyone
+                    Case "me" : modeToUse = SearchMode.RegisteredToMe
+                    Case "noone" : modeToUse = SearchMode.RegisteredToNoOne
+                    Case Else : modeToUse = If(RegistrationParts(1).StartsWith("S-1-5", StringComparison.OrdinalIgnoreCase),
+                                               SearchMode.RegisteredToSid, SearchMode.RegisteredToName)
+                End Select
+            End If
+            SearchPackages(SearchBox1.Text, modeToUse)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
             If MainForm.CurrentImage.ImageAppxPackages IsNot Nothing Then
@@ -630,5 +691,15 @@ Public Class GetAppxPkgInfoDlg
             e.SuppressKeyPress = True
             SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
+    End Sub
+
+    Private Sub WizardBtn_Click(sender As Object, e As EventArgs) Handles WizardBtn.Click
+        If AppxFilterAssistantDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            SearchBox1.Text = AppxFilterAssistantDialog.AppliedQuery
+        End If
+    End Sub
+
+    Private Sub WizardBtn_MouseHover(sender As Object, e As EventArgs) Handles WizardBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Build query with the Assistant...")
     End Sub
 End Class

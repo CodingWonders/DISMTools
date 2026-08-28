@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2663"
+    Const UnattendGenReleaseTag As String = "2683"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -768,6 +768,7 @@ Public Class NewUnattendWiz
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
+        ToolStripButton1.Width = WindowHelper.ScaleLogical(96)
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor

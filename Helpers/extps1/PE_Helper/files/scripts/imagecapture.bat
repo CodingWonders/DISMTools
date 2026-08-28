@@ -29,10 +29,11 @@ diskpart /s %scriptpath%
 
 echo.
 echo - To install drivers if you don't see your drives, type "DIM"
-if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
+if exist "%SYSTEMROOT%\system32\wdscapture.exe" echo - To prepare a capture for a Windows Deployment Services server, type "WDS"
 echo - To save the image to a network share, type "NET"
 echo - To perform quick disk and partition administration, type "DP"
 echo - To change the keyboard layout to use, type "KBD"
+if exist "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" echo - To unlock an encrypted BitLocker volume, type "BDE"
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
@@ -113,6 +114,11 @@ if /i "%sourcedrive%" equ "KBD" (
 	goto :main
 )
 
+if /i "%sourcedrive%" equ "BDE" (
+	start /b /wait cmd /c "%sysdrive%\Tools\BDE-GUI\bdemgr.bat" unlock
+	goto :main
+)
+
 if %_DEBUG% EQU 1 echo Checking presence of marker...
 if %_DEBUG% EQU 1 echo "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag"
 if not exist "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag" (
@@ -148,6 +154,12 @@ if not defined imagename (
 	set imagename=Windows
 )
 
+set /p imagedesc=Provide a custom description. To continue with a default description, press ENTER without typing anything: 
+if not defined imagedesc (
+    IF %_DEBUG% EQU 1 echo Destination description not provided. Continuing with default description.
+	set imagedesc=!imagename!
+)
+
 echo Capturing Windows installation to the target WIM file. This can take a long time, depending on the computer's speed.
 call :create_config_list %sourcedrive%
 
@@ -158,7 +170,8 @@ IF %_DEBUG% EQU 1 echo   Destination file : %destdrive%:\%destfile%
 IF %_DEBUG% EQU 1 echo   Source directory : %sourcedrive%:\
 IF %_DEBUG% EQU 1 echo   Scratch directory: %destdrive%:\
 IF %_DEBUG% EQU 1 echo   Image Name       : %imagename%
-dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
+IF %_DEBUG% EQU 1 echo   Image Description: %imagedesc%
+dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /description="%imagedesc%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
 if %ERRORLEVEL% equ 0 (
 	set succeeded=true
 	if exist "%SYSTEMDRIVE%\SysprepPrepTool" call :sysprep_hotinstall_remove_temp_files

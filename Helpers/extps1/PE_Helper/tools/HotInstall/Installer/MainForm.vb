@@ -435,6 +435,13 @@ Public Class MainForm
 
 #Region "System Preparation Work"
 
+    Private Function GetPathDirectoryName(path As String) As String
+        If path = "" Then Return ""
+        Dim pathParts() As String = path.Replace("\\", "\").TrimEnd("\").Split("\")
+        Array.Reverse(pathParts)
+        Return pathParts(0)
+    End Function
+
     ''' <summary>
     ''' Copies files from a given source to a given destination, whilst excluding any items whose names match the given exclusion
     ''' </summary>
@@ -452,35 +459,70 @@ Public Class MainForm
                 DynaLog.LogMessage("Destination does not exist. Creating...")
                 Directory.CreateDirectory(Destination)
             End If
-            Dim FileCount As Integer = Directory.GetFiles(Source, "*", SearchOption.AllDirectories).Count
-            Dim CopiedFiles As Integer = 0
 
-            Dim SourceRoot As String = Path.GetFullPath(Source).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-            Dim DestinationRoot As String = Path.GetFullPath(Destination).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            ' Enumerate directories in the root of the source; once we have them, we can have more granular error control
+            ' for specific directories.
+            Dim SubDirsInSource As IEnumerable(Of String) = Directory.EnumerateDirectories(Source, "*", SearchOption.TopDirectoryOnly)
 
-            DynaLog.LogMessage("Creating directories...")
-            For Each DirToCreate In Directory.GetDirectories(Source, "*", SearchOption.AllDirectories)
-                Dim sourcePath As String = DirToCreate.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
-                If Not Directory.Exists(destinationPath) Then
-                    Directory.CreateDirectory(destinationPath)
-                End If
-            Next
+            If SubDirsInSource.Any() Then
+                For Each SubDirInSource In SubDirsInSource
+                    Try
+                        Dim SourceRoot As String = Path.GetFullPath(SubDirInSource).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                        Dim DestinationRoot As String = Path.GetFullPath(Path.Combine(Destination, GetPathDirectoryName(SubDirInSource))).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
 
-            DynaLog.LogMessage("Copying files to each directory...")
-            For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
-                ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), CopiedFiles, FileCount)
-                If ReportProgress Then InstallerBW.ReportProgress(5)
-                If Path.GetFileName(FileToCopy) = ExcludedFile Then
-                    CopiedFiles += 1
-                    Continue For
-                End If
-                Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
-                File.Copy(FileToCopy, destinationPath, True)
-                CopiedFiles += 1
-                File.SetAttributes(destinationPath, FileAttributes.Archive)
-            Next
+                        DynaLog.LogMessage("Creating directories...")
+                        If Not Directory.Exists(DestinationRoot) Then Directory.CreateDirectory(DestinationRoot)
+                        For Each DirToCreate In Directory.GetDirectories(SubDirInSource, "*", SearchOption.AllDirectories)
+                            Dim sourcePath As String = DirToCreate.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                            Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
+                            If Not Directory.Exists(destinationPath) Then
+                                Directory.CreateDirectory(destinationPath)
+                            End If
+                        Next
+
+                        DynaLog.LogMessage("Copying files to each directory...")
+                        For Each FileToCopy In Directory.GetFiles(SubDirInSource, "*", SearchOption.AllDirectories)
+                            ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
+                            If ReportProgress Then InstallerBW.ReportProgress(5)
+                            If Path.GetFileName(FileToCopy) = ExcludedFile Then Continue For
+                            Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                            Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
+                            File.Copy(FileToCopy, destinationPath, True)
+                            File.SetAttributes(destinationPath, FileAttributes.Archive)
+                        Next
+                    Catch ex As Exception
+                        DynaLog.LogMessage("Could not copy files from directory " & GetPathDirectoryName(SubDirInSource) & ". Skipping...")
+                    End Try
+                Next
+            Else
+                Try
+                    Dim SourceRoot As String = Path.GetFullPath(Source).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    Dim DestinationRoot As String = Path.GetFullPath(Path.Combine(Destination, GetPathDirectoryName(Source))).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+
+                    DynaLog.LogMessage("Creating directories...")
+                    If Not Directory.Exists(DestinationRoot) Then Directory.CreateDirectory(DestinationRoot)
+                    For Each DirToCreate In Directory.GetDirectories(Source, "*", SearchOption.AllDirectories)
+                        Dim sourcePath As String = DirToCreate.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                        Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
+                        If Not Directory.Exists(destinationPath) Then
+                            Directory.CreateDirectory(destinationPath)
+                        End If
+                    Next
+
+                    DynaLog.LogMessage("Copying files to each directory...")
+                    For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
+                        ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
+                        If ReportProgress Then InstallerBW.ReportProgress(5)
+                        If Path.GetFileName(FileToCopy) = ExcludedFile Then Continue For
+                        Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                        Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
+                        File.Copy(FileToCopy, destinationPath, True)
+                        File.SetAttributes(destinationPath, FileAttributes.Archive)
+                    Next
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not copy files from directory " & GetPathDirectoryName(Source) & ". Skipping...")
+                End Try
+            End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not copy files. Error message: " & ex.Message)
             Throw
@@ -613,18 +655,20 @@ Public Class MainForm
         Try
             Dim scsiAdapterPaths As String() = Directory.GetFiles(scsiExportTempPath, "*.inf", SearchOption.AllDirectories)
             DismApi.Initialize(DismLogLevel.LogErrors)
+            Dim successfulInfInstalls As Integer = 0
             Using session As DismSession = DismApi.OpenOfflineSession(String.Format("{0}\$DISMTOOLS.~WS", Environment.GetEnvironmentVariable("SYSTEMDRIVE")))
                 For Each scsiAdapterPath In scsiAdapterPaths
                     DynaLog.LogMessage("Installing SCSI adapter/Storage controller driver " & Path.GetFileName(scsiAdapterPath) & " ...")
                     Try
                         DismApi.AddDriver(session, scsiAdapterPath, True)
                         DynaLog.LogMessage("Driver " & Path.GetFileName(scsiAdapterPath) & " was added successfully.")
+                        successfulInfInstalls += 1
                     Catch ex As Exception
                         DynaLog.LogMessage("Could not add driver " & Path.GetFileName(scsiAdapterPath) & ".")
                     End Try
                 Next
             End Using
-            File.WriteAllText(String.Format("{0}\$DISMTOOLS.~WS\driver_supplements_added", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), String.Empty)
+            If successfulInfInstalls > 0 Then File.WriteAllText(String.Format("{0}\$DISMTOOLS.~WS\driver_supplements_added", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), String.Empty)
         Catch ex As Exception
             DynaLog.LogMessage("Could not prepare SCSI driver import. Error message: " & ex.Message)
         Finally

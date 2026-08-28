@@ -70,6 +70,37 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property account_dev_settings() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("account_dev_settings", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to $env:APIKEY = &quot;YOUR_API_KEY_HERE&quot;
+        '''set &quot;API_URI=https://your-service-here.com/API_KEY&quot;.
+        '''</summary>
+        Friend ReadOnly Property ApiKeyLeakTemplate() As String
+            Get
+                Return ResourceManager.GetString("ApiKeyLeakTemplate", resourceCulture)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property bottomleft() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("bottomleft", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property bottomright() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("bottomright", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property changefont() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("changefont", resourceCulture)
@@ -77,9 +108,114 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property classic_pat_params() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("classic_pat_params", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property colormode() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("colormode", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property example_classic_pat_key() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("example_classic_pat_key", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property example_finegrained_pat_key() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("example_finegrained_pat_key", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property find() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("find", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property finegrained_pat_confirm() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("finegrained_pat_confirm", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property finegrained_pat_params_1() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("finegrained_pat_params_1", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property finegrained_pat_params_2() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("finegrained_pat_params_2", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property generate_pat() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("generate_pat", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property generate_token() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("generate_token", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property github_account_settings() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("github_account_settings", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property github_devapps_tokens() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("github_devapps_tokens", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property inspect_high_severity() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inspect_high_severity", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property inspect_low_severity() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inspect_low_severity", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property inspect_medium_severity() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inspect_medium_severity", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property inspect_security() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("inspect_security", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -104,6 +240,60 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property pin() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("pin", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property pin_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("pin_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Character Classes:
+        '''.        Any character except newline
+        '''\d       Digit [0-9]
+        '''\D       Non-digit
+        '''\w       Word character [A-Za-z0-9_]
+        '''\W       Non-word character
+        '''\s       Whitespace
+        '''\S       Non-whitespace
+        '''[abc]    Any of a, b, or c
+        '''[^abc]   Not a, b, or c
+        '''[a-z]    Lowercase letter
+        '''
+        '''Quantifiers:
+        '''
+        '''* 0 or more
+        '''- 1 or more
+        '''
+        '''?        0 or 1
+        '''{n}      Exactly n times
+        '''{n,}     n or more times
+        '''{n,m}    Between n and m times
+        '''
+        '''Anchors:
+        '''^        Start of string/line
+        '''$        End of string/line        ''' [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property RegexCheatsheet() As String
+            Get
+                Return ResourceManager.GetString("RegexCheatsheet", resourceCulture)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property replace() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("replace", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
@@ -124,6 +314,27 @@ Namespace My.Resources
         Friend ReadOnly Property targetversion() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("targetversion", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property topleft() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("topleft", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property topright() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("topright", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property upload() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("upload", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

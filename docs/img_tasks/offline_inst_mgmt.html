@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -521,6 +521,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bitlocker-volume-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BitLocker volume support
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3332,6 +3343,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#bitlocker-volume-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BitLocker volume support
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#differences-with-standard-project-management" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3388,9 +3410,19 @@
 <ul>
 <li>The drive contains an installation of Windows Vista or an earlier version of Windows</li>
 <li>The drive containing the installation is not formatted as NTFS</li>
-<li>The drive containing the installation is mounted as a removable medium</li>
 <li>The drive containing the installation is mounted with read-only privileges</li>
 </ul>
+<h2 id="bitlocker-volume-support">BitLocker volume support</h2>
+<p>DISMTools can detect if a volume connected to the system is encrypted with BitLocker. You will see "BITLOCKER" in the drive format field on all volumes that are encrypted and locked. To continue, you will need to provide the numerical password:</p>
+<p align="center">
+    <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/img_tasks/offline_inst_mgmt/off_inst_mgmt_bitlocker.png" data-desc-position="bottom"><img src="../res/img_tasks/offline_inst_mgmt/off_inst_mgmt_bitlocker.png"></a>
+</p>
+
+<p>After an installation in an encrypted volume has been managed, the volume will be locked again.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can prevent DISMTools from locking BitLocker volumes after leaving offline installation management from Options &gt; Image operations</p>
+</div>
 <h2 id="differences-with-standard-project-management">Differences with standard project management</h2>
 <p>There are some differences between managing an offline installation and a standard project, which will be mentioned below:</p>
 <ul>
@@ -3448,7 +3480,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       

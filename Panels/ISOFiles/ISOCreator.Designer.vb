@@ -23,7 +23,6 @@ Partial Class ISOCreator
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ISOCreator))
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
@@ -58,14 +57,16 @@ Partial Class ISOCreator
         Me.IdlePanel = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ISOProgressPanel = New System.Windows.Forms.Panel()
-        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.Label9 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
         Me.ADKDownloaderBW = New System.ComponentModel.BackgroundWorker()
+        Me.CreationJobsLV = New System.Windows.Forms.ListView()
+        Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.GroupBox1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -75,11 +76,6 @@ Partial Class ISOCreator
         Me.IdlePanel.SuspendLayout()
         Me.ISOProgressPanel.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'BackgroundWorker1
-        '
-        Me.BackgroundWorker1.WorkerReportsProgress = True
-        Me.BackgroundWorker1.WorkerSupportsCancellation = True
         '
         'Label2
         '
@@ -115,7 +111,7 @@ Partial Class ISOCreator
         Me.GroupBox1.Controls.Add(Me.CheckBox3)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 91)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1238, 445)
+        Me.GroupBox1.Size = New System.Drawing.Size(1238, 420)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Options"
@@ -124,7 +120,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.Location = New System.Drawing.Point(384, 393)
+        Me.CheckBox4.Location = New System.Drawing.Point(384, 368)
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(224, 17)
         Me.CheckBox4.TabIndex = 12
@@ -135,7 +131,7 @@ Partial Class ISOCreator
         '
         Me.Button6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button6.Location = New System.Drawing.Point(1025, 409)
+        Me.Button6.Location = New System.Drawing.Point(1025, 384)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(184, 23)
         Me.Button6.TabIndex = 11
@@ -152,7 +148,7 @@ Partial Class ISOCreator
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(24, 73)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1188, 198)
+        Me.ListView1.Size = New System.Drawing.Size(1188, 173)
         Me.ListView1.TabIndex = 10
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -189,7 +185,7 @@ Partial Class ISOCreator
         Me.Panel2.Controls.Add(Me.Button5)
         Me.Panel2.Controls.Add(Me.TextBox4)
         Me.Panel2.Enabled = False
-        Me.Panel2.Location = New System.Drawing.Point(194, 312)
+        Me.Panel2.Location = New System.Drawing.Point(194, 287)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(1018, 33)
         Me.Panel2.TabIndex = 9
@@ -218,7 +214,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(24, 393)
+        Me.CheckBox2.Location = New System.Drawing.Point(24, 368)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(133, 17)
         Me.CheckBox2.TabIndex = 8
@@ -229,7 +225,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoEllipsis = True
-        Me.CheckBox1.Location = New System.Drawing.Point(24, 319)
+        Me.CheckBox1.Location = New System.Drawing.Point(24, 294)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox1.TabIndex = 8
@@ -242,7 +238,7 @@ Partial Class ISOCreator
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.ComboBox1)
         Me.Panel1.Controls.Add(Me.Label6)
-        Me.Panel1.Location = New System.Drawing.Point(24, 277)
+        Me.Panel1.Location = New System.Drawing.Point(24, 252)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1181, 31)
         Me.Panel1.TabIndex = 7
@@ -282,7 +278,7 @@ Partial Class ISOCreator
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(1134, 365)
+        Me.Button3.Location = New System.Drawing.Point(1134, 340)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 2
@@ -304,7 +300,7 @@ Partial Class ISOCreator
         '
         Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox3.Location = New System.Drawing.Point(24, 366)
+        Me.TextBox3.Location = New System.Drawing.Point(24, 341)
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(1104, 21)
         Me.TextBox3.TabIndex = 1
@@ -322,7 +318,7 @@ Partial Class ISOCreator
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(21, 349)
+        Me.Label7.Location = New System.Drawing.Point(21, 324)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 0
@@ -352,7 +348,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(24, 415)
+        Me.CheckBox3.Location = New System.Drawing.Point(24, 390)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(175, 17)
         Me.CheckBox3.TabIndex = 8
@@ -386,21 +382,21 @@ Partial Class ISOCreator
         Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.ProgressContainer)
-        Me.GroupBox2.Location = New System.Drawing.Point(13, 542)
+        Me.GroupBox2.Location = New System.Drawing.Point(13, 517)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(1238, 98)
+        Me.GroupBox2.Size = New System.Drawing.Size(1238, 123)
         Me.GroupBox2.TabIndex = 10
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Progress"
         '
         'ProgressContainer
         '
-        Me.ProgressContainer.Controls.Add(Me.IdlePanel)
         Me.ProgressContainer.Controls.Add(Me.ISOProgressPanel)
+        Me.ProgressContainer.Controls.Add(Me.IdlePanel)
         Me.ProgressContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ProgressContainer.Location = New System.Drawing.Point(3, 17)
         Me.ProgressContainer.Name = "ProgressContainer"
-        Me.ProgressContainer.Size = New System.Drawing.Size(1232, 78)
+        Me.ProgressContainer.Size = New System.Drawing.Size(1232, 103)
         Me.ProgressContainer.TabIndex = 0
         '
         'IdlePanel
@@ -409,7 +405,7 @@ Partial Class ISOCreator
         Me.IdlePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.IdlePanel.Location = New System.Drawing.Point(0, 0)
         Me.IdlePanel.Name = "IdlePanel"
-        Me.IdlePanel.Size = New System.Drawing.Size(1232, 78)
+        Me.IdlePanel.Size = New System.Drawing.Size(1232, 103)
         Me.IdlePanel.TabIndex = 0
         '
         'Label3
@@ -418,44 +414,21 @@ Partial Class ISOCreator
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label3.Location = New System.Drawing.Point(0, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(1232, 78)
+        Me.Label3.Size = New System.Drawing.Size(1232, 103)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Once you're ready, click the Create button."
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ISOProgressPanel
         '
-        Me.ISOProgressPanel.Controls.Add(Me.ProgressBar1)
-        Me.ISOProgressPanel.Controls.Add(Me.Label9)
+        Me.ISOProgressPanel.Controls.Add(Me.CreationJobsLV)
         Me.ISOProgressPanel.Controls.Add(Me.Label8)
         Me.ISOProgressPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ISOProgressPanel.Location = New System.Drawing.Point(0, 0)
         Me.ISOProgressPanel.Name = "ISOProgressPanel"
-        Me.ISOProgressPanel.Size = New System.Drawing.Size(1232, 78)
+        Me.ISOProgressPanel.Size = New System.Drawing.Size(1232, 103)
         Me.ISOProgressPanel.TabIndex = 0
         Me.ISOProgressPanel.Visible = False
-        '
-        'ProgressBar1
-        '
-        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProgressBar1.Location = New System.Drawing.Point(15, 29)
-        Me.ProgressBar1.MarqueeAnimationSpeed = 25
-        Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(1201, 23)
-        Me.ProgressBar1.TabIndex = 1
-        '
-        'Label9
-        '
-        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Location = New System.Drawing.Point(12, 57)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(1204, 13)
-        Me.Label9.TabIndex = 0
-        Me.Label9.Text = "You can do other things while the ISO is being created. Come back here anytime fo" & _
-    "r an updated status."
         '
         'Label8
         '
@@ -466,7 +439,7 @@ Partial Class ISOCreator
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(1204, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Status"
+        Me.Label8.Text = "Jobs:"
         '
         'OpenFileDialog1
         '
@@ -497,6 +470,37 @@ Partial Class ISOCreator
         'ADKDownloaderBW
         '
         Me.ADKDownloaderBW.WorkerReportsProgress = True
+        '
+        'CreationJobsLV
+        '
+        Me.CreationJobsLV.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CreationJobsLV.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader6, Me.ColumnHeader7, Me.ColumnHeader8})
+        Me.CreationJobsLV.FullRowSelect = True
+        Me.CreationJobsLV.GridLines = True
+        Me.CreationJobsLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.CreationJobsLV.Location = New System.Drawing.Point(15, 32)
+        Me.CreationJobsLV.Name = "CreationJobsLV"
+        Me.CreationJobsLV.Size = New System.Drawing.Size(1201, 56)
+        Me.CreationJobsLV.TabIndex = 1
+        Me.CreationJobsLV.UseCompatibleStateImageBehavior = False
+        Me.CreationJobsLV.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader6
+        '
+        Me.ColumnHeader6.Text = "ID"
+        Me.ColumnHeader6.Width = 64
+        '
+        'ColumnHeader7
+        '
+        Me.ColumnHeader7.Text = "Destination File"
+        Me.ColumnHeader7.Width = 960
+        '
+        'ColumnHeader8
+        '
+        Me.ColumnHeader8.Text = "Status"
+        Me.ColumnHeader8.Width = 128
         '
         'ImageTaskHeader1
         '
@@ -544,7 +548,6 @@ Partial Class ISOCreator
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
@@ -562,8 +565,6 @@ Partial Class ISOCreator
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents ProgressContainer As System.Windows.Forms.Panel
     Friend WithEvents ISOProgressPanel As System.Windows.Forms.Panel
-    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
-    Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents IdlePanel As System.Windows.Forms.Panel
     Friend WithEvents Label3 As System.Windows.Forms.Label
@@ -588,4 +589,8 @@ Partial Class ISOCreator
     Friend WithEvents Button6 As System.Windows.Forms.Button
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
+    Friend WithEvents CreationJobsLV As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
 End Class

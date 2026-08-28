@@ -118,11 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label8.Text" xml:space="preserve">
-    <value>These predefined starter scripts can help you get the most out of your Windows image when using this unattended answer file. These scripts have been curated and tested by the developers.
+    <value>Starter scripts can help you get the most out of your Windows image when using this unattended answer file. The default set of scripts have been curated and tested by the developers.
 
 To get started, select a starter script from the list on the left.
 
-If you have a starter script that isn't included in this set of scripts, you can load it from the file system instead.</value>
+If you have a starter script that isn't included in this set of scripts, you can load it from the file system instead. You can also create starter scripts by clicking the button on the bottom left.
+
+Additionally, share your starter scripts with everyone by uploading them to the Library.</value>
   </data>
   <metadata name="ScriptCodeExporterSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

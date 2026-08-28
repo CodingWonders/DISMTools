@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3410,7 +3410,11 @@
 </tbody>
 </table>
 <p><i>This action is supported on DISMTools 0.3 and newer</i></p>
-<p><strong>NOTE:</strong> DISM will not be invoked when you add drivers to active installations. Instead, the PnP Utility (<code>pnputil.exe</code>) will be used to add drivers to the system. DISMTools will adapt its command line arguments to work with pnputil depending on the installed system, with command line arguments being different in Windows 8 and Windows 10 and newer. Performing this action on active installations is only supported on DISMTools 0.7 and newer.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>DISM will not be invoked when you add drivers to active installations. Instead, the PnP Utility (<code>pnputil.exe</code>) will be used to add drivers to the system. DISMTools will adapt its command line arguments to work with pnputil depending on the installed system, with command line arguments being different in Windows 8 and Windows 10 and newer. Performing this action on active installations is only supported on DISMTools 0.7 and newer.</p>
+<p>For system administrators working with the command line, DISMTools includes a helper script that allows you to recursively install driver INF files on Windows NT 6.x systems (Windows Vista-8.1, Server 2008-2012 R2).</p>
+</div>
 <h2 id="usage">Usage</h2>
 <p>You need to specify driver packages and/or folders to add to your Windows image by adding or dropping them to the <strong>driver files</strong> list. Folders get automatically added to the <strong>driver folders</strong> list, which allows the program to scan the folders you want recursively for driver packages.</p>
 <p>You may also need to specify some settings in order to get the result you want.</p>
@@ -3475,7 +3479,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       
