@@ -2,6 +2,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Net
+Imports DISMTools.Utilities.NetworkUtilities
 
 Public Class PrgSetup
 
@@ -855,6 +856,10 @@ Public Class PrgSetup
             DynaLog.LogMessage("Could not delete existing update downloader...")
             Exit Sub
         End Try
+        If NetworkCostHelper.IsNetworkConnectionMetered() Then
+
+            If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+        End If
         Try
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()

@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Globalization
 Imports Microsoft.Win32
+Imports DISMTools.Utilities.NetworkUtilities
 
 Public Class Options
 
@@ -474,6 +475,8 @@ Public Class Options
         MainForm.PreventSystemFromSleeping = CheckBox8.Checked
         MainForm.HumanizeDates = CheckBox1.Checked
         MainForm.LockUnlockedVolumes = CheckBox25.Checked
+
+        MainForm.WarnOnMetered = CheckBox26.Checked
 
         MainForm.PEHelper_MaxConcurrentISO = NumericUpDown2.Value
     End Sub
@@ -1721,7 +1724,7 @@ Public Class Options
         TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
-        TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Windows\Logs\DISM\DISM.log"
+        TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log"
         DynaLog.LogMessage("Gathering custom settings...")
         GatherCustomSettings()
 
@@ -1810,6 +1813,12 @@ Public Class Options
         DTSSEditAssocCB.Checked = DetectFileAssociations("DTSSEdit.StarterScript")
         GetAIRServiceInformation()
         ImageTaskHeader1.HideWindowTitle(handle)
+
+        If NetworkCostHelper.IsNetworkConnectionMetered() Then
+            Label36.Text = "Currently, your network is metered."
+        Else
+            Label36.Text = "Currently, your network is not metered."
+        End If
     End Sub
 
     Sub GetSystemFonts()
@@ -1826,83 +1835,26 @@ Public Class Options
         TextBox1.Text = MainForm.DismExe
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
-        If MainForm.SaveOnSettingsIni Then
-            ComboBox1.SelectedIndex = 0
-        Else
-            ComboBox1.SelectedIndex = 1
-        End If
-        Select Case MainForm.ColorMode
-            Case 0
-                ComboBox2.SelectedIndex = 0
-            Case 1
-                ComboBox2.SelectedIndex = 1
-            Case 2
-                ComboBox2.SelectedIndex = 2
-        End Select
+        ComboBox1.SelectedIndex = If(MainForm.SaveOnSettingsIni, 0, 1)
+        ComboBox2.SelectedIndex = MainForm.ColorMode
         ComboBox3.SelectedIndex = MainForm.Language
         ComboBox4.Text = MainForm.LogFont
         NumericUpDown1.Value = MainForm.LogFontSize
-        If MainForm.LogFontIsBold Then
-            Toggle1.Checked = True
-        Else
-            Toggle1.Checked = False
-        End If
-        Select Case MainForm.ProgressPanelStyle
-            Case 0
-                RadioButton5.Checked = False
-                RadioButton6.Checked = True
-            Case 1
-                RadioButton5.Checked = True
-                RadioButton6.Checked = False
-        End Select
+        Toggle1.Checked = MainForm.LogFontIsBold
+        RadioButton5.Checked = MainForm.ProgressPanelStyle = 1
+        RadioButton6.Checked = MainForm.ProgressPanelStyle = 0
         TextBox2.Text = MainForm.LogFile
         TrackBar1.Value = If(MainForm.LogLevel = TrackBar1.Minimum, MainForm.LogLevel, MainForm.LogLevel - 1)
-        If MainForm.QuietOperations Then
-            CheckBox2.Checked = True
-        Else
-            CheckBox2.Checked = False
-        End If
-        If MainForm.SysNoRestart Then
-            CheckBox3.Checked = True
-        Else
-            CheckBox3.Checked = False
-        End If
-        If MainForm.UseScratch Then
-            CheckBox4.Checked = True
-            TextBox3.Text = MainForm.ScratchDir
-        Else
-            CheckBox4.Checked = False
-            TextBox3.Text = ""
-        End If
-        If MainForm.AutoScrDir Then
-            RadioButton3.Checked = True
-            RadioButton4.Checked = False
-        Else
-            RadioButton3.Checked = False
-            RadioButton4.Checked = True
-        End If
-        If MainForm.EnglishOutput Then
-            CheckBox5.Checked = True
-        Else
-            CheckBox5.Checked = False
-        End If
-        Select Case MainForm.ReportView
-            Case 0
-                ComboBox5.SelectedIndex = 0
-            Case 1
-                ComboBox5.SelectedIndex = 1
-        End Select
-        If MainForm.NotificationShow Then
-            CheckBox6.Checked = True
-        Else
-            CheckBox6.Checked = False
-        End If
-        Select Case MainForm.NotificationFrequency
-            Case 0
-                ComboBox6.SelectedIndex = 0
-            Case 1
-                ComboBox6.SelectedIndex = 1
-        End Select
+        CheckBox2.Checked = MainForm.QuietOperations
+        CheckBox3.Checked = MainForm.SysNoRestart
+        CheckBox4.Checked = MainForm.UseScratch
+        TextBox3.Text = If(MainForm.UseScratch, MainForm.ScratchDir, "")
+        RadioButton3.Checked = MainForm.AutoScrDir
+        RadioButton4.Checked = Not MainForm.AutoScrDir
+        CheckBox5.Checked = MainForm.EnglishOutput
+        ComboBox5.SelectedIndex = MainForm.ReportView
+        CheckBox6.Checked = MainForm.NotificationShow
+        ComboBox6.SelectedIndex = MainForm.NotificationFrequency
         GetRootSpace(TextBox3.Text)
         CheckBox10.Checked = MainForm.AutoLogs
         CheckBox20.Checked = Not MainForm.EnableDynaLog
@@ -1928,6 +1880,8 @@ Public Class Options
         CheckBox8.Checked = MainForm.PreventSystemFromSleeping
         CheckBox1.Checked = MainForm.HumanizeDates
         CheckBox25.Checked = MainForm.LockUnlockedVolumes
+
+        CheckBox26.Checked = MainForm.WarnOnMetered
 
         NumericUpDown2.Value = MainForm.PEHelper_MaxConcurrentISO
     End Sub

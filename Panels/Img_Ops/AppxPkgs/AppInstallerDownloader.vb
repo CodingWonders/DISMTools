@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports DISMTools.Elements
 Imports DISMTools.Utilities.Converters
+Imports DISMTools.Utilities.NetworkUtilities
 Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.ComponentModel
@@ -237,6 +238,16 @@ Public Class AppInstallerDownloader
                     downUriLbl.Text = AppInstallerUri
                     Cancel_Button.Enabled = True
                     Label3.Visible = False
+
+                    ' Network transfers may incur charges when in metered mode; check and warn
+                    If NetworkCostHelper.IsNetworkConnectionMetered() Then
+                        DynaLog.LogMessage("Network connection is METERED! You may be billed for this transfer.")
+
+                        If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
+                            Throw New Exception()
+                        End If
+                    End If
+
                     BackgroundWorker1.RunWorkerAsync()
                 Else
                     DynaLog.LogMessage("We don't have a link. Cancelling...")

@@ -21,8 +21,8 @@ Public Class AddProvAppxPackage
     Public AppxDependencies(65535) As String
 
     ' Internal variables helpful to pass information
-    Public AppxAdditionCount As Integer
-    Public AppxDependencyCount As Integer
+    Private AppxAdditionCount As Integer
+    Private AppxDependencyCount As Integer
 
     Dim LogoAssetPopupForm As New Form()
     Dim LogoAssetPreview As New PictureBox()

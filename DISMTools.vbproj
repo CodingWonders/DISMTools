@@ -947,6 +947,12 @@
     <Compile Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Questions\MeteredConnectionWarningDialog.Designer.vb">
+      <DependentUpon>MeteredConnectionWarningDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\MeteredConnectionWarningDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Questions\MountOpDirCreationDialog.Designer.vb">
       <DependentUpon>MountOpDirCreationDialog.vb</DependentUpon>
     </Compile>
@@ -1049,6 +1055,7 @@
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
+    <Compile Include="Utilities\NetworkUtilities\NetworkCostHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PowerManagement\PowerManagementHelper.vb" />
@@ -1388,6 +1395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.resx">
       <DependentUpon>ImgWinVistaIncompatibilityDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\MeteredConnectionWarningDialog.resx">
+      <DependentUpon>MeteredConnectionWarningDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\MountOpDirCreationDialog.resx">
       <DependentUpon>MountOpDirCreationDialog.vb</DependentUpon>

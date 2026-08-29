@@ -7,6 +7,7 @@ Imports System.Net
 Imports Microsoft.Win32
 Imports System.Threading.Tasks
 Imports DISMTools.Elements.ISOCreation
+Imports DISMTools.Utilities.NetworkUtilities
 
 Public Class ISOCreator
 
@@ -445,6 +446,10 @@ Public Class ISOCreator
 
     Private Sub DownloadADK()
         Try
+            If NetworkCostHelper.IsNetworkConnectionMetered() Then
+
+                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled")
+            End If
             ProgressReporter.SetMessage("Preparing to download Assessment and Deployment Kit...")
             ADKDownloaderBW.ReportProgress(0)
             Dim FileNames As New List(Of String)

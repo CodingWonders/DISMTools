@@ -210,6 +210,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: expandsz; ValueName: "DismExe"; ValueData: "{win}\system32\dism.exe"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "SaveOnSettingsIni"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "WarnOnMetered"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; ValueType: dword; ValueName: "AutoScratch"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist

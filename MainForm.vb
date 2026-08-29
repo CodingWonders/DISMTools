@@ -10,6 +10,7 @@ Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
+Imports DISMTools.Utilities.NetworkUtilities
 Imports DISMTools.Elements
 Imports DISMTools.Elements.Contemporaneus
 Imports DISMTools.Elements.IniParserConfigurators
@@ -211,7 +212,7 @@ Public Class MainForm
     Public SearchEngineAITolerance As Integer = 1    ' The amount of tolerance of AI in search engines
 
     ' Tour server
-    Public ReadOnly tourServer As DTHttpServer = New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+    Public ReadOnly tourServer As New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
     Private ReadOnly videoServer As New DTHttpServer(Path.Combine(Application.StartupPath, "videos"), 2026)
 
     ' Contemporaneus Preview
@@ -237,6 +238,7 @@ Public Class MainForm
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
     Public HumanizeDates As Boolean = True                  ' Whether to display all date fields in a human-readable format
     Public LockUnlockedVolumes As Boolean = True            ' Whether to lock unlocked bitlocker volumes after ending offline management
+    Public WarnOnMetered As Boolean                         ' Whether to warn when performing network transfers on metered connections
 
     Public ReinitializeCurImage As Boolean = True
 
@@ -1555,6 +1557,23 @@ Public Class MainForm
         End If
     End Sub
 
+    ''' <summary>
+    ''' Gets a setting value from a INI data collection
+    ''' </summary>
+    ''' <param name="IniEngineData">The INI data collection</param>
+    ''' <param name="IniSection">The section of the INI data to parse</param>
+    ''' <param name="IniKey">The key of the INI data to parse</param>
+    ''' <param name="DefaultValue">The default value to return if the INI data could not be parsed</param>
+    ''' <returns>The specified setting value, or <paramref name="DefaultValue"/> if it could not be obtained.</returns>
+    ''' <remarks></remarks>
+    Private Function GetIniSettingValue(IniEngineData As IniData, IniSection As String, IniKey As String, DefaultValue As String) As String
+        Try
+            Return IniEngineData(IniSection)(IniKey)
+        Catch ex As Exception
+            Return DefaultValue
+        End Try
+    End Function
+
     Sub LoadDTSettings(LoadMode As Integer, Optional ForceINILoad As Boolean = False)
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
@@ -1574,6 +1593,7 @@ Public Class MainForm
                 Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
                 DismExe = PrgKey.GetValue("DismExe").ToString().Replace(Quote, "").Trim()
                 SaveOnSettingsIni = (CInt(PrgKey.GetValue("SaveOnSettingsIni")) = 1)
+                WarnOnMetered = CInt(PrgKey.GetValue("WarnOnMetered", 1)) = 1
                 PrgKey.Close()
                 Dim PersKey As RegistryKey = Key.OpenSubKey("Personalization")
                 ColorMode = PersKey.GetValue("ColorMode")
@@ -1692,30 +1712,31 @@ Public Class MainForm
                 Try
                     Dim parser As New IniDataParser(New SettingsParserConfiguration())
                     Dim settingData As IniData = parser.Parse(File.ReadAllText(Path.Combine(Application.StartupPath, "settings.ini"), UTF8))
-                    DismExe = settingData("Program")("DismExe").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    SaveOnSettingsIni = CInt(settingData("Program")("SaveOnSettingsIni")) = 1
+                    DismExe = GetIniSettingValue(settingData, "Program", "DismExe", Quote & "{common:WinDir}\system32\dism.exe" & Quote).Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    SaveOnSettingsIni = CInt(GetIniSettingValue(settingData, "Program", "SaveOnSettingsIni", "1")) = 1
+                    WarnOnMetered = CInt(GetIniSettingValue(settingData, "Program", "WarnOnMetered", "1")) = 1
                     If Not SaveOnSettingsIni AndAlso Not File.Exists(Path.Combine(Application.StartupPath, "portable")) Then
                         DynaLog.LogMessage("We are not forcing load with INI. Proceeding to load from registry...")
                         LoadDTSettings(0)
                         Exit Sub
                     End If
-                    ColorMode = CInt(settingData("Personalization")("ColorMode"))
+                    ColorMode = CInt(GetIniSettingValue(settingData, "Personalization", "ColorMode", "0"))
                     If ColorMode < 0 Then ColorMode = 0
                     If ColorMode > 2 Then ColorMode = 2
-                    Language = CInt(settingData("Personalization")("Language"))
+                    Language = CInt(GetIniSettingValue(settingData, "Personalization", "Language", "0"))
                     If Language < 0 Then Language = 0
                     If Language > 5 Then Language = 5
                     ChangeLangs(Language)
-                    LightThemeIndex = CInt(settingData("Personalization")("ColorTheme_Light"))
-                    DarkThemeIndex = CInt(settingData("Personalization")("ColorTheme_Dark"))
+                    LightThemeIndex = CInt(GetIniSettingValue(settingData, "Personalization", "ColorTheme_Light", "1"))
+                    DarkThemeIndex = CInt(GetIniSettingValue(settingData, "Personalization", "ColorTheme_Dark", "0"))
                     ChangePrgColors(ColorMode)
-                    LogFont = settingData("Personalization")("LogFont").Replace(Quote, "").Trim()
-                    LogFontSize = CInt(settingData("Personalization")("LogFontSi"))
-                    LogFontIsBold = CInt(settingData("Personalization")("LogFontBold")) = 1
-                    ProgressPanelStyle = CInt(settingData("Personalization")("SecondaryProgressPanelStyle"))
+                    LogFont = GetIniSettingValue(settingData, "Personalization", "LogFont", Quote & "Consolas" & Quote).Replace(Quote, "").Trim()
+                    LogFontSize = CInt(GetIniSettingValue(settingData, "Personalization", "LogFontSi", "11"))
+                    LogFontIsBold = CInt(GetIniSettingValue(settingData, "Personalization", "LogFontBold", "0")) = 1
+                    ProgressPanelStyle = CInt(GetIniSettingValue(settingData, "Personalization", "SecondaryProgressPanelStyle", "1"))
                     If ProgressPanelStyle < 0 Then ProgressPanelStyle = 0
                     If ProgressPanelStyle > 1 Then ProgressPanelStyle = 1
-                    AllCaps = CInt(settingData("Personalization")("AllCaps")) = 1
+                    AllCaps = CInt(GetIniSettingValue(settingData, "Personalization", "AllCaps", "0")) = 1
                     If AllCaps Then
                         FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
                         ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
@@ -1723,81 +1744,81 @@ Public Class MainForm
                         ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
                         HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
                     End If
-                    ExpandedProgressPanel = CInt(settingData("Personalization")("ExpandedProgressPanel")) = 1
-                    ShowDateAndTime = CInt(settingData("Personalization")("ShowDateAndTime")) = 1
-                    LogFile = settingData("Logs")("LogFile").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    LogLevel = CInt(settingData("Logs")("LogLevel"))
+                    ExpandedProgressPanel = CInt(GetIniSettingValue(settingData, "Personalization", "ExpandedProgressPanel", "1")) = 1
+                    ShowDateAndTime = CInt(GetIniSettingValue(settingData, "Personalization", "ShowDateAndTime", "1")) = 1
+                    LogFile = GetIniSettingValue(settingData, "Logs", "LogFile", Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote).Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    LogLevel = CInt(GetIniSettingValue(settingData, "Logs", "LogLevel", "3"))
                     If LogLevel < 1 Then LogLevel = 1
                     If LogLevel > 4 Then LogLevel = 4
-                    AutoLogs = CInt(settingData("Logs")("AutoLogs")) = 1
-                    SystemEditor = settingData("Logs")("SystemEditor").Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
-                    EnableDynaLog = CInt(settingData("Logs")("EnableDynaLog")) = 1
-                    QuietOperations = CInt(settingData("ImgOps")("Quiet")) = 1
-                    SysNoRestart = CInt(settingData("ImgOps")("NoRestart")) = 1
-                    NoNTSamMappings = CInt(settingData("ImgOps")("NoNTSamMappings")) = 1
-                    PEHelper_UnattendedFile = settingData("ImgOps")("PEHelper.UnattendedFile").Replace(Quote, "").Trim()
-                    PEHelper_CopyToVentoy = CInt(settingData("ImgOps")("PEHelper.CopyToVentoy")) = 1
-                    PEHelper_Use2023EFI = CInt(settingData("ImgOps")("PEHelper.Use2023EFI")) = 1
-                    PEHelper_IncludeSysDrvs = CInt(settingData("ImgOps")("PEHelper.IncludeSysDrvs")) = 1
-                    PEHelper_MaxConcurrentISO = CInt(settingData("ImgOps")("PEHelper.MaxConcurrentISO"))
-                    AppxDisplayNameFormatOnRemoval = CInt(settingData("ImgOps")("AppxRemovalDisplayNameFormat"))
-                    PreventSystemFromSleeping = CInt(settingData("ImgOps")("PreventSystemFromSleeping")) = 1
-                    HumanizeDates = CInt(settingData("ImgOps")("HumanizeDates")) = 1
-                    LockUnlockedVolumes = CInt(settingData("ImgOps")("LockUnlockedVolumes")) = 1
+                    AutoLogs = CInt(GetIniSettingValue(settingData, "Logs", "AutoLogs", "1")) = 1
+                    SystemEditor = GetIniSettingValue(settingData, "Logs", "SystemEditor", Quote & "{common:WinDir}\system32\notepad.exe" & Quote).Replace(Quote, "").Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    EnableDynaLog = CInt(GetIniSettingValue(settingData, "Logs", "EnableDynaLog", "1")) = 1
+                    QuietOperations = CInt(GetIniSettingValue(settingData, "ImgOps", "Quiet", "0")) = 1
+                    SysNoRestart = CInt(GetIniSettingValue(settingData, "ImgOps", "NoRestart", "0")) = 1
+                    NoNTSamMappings = CInt(GetIniSettingValue(settingData, "ImgOps", "NoNTSamMappings", "0")) = 1
+                    PEHelper_UnattendedFile = GetIniSettingValue(settingData, "ImgOps", "PEHelper.UnattendedFile", Quote & Quote).Replace(Quote, "").Trim()
+                    PEHelper_CopyToVentoy = CInt(GetIniSettingValue(settingData, "ImgOps", "PEHelper.CopyToVentoy", "0")) = 1
+                    PEHelper_Use2023EFI = CInt(GetIniSettingValue(settingData, "ImgOps", "PEHelper.Use2023EFI", "0")) = 1
+                    PEHelper_IncludeSysDrvs = CInt(GetIniSettingValue(settingData, "ImgOps", "PEHelper.IncludeSysDrvs", "1")) = 1
+                    PEHelper_MaxConcurrentISO = CInt(GetIniSettingValue(settingData, "ImgOps", "PEHelper.MaxConcurrentISO", "2"))
+                    AppxDisplayNameFormatOnRemoval = CInt(GetIniSettingValue(settingData, "ImgOps", "AppxRemovalDisplayNameFormat", "1"))
+                    PreventSystemFromSleeping = CInt(GetIniSettingValue(settingData, "ImgOps", "PreventSystemFromSleeping", "1")) = 1
+                    HumanizeDates = CInt(GetIniSettingValue(settingData, "ImgOps", "HumanizeDates", "1")) = 1
+                    LockUnlockedVolumes = CInt(GetIniSettingValue(settingData, "ImgOps", "LockUnlockedVolumes", "1")) = 1
                     If AppxDisplayNameFormatOnRemoval < 0 Then AppxDisplayNameFormatOnRemoval = 0
                     If AppxDisplayNameFormatOnRemoval > 2 Then AppxDisplayNameFormatOnRemoval = 2
-                    UseScratch = CInt(settingData("ScratchDir")("UseScratch")) = 1
-                    AutoScrDir = CInt(settingData("ScratchDir")("AutoScratch")) = 1
-                    ScratchDir = settingData("ScratchDir")("ScratchDirLocation").Replace(Quote, "")
-                    EnglishOutput = CInt(settingData("Output")("EnglishOutput")) = 1
-                    ReportView = CInt(settingData("Output")("ReportView"))
+                    UseScratch = CInt(GetIniSettingValue(settingData, "ScratchDir", "UseScratch", "0")) = 1
+                    AutoScrDir = CInt(GetIniSettingValue(settingData, "ScratchDir", "AutoScratch", "1")) = 1
+                    ScratchDir = GetIniSettingValue(settingData, "ScratchDir", "ScratchDirLocation", Quote & Quote).Replace(Quote, "")
+                    EnglishOutput = CInt(GetIniSettingValue(settingData, "Output", "EnglishOutput", "1")) = 1
+                    ReportView = CInt(GetIniSettingValue(settingData, "Output", "ReportView", "0"))
                     If ReportView < 0 Then ReportView = 0
                     If ReportView > 1 Then ReportView = 1
-                    NotificationShow = CInt(settingData("BgProcesses")("ShowNotification")) = 1
-                    NotificationFrequency = CInt(settingData("BgProcesses")("NotifyFrequency"))
+                    NotificationShow = CInt(GetIniSettingValue(settingData, "BgProcesses", "ShowNotification", "1")) = 1
+                    NotificationFrequency = CInt(GetIniSettingValue(settingData, "BgProcesses", "NotifyFrequency", "1"))
                     If NotificationFrequency < 0 Then NotificationFrequency = 0
                     If NotificationFrequency > 1 Then NotificationFrequency = 1
-                    ExtAppxGetter = CInt(settingData("AdvBgProcesses")("EnhancedAppxGetter")) = 1
-                    SkipNonRemovable = CInt(settingData("AdvBgProcesses")("SkipNonRemovable")) = 1
-                    AllDrivers = CInt(settingData("AdvBgProcesses")("DetectAllDrivers")) = 1
-                    SkipFrameworks = CInt(settingData("AdvBgProcesses")("SkipFrameworks")) = 1
-                    RunAllProcs = CInt(settingData("AdvBgProcesses")("RunAllProcs")) = 1
-                    StartupRemount = CInt(settingData("Startup")("RemountImages")) = 1
-                    StartupUpdateCheck = CInt(settingData("Startup")("CheckForUpdates")) = 1
-                    AutoCleanMounts = CInt(settingData("Shutdown")("AutoCleanMounts")) = 1
-                    Width = WindowHelper.ScaleLogical(CInt(settingData("WndParams")("WndWidth")))
-                    Height = WindowHelper.ScaleLogical(CInt(settingData("WndParams")("WndHeight")))
-                    StartPosition = If(CInt(settingData("WndParams")("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                    ExtAppxGetter = CInt(GetIniSettingValue(settingData, "AdvBgProcesses", "EnhancedAppxGetter", "1")) = 1
+                    SkipNonRemovable = CInt(GetIniSettingValue(settingData, "AdvBgProcesses", "SkipNonRemovable", "1")) = 1
+                    AllDrivers = CInt(GetIniSettingValue(settingData, "AdvBgProcesses", "DetectAllDrivers", "0")) = 1
+                    SkipFrameworks = CInt(GetIniSettingValue(settingData, "AdvBgProcesses", "SkipFrameworks", "1")) = 1
+                    RunAllProcs = CInt(GetIniSettingValue(settingData, "AdvBgProcesses", "RunAllProcs", "0")) = 1
+                    StartupRemount = CInt(GetIniSettingValue(settingData, "Startup", "RemountImages", "1")) = 1
+                    StartupUpdateCheck = CInt(GetIniSettingValue(settingData, "Startup", "CheckForUpdates", "1")) = 1
+                    AutoCleanMounts = CInt(GetIniSettingValue(settingData, "Shutdown", "AutoCleanMounts", "0")) = 1
+                    Width = WindowHelper.ScaleLogical(CInt(GetIniSettingValue(settingData, "WndParams", "WndWidth", "1280")))
+                    Height = WindowHelper.ScaleLogical(CInt(GetIniSettingValue(settingData, "WndParams", "WndHeight", "720")))
+                    StartPosition = If(CInt(GetIniSettingValue(settingData, "WndParams", "WndCenter", "1")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
                     If StartPosition = FormStartPosition.CenterScreen Then
                         Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
                     Else
-                        Left = CInt(settingData("WndParams")("WndLeft"))
-                        Top = CInt(settingData("WndParams")("WndTop"))
+                        Left = CInt(GetIniSettingValue(settingData, "WndParams", "WndLeft", "0"))
+                        Top = CInt(GetIniSettingValue(settingData, "WndParams", "WndTop", "0"))
                     End If
-                    WindowState = If(CInt(settingData("WndParams")("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
-                    SkipQuestions = CInt(settingData("InfoSaver")("SkipQuestions")) = 1
-                    AutoCompleteInfo(0) = CInt(settingData("InfoSaver")("Pkg_CompleteInfo")) = 1
-                    AutoCompleteInfo(1) = CInt(settingData("InfoSaver")("Feat_CompleteInfo")) = 1
-                    AutoCompleteInfo(2) = CInt(settingData("InfoSaver")("AppX_CompleteInfo")) = 1
-                    AutoCompleteInfo(3) = CInt(settingData("InfoSaver")("Cap_CompleteInfo")) = 1
-                    AutoCompleteInfo(4) = CInt(settingData("InfoSaver")("Drv_CompleteInfo")) = 1
-                    SearchEngineName = settingData("SearchSettings")("EngineName").Replace(Quote, "")
-                    SearchEngineAITolerance = CInt(settingData("SearchSettings")("AITolerance"))
+                    WindowState = If(CInt(GetIniSettingValue(settingData, "WndParams", "WndMaximized", "0")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
+                    SkipQuestions = CInt(GetIniSettingValue(settingData, "InfoSaver", "SkipQuestions", "1")) = 1
+                    AutoCompleteInfo(0) = CInt(GetIniSettingValue(settingData, "InfoSaver", "Pkg_CompleteInfo", "1")) = 1
+                    AutoCompleteInfo(1) = CInt(GetIniSettingValue(settingData, "InfoSaver", "Feat_CompleteInfo", "1")) = 1
+                    AutoCompleteInfo(2) = CInt(GetIniSettingValue(settingData, "InfoSaver", "AppX_CompleteInfo", "1")) = 1
+                    AutoCompleteInfo(3) = CInt(GetIniSettingValue(settingData, "InfoSaver", "Cap_CompleteInfo", "1")) = 1
+                    AutoCompleteInfo(4) = CInt(GetIniSettingValue(settingData, "InfoSaver", "Drv_CompleteInfo", "1")) = 1
+                    SearchEngineName = GetIniSettingValue(settingData, "SearchSettings", "EngineName", Quote & "DuckDuckGo" & Quote).Replace(Quote, "")
+                    SearchEngineAITolerance = CInt(GetIniSettingValue(settingData, "SearchSettings", "AITolerance", "1"))
                     If SearchEngineAITolerance < 0 Then SearchEngineAITolerance = 0
                     If SearchEngineAITolerance > 2 Then SearchEngineAITolerance = 2
-                    ShowWatermark = CInt(settingData("PEPolicy")("ShowWatermark")) = 1
-                    WDSHCGraphoView = CInt(settingData("PEPolicy")("WDSHCGraphoView")) = 1
-                    DTDimShowPnputilOut = CInt(settingData("PEPolicy")("DTDimShowPnputilOut")) = 1
-                    WDSHCConnAttempts = CInt(settingData("PEPolicy")("WDSHCConnAttempts"))
-                    PartTableOverridePreference = CInt(settingData("PEPolicy")("PartTableOverridePreference"))
-                    UEFICA23Preference = CInt(settingData("PEPolicy")("UEFICA23Preference"))
-                    AutoUnattendCopytoSysprep = CInt(settingData("PEPolicy")("AutoUnattendCopyToSysprep")) = 1
-                    PXEServerPort = CInt(settingData("PEPolicy")("PXEServerPort"))
-                    KeyboardLayoutCode = settingData("PEPolicy")("KeyboardLayoutCode").Replace(Quote, "")
-                    KeyboardLayoutOverrideExistingLayout = CInt(settingData("PEPolicy")("KeyboardLayoutOverrideExistingLayout")) = 1
-                    AnswerFileConflictResponse = CInt(settingData("PEPolicy")("AnswerFileConflictResponse"))
-                    ScanBootImages = CInt(settingData("PEPolicy")("ScanBootImages")) = 1
-                    ImageSelectorDefaultOption = CInt(settingData("PEPolicy")("ImageSelectorDefaultOption"))
+                    ShowWatermark = CInt(GetIniSettingValue(settingData, "PEPolicy", "ShowWatermark", "0")) = 1
+                    WDSHCGraphoView = CInt(GetIniSettingValue(settingData, "PEPolicy", "WDSHCGraphoView", "1")) = 1
+                    DTDimShowPnputilOut = CInt(GetIniSettingValue(settingData, "PEPolicy", "DTDimShowPnputilOut", "1")) = 1
+                    WDSHCConnAttempts = CInt(GetIniSettingValue(settingData, "PEPolicy", "WDSHCConnAttempts", "5"))
+                    PartTableOverridePreference = CInt(GetIniSettingValue(settingData, "PEPolicy", "PartTableOverridePreference", "0"))
+                    UEFICA23Preference = CInt(GetIniSettingValue(settingData, "PEPolicy", "UEFICA23Preference", "0"))
+                    AutoUnattendCopytoSysprep = CInt(GetIniSettingValue(settingData, "PEPolicy", "AutoUnattendCopyToSysprep", "0")) = 1
+                    PXEServerPort = CInt(GetIniSettingValue(settingData, "PEPolicy", "PXEServerPort", "8080"))
+                    KeyboardLayoutCode = GetIniSettingValue(settingData, "PEPolicy", "KeyboardLayoutCode", Quote & KeyboardLayoutCode & Quote).Replace(Quote, "")
+                    KeyboardLayoutOverrideExistingLayout = CInt(GetIniSettingValue(settingData, "PEPolicy", "KeyboardLayoutOverrideExistingLayout", "0")) = 1
+                    AnswerFileConflictResponse = CInt(GetIniSettingValue(settingData, "PEPolicy", "AnswerFileConflictResponse", "0"))
+                    ScanBootImages = CInt(GetIniSettingValue(settingData, "PEPolicy", "ScanBootImages", "0")) = 1
+                    ImageSelectorDefaultOption = CInt(GetIniSettingValue(settingData, "PEPolicy", "ImageSelectorDefaultOption", "0"))
                 Catch ex As Exception
                     DynaLog.LogMessage("Settings could not be loaded. Error message: " & ex.Message)
                 End Try
@@ -1935,6 +1956,7 @@ Public Class MainForm
         DynaLog.LogMessage("Program Settings:" & CrLf &
                            "DISMExe                             =    " & Quote & DismExe & Quote & CrLf &
                            "SaveOnSettingsIni                   =    " & SaveOnSettingsIni & CrLf &
+                           "WarnOnMetered                       =    " & WarnOnMetered & CrLf &
                            "ColorMode                           =    " & ColorMode & CrLf &
                            "ColorTheme_Light                    =    " & LightThemeIndex & CrLf &
                            "ColorTheme_Dark                     =    " & DarkThemeIndex & CrLf &
@@ -4156,7 +4178,7 @@ Public Class MainForm
         settingsData.Sections.AddSection("Program")
         settingsData("Program").AddKey("DismExe", Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         settingsData("Program").AddKey("SaveOnSettingsIni", 1)
-        settingsData("Program").AddKey("Volatile", 0)
+        settingsData("Program").AddKey("WarnOnMetered", 1)
         settingsData.Sections.AddSection("Personalization")
         Try
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
@@ -4257,7 +4279,7 @@ Public Class MainForm
         Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
         PrgKey.SetValue("DismExe", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe" & Quote, RegistryValueKind.ExpandString)
         PrgKey.SetValue("SaveOnSettingsIni", 1, RegistryValueKind.DWord)
-        PrgKey.SetValue("Volatile", 0, RegistryValueKind.DWord)
+        PrgKey.SetValue("WarnOnMetered", 1, RegistryValueKind.DWord)
         PrgKey.Close()
         Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
         Try
@@ -4366,8 +4388,6 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTSettings()
-        DynaLog.LogMessage("Determining volatile mode status...")
-        
         ShowDTSettings()
         If SaveOnSettingsIni Then
             DynaLog.LogMessage("Checking state of INI File...")
@@ -4381,6 +4401,7 @@ Public Class MainForm
             settingsData.Sections.AddSection("Program")
             settingsData("Program").AddKey("DismExe", Quote & DismExe.Replace(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "{common:WinDir}") & Quote)
             settingsData("Program").AddKey("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0))
+            settingsData("Program").AddKey("WarnOnMetered", If(WarnOnMetered, 1, 0))
             settingsData.Sections.AddSection("Personalization")
             settingsData("Personalization").AddKey("ColorMode", ColorMode)
             settingsData("Personalization").AddKey("ColorTheme_Light", LightThemeIndex)
@@ -4481,6 +4502,7 @@ Public Class MainForm
                 Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
                 PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
                 PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
+                PrgKey.SetValue("WarnOnMetered", If(WarnOnMetered, 1, 0), RegistryValueKind.DWord)
                 PrgKey.Close()
                 DynaLog.LogMessage("Configuring personalization settings...")
                 Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
@@ -12030,6 +12052,9 @@ Public Class MainForm
             DynaLog.LogMessage("Could not delete existing update downloader...")
             Exit Sub
         End Try
+        If NetworkCostHelper.IsNetworkConnectionMetered() Then
+            If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+        End If
         Try
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()
@@ -14948,6 +14973,10 @@ Public Class MainForm
             ' Download the WIM Explorer and run it while passing the image as an argument
             If Not Directory.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer") Then
                 Directory.CreateDirectory(Application.StartupPath & "\bin\utils\WIM-Explorer")
+            End If
+            If NetworkCostHelper.IsNetworkConnectionMetered() Then
+
+                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
             End If
             DynaLog.LogMessage("Downloading WIM Explorer installer script from GitHub repository...")
             Using WIMExpClient As New WebClient()
