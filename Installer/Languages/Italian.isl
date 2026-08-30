@@ -401,13 +401,13 @@ ShutdownBlockReasonUninstallingApp=Disinstallazione di %1.
 
 [CustomMessages]
 
-NameAndVersion=%1 versione %2
-AdditionalIcons=Icone aggiuntive:
-CreateDesktopIcon=Crea un'icona sul &desktop
-CreateQuickLaunchIcon=Crea un'icona nella &barra 'Avvio veloce'
+NameAndVersion=%1 %2
+AdditionalIcons=Collegamenti:
+CreateDesktopIcon=Crea collegamento programma sul &desktop
+CreateQuickLaunchIcon=Crea collegamento programma nella &barra 'Avvio veloce'
 ProgramOnTheWeb=Sito web di %1
 UninstallProgram=Disinstalla %1
-LaunchProgram=Avvia %1
+LaunchProgram=Eseguii %1
 AssocFileExtension=&Associa i file con estensione %2 a %1
 AssocingFileExtension=Associazione dei file con estensione %2 a %1...
 AutoStartProgramGroupDescription=Esecuzione automatica:
