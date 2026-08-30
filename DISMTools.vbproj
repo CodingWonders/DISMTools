@@ -1540,6 +1540,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\install_image_to_wds.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\rollback_utils\rollback.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
