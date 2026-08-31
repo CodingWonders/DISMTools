@@ -56,6 +56,9 @@ Public Class ServiceManagementForm
         CheckBox1.Checked = If(selectedService.StartType = WindowsService.ServiceStartType.Automatic, selectedService.DelayedStart, False)
         CheckBox1.Enabled = selectedService.StartType = WindowsService.ServiceStartType.Automatic
 
+        CheckBox2.Checked = selectedService.SafeModeOptions.AvailableInMinimalSafeBoot
+        CheckBox3.Checked = selectedService.SafeModeOptions.AvailableInNetworkSafeBoot
+
         ' Only enable user service flags with certain service types
         Label19.Enabled = {80, 96}.Contains(selectedService.Type)
         TextBox14.Enabled = {80, 96}.Contains(selectedService.Type)
@@ -119,6 +122,8 @@ Public Class ServiceManagementForm
         TabPage4.ForeColor = ForeColor
         TabPage5.BackColor = BackColor
         TabPage5.ForeColor = ForeColor
+        TabPage6.BackColor = BackColor
+        TabPage6.ForeColor = ForeColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
         TextBox2.BackColor = BackColor
@@ -384,6 +389,50 @@ Public Class ServiceManagementForm
 
             ' Force refresh of service information
             DisplayServiceInformation(ListView1.FocusedItem.Index)
+        End If
+    End Sub
+
+    Private Sub btnAllSafeModes_Click(sender As Object, e As EventArgs) Handles btnAllSafeModes.Click
+        CheckBox2.Checked = True
+        CheckBox3.Checked = True
+    End Sub
+
+    Private Sub btnNoSafeModes_Click(sender As Object, e As EventArgs) Handles btnNoSafeModes.Click
+        CheckBox2.Checked = False
+        CheckBox3.Checked = False
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            ' Hold a copy of the service so we can queue it for modification
+            Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
+            ServiceList(ListView1.FocusedItem.Index).SafeModeOptions.AvailableInMinimalSafeBoot = CheckBox2.Checked
+            newService.SafeModeOptions.AvailableInMinimalSafeBoot = CheckBox2.Checked
+
+            ' Store it in the modification queue, or update it
+            If ModifiedServiceList.Any(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase)) Then
+                Dim svcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase))
+                ModifiedServiceList(svcIndex) = newService
+            Else
+                ModifiedServiceList.Add(newService)
+            End If
+        End If
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            ' Hold a copy of the service so we can queue it for modification
+            Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
+            ServiceList(ListView1.FocusedItem.Index).SafeModeOptions.AvailableInNetworkSafeBoot = CheckBox3.Checked
+            newService.SafeModeOptions.AvailableInNetworkSafeBoot = CheckBox3.Checked
+
+            ' Store it in the modification queue, or update it
+            If ModifiedServiceList.Any(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase)) Then
+                Dim svcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(newService.Name, StringComparison.OrdinalIgnoreCase))
+                ModifiedServiceList(svcIndex) = newService
+            Else
+                ModifiedServiceList.Add(newService)
+            End If
         End If
     End Sub
 End Class

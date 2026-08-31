@@ -2173,10 +2173,10 @@ Public Class ImgInfoSaveDlg
                                   String.Format("Service Type: {0}", service.TypeToString()),
                                   String.Format("Per-user Service Flags: {0}", peruserServiceStatus),
                                   String.Format("Group: {0}", service.Group)}.ToList()) & CrLf &
-                          GetParagraph("Windows NT&trade; privileges:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Windows NT&trade; privileges:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Privilege Name", "Privilege Display Name", "Privilege Description"}.ToList()) &
                           String.Join("", service.RequiredPrivileges.Select(Function(privilege) GetTableRow({privilege.ConstantNameText, privilege.ConstantUserRight, privilege.ConstantDescription}.ToList()))) & CrLf &
-                          GetParagraph("Error Control:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Error Control:", ParagraphStyle.Italic) & CrLf &
                           GetListItems({String.Format("On service error: {0}", service.ErrorControlToString()),
                                         String.Format("Failure action on first error: {0}", service.FailureActionToString(service.FailureActions.FirstFailure)),
                                         String.Format("Failure action on second error: {0}", service.FailureActionToString(service.FailureActions.SecondFailure)),
@@ -2189,12 +2189,15 @@ Public Class ImgInfoSaveDlg
                                                       Math.Round((service.FailureActions.SecondDelayInMillis / 1000), 2),
                                                       Math.Round((service.FailureActions.SubsequentDelaysInMillis / 60000), 2),
                                                       Math.Round((service.FailureActions.SubsequentDelaysInMillis / 1000), 2))}.ToList()) & CrLf &
-                          GetParagraph("Dependencies:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Dependencies:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
                           String.Join("", serviceList.Where(Function(srv) service.Dependencies.Contains(srv.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
-                          GetParagraph("Dependents:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Dependents:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
-                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Contains(service.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf
+                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Contains(service.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
+                          GetParagraph("Safe Mode Parameters:", ParagraphStyle.Italic) & CrLf &
+                          GetListItems({String.Format("On Safe Mode and Safe Mode with Command Prompt: {0}", If(service.SafeModeOptions.AvailableInMinimalSafeBoot, "This service is available", "This service is not available")),
+                                        String.Format("On Safe Mode and Safe Mode with Networking: {0}", If(service.SafeModeOptions.AvailableInNetworkSafeBoot, "This service is available", "This service is not available"))}.ToList()) & CrLf
             Next
         Else
             Contents &= GetParagraph("No services were found.", ParagraphStyle.Bold) & CrLf
