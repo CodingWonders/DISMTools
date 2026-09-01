@@ -2458,7 +2458,15 @@ function New-BootFiles
                             Write-Host "Deleting BCD entry..."
                             $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
                             if ($entryGuid -ne "") {
-                                bcdedit /delete $entryGuid | Out-Host
+                                bcdedit /delete $entryGuid /f | Out-Host
+                            }
+                        }
+
+                        if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                            Write-Host "Deleting BCD entry..."
+                            $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                            if ($entryGuid -ne "") {
+                                bcdedit /delete $entryGuid /f | Out-Host
                             }
                         }
                     }
@@ -2522,6 +2530,14 @@ function New-BootFiles
                                 bcdedit /delete $entryGuid | Out-Host
                             }
                         }
+
+                        if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                            Write-Host "Deleting BCD entry..."
+                            $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                            if ($entryGuid -ne "") {
+                                bcdedit /delete $entryGuid /f | Out-Host
+                            }
+                        }
                     }
                     # We have to do this stupid thing to coax bootsect to work for BIOS
                     bootsect /nt60 "$espLetter`:"
@@ -2566,6 +2582,14 @@ function New-BootFiles
                             bcdedit /delete $entryGuid | Out-Host
                         }
                     }
+
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                        Write-Host "Deleting BCD entry..."
+                        $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                        if ($entryGuid -ne "") {
+                            bcdedit /delete $entryGuid /f | Out-Host
+                        }
+                    }
                 }
                 # We have to do this stupid thing to coax bootsect to work for BIOS
                 bootsect /nt60 "$espLetter`:"
@@ -2607,6 +2631,14 @@ function New-BootFiles
                         $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
                         if ($entryGuid -ne "") {
                             bcdedit /delete $entryGuid | Out-Host
+                        }
+                    }
+
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                        Write-Host "Deleting BCD entry..."
+                        $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                        if ($entryGuid -ne "") {
+                            bcdedit /delete $entryGuid /f | Out-Host
                         }
                     }
                 }
