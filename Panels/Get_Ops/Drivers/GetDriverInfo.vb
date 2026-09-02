@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports System.Threading
+Imports System.Threading.Tasks
 Imports DISMTools.Utilities
 Imports System.Globalization
 
@@ -18,6 +19,8 @@ Public Class GetDriverInfo
     Dim JumpTo As Integer = -1               ' This variable gets updated every time a target is specified in the Jump To panel
 
     Dim IsInDrvPkgs As Boolean
+
+    Private IsScanningDriverFiles As Boolean
 
     Enum SearchMode As Integer
         OriginalFileName
@@ -560,7 +563,6 @@ Public Class GetDriverInfo
         ' Detect if the "Detect all drivers" option is checked and act accordingly
         Panel6.Visible = Not MainForm.AllDrivers
 
-        Label5.Visible = False
         IsInDrvPkgs = False
         Button8.Enabled = True
         Button9.Visible = False
@@ -572,7 +574,6 @@ Public Class GetDriverInfo
         InfoFromInstalledDrvsPanel.Visible = False
         InfoFromDrvPackagesPanel.Visible = True
         Panel6.Visible = False
-        Label5.Visible = True
         IsInDrvPkgs = True
         Button8.Enabled = ListBox1.Items.Count > 0
         Button9.Visible = True
@@ -583,184 +584,199 @@ Public Class GetDriverInfo
         DriverInfoPanel.Visible = False
     End Sub
 
-    Sub GetDriverInformation()
-        WindowHelper.DisableCloseCapability(Handle)
-        DynaLog.LogMessage("Clearing information lists...")
-        DriverInfoList.Clear()
-        Try
-            ' Background processes need to have completed before showing information
-            DynaLog.LogMessage("Checking if background processes are busy...")
-            If MainForm.ImgBW.IsBusy Then
-                DynaLog.LogMessage("Background processes are busy. Stopping them...")
-                Dim msg As String = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
-                            Case "ESN"
-                                msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
-                            Case "FRA"
-                                msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
-                            Case "PTB", "PTG"
-                                msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
-                            Case "ITA"
-                                msg = "Prima di visualizzare le informazioni sul pacchetto devono essere completati i processi in background. Attendi che siano completati."
-                        End Select
-                    Case 1
-                        msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
-                    Case 2
-                        msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
-                    Case 3
-                        msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
-                    Case 4
-                        msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
-                    Case 5
-                        msg = "Prima di visualizzare le informazioni sul pacchetto devono essere completati i processi in secondo piano. Attendi che siano completati."
-                End Select
-                MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label5.Text = "Waiting for background processes to finish..."
-                            Case "ESN"
-                                Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
-                            Case "FRA"
-                                Label5.Text = "Attente de la fin des processus en arrière plan..."
-                            Case "PTB", "PTG"
-                                Label5.Text = "À espera que os processos em segundo plano terminem..."
-                            Case "ITA"
-                                Label5.Text = "In attesa del completamento dei processi in background..."
-                        End Select
-                    Case 1
-                        Label5.Text = "Waiting for background processes to finish..."
-                    Case 2
-                        Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
-                    Case 3
-                        Label5.Text = "Attente de la fin des processus en arrière plan..."
-                    Case 4
-                        Label5.Text = "À espera que os processos em segundo plano terminem..."
-                    Case 5
-                        Label5.Text = "In attesa del completamento dei processi in background..."
-                End Select
-                While MainForm.ImgBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            MainForm.StopMountedImageDetector()
-            Select Case MainForm.Language
+    Private Async Sub GetDriverInformation()
+        Dim onlineManagement As Boolean = MainForm.OnlineManagement,
+            mountDirectory As String = MainForm.MountDir,
+            displayLanguage As Integer = MainForm.Language
+
+        IsScanningDriverFiles = True
+
+        ' Background processes need to have completed before showing information
+        DynaLog.LogMessage("Checking if background processes are busy...")
+        If MainForm.ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are busy. Stopping them...")
+            Dim msg As String = ""
+            Select Case displayLanguage
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            Label5.Text = "Preparing driver information processes..."
+                            msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                         Case "ESN"
-                            Label5.Text = "Preparando procesos de información de controladores..."
+                            msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
                         Case "FRA"
-                            Label5.Text = "Préparation des processus d'information des pilotes en cours..."
+                            msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                         Case "PTB", "PTG"
-                            Label5.Text = "Preparar os processos de informação dos controladores..."
+                            msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
                         Case "ITA"
-                            Label5.Text = "Preparazione verifica informazioni driver..."
+                            msg = "Prima di visualizzare le informazioni sul pacchetto devono essere completati i processi in background. Attendi che siano completati."
                     End Select
                 Case 1
-                    Label5.Text = "Preparing driver information processes..."
+                    msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                 Case 2
-                    Label5.Text = "Preparando procesos de información de controladores..."
+                    msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
                 Case 3
-                    Label5.Text = "Préparation des processus d'information des pilotes en cours..."
+                    msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                 Case 4
-                    Label5.Text = "Preparar os processos de informação dos controladores..."
+                    msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
                 Case 5
-                    Label5.Text = "Preparazione verifica informazioni driver..."
+                    msg = "Prima di visualizzare le informazioni sul pacchetto devono essere completati i processi in secondo piano. Attendi che siano completati."
             End Select
-            Application.DoEvents()
-            DynaLog.LogMessage("Initializing API...")
-            DismApi.Initialize(DismLogLevel.LogErrors)
-            DynaLog.LogMessage("Creating session...")
-            Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
-                For Each drvFile In ListBox1.Items
-                    DynaLog.LogMessage("Driver file to get information about: " & Quote & Path.GetFileName(drvFile) & Quote)
-                    If File.Exists(drvFile) Then
-                        DynaLog.LogMessage("Driver file exists.")
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                                    Case "ESN"
-                                        Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                                    Case "FRA"
-                                        Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..."
-                                    Case "PTB", "PTG"
-                                        Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                                    Case "ITA"
-                                        Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                                End Select
-                            Case 1
-                                Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                            Case 2
-                                Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                            Case 3
-                                Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..."
-                            Case 4
-                                Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                            Case 5
-                                Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(drvFile) & Quote & "..."
-                        End Select
-                        Application.DoEvents()
-                        ' Pesky computer manufacturer companies like HP have INF files that are not drivers. Work around
-                        ' those. HP: horrible products that are "oddly satisfying"
-                        Try
-                            Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile),
-                                UniqueHardwareCount As Integer = drvInfoCollection.Distinct().Count
-                            DynaLog.LogMessage("Information collection count: " & UniqueHardwareCount)
-                            If UniqueHardwareCount > 0 Then DriverInfoList.Add(drvInfoCollection)
-                        Catch ex As Exception
-                            ' Information could not be obtained. Continue
-                        End Try
-                    End If
-                Next
-            End Using
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not get driver information. Error message: " & ex.Message)
-            ' Cancel it
-        Finally
-            DynaLog.LogMessage("Shutting down API...")
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
+            MsgBox(msg, vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
+            Select Case displayLanguage
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label5.Text = "Waiting for background processes to finish..."
+                        Case "ESN"
+                            Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
+                        Case "FRA"
+                            Label5.Text = "Attente de la fin des processus en arrière plan..."
+                        Case "PTB", "PTG"
+                            Label5.Text = "À espera que os processos em segundo plano terminem..."
+                        Case "ITA"
+                            Label5.Text = "In attesa del completamento dei processi in background..."
+                    End Select
+                Case 1
+                    Label5.Text = "Waiting for background processes to finish..."
+                Case 2
+                    Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
+                Case 3
+                    Label5.Text = "Attente de la fin des processus en arrière plan..."
+                Case 4
+                    Label5.Text = "À espera que os processos em segundo plano terminem..."
+                Case 5
+                    Label5.Text = "In attesa del completamento dei processi in background..."
+            End Select
+            While MainForm.ImgBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(500)
+            End While
+        End If
 
-            End Try
-        End Try
-        DynaLog.LogMessage("This process has finished.")
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label5.Text = "Ready"
-                    Case "ESN"
-                        Label5.Text = "Listo"
-                    Case "FRA"
-                        Label5.Text = "Prêt"
-                    Case "PTB", "PTG"
-                        Label5.Text = "Pronto"
-                    Case "ITA"
-                        Label5.Text = "Pronto"
-                End Select
-            Case 1
-                Label5.Text = "Ready"
-            Case 2
-                Label5.Text = "Listo"
-            Case 3
-                Label5.Text = "Prêt"
-            Case 4
-                Label5.Text = "Pronto"
-            Case 5
-                Label5.Text = "Pronto"
-        End Select
-        WindowHelper.EnableCloseCapability(Handle)
+        Await Task.Run(Sub()
+                           DriverControlsTLP.Enabled = False
+                           WindowHelper.DisableCloseCapability(Handle)
+                           DynaLog.LogMessage("Clearing information lists...")
+                           DriverInfoList.Clear()
+                           Try
+                               MainForm.StopMountedImageDetector()
+                               Select Case displayLanguage
+                                   Case 0
+                                       Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                           Case "ENU", "ENG"
+                                               Label5.Text = "Preparing driver information processes..."
+                                           Case "ESN"
+                                               Label5.Text = "Preparando procesos de información de controladores..."
+                                           Case "FRA"
+                                               Label5.Text = "Préparation des processus d'information des pilotes en cours..."
+                                           Case "PTB", "PTG"
+                                               Label5.Text = "Preparar os processos de informação dos controladores..."
+                                           Case "ITA"
+                                               Label5.Text = "Preparazione verifica informazioni driver..."
+                                       End Select
+                                   Case 1
+                                       Label5.Text = "Preparing driver information processes..."
+                                   Case 2
+                                       Label5.Text = "Preparando procesos de información de controladores..."
+                                   Case 3
+                                       Label5.Text = "Préparation des processus d'information des pilotes en cours..."
+                                   Case 4
+                                       Label5.Text = "Preparar os processos de informação dos controladores..."
+                                   Case 5
+                                       Label5.Text = "Preparazione verifica informazioni driver..."
+                               End Select
+                               Application.DoEvents()
+                               DynaLog.LogMessage("Initializing API...")
+                               DismApi.Initialize(DismLogLevel.LogErrors)
+                               DynaLog.LogMessage("Creating session...")
+                               Using imgSession As DismSession = If(onlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mountDirectory))
+                                   Dim DriverFiles As ListBox.ObjectCollection = ListBox1.Items
+                                   For x = 0 To DriverFiles.Count - 1
+                                       DynaLog.LogMessage("Driver file to get information about: " & Quote & Path.GetFileName(DriverFiles(x)) & Quote)
+                                       If File.Exists(DriverFiles(x)) Then
+                                           DynaLog.LogMessage("Driver file exists.")
+                                           Select Case displayLanguage
+                                               Case 0
+                                                   Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                       Case "ENU", "ENG"
+                                                           Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                       Case "ESN"
+                                                           Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                       Case "FRA"
+                                                           Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & " en cours..."
+                                                       Case "PTB", "PTG"
+                                                           Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                       Case "ITA"
+                                                           Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                   End Select
+                                               Case 1
+                                                   Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                               Case 2
+                                                   Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                               Case 3
+                                                   Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & " en cours..."
+                                               Case 4
+                                                   Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                               Case 5
+                                                   Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                           End Select
+                                           Application.DoEvents()
+                                           ' Pesky computer manufacturer companies like HP have INF files that are not drivers. Work around
+                                           ' those. HP: horrible products that are "oddly satisfying"
+                                           Try
+                                               Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, DriverFiles(x)),
+                                                   UniqueHardwareCount As Integer = drvInfoCollection.Distinct().Count
+                                               DynaLog.LogMessage("Information collection count: " & UniqueHardwareCount)
+                                               DriverInfoList.Add(If(UniqueHardwareCount > 0, drvInfoCollection, Nothing))
+                                           Catch ex As Exception
+                                               ' Information could not be obtained. Continue
+                                               DriverInfoList.Add(Nothing)
+                                           End Try
+                                       End If
+                                   Next
+                               End Using
+                           Catch ex As Exception
+                               DynaLog.LogMessage("Could not get driver information. Error message: " & ex.Message)
+                               ' Cancel it
+                           Finally
+                               DynaLog.LogMessage("Shutting down API...")
+                               Try
+                                   DismApi.Shutdown()
+                               Catch ex As Exception
+
+                               End Try
+                           End Try
+                           DynaLog.LogMessage("This process has finished.")
+                           Select Case displayLanguage
+                               Case 0
+                                   Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                       Case "ENU", "ENG"
+                                           Label5.Text = "Ready"
+                                       Case "ESN"
+                                           Label5.Text = "Listo"
+                                       Case "FRA"
+                                           Label5.Text = "Prêt"
+                                       Case "PTB", "PTG"
+                                           Label5.Text = "Pronto"
+                                       Case "ITA"
+                                           Label5.Text = "Pronto"
+                                   End Select
+                               Case 1
+                                   Label5.Text = "Ready"
+                               Case 2
+                                   Label5.Text = "Listo"
+                               Case 3
+                                   Label5.Text = "Prêt"
+                               Case 4
+                                   Label5.Text = "Pronto"
+                               Case 5
+                                   Label5.Text = "Pronto"
+                           End Select
+                           WindowHelper.EnableCloseCapability(Handle)
+                           DriverControlsTLP.Enabled = True
+                       End Sub)
+
+        IsScanningDriverFiles = False
     End Sub
 
     Sub DisplayDriverInformation(HWTarget As Integer)
@@ -919,7 +935,9 @@ Public Class GetDriverInfo
                 Button9.Enabled = False
             End If
         Catch ex As Exception
-            ListBox1.Items.Remove(ListBox1.SelectedItem)
+            Dim dialogMsg As String = If(IsScanningDriverFiles, "We're still getting information about the driver files. Wait until we complete so you can see information about {0}.", "We couldn't get information about {0} because it appears to be invalid."),
+                dialogIcon As MessageBoxIcon = If(IsScanningDriverFiles, MessageBoxIcon.Information, MessageBoxIcon.Error)
+            MessageBox.Show(String.Format(dialogMsg, Path.GetFileName(ListBox1.SelectedItem)), ImageTaskHeader1.ItemText, MessageBoxButtons.OK, dialogIcon)
             NoDrvPanel.Visible = True
             DrvPackageInfoPanel.Visible = False
             If ListBox1.Items.Count < 1 Then

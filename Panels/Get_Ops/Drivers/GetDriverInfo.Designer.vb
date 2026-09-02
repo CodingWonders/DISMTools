@@ -79,7 +79,7 @@ Partial Class GetDriverInfo
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.DrvPackagesPanel = New System.Windows.Forms.Panel()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.DriverControlsTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -146,7 +146,7 @@ Partial Class GetDriverInfo
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.DrvPackagesPanel.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
+        Me.DriverControlsTLP.SuspendLayout()
         Me.DrvPackageContainerPanel.SuspendLayout()
         Me.DrvPackageInfoPanel.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
@@ -243,7 +243,7 @@ Partial Class GetDriverInfo
         '
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(20, 460)
+        Me.Label5.Location = New System.Drawing.Point(20, 443)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(38, 13)
         Me.Label5.TabIndex = 4
@@ -787,7 +787,7 @@ Partial Class GetDriverInfo
         'DrvPackagesPanel
         '
         Me.DrvPackagesPanel.Controls.Add(Me.ListBox1)
-        Me.DrvPackagesPanel.Controls.Add(Me.TableLayoutPanel2)
+        Me.DrvPackagesPanel.Controls.Add(Me.DriverControlsTLP)
         Me.DrvPackagesPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DrvPackagesPanel.Location = New System.Drawing.Point(0, 0)
         Me.DrvPackagesPanel.Name = "DrvPackagesPanel"
@@ -804,22 +804,22 @@ Partial Class GetDriverInfo
         Me.ListBox1.Size = New System.Drawing.Size(440, 336)
         Me.ListBox1.TabIndex = 0
         '
-        'TableLayoutPanel2
+        'DriverControlsTLP
         '
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 2, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
-        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 336)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(440, 28)
-        Me.TableLayoutPanel2.TabIndex = 1
+        Me.DriverControlsTLP.ColumnCount = 3
+        Me.DriverControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.DriverControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.DriverControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.DriverControlsTLP.Controls.Add(Me.Button3, 2, 0)
+        Me.DriverControlsTLP.Controls.Add(Me.Button2, 1, 0)
+        Me.DriverControlsTLP.Controls.Add(Me.Button1, 0, 0)
+        Me.DriverControlsTLP.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.DriverControlsTLP.Location = New System.Drawing.Point(0, 336)
+        Me.DriverControlsTLP.Name = "DriverControlsTLP"
+        Me.DriverControlsTLP.RowCount = 1
+        Me.DriverControlsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.DriverControlsTLP.Size = New System.Drawing.Size(440, 28)
+        Me.DriverControlsTLP.TabIndex = 1
         '
         'Button3
         '
@@ -1338,7 +1338,7 @@ Partial Class GetDriverInfo
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.DrvPackagesPanel.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.DriverControlsTLP.ResumeLayout(False)
         Me.DrvPackageContainerPanel.ResumeLayout(False)
         Me.DrvPackageInfoPanel.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
@@ -1375,7 +1375,7 @@ Partial Class GetDriverInfo
     Friend WithEvents NoDrvPanel As System.Windows.Forms.Panel
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents DrvPackagesPanel As System.Windows.Forms.Panel
-    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents DriverControlsTLP As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button

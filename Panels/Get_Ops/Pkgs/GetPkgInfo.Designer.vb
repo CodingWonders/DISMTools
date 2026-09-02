@@ -103,7 +103,7 @@ Partial Class GetPkgInfoDlg
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.PkgFilesPanel = New System.Windows.Forms.Panel()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.PackageControlsTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -189,7 +189,7 @@ Partial Class GetPkgInfoDlg
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.PkgFilesPanel.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
+        Me.PackageControlsTLP.SuspendLayout()
         Me.PackageFileContainerPanel.SuspendLayout()
         Me.PackageFileInfoPanel.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
@@ -1122,7 +1122,7 @@ Partial Class GetPkgInfoDlg
         'PkgFilesPanel
         '
         Me.PkgFilesPanel.Controls.Add(Me.ListBox1)
-        Me.PkgFilesPanel.Controls.Add(Me.TableLayoutPanel2)
+        Me.PkgFilesPanel.Controls.Add(Me.PackageControlsTLP)
         Me.PkgFilesPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PkgFilesPanel.Location = New System.Drawing.Point(0, 0)
         Me.PkgFilesPanel.Name = "PkgFilesPanel"
@@ -1139,22 +1139,22 @@ Partial Class GetPkgInfoDlg
         Me.ListBox1.Size = New System.Drawing.Size(440, 348)
         Me.ListBox1.TabIndex = 0
         '
-        'TableLayoutPanel2
+        'PackageControlsTLP
         '
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 2, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
-        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 348)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(440, 28)
-        Me.TableLayoutPanel2.TabIndex = 1
+        Me.PackageControlsTLP.ColumnCount = 3
+        Me.PackageControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PackageControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PackageControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PackageControlsTLP.Controls.Add(Me.Button3, 2, 0)
+        Me.PackageControlsTLP.Controls.Add(Me.Button2, 1, 0)
+        Me.PackageControlsTLP.Controls.Add(Me.Button1, 0, 0)
+        Me.PackageControlsTLP.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PackageControlsTLP.Location = New System.Drawing.Point(0, 348)
+        Me.PackageControlsTLP.Name = "PackageControlsTLP"
+        Me.PackageControlsTLP.RowCount = 1
+        Me.PackageControlsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.PackageControlsTLP.Size = New System.Drawing.Size(440, 28)
+        Me.PackageControlsTLP.TabIndex = 1
         '
         'Button3
         '
@@ -1868,7 +1868,7 @@ Partial Class GetPkgInfoDlg
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.PkgFilesPanel.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.PackageControlsTLP.ResumeLayout(False)
         Me.PackageFileContainerPanel.ResumeLayout(False)
         Me.PackageFileInfoPanel.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
@@ -1893,7 +1893,7 @@ Partial Class GetPkgInfoDlg
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents PkgFilesPanel As System.Windows.Forms.Panel
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
-    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents PackageControlsTLP As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
