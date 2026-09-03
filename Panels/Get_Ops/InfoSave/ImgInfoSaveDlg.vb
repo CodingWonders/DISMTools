@@ -1993,14 +1993,16 @@ Public Class ImgInfoSaveDlg
                                                                  "Compatible IDs",
                                                                  "Exclude IDs",
                                                                  "Hardware manufacturer",
-                                                                 "Architecture"}.ToList())
+                                                                 "Architecture",
+                                                                 "Service"}.ToList())
                                 For Each hwTarget As DismDriver In drvInfoCollection.Distinct()
                                     Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
                                                                           String.Format("{0} ({1})", hwTarget.HardwareId, MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(hwTarget.HardwareId), "Look up")),
                                                                           If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
                                                                           If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
                                                                           hwTarget.ManufacturerName,
-                                                                          Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
+                                                                          Casters.CastDismArchitecture(hwTarget.Architecture),
+                                                                          hwTarget.ServerName}.ToList())
                                 Next
                                 Contents &= CrLf
                             Else

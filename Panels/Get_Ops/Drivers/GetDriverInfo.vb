@@ -787,6 +787,7 @@ Public Class GetDriverInfo
         Dim selectedDriver As DismDriver = CurrentDriverCollection.ElementAtOrDefault(HWTarget - 1)
         If selectedDriver Is Nothing Then Exit Sub
         DynaLog.LogMessage("We have the appropriate hardware target. Displaying information...")
+        Label1.Text = selectedDriver.ServerName
         Label9.Text = selectedDriver.HardwareDescription
         Label11.Text = selectedDriver.HardwareId
         Label14.Text = selectedDriver.CompatibleIds

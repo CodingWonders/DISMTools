@@ -122,6 +122,8 @@ Partial Class GetDriverInfo
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.Label50 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.DriverInfoContainerPanel.SuspendLayout()
         Me.DriverInfoPanel.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -254,8 +256,8 @@ Partial Class GetDriverInfo
         Me.DriverContainerPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DriverContainerPanel.Controls.Add(Me.InfoFromInstalledDrvsPanel)
         Me.DriverContainerPanel.Controls.Add(Me.InfoFromDrvPackagesPanel)
+        Me.DriverContainerPanel.Controls.Add(Me.InfoFromInstalledDrvsPanel)
         Me.DriverContainerPanel.Location = New System.Drawing.Point(64, 68)
         Me.DriverContainerPanel.Name = "DriverContainerPanel"
         Me.DriverContainerPanel.Size = New System.Drawing.Size(880, 364)
@@ -451,7 +453,7 @@ Partial Class GetDriverInfo
         Me.Label23.Location = New System.Drawing.Point(7, 19)
         Me.Label23.Name = "Label23"
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label23.Size = New System.Drawing.Size(38, 15)
+        Me.Label23.Size = New System.Drawing.Size(19, 15)
         Me.Label23.TabIndex = 0
         Me.Label23.Text = "    "
         Me.Label23.UseMnemonic = False
@@ -473,7 +475,7 @@ Partial Class GetDriverInfo
         Me.Label25.Location = New System.Drawing.Point(7, 51)
         Me.Label25.Name = "Label25"
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label25.Size = New System.Drawing.Size(38, 15)
+        Me.Label25.Size = New System.Drawing.Size(19, 15)
         Me.Label25.TabIndex = 0
         Me.Label25.Text = "    "
         Me.Label25.UseMnemonic = False
@@ -495,7 +497,7 @@ Partial Class GetDriverInfo
         Me.Label35.Location = New System.Drawing.Point(7, 83)
         Me.Label35.Name = "Label35"
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label35.Size = New System.Drawing.Size(38, 15)
+        Me.Label35.Size = New System.Drawing.Size(19, 15)
         Me.Label35.TabIndex = 0
         Me.Label35.Text = "    "
         Me.Label35.UseMnemonic = False
@@ -517,7 +519,7 @@ Partial Class GetDriverInfo
         Me.Label32.Location = New System.Drawing.Point(7, 115)
         Me.Label32.Name = "Label32"
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label32.Size = New System.Drawing.Size(38, 15)
+        Me.Label32.Size = New System.Drawing.Size(19, 15)
         Me.Label32.TabIndex = 0
         Me.Label32.Text = "    "
         Me.Label32.UseMnemonic = False
@@ -539,7 +541,7 @@ Partial Class GetDriverInfo
         Me.Label40.Location = New System.Drawing.Point(7, 147)
         Me.Label40.Name = "Label40"
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label40.Size = New System.Drawing.Size(38, 15)
+        Me.Label40.Size = New System.Drawing.Size(19, 15)
         Me.Label40.TabIndex = 0
         Me.Label40.Text = "    "
         Me.Label40.UseMnemonic = False
@@ -561,7 +563,7 @@ Partial Class GetDriverInfo
         Me.Label42.Location = New System.Drawing.Point(7, 179)
         Me.Label42.Name = "Label42"
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label42.Size = New System.Drawing.Size(38, 15)
+        Me.Label42.Size = New System.Drawing.Size(19, 15)
         Me.Label42.TabIndex = 0
         Me.Label42.Text = "    "
         Me.Label42.UseMnemonic = False
@@ -583,7 +585,7 @@ Partial Class GetDriverInfo
         Me.Label46.Location = New System.Drawing.Point(7, 211)
         Me.Label46.Name = "Label46"
         Me.Label46.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label46.Size = New System.Drawing.Size(38, 15)
+        Me.Label46.Size = New System.Drawing.Size(19, 15)
         Me.Label46.TabIndex = 0
         Me.Label46.Text = "    "
         Me.Label46.UseMnemonic = False
@@ -605,7 +607,7 @@ Partial Class GetDriverInfo
         Me.Label34.Location = New System.Drawing.Point(7, 243)
         Me.Label34.Name = "Label34"
         Me.Label34.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label34.Size = New System.Drawing.Size(38, 15)
+        Me.Label34.Size = New System.Drawing.Size(19, 15)
         Me.Label34.TabIndex = 0
         Me.Label34.Text = "    "
         Me.Label34.UseMnemonic = False
@@ -627,7 +629,7 @@ Partial Class GetDriverInfo
         Me.Label27.Location = New System.Drawing.Point(7, 275)
         Me.Label27.Name = "Label27"
         Me.Label27.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label27.Size = New System.Drawing.Size(38, 15)
+        Me.Label27.Size = New System.Drawing.Size(19, 15)
         Me.Label27.TabIndex = 0
         Me.Label27.Text = "    "
         Me.Label27.UseMnemonic = False
@@ -649,7 +651,7 @@ Partial Class GetDriverInfo
         Me.Label29.Location = New System.Drawing.Point(7, 307)
         Me.Label29.Name = "Label29"
         Me.Label29.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label29.Size = New System.Drawing.Size(38, 15)
+        Me.Label29.Size = New System.Drawing.Size(19, 15)
         Me.Label29.TabIndex = 0
         Me.Label29.Text = "    "
         Me.Label29.UseMnemonic = False
@@ -671,7 +673,7 @@ Partial Class GetDriverInfo
         Me.Label38.Location = New System.Drawing.Point(7, 339)
         Me.Label38.Name = "Label38"
         Me.Label38.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label38.Size = New System.Drawing.Size(38, 15)
+        Me.Label38.Size = New System.Drawing.Size(19, 15)
         Me.Label38.TabIndex = 0
         Me.Label38.Text = "    "
         Me.Label38.UseMnemonic = False
@@ -693,7 +695,7 @@ Partial Class GetDriverInfo
         Me.Label44.Location = New System.Drawing.Point(7, 371)
         Me.Label44.Name = "Label44"
         Me.Label44.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label44.Size = New System.Drawing.Size(38, 15)
+        Me.Label44.Size = New System.Drawing.Size(19, 15)
         Me.Label44.TabIndex = 0
         Me.Label44.Text = "    "
         Me.Label44.UseMnemonic = False
@@ -893,6 +895,8 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel2.Controls.Add(Me.Label18)
         Me.FlowLayoutPanel2.Controls.Add(Me.Label20)
         Me.FlowLayoutPanel2.Controls.Add(Me.Label19)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label50)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label1)
         Me.FlowLayoutPanel2.Controls.Add(Me.Label49)
         Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
@@ -919,7 +923,7 @@ Partial Class GetDriverInfo
         Me.Label9.Location = New System.Drawing.Point(7, 19)
         Me.Label9.Name = "Label9"
         Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label9.Size = New System.Drawing.Size(38, 15)
+        Me.Label9.Size = New System.Drawing.Size(19, 15)
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "    "
         Me.Label9.UseMnemonic = False
@@ -941,7 +945,7 @@ Partial Class GetDriverInfo
         Me.Label11.Location = New System.Drawing.Point(7, 51)
         Me.Label11.Name = "Label11"
         Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label11.Size = New System.Drawing.Size(38, 15)
+        Me.Label11.Size = New System.Drawing.Size(19, 15)
         Me.Label11.TabIndex = 0
         Me.Label11.Text = "    "
         Me.Label11.UseMnemonic = False
@@ -973,7 +977,7 @@ Partial Class GetDriverInfo
         Me.Label14.Location = New System.Drawing.Point(7, 100)
         Me.Label14.Name = "Label14"
         Me.Label14.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
-        Me.Label14.Size = New System.Drawing.Size(50, 15)
+        Me.Label14.Size = New System.Drawing.Size(31, 15)
         Me.Label14.TabIndex = 0
         Me.Label14.Text = "    "
         Me.Label14.UseMnemonic = False
@@ -995,7 +999,7 @@ Partial Class GetDriverInfo
         Me.Label15.Location = New System.Drawing.Point(7, 132)
         Me.Label15.Name = "Label15"
         Me.Label15.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
-        Me.Label15.Size = New System.Drawing.Size(50, 15)
+        Me.Label15.Size = New System.Drawing.Size(31, 15)
         Me.Label15.TabIndex = 0
         Me.Label15.Text = "    "
         Me.Label15.UseMnemonic = False
@@ -1017,7 +1021,7 @@ Partial Class GetDriverInfo
         Me.Label18.Location = New System.Drawing.Point(7, 164)
         Me.Label18.Name = "Label18"
         Me.Label18.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label18.Size = New System.Drawing.Size(38, 15)
+        Me.Label18.Size = New System.Drawing.Size(19, 15)
         Me.Label18.TabIndex = 0
         Me.Label18.Text = "    "
         Me.Label18.UseMnemonic = False
@@ -1039,7 +1043,7 @@ Partial Class GetDriverInfo
         Me.Label19.Location = New System.Drawing.Point(7, 196)
         Me.Label19.Name = "Label19"
         Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label19.Size = New System.Drawing.Size(38, 15)
+        Me.Label19.Size = New System.Drawing.Size(19, 15)
         Me.Label19.TabIndex = 0
         Me.Label19.Text = "    "
         Me.Label19.UseMnemonic = False
@@ -1047,7 +1051,7 @@ Partial Class GetDriverInfo
         'Label49
         '
         Me.Label49.AutoEllipsis = True
-        Me.Label49.Location = New System.Drawing.Point(7, 211)
+        Me.Label49.Location = New System.Drawing.Point(7, 243)
         Me.Label49.Name = "Label49"
         Me.Label49.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label49.Size = New System.Drawing.Size(405, 16)
@@ -1296,6 +1300,28 @@ Partial Class GetDriverInfo
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 10
         '
+        'Label50
+        '
+        Me.Label50.AutoSize = True
+        Me.Label50.Location = New System.Drawing.Point(7, 211)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label50.Size = New System.Drawing.Size(46, 17)
+        Me.Label50.TabIndex = 2
+        Me.Label50.Text = "Service:"
+        '
+        'Label1
+        '
+        Me.Label1.AutoEllipsis = True
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(7, 228)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label1.Size = New System.Drawing.Size(19, 15)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "    "
+        Me.Label1.UseMnemonic = False
+        '
         'GetDriverInfo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1454,5 +1480,7 @@ Partial Class GetDriverInfo
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents WizardBtn As System.Windows.Forms.Button
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents Label50 As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 
 End Class
