@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.Threading
+Imports System.Threading.Tasks
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
@@ -210,13 +211,52 @@ Public Class GetFeatureInfoDlg
         ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
         ImageTaskHeader1.HideWindowTitle(handle)
+
+        ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
+        Dim clientHeight As Integer = WindowHelper.ScaleLogical(24) * (ListView1.Items.Count + 1)
+        Dim bm As New Bitmap(ListView1.ClientSize.Width, If(ListView1.ClientSize.Height > clientHeight, ListView1.ClientSize.Height, clientHeight))
+        Graphics.FromImage(bm).Clear(ListView1.BackColor)
+        ListView1.BackgroundImage = bm
     End Sub
 
-    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+    Private onlineManagement As Boolean
+    Private mountDirectory As String
+
+    Private Async Function GetInstalledFeatureInformationAsync(FeatureName As String) As Task(Of Object)
+        Dim obtainedFeature As Object = Nothing
+
+        Await Task.Run(Sub()
+                           Try
+                               DynaLog.LogMessage("Initializing API...")
+                               DismApi.Initialize(DismLogLevel.LogErrors)
+                               DynaLog.LogMessage("Creating session...")
+                               Using imgSession As DismSession = If(onlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mountDirectory))
+                                   obtainedFeature = DismApi.GetFeatureInfo(imgSession, FeatureName)
+                               End Using
+                           Catch ex As Exception
+                               obtainedFeature = ex
+                           Finally
+                               Try
+                                   DismApi.Shutdown()
+                               Catch ex As Exception
+
+                               End Try
+                           End Try
+                       End Sub)
+
+        Return obtainedFeature
+    End Function
+
+    Private Async Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        ListView1.Enabled = False
+        SearchBox1.Enabled = False
+        WizardBtn.Enabled = False
         WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Selected items: " & ListView1.SelectedItems.Count)
         Try
             If ListView1.SelectedItems.Count = 1 Then
+                If ListView1.SelectedItems(0) Is Nothing Then Exit Sub
+
                 ' Background processes need to have completed before showing information
                 DynaLog.LogMessage("Checking if background processes are busy...")
                 If MainForm.ImgBW.IsBusy Then
@@ -274,8 +314,7 @@ Public Class GetFeatureInfoDlg
                             Label2.Text = "In attesa che i processi in background siano stati completati..."
                     End Select
                     While MainForm.ImgBW.IsBusy
-                        Application.DoEvents()
-                        Thread.Sleep(500)
+                        Await Task.Delay(500)
                     End While
                 End If
                 MainForm.StopMountedImageDetector()
@@ -307,152 +346,113 @@ Public Class GetFeatureInfoDlg
                     Case 5
                         Label2.Text = "Preparazione verifica informazioni funzionalità..."
                 End Select
-                Application.DoEvents()
-                Try
-                    DynaLog.LogMessage("Initializing API...")
-                    DismApi.Initialize(DismLogLevel.LogErrors)
-                    DynaLog.LogMessage("Creating session...")
-                    Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                    Case "ESN"
-                                        Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                    Case "FRA"
-                                        Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
-                                    Case "PTB", "PTG"
-                                        Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                    Case "ITA"
-                                        Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                                End Select
-                            Case 1
+
+                onlineManagement = MainForm.OnlineManagement
+                mountDirectory = MainForm.MountDir
+
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
                                 Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                            Case 2
+                            Case "ESN"
                                 Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                            Case 3
+                            Case "FRA"
                                 Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
-                            Case 4
+                            Case "PTB", "PTG"
                                 Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
-                            Case 5
+                            Case "ITA"
                                 Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
-                        DynaLog.LogMessage("Feature to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
-                        Application.DoEvents()
-                        Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
-                        Label23.Text = featInfo.FeatureName
-                        Label25.Text = featInfo.DisplayName
-                        Label35.Text = featInfo.Description
-                        Label32.Text = Casters.CastDismRestartType(featInfo.RestartRequired, True)
-                        Label40.Text = Casters.CastDismFeatureState(featInfo.FeatureState, True)
-                        Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
-                        DynaLog.LogMessage("Custom property count: " & cProps.Count)
-                        If cProps.Count > 0 Then
-                            DynaLog.LogMessage("This feature has custom properties.")
-                            Label42.Visible = False
-                            CPropViewer.Visible = True
-                            Dim cPropContents As String = ""
-                            For Each cProp As DismCustomProperty In cProps
-                                cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
-                            Next
-                            PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            cPropValue.Text = "Please select or expand an entry."
-                                        Case "ESN"
-                                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                        Case "FRA"
-                                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                        Case "PTB", "PTG"
-                                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                        Case "ITA"
-                                            cPropValue.Text = "Seleziona o espandi un elemento."
-                                    End Select
-                                Case 1
-                                    cPropValue.Text = "Please select or expand an entry."
-                                Case 2
-                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                Case 3
-                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                Case 4
-                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                Case 5
-                                    cPropValue.Text = "Seleziona o espandi un elemento."
-                            End Select
-                        Else
-                            DynaLog.LogMessage("This feature does not have custom properties.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label42.Text = "None"
-                                        Case "ESN"
-                                            Label42.Text = "Ninguna"
-                                        Case "FRA"
-                                            Label42.Text = "Aucune"
-                                        Case "PTB", "PTG"
-                                            Label42.Text = "Nenhum"
-                                        Case "ITA"
-                                            Label42.Text = "Nessuno"
-                                    End Select
-                                Case 1
-                                    Label42.Text = "None"
-                                Case 2
-                                    Label42.Text = "Ninguna"
-                                Case 3
-                                    Label42.Text = "Aucune"
-                                Case 4
-                                    Label42.Text = "Nenhum"
-                                Case 5
-                                    Label42.Text = "Nessuno"
-                            End Select
-                            Label42.Visible = True
-                            CPropViewer.Visible = False
-                        End If
-                    End Using
-                Catch NRE As NullReferenceException
-                    Panel4.Visible = False
-                    Panel7.Visible = True
-                Catch ex As Exception
-                    DynaLog.LogMessage("Could not get feature information. Error message: " & ex.Message)
-                    Dim msg As String = ""
+                    Case 1
+                        Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                    Case 2
+                        Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                    Case 3
+                        Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
+                    Case 4
+                        Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                    Case 5
+                        Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                End Select
+                DynaLog.LogMessage("Feature to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
+
+                Dim featureInformation As Object = Await GetInstalledFeatureInformationAsync(ListView1.FocusedItem.SubItems(0).Text)
+                If TypeOf featureInformation Is Exception Then Throw CType(featureInformation, Exception)
+
+                Dim featInfo As DismFeatureInfo = CType(featureInformation, DismFeatureInfo)
+                Label23.Text = featInfo.FeatureName
+                Label25.Text = featInfo.DisplayName
+                Label35.Text = featInfo.Description
+                Label32.Text = Casters.CastDismRestartType(featInfo.RestartRequired, True)
+                Label40.Text = Casters.CastDismFeatureState(featInfo.FeatureState, True)
+                Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
+                DynaLog.LogMessage("Custom property count: " & cProps.Count)
+                If cProps.Count > 0 Then
+                    DynaLog.LogMessage("This feature has custom properties.")
+                    Label42.Visible = False
+                    CPropViewer.Visible = True
+                    Dim cPropContents As String = ""
+                    For Each cProp As DismCustomProperty In cProps
+                        cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                    Next
+                    PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    cPropValue.Text = "Please select or expand an entry."
                                 Case "ESN"
-                                    msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
                                 Case "FRA"
-                                    msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
                                 Case "PTB", "PTG"
-                                    msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
                                 Case "ITA"
-                                    msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    cPropValue.Text = "Seleziona o espandi un elemento."
                             End Select
                         Case 1
-                            msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            cPropValue.Text = "Please select or expand an entry."
                         Case 2
-                            msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
                         Case 3
-                            msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
                         Case 4
-                            msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
                         Case 5
-                            msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            cPropValue.Text = "Seleziona o espandi un elemento."
                     End Select
-                    MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                Finally
-                    DynaLog.LogMessage("Shutting down API...")
-                    Try
-                        DismApi.Shutdown()
-                    Catch ex As Exception
+                Else
+                    DynaLog.LogMessage("This feature does not have custom properties.")
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Label42.Text = "None"
+                                Case "ESN"
+                                    Label42.Text = "Ninguna"
+                                Case "FRA"
+                                    Label42.Text = "Aucune"
+                                Case "PTB", "PTG"
+                                    Label42.Text = "Nenhum"
+                                Case "ITA"
+                                    Label42.Text = "Nessuno"
+                            End Select
+                        Case 1
+                            Label42.Text = "None"
+                        Case 2
+                            Label42.Text = "Ninguna"
+                        Case 3
+                            Label42.Text = "Aucune"
+                        Case 4
+                            Label42.Text = "Nenhum"
+                        Case 5
+                            Label42.Text = "Nessuno"
+                    End Select
+                    Label42.Visible = True
+                    CPropViewer.Visible = False
+                End If
 
-                    End Try
-                End Try
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -485,6 +485,34 @@ Public Class GetFeatureInfoDlg
                 Panel7.Visible = True
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get feature information. Error message: " & ex.Message)
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "ESN"
+                            msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "FRA"
+                            msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "PTB", "PTG"
+                            msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "ITA"
+                            msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                    End Select
+                Case 1
+                    msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 2
+                    msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 3
+                    msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 4
+                    msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 5
+                    msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
@@ -492,6 +520,9 @@ Public Class GetFeatureInfoDlg
         _lvwColumnSorter = New ListViewColumnSorter()
         ListView1.ListViewItemSorter = _lvwColumnSorter
         WindowHelper.EnableCloseCapability(Handle)
+        ListView1.Enabled = True
+        SearchBox1.Enabled = True
+        WizardBtn.Enabled = True
 
         Button1.Visible = (ListView1.SelectedItems.Count = 1)
     End Sub

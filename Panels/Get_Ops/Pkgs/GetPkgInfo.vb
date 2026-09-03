@@ -704,10 +704,47 @@ Public Class GetPkgInfoDlg
         Button4.Enabled = ListBox1.Items.Count > 0
     End Sub
 
-    Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
+    Private onlineManagement As Boolean
+    Private mountDirectory As String
+
+    Private Async Function GetInstalledPackageInformationAsync(PackageName As String) As Task(Of Dictionary(Of String, Object))
+        Dim packageResults As New Dictionary(Of String, Object) From {
+            {"UseEXInfo", OSVer.Major >= 10}
+        }
+
+        Dim pkgInfo As Object = Nothing
+
+        Await Task.Run(Sub()
+                           Try
+                               DynaLog.LogMessage("Initializing API...")
+                               DismApi.Initialize(DismLogLevel.LogErrors)
+                               DynaLog.LogMessage("Creating session...")
+                               Using imgSession As DismSession = If(onlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mountDirectory))
+                                   pkgInfo = If(OSVer.Major >= 10, DismApi.GetPackageInfoExByName(imgSession, PackageName), DismApi.GetPackageInfoByName(imgSession, PackageName))
+                               End Using
+                           Catch ex As Exception
+                               pkgInfo = ex
+                           Finally
+                               Try
+                                   DismApi.Shutdown()
+                               Catch ex As Exception
+
+                               End Try
+                           End Try
+                       End Sub)
+
+        packageResults.Add("PackageInfo", pkgInfo)
+
+        Return packageResults
+    End Function
+
+    Private Async Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
         WindowHelper.DisableCloseCapability(Handle)
         Try
             If ListBox2.SelectedItems.Count = 1 Then
+                ListBox2.Enabled = False
+                SearchBox1.Enabled = False
+
                 ' Background processes need to have completed before showing information
                 DynaLog.LogMessage("Checking if background processes are busy...")
                 If MainForm.ImgBW.IsBusy Then
@@ -765,8 +802,7 @@ Public Class GetPkgInfoDlg
                             Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                     End Select
                     While MainForm.ImgBW.IsBusy
-                        Application.DoEvents()
-                        Thread.Sleep(500)
+                        Await Task.Delay(500)
                     End While
                 End If
                 MainForm.StopMountedImageDetector()
@@ -798,227 +834,226 @@ Public Class GetPkgInfoDlg
                     Case 5
                         Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
                 End Select
-                Application.DoEvents()
-                Try
-                    DynaLog.LogMessage("Initializing API...")
-                    DismApi.Initialize(DismLogLevel.LogErrors)
-                    DynaLog.LogMessage("Creating session...")
-                    Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
-                        DynaLog.LogMessage("Package to get information about: " & Quote & ListBox2.SelectedItem & Quote)
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                    Case "ESN"
-                                        Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                    Case "FRA"
-                                        Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
-                                    Case "PTB", "PTG"
-                                        Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                    Case "ITA"
-                                        Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
-                                End Select
-                            Case 1
+                DynaLog.LogMessage("Package to get information about: " & Quote & ListBox2.SelectedItem & Quote)
+                onlineManagement = MainForm.OnlineManagement
+                mountDirectory = MainForm.MountDir
+
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
                                 Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
-                            Case 2
+                            Case "ESN"
                                 Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                            Case 3
+                            Case "FRA"
                                 Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
-                            Case 4
+                            Case "PTB", "PTG"
                                 Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
-                            Case 5
+                            Case "ITA"
                                 Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
                         End Select
-                        Dim PkgInfoEx As DismPackageInfoEx = Nothing
-                        Dim PkgInfo As DismPackageInfo = Nothing
-                        ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
-                        ' Windows 8 and earlier cannot use the extended type, as no "Ex" function is declared in their DISM API DLL
-                        DynaLog.LogMessage("Detecting conditions imposed by host system...")
-                        If OSVer.Major >= 10 Then
-                            DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
-                            PkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
-                        Else
-                            DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
-                            PkgInfo = DismApi.GetPackageInfoByName(imgSession, ListBox2.SelectedItem)
-                        End If
-                        Label23.Text = If(OSVer.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
-                        Label25.Text = Casters.CastDismApplicabilityStatus(If(OSVer.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
-                        Label35.Text = If(OSVer.Major >= 10, PkgInfoEx.Copyright, PkgInfo.Copyright)
-                        Label32.Text = If(OSVer.Major >= 10, PkgInfoEx.Company, PkgInfo.Company)
-                        Label40.Text = If(OSVer.Major >= 10, PkgInfoEx.CreationTime, PkgInfo.CreationTime)
-                        Label42.Text = If(OSVer.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
-                        Label46.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
-                        Label34.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
+                    Case 1
+                        Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
+                    Case 2
+                        Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
+                    Case 3
+                        Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
+                    Case 4
+                        Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
+                    Case 5
+                        Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
+                End Select
+                Dim PkgInfoEx As DismPackageInfoEx = Nothing
+                Dim PkgInfo As DismPackageInfo = Nothing
+                ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
+                ' Windows 8 and earlier cannot use the extended type, as no "Ex" function is declared in their DISM API DLL
+                DynaLog.LogMessage("Detecting conditions imposed by host system...")
+                Dim packageInformation As Dictionary(Of String, Object) = Await GetInstalledPackageInformationAsync(ListBox2.SelectedItem)
 
-                        Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
-                        Dim PackageInstallTime As Date = If(OSVer.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime),
-                            PackageLastUpdate As Date = If(OSVer.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
-                        Dim PackageInstallTimeString As String = "",
-                            PackageLastUpdateString As String = ""
-                        If MainForm.HumanizeDates Then
-                            PackageInstallTimeString = String.Format("{0}, {1}", PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
-                            PackageLastUpdateString = String.Format("{0}, {1}", PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
-                        Else
-                            PackageInstallTimeString = PackageInstallTime.ToString("MM/dd/yyyy HH:mm:ss")
-                            PackageLastUpdateString = PackageLastUpdate.ToString("MM/dd/yyyy HH:mm:ss")
-                        End If
+                If TypeOf packageInformation("PackageInfo") Is Exception Then Throw CType(packageInformation("PackageInfo"), Exception)
 
-                        Label27.Text = PackageInstallTimeString
-                        Label29.Text = PackageLastUpdateString
-                        Label38.Text = If(OSVer.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
-                        Label44.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
-                        Label15.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
-                        Label21.Text = Casters.CastDismReleaseType(If(OSVer.Major >= 10, PkgInfoEx.ReleaseType, PkgInfo.ReleaseType), True)
-                        Label13.Text = Casters.CastDismRestartType(If(OSVer.Major >= 10, PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
-                        Label49.Text = If(OSVer.Major >= 10, PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
-                        Label51.Text = Casters.CastDismPackageState(If(OSVer.Major >= 10, PkgInfoEx.PackageState, PkgInfo.PackageState), True)
-                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(OSVer.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
-                        If OSVer.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
-                        Label57.Text = ""
-                        Dim cProps As DismCustomPropertyCollection = If(OSVer.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
-                        DynaLog.LogMessage("Custom property count: " & cProps.Count)
-                        If cProps.Count > 0 Then
-                            DynaLog.LogMessage("This package has custom properties.")
-                            Label57.Visible = False
-                            CPropViewer.Visible = True
-                            Dim cPropContents As String = ""
-                            For Each cProp As DismCustomProperty In cProps
-                                cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
-                            Next
-                            PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            cPropValue.Text = "Please select or expand an entry."
-                                        Case "ESN"
-                                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                        Case "FRA"
-                                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                        Case "PTB", "PTG"
-                                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                        Case "ITA"
-                                            cPropValue.Text = "Selezionare o espandere un elemento."
-                                    End Select
-                                Case 1
-                                    cPropValue.Text = "Please select or expand an entry."
-                                Case 2
-                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
-                                Case 3
-                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
-                                Case 4
-                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
-                                Case 5
-                                    cPropValue.Text = "Selezionare o espandere un elemento."
-                            End Select
-                        Else
-                            DynaLog.LogMessage("This package does not have custom properties.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label57.Text = "None"
-                                        Case "ESN"
-                                            Label57.Text = "Ninguna"
-                                        Case "FRA"
-                                            Label57.Text = "Aucune"
-                                        Case "PTB", "PTG"
-                                            Label57.Text = "Nenhum"
-                                        Case "ITA"
-                                            Label57.Text = "Nessuno"
-                                    End Select
-                                Case 1
-                                    Label57.Text = "None"
-                                Case 2
-                                    Label57.Text = "Ninguna"
-                                Case 3
-                                    Label57.Text = "Aucune"
-                                Case 4
-                                    Label57.Text = "Nenhum"
-                                Case 5
-                                    Label57.Text = "Nessuno"
-                            End Select
-                            Label57.Visible = True
-                            CPropViewer.Visible = False
-                        End If
-                        Label59.Text = ""
-                        Dim pkgFeats As DismFeatureCollection = If(OSVer.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
-                        DynaLog.LogMessage("Feature count: " & pkgFeats.Count)
-                        If pkgFeats.Count > 0 Then
-                            DynaLog.LogMessage("This package has features.")
-                            ' Output all features
-                            For Each pkgFeat As DismFeature In pkgFeats
-                                Label59.Text &= "- " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State, True) & ")" & CrLf
-                            Next
-                        Else
-                            DynaLog.LogMessage("This package does not have features.")
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Label59.Text = "None"
-                                        Case "ESN"
-                                            Label59.Text = "Ninguna"
-                                        Case "FRA"
-                                            Label59.Text = "Aucune"
-                                        Case "PTB", "PTG"
-                                            Label59.Text = "Nenhum"
-                                        Case "ITA"
-                                            Label59.Text = "Nessuno"
-                                    End Select
-                                Case 1
-                                    Label59.Text = "None"
-                                Case 2
-                                    Label59.Text = "Ninguna"
-                                Case 3
-                                    Label59.Text = "Aucune"
-                                Case 4
-                                    Label59.Text = "Nenhum"
-                                Case 5
-                                    Label59.Text = "Nessuno"
-                            End Select
-                        End If
-                    End Using
-                    Panel4.Visible = True
-                    Panel7.Visible = False
+                If packageInformation("UseEXInfo") Then
+                    If Not TypeOf packageInformation("PackageInfo") Is DismPackageInfoEx Then Throw New Exception("Invalid package information.")
+                    DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
+                    PkgInfoEx = CType(packageInformation("PackageInfo"), DismPackageInfoEx)
+                Else
+                    If Not TypeOf packageInformation("PackageInfo") Is DismPackageInfo Then Throw New Exception("Invalid package information.")
+                    DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
+                    PkgInfo = CType(packageInformation("PackageInfo"), DismPackageInfo)
+                End If
+                Label23.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.PackageName, PkgInfo.PackageName)
+                Label25.Text = Casters.CastDismApplicabilityStatus(If(packageInformation("UseEXInfo"), PkgInfoEx.Applicable, PkgInfo.Applicable), True)
+                Label35.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.Copyright, PkgInfo.Copyright)
+                Label32.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.Company, PkgInfo.Company)
+                Label40.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.CreationTime, PkgInfo.CreationTime)
+                Label42.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.Description, PkgInfo.Description)
+                Label46.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.InstallClient, PkgInfo.InstallClient)
+                Label34.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
+
+                Dim CurrentOSCulture As CultureInfo = CultureInfo.CurrentCulture
+                Dim PackageInstallTime As Date = If(packageInformation("UseEXInfo"), PkgInfoEx.InstallTime, PkgInfo.InstallTime),
+                    PackageLastUpdate As Date = If(packageInformation("UseEXInfo"), PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+                Dim PackageInstallTimeString As String = "",
+                    PackageLastUpdateString As String = ""
+                If MainForm.HumanizeDates Then
+                    PackageInstallTimeString = String.Format("{0}, {1}", PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageInstallTime.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                    PackageLastUpdateString = String.Format("{0}, {1}", PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongDatePattern, CurrentOSCulture), PackageLastUpdate.ToString(CurrentOSCulture.DateTimeFormat.LongTimePattern, CurrentOSCulture))
+                Else
+                    PackageInstallTimeString = PackageInstallTime.ToString("MM/dd/yyyy HH:mm:ss")
+                    PackageLastUpdateString = PackageLastUpdate.ToString("MM/dd/yyyy HH:mm:ss")
+                End If
+
+                Label27.Text = PackageInstallTimeString
+                Label29.Text = PackageLastUpdateString
+                Label38.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.DisplayName, PkgInfo.DisplayName)
+                Label44.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.ProductName, PkgInfo.ProductName)
+                Label15.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
+                Label21.Text = Casters.CastDismReleaseType(If(packageInformation("UseEXInfo"), PkgInfoEx.ReleaseType, PkgInfo.ReleaseType), True)
+                Label13.Text = Casters.CastDismRestartType(If(packageInformation("UseEXInfo"), PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
+                Label49.Text = If(packageInformation("UseEXInfo"), PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
+                Label51.Text = Casters.CastDismPackageState(If(packageInformation("UseEXInfo"), PkgInfoEx.PackageState, PkgInfo.PackageState), True)
+                Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(packageInformation("UseEXInfo"), PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
+                If packageInformation("UseEXInfo") Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
+                Label57.Text = ""
+                Dim cProps As DismCustomPropertyCollection = If(packageInformation("UseEXInfo"), PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
+                DynaLog.LogMessage("Custom property count: " & cProps.Count)
+                If cProps.Count > 0 Then
+                    DynaLog.LogMessage("This package has custom properties.")
+                    Label57.Visible = False
+                    CPropViewer.Visible = True
+                    Dim cPropContents As String = ""
+                    For Each cProp As DismCustomProperty In cProps
+                        cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                    Next
+                    PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    Label5.Text = "Ready"
+                                    cPropValue.Text = "Please select or expand an entry."
                                 Case "ESN"
-                                    Label5.Text = "Listo"
+                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
                                 Case "FRA"
-                                    Label5.Text = "Prêt"
+                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
                                 Case "PTB", "PTG"
-                                    Label5.Text = "Pronto"
+                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
                                 Case "ITA"
-                                    Label5.Text = "Pronto"
+                                    cPropValue.Text = "Selezionare o espandere un elemento."
                             End Select
                         Case 1
-                            Label5.Text = "Ready"
+                            cPropValue.Text = "Please select or expand an entry."
                         Case 2
-                            Label5.Text = "Listo"
+                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
                         Case 3
-                            Label5.Text = "Prêt"
+                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
                         Case 4
-                            Label5.Text = "Pronto"
+                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
                         Case 5
-                            Label5.Text = "Pronto"
+                            cPropValue.Text = "Selezionare o espandere un elemento."
                     End Select
-                Finally
-                    Try
-                        DismApi.Shutdown()
-                    Catch ex As Exception
+                Else
+                    DynaLog.LogMessage("This package does not have custom properties.")
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Label57.Text = "None"
+                                Case "ESN"
+                                    Label57.Text = "Ninguna"
+                                Case "FRA"
+                                    Label57.Text = "Aucune"
+                                Case "PTB", "PTG"
+                                    Label57.Text = "Nenhum"
+                                Case "ITA"
+                                    Label57.Text = "Nessuno"
+                            End Select
+                        Case 1
+                            Label57.Text = "None"
+                        Case 2
+                            Label57.Text = "Ninguna"
+                        Case 3
+                            Label57.Text = "Aucune"
+                        Case 4
+                            Label57.Text = "Nenhum"
+                        Case 5
+                            Label57.Text = "Nessuno"
+                    End Select
+                    Label57.Visible = True
+                    CPropViewer.Visible = False
+                End If
+                Label59.Text = ""
+                Dim pkgFeats As DismFeatureCollection = If(packageInformation("UseEXInfo"), PkgInfoEx.Features, PkgInfo.Features)
+                DynaLog.LogMessage("Feature count: " & pkgFeats.Count)
+                If pkgFeats.Count > 0 Then
+                    DynaLog.LogMessage("This package has features.")
+                    ' Output all features
+                    For Each pkgFeat As DismFeature In pkgFeats
+                        Label59.Text &= "- " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State, True) & ")" & CrLf
+                    Next
+                Else
+                    DynaLog.LogMessage("This package does not have features.")
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Label59.Text = "None"
+                                Case "ESN"
+                                    Label59.Text = "Ninguna"
+                                Case "FRA"
+                                    Label59.Text = "Aucune"
+                                Case "PTB", "PTG"
+                                    Label59.Text = "Nenhum"
+                                Case "ITA"
+                                    Label59.Text = "Nessuno"
+                            End Select
+                        Case 1
+                            Label59.Text = "None"
+                        Case 2
+                            Label59.Text = "Ninguna"
+                        Case 3
+                            Label59.Text = "Aucune"
+                        Case 4
+                            Label59.Text = "Nenhum"
+                        Case 5
+                            Label59.Text = "Nessuno"
+                    End Select
+                End If
+                Panel4.Visible = True
+                Panel7.Visible = False
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                Label5.Text = "Ready"
+                            Case "ESN"
+                                Label5.Text = "Listo"
+                            Case "FRA"
+                                Label5.Text = "Prêt"
+                            Case "PTB", "PTG"
+                                Label5.Text = "Pronto"
+                            Case "ITA"
+                                Label5.Text = "Pronto"
+                        End Select
+                    Case 1
+                        Label5.Text = "Ready"
+                    Case 2
+                        Label5.Text = "Listo"
+                    Case 3
+                        Label5.Text = "Prêt"
+                    Case 4
+                        Label5.Text = "Pronto"
+                    Case 5
+                        Label5.Text = "Pronto"
+                End Select
 
-                    End Try
-                End Try
+                ListBox2.Enabled = True
+                SearchBox1.Enabled = True
             Else
                 Panel4.Visible = False
                 Panel7.Visible = True
             End If
         Catch ex As Exception
+            MessageBox.Show("Could not get package information. Error message: " & ex.Message, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Error)
             DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
             Panel4.Visible = False
             Panel7.Visible = True
@@ -1164,8 +1199,7 @@ Public Class GetPkgInfoDlg
                     Label5.Text = "In attesa che i processi in secondo piano finiscano..."
             End Select
             While MainForm.ImgBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
+                Await Task.Delay(500)
             End While
         End If
 
