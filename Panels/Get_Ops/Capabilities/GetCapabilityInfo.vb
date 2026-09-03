@@ -309,8 +309,7 @@ Public Class GetCapabilityInfoDlg
                             Label2.Text = "In attesa del completamento che i processi in background..."
                     End Select
                     While MainForm.ImgBW.IsBusy
-                        Application.DoEvents()
-                        Thread.Sleep(500)
+                        Await Task.Delay(500)
                     End While
                 End If
                 MainForm.StopMountedImageDetector()
