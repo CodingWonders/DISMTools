@@ -648,7 +648,8 @@ Public Class GetDriverInfo
                     Label5.Text = "In attesa del completamento dei processi in background..."
             End Select
             While MainForm.ImgBW.IsBusy
-                Await Task.Delay(500)
+                Application.DoEvents()
+                Thread.Sleep(500)
             End While
         End If
 

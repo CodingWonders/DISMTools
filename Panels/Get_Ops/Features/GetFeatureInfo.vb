@@ -314,7 +314,8 @@ Public Class GetFeatureInfoDlg
                             Label2.Text = "In attesa che i processi in background siano stati completati..."
                     End Select
                     While MainForm.ImgBW.IsBusy
-                        Await Task.Delay(500)
+                        Application.DoEvents()
+                        Thread.Sleep(500)
                     End While
                 End If
                 MainForm.StopMountedImageDetector()

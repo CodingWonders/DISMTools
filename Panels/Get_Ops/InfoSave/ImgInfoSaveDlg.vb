@@ -2321,7 +2321,8 @@ Public Class ImgInfoSaveDlg
             End Select
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
             While MainForm.ImgBW.IsBusy
-                Await Task.Delay(500)
+                Application.DoEvents()
+                Thread.Sleep(500)
             End While
         End If
 

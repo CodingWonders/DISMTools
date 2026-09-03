@@ -802,7 +802,8 @@ Public Class GetPkgInfoDlg
                             Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                     End Select
                     While MainForm.ImgBW.IsBusy
-                        Await Task.Delay(500)
+                        Application.DoEvents()
+                        Thread.Sleep(500)
                     End While
                 End If
                 MainForm.StopMountedImageDetector()
@@ -1199,7 +1200,8 @@ Public Class GetPkgInfoDlg
                     Label5.Text = "In attesa che i processi in secondo piano finiscano..."
             End Select
             While MainForm.ImgBW.IsBusy
-                Await Task.Delay(500)
+                Application.DoEvents()
+                Thread.Sleep(500)
             End While
         End If
 
