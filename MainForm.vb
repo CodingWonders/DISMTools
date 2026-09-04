@@ -165,6 +165,7 @@ Public Class MainForm
 
     Public SkipQuestions As Boolean             ' Skips questions in the info saver
     Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
+    Public DoNotAskOnNonComplete As Boolean     ' Determines whether to ask for items in the information saver for which we don't save every detail
 
     Public AutoCleanMounts As Boolean
 
@@ -1675,6 +1676,7 @@ Public Class MainForm
                 AutoCompleteInfo(2) = (CInt(InfoSaverKey.GetValue("AppX_CompleteInfo")) = 1)
                 AutoCompleteInfo(3) = (CInt(InfoSaverKey.GetValue("Cap_CompleteInfo")) = 1)
                 AutoCompleteInfo(4) = (CInt(InfoSaverKey.GetValue("Drv_CompleteInfo")) = 1)
+                DoNotAskOnNonComplete = CInt(InfoSaverKey.GetValue("DoNotAskOnNonComplete", 0)) = 1
                 InfoSaverKey.Close()
                 Dim SearchKey As RegistryKey = Key.OpenSubKey("SearchSettings")
                 SearchEngineName = SearchKey.GetValue("EngineName").ToString().Replace(Quote, "").Trim()
@@ -1802,6 +1804,7 @@ Public Class MainForm
                     AutoCompleteInfo(2) = CInt(GetIniSettingValue(settingData, "InfoSaver", "AppX_CompleteInfo", "1")) = 1
                     AutoCompleteInfo(3) = CInt(GetIniSettingValue(settingData, "InfoSaver", "Cap_CompleteInfo", "1")) = 1
                     AutoCompleteInfo(4) = CInt(GetIniSettingValue(settingData, "InfoSaver", "Drv_CompleteInfo", "1")) = 1
+                    DoNotAskOnNonComplete = CInt(GetIniSettingValue(settingData, "InfoSaver", "DoNotAskOnNonComplete", "0")) = 1
                     SearchEngineName = GetIniSettingValue(settingData, "SearchSettings", "EngineName", Quote & "DuckDuckGo" & Quote).Replace(Quote, "")
                     SearchEngineAITolerance = CInt(GetIniSettingValue(settingData, "SearchSettings", "AITolerance", "1"))
                     If SearchEngineAITolerance < 0 Then SearchEngineAITolerance = 0
@@ -2014,6 +2017,7 @@ Public Class MainForm
                            "AppX_CompleteInfo                   =    " & AutoCompleteInfo(2) & CrLf &
                            "Cap_CompleteInfo                    =    " & AutoCompleteInfo(3) & CrLf &
                            "Drv_CompleteInfo                    =    " & AutoCompleteInfo(4) & CrLf &
+                           "DoNotAskOnNonComplete               =    " & DoNotAskOnNonComplete & CrLf &
                            "ShowWatermark                       =    " & ShowWatermark & CrLf &
                            "WDSHCGraphoView                     =    " & WDSHCGraphoView & CrLf &
                            "DTDimShowPnputilOut                 =    " & DTDimShowPnputilOut & CrLf &
@@ -4255,6 +4259,7 @@ Public Class MainForm
         settingsData("InfoSaver").AddKey("AppX_CompleteInfo", 1)
         settingsData("InfoSaver").AddKey("Cap_CompleteInfo", 1)
         settingsData("InfoSaver").AddKey("Drv_CompleteInfo", 1)
+        settingsData("InfoSaver").AddKey("DoNotAskOnNonComplete", 0)
         settingsData.Sections.AddSection("SearchSettings")
         settingsData("SearchSettings").AddKey("EngineName", Quote & "DuckDuckGo" & Quote)
         settingsData("SearchSettings").AddKey("AITolerance", 1)
@@ -4366,6 +4371,7 @@ Public Class MainForm
         InfoSaverKey.SetValue("AppX_CompleteInfo", 1, RegistryValueKind.DWord)
         InfoSaverKey.SetValue("Cap_CompleteInfo", 1, RegistryValueKind.DWord)
         InfoSaverKey.SetValue("Drv_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("DoNotAskOnNonComplete", 0, RegistryValueKind.DWord)
         InfoSaverKey.Close()
         Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
         SearchKey.SetValue("EngineName", "DuckDuckGo", RegistryValueKind.String)
@@ -4468,6 +4474,7 @@ Public Class MainForm
             settingsData("InfoSaver").AddKey("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0))
             settingsData("InfoSaver").AddKey("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0))
             settingsData("InfoSaver").AddKey("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0))
+            settingsData("InfoSaver").AddKey("DoNotAskOnNonComplete", If(DoNotAskOnNonComplete, 1, 0))
             settingsData.Sections.AddSection("SearchSettings")
             settingsData("SearchSettings").AddKey("EngineName", Quote & SearchEngineName & Quote)
             settingsData("SearchSettings").AddKey("AITolerance", SearchEngineAITolerance)
@@ -4594,6 +4601,7 @@ Public Class MainForm
                 InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
                 InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
                 InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("DoNotAskOnNonComplete", If(DoNotAskOnNonComplete, 1, 0), RegistryValueKind.DWord)
                 InfoSaverKey.Close()
                 Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
                 SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
@@ -13244,6 +13252,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13543,6 +13552,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13613,6 +13623,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13678,6 +13689,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13772,6 +13784,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13867,6 +13880,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13933,6 +13947,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13955,6 +13970,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -14936,6 +14952,7 @@ Public Class MainForm
             ImgInfoSaveDlg.ForceAppxApi = True
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(MountedImgMgr)
             InfoSaveResults.Show()
         End If

@@ -603,6 +603,7 @@ Public Class GetAppxPkgInfoDlg
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = MainForm.DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If

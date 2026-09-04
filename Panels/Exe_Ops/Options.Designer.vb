@@ -155,6 +155,13 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
+        Me.Options_Program = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel14 = New System.Windows.Forms.Panel()
+        Me.Panel15 = New System.Windows.Forms.Panel()
+        Me.Panel13 = New System.Windows.Forms.Panel()
+        Me.Label36 = New System.Windows.Forms.Label()
+        Me.CheckBox26 = New System.Windows.Forms.CheckBox()
         Me.Options_ImgOps = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -232,10 +239,6 @@ Partial Class Options
         Me.Label61 = New System.Windows.Forms.Label()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.ProgressPanelPic = New System.Windows.Forms.PictureBox()
-        Me.Options_Program = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel14 = New System.Windows.Forms.Panel()
-        Me.Panel15 = New System.Windows.Forms.Panel()
         Me.Options_Logs = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel5 = New System.Windows.Forms.Panel()
@@ -264,9 +267,7 @@ Partial Class Options
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
-        Me.Panel13 = New System.Windows.Forms.Panel()
-        Me.CheckBox26 = New System.Windows.Forms.CheckBox()
-        Me.Label36 = New System.Windows.Forms.Label()
+        Me.CheckBox27 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -311,6 +312,11 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
+        Me.Options_Program.SuspendLayout()
+        Me.FlowLayoutPanel2.SuspendLayout()
+        Me.Panel14.SuspendLayout()
+        Me.Panel15.SuspendLayout()
+        Me.Panel13.SuspendLayout()
         Me.Options_ImgOps.SuspendLayout()
         Me.FlowLayoutPanel5.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -338,10 +344,6 @@ Partial Class Options
         Me.Panel18.SuspendLayout()
         Me.Panel22.SuspendLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Options_Program.SuspendLayout()
-        Me.FlowLayoutPanel2.SuspendLayout()
-        Me.Panel14.SuspendLayout()
-        Me.Panel15.SuspendLayout()
         Me.Options_Logs.SuspendLayout()
         Me.FlowLayoutPanel4.SuspendLayout()
         Me.Panel5.SuspendLayout()
@@ -359,7 +361,6 @@ Partial Class Options
         Me.FlowLayoutPanel8.SuspendLayout()
         Me.Panel11.SuspendLayout()
         Me.Panel12.SuspendLayout()
-        Me.Panel13.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1733,8 +1734,8 @@ Partial Class Options
         '
         'ValueContainer
         '
-        Me.ValueContainer.Controls.Add(Me.Options_Program)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
+        Me.ValueContainer.Controls.Add(Me.Options_Program)
         Me.ValueContainer.Controls.Add(Me.Options_FileAssocs)
         Me.ValueContainer.Controls.Add(Me.Options_Shutdown)
         Me.ValueContainer.Controls.Add(Me.Options_Startup)
@@ -1749,6 +1750,86 @@ Partial Class Options
         Me.ValueContainer.Name = "ValueContainer"
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
+        '
+        'Options_Program
+        '
+        Me.Options_Program.Controls.Add(Me.FlowLayoutPanel2)
+        Me.Options_Program.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_Program.Location = New System.Drawing.Point(0, 0)
+        Me.Options_Program.Name = "Options_Program"
+        Me.Options_Program.Size = New System.Drawing.Size(748, 465)
+        Me.Options_Program.TabIndex = 0
+        Me.Options_Program.Visible = False
+        '
+        'FlowLayoutPanel2
+        '
+        Me.FlowLayoutPanel2.AutoScroll = True
+        Me.FlowLayoutPanel2.Controls.Add(Me.Panel14)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Panel15)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Panel13)
+        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel2.TabIndex = 0
+        '
+        'Panel14
+        '
+        Me.Panel14.Controls.Add(Me.Label2)
+        Me.Panel14.Controls.Add(Me.Label3)
+        Me.Panel14.Controls.Add(Me.Label4)
+        Me.Panel14.Controls.Add(Me.LinkLabel1)
+        Me.Panel14.Controls.Add(Me.TextBox1)
+        Me.Panel14.Controls.Add(Me.PictureBox2)
+        Me.Panel14.Controls.Add(Me.Button1)
+        Me.Panel14.Controls.Add(Me.Button2)
+        Me.Panel14.Location = New System.Drawing.Point(0, 0)
+        Me.Panel14.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel14.Name = "Panel14"
+        Me.Panel14.Size = New System.Drawing.Size(748, 138)
+        Me.Panel14.TabIndex = 0
+        '
+        'Panel15
+        '
+        Me.Panel15.Controls.Add(Me.Label5)
+        Me.Panel15.Controls.Add(Me.ComboBox1)
+        Me.Panel15.Location = New System.Drawing.Point(0, 138)
+        Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel15.Name = "Panel15"
+        Me.Panel15.Size = New System.Drawing.Size(748, 54)
+        Me.Panel15.TabIndex = 1
+        '
+        'Panel13
+        '
+        Me.Panel13.Controls.Add(Me.Label36)
+        Me.Panel13.Controls.Add(Me.CheckBox26)
+        Me.Panel13.Location = New System.Drawing.Point(0, 192)
+        Me.Panel13.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel13.Name = "Panel13"
+        Me.Panel13.Size = New System.Drawing.Size(748, 96)
+        Me.Panel13.TabIndex = 2
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.Location = New System.Drawing.Point(16, 52)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(111, 15)
+        Me.Label36.TabIndex = 1
+        Me.Label36.Text = "Network cost status"
+        '
+        'CheckBox26
+        '
+        Me.CheckBox26.AutoSize = True
+        Me.CheckBox26.Checked = True
+        Me.CheckBox26.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox26.Location = New System.Drawing.Point(20, 20)
+        Me.CheckBox26.Name = "CheckBox26"
+        Me.CheckBox26.Size = New System.Drawing.Size(573, 19)
+        Me.CheckBox26.TabIndex = 0
+        Me.CheckBox26.Text = "When initiating a network transfer on a metered network connection, warn me about" & _
+    " additional charges"
+        Me.CheckBox26.UseVisualStyleBackColor = True
         '
         'Options_ImgOps
         '
@@ -1997,6 +2078,7 @@ Partial Class Options
         '
         'Panel7
         '
+        Me.Panel7.Controls.Add(Me.CheckBox27)
         Me.Panel7.Controls.Add(Me.Label9)
         Me.Panel7.Controls.Add(Me.CheckBox14)
         Me.Panel7.Controls.Add(Me.Label48)
@@ -2004,7 +2086,7 @@ Partial Class Options
         Me.Panel7.Location = New System.Drawing.Point(0, 640)
         Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(728, 172)
+        Me.Panel7.Size = New System.Drawing.Size(728, 192)
         Me.Panel7.TabIndex = 1
         '
         'Label9
@@ -2026,7 +2108,7 @@ Partial Class Options
         Me.Panel21.Controls.Add(Me.Label69)
         Me.Panel21.Controls.Add(Me.Label67)
         Me.Panel21.Controls.Add(Me.Label68)
-        Me.Panel21.Location = New System.Drawing.Point(0, 812)
+        Me.Panel21.Location = New System.Drawing.Point(0, 832)
         Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel21.Name = "Panel21"
         Me.Panel21.Size = New System.Drawing.Size(728, 256)
@@ -2605,54 +2687,6 @@ Partial Class Options
         Me.ProgressPanelPic.TabIndex = 7
         Me.ProgressPanelPic.TabStop = False
         '
-        'Options_Program
-        '
-        Me.Options_Program.Controls.Add(Me.FlowLayoutPanel2)
-        Me.Options_Program.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_Program.Location = New System.Drawing.Point(0, 0)
-        Me.Options_Program.Name = "Options_Program"
-        Me.Options_Program.Size = New System.Drawing.Size(748, 465)
-        Me.Options_Program.TabIndex = 0
-        Me.Options_Program.Visible = False
-        '
-        'FlowLayoutPanel2
-        '
-        Me.FlowLayoutPanel2.AutoScroll = True
-        Me.FlowLayoutPanel2.Controls.Add(Me.Panel14)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Panel15)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Panel13)
-        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel2.TabIndex = 0
-        '
-        'Panel14
-        '
-        Me.Panel14.Controls.Add(Me.Label2)
-        Me.Panel14.Controls.Add(Me.Label3)
-        Me.Panel14.Controls.Add(Me.Label4)
-        Me.Panel14.Controls.Add(Me.LinkLabel1)
-        Me.Panel14.Controls.Add(Me.TextBox1)
-        Me.Panel14.Controls.Add(Me.PictureBox2)
-        Me.Panel14.Controls.Add(Me.Button1)
-        Me.Panel14.Controls.Add(Me.Button2)
-        Me.Panel14.Location = New System.Drawing.Point(0, 0)
-        Me.Panel14.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel14.Name = "Panel14"
-        Me.Panel14.Size = New System.Drawing.Size(748, 138)
-        Me.Panel14.TabIndex = 0
-        '
-        'Panel15
-        '
-        Me.Panel15.Controls.Add(Me.Label5)
-        Me.Panel15.Controls.Add(Me.ComboBox1)
-        Me.Panel15.Location = New System.Drawing.Point(0, 138)
-        Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel15.Name = "Panel15"
-        Me.Panel15.Size = New System.Drawing.Size(748, 54)
-        Me.Panel15.TabIndex = 1
-        '
         'Options_Logs
         '
         Me.Options_Logs.Controls.Add(Me.FlowLayoutPanel4)
@@ -2975,37 +3009,15 @@ Partial Class Options
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 6
         '
-        'Panel13
+        'CheckBox27
         '
-        Me.Panel13.Controls.Add(Me.Label36)
-        Me.Panel13.Controls.Add(Me.CheckBox26)
-        Me.Panel13.Location = New System.Drawing.Point(0, 192)
-        Me.Panel13.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel13.Name = "Panel13"
-        Me.Panel13.Size = New System.Drawing.Size(748, 96)
-        Me.Panel13.TabIndex = 2
-        '
-        'CheckBox26
-        '
-        Me.CheckBox26.AutoSize = True
-        Me.CheckBox26.Checked = True
-        Me.CheckBox26.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox26.Location = New System.Drawing.Point(20, 20)
-        Me.CheckBox26.Name = "CheckBox26"
-        Me.CheckBox26.Size = New System.Drawing.Size(573, 19)
-        Me.CheckBox26.TabIndex = 0
-        Me.CheckBox26.Text = "When initiating a network transfer on a metered network connection, warn me about" & _
-    " additional charges"
-        Me.CheckBox26.UseVisualStyleBackColor = True
-        '
-        'Label36
-        '
-        Me.Label36.AutoSize = True
-        Me.Label36.Location = New System.Drawing.Point(16, 52)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(111, 15)
-        Me.Label36.TabIndex = 1
-        Me.Label36.Text = "Network cost status"
+        Me.CheckBox27.AutoSize = True
+        Me.CheckBox27.Location = New System.Drawing.Point(41, 159)
+        Me.CheckBox27.Name = "CheckBox27"
+        Me.CheckBox27.Size = New System.Drawing.Size(464, 19)
+        Me.CheckBox27.TabIndex = 4
+        Me.CheckBox27.Text = "For elements I haven't checked above, do not ask me to save complete information"
+        Me.CheckBox27.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -3084,6 +3096,13 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
+        Me.Options_Program.ResumeLayout(False)
+        Me.FlowLayoutPanel2.ResumeLayout(False)
+        Me.Panel14.ResumeLayout(False)
+        Me.Panel14.PerformLayout()
+        Me.Panel15.ResumeLayout(False)
+        Me.Panel13.ResumeLayout(False)
+        Me.Panel13.PerformLayout()
         Me.Options_ImgOps.ResumeLayout(False)
         Me.FlowLayoutPanel5.ResumeLayout(False)
         Me.Panel6.ResumeLayout(False)
@@ -3122,11 +3141,6 @@ Partial Class Options
         Me.Panel22.ResumeLayout(False)
         Me.Panel22.PerformLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Options_Program.ResumeLayout(False)
-        Me.FlowLayoutPanel2.ResumeLayout(False)
-        Me.Panel14.ResumeLayout(False)
-        Me.Panel14.PerformLayout()
-        Me.Panel15.ResumeLayout(False)
         Me.Options_Logs.ResumeLayout(False)
         Me.FlowLayoutPanel4.ResumeLayout(False)
         Me.Panel5.ResumeLayout(False)
@@ -3152,8 +3166,6 @@ Partial Class Options
         Me.Panel11.ResumeLayout(False)
         Me.Panel11.PerformLayout()
         Me.Panel12.ResumeLayout(False)
-        Me.Panel13.ResumeLayout(False)
-        Me.Panel13.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3401,5 +3413,6 @@ Partial Class Options
     Friend WithEvents Panel13 As System.Windows.Forms.Panel
     Friend WithEvents Label36 As System.Windows.Forms.Label
     Friend WithEvents CheckBox26 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox27 As System.Windows.Forms.CheckBox
 
 End Class

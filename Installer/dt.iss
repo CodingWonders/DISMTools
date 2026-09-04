@@ -233,6 +233,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; Va
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "AppX_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "DoNotAskOnNonComplete"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; ValueType: string; ValueName: "EngineName"; ValueData: "DuckDuckGo"; Flags: uninsdeletevalue createvalueifdoesntexist

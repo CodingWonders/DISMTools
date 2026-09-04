@@ -478,6 +478,8 @@ Public Class Options
 
         MainForm.WarnOnMetered = CheckBox26.Checked
 
+        MainForm.DoNotAskOnNonComplete = CheckBox27.Checked
+
         MainForm.PEHelper_MaxConcurrentISO = NumericUpDown2.Value
     End Sub
 
@@ -1882,6 +1884,8 @@ Public Class Options
         CheckBox25.Checked = MainForm.LockUnlockedVolumes
 
         CheckBox26.Checked = MainForm.WarnOnMetered
+
+        CheckBox27.Checked = MainForm.DoNotAskOnNonComplete
 
         NumericUpDown2.Value = MainForm.PEHelper_MaxConcurrentISO
     End Sub

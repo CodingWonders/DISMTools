@@ -52,6 +52,8 @@ Public Class ImgInfoSaveDlg
     Public SkipQuestions As Boolean
     Public AutoCompleteInfo(4) As Boolean
 
+    Public DoNotAskOnNonComplete As Boolean
+
     Public ForceAppxApi As Boolean
 
     Const CodeBlockChar As String = " ` "       ' It is " ` " to prevent Markdig problem "Markdown elements in the input are too deeply nested - depth limit exceeded. Input is most likely not sensible or is a very large table."
@@ -2483,39 +2485,79 @@ Public Class ImgInfoSaveDlg
         Select Case SaveTask
             Case 0
                 If Not SkipQuestions Or Not AutoCompleteInfo(0) Then
-                    GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryPackage = False
+                    Else
+                        GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Not SkipQuestions Or Not AutoCompleteInfo(1) Then
-                    GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryFeature = False
+                    Else
+                        GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Environment.OSVersion.Version.Major = 10 AndAlso (Not SkipQuestions Or Not AutoCompleteInfo(2)) Then
-                    GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryAppxPackage = False
+                    Else
+                        GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Not SkipQuestions Or Not AutoCompleteInfo(3) Then
-                    GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryCapability = False
+                    Else
+                        GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Not SkipQuestions Or Not AutoCompleteInfo(4) Then
-                    GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryDriver = False
+                    Else
+                        GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 2
                 If Not SkipQuestions Or Not AutoCompleteInfo(0) Then
-                    GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryPackage = False
+                    Else
+                        GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 4
                 If Not SkipQuestions Or Not AutoCompleteInfo(1) Then
-                    GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryFeature = False
+                    Else
+                        GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 5
                 If Environment.OSVersion.Version.Major = 10 AndAlso (Not SkipQuestions Or Not AutoCompleteInfo(2)) Then
-                    GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryAppxPackage = False
+                    Else
+                        GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 6
                 If Not SkipQuestions Or Not AutoCompleteInfo(3) Then
-                    GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryCapability = False
+                    Else
+                        GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 7
                 If Not SkipQuestions Or Not AutoCompleteInfo(4) Then
-                    GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryDriver = False
+                    Else
+                        GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
         End Select
 

@@ -350,6 +350,7 @@ Public Class ServiceManagementForm
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 10
             ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = MainForm.DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
