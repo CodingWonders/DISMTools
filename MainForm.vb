@@ -15162,8 +15162,8 @@ Public Class MainForm
             End If
         End If
         ' Toggle Menu button and side panel visibility
-        MenuToggle.Visible = Width <= WindowHelper.ScaleLogical(1024)
-        ProjectSidePanel.Visible = Width > WindowHelper.ScaleLogical(1024)
+        MenuToggle.Visible = Width <= WindowHelper.ScaleLogical(1152)
+        ProjectSidePanel.Visible = Width > WindowHelper.ScaleLogical(1152)
     End Sub
 
     Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
