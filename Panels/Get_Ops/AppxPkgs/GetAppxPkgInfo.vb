@@ -268,7 +268,7 @@ Public Class GetAppxPkgInfoDlg
             If Not Debugger.IsAttached Then DynaLog.DisableLogging()
             For Each ListItem In ListBox1.Items
                 SidInformation.Add(ListItem, AppxHelper.GetRegistrationPckgdepSidInfo(MainForm.MountDir,
-                                                                                      If(MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count,
+                                                                                      If(MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count,
                                                                                          MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListBox1.Items.IndexOf(ListItem)),
                                                                                          MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListBox1.Items.IndexOf(ListItem)))))
 
