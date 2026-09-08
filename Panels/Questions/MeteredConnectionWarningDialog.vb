@@ -2,8 +2,9 @@
 
 Public Class MeteredConnectionWarningDialog
 
+    Public WarnOnMetered As Boolean
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        MainForm.WarnOnMetered = Not cbNoMoreWarning.Checked
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -14,7 +15,7 @@ Public Class MeteredConnectionWarningDialog
     End Sub
 
     Private Sub MeteredConnectionWarningDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If Not MainForm.WarnOnMetered Then
+        If Not WarnOnMetered Then
             OK_Button.PerformClick()
             Exit Sub
         End If

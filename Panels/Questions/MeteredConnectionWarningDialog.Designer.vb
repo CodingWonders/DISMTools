@@ -28,7 +28,6 @@ Partial Class MeteredConnectionWarningDialog
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.cbNoMoreWarning = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -91,19 +90,6 @@ Partial Class MeteredConnectionWarningDialog
         Me.Label1.TabIndex = 2
         Me.Label1.Text = resources.GetString("Label1.Text")
         '
-        'cbNoMoreWarning
-        '
-        Me.cbNoMoreWarning.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.cbNoMoreWarning.AutoSize = True
-        Me.cbNoMoreWarning.Checked = True
-        Me.cbNoMoreWarning.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbNoMoreWarning.Location = New System.Drawing.Point(13, 183)
-        Me.cbNoMoreWarning.Name = "cbNoMoreWarning"
-        Me.cbNoMoreWarning.Size = New System.Drawing.Size(258, 17)
-        Me.cbNoMoreWarning.TabIndex = 3
-        Me.cbNoMoreWarning.Text = "Don't warn me again about metered connections"
-        Me.cbNoMoreWarning.UseVisualStyleBackColor = True
-        '
         'MeteredConnectionWarningDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -111,7 +97,6 @@ Partial Class MeteredConnectionWarningDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(524, 217)
-        Me.Controls.Add(Me.cbNoMoreWarning)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -126,7 +111,6 @@ Partial Class MeteredConnectionWarningDialog
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -134,6 +118,5 @@ Partial Class MeteredConnectionWarningDialog
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents cbNoMoreWarning As System.Windows.Forms.CheckBox
 
 End Class
