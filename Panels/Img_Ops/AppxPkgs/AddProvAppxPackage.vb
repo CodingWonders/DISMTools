@@ -2459,6 +2459,8 @@ Public Class AddProvAppxPackage
 
         Dim warnOnMetered As Boolean = MainForm.WarnOnMetered
 
+        OK_Button.Enabled = False
+
         Await Task.Run(Sub()
                            For Each PackageFile In PackageFiles
                                ProgressReporter.SetMessage(String.Format(progressMsg, currentPkgFile, packageFileCount))
@@ -2586,6 +2588,8 @@ Public Class AddProvAppxPackage
                        End Sub)
         Cursor = Cursors.Arrow
         AppxReporterBW.CancelAsync()
+
+        OK_Button.Enabled = True
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
