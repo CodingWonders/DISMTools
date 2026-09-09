@@ -1319,7 +1319,7 @@ function Start-OSApplication
         Write-Host "of the EFI boot binary that will later be used when creating boot files:`n"
         Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
         Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
-        Write-Host "   will expire in June 2026."
+        Write-Host "   started expiring in June 2026."
         Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
         Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
         Write-Host "   updates will not work using these boot binaries.`n"
@@ -1329,8 +1329,9 @@ function Start-OSApplication
             Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
         }
         Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
-        Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
-        Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
+        Write-Host "the new version of such files. Failure to do so can cause boot issues. These usually occur if you are"
+        Write-Host "deploying an image that has not yet received updated UEFI CA 2023 binaries. As a workaround, you can"
+        Write-Host "try to disable Secure Boot."
         $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/n)"
         if ($bootOptn -eq "") { $bootOptn = "Y" }
         $usebootex = ($bootOptn -eq "Y")
