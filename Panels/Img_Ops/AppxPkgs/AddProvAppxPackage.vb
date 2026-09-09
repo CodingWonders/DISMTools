@@ -1305,7 +1305,7 @@ Public Class AddProvAppxPackage
             Directory.CreateDirectory(Application.StartupPath & "\appxscan")
             DynaLog.LogMessage("Extracting application manifest...")
             AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\" & If(Environment.Is64BitOperatingSystem, "x64", "x86") & "\7z.exe"
-            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
@@ -1736,7 +1736,7 @@ Public Class AddProvAppxPackage
                     DynaLog.LogMessage("A bundle manifest has been detected. Treating as a bundle package...")
                     ' APPXBUNDLE/MSIXBUNDLE
                     DynaLog.LogMessage("Extracting main AppX package from bundle to grab assets...")
-                    AppxScanner.StartInfo.Arguments = "x " & Quote & SourcePackage & "\" & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
+                    AppxScanner.StartInfo.Arguments = "x " & Quote & SourcePackage & "\" & PackageName & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
                     AppxScanner.Start()
                     AppxScanner.WaitForExit()
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
@@ -1810,7 +1810,7 @@ Public Class AddProvAppxPackage
                 If IsBundlePackage Then
                     DynaLog.LogMessage("This is a bundle package.")
                     DynaLog.LogMessage("Extracting main AppX package from bundle to grab assets...")
-                    AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
+                    AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
                     AppxScanner.Start()
                     AppxScanner.WaitForExit()
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
@@ -1820,15 +1820,15 @@ Public Class AddProvAppxPackage
                         If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
                             ' Try extracting small, store and large assets
                             DynaLog.LogMessage("Extracting small logo assets...")
-                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                             DynaLog.LogMessage("Extracting store-sized logo assets...")
-                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                             DynaLog.LogMessage("Extracting large logo assets...")
-                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                         End If
@@ -1847,15 +1847,15 @@ Public Class AddProvAppxPackage
                         Else
                             ' Try extracting small, store and large assets
                             DynaLog.LogMessage("Extracting small logo assets...")
-                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                             DynaLog.LogMessage("Extracting store-sized logo assets...")
-                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                             DynaLog.LogMessage("Extracting large logo assets...")
-                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & String.Format(" -mmt{0}", Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS")) & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                         End If
