@@ -396,6 +396,8 @@ Public Class ProgressPanel
     Public featParentPkgName As String                      ' Parent package name to use when enabling features
     Public featisSourceSpecified As Boolean                 ' Determine whether to use a feature source
     Public featSource As String                             ' Feature source
+    Public featEnablementRequiredSources As List(Of String) ' Names of features that require sources
+    Public featEnablementOnlyUseSourceWhenNeeded As Boolean ' Determine when to use /source
     Public featParentIsEnabled As Boolean                   ' Determine whether all parent features need to be enabled
     Public featContactWindowsUpdate As Boolean              ' Determine whether to contact Windows Update (WU) for online images
     Public featEnablementCommit As Boolean                  ' Determine whether to commit image after enabling features
@@ -3756,6 +3758,7 @@ Public Class ProgressPanel
         For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
+            Dim featureName As String = featEnablementNames(x).Replace("ListViewItem: ", "").Replace("{", "").Replace("}", "").Trim()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3784,14 +3787,14 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf &
                                "Feature " & (x + 1) & " of " & featEnablementCount)
             CurrentPB.Value = x + 1
-            DynaLog.LogMessage("Getting information about feature " & Quote & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & Quote & "...")
+            DynaLog.LogMessage("Getting information about feature " & Quote & featureName & Quote & "...")
             Try
                 DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 DynaLog.LogMessage("Opening image session...")
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     DynaLog.LogMessage("Getting feature information...")
-                    Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
+                    Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featureName)
                     LogView.AppendText(CrLf & CrLf &
                                        "- Feature name: " & featInfo.FeatureName & CrLf &
                                        "- Feature description: " & featInfo.Description & CrLf)
@@ -3804,23 +3807,22 @@ Public Class ProgressPanel
 
                 End Try
             End Try
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
-            If featisParentPkgNameUsed And featParentPkgName <> "" Then
-                CommandArgs &= " /packagename=" & featParentPkgName
-            End If
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /enable-feature /featurename=" & featureName
+            If featisParentPkgNameUsed And featParentPkgName <> "" Then CommandArgs &= " /packagename=" & featParentPkgName
             If featisSourceSpecified And featSource <> "" Then
-                ' Like image captures, feature enablements will fail if the source is in the root
-                ' of a volume and is quoted.
-                Dim SourceIsRooted As Boolean = Path.GetPathRoot(featSource) = featSource
-                Dim SourcePath As String = If(SourceIsRooted, featSource, Quote & featSource & Quote)
-                CommandArgs &= " /source=" & SourcePath
+                ' We may only require /Source if the feature is removed and if we do it like that
+                If featEnablementOnlyUseSourceWhenNeeded AndAlso Not featEnablementRequiredSources.Any(Function(feature) feature.Equals(featureName, StringComparison.OrdinalIgnoreCase)) Then
+                    LogView.AppendText(CrLf & "This feature does not need a source to be enabled. Continuing without the source..." & CrLf)
+                Else
+                    ' Like image captures, feature enablements will fail if the source is in the root
+                    ' of a volume and is quoted.
+                    Dim SourceIsRooted As Boolean = Path.GetPathRoot(featSource) = featSource
+                    Dim SourcePath As String = If(SourceIsRooted, featSource, Quote & featSource & Quote)
+                    CommandArgs &= " /source=" & SourcePath
+                End If
             End If
-            If featParentIsEnabled Then
-                CommandArgs &= " /all"
-            End If
-            If Not featContactWindowsUpdate And OnlineMgmt Then
-                CommandArgs &= " /limitaccess"
-            End If
+            If featParentIsEnabled Then CommandArgs &= " /all"
+            If Not featContactWindowsUpdate And OnlineMgmt Then CommandArgs &= " /limitaccess"
             RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             GetFeatErrorLevel()
