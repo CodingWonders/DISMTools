@@ -835,7 +835,6 @@ function Start-OSApplication {
         "UseNever" { $usebootex = $false }
         "UseAlways" { $usebootex = $true }
     }
-    $usebootex = $false
     if (($bootexPolicyUsed -ne $true) -and ($global:override -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
         Show-SectionMessage -sectionTitle "Select UEFI boot binary" -sectionDescription "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions of the EFI boot binary that will later be used when creating boot files:"
         # Quick run-down: we only ask for EFI boot binary when we find Secure Boot on the system, AND
