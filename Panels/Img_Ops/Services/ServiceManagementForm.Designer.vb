@@ -95,6 +95,12 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader17 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TextBox6 = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
+        Me.TabPage6 = New System.Windows.Forms.TabPage()
+        Me.btnNoSafeModes = New System.Windows.Forms.Button()
+        Me.btnAllSafeModes = New System.Windows.Forms.Button()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.Label20 = New System.Windows.Forms.Label()
         Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
         Me.ProgressLabel = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
@@ -107,12 +113,6 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoSFD = New System.Windows.Forms.SaveFileDialog()
         Me.RestoreServiceBtn = New System.Windows.Forms.Button()
         Me.DeleteServiceBtn = New System.Windows.Forms.Button()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.btnAllSafeModes = New System.Windows.Forms.Button()
-        Me.btnNoSafeModes = New System.Windows.Forms.Button()
-        Me.TabPage6 = New System.Windows.Forms.TabPage()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -130,10 +130,10 @@ Partial Class ServiceManagementForm
         Me.Panel2.SuspendLayout()
         Me.TabPage5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.TabPage6.SuspendLayout()
         Me.ServiceInfoContainerPanel.SuspendLayout()
         Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SelectedServicePanel.SuspendLayout()
-        Me.TabPage6.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -832,6 +832,73 @@ Partial Class ServiceManagementForm
         Me.Label16.TabIndex = 0
         Me.Label16.Text = "This service is part of group:"
         '
+        'TabPage6
+        '
+        Me.TabPage6.Controls.Add(Me.btnNoSafeModes)
+        Me.TabPage6.Controls.Add(Me.btnAllSafeModes)
+        Me.TabPage6.Controls.Add(Me.CheckBox3)
+        Me.TabPage6.Controls.Add(Me.CheckBox2)
+        Me.TabPage6.Controls.Add(Me.Label20)
+        Me.TabPage6.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage6.Name = "TabPage6"
+        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage6.Size = New System.Drawing.Size(1232, 239)
+        Me.TabPage6.TabIndex = 5
+        Me.TabPage6.Text = "Safe Mode"
+        Me.TabPage6.UseVisualStyleBackColor = True
+        '
+        'btnNoSafeModes
+        '
+        Me.btnNoSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnNoSafeModes.Location = New System.Drawing.Point(278, 114)
+        Me.btnNoSafeModes.Name = "btnNoSafeModes"
+        Me.btnNoSafeModes.Size = New System.Drawing.Size(192, 23)
+        Me.btnNoSafeModes.TabIndex = 3
+        Me.btnNoSafeModes.Text = "Disable in all modes"
+        Me.btnNoSafeModes.UseVisualStyleBackColor = True
+        '
+        'btnAllSafeModes
+        '
+        Me.btnAllSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnAllSafeModes.Location = New System.Drawing.Point(80, 114)
+        Me.btnAllSafeModes.Name = "btnAllSafeModes"
+        Me.btnAllSafeModes.Size = New System.Drawing.Size(192, 23)
+        Me.btnAllSafeModes.TabIndex = 3
+        Me.btnAllSafeModes.Text = "Make available in all modes"
+        Me.btnAllSafeModes.UseVisualStyleBackColor = True
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(80, 91)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(479, 17)
+        Me.CheckBox3.TabIndex = 2
+        Me.CheckBox3.Text = "Make this service available in Safe Mode with Networking and Directory Services R" & _
+    "estore Mode"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(80, 68)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(403, 17)
+        Me.CheckBox2.TabIndex = 2
+        Me.CheckBox2.Text = "Make this service available in Safe Mode and Safe Mode with Command Prompt"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'Label20
+        '
+        Me.Label20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label20.AutoEllipsis = True
+        Me.Label20.Location = New System.Drawing.Point(16, 16)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(1196, 48)
+        Me.Label20.TabIndex = 1
+        Me.Label20.Text = resources.GetString("Label20.Text")
+        '
         'SaveServiceInfoBtn
         '
         Me.SaveServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -950,72 +1017,6 @@ Partial Class ServiceManagementForm
         Me.DeleteServiceBtn.Text = "Delete service"
         Me.DeleteServiceBtn.UseVisualStyleBackColor = True
         '
-        'Label20
-        '
-        Me.Label20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label20.AutoEllipsis = True
-        Me.Label20.Location = New System.Drawing.Point(16, 16)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(1196, 48)
-        Me.Label20.TabIndex = 1
-        Me.Label20.Text = resources.GetString("Label20.Text")
-        '
-        'CheckBox2
-        '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(80, 68)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(403, 17)
-        Me.CheckBox2.TabIndex = 2
-        Me.CheckBox2.Text = "Make this service available in Safe Mode and Safe Mode with Command Prompt"
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        '
-        'CheckBox3
-        '
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(80, 91)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(298, 17)
-        Me.CheckBox3.TabIndex = 2
-        Me.CheckBox3.Text = "Make this service available in Safe Mode with Networking"
-        Me.CheckBox3.UseVisualStyleBackColor = True
-        '
-        'btnAllSafeModes
-        '
-        Me.btnAllSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnAllSafeModes.Location = New System.Drawing.Point(80, 114)
-        Me.btnAllSafeModes.Name = "btnAllSafeModes"
-        Me.btnAllSafeModes.Size = New System.Drawing.Size(192, 23)
-        Me.btnAllSafeModes.TabIndex = 3
-        Me.btnAllSafeModes.Text = "Make available in all modes"
-        Me.btnAllSafeModes.UseVisualStyleBackColor = True
-        '
-        'btnNoSafeModes
-        '
-        Me.btnNoSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnNoSafeModes.Location = New System.Drawing.Point(278, 114)
-        Me.btnNoSafeModes.Name = "btnNoSafeModes"
-        Me.btnNoSafeModes.Size = New System.Drawing.Size(192, 23)
-        Me.btnNoSafeModes.TabIndex = 3
-        Me.btnNoSafeModes.Text = "Disable in all modes"
-        Me.btnNoSafeModes.UseVisualStyleBackColor = True
-        '
-        'TabPage6
-        '
-        Me.TabPage6.Controls.Add(Me.btnNoSafeModes)
-        Me.TabPage6.Controls.Add(Me.btnAllSafeModes)
-        Me.TabPage6.Controls.Add(Me.CheckBox3)
-        Me.TabPage6.Controls.Add(Me.CheckBox2)
-        Me.TabPage6.Controls.Add(Me.Label20)
-        Me.TabPage6.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage6.Name = "TabPage6"
-        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage6.Size = New System.Drawing.Size(1232, 239)
-        Me.TabPage6.TabIndex = 5
-        Me.TabPage6.Text = "Safe Mode"
-        Me.TabPage6.UseVisualStyleBackColor = True
-        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1062,11 +1063,11 @@ Partial Class ServiceManagementForm
         Me.TabPage5.ResumeLayout(False)
         Me.TabPage5.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
+        Me.TabPage6.ResumeLayout(False)
+        Me.TabPage6.PerformLayout()
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
         Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.SelectedServicePanel.ResumeLayout(False)
-        Me.TabPage6.ResumeLayout(False)
-        Me.TabPage6.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
