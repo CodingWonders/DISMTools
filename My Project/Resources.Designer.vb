@@ -2265,14 +2265,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''--- Bugfixes
+        '''- Fixed an exception when launching the AppX package information dialog on Windows 8 systems
         '''
-        '''- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
-        '''- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
-        '''- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
-        '''- Fixed issues with some image tasks targeting root [resto de la cadena truncado]&quot;;.
+        '''New features:
+        '''
+        '''- HotInstall and the Sysprep Preparation Tool now create rollback environments to undo boot configuration changes and environment deployments
+        '''- The Sysprep Preparation Tool now disables sleep mode when running preparation tasks
+        '''- You can now query and set Safe Mode preferences for services
+        '''- Getting information about items is now done asynchronously, making the UI responsive
+        '''- Wh [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
