@@ -160,9 +160,6 @@ Public Class ServiceManagementForm
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
-        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
-        ListView4.Size = New Size(WindowHelper.ScaleLogical(ListView4.Width), WindowHelper.ScaleLogical(ListView4.Height))
-
         ModifiedServiceList.Clear()
         isModified = False
 
@@ -434,6 +431,31 @@ Public Class ServiceManagementForm
             Else
                 ModifiedServiceList.Add(newService)
             End If
+        End If
+    End Sub
+
+    Private Sub ViewAsGraphBtn_Click(sender As Object, e As EventArgs) Handles ViewAsGraphBtn.Click
+        If ListView1.SelectedItems.Count = 0 Then Exit Sub
+
+        Dim selectedService As WindowsService = ServiceList.ElementAtOrDefault(ListView1.FocusedItem.Index)
+        If selectedService Is Nothing Then Exit Sub
+
+        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName),
+            dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(selectedService.Name)).OrderBy(Function(service) service.DisplayName)
+
+        Dim servicesToShow As New List(Of WindowsService)
+        servicesToShow.Add(selectedService)
+        servicesToShow.AddRange(dependencies)
+        servicesToShow.AddRange(dependents)
+
+        ServiceDependencyGraphViewer.ServicesToDisplay = servicesToShow.AsEnumerable()
+        ServiceDependencyGraphViewer.MainServiceName = selectedService.Name
+        If ServiceDependencyGraphViewer.Visible Then
+            ServiceDependencyGraphViewer.RedisplayServices()
+            If ServiceDependencyGraphViewer.WindowState = FormWindowState.Minimized Then ServiceDependencyGraphViewer.WindowState = FormWindowState.Normal
+            ServiceDependencyGraphViewer.BringToFront()
+        Else
+            ServiceDependencyGraphViewer.Show(Me)
         End If
     End Sub
 End Class

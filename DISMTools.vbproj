@@ -814,6 +814,12 @@
     <Compile Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceDependencyGraphViewer.Designer.vb">
+      <DependentUpon>ServiceDependencyGraphViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceDependencyGraphViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.Designer.vb">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
     </Compile>
@@ -1036,6 +1042,9 @@
     </Compile>
     <Compile Include="UserControls\NewsFeedItemCard.vb">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ServiceDependencyDiagram.vb">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\WimFileSourceControl.Designer.vb">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>
@@ -1329,6 +1338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.resx">
       <DependentUpon>RegisteredServiceHostGroupsDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceDependencyGraphViewer.resx">
+      <DependentUpon>ServiceDependencyGraphViewer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceManagementForm.resx">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
@@ -1873,6 +1885,14 @@
     <Content Include="Resources\assistant_light.png" />
     <None Include="Resources\copy_img_to_wds.png" />
     <None Include="Resources\first_element_upward.png" />
+    <None Include="Resources\diagrams\diagram_save_image_dark.png" />
+    <None Include="Resources\diagrams\diagram_save_image_light.png" />
+    <None Include="Resources\diagrams\diagram_zoom_in_dark.png" />
+    <None Include="Resources\diagrams\diagram_zoom_in_light.png" />
+    <None Include="Resources\diagrams\diagram_zoom_out_dark.png" />
+    <None Include="Resources\diagrams\diagram_zoom_out_light.png" />
+    <None Include="Resources\diagrams\diagram_zoom_reset_dark.png" />
+    <None Include="Resources\diagrams\diagram_zoom_reset_light.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />

@@ -1115,4 +1115,28 @@ New features:
   <data name="infinityhome_change_network_config" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\infinityhome_change_network_config.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="diagram_save_image_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_save_image_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_save_image_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_save_image_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_in_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_in_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_in_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_in_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_out_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_out_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_out_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_out_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_reset_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_reset_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_reset_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_reset_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
