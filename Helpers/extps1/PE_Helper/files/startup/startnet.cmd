@@ -12,7 +12,7 @@ wpeinit
 doskey inv=powershell -file "%sysdrive%\DTPE_Inventory.ps1"
 if %debug% equ 1 (
 	echo Debug mode enabled.
-	taskmgr
+	start taskmgr
 )
 :: powershell -command Set-ExecutionPolicy Unrestricted
 :: We no longer do it like this for the sake of performance. If we could not set the ExecutionPolicy value in registry,
@@ -68,6 +68,16 @@ if !ShowWatermark! EQU 1 (
 	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
 	reg add "HKLM\SOFTWARE\DISMTools\Preinstallation Environment" /f /v DRY_Watermark /t REG_DWORD /d 1 >nul 2>&1
 )
+
+if %debug% lss 2 if exist "%sysdrive%\BarylRollback" if exist "%sysdrive%\rollback.bat" (
+	call "%sysdrive%\rollback.bat"
+	if exist "%sysdrive%\BarylRollback_NoRestart" (
+		powershell -noprofile -command wpeutil shutdown
+	) else (
+		powershell -noprofile -command wpeutil reboot
+	)
+)
+
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 	if exist "%sysdrive%\scripts\imagecapture.bat" (
 		echo An image capture will begin now...

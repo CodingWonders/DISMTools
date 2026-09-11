@@ -73,7 +73,7 @@ Module ProgressReporter
 
     Public Sub Hide()
         ProgressMessage = ""
-        progressForm.Close()
+        If progressForm IsNot Nothing Then progressForm.Close()
     End Sub
 
     Public Sub ReportProgress(sender As Object, Optional Percentage As Double = -1)

@@ -2,6 +2,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Net
+Imports DISMTools.Utilities.NetworkUtilities
 
 Public Class PrgAbout
 
@@ -621,6 +622,10 @@ Public Class PrgAbout
             DynaLog.LogMessage("Could not delete existing update downloader...")
             Exit Sub
         End Try
+        If NetworkCostHelper.IsNetworkConnectionMetered() Then
+
+            If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+        End If
         Try
             Using client As New WebClient()
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12

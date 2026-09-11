@@ -52,6 +52,8 @@ Public Class ImgInfoSaveDlg
     Public SkipQuestions As Boolean
     Public AutoCompleteInfo(4) As Boolean
 
+    Public DoNotAskOnNonComplete As Boolean
+
     Public ForceAppxApi As Boolean
 
     Const CodeBlockChar As String = " ` "       ' It is " ` " to prevent Markdig problem "Markdown elements in the input are too deeply nested - depth limit exceeded. Input is most likely not sensible or is a very large table."
@@ -1993,14 +1995,16 @@ Public Class ImgInfoSaveDlg
                                                                  "Compatible IDs",
                                                                  "Exclude IDs",
                                                                  "Hardware manufacturer",
-                                                                 "Architecture"}.ToList())
+                                                                 "Architecture",
+                                                                 "Service"}.ToList())
                                 For Each hwTarget As DismDriver In drvInfoCollection.Distinct()
                                     Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
                                                                           String.Format("{0} ({1})", hwTarget.HardwareId, MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(hwTarget.HardwareId), "Look up")),
                                                                           If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
                                                                           If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
                                                                           hwTarget.ManufacturerName,
-                                                                          Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
+                                                                          Casters.CastDismArchitecture(hwTarget.Architecture),
+                                                                          hwTarget.ServerName}.ToList())
                                 Next
                                 Contents &= CrLf
                             Else
@@ -2173,10 +2177,10 @@ Public Class ImgInfoSaveDlg
                                   String.Format("Service Type: {0}", service.TypeToString()),
                                   String.Format("Per-user Service Flags: {0}", peruserServiceStatus),
                                   String.Format("Group: {0}", service.Group)}.ToList()) & CrLf &
-                          GetParagraph("Windows NT&trade; privileges:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Windows NT&trade; privileges:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Privilege Name", "Privilege Display Name", "Privilege Description"}.ToList()) &
                           String.Join("", service.RequiredPrivileges.Select(Function(privilege) GetTableRow({privilege.ConstantNameText, privilege.ConstantUserRight, privilege.ConstantDescription}.ToList()))) & CrLf &
-                          GetParagraph("Error Control:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Error Control:", ParagraphStyle.Italic) & CrLf &
                           GetListItems({String.Format("On service error: {0}", service.ErrorControlToString()),
                                         String.Format("Failure action on first error: {0}", service.FailureActionToString(service.FailureActions.FirstFailure)),
                                         String.Format("Failure action on second error: {0}", service.FailureActionToString(service.FailureActions.SecondFailure)),
@@ -2189,12 +2193,15 @@ Public Class ImgInfoSaveDlg
                                                       Math.Round((service.FailureActions.SecondDelayInMillis / 1000), 2),
                                                       Math.Round((service.FailureActions.SubsequentDelaysInMillis / 60000), 2),
                                                       Math.Round((service.FailureActions.SubsequentDelaysInMillis / 1000), 2))}.ToList()) & CrLf &
-                          GetParagraph("Dependencies:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Dependencies:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
                           String.Join("", serviceList.Where(Function(srv) service.Dependencies.Contains(srv.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
-                          GetParagraph("Dependents:", ParagraphStyle.Bold) & CrLf &
+                          GetParagraph("Dependents:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
-                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Contains(service.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf
+                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Contains(service.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
+                          GetParagraph("Safe Mode Parameters:", ParagraphStyle.Italic) & CrLf &
+                          GetListItems({String.Format("On Safe Mode and Safe Mode with Command Prompt: {0}", If(service.SafeModeOptions.AvailableInMinimalSafeBoot, "This service is available", "This service is not available")),
+                                        String.Format("On Safe Mode and Safe Mode with Networking: {0}", If(service.SafeModeOptions.AvailableInNetworkSafeBoot, "This service is available", "This service is not available"))}.ToList()) & CrLf
             Next
         Else
             Contents &= GetParagraph("No services were found.", ParagraphStyle.Bold) & CrLf
@@ -2316,8 +2323,7 @@ Public Class ImgInfoSaveDlg
             End Select
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
             While MainForm.ImgBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
+                Await Task.Delay(500)
             End While
         End If
 
@@ -2479,39 +2485,79 @@ Public Class ImgInfoSaveDlg
         Select Case SaveTask
             Case 0
                 If Not SkipQuestions Or Not AutoCompleteInfo(0) Then
-                    GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryPackage = False
+                    Else
+                        GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Not SkipQuestions Or Not AutoCompleteInfo(1) Then
-                    GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryFeature = False
+                    Else
+                        GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Environment.OSVersion.Version.Major = 10 AndAlso (Not SkipQuestions Or Not AutoCompleteInfo(2)) Then
-                    GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryAppxPackage = False
+                    Else
+                        GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Not SkipQuestions Or Not AutoCompleteInfo(3) Then
-                    GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryCapability = False
+                    Else
+                        GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
                 If Not SkipQuestions Or Not AutoCompleteInfo(4) Then
-                    GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryDriver = False
+                    Else
+                        GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 2
                 If Not SkipQuestions Or Not AutoCompleteInfo(0) Then
-                    GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryPackage = False
+                    Else
+                        GetEveryPackage = MessageBox.Show(TaskMessages(0), TaskTitles(0), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 4
                 If Not SkipQuestions Or Not AutoCompleteInfo(1) Then
-                    GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryFeature = False
+                    Else
+                        GetEveryFeature = MessageBox.Show(TaskMessages(1), TaskTitles(1), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 5
                 If Environment.OSVersion.Version.Major = 10 AndAlso (Not SkipQuestions Or Not AutoCompleteInfo(2)) Then
-                    GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryAppxPackage = False
+                    Else
+                        GetEveryAppxPackage = MessageBox.Show(TaskMessages(2), TaskTitles(2), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 6
                 If Not SkipQuestions Or Not AutoCompleteInfo(3) Then
-                    GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryCapability = False
+                    Else
+                        GetEveryCapability = MessageBox.Show(TaskMessages(3), TaskTitles(3), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
             Case 7
                 If Not SkipQuestions Or Not AutoCompleteInfo(4) Then
-                    GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    If DoNotAskOnNonComplete Then
+                        GetEveryDriver = False
+                    Else
+                        GetEveryDriver = MessageBox.Show(TaskMessages(4), TaskTitles(4), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
+                    End If
                 End If
         End Select
 

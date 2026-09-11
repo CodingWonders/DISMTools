@@ -185,6 +185,29 @@
         End Sub
     End Class
 
+    Class ServiceSafeModeOptions
+        ''' <summary>
+        ''' Determines whether a service is available in Safe Mode and Safe Mode with Command Prompt
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Property AvailableInMinimalSafeBoot As Boolean
+        ''' <summary>
+        ''' Determines whether a service is available in Safe Mode with Networking
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Property AvailableInNetworkSafeBoot As Boolean
+
+        Public Sub New()
+            AvailableInMinimalSafeBoot = False
+            AvailableInNetworkSafeBoot = False
+        End Sub
+
+        Public Sub New(minimalSafeboot As Boolean, networkSafeboot As Boolean)
+            AvailableInMinimalSafeBoot = minimalSafeboot
+            AvailableInNetworkSafeBoot = networkSafeboot
+        End Sub
+    End Class
+
     ''' <summary>
     ''' The action to take when a service fails
     ''' </summary>
@@ -312,6 +335,8 @@
     ''' <remarks></remarks>
     Public Property MarkedForDeletion As Boolean
 
+    Public Property SafeModeOptions As New ServiceSafeModeOptions()
+
     ''' <summary>
     ''' Initializes an object of the Windows Service class with specified values
     ''' </summary>
@@ -329,8 +354,10 @@
     ''' <param name="deps">The names of the services this Windows service depends on</param>
     ''' <param name="failureActions">The failure actions of the Windows service</param>
     ''' <param name="userServiceFlags">The service flags of a per-user service</param>
+    ''' <param name="MinimalSafeboot">Whether a service is available in Safe Mode and Safe Mode with Command Prompt</param>
+    ''' <param name="NetworkSafeboot">Whether a service is available in Safe Mode with Networking</param>
     ''' <remarks></remarks>
-    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, group As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions, userServiceFlags As Integer)
+    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, group As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions, userServiceFlags As Integer, Optional MinimalSafeboot As Boolean = False, Optional NetworkSafeboot As Boolean = False)
         Me.Name = name
         Me.DisplayName = displayName
         Me.Description = description
@@ -345,6 +372,8 @@
         Me.Dependencies = deps
         Me.FailureActions = failureActions
         Me.UserServiceFlags = userServiceFlags
+        Me.SafeModeOptions.AvailableInMinimalSafeBoot = MinimalSafeboot
+        Me.SafeModeOptions.AvailableInNetworkSafeBoot = NetworkSafeboot
     End Sub
 
     Public Overrides Function Equals(obj As Object) As Boolean

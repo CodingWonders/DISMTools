@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports DISMTools.Elements
 Imports DISMTools.Utilities.Converters
+Imports DISMTools.Utilities.NetworkUtilities
 Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.ComponentModel
@@ -28,13 +29,16 @@ Public Class AppInstallerDownloader
 
     Private DownloadError As Exception
 
+    Public LanguageCode As Integer
+    Public WarnOnMetered As Boolean
+
     Private Sub AppInstallerDownloader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         DownloadError = Nothing
         Timer1.Enabled = True
         downUriLbl.Text = ""
         sw.Reset()
         sw.Start()
-        Select Case MainForm.Language
+        Select Case LanguageCode
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
@@ -146,7 +150,7 @@ Public Class AppInstallerDownloader
         WindowHelper.DisableCloseCapability(handle)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
-        Language = MainForm.Language
+        Language = LanguageCode
         Height = WindowHelper.ScaleLogical(320)
         originalTitle = Text
         Visible = True
@@ -237,6 +241,18 @@ Public Class AppInstallerDownloader
                     downUriLbl.Text = AppInstallerUri
                     Cancel_Button.Enabled = True
                     Label3.Visible = False
+
+                    ' Network transfers may incur charges when in metered mode; check and warn
+                    If NetworkCostHelper.IsNetworkConnectionMetered() Then
+                        DynaLog.LogMessage("Network connection is METERED! You may be billed for this transfer.")
+
+                        MeteredConnectionWarningDialog.WarnOnMetered = WarnOnMetered
+
+                        If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
+                            Throw New Exception()
+                        End If
+                    End If
+
                     BackgroundWorker1.RunWorkerAsync()
                 Else
                     DynaLog.LogMessage("We don't have a link. Cancelling...")
@@ -397,8 +413,12 @@ Public Class AppInstallerDownloader
     End Sub
 
     Private Sub CopyUri_Button_Click(sender As Object, e As EventArgs) Handles CopyUri_Button.Click
-        Dim data As New DataObject()
-        data.SetText(downUriLbl.Text)
-        Clipboard.SetDataObject(data, True)
+        Dim thread As New Thread(Sub()
+                                     Dim data As New DataObject()
+                                     data.SetText(downUriLbl.Text)
+                                     Clipboard.SetDataObject(data, True)
+                                 End Sub)
+        thread.SetApartmentState(ApartmentState.STA)
+        thread.Start()
     End Sub
 End Class

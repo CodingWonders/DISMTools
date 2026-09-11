@@ -9,6 +9,7 @@ Imports System.Net
 Imports System.Net.NetworkInformation
 Imports System.Text.RegularExpressions
 Imports System.Text
+Imports DISMTools.Utilities.NetworkUtilities
 
 Public Class NewUnattendWiz
 
@@ -2320,6 +2321,10 @@ Public Class NewUnattendWiz
             If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
                 DynaLog.LogMessage("Creating self-contained package directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
+            End If
+            If NetworkCostHelper.IsNetworkConnectionMetered() Then
+
+                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled.")
             End If
             Using UnattClient As New WebClient()
                 DynaLog.LogMessage("Downloading UnattendGen installer from the UnattendGen repository...")

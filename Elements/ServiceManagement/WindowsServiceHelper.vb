@@ -481,6 +481,25 @@ Module WindowsServiceHelper
                 Dim ServiceNames() As String = ServiceRk.GetSubKeyNames().Where(Function(serviceName) Not serviceName.StartsWith(".NET", StringComparison.OrdinalIgnoreCase) AndAlso Not serviceName.StartsWith("{")).ToArray()
                 ServiceRk.Close()
 
+                Dim MinimalSafebootPath As String = String.Format("zSYSTEM\ControlSet{0}\Control\SafeBoot\Minimal", DefaultControlSet.ToString().PadLeft(3, "0")),
+                    NetworkSafebootPath As String = String.Format("zSYSTEM\ControlSet{0}\Control\SafeBoot\Network", DefaultControlSet.ToString().PadLeft(3, "0"))
+
+                Dim MinimalServices() As String = New String() {},
+                    NetworkServices() As String = New String() {}
+
+                Try
+                    Dim MinimalSafebootRk As RegistryKey = Registry.LocalMachine.OpenSubKey(MinimalSafebootPath, False),
+                        NetworkSafebootRk As RegistryKey = Registry.LocalMachine.OpenSubKey(NetworkSafebootPath, False)
+
+                    MinimalServices = MinimalSafebootRk.GetSubKeyNames()
+                    NetworkServices = NetworkSafebootRk.GetSubKeyNames()
+
+                    MinimalSafebootRk.Close()
+                    NetworkSafebootRk.Close()
+                Catch ex As Exception
+
+                End Try
+
                 ' Now we have to grab as much information as we can
                 For Each ServiceName In ServiceNames
                     Dim serviceImagePath As String = "",
@@ -577,7 +596,9 @@ Module WindowsServiceHelper
                                                            serviceRequiredPrivilegeList,
                                                            serviceDependencies,
                                                            ParseFailureActionByteArray(serviceFailActionByteArr),
-                                                           serviceUserServFlags))
+                                                           serviceUserServFlags,
+                                                           MinimalServices.Any(Function(service) service.Equals(serviceEntryName, StringComparison.OrdinalIgnoreCase)),
+                                                           NetworkServices.Any(Function(service) service.Equals(serviceEntryName, StringComparison.OrdinalIgnoreCase))))
                     End Using
                 Next
             Catch ex As Exception
@@ -683,14 +704,24 @@ Module WindowsServiceHelper
             DynaLog.DisableLogging()
             For Each Service As WindowsService In ServiceList
                 currentService += 1
-                Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name)
+                Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name),
+                    minimalSafebootPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\SafeBoot\Minimal\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name),
+                    networkSafebootPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\SafeBoot\Network\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name)
+
+                ' For default values in safeboot, we have to convert the type to a valid value
+                Dim SafeBootServiceTypeValue As String = ""
+                Select Case Service.Type
+                    Case WindowsService.ServiceType.WindowsApplication, WindowsService.ServiceType.WindowsService : SafeBootServiceTypeValue = "Service"
+                    Case WindowsService.ServiceType.KernelDeviceDriver, WindowsService.ServiceType.FileSystemDriver, WindowsService.ServiceType.Adapter : SafeBootServiceTypeValue = "Driver"
+                End Select
+
                 ' For those wondering: why not .NET APIs? Well, they throw access denied exceptions. Handling the exceptions tells us that
                 ' none of the information will be saved. For example, if we have 672 service entries, all of them will fail if we use .NET APIs.
                 ' However, if we use the APIs provided by the Registry Helper (which runs the reg program under the hood), we bring the failed
                 ' set operations down to 9, and we **do** set this information using this method. We'll roll with it, though we'll disable
                 ' DynaLog logging so it doesn't take about a minute.
                 If Service.MarkedForDeletion Then
-                    If RegistryHelper.RemoveRegistryItem(registryPath, "/va /f") <> 0 Then
+                    If RegistryHelper.RemoveRegistryItem(registryPath, "/f") <> 0 Then
                         failedSets += 1
                         Continue For
                     End If
@@ -703,6 +734,18 @@ Module WindowsServiceHelper
                         ' Currently, we assume that setting DelayedAutoStart to 0 does the same thing as removing this value altogether: turning off
                         ' delayed start. If this is not the case, we'll just get rid of it.
                         RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
+                    End If
+
+                    ' If the service has changed in the safeboot department, we act accordingly.
+                    If Service.SafeModeOptions.AvailableInMinimalSafeBoot Then
+                        RegistryHelper.AddRegistryItem(New RegistryItem(minimalSafebootPath, "", RegistryItem.ValueType.RegSz, SafeBootServiceTypeValue))
+                    Else
+                        RegistryHelper.RemoveRegistryItem(minimalSafebootPath, "/f")
+                    End If
+                    If Service.SafeModeOptions.AvailableInNetworkSafeBoot Then
+                        RegistryHelper.AddRegistryItem(New RegistryItem(networkSafebootPath, "", RegistryItem.ValueType.RegSz, SafeBootServiceTypeValue))
+                    Else
+                        RegistryHelper.RemoveRegistryItem(networkSafebootPath, "/f")
                     End If
                 End If
                 If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)

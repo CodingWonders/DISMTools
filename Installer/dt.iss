@@ -210,6 +210,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: expandsz; ValueName: "DismExe"; ValueData: "{win}\system32\dism.exe"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "SaveOnSettingsIni"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "WarnOnMetered"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; ValueType: dword; ValueName: "AutoScratch"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
@@ -232,6 +233,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; Va
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "AppX_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "DoNotAskOnNonComplete"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; ValueType: string; ValueName: "EngineName"; ValueData: "DuckDuckGo"; Flags: uninsdeletevalue createvalueifdoesntexist

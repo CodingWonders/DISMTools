@@ -107,6 +107,12 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoSFD = New System.Windows.Forms.SaveFileDialog()
         Me.RestoreServiceBtn = New System.Windows.Forms.Button()
         Me.DeleteServiceBtn = New System.Windows.Forms.Button()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.btnAllSafeModes = New System.Windows.Forms.Button()
+        Me.btnNoSafeModes = New System.Windows.Forms.Button()
+        Me.TabPage6 = New System.Windows.Forms.TabPage()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -127,6 +133,7 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.SuspendLayout()
         Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SelectedServicePanel.SuspendLayout()
+        Me.TabPage6.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -189,6 +196,7 @@ Partial Class ServiceManagementForm
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.TabPage4)
         Me.TabControl1.Controls.Add(Me.TabPage5)
+        Me.TabControl1.Controls.Add(Me.TabPage6)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
@@ -942,6 +950,72 @@ Partial Class ServiceManagementForm
         Me.DeleteServiceBtn.Text = "Delete service"
         Me.DeleteServiceBtn.UseVisualStyleBackColor = True
         '
+        'Label20
+        '
+        Me.Label20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label20.AutoEllipsis = True
+        Me.Label20.Location = New System.Drawing.Point(16, 16)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(1196, 48)
+        Me.Label20.TabIndex = 1
+        Me.Label20.Text = resources.GetString("Label20.Text")
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(80, 68)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(403, 17)
+        Me.CheckBox2.TabIndex = 2
+        Me.CheckBox2.Text = "Make this service available in Safe Mode and Safe Mode with Command Prompt"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(80, 91)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(298, 17)
+        Me.CheckBox3.TabIndex = 2
+        Me.CheckBox3.Text = "Make this service available in Safe Mode with Networking"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'btnAllSafeModes
+        '
+        Me.btnAllSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnAllSafeModes.Location = New System.Drawing.Point(80, 114)
+        Me.btnAllSafeModes.Name = "btnAllSafeModes"
+        Me.btnAllSafeModes.Size = New System.Drawing.Size(192, 23)
+        Me.btnAllSafeModes.TabIndex = 3
+        Me.btnAllSafeModes.Text = "Make available in all modes"
+        Me.btnAllSafeModes.UseVisualStyleBackColor = True
+        '
+        'btnNoSafeModes
+        '
+        Me.btnNoSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnNoSafeModes.Location = New System.Drawing.Point(278, 114)
+        Me.btnNoSafeModes.Name = "btnNoSafeModes"
+        Me.btnNoSafeModes.Size = New System.Drawing.Size(192, 23)
+        Me.btnNoSafeModes.TabIndex = 3
+        Me.btnNoSafeModes.Text = "Disable in all modes"
+        Me.btnNoSafeModes.UseVisualStyleBackColor = True
+        '
+        'TabPage6
+        '
+        Me.TabPage6.Controls.Add(Me.btnNoSafeModes)
+        Me.TabPage6.Controls.Add(Me.btnAllSafeModes)
+        Me.TabPage6.Controls.Add(Me.CheckBox3)
+        Me.TabPage6.Controls.Add(Me.CheckBox2)
+        Me.TabPage6.Controls.Add(Me.Label20)
+        Me.TabPage6.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage6.Name = "TabPage6"
+        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage6.Size = New System.Drawing.Size(1232, 239)
+        Me.TabPage6.TabIndex = 5
+        Me.TabPage6.Text = "Safe Mode"
+        Me.TabPage6.UseVisualStyleBackColor = True
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -991,6 +1065,8 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
         Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.SelectedServicePanel.ResumeLayout(False)
+        Me.TabPage6.ResumeLayout(False)
+        Me.TabPage6.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1078,4 +1154,10 @@ Partial Class ServiceManagementForm
     Friend WithEvents ServiceInfoSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents RestoreServiceBtn As System.Windows.Forms.Button
     Friend WithEvents DeleteServiceBtn As System.Windows.Forms.Button
+    Friend WithEvents TabPage6 As System.Windows.Forms.TabPage
+    Friend WithEvents btnNoSafeModes As System.Windows.Forms.Button
+    Friend WithEvents btnAllSafeModes As System.Windows.Forms.Button
+    Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label20 As System.Windows.Forms.Label
 End Class

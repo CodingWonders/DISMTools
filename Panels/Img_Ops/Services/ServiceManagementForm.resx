@@ -123,6 +123,9 @@
   <metadata name="ServiceInfoSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>106, 17</value>
   </metadata>
+  <data name="Label20.Text" xml:space="preserve">
+    <value>If you need this service available even when the target system can't boot into normal mode, consider changing the following options. However, keep in mind that you may be enabling an unreliable device or application service that may cause Safe Mode to crash:</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

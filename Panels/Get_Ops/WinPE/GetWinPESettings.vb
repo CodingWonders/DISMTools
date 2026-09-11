@@ -292,6 +292,7 @@ Public Class GetWinPESettings
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
+            ImgInfoSaveDlg.DoNotAskOnNonComplete = MainForm.DoNotAskOnNonComplete
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If

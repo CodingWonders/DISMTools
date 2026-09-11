@@ -835,14 +835,13 @@ function Start-OSApplication {
         "UseNever" { $usebootex = $false }
         "UseAlways" { $usebootex = $true }
     }
-    $usebootex = $false
     if (($bootexPolicyUsed -ne $true) -and ($global:override -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
         Show-SectionMessage -sectionTitle "Select UEFI boot binary" -sectionDescription "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions of the EFI boot binary that will later be used when creating boot files:"
         # Quick run-down: we only ask for EFI boot binary when we find Secure Boot on the system, AND
         # if the provided bcdboot supports bootex.
         Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
         Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
-        Write-Host "   will expire in June 2026."
+        Write-Host "   started expiring in June 2026."
         Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
         Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
         Write-Host "   updates will not work using these boot binaries.`n"
@@ -852,8 +851,9 @@ function Start-OSApplication {
             Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
         }
         Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
-        Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
-        Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
+        Write-Host "the new version of such files. Failure to do so can cause boot issues. These usually occur if you are"
+        Write-Host "deploying an image that has not yet received updated UEFI CA 2023 binaries. As a workaround, you can"
+        Write-Host "try to disable Secure Boot."
         $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/n)"
         if ($bootOptn -eq "") { $bootOptn = "Y" }
         $usebootex = ($bootOptn -eq "Y")

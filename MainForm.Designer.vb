@@ -236,6 +236,11 @@ Partial Class MainForm
         Me.HomePanel = New System.Windows.Forms.Panel()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
         Me.InfinityStartPanel = New System.Windows.Forms.Panel()
+        Me.NewsContentPreviewerPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.NewsFeedTextLabel = New System.Windows.Forms.Label()
+        Me.NewsFeedDateLabel = New System.Windows.Forms.Label()
+        Me.NewsFeedCloseBtn = New System.Windows.Forms.Button()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.HelpLinksPanel = New System.Windows.Forms.Panel()
         Me.Panel8 = New System.Windows.Forms.Panel()
@@ -264,11 +269,6 @@ Partial Class MainForm
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.NewsContentPreviewerPanel = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.NewsFeedTextLabel = New System.Windows.Forms.Label()
-        Me.NewsFeedDateLabel = New System.Windows.Forms.Label()
-        Me.NewsFeedCloseBtn = New System.Windows.Forms.Button()
         Me.ComputerInfoPanel = New System.Windows.Forms.Panel()
         Me.ComputerOSLabel = New System.Windows.Forms.Label()
         Me.AdminToolsBtn = New System.Windows.Forms.Button()
@@ -520,6 +520,8 @@ Partial Class MainForm
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
         Me.InfinityStartPanel.SuspendLayout()
+        Me.NewsContentPreviewerPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -531,8 +533,6 @@ Partial Class MainForm
         Me.NewsPanel.SuspendLayout()
         Me.Panel12.SuspendLayout()
         Me.Panel7.SuspendLayout()
-        Me.NewsContentPreviewerPanel.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.ComputerInfoPanel.SuspendLayout()
         Me.ComputerInfoTLP.SuspendLayout()
         CType(Me.ComputerWallpaperPB, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -611,142 +611,145 @@ Partial Class MainForm
         'NewProjectToolStripMenuItem
         '
         Me.NewProjectToolStripMenuItem.Name = "NewProjectToolStripMenuItem"
-        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.NewProjectToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
+        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.NewProjectToolStripMenuItem.Text = "&New project..."
         '
         'OpenExistingProjectToolStripMenuItem
         '
         Me.OpenExistingProjectToolStripMenuItem.Name = "OpenExistingProjectToolStripMenuItem"
-        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.OpenExistingProjectToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
+        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
         '
         'ToolStripSeparator26
         '
         Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
-        Me.ToolStripSeparator26.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(226, 6)
         '
         'ManageOnlineInstallationToolStripMenuItem
         '
         Me.ManageOnlineInstallationToolStripMenuItem.Name = "ManageOnlineInstallationToolStripMenuItem"
-        Me.ManageOnlineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.ManageOnlineInstallationToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
         '
         'ManageOfflineInstallationToolStripMenuItem
         '
         Me.ManageOfflineInstallationToolStripMenuItem.Name = "ManageOfflineInstallationToolStripMenuItem"
-        Me.ManageOfflineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.ManageOfflineInstallationToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
         '
         'ToolStripSeparator37
         '
         Me.ToolStripSeparator37.Name = "ToolStripSeparator37"
-        Me.ToolStripSeparator37.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator37.Size = New System.Drawing.Size(226, 6)
         '
         'RecentProjectsListMenu
         '
         Me.RecentProjectsListMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RecentProject1ToolStripMenuItem, Me.RecentProject2ToolStripMenuItem, Me.RecentProject3ToolStripMenuItem, Me.RecentProject4ToolStripMenuItem, Me.RecentProject5ToolStripMenuItem, Me.RecentProject6ToolStripMenuItem, Me.RecentProject7ToolStripMenuItem, Me.RecentProject8ToolStripMenuItem, Me.RecentProject9ToolStripMenuItem, Me.RecentProject10ToolStripMenuItem})
         Me.RecentProjectsListMenu.Name = "RecentProjectsListMenu"
-        Me.RecentProjectsListMenu.Size = New System.Drawing.Size(224, 22)
+        Me.RecentProjectsListMenu.Size = New System.Drawing.Size(229, 22)
         Me.RecentProjectsListMenu.Text = "Recent projects"
         '
         'RecentProject1ToolStripMenuItem
         '
         Me.RecentProject1ToolStripMenuItem.Name = "RecentProject1ToolStripMenuItem"
         Me.RecentProject1ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D1), System.Windows.Forms.Keys)
-        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject1ToolStripMenuItem.Visible = False
         '
         'RecentProject2ToolStripMenuItem
         '
         Me.RecentProject2ToolStripMenuItem.Name = "RecentProject2ToolStripMenuItem"
         Me.RecentProject2ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D2), System.Windows.Forms.Keys)
-        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject2ToolStripMenuItem.Visible = False
         '
         'RecentProject3ToolStripMenuItem
         '
         Me.RecentProject3ToolStripMenuItem.Name = "RecentProject3ToolStripMenuItem"
         Me.RecentProject3ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D3), System.Windows.Forms.Keys)
-        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject3ToolStripMenuItem.Visible = False
         '
         'RecentProject4ToolStripMenuItem
         '
         Me.RecentProject4ToolStripMenuItem.Name = "RecentProject4ToolStripMenuItem"
         Me.RecentProject4ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D4), System.Windows.Forms.Keys)
-        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject4ToolStripMenuItem.Visible = False
         '
         'RecentProject5ToolStripMenuItem
         '
         Me.RecentProject5ToolStripMenuItem.Name = "RecentProject5ToolStripMenuItem"
         Me.RecentProject5ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D5), System.Windows.Forms.Keys)
-        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject5ToolStripMenuItem.Visible = False
         '
         'RecentProject6ToolStripMenuItem
         '
         Me.RecentProject6ToolStripMenuItem.Name = "RecentProject6ToolStripMenuItem"
         Me.RecentProject6ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D6), System.Windows.Forms.Keys)
-        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject6ToolStripMenuItem.Visible = False
         '
         'RecentProject7ToolStripMenuItem
         '
         Me.RecentProject7ToolStripMenuItem.Name = "RecentProject7ToolStripMenuItem"
         Me.RecentProject7ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D7), System.Windows.Forms.Keys)
-        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject7ToolStripMenuItem.Visible = False
         '
         'RecentProject8ToolStripMenuItem
         '
         Me.RecentProject8ToolStripMenuItem.Name = "RecentProject8ToolStripMenuItem"
         Me.RecentProject8ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D8), System.Windows.Forms.Keys)
-        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject8ToolStripMenuItem.Visible = False
         '
         'RecentProject9ToolStripMenuItem
         '
         Me.RecentProject9ToolStripMenuItem.Name = "RecentProject9ToolStripMenuItem"
         Me.RecentProject9ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D9), System.Windows.Forms.Keys)
-        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject9ToolStripMenuItem.Visible = False
         '
         'RecentProject10ToolStripMenuItem
         '
         Me.RecentProject10ToolStripMenuItem.Name = "RecentProject10ToolStripMenuItem"
         Me.RecentProject10ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D0), System.Windows.Forms.Keys)
-        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RecentProject10ToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(226, 6)
         '
         'SaveProjectToolStripMenuItem
         '
         Me.SaveProjectToolStripMenuItem.Enabled = False
         Me.SaveProjectToolStripMenuItem.Name = "SaveProjectToolStripMenuItem"
-        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.SaveProjectToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
+        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.SaveProjectToolStripMenuItem.Text = "&Save project..."
         '
         'SaveProjectasToolStripMenuItem
         '
         Me.SaveProjectasToolStripMenuItem.Enabled = False
         Me.SaveProjectasToolStripMenuItem.Name = "SaveProjectasToolStripMenuItem"
-        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.SaveProjectasToolStripMenuItem.Text = "Save project &as..."
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(226, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'ProjectToolStripMenuItem
@@ -1937,6 +1940,64 @@ Partial Class MainForm
         Me.InfinityStartPanel.Size = New System.Drawing.Size(1008, 657)
         Me.InfinityStartPanel.TabIndex = 9
         '
+        'NewsContentPreviewerPanel
+        '
+        Me.NewsContentPreviewerPanel.Controls.Add(Me.Panel1)
+        Me.NewsContentPreviewerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 160)
+        Me.NewsContentPreviewerPanel.Name = "NewsContentPreviewerPanel"
+        Me.NewsContentPreviewerPanel.Size = New System.Drawing.Size(1008, 497)
+        Me.NewsContentPreviewerPanel.TabIndex = 3
+        Me.NewsContentPreviewerPanel.Visible = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
+        Me.Panel1.Controls.Add(Me.NewsFeedDateLabel)
+        Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1008, 32)
+        Me.Panel1.TabIndex = 3
+        '
+        'NewsFeedTextLabel
+        '
+        Me.NewsFeedTextLabel.AutoEllipsis = True
+        Me.NewsFeedTextLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewsFeedTextLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NewsFeedTextLabel.Location = New System.Drawing.Point(41, 0)
+        Me.NewsFeedTextLabel.Name = "NewsFeedTextLabel"
+        Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(583, 32)
+        Me.NewsFeedTextLabel.TabIndex = 1
+        Me.NewsFeedTextLabel.Text = "Item Feed Text"
+        Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'NewsFeedDateLabel
+        '
+        Me.NewsFeedDateLabel.Dock = System.Windows.Forms.DockStyle.Right
+        Me.NewsFeedDateLabel.Location = New System.Drawing.Point(624, 0)
+        Me.NewsFeedDateLabel.Name = "NewsFeedDateLabel"
+        Me.NewsFeedDateLabel.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
+        Me.NewsFeedDateLabel.Size = New System.Drawing.Size(384, 32)
+        Me.NewsFeedDateLabel.TabIndex = 3
+        Me.NewsFeedDateLabel.Text = "Item Feed Date"
+        Me.NewsFeedDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'NewsFeedCloseBtn
+        '
+        Me.NewsFeedCloseBtn.BackColor = System.Drawing.Color.Black
+        Me.NewsFeedCloseBtn.Dock = System.Windows.Forms.DockStyle.Left
+        Me.NewsFeedCloseBtn.FlatAppearance.BorderSize = 0
+        Me.NewsFeedCloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.NewsFeedCloseBtn.Image = Global.DISMTools.My.Resources.Resources.backbox
+        Me.NewsFeedCloseBtn.Location = New System.Drawing.Point(0, 0)
+        Me.NewsFeedCloseBtn.Name = "NewsFeedCloseBtn"
+        Me.NewsFeedCloseBtn.Size = New System.Drawing.Size(41, 32)
+        Me.NewsFeedCloseBtn.TabIndex = 2
+        Me.NewsFeedCloseBtn.UseVisualStyleBackColor = False
+        '
         'SplitContainer1
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -2277,64 +2338,6 @@ Partial Class MainForm
         Me.Label8.TabIndex = 2
         Me.Label8.Text = "News last updated: "
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'NewsContentPreviewerPanel
-        '
-        Me.NewsContentPreviewerPanel.Controls.Add(Me.Panel1)
-        Me.NewsContentPreviewerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 160)
-        Me.NewsContentPreviewerPanel.Name = "NewsContentPreviewerPanel"
-        Me.NewsContentPreviewerPanel.Size = New System.Drawing.Size(1008, 497)
-        Me.NewsContentPreviewerPanel.TabIndex = 3
-        Me.NewsContentPreviewerPanel.Visible = False
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
-        Me.Panel1.Controls.Add(Me.NewsFeedDateLabel)
-        Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1008, 32)
-        Me.Panel1.TabIndex = 3
-        '
-        'NewsFeedTextLabel
-        '
-        Me.NewsFeedTextLabel.AutoEllipsis = True
-        Me.NewsFeedTextLabel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NewsFeedTextLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NewsFeedTextLabel.Location = New System.Drawing.Point(41, 0)
-        Me.NewsFeedTextLabel.Name = "NewsFeedTextLabel"
-        Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(583, 32)
-        Me.NewsFeedTextLabel.TabIndex = 1
-        Me.NewsFeedTextLabel.Text = "Item Feed Text"
-        Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'NewsFeedDateLabel
-        '
-        Me.NewsFeedDateLabel.Dock = System.Windows.Forms.DockStyle.Right
-        Me.NewsFeedDateLabel.Location = New System.Drawing.Point(624, 0)
-        Me.NewsFeedDateLabel.Name = "NewsFeedDateLabel"
-        Me.NewsFeedDateLabel.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
-        Me.NewsFeedDateLabel.Size = New System.Drawing.Size(384, 32)
-        Me.NewsFeedDateLabel.TabIndex = 3
-        Me.NewsFeedDateLabel.Text = "Item Feed Date"
-        Me.NewsFeedDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'NewsFeedCloseBtn
-        '
-        Me.NewsFeedCloseBtn.BackColor = System.Drawing.Color.Black
-        Me.NewsFeedCloseBtn.Dock = System.Windows.Forms.DockStyle.Left
-        Me.NewsFeedCloseBtn.FlatAppearance.BorderSize = 0
-        Me.NewsFeedCloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.NewsFeedCloseBtn.Image = Global.DISMTools.My.Resources.Resources.backbox
-        Me.NewsFeedCloseBtn.Location = New System.Drawing.Point(0, 0)
-        Me.NewsFeedCloseBtn.Name = "NewsFeedCloseBtn"
-        Me.NewsFeedCloseBtn.Size = New System.Drawing.Size(41, 32)
-        Me.NewsFeedCloseBtn.TabIndex = 2
-        Me.NewsFeedCloseBtn.UseVisualStyleBackColor = False
         '
         'ComputerInfoPanel
         '
@@ -4798,6 +4801,8 @@ Partial Class MainForm
         Me.HomePanel.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
         Me.InfinityStartPanel.ResumeLayout(False)
+        Me.NewsContentPreviewerPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -4810,8 +4815,6 @@ Partial Class MainForm
         Me.NewsPanel.ResumeLayout(False)
         Me.Panel12.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
-        Me.NewsContentPreviewerPanel.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
         Me.ComputerInfoPanel.ResumeLayout(False)
         Me.ComputerInfoPanel.PerformLayout()
         Me.ComputerInfoTLP.ResumeLayout(False)

@@ -11,6 +11,8 @@ Public Class EnableFeat
     Public featEnablementCount As Integer
     Public featEnablementNames(65535) As String
 
+    Private RemovedFeatures As New List(Of String)
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -188,6 +190,8 @@ Public Class EnableFeat
                 ProgressPanel.featEnablementCommit = False
             End If
         End If
+        ProgressPanel.featEnablementRequiredSources = RemovedFeatures
+        ProgressPanel.featEnablementOnlyUseSourceWhenNeeded = CheckBox6.Checked
         ProgressPanel.OperationNum = 30
         Visible = False
         ProgressPanel.ShowDialog(MainForm)
@@ -204,16 +208,24 @@ Public Class EnableFeat
         DynaLog.LogMessage("Opening feature enablement dialog...")
         ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
+        RemovedFeatures.Clear()
         If Not MainForm.CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
             BGProcsBusyDialog.ShowDialog(Me)
             Return False
         End If
         DynaLog.LogMessage("Adding features to arrays...")
+        Dim targetStates() As DismPackageFeatureState = New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged, DismPackageFeatureState.Removed}
         If MainForm.CurrentImage.ImageFeatures IsNot Nothing AndAlso MainForm.CurrentImage.ImageFeatures.Count > MainForm.CurrentImage.ImageFeatures_Backup.Count Then
-            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged, DismPackageFeatureState.Removed}.Contains(feature.State)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
+            Dim disabledFeatures As IEnumerable(Of DismFeature) = MainForm.CurrentImage.ImageFeatures.Where(Function(feature) targetStates.Contains(feature.State))
+
+            ListView1.Items.AddRange(disabledFeatures.Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
+            RemovedFeatures.AddRange(disabledFeatures.Where(Function(feature) feature.State = DismPackageFeatureState.Removed).Select(Function(feature) feature.FeatureName).ToArray())
         Else
-            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures_Backup.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged, DismPackageFeatureState.Removed}.Contains(feature.FeatureState)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.FeatureState, True)})).ToArray())
+            Dim disabledFeatures As IEnumerable(Of ImageFeature) = MainForm.CurrentImage.ImageFeatures_Backup.Where(Function(feature) targetStates.Contains(feature.FeatureState))
+
+            ListView1.Items.AddRange(disabledFeatures.Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.FeatureState, True)})).ToArray())
+            RemovedFeatures.AddRange(disabledFeatures.Where(Function(feature) feature.FeatureState = DismPackageFeatureState.Removed).Select(Function(feature) feature.FeatureName).ToArray())
         End If
         Return True
     End Function
@@ -242,6 +254,7 @@ Public Class EnableFeat
                         CheckBox3.Text = "Enable all parent features"
                         CheckBox4.Text = "Contact Windows Update for online images"
                         CheckBox5.Text = "Commit image after enabling features"
+                        CheckBox6.Text = "Use this source only on features that require it"
                         ListView1.Columns(0).Text = "Feature name"
                         ListView1.Columns(1).Text = "State"
                         FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
@@ -262,6 +275,7 @@ Public Class EnableFeat
                         CheckBox3.Text = "Habilitar todas las características principales"
                         CheckBox4.Text = "Contactar Windows Update para instalaciones activas"
                         CheckBox5.Text = "Guardar imagen tras habilitar características"
+                        CheckBox6.Text = "Utilizar este origen solo en las características que lo requieran"
                         ListView1.Columns(0).Text = "Nombre de característica"
                         ListView1.Columns(1).Text = "Estado"
                         FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
@@ -282,6 +296,7 @@ Public Class EnableFeat
                         CheckBox3.Text = "Activer toutes les caractéristiques des parents"
                         CheckBox4.Text = "Contacter Windows Update sur les images en ligne"
                         CheckBox5.Text = "Sauvegarder l'image après l'activation des caractéristiques"
+                        CheckBox6.Text = "N'utilisez cette source que pour les fonctionnalités qui le nécessitent"
                         ListView1.Columns(0).Text = "Nom de la caractéristique"
                         ListView1.Columns(1).Text = "État"
                         FolderBrowserDialog1.Description = "Spécifiez un répertoire qui servira de source des caractéristiques :"
@@ -302,6 +317,7 @@ Public Class EnableFeat
                         CheckBox3.Text = "Ativar todas as características principais"
                         CheckBox4.Text = "Contactar o Windows Update para obter imagens online"
                         CheckBox5.Text = "Confirmar a imagem depois de ativar as funcionalidades"
+                        CheckBox6.Text = "Utilize esta fonte apenas nas funcionalidades que a exijam"
                         ListView1.Columns(0).Text = "Nome da caraterística"
                         ListView1.Columns(1).Text = "Estado"
                         FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
@@ -322,6 +338,7 @@ Public Class EnableFeat
                         CheckBox3.Text = "Abilita tutte le funzioni genitore"
                         CheckBox4.Text = "Contatta Windows Update per le immagini online"
                         CheckBox5.Text = "Applica l'immagine dopo aver abilitato le funzioni"
+                        CheckBox6.Text = "Utilizza questa fonte solo per le funzionalità che la richiedono"
                         ListView1.Columns(0).Text = "Nome della funzione"
                         ListView1.Columns(1).Text = "Stato"
                         FolderBrowserDialog1.Description = "Specificare una cartella che fungerà da origine delle caratteristiche:"
@@ -343,6 +360,7 @@ Public Class EnableFeat
                 CheckBox3.Text = "Enable all parent features"
                 CheckBox4.Text = "Contact Windows Update for online images"
                 CheckBox5.Text = "Commit image after enabling features"
+                CheckBox6.Text = "Use this source only on features that require it"
                 ListView1.Columns(0).Text = "Feature name"
                 ListView1.Columns(1).Text = "State"
                 FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
@@ -363,6 +381,7 @@ Public Class EnableFeat
                 CheckBox3.Text = "Habilitar todas las características principales"
                 CheckBox4.Text = "Contactar Windows Update para instalaciones activas"
                 CheckBox5.Text = "Guardar imagen tras habilitar características"
+                CheckBox6.Text = "Utilizar este origen solo en las características que lo requieran"
                 ListView1.Columns(0).Text = "Nombre de característica"
                 ListView1.Columns(1).Text = "Estado"
                 FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
@@ -383,6 +402,7 @@ Public Class EnableFeat
                 CheckBox3.Text = "Activer toutes les caractéristiques des parents"
                 CheckBox4.Text = "Contacter Windows Update sur les images en ligne"
                 CheckBox5.Text = "Sauvegarder l'image après l'activation des caractéristiques"
+                CheckBox6.Text = "N'utilisez cette source que pour les fonctionnalités qui le nécessitent"
                 ListView1.Columns(0).Text = "Nom de la caractéristique"
                 ListView1.Columns(1).Text = "État"
                 FolderBrowserDialog1.Description = "Spécifiez un répertoire qui servira de source des caractéristiques :"
@@ -403,6 +423,7 @@ Public Class EnableFeat
                 CheckBox3.Text = "Ativar todas as características principais"
                 CheckBox4.Text = "Contactar o Windows Update para obter imagens online"
                 CheckBox5.Text = "Confirmar a imagem depois de ativar as funcionalidades"
+                CheckBox6.Text = "Utilize esta fonte apenas nas funcionalidades que a exijam"
                 ListView1.Columns(0).Text = "Nome da caraterística"
                 ListView1.Columns(1).Text = "Estado"
                 FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
@@ -423,6 +444,7 @@ Public Class EnableFeat
                 CheckBox3.Text = "Abilita tutte le funzioni genitore"
                 CheckBox4.Text = "Contatta Windows Update per le immagini online"
                 CheckBox5.Text = "Applica l'immagine dopo aver abilitato le funzioni"
+                CheckBox6.Text = "Utilizza questa fonte solo per le funzionalità che la richiedono"
                 ListView1.Columns(0).Text = "Nome della funzione"
                 ListView1.Columns(1).Text = "Stato"
                 FolderBrowserDialog1.Description = "Specificare una cartella che fungerà da origine delle caratteristiche:"
@@ -438,10 +460,10 @@ Public Class EnableFeat
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
-        CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
+        CheckBox5.Enabled = Not (MainForm.OnlineManagement Or MainForm.OfflineManagement)
         DynaLog.LogMessage("Detecting ability to contact Windows Update (in the case of active installation management)...")
         DynaLog.LogMessage("Boot Mode of Host System: " & SystemInformation.BootMode.ToString())
-        If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then
+        If MainForm.OnlineManagement And {BootMode.Normal, BootMode.FailSafeWithNetwork}.Contains(SystemInformation.BootMode) Then
             DynaLog.LogMessage("Host system is booted to either normal mode or Safe Mode with networking.")
             CheckBox4.Enabled = True
         Else
@@ -464,20 +486,16 @@ Public Class EnableFeat
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
-        If CheckBox1.Checked Then
-            Label3.Enabled = True
-            Button1.Enabled = True
-        Else
-            Label3.Enabled = False
-            Button1.Enabled = False
-        End If
+        Label3.Enabled = CheckBox1.Checked
+        Button1.Enabled = CheckBox1.Checked
     End Sub
 
     Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
-        Label4.Enabled = CheckBox2.Checked = True
-        Button2.Enabled = CheckBox2.Checked = True
-        RichTextBox1.Enabled = CheckBox2.Checked = True
-        Button3.Enabled = CheckBox2.Checked = True
+        Label4.Enabled = CheckBox2.Checked
+        Button2.Enabled = CheckBox2.Checked
+        RichTextBox1.Enabled = CheckBox2.Checked
+        Button3.Enabled = CheckBox2.Checked
+        CheckBox6.Enabled = CheckBox2.Checked
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -509,5 +527,29 @@ Public Class EnableFeat
     Private Sub Button5_Click(sender As Object, e As EventArgs)
         TextBoxSourcePanel.Visible = True
         WimFileSourcePanel.Visible = False
+    End Sub
+
+    Private Sub CheckBox6_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox6.CheckedChanged
+        If Not CheckBox6.Checked Then
+            Dim msg As String = ""
+
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG" : msg = "If you proceed with this task, all the selected features will use the provided source. If the source does not contain the required files for those features, they will not be able to be enabled."
+                        Case "ESN" : msg = "Si continúa con esta tarea, todas las características seleccionadas utilizarán este origen. Si el origen no contiene los archivos necesarios para estas características, no podrán ser habilitadas."
+                        Case "FRA" : msg = "Si vous poursuivez cette opération, toutes les fonctionnalités sélectionnées utiliseront la source fournie. Si cette source ne contient pas les fichiers requis pour ces fonctionnalités, celles-ci ne pourront pas être activées."
+                        Case "PTB", "PTG" : msg = "Se avançar com esta tarefa, todas as funcionalidades selecionadas utilizarão a fonte fornecida. Se a fonte não contiver os ficheiros necessários para essas funcionalidades, estas não poderão ser ativadas."
+                        Case "ITA" : msg = "Se si procede con questa operazione, tutte le funzionalità selezionate utilizzeranno la fonte specificata. Se la fonte non contiene i file necessari per tali funzionalità, queste non potranno essere abilitate."
+                    End Select
+                Case 1 : msg = "If you proceed with this task, all the selected features will use the provided source. If the source does not contain the required files for those features, they will not be able to be enabled."
+                Case 2 : msg = "Si continúa con esta tarea, todas las características seleccionadas utilizarán este origen. Si el origen no contiene los archivos necesarios para estas características, no podrán ser habilitadas."
+                Case 3 : msg = "Si vous poursuivez cette opération, toutes les fonctionnalités sélectionnées utiliseront la source fournie. Si cette source ne contient pas les fichiers requis pour ces fonctionnalités, celles-ci ne pourront pas être activées."
+                Case 4 : msg = "Se avançar com esta tarefa, todas as funcionalidades selecionadas utilizarão a fonte fornecida. Se a fonte não contiver os ficheiros necessários para essas funcionalidades, estas não poderão ser ativadas."
+                Case 5 : msg = "Se si procede con questa operazione, tutte le funzionalità selezionate utilizzeranno la fonte specificata. Se la fonte non contiene i file necessari per tali funzionalità, queste non potranno essere abilitate."
+            End Select
+
+            MessageBox.Show(Me, msg, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 End Class
