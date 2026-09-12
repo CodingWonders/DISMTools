@@ -8,6 +8,7 @@ Imports System.Linq
 Imports System.Windows.Forms
 Imports System.Text
 Imports System.Text.RegularExpressions
+Imports Microsoft.Win32
 
 Public Class ServiceDependencyDiagram
     Inherits Control
@@ -65,8 +66,14 @@ Public Class ServiceDependencyDiagram
 
     Private ReadOnly OuterPadding As Single = WindowHelper.ScaleLogical(80)
 
-    Private Const MinimumZoom As Single = 0.2F
+    Private Const MinimumZoom As Single = 0.200000003F
     Private Const MaximumZoom As Single = 3.0F
+
+    ''' <summary>
+    ''' Number of pan pixels applied per unit of wheel delta when panning
+    ''' with the mouse wheel or a 2-finger touchpad swipe.
+    ''' </summary>
+    Private Const WheelPanSpeed As Single = 1.0F
 
 #End Region
 
@@ -604,7 +611,7 @@ Public Class ServiceDependencyDiagram
         ' Use a horizontal cubic Bézier curve. This keeps arrows readable
         ' even when multiple nodes share the same column.
         Dim horizontalDistance As Single = Math.Abs(endPoint.X - startPoint.X)
-        Dim curveOffset As Single = Math.Max(30.0F, horizontalDistance * 0.35F)
+        Dim curveOffset As Single = Math.Max(30.0F, horizontalDistance * 0.349999994F)
 
         Dim controlPoint1 As PointF
         Dim controlPoint2 As PointF
@@ -685,7 +692,7 @@ Public Class ServiceDependencyDiagram
     Private Shared Function CreateRectangle(rectangle As RectangleF, radius As Single) As GraphicsPath
         Dim path As New GraphicsPath()
 
-        If radius = 0 Then
+        If radius <= 0 Then
             path.AddRectangle(rectangle)
         Else
             Dim diameter As Single = radius * 2.0F
@@ -739,10 +746,9 @@ Public Class ServiceDependencyDiagram
         Dim deltaX As Integer = e.X - _lastMousePosition.X
         Dim deltaY As Integer = e.Y - _lastMousePosition.Y
 
-        _pan = New PointF(_pan.X + deltaX, _pan.Y + deltaY)
         _lastMousePosition = e.Location
 
-        Invalidate()
+        PanBy(CSng(deltaX), CSng(deltaY))
     End Sub
 
     Protected Overrides Sub OnMouseUp(e As MouseEventArgs)
@@ -759,27 +765,124 @@ Public Class ServiceDependencyDiagram
 
         If _mainService Is Nothing Then Exit Sub
 
+        ' Windows synthesizes Ctrl+MouseWheel for a touchpad's pinch-to-zoom
+        ' gesture (the same convention browsers use), so gating zoom behind
+        ' Ctrl lets a plain vertical wheel notch -- including the vertical
+        ' scroll a 2-finger touchpad swipe generates -- pan the diagram
+        ' instead, without losing pinch-to-zoom support.
+        If (Control.ModifierKeys And Keys.Control) = Keys.Control Then
+            ZoomAtPoint(e.Delta, e.X, e.Y)
+        Else
+            Dim actualDelta As Integer = e.Delta
+            Const DELTA_MOUSE_WHEEL_POSITIVE As Integer = 120,
+                  DELTA_MOUSE_WHEEL_NEGATIVE As Integer = -120,
+                  PRECISION_SCROLL_INVERTED_SCROLLING As UInteger = 0,
+                  PRECISION_SCROLL_REGULAR_SCROLLING As UInteger = UInteger.MaxValue
+
+            If {DELTA_MOUSE_WHEEL_POSITIVE, DELTA_MOUSE_WHEEL_NEGATIVE}.Contains(e.Delta) Then
+                ' A movement is made with a regular mouse wheel. Scrolling with the mouse wheel should
+                ' always be done using regular scrolling, not inverted scrolling. Invert the delta to
+                ' reflect that way of scrolling.
+                actualDelta = -actualDelta
+            Else
+                ' Depending on the natural scrolling settings, we may need to invert the delta, just like
+                ' we do when we scroll with a regular mouse wheel.
+                Dim PrecisionTouchPadRk As RegistryKey = Nothing
+                Try
+                    PrecisionTouchPadRk = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", False)
+                    Dim scrollDirectionVal As Long = PrecisionTouchPadRk.GetValue("ScrollDirection", PRECISION_SCROLL_INVERTED_SCROLLING)
+
+                    If scrollDirectionVal <> PRECISION_SCROLL_REGULAR_SCROLLING Then actualDelta = -actualDelta
+                Catch ex As Exception
+
+                Finally
+                    If PrecisionTouchPadRk IsNot Nothing Then PrecisionTouchPadRk.Close()
+                End Try
+            End If
+
+            PanBy(0.0F, -CSng(actualDelta) * WheelPanSpeed)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles the horizontal component of mouse wheel input. WinForms does
+    ''' not raise a dedicated event for WM_MOUSEHWHEEL, which is the message
+    ''' a 2-finger horizontal touchpad swipe (or a tilting mouse wheel)
+    ''' generates, so it is intercepted here instead.
+    ''' </summary>
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        Const WM_MOUSEHWHEEL As Integer = &H20E
+
+        If m.Msg = WM_MOUSEHWHEEL Then
+            HandleHorizontalMouseWheel(m)
+            Exit Sub
+        End If
+
+        MyBase.WndProc(m)
+    End Sub
+
+    Private Sub HandleHorizontalMouseWheel(ByRef m As Message)
+        Const WheelDeltaUnit As Integer = 120,
+              WheelPanPixelsPerNotch As Single = 40
+
+        If _mainService IsNot Nothing Then
+            ' WM_MOUSEHWHEEL's wParam packs the (signed) wheel delta into its
+            ' high 16 bits. On a 64-bit process, Windows sign-extends wParam
+            ' into the full 64-bit value whenever that delta is negative, so
+            ' it no longer fits in Int32 -- IntPtr.ToInt32() would throw an
+            ' OverflowException in that case. Reading the raw 64-bit value
+            ' and unpacking the high word by hand avoids any checked
+            ' narrowing conversion that could overflow.
+            Dim wParamValue As Long = m.WParam.ToInt64()
+            Dim highWord As Integer = CInt((wParamValue >> 16) And &HFFFFL)
+            Dim rawDelta As Integer = If(highWord >= &H8000, highWord - &H10000, highWord)
+
+            ' Normalize to "wheel notches" instead of treating the raw
+            ' delta as a pixel count directly. Some touchpad drivers report
+            ' much larger (or more frequent) magnitudes than a physical
+            ' wheel's +/-120 per notch, which would otherwise pan the
+            ' diagram far outside the visible area during a single swipe.
+            Dim notches As Single = CSng(rawDelta) / WheelDeltaUnit
+
+            PanBy(-notches * WheelPanPixelsPerNotch, 0.0F)
+        End If
+
+        ' Mark the message as handled so it is not forwarded to the
+        ' parent window.
+        m.Result = IntPtr.Zero
+    End Sub
+
+    ''' <summary>
+    ''' Offsets the current pan by the given screen-space amount and
+    ''' repaints the control.
+    ''' </summary>
+    Private Sub PanBy(deltaX As Single, deltaY As Single)
+        _pan = New PointF(_pan.X + deltaX, _pan.Y + deltaY)
+        Invalidate()
+    End Sub
+
+    ''' <summary>
+    ''' Zooms in or out based on the sign of <paramref name="wheelDelta"/>,
+    ''' keeping the logical point beneath the given screen coordinates
+    ''' stationary.
+    ''' </summary>
+    Private Sub ZoomAtPoint(wheelDelta As Integer, screenX As Single, screenY As Single)
         Dim oldZoom As Single = _zoom
 
-        If e.Delta > 0 Then
-            _zoom *= 1.1F
-        ElseIf e.Delta < 0 Then
-            _zoom /= 1.1F
+        If wheelDelta > 0 Then
+            _zoom *= 1.10000002F
+        ElseIf wheelDelta < 0 Then
+            _zoom /= 1.10000002F
         End If
 
         _zoom = Math.Max(MinimumZoom, Math.Min(MaximumZoom, _zoom))
 
-        If Math.Abs(oldZoom - _zoom) < 0.001F Then Exit Sub
+        If Math.Abs(oldZoom - _zoom) < 0.00100000005F Then Exit Sub
 
-        ' Keep the logical point beneath the mouse cursor stationary
-        ' while zooming.
-        Dim mouseX As Single = e.X
-        Dim mouseY As Single = e.Y
+        Dim logicalX As Single = (screenX - _pan.X) / oldZoom
+        Dim logicalY As Single = (screenY - _pan.Y) / oldZoom
 
-        Dim logicalX As Single = (mouseX - _pan.X) / oldZoom
-        Dim logicalY As Single = (mouseY - _pan.Y) / oldZoom
-
-        _pan = New PointF(mouseX - logicalX * _zoom, mouseY - logicalY * _zoom)
+        _pan = New PointF(screenX - logicalX * _zoom, screenY - logicalY * _zoom)
         Invalidate()
     End Sub
 
