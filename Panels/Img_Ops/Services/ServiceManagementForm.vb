@@ -455,7 +455,7 @@ Public Class ServiceManagementForm
             If ServiceDependencyGraphViewer.WindowState = FormWindowState.Minimized Then ServiceDependencyGraphViewer.WindowState = FormWindowState.Normal
             ServiceDependencyGraphViewer.BringToFront()
         Else
-            ServiceDependencyGraphViewer.Show(Me)
+            ServiceDependencyGraphViewer.Show()
         End If
     End Sub
 End Class
