@@ -1893,6 +1893,8 @@
     <None Include="Resources\diagrams\diagram_zoom_out_light.png" />
     <None Include="Resources\diagrams\diagram_zoom_reset_dark.png" />
     <None Include="Resources\diagrams\diagram_zoom_reset_light.png" />
+    <None Include="Resources\diagrams\diagram_save_mermaid_dark.png" />
+    <None Include="Resources\diagrams\diagram_save_mermaid_light.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />

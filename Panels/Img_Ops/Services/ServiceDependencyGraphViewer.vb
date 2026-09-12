@@ -24,15 +24,18 @@
         btnZoomOut.BackColor = CurrentTheme.SectionBackgroundColor
         btnResetZoom.BackColor = CurrentTheme.SectionBackgroundColor
         btnSaveImage.BackColor = CurrentTheme.SectionBackgroundColor
+        btnSaveToMermaid.BackColor = CurrentTheme.SectionBackgroundColor
         btnZoomIn.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
         btnZoomOut.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
         btnResetZoom.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
         btnSaveImage.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
+        btnSaveToMermaid.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
 
         btnZoomIn.Image = GetGlyphResource("diagram_zoom_in")
         btnZoomOut.Image = GetGlyphResource("diagram_zoom_out")
         btnResetZoom.Image = GetGlyphResource("diagram_zoom_reset")
         btnSaveImage.Image = GetGlyphResource("diagram_save_image")
+        btnSaveToMermaid.Image = GetGlyphResource("diagram_save_mermaid")
 
         depDiagram.SetGraph(mainServiceToDisplay, ServicesToDisplay)
     End Sub
@@ -60,6 +63,16 @@
         End If
     End Sub
 
+    Private Sub btnSaveToMermaid_Click(sender As Object, e As EventArgs) Handles btnSaveToMermaid.Click
+        If sfdMermaidDiagram.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            Dim mermaidDiagram As String = depDiagram.SaveAsMermaid(),
+                mdContents As String = ""
+
+            mdContents = GetHeader(String.Format("Dependency diagram for service {0}", MainServiceName)) & CrLf & String.Format("```mermaid{0}{0}{1}{0}{0}```", Environment.NewLine, mermaidDiagram)
+            File.WriteAllText(sfdMermaidDiagram.FileName, mdContents)
+        End If
+    End Sub
+
     Private Sub btnZoomIn_MouseHover(sender As Object, e As EventArgs) Handles btnZoomIn.MouseHover
         WindowHelper.DisplayToolTip(sender, "Zoom in")
     End Sub
@@ -73,6 +86,10 @@
     End Sub
 
     Private Sub btnSaveImage_MouseHover(sender As Object, e As EventArgs) Handles btnSaveImage.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Save diagram...")
+        WindowHelper.DisplayToolTip(sender, "Save diagram as image...")
+    End Sub
+
+    Private Sub btnSaveToMermaid_MouseHover(sender As Object, e As EventArgs) Handles btnSaveToMermaid.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Save diagram as a Mermaid diagram for Markdown files...")
     End Sub
 End Class

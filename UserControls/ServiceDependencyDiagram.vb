@@ -6,6 +6,8 @@ Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Linq
 Imports System.Windows.Forms
+Imports System.Text
+Imports System.Text.RegularExpressions
 
 Public Class ServiceDependencyDiagram
     Inherits Control
@@ -880,6 +882,103 @@ Public Class ServiceDependencyDiagram
         End Using
     End Sub
 
+    Public Function SaveAsMermaid() As String
+        Dim mermaidBuilder As New StringBuilder()
+
+        mermaidBuilder.AppendLine("flowchart LR")
+
+        If _mainService Is Nothing Then Return mermaidBuilder.ToString()
+        If _nodes Is Nothing OrElse Not _nodes.Any() Then Return mermaidBuilder.ToString()
+
+        Dim nodeIds As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
+        For Each node In _nodes
+            Dim nodeId As String = CreateMermaidNodeId(node.Service.Name)
+            Dim baseNodeId As String = nodeId,
+                suffix As Integer = 2
+
+            While nodeIds.Values.Contains(nodeId)
+                nodeId = String.Format("{0}_{1}", baseNodeId, suffix.ToString())
+                suffix += 1
+            End While
+
+            nodeIds(node.Service.Name) = nodeId
+        Next
+
+        ' Export the nodes
+        For Each node In _nodes
+            Dim service As WindowsService = node.Service,
+                nodeId As String = nodeIds(service.Name)
+
+            Dim nodeLabel As String = CreateMermaidNodeLabel(service)
+
+            mermaidBuilder.Append("    ")
+            mermaidBuilder.Append(nodeId)
+            mermaidBuilder.Append("[")
+            mermaidBuilder.Append(nodeLabel)
+            mermaidBuilder.AppendLine("]")
+        Next
+
+        ' Export the relationships
+        Dim exportedRelationships As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+
+        For Each connection In _connections
+            If connection.Source Is Nothing OrElse connection.Target Is Nothing Then Continue For
+
+            Dim sourceName As String = connection.Source.Service.Name,
+                targetName As String = connection.Target.Service.Name
+
+            If Not nodeIds.ContainsKey(sourceName) OrElse Not nodeIds.ContainsKey(targetName) Then Continue For
+
+            Dim relationshipKey As String = String.Format("{0}{1}{2}", sourceName, ChrW(0), targetName)
+            If exportedRelationships.Contains(relationshipKey) Then Continue For
+
+            exportedRelationships.Add(relationshipKey)
+            mermaidBuilder.Append("    ")
+            mermaidBuilder.Append(nodeIds(sourceName))
+            mermaidBuilder.Append(" --> ")
+            mermaidBuilder.AppendLine(nodeIds(targetName))
+        Next
+
+        ' Style the nodes
+        For Each node In _nodes
+            mermaidBuilder.AppendLine()
+            mermaidBuilder.Append("    style ")
+            mermaidBuilder.Append(nodeIds(node.Service.Name))
+            If node.Service.Name.Equals(_mainService.Name, StringComparison.OrdinalIgnoreCase) Then
+                mermaidBuilder.AppendLine(String.Format(" fill:{0},stroke:{1},stroke-width:2px", ColorTranslator.ToHtml(_mainNodeBackColor), ColorTranslator.ToHtml(_mainNodeBorderColor)))
+            Else
+                mermaidBuilder.AppendLine(String.Format(" fill:{0},stroke:{1},stroke-width:2px", ColorTranslator.ToHtml(_nodeBackColor), ColorTranslator.ToHtml(_nodeBorderColor)))
+            End If
+        Next
+
+        Return mermaidBuilder.ToString()
+    End Function
+
+    Private Function CreateMermaidNodeId(serviceName As String) As String
+        If String.IsNullOrWhiteSpace(serviceName) Then Return "ServiceNode"
+
+        Dim nodeId As String = Regex.Replace(serviceName, "[^a-zA-Z0-9_]", "_")
+        If String.IsNullOrWhiteSpace(nodeId) Then nodeId = "ServiceNode"
+
+        nodeId = "Service_" & nodeId
+        Return nodeId
+    End Function
+
+    Private Function CreateMermaidNodeLabel(service As WindowsService) As String
+        Dim displayName As String = service.DisplayName,
+            serviceName As String = service.Name,
+            description As String = service.Description,
+            startMode As String = service.StartTypeToString(),
+            serviceType As String = service.TypeToString()
+
+        If String.IsNullOrWhiteSpace(displayName) Then displayName = serviceName
+        If String.IsNullOrWhiteSpace(description) Then description = "(no description available)"
+
+        Dim label As String = String.Format("{0}{2}{1}{1}{3}{1}Start Type: {4}{1}Type: {5}{0}", Quote, "<br/>", serviceName, description, startMode, serviceType)
+
+        Return label
+    End Function
+
     Private Sub DrawConnectionsForExport(g As Graphics)
         Using pen As New Pen(_arrowColor, 2.0F)
             pen.EndCap = LineCap.ArrowAnchor
@@ -944,6 +1043,8 @@ Public Class ServiceDependencyDiagram
             End Using
         End Using
     End Sub
+
+
 
 #End Region
 

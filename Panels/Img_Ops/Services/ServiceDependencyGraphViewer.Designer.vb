@@ -29,6 +29,8 @@ Partial Class ServiceDependencyGraphViewer
         Me.btnSaveImage = New System.Windows.Forms.Button()
         Me.depDiagram = New DISMTools.ServiceDependencyDiagram()
         Me.sfdDiagram = New System.Windows.Forms.SaveFileDialog()
+        Me.btnSaveToMermaid = New System.Windows.Forms.Button()
+        Me.sfdMermaidDiagram = New System.Windows.Forms.SaveFileDialog()
         Me.SuspendLayout()
         '
         'btnZoomIn
@@ -100,11 +102,27 @@ Partial Class ServiceDependencyGraphViewer
         '
         Me.sfdDiagram.Filter = "PNG files|*.png"
         '
+        'btnSaveToMermaid
+        '
+        Me.btnSaveToMermaid.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSaveToMermaid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSaveToMermaid.Image = Global.DISMTools.My.Resources.Resources.diagram_save_mermaid_light
+        Me.btnSaveToMermaid.Location = New System.Drawing.Point(1216, 180)
+        Me.btnSaveToMermaid.Name = "btnSaveToMermaid"
+        Me.btnSaveToMermaid.Size = New System.Drawing.Size(36, 36)
+        Me.btnSaveToMermaid.TabIndex = 2
+        Me.btnSaveToMermaid.UseVisualStyleBackColor = True
+        '
+        'sfdMermaidDiagram
+        '
+        Me.sfdMermaidDiagram.Filter = "Markdown files|*.md"
+        '
         'ServiceDependencyGraphViewer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.btnSaveToMermaid)
         Me.Controls.Add(Me.btnSaveImage)
         Me.Controls.Add(Me.btnResetZoom)
         Me.Controls.Add(Me.btnZoomOut)
@@ -125,4 +143,6 @@ Partial Class ServiceDependencyGraphViewer
     Friend WithEvents btnResetZoom As System.Windows.Forms.Button
     Friend WithEvents btnSaveImage As System.Windows.Forms.Button
     Friend WithEvents sfdDiagram As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents btnSaveToMermaid As System.Windows.Forms.Button
+    Friend WithEvents sfdMermaidDiagram As System.Windows.Forms.SaveFileDialog
 End Class
