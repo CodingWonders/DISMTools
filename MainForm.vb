@@ -1288,7 +1288,10 @@ Public Class MainForm
                 LightThemeIndex = PersKey.GetValue("ColorTheme_Light")
                 Language = PersKey.GetValue("Language", -1)
                 LanguageCode = LocalizationService.ResolveStartupCultureCode(PersKey.GetValue("LanguageCode", LocalizationService.DefaultCultureCode))
-                If Language > -1 Then ParseLanguageCode(Language)
+                If Language > -1 Then
+                    ParseLanguageCode(Language)
+                    PersKey.DeleteValue("Language", False)
+                End If
                 LogFont = PersKey.GetValue("LogFont").ToString()
                 LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)

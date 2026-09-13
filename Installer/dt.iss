@@ -200,7 +200,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ColorTheme_Dark"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ColorTheme_Light"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ExpandedProgressPanel"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "Language"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LanguageCode"; ValueData: "en-US"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Consolas"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 11; Flags: uninsdeletevalue createvalueifdoesntexist
