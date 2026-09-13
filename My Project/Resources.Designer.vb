@@ -591,7 +591,7 @@ Namespace My.Resources
         '''                &lt;Mode&gt;Audit&lt;/Mode&gt;
         '''            &lt;/Reseal&gt;
         '''        &lt;/component&gt;
-        '''   [resto de la cadena truncado]&quot;;.
+        '''    &lt;/sett [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property DefaultUnattended_AuditMode() As String
             Get
@@ -1346,7 +1346,7 @@ Namespace My.Resources
         '''
         '''This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
         '''
-        '''You should have rec [resto de la cadena truncado]&quot;;.
+        '''You should have received  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property LicenseOverview() As String
             Get

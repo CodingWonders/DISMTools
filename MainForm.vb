@@ -51,6 +51,7 @@ Public Class MainForm
     Public DismExe As String
     Public SaveOnSettingsIni As Boolean
     Public ColorMode As Integer
+    Public Language As Integer
     Public LanguageCode As String = LocalizationService.CurrentCultureCode
     Public LogFont As String
     Public LogFile As String
@@ -108,7 +109,7 @@ Public Class MainForm
 
     ' Set branch name and codenames
     Public dtBranch As String = "dt_pre_infinity_mk3"
-    Public dt_codeName As String = "InfinityMk2"
+    Public dt_codeName As String = "InfinityMk3"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
@@ -1250,7 +1251,11 @@ Public Class MainForm
     ''' <remarks></remarks>
     Private Function GetIniSettingValue(IniEngineData As IniData, IniSection As String, IniKey As String, DefaultValue As String) As String
         Try
-            Return IniEngineData(IniSection)(IniKey)
+            If IniEngineData(IniSection).ContainsKey(IniKey) Then
+                Return IniEngineData(IniSection)(IniKey)
+            Else
+                Throw New Exception()
+            End If
         Catch ex As Exception
             Return DefaultValue
         End Try
@@ -1281,7 +1286,9 @@ Public Class MainForm
                 ColorMode = PersKey.GetValue("ColorMode")
                 DarkThemeIndex = PersKey.GetValue("ColorTheme_Dark")
                 LightThemeIndex = PersKey.GetValue("ColorTheme_Light")
+                Language = PersKey.GetValue("Language", -1)
                 LanguageCode = LocalizationService.ResolveStartupCultureCode(PersKey.GetValue("LanguageCode", LocalizationService.DefaultCultureCode))
+                If Language > -1 Then ParseLanguageCode(Language)
                 LogFont = PersKey.GetValue("LogFont").ToString()
                 LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
@@ -1406,12 +1413,10 @@ Public Class MainForm
                     ColorMode = CInt(GetIniSettingValue(settingData, "Personalization", "ColorMode", "0"))
                     If ColorMode < 0 Then ColorMode = 0
                     If ColorMode > 2 Then ColorMode = 2
-                    Dim rawLanguageSetting As String = ""
-                    Try
-                        rawLanguageSetting = GetIniSettingValue(settingData, "Personalization", "LanguageCode", LocalizationService.DefaultCultureCode)
-                    Catch
-                    End Try
+                    Language = CInt(GetIniSettingValue(settingData, "Personalization", "Language", "-1"))
+                    Dim rawLanguageSetting As String = GetIniSettingValue(settingData, "Personalization", "LanguageCode", LocalizationService.DefaultCultureCode)
                     LanguageCode = LocalizationService.ResolveStartupCultureCode(rawLanguageSetting)
+                    If Language > -1 Then ParseLanguageCode(Language)
                     ApplyLanguage(LanguageCode)
                     LightThemeIndex = CInt(GetIniSettingValue(settingData, "Personalization", "ColorTheme_Light", "1"))
                     DarkThemeIndex = CInt(GetIniSettingValue(settingData, "Personalization", "ColorTheme_Dark", "0"))
@@ -4410,6 +4415,8 @@ Public Class MainForm
 
         RefreshInfinityHomeLocalizedInformation()
         RefreshNewsFeedLocalizedInformation()
+
+        DynaLog.LogMessage("Localizations Applied...")
     End Sub
 
     Private Sub RefreshNewsFeedLocalizedInformation()
@@ -9452,11 +9459,11 @@ Public Class MainForm
         If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
             DynaLog.LogMessage("Tour directory exists. Starting the tour!")
 
-            Dim languageCode As String = LocalizationService.GetDocumentationLanguageCode()
+            Dim tourLanguageCode As String = LocalizationService.GetDocumentationLanguageCode()
 
             tourServer.StartServer()
             If tourServer.IsListenerAlive() Then
-                Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", tourLanguageCode))
                 TourActionsTSMI.Visible = True
             End If
         End If
@@ -9546,9 +9553,9 @@ Public Class MainForm
     End Sub
 
     Private Sub RestartDTTourTSMI_Click(sender As Object, e As EventArgs) Handles RestartDTTourTSMI.Click
-        Dim languageCode As String = LocalizationService.GetDocumentationLanguageCode()
+        Dim tourLanguageCode As String = LocalizationService.GetDocumentationLanguageCode()
 
-        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", tourLanguageCode))
     End Sub
 
     Private Sub RunProcess(FilePath As String, Optional Arguments As String = "")
@@ -9989,4 +9996,24 @@ Public Class MainForm
     Private Sub RefreshFactButton_MouseHover(sender As Object, e As EventArgs) Handles RefreshFactButton.MouseHover
         WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Main.Tooltips")("Show.New.Fact.Label"))
     End Sub
+
+    Private Sub ParseLanguageCode(Language As Integer)
+        ' Migrate the old language value to the language code
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG" : LanguageCode = "en-US"      ' https://www.youtube.com/watch?v=bMF62-C_1XU
+                    Case "ESN" : LanguageCode = "es-ES"             ' https://www.youtube.com/watch?v=ibfizUItKxg
+                    Case "FRA" : LanguageCode = "fr-FR"             ' https://www.youtube.com/watch?v=HLCbp_8ljbM
+                    Case "PTB", "PTG" : LanguageCode = "pt-PT"
+                    Case "ITA" : LanguageCode = "it-IT"             ' https://www.youtube.com/watch?v=yKasz2Hyx_w
+                End Select
+            Case 1 : LanguageCode = "en-US"
+            Case 2 : LanguageCode = "es-ES"
+            Case 3 : LanguageCode = "fr-FR"
+            Case 4 : LanguageCode = "pt-PT"
+            Case 5 : LanguageCode = "it-IT"
+        End Select
+    End Sub
+
 End Class

@@ -1060,6 +1060,7 @@ Public Class Options
         MainForm.ApplyLanguage(MainForm.LanguageCode)
         ChangeSections(SectionNum)
         ImageTaskHeader1.ItemText = Text
+        ImageTaskHeader1.HideWindowTitle(Handle)
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
