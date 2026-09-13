@@ -394,7 +394,8 @@ Public Class MainForm
 
         Try
             Dim scriptContents As String = File.ReadAllText(scriptFileName)
-            tbScriptCode.Text = scriptContents
+            ' we have to replace newline characters to show the lines as actual lines; compound \r\n first, then \r and \n respectively
+            tbScriptCode.Text = scriptContents.Replace(CrLf, Environment.NewLine).Replace(Cr, Environment.NewLine).Replace(Lf, Environment.NewLine)
             UpdateCaretPosition()
         Catch ex As Exception
             MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)
