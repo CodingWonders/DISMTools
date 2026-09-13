@@ -36,13 +36,13 @@ Public Class LockVolumeDialog
         Dim lockResult As UInteger = LockVolume(PersistentVolumeID)
         Select Case lockResult
             Case Constants.S_OK : ' Ignore
-            Case Constants.E_ACCESS_DENIED : MessageBox.Show("The selected volume could not be locked because some applications have opened files in it.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Case Constants.E_ACCESS_DENIED : MessageBox.Show("The selected volume could not be locked because some applications have opened files in it.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Case Constants.FVE_E_LOCKED_VOLUME : MessageBox.Show("The selected volume is already locked.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Case Constants.FVE_E_NOT_ENCRYPTED : MessageBox.Show("The selected volume is not encrypted.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Case Constants.FVE_E_PROTECTION_DISABLED : MessageBox.Show("The selected volume has had its key protectors disabled and its keys available in the clear.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Case Constants.FVE_E_RECOVERY_KEY_REQUIRED : MessageBox.Show("The selected volume does not use numerical passwords or external keys required to unlock volumes, so the volume cannot be locked.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Case Else : MessageBox.Show(String.Format("The volume could not be unlocked. Error code: {0}", lockResult), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Constants.E_ACCESS_DENIED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("AccessDenied.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Constants.E_ACCESS_DENIED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("AccessDenied.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Constants.FVE_E_LOCKED_VOLUME : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("AlreadyLocked.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Constants.FVE_E_NOT_ENCRYPTED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("NotEncrypted.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Constants.FVE_E_PROTECTION_DISABLED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("ProtectionDisabled.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Constants.FVE_E_RECOVERY_KEY_REQUIRED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("RecoveryKeyRequired.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Case Else : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages").Format("UnknownError.Message", lockResult), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Select
 
         Close()

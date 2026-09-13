@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports DISMTools.Utilities
 
@@ -59,151 +59,19 @@ Public Class OfflineInstDriveLister
     End Sub
 
     Private Sub OfflineInstDriveLister_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Choose a disk"
-                        Label1.Text = "To begin performing offline installation management, please choose a disk shown in the list below. This list will be updated automatically every minute, or when you click the Refresh button."
-                        ListView1.Columns(0).Text = "Drive letter"
-                        ListView1.Columns(1).Text = "Drive label"
-                        ListView1.Columns(2).Text = "Drive type"
-                        ListView1.Columns(3).Text = "Total size"
-                        ListView1.Columns(4).Text = "Available free space"
-                        ListView1.Columns(5).Text = "Drive format"
-                        ListView1.Columns(6).Text = "Contains Windows?"
-                        ListView1.Columns(7).Text = "Windows version"
-                        Button1.Text = "Refresh"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                    Case "ESN"
-                        Text = "Elija un disco"
-                        Label1.Text = "Para comenzar a realizar el mantenimiento de instalaciones fuera de línea, escoja un disco mostrado en la lista de abajo. Esta lista se actualizará automáticamente cada minuto, o cuando haga clic en el botón Actualizar."
-                        ListView1.Columns(0).Text = "Letra de disco"
-                        ListView1.Columns(1).Text = "Etiqueta de disco"
-                        ListView1.Columns(2).Text = "Tipo de disco"
-                        ListView1.Columns(3).Text = "Tamaño total"
-                        ListView1.Columns(4).Text = "Espacio libre"
-                        ListView1.Columns(5).Text = "Formato del disco"
-                        ListView1.Columns(6).Text = "¿Contiene Windows?"
-                        ListView1.Columns(7).Text = "Versión de Windows"
-                        Button1.Text = "Actualizar"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "FRA"
-                        Text = "Choisir un disque"
-                        Label1.Text = "Pour commencer la gestion de l'installation hors ligne, veuillez choisir un disque dans la liste ci-dessous. Cette liste sera mise à jour automatiquement toutes les minutes, ou lorsque vous cliquez sur le bouton Actualiser."
-                        ListView1.Columns(0).Text = "Lettre de disque"
-                        ListView1.Columns(1).Text = "Étiquette de disque"
-                        ListView1.Columns(2).Text = "Type de disque"
-                        ListView1.Columns(3).Text = "Taille totale"
-                        ListView1.Columns(4).Text = "Espace libre disponible"
-                        ListView1.Columns(5).Text = "Format de disque"
-                        ListView1.Columns(6).Text = "Contient Windows ?"
-                        ListView1.Columns(7).Text = "Version Windows"
-                        Button1.Text = "Actualiser"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                    Case "PTB", "PTG"
-                        Text = "Escolha um disco"
-                        Label1.Text = "Para começar a efetuar a gestão da instalação offline, escolha um disco apresentado na lista abaixo. Esta lista será actualizada automaticamente a cada minuto, ou quando clicar no botão Atualizar."
-                        ListView1.Columns(0).Text = "Letra da unidade"
-                        ListView1.Columns(1).Text = "Etiqueta da unidade"
-                        ListView1.Columns(2).Text = "Tipo de unidade"
-                        ListView1.Columns(3).Text = "Tamanho total"
-                        ListView1.Columns(4).Text = "Espaço livre disponível"
-                        ListView1.Columns(5).Text = "Formato da unidade"
-                        ListView1.Columns(6).Text = "Contém Windows?"
-                        ListView1.Columns(7).Text = "Versão do Windows"
-                        Button1.Text = "Atualizar"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "ITA"
-                        Text = "Scegliere un disco"
-                        Label1.Text = "Per iniziare la gestione dell'installazione offline, scegliere un disco nell'elenco sottostante. Questo elenco verrà aggiornato automaticamente ogni minuto o quando si fa clic sul pulsante Aggiorna."
-                        ListView1.Columns(0).Text = "Lettera unità"
-                        ListView1.Columns(1).Text = "Etichetta unità"
-                        ListView1.Columns(2).Text = "Tipo di unità"
-                        ListView1.Columns(3).Text = "Dimensione totale"
-                        ListView1.Columns(4).Text = "Spazio libero disponibile"
-                        ListView1.Columns(5).Text = "Formato unità"
-                        ListView1.Columns(6).Text = "Contiene Windows?"
-                        ListView1.Columns(7).Text = "Versione di Windows"
-                        Button1.Text = "Aggiorna"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                End Select
-            Case 1
-                Text = "Choose a disk"
-                Label1.Text = "To begin performing offline installation management, please choose a disk shown in the list below. This list will be updated automatically every minute, or when you click the Refresh button."
-                ListView1.Columns(0).Text = "Drive letter"
-                ListView1.Columns(1).Text = "Drive label"
-                ListView1.Columns(2).Text = "Drive type"
-                ListView1.Columns(3).Text = "Total size"
-                ListView1.Columns(4).Text = "Available free space"
-                ListView1.Columns(5).Text = "Drive format"
-                ListView1.Columns(6).Text = "Contains Windows?"
-                ListView1.Columns(7).Text = "Windows version"
-                Button1.Text = "Refresh"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-            Case 2
-                Text = "Elija un disco"
-                Label1.Text = "Para comenzar a realizar el mantenimiento de instalaciones fuera de línea, escoja un disco mostrado en la lista de abajo. Esta lista se actualizará automáticamente cada minuto, o cuando haga clic en el botón Actualizar."
-                ListView1.Columns(0).Text = "Letra de disco"
-                ListView1.Columns(1).Text = "Etiqueta de disco"
-                ListView1.Columns(2).Text = "Tipo de disco"
-                ListView1.Columns(3).Text = "Tamaño total"
-                ListView1.Columns(4).Text = "Espacio libre"
-                ListView1.Columns(5).Text = "Formato del disco"
-                ListView1.Columns(6).Text = "¿Contiene Windows?"
-                ListView1.Columns(7).Text = "Versión de Windows"
-                Button1.Text = "Actualizar"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-            Case 3
-                Text = "Choisir un disque"
-                Label1.Text = "Pour commencer la gestion de l'installation hors ligne, veuillez choisir un disque dans la liste ci-dessous. Cette liste sera mise à jour automatiquement toutes les minutes, ou lorsque vous cliquez sur le bouton Actualiser."
-                ListView1.Columns(0).Text = "Lettre de disque"
-                ListView1.Columns(1).Text = "Étiquette de disque"
-                ListView1.Columns(2).Text = "Type de disque"
-                ListView1.Columns(3).Text = "Taille totale"
-                ListView1.Columns(4).Text = "Espace libre disponible"
-                ListView1.Columns(5).Text = "Format de disque"
-                ListView1.Columns(6).Text = "Contient Windows ?"
-                ListView1.Columns(7).Text = "Version Windows"
-                Button1.Text = "Actualiser"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-            Case 4
-                Text = "Escolha um disco"
-                Label1.Text = "Para começar a efetuar a gestão da instalação offline, escolha um disco apresentado na lista abaixo. Esta lista será actualizada automaticamente a cada minuto, ou quando clicar no botão Atualizar."
-                ListView1.Columns(0).Text = "Letra da unidade"
-                ListView1.Columns(1).Text = "Etiqueta da unidade"
-                ListView1.Columns(2).Text = "Tipo de unidade"
-                ListView1.Columns(3).Text = "Tamanho total"
-                ListView1.Columns(4).Text = "Espaço livre disponível"
-                ListView1.Columns(5).Text = "Formato da unidade"
-                ListView1.Columns(6).Text = "Contém Windows?"
-                ListView1.Columns(7).Text = "Versão do Windows"
-                Button1.Text = "Atualizar"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-            Case 5
-                Text = "Scegliere un disco"
-                Label1.Text = "Per iniziare la gestione dell'installazione offline, scegliere un disco nell'elenco sottostante. Questo elenco verrà aggiornato automaticamente ogni minuto o quando si fa clic sul pulsante Aggiorna."
-                ListView1.Columns(0).Text = "Lettera unità"
-                ListView1.Columns(1).Text = "Etichetta unità"
-                ListView1.Columns(2).Text = "Tipo di unità"
-                ListView1.Columns(3).Text = "Dimensione totale"
-                ListView1.Columns(4).Text = "Spazio libero disponibile"
-                ListView1.Columns(5).Text = "Formato unità"
-                ListView1.Columns(6).Text = "Contiene Windows?"
-                ListView1.Columns(7).Text = "Versione di Windows"
-                Button1.Text = "Aggiorna"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-        End Select
+        Text = LocalizationService.ForSection("OfflineDriveList")("Disk.Choose.Label")
+        Label1.Text = LocalizationService.ForSection("OfflineDriveList")("Begin.Install.Message")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("OfflineDriveList")("DriveLetter.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("OfflineDriveList")("DriveLabel.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("OfflineDriveList")("DriveType.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("OfflineDriveList")("TotalSize.Column")
+        ListView1.Columns(4).Text = LocalizationService.ForSection("OfflineDriveList")("Available.Free.Space.Column")
+        ListView1.Columns(5).Text = LocalizationService.ForSection("OfflineDriveList")("DriveFormat.Column")
+        ListView1.Columns(6).Text = LocalizationService.ForSection("OfflineDriveList")("ContainsWindows.Column")
+        ListView1.Columns(7).Text = LocalizationService.ForSection("OfflineDriveList")("Windows.Column")
+        Button1.Text = LocalizationService.ForSection("OfflineDriveList")("Refresh.Button")
+        OK_Button.Text = LocalizationService.ForSection("OfflineDriveList")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("OfflineDriveList")("Cancel.Button")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = BackColor

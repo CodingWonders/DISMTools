@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Dism
+Imports Microsoft.Dism
 Imports System.IO
 
 Namespace Elements.Contemporaneus
@@ -31,63 +31,12 @@ Namespace Elements.Contemporaneus
             Return isRegistered
         End Function
 
-        Public Function GetLocalizedRegistrationStatus(MountDirectory As String, LangCode As Integer) As String
-            Dim registrationString As String = ""
-
+        Public Function GetLocalizedRegistrationStatus(MountDirectory As String) As String
             If IsPackageRegistered(MountDirectory) Then
-                Select Case LangCode
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                registrationString = "Yes"
-                            Case "ESN"
-                                registrationString = "Sí"
-                            Case "FRA"
-                                registrationString = "Oui"
-                            Case "PTB", "PTG"
-                                registrationString = "Sim"
-                            Case "ITA"
-                                registrationString = "Sì"
-                        End Select
-                    Case 1
-                        registrationString = "Yes"
-                    Case 2
-                        registrationString = "Sí"
-                    Case 3
-                        registrationString = "Oui"
-                    Case 4
-                        registrationString = "Sim"
-                    Case 5
-                        registrationString = "Sì"
-                End Select
-            Else
-                Select Case LangCode
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                registrationString = "No"
-                            Case "ESN"
-                                registrationString = "No"
-                            Case "FRA"
-                                registrationString = "Non"
-                            Case "PTB", "PTG"
-                                registrationString = "Não"
-                            Case "ITA"
-                                registrationString = "No"
-                        End Select
-                    Case 1
-                        registrationString = "No"
-                    Case 2
-                        registrationString = "No"
-                    Case 3
-                        registrationString = "Non"
-                    Case 4
-                        registrationString = "Não"
-                    Case 5
-                        registrationString = "No"
-                End Select
+                Return LocalizationService.ForSection("ImageAppxPackage.RegStatus")("Yes.Button")
             End If
-            Return registrationString
+
+            Return LocalizationService.ForSection("ImageAppxPackage.RegStatus")("No.Button")
         End Function
 
     End Class

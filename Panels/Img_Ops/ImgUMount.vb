@@ -1,11 +1,11 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 
 Public Class ImgUMount
 
-    Dim UMountOperations() As String = New String(1) {"Save changes and unmount", "Discard changes and unmount"}
+    Dim UMountOperations() As String = New String(1) {"", ""}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
@@ -29,60 +29,12 @@ Public Class ImgUMount
                     ProgressPanel.RandomMountDir = TextBox1.Text
                 Else
                     DynaLog.LogMessage("No image is mounted there. This is not a valid mount directory.")
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                                Case "ESN"
-                                    MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                                Case "FRA"
-                                    MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                                Case "PTB", "PTG"
-                                    MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                                Case "ITA"
-                                    MsgBox("La directory specificata non è una directory di montaggio valida.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            End Select
-                        Case 1
-                            MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case 2
-                            MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case 3
-                            MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case 4
-                            MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case 5
-                            MsgBox("La directory specificata non è una directory di montaggio valida.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    End Select
+                    MsgBox(LocalizationService.ForSection("ImgUMount.Validation")("Dir.Invalid.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                     Exit Sub
                 End If
             Else
                 DynaLog.LogMessage("The provided mount directory does not exist.")
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "ESN"
-                                MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "FRA"
-                                MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "PTB", "PTG"
-                                MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "ITA"
-                                MsgBox("La directory di montaggio non esiste", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        End Select
-                    Case 1
-                        MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 2
-                        MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 3
-                        MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 4
-                        MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 5
-                        MsgBox("La directory di montaggio non esiste", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                End Select
+                MsgBox(LocalizationService.ForSection("ImgUMount.Validation")("Dir.Missing.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Exit Sub
             End If
         End If
@@ -119,201 +71,24 @@ Public Class ImgUMount
     Private Sub ImgUMount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ComboBox1.SelectedText = ""
         ComboBox1.Items.Clear()
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Unmount an image"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Please specify the options to unmount this image:"
-                        Label3.Text = "The mount directory:"
-                        Label4.Text = "Mount directory:"
-                        Label7.Text = "Unmount operation:"
-                        CheckBox1.Text = "Check image integrity"
-                        CheckBox2.Text = "Append changes to another index"
-                        Button1.Text = "Pick..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        FolderBrowserDialog1.Description = "Please specify a mount directory:"
-                        RadioButton1.Text = "is loaded in the project"
-                        RadioButton2.Text = "is located somewhere else"
-                        UMountOperations(0) = "Save changes and unmount"
-                        UMountOperations(1) = "Discard changes and unmount"
-                        GroupBox1.Text = "Mount directory"
-                        GroupBox2.Text = "Additional options"
-                    Case "ESN"
-                        Text = "Desmontar una imagen"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Especifique las opciones para desmontar esta imagen:"
-                        Label3.Text = "El directorio de montaje:"
-                        Label4.Text = "Directorio de montaje:"
-                        Label7.Text = "Operación de desmontaje:"
-                        CheckBox1.Text = "Comprobar integridad de la imagen"
-                        CheckBox2.Text = "Anexar los cambios en otro índice"
-                        Button1.Text = "Escoger..."
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        FolderBrowserDialog1.Description = "Especifique un directorio de montaje:"
-                        RadioButton1.Text = "está cargado en el proyecto"
-                        RadioButton2.Text = "se ubica en otro lugar"
-                        UMountOperations(0) = "Guardar cambios y desmontar"
-                        UMountOperations(1) = "Descartar cambios y desmontar"
-                        GroupBox1.Text = "Directorio de montaje"
-                        GroupBox2.Text = "Opciones adicionales"
-                    Case "FRA"
-                        Text = "Démonter une image"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
-                        Label3.Text = "Le répertoire de montage :"
-                        Label4.Text = "Répertoire de montage :"
-                        Label7.Text = "Opération de démontage :"
-                        CheckBox1.Text = "Vérifier l'intégrité de l'image"
-                        CheckBox2.Text = "Ajouter des modifications à un autre index"
-                        Button1.Text = "Choisir..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        FolderBrowserDialog1.Description = "Veuillez indiquer un répertoire de montage :"
-                        RadioButton1.Text = "est chargé dans le projet"
-                        RadioButton2.Text = "est situé ailleurs"
-                        UMountOperations(0) = "Sauvegarder les modifications et démonter"
-                        UMountOperations(1) = "Annuler les modifications et démonter"
-                        GroupBox1.Text = "Répertoire de montage"
-                        GroupBox2.Text = "Paramètres supplémentaires"
-                    Case "PTB", "PTG"
-                        Text = "Desmontar uma imagem"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Por favor, especifique as opções para desmontar esta imagem:"
-                        Label3.Text = "O diretório de montagem:"
-                        Label4.Text = "Diretório de montagem:"
-                        Label7.Text = "Operação de desmontagem:"
-                        CheckBox1.Text = "Verificar a integridade da imagem"
-                        CheckBox2.Text = "Anexar alterações a outro índice"
-                        Button1.Text = "Escolher..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        FolderBrowserDialog1.Description = "Por favor, especifique um diretório de montagem:"
-                        RadioButton1.Text = "está carregado no projeto"
-                        RadioButton2.Text = "está localizado noutro local"
-                        UMountOperations(0) = "Guardar alterações e desmontar"
-                        UMountOperations(1) = "Descartar alterações e desmontar"
-                        GroupBox1.Text = "Diretório de montagem"
-                        GroupBox2.Text = "Opções adicionais"
-                    Case "ITA"
-                        Text = "Smontare un'immagine"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Specificare le opzioni per smontare questa immagine:"
-                        Label3.Text = "La directory di montaggio:"
-                        Label4.Text = "Directory di montaggio:"
-                        Label7.Text = "Operazione di smontaggio:"
-                        CheckBox1.Text = "Controlla l'integrità dell'immagine"
-                        CheckBox2.Text = "Applica le modifiche a un altro indice"
-                        Button1.Text = "Scegli..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        FolderBrowserDialog1.Description = "Specificare una directory di montaggio:"
-                        RadioButton1.Text = "è caricata nel progetto"
-                        RadioButton2.Text = "si trova da qualche altra parte"
-                        UMountOperations(0) = "Salvare le modifiche e smontare"
-                        UMountOperations(1) = "Scartare le modifiche e smontare"
-                        GroupBox1.Text = "Montare la directory"
-                        GroupBox2.Text = "Opzioni aggiuntive"
-                End Select
-            Case 1
-                Text = "Unmount an image"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Please specify the options to unmount this image:"
-                Label3.Text = "The mount directory:"
-                Label4.Text = "Mount directory:"
-                Label7.Text = "Unmount operation:"
-                CheckBox1.Text = "Check image integrity"
-                CheckBox2.Text = "Append changes to another index"
-                Button1.Text = "Pick..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                FolderBrowserDialog1.Description = "Please specify a mount directory:"
-                RadioButton1.Text = "is loaded in the project"
-                RadioButton2.Text = "is located somewhere else"
-                UMountOperations(0) = "Save changes and unmount"
-                UMountOperations(1) = "Discard changes and unmount"
-                GroupBox1.Text = "Mount directory"
-                GroupBox2.Text = "Additional options"
-            Case 2
-                Text = "Desmontar una imagen"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Especifique las opciones para desmontar esta imagen:"
-                Label3.Text = "El directorio de montaje:"
-                Label4.Text = "Directorio de montaje:"
-                Label7.Text = "Operación de desmontaje:"
-                CheckBox1.Text = "Comprobar integridad de la imagen"
-                CheckBox2.Text = "Anexar los cambios en otro índice"
-                Button1.Text = "Escoger..."
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                FolderBrowserDialog1.Description = "Especifique un directorio de montaje:"
-                RadioButton1.Text = "está cargado en el proyecto"
-                RadioButton2.Text = "se ubica en otro lugar"
-                UMountOperations(0) = "Guardar cambios y desmontar"
-                UMountOperations(1) = "Descartar cambios y desmontar"
-                GroupBox1.Text = "Directorio de montaje"
-                GroupBox2.Text = "Opciones adicionales"
-            Case 3
-                Text = "Démonter une image"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
-                Label3.Text = "Le répertoire de montage :"
-                Label4.Text = "Répertoire de montage :"
-                Label7.Text = "Opération de démontage :"
-                CheckBox1.Text = "Vérifier l'intégrité de l'image"
-                CheckBox2.Text = "Ajouter des modifications à un autre index"
-                Button1.Text = "Choisir..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                FolderBrowserDialog1.Description = "Veuillez indiquer un répertoire de montage :"
-                RadioButton1.Text = "est chargé dans le projet"
-                RadioButton2.Text = "est situé ailleurs"
-                UMountOperations(0) = "Sauvegarder les modifications et démonter"
-                UMountOperations(1) = "Annuler les modifications et démonter"
-                GroupBox1.Text = "Répertoire de montage"
-                GroupBox2.Text = "Paramètres supplémentaires"
-            Case 4
-                Text = "Desmontar uma imagem"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Por favor, especifique as opções para desmontar esta imagem:"
-                Label3.Text = "O diretório de montagem:"
-                Label4.Text = "Diretório de montagem:"
-                Label7.Text = "Operação de desmontagem:"
-                CheckBox1.Text = "Verificar a integridade da imagem"
-                CheckBox2.Text = "Anexar alterações a outro índice"
-                Button1.Text = "Escolher..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                FolderBrowserDialog1.Description = "Por favor, especifique um diretório de montagem:"
-                RadioButton1.Text = "está carregado no projeto"
-                RadioButton2.Text = "está localizado noutro local"
-                UMountOperations(0) = "Guardar alterações e desmontar"
-                UMountOperations(1) = "Descartar alterações e desmontar"
-                GroupBox1.Text = "Diretório de montagem"
-                GroupBox2.Text = "Opções adicionais"
-            Case 5
-                Text = "Smontare un'immagine"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Specificare le opzioni per smontare questa immagine:"
-                Label3.Text = "La directory di montaggio:"
-                Label4.Text = "Directory di montaggio:"
-                Label7.Text = "Operazione di smontaggio:"
-                CheckBox1.Text = "Controlla l'integrità dell'immagine"
-                CheckBox2.Text = "Applica le modifiche a un altro indice"
-                Button1.Text = "Scegli..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                FolderBrowserDialog1.Description = "Specificare una directory di montaggio:"
-                RadioButton1.Text = "è caricata nel progetto"
-                RadioButton2.Text = "si trova da qualche altra parte"
-                UMountOperations(0) = "Salvare le modifiche e smontare"
-                UMountOperations(1) = "Scartare le modifiche e smontare"
-                GroupBox1.Text = "Montare la directory"
-                GroupBox2.Text = "Opzioni aggiuntive"
-        End Select
+        Text = LocalizationService.ForSection("ImgUMount")("UnmountImage.Label")
+        ImageTaskHeader1.ItemText = Text
+        Label2.Text = LocalizationService.ForSection("ImgUMount")("Options.Required.Label")
+        Label3.Text = LocalizationService.ForSection("ImgUMount")("Dir.Label")
+        Label4.Text = LocalizationService.ForSection("ImgUMount")("MountDirectory.Label")
+        Label7.Text = LocalizationService.ForSection("ImgUMount")("UnmountOperation.Label")
+        CheckBox1.Text = LocalizationService.ForSection("ImgUMount")("Integrity.CheckBox")
+        CheckBox2.Text = LocalizationService.ForSection("ImgUMount")("Append.Changes.CheckBox")
+        Button1.Text = LocalizationService.ForSection("ImgUMount")("Pick.Button")
+        OK_Button.Text = LocalizationService.ForSection("ImgUMount")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ImgUMount")("Cancel.Button")
+        FolderBrowserDialog1.Description = LocalizationService.ForSection("ImgUMount")("Dir.Required.Description")
+        RadioButton1.Text = LocalizationService.ForSection("ImgUMount")("LoadedProject.RadioButton")
+        RadioButton2.Text = LocalizationService.ForSection("ImgUMount")("LocatedSomewhere.RadioButton")
+        UMountOperations(0) = LocalizationService.ForSection("ImgUMount")("Save.Changes.Unmount.Item")
+        UMountOperations(1) = LocalizationService.ForSection("ImgUMount")("Discard.Changes.Unmount.Item")
+        GroupBox1.Text = LocalizationService.ForSection("ImgUMount")("MountDirectory.Group")
+        GroupBox2.Text = LocalizationService.ForSection("ImgUMount")("Additional.Options.Group")
         ComboBox1.Items.AddRange(UMountOperations)
         ComboBox1.SelectedIndex = 0
         ImageTaskHeader1.SetColors()

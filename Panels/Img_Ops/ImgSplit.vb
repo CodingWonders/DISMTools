@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 
@@ -16,61 +16,13 @@ Public Class ImgSplit
                 ProgressPanel.SWMSplitTargetFile = TextBox2.Text
             Else
                 DynaLog.LogMessage("Either no target file has been specified or its directory does not exist in the file system.")
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "ESN"
-                                MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "FRA"
-                                MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "PTB", "PTG"
-                                MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                            Case "ITA"
-                                MsgBox("Specificare un nome e un percorso per il file SWM di destinazione e riprovare. Assicurarsi inoltre che il percorso di destinazione esista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        End Select
-                    Case 1
-                        MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 2
-                        MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 3
-                        MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 4
-                        MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    Case 5
-                        MsgBox("Specificare un nome e un percorso per il file SWM di destinazione e riprovare. Assicurarsi inoltre che il percorso di destinazione esista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                End Select
+                MsgBox(LocalizationService.ForSection("ImgSplit.Validation")("Name.Required.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                 Exit Sub
             End If
             ProgressPanel.SWMSplitCheckIntegrity = CheckBox1.Checked
         Else
             DynaLog.LogMessage("Either no source WIM file has been specified or it does not exist in the file system.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case "ESN"
-                            MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case "FRA"
-                            MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case "PTB", "PTG"
-                            MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                        Case "ITA"
-                            MsgBox("Specificare un file WIM di origine e riprovare. Assicurarsi inoltre che esista", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    End Select
-                Case 1
-                    MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                Case 2
-                    MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                Case 3
-                    MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                Case 4
-                    MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                Case 5
-                    MsgBox("Specificare un file WIM di origine e riprovare. Assicurarsi inoltre che esista", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-            End Select
+            MsgBox(LocalizationService.ForSection("ImgSplit.Validation")("Source.WIM.Required.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         ProgressPanel.OperationNum = 20
@@ -86,151 +38,19 @@ Public Class ImgSplit
     End Sub
 
     Private Sub ImgSplit_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Split images"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Source image to split:"
-                        Label3.Text = "Name and path of the destination split image:"
-                        Label4.Text = "Maximum size of split images (in MB):"
-                        Label5.Text = "Do note that, to accommodate a large file in the image, a split image file may be larger than the specified value"
-                        Button1.Text = "Browse..."
-                        Button2.Text = "Browse..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        CheckBox1.Text = "Check image integrity"
-                        OpenFileDialog1.Title = "Specify the source WIM file to split:"
-                        SaveFileDialog1.Title = "Specify the target location of the split images:"
-                    Case "ESN"
-                        Text = "Dividir imágenes"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Imagen de origen a dividir:"
-                        Label3.Text = "Nombre y ruta de la imagen dividida de destino:"
-                        Label4.Text = "Tamaño máximo de imágenes divididas (en MB):"
-                        Label5.Text = "Para acomodar un archivo grande de la imagen, una imagen dividida puede ocupar más tamaño del especificado"
-                        Button1.Text = "Examinar..."
-                        Button2.Text = "Examinar..."
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        CheckBox1.Text = "Comprobar integridad de la imagen"
-                        OpenFileDialog1.Title = "Especifique el archivo WIM de origen a dividir:"
-                        SaveFileDialog1.Title = "Especifique la ubicación de destino de las imágenes divididas:"
-                    Case "FRA"
-                        Text = "Diviser les images"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Image source à diviser :"
-                        Label3.Text = "Nom et chemin de l'image divisée de destination :"
-                        Label4.Text = "Taille maximale des images fractionnées (en Mo) :"
-                        Label5.Text = "Notez que, pour tenir compte d'un fichier volumineux dans l'image, un fichier d'image divisé peut être plus grand que la valeur spécifiée."
-                        Button1.Text = "Parcourir..."
-                        Button2.Text = "Parcourir..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        CheckBox1.Text = "Vérifier l'intégrité de l'image"
-                        OpenFileDialog1.Title = "Spécifiez le fichier WIM source à diviser :"
-                        SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
-                    Case "PTB", "PTG"
-                        Text = "Dividir imagens"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Imagem de origem a dividir:"
-                        Label3.Text = "Nome e caminho da imagem dividida de destino:"
-                        Label4.Text = "Tamanho máximo das imagens divididas (em MB):"
-                        Label5.Text = "Tenha em atenção que, para acomodar um ficheiro grande na imagem, um ficheiro de imagem dividida pode ser maior do que o valor especificado"
-                        Button1.Text = "Navegar..."
-                        Button2.Text = "Navegar..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        CheckBox1.Text = "Verificar a integridade da imagem"
-                        OpenFileDialog1.Title = "Especificar o ficheiro WIM de origem a dividir:"
-                        SaveFileDialog1.Title = "Especificar a localização de destino das imagens divididas:"
-                    Case "ITA"
-                        Text = "Dividere le immagini"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Immagine sorgente da dividere:"
-                        Label3.Text = "Nome e percorso dell'immagine di destinazione da dividere:"
-                        Label4.Text = "Dimensione massima delle immagini divise (in MB):"
-                        Label5.Text = "Tenere presente che, per ospitare un file di grandi dimensioni nell'immagine, un file di immagine divisa può essere più grande del valore specificato"
-                        Button1.Text = "Sfoglia..."
-                        Button2.Text = "Sfoglia..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annulla"
-                        CheckBox1.Text = "Controlla l'integrità dell'immagine"
-                        OpenFileDialog1.Title = "Specificare il file WIM di origine da dividere:"
-                        SaveFileDialog1.Title = "Specificare la posizione di destinazione delle immagini divise:"
-                End Select
-            Case 1
-                Text = "Split images"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Source image to split:"
-                Label3.Text = "Name and path of the destination split image:"
-                Label4.Text = "Maximum size of split images (in MB):"
-                Label5.Text = "Do note that, to accommodate a large file in the image, a split image file may be larger than the specified value"
-                Button1.Text = "Browse..."
-                Button2.Text = "Browse..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                CheckBox1.Text = "Check image integrity"
-                OpenFileDialog1.Title = "Specify the source WIM file to split:"
-                SaveFileDialog1.Title = "Specify the target location of the split images:"
-            Case 2
-                Text = "Dividir imágenes"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Imagen de origen a dividir:"
-                Label3.Text = "Nombre y ruta de la imagen dividida de destino:"
-                Label4.Text = "Tamaño máximo de imágenes divididas (en MB):"
-                Label5.Text = "Para acomodar un archivo grande de la imagen, una imagen dividida puede ocupar más tamaño del especificado"
-                Button1.Text = "Examinar..."
-                Button2.Text = "Examinar..."
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                CheckBox1.Text = "Comprobar integridad de la imagen"
-                OpenFileDialog1.Title = "Especifique el archivo WIM de origen a dividir:"
-                SaveFileDialog1.Title = "Especifique la ubicación de destino de las imágenes divididas:"
-            Case 3
-                Text = "Diviser les images"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Image source à diviser :"
-                Label3.Text = "Nom et chemin de l'image divisée de destination :"
-                Label4.Text = "Taille maximale des images fractionnées (en Mo) :"
-                Label5.Text = "Notez que, pour tenir compte d'un fichier volumineux dans l'image, un fichier d'image divisé peut être plus grand que la valeur spécifiée."
-                Button1.Text = "Parcourir..."
-                Button2.Text = "Parcourir..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                CheckBox1.Text = "Vérifier l'intégrité de l'image"
-                OpenFileDialog1.Title = "Spécifiez le fichier WIM source à diviser :"
-                SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
-            Case 4
-                Text = "Dividir imagens"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Imagem de origem a dividir:"
-                Label3.Text = "Nome e caminho da imagem dividida de destino:"
-                Label4.Text = "Tamanho máximo das imagens divididas (em MB):"
-                Label5.Text = "Tenha em atenção que, para acomodar um ficheiro grande na imagem, um ficheiro de imagem dividida pode ser maior do que o valor especificado"
-                Button1.Text = "Navegar..."
-                Button2.Text = "Navegar..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                CheckBox1.Text = "Verificar a integridade da imagem"
-                OpenFileDialog1.Title = "Especificar o ficheiro WIM de origem a dividir:"
-                SaveFileDialog1.Title = "Especificar a localização de destino das imagens divididas:"
-            Case 5
-                Text = "Dividere le immagini"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Immagine sorgente da dividere:"
-                Label3.Text = "Nome e percorso dell'immagine di destinazione da dividere:"
-                Label4.Text = "Dimensione massima delle immagini divise (in MB):"
-                Label5.Text = "Tenere presente che, per ospitare un file di grandi dimensioni nell'immagine, un file di immagine divisa può essere più grande del valore specificato"
-                Button1.Text = "Sfoglia..."
-                Button2.Text = "Sfoglia..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annulla"
-                CheckBox1.Text = "Controlla l'integrità dell'immagine"
-                OpenFileDialog1.Title = "Specificare il file WIM di origine da dividere:"
-                SaveFileDialog1.Title = "Specificare la posizione di destinazione delle immagini divise:"
-        End Select
+        Text = LocalizationService.ForSection("ImgSplit")("SplitImages.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("ImgSplit").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("ImgSplit")("Source.Image.Label")
+        Label3.Text = LocalizationService.ForSection("ImgSplit")("Name.Path.Destination.Label")
+        Label4.Text = LocalizationService.ForSection("ImgSplit")("Maximum.Size.Images.Label")
+        Label5.Text = LocalizationService.ForSection("ImgSplit")("LargeFile.Note.Message")
+        Button1.Text = LocalizationService.ForSection("ImgSplit")("Browse.Button")
+        Button2.Text = LocalizationService.ForSection("ImgSplit")("Browse.Button")
+        OK_Button.Text = LocalizationService.ForSection("ImgSplit")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ImgSplit")("Cancel.Button")
+        CheckBox1.Text = LocalizationService.ForSection("ImgSplit")("Integrity.CheckBox")
+        OpenFileDialog1.Title = LocalizationService.ForSection("ImgSplit")("Source.WIM.File.Title")
+        SaveFileDialog1.Title = LocalizationService.ForSection("ImgSplit")("Target.Location.Title")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

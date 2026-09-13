@@ -1,4 +1,4 @@
-﻿Imports System.Threading
+Imports System.Threading
 Imports System.Net.NetworkInformation
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.RegularExpressions
@@ -261,7 +261,7 @@ Public Class ADDSJoinDialog
         CurrentWizardPage = NewPage
         Back_Button.Enabled = Not (NewPage = WizardPage.DnsConfigPage)
 
-        Next_Button.Text = If(NewPage = WizardPage.DsConfigPage, "Finish", "Next")
+        Next_Button.Text = If(NewPage = WizardPage.DsConfigPage, LocalizationService.ForSection("ADDSJoinDialog.ChangePage")("Finish.Label"), LocalizationService.ForSection("ADDSJoinDialog.ChangePage")("Next.Button"))
 
         DNS_Explanation_Link.Visible = (NewPage = WizardPage.DnsConfigPage)
     End Sub
@@ -272,44 +272,43 @@ Public Class ADDSJoinDialog
         Select Case page
             Case WizardPage.DnsConfigPage
                 If TextBox1.Text = "" Then
-                    MsgBox("A primary domain suffix must be provided for DNS", vbOKOnly + vbCritical)
+                    MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("PrimarySuffix.Required"), vbOKOnly + vbCritical)
                     Return False
                 End If
                 If dnsAliasName = "" Then
-                    MsgBox("An interface alias must be provided for DNS. These are the names of the network adapters installed on your system", vbOKOnly + vbCritical)
+                    MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("InterfaceAlias.Message"), vbOKOnly + vbCritical)
                     Return False
                 End If
                 If RichTextBox1.Text = "" Then
-                    MsgBox("No DNS server addresses have been provided", vbOKOnly + vbCritical)
+                    MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("No.DNSServer.None.Label"), vbOKOnly + vbCritical)
                     Return False
                 End If
             Case WizardPage.DsConfigPage
                 If TextBox4.Text = "" Then
-                    MsgBox("A domain name must be specified", vbOKOnly + vbCritical)
+                    MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("DomainName.Label"), vbOKOnly + vbCritical)
                     Return False
                 End If
                 If initialUserName = "" Then
-                    MsgBox("A user name must be specified", vbOKOnly + vbCritical)
+                    MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("User.Name.Label"), vbOKOnly + vbCritical)
                     Return False
                 End If
                 If TextBox6.Text = "" Then
                     Try
                         If DomainServicesModule.DSAccountRequiresPassword(dsDomainName, initialUserName) Then
-                            MsgBox(String.Format("A password for the specified user, {0}{1}{0}, must be specified as per security policies imposed by the domain controller.", Quote, initialUserName), vbOKOnly + vbCritical)
+                            MsgBox(LocalizationService.ForSection("DomainJoin.Messages").Format("Password.User.Message", initialUserName), vbOKOnly + vbCritical)
                             Return False
                         End If
                     Catch ex As Exception
-                        MsgBox(String.Format("A password for the specified user, {0}{1}{0}, must be specified as per security policies imposed by the domain controller.", Quote, initialUserName), vbOKOnly + vbCritical)
+                        MsgBox(LocalizationService.ForSection("DomainJoin.Messages").Format("Password.User.Message", initialUserName), vbOKOnly + vbCritical)
                         Return False
                     End Try
                 End If
                 If dsIsInDomain AndAlso Not DomainServicesModule.DSAccountExists(dsDomainName, initialUserName) Then
-                    If MsgBox(String.Format("The specified user, {1}, does not appear to exist in the provided domain. You may not be able to sign in with this user unless you create it first.{0}{0}" &
-                                            "Do you want to continue?", Environment.NewLine, initialUserName), vbYesNo + vbExclamation, Text) = MsgBoxResult.No Then
+                    If MsgBox(LocalizationService.ForSection("DomainJoin.Messages").Format("User.Appear.Exist.Message", initialUserName), vbYesNo + vbExclamation, Text) = MsgBoxResult.No Then
                         Return False
                     End If
                 End If
-                Return MsgBox("Please verify the information that you typed. If you incorrectly typed a field, the client device may not join the domain." & CrLf & CrLf & "The client device will also not join the domain if it will run home editions of Windows." & CrLf & CrLf & "Are you sure that these settings are correct?", vbYesNo + vbQuestion, "Verify Settings") = MsgBoxResult.Yes
+                Return MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Verify.Typed.Message"), vbYesNo + vbQuestion, LocalizationService.ForSection("DomainJoin.Messages")("VerifySettings.Title")) = MsgBoxResult.Yes
         End Select
         Return True
     End Function
@@ -327,11 +326,11 @@ Public Class ADDSJoinDialog
                 dsInfo = New DomainInformation(TextBox4.Text, initialUserName, TextBox6.Text)
             End If
             If ApplyDsSettings() Then
-                MsgBox("Domain settings were added successfully to the answer file. You can further modify these components in the System components section.")
+                MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Domain.Settings.Message"))
                 SetDefaultSettings()
                 Close()
             Else
-                MsgBox("Could not add domain settings.")
+                MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Add.Domain.Settings.Label"))
             End If
         Else
             ChangePage(CurrentWizardPage + 1)
@@ -409,8 +408,7 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub DNS_Explanation_Link_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DNS_Explanation_Link.LinkClicked
-        MsgBox("DNS (short for Domain Name System) is a server role that automatically translates IP addresses to human-readable names." & CrLf & CrLf &
-               "When you use this wizard, DISMTools assumes that either you or your system administrator have set up DNS on your network. If not, cancel this wizard and set it up.",
+        MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Dnsshort.DomainName.Message"),
                vbOKOnly + vbInformation)
     End Sub
 
@@ -472,7 +470,7 @@ Public Class ADDSJoinDialog
                     LinkLocalIPv6Addresses += 1
                 ElseIf Regex.IsMatch(dnsAddress, "^fec.*") Then         ' Site-Local pattern. Invalid address in the program's perspective, and as per RFC 3879: https://datatracker.ietf.org/doc/html/rfc3879
                     DynaLog.LogMessage("Address Type: Site-Local. For compatibility reasons, it will be treated as invalid")
-                    InvalidAddressList.Add(String.Format("- {0} -- Site-Local Address; it is no longer in use", dnsAddress))
+                    InvalidAddressList.Add(LocalizationService.ForSection("DomainJoin.DNS").Format("Site.Local.Address.Label", dnsAddress))
                     InvalidAddresses += 1
                 ElseIf Regex.IsMatch(dnsAddress, "^f(c|d).*") Then      ' Unique Local address pattern. It's our Site-Local replacement as per RFC 4193: https://datatracker.ietf.org/doc/html/rfc4193
                     ' It can be either fc or fd depending on whether the prefix is locally assigned
@@ -485,7 +483,7 @@ Public Class ADDSJoinDialog
             Else
                 DynaLog.LogMessage("This is an unrecognized address")
                 InvalidAddresses += 1
-                InvalidAddressList.Add(String.Format("- {0} -- Malformed Address", dnsAddress))
+                InvalidAddressList.Add(LocalizationService.ForSection("DomainJoin.DNS").Format("MalformedAddress.Label", dnsAddress))
             End If
             current += 1
         Next
@@ -493,26 +491,11 @@ Public Class ADDSJoinDialog
         ValidToInvalidAddressRatio = Math.Round(((IPv4Addresses + GlobalIPv6Addresses + LinkLocalIPv6Addresses + UniqueLocalIPv6Addresses) / total) * 100, 2)
 
         ' Now let's report our info to the user
-        dnsAddressValidationInfo = String.Format("Address Syntax Validation Results:" & CrLf &
-                                                 "- Invalid Addresses: {0}" & CrLf &
-                                                 "- IPv4 Addresses: {1}" & CrLf &
-                                                 "- Global IPv6 Addresses: {2}" & CrLf &
-                                                 "- Link-Local IPv6 Addresses: {3}" & CrLf &
-                                                 "- Unique Local IPv6 Addresses: {4}" & CrLf & CrLf &
-                                                 "- Valid/Invalid Address Ratio: {5}%" & CrLf &
-                                                 "{6}" & CrLf &
-                                                 "These addresses will be configured in the unattended answer file.",
-                                                 InvalidAddresses,
-                                                 IPv4Addresses,
-                                                 GlobalIPv6Addresses,
-                                                 LinkLocalIPv6Addresses,
-                                                 UniqueLocalIPv6Addresses,
-                                                 ValidToInvalidAddressRatio,
-                                                 If(InvalidAddresses > 0,
-                                                    CrLf & "Some addresses are invalid. Here's why: " & CrLf & CrLf & String.Join(CrLf, InvalidAddressList) & CrLf,
+        dnsAddressValidationInfo = LocalizationService.ForSection("DomainJoin.DNS").Format("AddressSyntax.Message", InvalidAddresses, IPv4Addresses, GlobalIPv6Addresses, LinkLocalIPv6Addresses, UniqueLocalIPv6Addresses, ValidToInvalidAddressRatio, If(InvalidAddresses > 0,
+                                                    LocalizationService.ForSection("DomainJoin.DNS").Format("InvalidAddresses.Label", String.Join(CrLf, InvalidAddressList)),
                                                     ""))
 
-        Throw New Exception("The verification has finished." & CrLf & CrLf & dnsAddressValidationInfo)
+        Throw New Exception(LocalizationService.ForSection("DomainJoin.DNS").Format("Verification.Done.Message", dnsAddressValidationInfo))
     End Sub
 
     Private Sub DnsValidatorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles DnsValidatorBW.ProgressChanged
@@ -523,9 +506,9 @@ Public Class ADDSJoinDialog
         ProgressReporter.Hide()
         If e.Error IsNot Nothing Then
             MessageBox.Show(e.Error.Message,
-                            "DNS Address Validation Results",
+                            LocalizationService.ForSection("DomainJoin.DNS")("AddressValidation.Title"),
                             MessageBoxButtons.OK,
-                            If(e.Error.Message.StartsWith("The verification has finished."), MessageBoxIcon.Information, MessageBoxIcon.Error))
+                            If(e.Error.Message.StartsWith(LocalizationService.ForSection("DomainJoin.DNS")("Verification.Done.Label")), MessageBoxIcon.Information, MessageBoxIcon.Error))
         End If
         DnsSyntaxCheckerBtn.Enabled = True
     End Sub
@@ -564,7 +547,7 @@ Public Class ADDSJoinDialog
         initialUserName = referenceUser.SamAccountName
 
         If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, referenceUser.SamAccountName) Then
-            MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
+            MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("UserDisabled.Message"), vbOKOnly + vbExclamation, LocalizationService.ForSection("DomainJoin.Messages")("AccountDisabled.Title"))
         End If
     End Sub
 
@@ -574,7 +557,7 @@ Public Class ADDSJoinDialog
 
     Private Sub DsAccountObjectPickerBtn_Click(sender As Object, e As EventArgs) Handles DsAccountObjectPickerBtn.Click
         If Not dsIsInDomain Then
-            MessageBox.Show("This computer does not belong to a domain.", Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            MessageBox.Show(LocalizationService.ForSection("DomainJoin.Messages")("Computer.Belong.Domain.Label"), Text, MessageBoxButtons.OK, MessageBoxIcon.Stop)
             Exit Sub
         End If
         Dim dsaPicker As New DirectoryObjectPickerDialog() With {
@@ -635,7 +618,7 @@ Public Class ADDSJoinDialog
 
     Private Sub DnsResolutionTSMI_Click(sender As Object, e As EventArgs) Handles DnsResolutionTSMI.Click
         If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
-            MsgBox("Please provide a domain for which to test domain name resolution.", vbOKOnly + vbExclamation, Text)
+            MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Provide.Domain.Label"), vbOKOnly + vbExclamation, Text)
             Exit Sub
         End If
 
@@ -665,7 +648,7 @@ Public Class ADDSJoinDialog
         nslookupOut = nslookupProc.StandardOutput.ReadToEnd() & nslookupProc.StandardError.ReadToEnd()
         nslookupProc.WaitForExit()
         Cursor = Cursors.Arrow
-        MsgBox(String.Format("NSLOOKUP output:{0}{0}{1}", Environment.NewLine, nslookupOut), vbOKOnly + vbInformation, "Domain name resolution results")
+        MsgBox(LocalizationService.ForSection("DomainJoin.Messages").Format("Nslookupoutput.Label", nslookupOut), vbOKOnly + vbInformation, LocalizationService.ForSection("DomainJoin.Messages")("DomainResolution.Title"))
     End Sub
 
     Private Sub DnsZoneTSMI_Click(sender As Object, e As EventArgs) Handles DnsZoneTSMI.Click

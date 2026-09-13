@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Win32
+Imports Microsoft.Win32
 
 Public Class EnvVarManagementForm
 
@@ -11,7 +11,7 @@ Public Class EnvVarManagementForm
             variableName As String = ""
         If VariableScope = EnvironmentVariable.EnvironmentVariableScope.Machine Then
             TextBox1.Text = machineEnvVars(Index).Name
-            TextBox2.Text = "Machine"
+            TextBox2.Text = LocalizationService.ForSection("EnvVars.Info")("Machine.Field")
             TextBox3.Text = machineEnvVars(Index).Value
 
             MoveToMachineScopeBtn.Enabled = False
@@ -22,7 +22,7 @@ Public Class EnvVarManagementForm
             currentEnvVarIndex = New Tuple(Of EnvironmentVariable.EnvironmentVariableScope, Integer)(EnvironmentVariable.EnvironmentVariableScope.Machine, Index)
         Else
             TextBox1.Text = userEnvVars(Index).Name
-            TextBox2.Text = "User"
+            TextBox2.Text = LocalizationService.ForSection("EnvVars.Info")("User.Field")
             TextBox3.Text = userEnvVars(Index).Value
 
             currentEnvVarIndex = New Tuple(Of EnvironmentVariable.EnvironmentVariableScope, Integer)(EnvironmentVariable.EnvironmentVariableScope.User, Index)
@@ -47,11 +47,11 @@ Public Class EnvVarManagementForm
         If CleanData Then envVarList = EnvironmentVariableHelper.GetEnvironmentVariableList(MainForm.MountDir)
 
         For Each envVar In envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine)
-            SysEnvVarLV.Items.Add(New ListViewItem(New String() {String.Format("{0}{1}", envVar.Name, If(envVar.NoLongerExists, " (will be removed)", "")), envVar.Value}))
+            SysEnvVarLV.Items.Add(New ListViewItem(New String() {String.Format("{0}{1}", envVar.Name, If(envVar.NoLongerExists, LocalizationService.ForSection("EnvVars.Management")("Removed.Label"), "")), envVar.Value}))
         Next
 
         For Each envVar In envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.User)
-            UserEnvVarLV.Items.Add(New ListViewItem(New String() {String.Format("{0}{1}", envVar.Name, If(envVar.NoLongerExists, " (will be removed)", "")), envVar.Value}))
+            UserEnvVarLV.Items.Add(New ListViewItem(New String() {String.Format("{0}{1}", envVar.Name, If(envVar.NoLongerExists, LocalizationService.ForSection("EnvVars.Management")("Removed.Label"), "")), envVar.Value}))
         Next
     End Sub
 
@@ -103,11 +103,9 @@ Public Class EnvVarManagementForm
     Private Sub SaveAllChangesBtn_Click(sender As Object, e As EventArgs) Handles SaveAllChangesBtn.Click
         Cursor = Cursors.WaitCursor
         If EnvironmentVariableHelper.SaveEnvironmentVariables(MainForm.MountDir, envVarList) Then
-            MsgBox("Environment variable information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
-                   "A backup of the previous variable configuration has been saved to your desktop should you need it in case modifications do not go as planned." & vbCrLf & vbCrLf &
-                   "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("EnvVars.Management")("InfoLoaded.Message"), vbOKOnly + vbInformation)
         Else
-            MsgBox("Environment variable information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
+            MsgBox(LocalizationService.ForSection("EnvVars.Management")("InfoSaved.Message"), vbOKOnly + vbExclamation)
         End If
         Cursor = Cursors.Arrow
         EnvVarDetailsPanel.Enabled = False
