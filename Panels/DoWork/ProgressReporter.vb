@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Module ProgressReporter
 
@@ -12,7 +12,7 @@ Module ProgressReporter
     Private Sub InitializeForm()
         progressForm = New Form With {
             .StartPosition = FormStartPosition.CenterScreen,
-            .Text = "Progress",
+            .Text = LocalizationService.ForSection("ProgressReporter")("Progress.Label"),
             .Size = WindowHelper.ScaleSizeLogical(384, 72),
             .FormBorderStyle = FormBorderStyle.None,
             .MinimizeBox = False,

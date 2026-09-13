@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ReloadProjectQuestionDialog
@@ -14,61 +14,10 @@ Public Class ReloadProjectQuestionDialog
     End Sub
 
     Private Sub ReloadProjectQuestionDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label1.Text = "This image is no longer available"
-                        Label2.Text = "The image that was loaded in this project is no longer available. This can happen if it was unmounted by an external program. Because of this, the project needs to be reloaded. Click " & Quote & "OK" & Quote & " to reload this project." & CrLf & CrLf & "NOTE: if you click " & Quote & "Cancel" & Quote & ", the project will be unloaded"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                    Case "ESN"
-                        Label1.Text = "Esta imagen ya no está disponible"
-                        Label2.Text = "La imagen que fue cargada en este proyecto ya no está disponible. Esto puede ocurrir si dicha imagen fue desmontada por un programa externo. Debido a esto, el proyecto debe ser recargado. Haga clic en " & Quote & "Aceptar" & Quote & " para recargar este proyecto." & CrLf & CrLf & "NOTA: si hace clic en " & Quote & "Cancelar" & Quote & ", el proyecto será descargado"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "FRA"
-                        Label1.Text = "Cette image n'est plus disponible"
-                        Label2.Text = "L'image qui a été chargée dans ce projet n'est plus disponible. Cela peut se produire si elle a été démontée par un programme externe. Pour cette raison, le projet doit être rechargé. Cliquez sur " & Quote & "OK" & Quote & " pour recharger ce projet." & CrLf & CrLf & "NOTE: si vous cliquez sur " & Quote & "Annuler" & Quote & ", le projet sera déchargé."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                    Case "PTB", "PTG"
-                        Label1.Text = "Esta imagem já não está disponível"
-                        Label2.Text = "A imagem que foi carregada neste projeto já não está disponível. Isto pode acontecer se tiver sido desmontada por um programa externo. Por este motivo, o projeto tem de ser recarregado. Clique em " & Quote & "OK" & Quote & " para recarregar este projeto." & CrLf & CrLf & "NOTA: se clicar em " & Quote & "Cancelar" & Quote & ", o projeto será descarregado"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "ITA"
-                        Label1.Text = "Questa immagine non è più disponibile"
-                        Label2.Text = "L'immagine caricata in questo progetto non è più disponibile. Questo può accadere se è stata smontata da un programma esterno. Per questo motivo, il progetto deve essere ricaricato. Fare clic su " & Quote & "OK" & Quote & " per ricaricare il progetto." & CrLf & CrLf & "NOTA: se si fa clic su " & Quote & "Annulla" & Quote & ", il progetto verrà scaricato"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                End Select
-            Case 1
-                Label1.Text = "This image is no longer available"
-                Label2.Text = "The image that was loaded in this project is no longer available. This can happen if it was unmounted by an external program. Because of this, the project needs to be reloaded. Click " & Quote & "OK" & Quote & " to reload this project." & CrLf & CrLf & "NOTE: if you click " & Quote & "Cancel" & Quote & ", the project will be unloaded"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-            Case 2
-                Label1.Text = "Esta imagen ya no está disponible"
-                Label2.Text = "La imagen que fue cargada en este proyecto ya no está disponible. Esto puede ocurrir si dicha imagen fue desmontada por un programa externo. Debido a esto, el proyecto debe ser recargado. Haga clic en " & Quote & "Aceptar" & Quote & " para recargar este proyecto." & CrLf & CrLf & "NOTA: si hace clic en " & Quote & "Cancelar" & Quote & ", el proyecto será descargado"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-            Case 3
-                Label1.Text = "Cette image n'est plus disponible"
-                Label2.Text = "L'image qui a été chargée dans ce projet n'est plus disponible. Cela peut se produire si elle a été démontée par un programme externe. Pour cette raison, le projet doit être rechargé. Cliquez sur " & Quote & "OK" & Quote & " pour recharger ce projet." & CrLf & CrLf & "NOTE: si vous cliquez sur " & Quote & "Annuler" & Quote & ", le projet sera déchargé."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-            Case 4
-                Label1.Text = "Esta imagem já não está disponível"
-                Label2.Text = "A imagem que foi carregada neste projeto já não está disponível. Isto pode acontecer se tiver sido desmontada por um programa externo. Por este motivo, o projeto tem de ser recarregado. Clique em " & Quote & "OK" & Quote & " para recarregar este projeto." & CrLf & CrLf & "NOTA: se clicar em " & Quote & "Cancelar" & Quote & ", o projeto será descarregado"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-            Case 5
-                Label1.Text = "Questa immagine non è più disponibile"
-                Label2.Text = "L'immagine caricata in questo progetto non è più disponibile. Questo può accadere se è stata smontata da un programma esterno. Per questo motivo, il progetto deve essere ricaricato. Fare clic su " & Quote & "OK" & Quote & " per ricaricare il progetto." & CrLf & CrLf & "NOTA: se si fa clic su " & Quote & "Annulla" & Quote & ", il progetto verrà scaricato"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-        End Select
+        Label1.Text = LocalizationService.ForSection("ReloadProject")("ImageMissing.Label")
+        Label2.Text = LocalizationService.ForSection("ReloadProject")("ImageUnavailable.Message")
+        OK_Button.Text = LocalizationService.ForSection("ReloadProject")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ReloadProject")("Cancel.Button")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Panel1.BackColor = CurrentTheme.SectionBackgroundColor

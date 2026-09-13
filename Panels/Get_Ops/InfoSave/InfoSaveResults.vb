@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Drawing.Printing
 Imports Markdig
 Imports Microsoft.VisualBasic.ControlChars
@@ -20,61 +20,10 @@ Public Class InfoSaveResults
     End Sub
 
     Private Async Sub InfoSaveResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Image information report results"
-                        Label1.Text = "The report has been saved to the location you had specified, and its contents will be shown below."
-                        Button1.Text = "OK"
-                        Button2.Text = "Save report..."
-                    Case "ESN"
-                        Text = "Resultados del informe de información de la imagen"
-                        Label1.Text = "El informe ha sido guardado en la ubicación que especificó, y sus contenidos serán mostrados abajo."
-                        Button1.Text = "Aceptar"
-                        Button2.Text = "Guardar informe..."
-                    Case "FRA"
-                        Text = "Résultats du rapport d'information de l'image"
-                        Label1.Text = "Le rapport a été sauvegardé à l'emplacement que vous aviez indiqué et son contenu s'affiche ci-dessous."
-                        Button1.Text = "OK"
-                        Button2.Text = "Enregistrer le rapport..."
-                    Case "PTB", "PTG"
-                        Text = "Resultados do relatório de informações sobre imagens"
-                        Label1.Text = "O relatório foi guardado na localização que especificou e o seu conteúdo será apresentado abaixo."
-                        Button1.Text = "OK"
-                        Button2.Text = "Guardar relatório..."
-                    Case "ITA"
-                        Text = "Risultati del rapporto sulle informazioni sull'immagine"
-                        Label1.Text = "Il rapporto è stato salvato nella posizione specificata e il suo contenuto viene visualizzato sottostante."
-                        Button1.Text = "OK"
-                        Button2.Text = "Salva rapporto..."
-                End Select
-            Case 1
-                Text = "Image information report results"
-                Label1.Text = "The report has been saved to the location you had specified, and its contents will be shown below."
-                Button1.Text = "OK"
-                Button2.Text = "Save report..."
-            Case 2
-                Text = "Resultados del informe de información de la imagen"
-                Label1.Text = "El informe ha sido guardado en la ubicación que especificó, y sus contenidos serán mostrados abajo."
-                Button1.Text = "Aceptar"
-                Button2.Text = "Guardar informe..."
-            Case 3
-                Text = "Résultats du rapport d'information de l'image"
-                Label1.Text = "Le rapport a été sauvegardé à l'emplacement que vous aviez indiqué et son contenu s'affiche ci-dessous."
-                Button1.Text = "OK"
-                Button2.Text = "Enregistrer le rapport..."
-            Case 4
-                Text = "Resultados do relatório de informações sobre imagens"
-                Label1.Text = "O relatório foi guardado na localização que especificou e o seu conteúdo será apresentado abaixo."
-                Button1.Text = "OK"
-                Button2.Text = "Guardar relatório..."
-            Case 5
-                Text = "Risultati del rapporto sulle informazioni sull'immagine"
-                Label1.Text = "Il rapporto è stato salvato nella posizione specificata e il suo contenuto viene visualizzato sottostante."
-                Button1.Text = "OK"
-                Button2.Text = "Salva rapporto..."
-        End Select
+        Text = LocalizationService.ForSection("InfoSaveResults")("Image.Report.Label")
+        Label1.Text = LocalizationService.ForSection("InfoSaveResults")("ReportSaved.Message")
+        Button1.Text = LocalizationService.ForSection("InfoSaveResults.Actions")("Ok.Button")
+        Button2.Text = LocalizationService.ForSection("InfoSaveResults")("SaveReport.Button")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor
@@ -248,7 +197,7 @@ Public Class InfoSaveResults
                                Catch ex As Exception
                                    DynaLog.LogMessage("Could not convert to HTML. Error message: " & ex.Message)
                                    DynaLog.LogMessage("This could be an issue with Markdig.")
-                                   If MsgBox("Conversion to HTML has failed due to the following error: " & ex.Message & CrLf & CrLf & "Do you want to open this file in a text editor?", vbYesNo + vbCritical, "Conversion error") = MsgBoxResult.Yes Then
+                                   If MsgBox(LocalizationService.ForSection("InfoSave.Results.Messages").Format("HtmlFailed.Message", ex.Message), vbYesNo + vbCritical, LocalizationService.ForSection("InfoSave.Results.Messages")("ConversionError.Label")) = MsgBoxResult.Yes Then
                                        Process.Start(FilePath)
                                    End If
                                    Close()

@@ -24,21 +24,21 @@ Public Class UnlockVolumeDialog
         Dim UnlockResult As UInteger = UnlockVolumeWithNumericalPassword(PersistentVolumeID, NumericalPassword)
         Select Case UnlockResult
             Case Constants.S_OK
-                MessageBox.Show("The selected volume has been successfully unlocked.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages")("Success.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Case Constants.FVE_E_NOT_ACTIVATED
-                MessageBox.Show("The selected volume does not have BitLocker turned on.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages")("NotActivated.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             Case Constants.FVE_E_PROTECTOR_NOT_FOUND
-                MessageBox.Show("The selected volume does not use this method for recovery.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages")("ProtectorNotFound.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             Case Constants.FVE_E_FAILED_AUTHENTICATION
-                MessageBox.Show("The selected volume cannot be unlocked with the provided password.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages")("AuthenticationFailed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             Case Constants.FVE_E_INVALID_PASSWORD_FORMAT
-                MessageBox.Show("The provided recovery password has not been typed correctly.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages")("InvalidPassword.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             Case Else
-                MessageBox.Show(String.Format("The volume could not be unlocked. Error code: {0}", UnlockResult), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages").Format("UnknownError.Message", UnlockResult), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
         End Select
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -93,7 +93,7 @@ Public Class UnlockVolumeDialog
 
         ' We're only interested in the key protectors for numerical passwords
         If Not ProtectorIds.Any(Function(protector) protector.ProtectorType = KeyProtectorType.NumericalPassword) Then
-            MessageBox.Show("This volume does not appear to use a numerical password as a key protector.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("BDE.UnlockVolume.Messages")("NumericalProtectorMissing.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Cancel_Button.PerformClick()
             Exit Sub
         End If

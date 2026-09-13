@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
 Imports Microsoft.VisualBasic.ControlChars
@@ -12,31 +12,7 @@ Public Class ImgAppend
         DynaLog.LogMessage("Checking source image directory...")
         If TextBox1.Text = "" Or Not Directory.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("Either no source directory has been specified or it does not exist in the file system.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Please specify a source image directory and try again."
-                        Case "ESN"
-                            msg = "Por favor, especifique un directorio de imagen de origen e inténtelo de nuevo."
-                        Case "FRA"
-                            msg = "Veuillez indiquer un répertoire d'images source et réessayer."
-                        Case "PTB", "PTG"
-                            msg = "Especifique um diretório de imagens de origem e tente novamente."
-                        Case "ITA"
-                            msg = "Specificare una directory di origine dell'immagine e riprovare."
-                    End Select
-                Case 1
-                    msg = "Please specify a source image directory and try again."
-                Case 2
-                    msg = "Por favor, especifique un directorio de imagen de origen e inténtelo de nuevo."
-                Case 3
-                    msg = "Veuillez indiquer un répertoire d'images source et réessayer."
-                Case 4
-                    msg = "Especifique um diretório de imagens de origem e tente novamente."
-                Case 5
-                    msg = "Specificare una directory di origine dell'immagine e riprovare."
-            End Select
+            msg = LocalizationService.ForSection("ImgAppend.Validation")("SourceImage.Required.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
@@ -45,31 +21,7 @@ Public Class ImgAppend
         DynaLog.LogMessage("Checking destination image...")
         If TextBox2.Text = "" Or Not File.Exists(TextBox2.Text) Then
             DynaLog.LogMessage("Either no destination image has been specified or it does not exist in the file system.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Please specify a destination image file and try again."
-                        Case "ESN"
-                            msg = "Por favor, especifique un archivo de imagen de destino e inténtelo de nuevo."
-                        Case "FRA"
-                            msg = "Veuillez indiquer un fichier image de destination et réessayer."
-                        Case "PTB", "PTG"
-                            msg = "Especifique um ficheiro de imagem de destino e tente novamente."
-                        Case "ITA"
-                            msg = "Specificare un file immagine di destinazione e riprovare."
-                    End Select
-                Case 1
-                    msg = "Please specify a destination image file and try again."
-                Case 2
-                    msg = "Por favor, especifique un archivo de imagen de destino e inténtelo de nuevo."
-                Case 3
-                    msg = "Veuillez indiquer un fichier image de destination et réessayer."
-                Case 4
-                    msg = "Especifique um ficheiro de imagem de destino e tente novamente."
-                Case 5
-                    msg = "Specificare un file immagine di destinazione e riprovare."
-            End Select
+            msg = LocalizationService.ForSection("ImgAppend.Validation")("ImageFile.Required.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
@@ -78,31 +30,7 @@ Public Class ImgAppend
         DynaLog.LogMessage("Checking name of image to append to destination...")
         If TextBox3.Text = "" Then
             DynaLog.LogMessage("No name has been specified.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Please specify a name for the destination image file and try again."
-                        Case "ESN"
-                            msg = "Por favor, especifique un nombre para el archivo de imagen de destino e inténtelo de nuevo."
-                        Case "FRA"
-                            msg = "Veuillez indiquer un nom pour le fichier image de destination et réessayer."
-                        Case "PTB", "PTG"
-                            msg = "Especifique um nome para o ficheiro de imagem de destino e tente novamente."
-                        Case "ITA"
-                            msg = "Specificare un nome per il file immagine di destinazione e riprovare."
-                    End Select
-                Case 1
-                    msg = "Please specify a name for the destination image file and try again."
-                Case 2
-                    msg = "Por favor, especifique un nombre para el archivo de imagen de destino e inténtelo de nuevo."
-                Case 3
-                    msg = "Veuillez indiquer un nom pour le fichier image de destination et réessayer."
-                Case 4
-                    msg = "Especifique um nome para o ficheiro de imagem de destino e tente novamente."
-                Case 5
-                    msg = "Specificare un nome per il file immagine di destinazione e riprovare."
-            End Select
+            msg = LocalizationService.ForSection("ImgAppend.Validation")("NameDestination.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         Else
@@ -117,31 +45,7 @@ Public Class ImgAppend
             Else
                 DynaLog.LogMessage("Either no configuration list file has been specified or it does not exist in the file system.")
                 DynaLog.LogMessage("We can continue without it, but that may not be what the user wants. Asking...")
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "Either no configuration list file has been specified or the configuration list file could not be detected in your file system. Would you like to continue without any configuration list file?"
-                            Case "ESN"
-                                msg = "Ningún archivo de lista de configuración fue especificado, o no se pudo detectar en su sistema de archivos. ¿Desea continuar sin un archivo de lista de configuración?"
-                            Case "FRA"
-                                msg = "Soit aucun fichier de liste de configuration n'a été spécifié, soit le fichier de liste de configuration n'a pas pu être détecté dans votre système de fichiers. Souhaitez-vous continuer sans fichier de liste de configuration ?"
-                            Case "PTB", "PTG"
-                                msg = "Ou não foi especificado nenhum ficheiro de lista de configuração ou o ficheiro de lista de configuração não foi detectado no seu sistema de ficheiros. Deseja continuar sem qualquer ficheiro de lista de configuração?"
-                            Case "ITA"
-                                msg = "Non è stato specificato alcun file dell'elenco di configurazione oppure non è stato possibile rilevare il file dell'elenco di configurazione nel file system. Si desidera continuare senza alcun file dell'elenco di configurazione?"
-                        End Select
-                    Case 1
-                        msg = "Either no configuration list file has been specified or the configuration list file could not be detected in your file system. Would you like to continue without any configuration list file?"
-                    Case 2
-                        msg = "Ningún archivo de lista de configuración fue especificado, o no se pudo detectar en su sistema de archivos. ¿Desea continuar sin un archivo de lista de configuración?"
-                    Case 3
-                        msg = "Soit aucun fichier de liste de configuration n'a été spécifié, soit le fichier de liste de configuration n'a pas pu être détecté dans votre système de fichiers. Souhaitez-vous continuer sans fichier de liste de configuration ?"
-                    Case 4
-                        msg = "Ou não foi especificado nenhum ficheiro de lista de configuração ou o ficheiro de lista de configuração não foi detectado no seu sistema de ficheiros. Deseja continuar sem qualquer ficheiro de lista de configuração?"
-                    Case 5
-                        msg = "Non è stato specificato alcun file dell'elenco di configurazione oppure non è stato possibile rilevare il file dell'elenco di configurazione nel file system. Si desidera continuare senza alcun file dell'elenco di configurazione?"
-                End Select
+                msg = LocalizationService.ForSection("ImgAppend.Validation")("Either.Config.List.Message")
                 If MsgBox(msg, vbYesNo + vbCritical, ImageTaskHeader1.ItemText) = MsgBoxResult.Ok Then
                     DynaLog.LogMessage("The user does not mind if we continue without the configuration list file.")
                     ProgressPanel.AppendixWimScriptConfig = ""
@@ -173,251 +77,29 @@ Public Class ImgAppend
     End Sub
 
     Private Sub ImgAppend_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Append to an image"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Path of configuration file:"
-                        Label3.Text = "Source image directory:"
-                        Label5.Text = "Destination image description:"
-                        Label6.Text = "Destination image file:"
-                        Label7.Text = "Destination image name:"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        Button1.Text = "Browse..."
-                        Button2.Text = "Browse..."
-                        Button3.Text = "Browse..."
-                        Button4.Text = "Grab from last image"
-                        Button5.Text = "Create..."
-                        CheckBox1.Text = "Exclude certain files and directories for destination image"
-                        CheckBox2.Text = "Append with WIMBoot configuration"
-                        CheckBox3.Text = "Make image bootable (Windows PE only)"
-                        CheckBox4.Text = "Verify image integrity"
-                        CheckBox5.Text = "Check for file errors"
-                        CheckBox6.Text = "Use the reparse point tag fix"
-                        CheckBox7.Text = "Capture extended attributes"
-                        GroupBox1.Text = "Sources and destinations"
-                        GroupBox2.Text = "Options"
-                    Case "ESN"
-                        Text = "Anexar a una imagen"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Ruta del archivo de configuración:"
-                        Label3.Text = "Directorio de la imagen de origen:"
-                        Label5.Text = "Descripción de la imagen de destino:"
-                        Label6.Text = "Archivo de imagen de destino:"
-                        Label7.Text = "Nombre de la imagen de destino:"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        Button1.Text = "Examinar..."
-                        Button2.Text = "Examinar..."
-                        Button3.Text = "Examinar..."
-                        Button4.Text = "Coger de la última imagen"
-                        Button5.Text = "Crear..."
-                        CheckBox1.Text = "Excluir algunos archivos y directorios para la imagen de destino"
-                        CheckBox2.Text = "Anexar con configuración WIMBoot"
-                        CheckBox3.Text = "Hacer imagen arrancable (solo Windows PE)"
-                        CheckBox4.Text = "Verificar integridad de imagen"
-                        CheckBox5.Text = "Comprobar errores de archivos"
-                        CheckBox6.Text = "Utilizar corrección de etiquetas de puntos de repetición de análisis"
-                        CheckBox7.Text = "Capturar atributos extendidos"
-                        GroupBox1.Text = "Orígenes y destinos"
-                        GroupBox2.Text = "Opciones"
-                    Case "FRA"
-                        Text = "Ajouter à une image"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Chemin du fichier de configuration :"
-                        Label3.Text = "Répertoire de l'image source :"
-                        Label5.Text = "Description de l'image de destination :"
-                        Label6.Text = "Fichier de l'image de destination :"
-                        Label7.Text = "Nom de l'image de destination :"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        Button1.Text = "Parcourir..."
-                        Button2.Text = "Parcourir..."
-                        Button3.Text = "Parcourir..."
-                        Button4.Text = "Dernière image"
-                        Button5.Text = "Créer..."
-                        CheckBox1.Text = "Exclure certains fichiers et répertoires pour l'image de destination"
-                        CheckBox2.Text = "Ajouter la configuration WIMBoot"
-                        CheckBox3.Text = "Rendre l'image amorçable (Windows PE uniquement)"
-                        CheckBox4.Text = "Vérifier l'intégrité de l'image"
-                        CheckBox5.Text = "Rechercher les erreurs de fichiers"
-                        CheckBox6.Text = "Utiliser la correction de la balise reparse"
-                        CheckBox7.Text = "Capturer les attributs étendus"
-                        GroupBox1.Text = "Sources et destinations"
-                        GroupBox2.Text = "Paramètres"
-                    Case "PTB", "PTG"
-                        Text = "Anexar a uma imagem"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Localização do ficheiro de configuração:"
-                        Label3.Text = "Diretório da imagem de origem:"
-                        Label5.Text = "Descrição da imagem de destino:"
-                        Label6.Text = "Ficheiro de imagem de destino:"
-                        Label7.Text = "Nome da imagem de destino:"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        Button1.Text = "Navegar..."
-                        Button2.Text = "Procurar..."
-                        Button3.Text = "Procurar..."
-                        Button4.Text = "Última imagem"
-                        Button5.Text = "Criar..."
-                        CheckBox1.Text = "Excluir determinados ficheiros e directórios para a imagem de destino"
-                        CheckBox2.Text = "Anexar com a configuração WIMBoot"
-                        CheckBox3.Text = "Tornar a imagem de arranque (apenas Windows PE)"
-                        CheckBox4.Text = "Verificar a integridade da imagem"
-                        CheckBox5.Text = "Verificar se existem erros nos ficheiros"
-                        CheckBox6.Text = "Utilizar a correção da etiqueta de ponto de reparação"
-                        CheckBox7.Text = "Capturar atributos alargados"
-                        GroupBox1.Text = "Origens e destinos"
-                        GroupBox2.Text = "Opções"
-                    Case "ITA"
-                        Text = "Aggiungi a un'immagine"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Percorso del file di configurazione:"
-                        Label3.Text = "Cartella dell'immagine di origine:"
-                        Label5.Text = "Descrizione immagine di destinazione:"
-                        Label6.Text = "File immagine di destinazione:"
-                        Label7.Text = "Nome immagine di destinazione:"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        Button1.Text = "Sfoglia..."
-                        Button2.Text = "Sfoglia..."
-                        Button3.Text = "Sfogliare..."
-                        Button4.Text = "Ultima immagine"
-                        Button5.Text = "Crea..."
-                        CheckBox1.Text = "Escludi determinati file e cartelle per l'immagine di destinazione"
-                        CheckBox2.Text = "Aggiungi con la configurazione WIMBoot"
-                        CheckBox3.Text = "Rendi l'immagine avviabile (solo Windows PE)"
-                        CheckBox4.Text = "Verifica l'integrità dell'immagine"
-                        CheckBox5.Text = "Controlla gli errori dei file"
-                        CheckBox6.Text = "Utilizza la correzione del tag del punto di reparse"
-                        CheckBox7.Text = "Cattura attributi estesi"
-                        GroupBox1.Text = "Sorgenti e destinazioni"
-                        GroupBox2.Text = "Opzioni"
-                End Select
-            Case 1
-                Text = "Append to an image"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Path of configuration file:"
-                Label3.Text = "Source image directory:"
-                Label5.Text = "Destination image description:"
-                Label6.Text = "Destination image file:"
-                Label7.Text = "Destination image name:"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                Button1.Text = "Browse..."
-                Button2.Text = "Browse..."
-                Button3.Text = "Browse..."
-                Button4.Text = "Grab from last image"
-                Button5.Text = "Create..."
-                CheckBox1.Text = "Exclude certain files and directories for destination image"
-                CheckBox2.Text = "Append with WIMBoot configuration"
-                CheckBox3.Text = "Make image bootable (Windows PE only)"
-                CheckBox4.Text = "Verify image integrity"
-                CheckBox5.Text = "Check for file errors"
-                CheckBox6.Text = "Use the reparse point tag fix"
-                CheckBox7.Text = "Capture extended attributes"
-                GroupBox1.Text = "Sources and destinations"
-                GroupBox2.Text = "Options"
-            Case 2
-                Text = "Anexar a una imagen"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Ruta del archivo de configuración:"
-                Label3.Text = "Directorio de la imagen de origen:"
-                Label5.Text = "Descripción de la imagen de destino:"
-                Label6.Text = "Archivo de imagen de destino:"
-                Label7.Text = "Nombre de la imagen de destino:"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                Button1.Text = "Examinar..."
-                Button2.Text = "Examinar..."
-                Button3.Text = "Examinar..."
-                Button4.Text = "Coger de la última imagen"
-                Button5.Text = "Crear..."
-                CheckBox1.Text = "Excluir algunos archivos y directorios para la imagen de destino"
-                CheckBox2.Text = "Anexar con configuración WIMBoot"
-                CheckBox3.Text = "Hacer imagen arrancable (solo Windows PE)"
-                CheckBox4.Text = "Verificar integridad de imagen"
-                CheckBox5.Text = "Comprobar errores de archivos"
-                CheckBox6.Text = "Utilizar corrección de etiquetas de puntos de repetición de análisis"
-                CheckBox7.Text = "Capturar atributos extendidos"
-                GroupBox1.Text = "Orígenes y destinos"
-                GroupBox2.Text = "Opciones"
-            Case 3
-                Text = "Ajouter à une image"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Chemin du fichier de configuration :"
-                Label3.Text = "Répertoire de l'image source :"
-                Label5.Text = "Description de l'image de destination :"
-                Label6.Text = "Fichier de l'image de destination :"
-                Label7.Text = "Nom de l'image de destination :"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                Button1.Text = "Parcourir..."
-                Button2.Text = "Parcourir..."
-                Button3.Text = "Parcourir..."
-                Button4.Text = "Dernière image"
-                Button5.Text = "Créer..."
-                CheckBox1.Text = "Exclure certains fichiers et répertoires pour l'image de destination"
-                CheckBox2.Text = "Ajouter la configuration WIMBoot"
-                CheckBox3.Text = "Rendre l'image amorçable (Windows PE uniquement)"
-                CheckBox4.Text = "Vérifier l'intégrité de l'image"
-                CheckBox5.Text = "Rechercher les erreurs de fichiers"
-                CheckBox6.Text = "Utiliser la correction de la balise reparse"
-                CheckBox7.Text = "Capturer les attributs étendus"
-                GroupBox1.Text = "Sources et destinations"
-                GroupBox2.Text = "Paramètres"
-            Case 4
-                Text = "Anexar a uma imagem"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Localização do ficheiro de configuração:"
-                Label3.Text = "Diretório da imagem de origem:"
-                Label5.Text = "Descrição da imagem de destino:"
-                Label6.Text = "Ficheiro de imagem de destino:"
-                Label7.Text = "Nome da imagem de destino:"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                Button1.Text = "Navegar..."
-                Button2.Text = "Procurar..."
-                Button3.Text = "Procurar..."
-                Button4.Text = "Última imagem"
-                Button5.Text = "Criar..."
-                CheckBox1.Text = "Excluir determinados ficheiros e directórios para a imagem de destino"
-                CheckBox2.Text = "Anexar com a configuração WIMBoot"
-                CheckBox3.Text = "Tornar a imagem de arranque (apenas Windows PE)"
-                CheckBox4.Text = "Verificar a integridade da imagem"
-                CheckBox5.Text = "Verificar se existem erros nos ficheiros"
-                CheckBox6.Text = "Utilizar a correção da etiqueta de ponto de reparação"
-                CheckBox7.Text = "Capturar atributos alargados"
-                GroupBox1.Text = "Origens e destinos"
-                GroupBox2.Text = "Opções"
-            Case 5
-                Text = "Aggiungi a un'immagine"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Percorso del file di configurazione:"
-                Label3.Text = "Cartella dell'immagine di origine:"
-                Label5.Text = "Descrizione immagine di destinazione:"
-                Label6.Text = "File immagine di destinazione:"
-                Label7.Text = "Nome immagine di destinazione:"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                Button1.Text = "Sfoglia..."
-                Button2.Text = "Sfoglia..."
-                Button3.Text = "Sfogliare..."
-                Button4.Text = "Ultima immagine"
-                Button5.Text = "Crea..."
-                CheckBox1.Text = "Escludi determinati file e cartelle per l'immagine di destinazione"
-                CheckBox2.Text = "Aggiungi con la configurazione WIMBoot"
-                CheckBox3.Text = "Rendi l'immagine avviabile (solo Windows PE)"
-                CheckBox4.Text = "Verifica l'integrità dell'immagine"
-                CheckBox5.Text = "Controlla gli errori dei file"
-                CheckBox6.Text = "Utilizza la correzione del tag del punto di reparse"
-                CheckBox7.Text = "Cattura attributi estesi"
-                GroupBox1.Text = "Sorgenti e destinazioni"
-                GroupBox2.Text = "Opzioni"
-        End Select
+        Text = LocalizationService.ForSection("ImgAppend")("AppendImage.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("ImgAppend").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("ImgAppend")("Path.Config.File.Label")
+        Label3.Text = LocalizationService.ForSection("ImgAppend")("Source.Image.Dir.Label")
+        Label5.Text = LocalizationService.ForSection("ImgAppend")("Dest.Image.Description.Label")
+        Label6.Text = LocalizationService.ForSection("ImgAppend")("Destination.ImageFile.Label")
+        Label7.Text = LocalizationService.ForSection("ImgAppend")("Destination.Image.Name.Label")
+        OK_Button.Text = LocalizationService.ForSection("ImgAppend")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ImgAppend")("Cancel.Button")
+        Button1.Text = LocalizationService.ForSection("ImgAppend")("Browse.Button")
+        Button2.Text = LocalizationService.ForSection("ImgAppend")("Browse.Button")
+        Button3.Text = LocalizationService.ForSection("ImgAppend")("Browse.Button")
+        Button4.Text = LocalizationService.ForSection("ImgAppend")("Grab.Last.Image.Button")
+        Button5.Text = LocalizationService.ForSection("ImgAppend")("Create.Button")
+        CheckBox1.Text = LocalizationService.ForSection("ImgAppend")("Exclude.Files.Dirs.CheckBox")
+        CheckBox2.Text = LocalizationService.ForSection("ImgAppend")("WIM.Boot.Config.CheckBox")
+        CheckBox3.Text = LocalizationService.ForSection("ImgAppend")("Image.Bootable.CheckBox")
+        CheckBox4.Text = LocalizationService.ForSection("ImgAppend")("Verify.Image.CheckBox")
+        CheckBox5.Text = LocalizationService.ForSection("ImgAppend")("Check.File.Errors.CheckBox")
+        CheckBox6.Text = LocalizationService.ForSection("ImgAppend")("Reparse.Point.Tag.CheckBox")
+        CheckBox7.Text = LocalizationService.ForSection("ImgAppend")("ExtendedAttributes.CheckBox")
+        GroupBox1.Text = LocalizationService.ForSection("ImgAppend")("Sources.Destinations.Group")
+        GroupBox2.Text = LocalizationService.ForSection("ImgAppend")("Options.Group")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -516,7 +198,7 @@ Public Class ImgAppend
             imageName = ImageInfoCollection.Last.ImageName
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
-            MsgBox("Could not grab last image name. Error information:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("ImageOps.Append.Messages").Format("Grab.Last.Image.Label", ex.ToString()), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             Try
                 DynaLog.LogMessage("Shutting down API...")
@@ -539,31 +221,7 @@ Public Class ImgAppend
 
     Private Sub Button4_MouseHover(sender As Object, e As EventArgs) Handles Button4.MouseHover
         Dim msg As String = ""
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        msg = "Grab the name of the last index of the target image"
-                    Case "ESN"
-                        msg = "Obtener el nombre del último índice de la imagen de destino"
-                    Case "FRA"
-                        msg = "Obtenir le nom du dernier index de l'image cible"
-                    Case "PTB", "PTG"
-                        msg = "Obter o nome do último índice da imagem de destino"
-                    Case "ITA"
-                        msg = "Ottenere il nome dell'ultimo indice dell'immagine di destinazione"
-                End Select
-            Case 1
-                msg = "Grab the name of the last index of the target image"
-            Case 2
-                msg = "Obtener el nombre del último índice de la imagen de destino"
-            Case 3
-                msg = "Obtenir le nom du dernier index de l'image cible"
-            Case 4
-                msg = "Obter o nome do último índice da imagem de destino"
-            Case 5
-                msg = "Ottenere il nome dell'ultimo indice dell'immagine di destinazione"
-        End Select
+        msg = LocalizationService.ForSection("ImgAppend.Tooltip")("Grab.Name.Last.Message")
         WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 End Class

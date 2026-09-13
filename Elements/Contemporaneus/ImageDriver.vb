@@ -21,68 +21,14 @@
         End Sub
 
         ''' <summary>
-        ''' Gets a localized string displaying mount mode
+        ''' Gets the driver inbox state in the current application language.
         ''' </summary>
-        ''' <param name="LangCode">The language code. 0 to automatically detect from system languages; 1-5 for independent languages</param>
-        ''' <returns>The localized string</returns>
-        Public Function DriverInboxToString(LangCode As Integer) As String
-            Dim driverInboxString As String = ""
-
+        Public Function DriverInboxToString() As String
             If DriverInbox Then
-                Select Case LangCode
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                driverInboxString = "Yes"
-                            Case "ESN"
-                                driverInboxString = "Sí"
-                            Case "FRA"
-                                driverInboxString = "Oui"
-                            Case "PTB", "PTG"
-                                driverInboxString = "Sim"
-                            Case "ITA"
-                                driverInboxString = "Sì"
-                        End Select
-                    Case 1
-                        driverInboxString = "Yes"
-                    Case 2
-                        driverInboxString = "Sí"
-                    Case 3
-                        driverInboxString = "Oui"
-                    Case 4
-                        driverInboxString = "Sim"
-                    Case 5
-                        driverInboxString = "Sì"
-                End Select
-            Else
-                Select Case LangCode
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                driverInboxString = "No"
-                            Case "ESN"
-                                driverInboxString = "No"
-                            Case "FRA"
-                                driverInboxString = "Non"
-                            Case "PTB", "PTG"
-                                driverInboxString = "Não"
-                            Case "ITA"
-                                driverInboxString = "No"
-                        End Select
-                    Case 1
-                        driverInboxString = "No"
-                    Case 2
-                        driverInboxString = "No"
-                    Case 3
-                        driverInboxString = "Non"
-                    Case 4
-                        driverInboxString = "Não"
-                    Case 5
-                        driverInboxString = "No"
-                End Select
+                Return LocalizationService.ForSection("ImageDriver.DriverInbox")("Yes.Button")
             End If
 
-            Return driverInboxString
+            Return LocalizationService.ForSection("ImageDriver.DriverInbox")("No.Button")
         End Function
 
     End Class

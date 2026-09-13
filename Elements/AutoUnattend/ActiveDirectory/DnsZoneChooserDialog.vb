@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class DnsZoneChooserDialog
 
@@ -6,11 +6,11 @@ Public Class DnsZoneChooserDialog
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If SelectedDnsZone = "" Then
-            MessageBox.Show("Please select a DNS zone and try again.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("ActiveDirectory.DnsZone")("SelectZone.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
         If IsDnsZoneShutdown(SelectedDnsZone) Then
-            MessageBox.Show("The selected DNS zone is no longer active because of either an expiration or a shut down. Choose another zone and try again.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("ActiveDirectory.DnsZone")("Selected.Too.Long.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -75,7 +75,7 @@ Public Class DnsZoneChooserDialog
                                                                    String.Format("{0} ({1} Lookup)", GetDnsZoneTypeString(DnsZoneProperties("ZoneType")), If(DnsZoneProperties("Reverse"), "Reverse", "Forward"))}))
             Next
         Else
-            MessageBox.Show("DNS zones could not be obtained.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("ActiveDirectory.DnsZone")("ZonesLoaded.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Close()
         End If
     End Sub

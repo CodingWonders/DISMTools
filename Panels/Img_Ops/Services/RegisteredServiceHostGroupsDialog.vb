@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class RegisteredServiceHostGroupsDialog
 
@@ -25,10 +25,10 @@ Public Class RegisteredServiceHostGroupsDialog
         ' Order group information based on service count
         GroupInformation = GroupInformation.OrderByDescending(Function(serviceGroup) serviceGroup.Services.Count).ThenBy(Function(serviceGroup) serviceGroup.Name).ToList()
 
-        ServiceGroupDetailsLv.Items.AddRange(GroupInformation.Select(Function(Group) New ListViewItem(New String() {Group.Name, String.Format("{0} service(s) in group", Group.Services.Count)})).ToArray())
+        ServiceGroupDetailsLv.Items.AddRange(GroupInformation.Select(Function(Group) New ListViewItem(New String() {Group.Name, String.Format(LocalizationService.ForSection("ServiceGroups")("ServiceGroup.Label"), Group.Services.Count)})).ToArray())
 
         Dim count As Integer = GroupInformation.Sum(Function(serviceGroup) serviceGroup.Services.Count)
-        Label2.Text = String.Format("{0} service(s) are registered in the service host.", count)
+        Label2.Text = String.Format(LocalizationService.ForSection("ServiceGroups")("RegisteredHost.Label"), count)
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(274)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(233)

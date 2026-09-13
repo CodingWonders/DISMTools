@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
 
@@ -17,31 +17,7 @@ Public Class DisableFeat
         DynaLog.LogMessage("Detecting features to disable...")
         If ListView1.CheckedItems.Count <= 0 Then
             DynaLog.LogMessage("No items have been added to the queue.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Case "ESN"
-                            MessageBox.Show(MainForm, "Seleccione las características a deshabilitar, e inténtelo de nuevo", "No hay características seleccionadas", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Case "FRA"
-                            MessageBox.Show(MainForm, "Veuillez sélectionner les caractéristiques à désactiver et réessayer.", "Aucune caractéristique sélectionée", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Case "PTB", "PTG"
-                            MessageBox.Show(MainForm, "Por favor, seleccione as características a desativar e tente novamente.", "Nenhuma caraterística selecionada", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Case "ITA"
-                            MessageBox.Show(MainForm, "Selezionare le caratteristiche da disabilitare e riprovare", "Nessuna caratteristica selezionata", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Select
-                Case 1
-                    MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Case 2
-                    MessageBox.Show(MainForm, "Seleccione las características a deshabilitar, e inténtelo de nuevo", "No hay características seleccionadas", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Case 3
-                    MessageBox.Show(MainForm, "Veuillez sélectionner les caractéristiques à désactiver et réessayer.", "Aucune caractéristique sélectionée", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Case 4
-                    MessageBox.Show(MainForm, "Por favor, seleccione as características a desativar e tente novamente.", "Nenhuma caraterística selecionada", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Case 5
-                    MessageBox.Show(MainForm, "Selezionare le caratteristiche da disabilitare e riprovare", "Nessuna caratteristica selezionata", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Select
+            MessageBox.Show(MainForm, LocalizationService.ForSection("DisableFeat.Validation")("Features.Message"), LocalizationService.ForSection("DisableFeat.Validation")("FeaturesSelected.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         Else
             Try
@@ -101,141 +77,18 @@ Public Class DisableFeat
         If Not Initialize() Then
             Close()
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Disable features"
-                        ImageTaskHeader1.ItemText = Text
-                        Label3.Text = "Package name:"
-                        GroupBox1.Text = "Features"
-                        GroupBox2.Text = "Options"
-                        Button1.Text = "Lookup..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        ListView1.Columns(0).Text = "Feature name"
-                        ListView1.Columns(1).Text = "State"
-                        CheckBox1.Text = "Specify parent package name for features"
-                        CheckBox2.Text = "Remove feature without removing manifest"
-                    Case "ESN"
-                        Text = "Deshabilitar características"
-                        ImageTaskHeader1.ItemText = Text
-                        Label3.Text = "Paquete:"
-                        GroupBox1.Text = "Características"
-                        GroupBox2.Text = "Opciones"
-                        Button1.Text = "Consultar"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "Nombre de característica"
-                        ListView1.Columns(1).Text = "Estado"
-                        CheckBox1.Text = "Especificar nombre de paquete principal para las características"
-                        CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
-                    Case "FRA"
-                        Text = "Désactiver des caractéristiques"
-                        ImageTaskHeader1.ItemText = Text
-                        Label3.Text = "Nom du paquet :"
-                        GroupBox1.Text = "Caractéristiques"
-                        GroupBox2.Text = "Paramètres"
-                        Button1.Text = "Rechercher..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        ListView1.Columns(0).Text = "Nom de la caractéristique"
-                        ListView1.Columns(1).Text = "État"
-                        CheckBox1.Text = "Spécifier le nom du paquet parent pour les caractéristiques"
-                        CheckBox2.Text = "Supprimer une caractéristique sans supprimer le manifeste"
-                    Case "PTB", "PTG"
-                        Text = "Desativar características"
-                        ImageTaskHeader1.ItemText = Text
-                        Label3.Text = "Nome do pacote:"
-                        GroupBox1.Text = "Características"
-                        GroupBox2.Text = "Opções"
-                        Button1.Text = "Navegar..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "Nome da caraterística"
-                        ListView1.Columns(1).Text = "Estado"
-                        CheckBox1.Text = "Especificar o nome do pacote principal para as características"
-                        CheckBox2.Text = "Remover caraterística sem remover manifesto"
-                    Case "ITA"
-                        Text = "Disabilita caratteristiche"
-                        ImageTaskHeader1.ItemText = Text
-                        Label3.Text = "Nome pacchetto:"
-                        GroupBox1.Text = "Caratteristiche"
-                        GroupBox2.Text = "Opzioni"
-                        Button1.Text = "Ricerca..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        ListView1.Columns(0).Text = "Nome caratteristica"
-                        ListView1.Columns(1).Text = "Stato"
-                        CheckBox1.Text = "Specificare il nome del pacchetto padre per le caratteristiche"
-                        CheckBox2.Text = "Rimuovi la caratteristica senza rimuovere il manifesto"
-                End Select
-            Case 1
-                Text = "Disable features"
-                ImageTaskHeader1.ItemText = Text
-                Label3.Text = "Package name:"
-                GroupBox1.Text = "Features"
-                GroupBox2.Text = "Options"
-                Button1.Text = "Lookup..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                ListView1.Columns(0).Text = "Feature name"
-                ListView1.Columns(1).Text = "State"
-                CheckBox1.Text = "Specify parent package name for features"
-                CheckBox2.Text = "Remove feature without removing manifest"
-            Case 2
-                Text = "Deshabilitar características"
-                ImageTaskHeader1.ItemText = Text
-                Label3.Text = "Paquete:"
-                GroupBox1.Text = "Características"
-                GroupBox2.Text = "Opciones"
-                Button1.Text = "Consultar"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "Nombre de característica"
-                ListView1.Columns(1).Text = "Estado"
-                CheckBox1.Text = "Especificar nombre de paquete principal para las características"
-                CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
-            Case 3
-                Text = "Désactiver des caractéristiques"
-                ImageTaskHeader1.ItemText = Text
-                Label3.Text = "Nom du paquet :"
-                GroupBox1.Text = "Caractéristiques"
-                GroupBox2.Text = "Paramètres"
-                Button1.Text = "Rechercher..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                ListView1.Columns(0).Text = "Nom de la caractéristique"
-                ListView1.Columns(1).Text = "État"
-                CheckBox1.Text = "Spécifier le nom du paquet parent pour les caractéristiques"
-                CheckBox2.Text = "Supprimer une caractéristique sans supprimer le manifeste"
-            Case 4
-                Text = "Desativar características"
-                ImageTaskHeader1.ItemText = Text
-                Label3.Text = "Nome do pacote:"
-                GroupBox1.Text = "Características"
-                GroupBox2.Text = "Opções"
-                Button1.Text = "Navegar..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "Nome da caraterística"
-                ListView1.Columns(1).Text = "Estado"
-                CheckBox1.Text = "Especificar o nome do pacote principal para as características"
-                CheckBox2.Text = "Remover caraterística sem remover manifesto"
-            Case 5
-                Text = "Disabilita caratteristiche"
-                ImageTaskHeader1.ItemText = Text
-                Label3.Text = "Nome pacchetto:"
-                GroupBox1.Text = "Caratteristiche"
-                GroupBox2.Text = "Opzioni"
-                Button1.Text = "Ricerca..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                ListView1.Columns(0).Text = "Nome caratteristica"
-                ListView1.Columns(1).Text = "Stato"
-                CheckBox1.Text = "Specificare il nome del pacchetto padre per le caratteristiche"
-                CheckBox2.Text = "Rimuovi la caratteristica senza rimuovere il manifesto"
-        End Select
+        Text = LocalizationService.ForSection("DisableFeat")("DisableFeatures.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("DisableFeat").Format("Image.Task.Header.Label", Text)
+        Label3.Text = LocalizationService.ForSection("DisableFeat")("PackageName.Label")
+        GroupBox1.Text = LocalizationService.ForSection("DisableFeat")("Features.Group")
+        GroupBox2.Text = LocalizationService.ForSection("DisableFeat")("Options.Group")
+        Button1.Text = LocalizationService.ForSection("DisableFeat")("Lookup.Button")
+        OK_Button.Text = LocalizationService.ForSection("DisableFeat")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("DisableFeat")("Cancel.Button")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("DisableFeat")("FeatureName.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("DisableFeat")("State.Column")
+        CheckBox1.Text = LocalizationService.ForSection("DisableFeat")("ParentPackage.CheckBox")
+        CheckBox2.Text = LocalizationService.ForSection("DisableFeat")("Remove.Feature.CheckBox")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
