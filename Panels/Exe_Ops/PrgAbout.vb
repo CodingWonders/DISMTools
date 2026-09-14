@@ -46,7 +46,7 @@ Public Class PrgAbout
         LinkLabel12.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
         OK_Button.Text = LocalizationService.ForSection("PrgAbout")("Ok.Button")
         UpdCheckBtn.Text = LocalizationService.ForSection("PrgAbout")("CheckUpdates.Label")
-        RichTextBox1.Text = LocalizationService.ForSection("PrgAbout.Resources")("DISM.Tools.Free.Message")
+        RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
         ForeColor = Color.White
         Label15.ForeColor = Color.Black
