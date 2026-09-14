@@ -142,7 +142,7 @@ Public Class ImgInfoSaveDlg
                 Contents &= GetTableRow(New String() {ImageInfo.ProductVersion.ToString(),
                                                       ImageInfo.ImageName,
                                                       ImageInfo.ImageDescription,
-                                                      ImageInfo.ImageSize.ToString("N0") & LocalizationService.ForSection("ImageInfoSave.Report")("Bytes.Label") & Converters.BytesToReadableSize(ImageInfo.ImageSize) & ")",
+                                                      ImageInfo.ImageSize.ToString("N0") & " " & LocalizationService.ForSection("ImageInfoSave.Report")("Bytes.Label") & Converters.BytesToReadableSize(ImageInfo.ImageSize) & ")",
                                                       Casters.CastDismArchitecture(ImageInfo.Architecture),
                                                       If(ImageInfo.Hal <> "", ImageInfo.Hal, LocalizationService.ForSection("ImageInfoSave.Report")("UndefinedImage.Label")),
                                                       ImageInfo.ProductVersion.Revision,
@@ -988,8 +988,8 @@ Public Class ImgInfoSaveDlg
                                                                   CodeBlockChar & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CodeBlockChar,
                                                                   Casters.CastDismPackageState(capInfo.State),
                                                                   capInfo.Description,
-                                                                  capInfo.DownloadSize & LocalizationService.ForSection("ImageInfoSave.Report")("BytesSuffix.Label") & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", ""),
-                                                                  capInfo.InstallSize & LocalizationService.ForSection("ImageInfoSave.Report")("BytesSuffix.Label") & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", ""),
+                                                                  capInfo.DownloadSize & " " & LocalizationService.ForSection("ImageInfoSave.Report")("BytesSuffix.Label") & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", ""),
+                                                                  capInfo.InstallSize & " " & LocalizationService.ForSection("ImageInfoSave.Report")("BytesSuffix.Label") & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", ""),
                                                                   MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, capInfo.Name)), LocalizationService.ForSection("ImageInfoSave.Report")("Look.Item.Online.Label"))}.ToList())
                         Next
                         Contents &= CrLf & GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("CapabilityInfo.Ready.Label")) & CrLf
