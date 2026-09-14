@@ -16,6 +16,15 @@ Public Class ScriptReorderDialog
     End Sub
 
     Private Sub ScriptReorderDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Dialog.Alter.Order.Message")
+        Label3.Text = LocalizationService.ForSection("Designer.ScriptReorder")("ScriptCode.Label")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.ScriptReorder")("Script.Column")
+        Label2.Text = LocalizationService.ForSection("Designer.ScriptReorder")("ScriptOrder.Label")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.ScriptReorder")("WordWrap.CheckBox")
+        Text = LocalizationService.ForSection("Designer.ScriptReorder")("Scripts.Stage.Label")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = BackColor

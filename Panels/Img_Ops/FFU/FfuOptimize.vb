@@ -32,6 +32,16 @@ Public Class FfuOptimize
     End Sub
 
     Private Sub FfuOptimize_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Cancel.Button")
+        Button1.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Browse.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.FFUOptimize")("ImageFile.Label")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.FFUOptimize")("Default.Partition.CheckBox")
+        Label2.Text = LocalizationService.ForSection("Designer.FFUOptimize")("PartitionNumber.Label")
+        OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUOptimize")("Full.Flash.Utility.Filter")
+        OpenFileDialog1.Title = LocalizationService.ForSection("Designer.FFUOptimize")("OpenFile.Title")
+        Text = LocalizationService.ForSection("Designer.FFUOptimize")("Ffuimages.Label")
+        ImageTaskHeader1.ItemText = Text
 
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor

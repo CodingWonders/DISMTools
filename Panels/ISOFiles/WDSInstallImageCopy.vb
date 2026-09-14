@@ -41,6 +41,28 @@ Public Class WDSInstallImageCopy
     End Sub
 
     Private Sub WDSInstallImageCopy_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Cancel.Button")
+        Button2.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Pick.Button")
+        Button1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Browse.Button")
+        Label4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageFile.Server.Label")
+        Button3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Mounted.Image.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Images.Added.Group.Label")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Value.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageName.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageDescription.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageVersion.Column")
+        ColumnHeader5.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Image.Architecture.Column")
+        Button4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Pick.Server.Groups.Button")
+        Button5.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("SelectAll.Button")
+        Button6.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ClearSelection.Button")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Progress.Group")
+        Label3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Re.Ready.OK.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Status.Label")
+        OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.WDSImageCopy")("WIM.Files.Filter")
+        Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Image.Win.Deploy.Label")
+        ImageTaskHeader1.ItemText = Text
+
         If WindowsServiceHelper.GetOnlineSystemServiceInformationByName("WDSServer") Is Nothing Then
             ' We are either not running this on Windows Server, or we are, but without the WDS role
             MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Wizard.Support.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)

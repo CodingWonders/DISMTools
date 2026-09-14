@@ -33,6 +33,16 @@ Public Class DnsZoneChooserDialog
     End Function
 
     Private Sub DnsZoneChooserDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.DNSZones")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.DNSZones")("CancelButton.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.DNSZones")("OfferedZones.Message")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.DNSZones")("ZoneName.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.DNSZones")("DnsserverName.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.DNSZones")("DomainServices.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.DNSZones")("ZoneType.Column")
+        Refresh_Button.Text = LocalizationService.ForSection("Designer.DNSZones")("Refresh.Button")
+        Text = LocalizationService.ForSection("Designer.DNSZones")("DNSZone.Choose.Label")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor

@@ -149,6 +149,62 @@ Public Class PECustomizerDialog
     End Sub
 
     Private Sub PECustomizerDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.PECustomizer")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Customize.Session.Label")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Wallpaper.Group")
+        Button1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Browse.Button")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("My.Desktop.CheckBox")
+        Label2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Path.Custom.Wallpaper.Label")
+        CheckBox2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Show.Version.Top.CheckBox")
+        CheckBox3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Display.Images.CheckBox")
+        CheckBox4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Show.Report.Hardware.Message")
+        Label3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Default.Partitio.Table.Label")
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({
+            LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer")("Default.Mbrpartition.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer")("Default.Gptpartition.Item")
+        })
+        ComboBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Item")
+        Label4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Message")
+        Label5.Text = LocalizationService.ForSection("Designer.PECustomizer")("SecureBoot.Label")
+        ComboBox2.Items.Clear()
+        ComboBox2.Items.AddRange({
+            LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Version.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.BootSign")("Windows.Production.PCA.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.BootSign")("Windows.UEFI.CA.Item")
+        })
+        ComboBox2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Version.Item")
+        Label6.Text = LocalizationService.ForSection("Designer.PECustomizer")("Connection.Attempts.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.PECustomizer")("ConnectionAttempts.Label")
+        OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.PECustomizer")("JpgfilesJpg.Filter")
+        CheckBox5.Text = LocalizationService.ForSection("Designer.PECustomizer")("CopyAnswerFiles.Message")
+        Label8.Text = LocalizationService.ForSection("Designer.PECustomizer")("Port.Used.PXE.Label")
+        Label9.Text = LocalizationService.ForSection("Designer.PECustomizer")("Pick.Default.Keyboard.Label")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.PECustomizer")("LayoutCode.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.PECustomizer")("LayoutName.Column")
+        Label10.Text = LocalizationService.ForSection("Designer.PECustomizer")("Layout.Code.Selected.Label")
+        DefaultPolicySaveButton.Text = LocalizationService.ForSection("Designer.PECustomizer")("Save.Default.Policies.Label")
+        TabPage1.Text = LocalizationService.ForSection("Designer.PECustomizer")("General.Tab")
+        TabPage2.Text = LocalizationService.ForSection("Designer.PECustomizer")("PXEs.Tab")
+        TabPage3.Text = LocalizationService.ForSection("Designer.PECustomizer")("KeyboardLayouts.Tab")
+        Label11.Text = LocalizationService.ForSection("Designer.PECustomizer")("Option.Only.Take.Label")
+        CheckBox6.Text = LocalizationService.ForSection("Designer.PECustomizer")("KeyboardOverride.CheckBox")
+        TabPage4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Unattended.Deployments.Tab")
+        Label12.Text = LocalizationService.ForSection("Designer.PECustomizer")("Unattended.AnswerFile.Label")
+        RemoveHandler ComboBox3.SelectedIndexChanged, AddressOf ComboBox3_SelectedIndexChanged
+        ComboBox3.Items.Clear()
+        ComboBox3.Items.AddRange({
+            LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Resolve.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.Conflict")("ISO.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.Conflict")("WindowsImage.Item")
+        })
+        AddHandler ComboBox3.SelectedIndexChanged, AddressOf ComboBox3_SelectedIndexChanged
+        ComboBox3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Resolve.Item")
+        Label13.Text = LocalizationService.ForSection("Designer.PECustomizer")("Assuming.Each.Answer.Message")
+        Text = LocalizationService.ForSection("Designer.PECustomizer")("CustomizePE.Label")
+
         ' Load from defined policies
         CheckBox2.Checked = MainForm.ShowWatermark
         CheckBox3.Checked = MainForm.WDSHCGraphoView

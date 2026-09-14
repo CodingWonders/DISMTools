@@ -86,6 +86,26 @@ Public Class FfuApply
     End Sub
 
     Private Sub FfuApply_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.FFUApply")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUApply")("Cancel.Button")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.FFUApply")("Source.Group")
+        Button1.Text = LocalizationService.ForSection("Designer.FFUApply")("Browse.Button")
+        UseMountedImgBtn.Text = LocalizationService.ForSection("Designer.FFUApply")("Mounted.Image.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.FFUApply")("SourceImageFile.Label")
+        GroupBox4.Text = LocalizationService.ForSection("Designer.FFUApply")("SfufilePattern.Group")
+        ToolStripStatusLabel1.Text = LocalizationService.ForSection("Designer.FFUApply")("Status.InitialLabel")
+        Button5.Text = LocalizationService.ForSection("Designer.FFUApply")("ScanPattern.Button")
+        Button4.Text = LocalizationService.ForSection("Designer.FFUApply")("Name.Image.Button")
+        Label4.Text = LocalizationService.ForSection("Designer.FFUApply")("NamingPattern.Label")
+        GroupBox3.Text = LocalizationService.ForSection("Designer.FFUApply")("Destination.Group")
+        Label1.Text = LocalizationService.ForSection("Designer.FFUApply")("DriveDetails.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.FFUApply")("DestinationDrive.Label")
+        Button2.Text = LocalizationService.ForSection("Designer.FFUApply")("Specify.Button")
+        OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.FFUApply")("Full.Flash.Utility.Filter")
+        OpenFileDialog1.Title = LocalizationService.ForSection("Designer.FFUApply")("Source.Image.Required.Title")
+        CheckBox4.Text = LocalizationService.ForSection("Designer.FFUApply")("Reference.Sfufiles.CheckBox")
+        Text = LocalizationService.ForSection("Designer.FFUApply")("File.Label")
+        ImageTaskHeader1.ItemText = Text
 
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor

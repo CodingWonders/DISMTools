@@ -179,6 +179,35 @@ Public Class SampleScriptBrowser
     End Function
 
     Private Async Sub SampleScriptBrowser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Cancel.Button")
+        CreateStarterScriptBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Create.Starter.Button")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Name.Column")
+        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({
+            LocalizationService.ForSection("Designer.ScriptBrowser")("System.Config.Item"),
+            LocalizationService.ForSection("Designer.ScriptBrowser")("First.User.Logs.Item"),
+            LocalizationService.ForSection("Designer.ScriptBrowser")("Whenever.User.Logs.Item"),
+            LocalizationService.ForSection("Designer.ScriptBrowser")("Scripts.Uploaded.Library.Item"),
+            LocalizationService.ForSection("Designer.ScriptBrowser")("Scripts.Defined.User.Item")
+        })
+        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        Label1.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Stage.Type.Choose.Label")
+        EnterFSModeBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("EnlargePreview.Label")
+        ExportScriptCodeBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Export.Code.File.Button")
+        Label7.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Okinsert.Label")
+        Label6.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("ScriptCode.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Language.Label")
+        Label4.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Description.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("ScriptName.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("View.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("StarterScripts.Help.Message")
+        ScriptCodeExporterSFD.Title = LocalizationService.ForSection("Designer.ScriptBrowser")("Export.Code.Title")
+        Label9.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("Leave.Full.Screen.Label")
+        ExitFSModeBtn.Text = LocalizationService.ForSection("Designer.ScriptBrowser")("GoBack.Label")
+        Text = LocalizationService.ForSection("Designer.ScriptBrowser")("LoadStarterScript.Label")
+
         ' Clear existing items
         SysConfigScripts.Clear()
         FirstUserLogonScripts.Clear()

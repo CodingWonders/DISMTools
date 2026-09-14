@@ -47,6 +47,8 @@ Public Class ApplyUnattendFile
         Button1.Text = LocalizationService.ForSection("ApplyUnattend")("Browse.Button")
         OK_Button.Text = LocalizationService.ForSection("ApplyUnattend")("Ok.Button")
         Cancel_Button.Text = LocalizationService.ForSection("ApplyUnattend")("Cancel.Button")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("Copy.AnswerFile.CheckBox")
+        Label1.Text = LocalizationService.ForSection("Designer.ApplyUnattend")("LeaveUnchecked.Message")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

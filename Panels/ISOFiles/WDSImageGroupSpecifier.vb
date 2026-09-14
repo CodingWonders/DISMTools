@@ -93,6 +93,14 @@ Public Class WDSImageGroupSpecifier
     End Function
 
     Private Sub WDSImageGroupSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Action.Choose.Label")
+        Refresh_Button.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Refresh.Button")
+        RadioButton1.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Upload.RadioButton")
+        RadioButton2.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("CreateGroup.RadioButton")
+        Label2.Text = LocalizationService.ForSection("Designer.WDSImageGroup")("Already.Exists.Label")
+        Text = LocalizationService.ForSection("Designer.WDSImageGroup")("SpecifyGroup.Button")
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

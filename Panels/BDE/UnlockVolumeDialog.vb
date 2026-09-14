@@ -51,6 +51,12 @@ Public Class UnlockVolumeDialog
     End Sub
 
     Private Sub UnlockVolumeDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("RecoveryKey.Message")
+        Label2.Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("KeyProtectorId.Label")
+        Text = LocalizationService.ForSection("Designer.BDE.UnlockVolume")("Title")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         RPS1.BackColor = BackColor

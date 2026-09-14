@@ -142,6 +142,55 @@ Public Class DriverFilterAssistantDialog
     End Sub
 
     Private Sub DriverFilterAssistantDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.DriverFilter")("Apply.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.DriverFilter")("Clear.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.DriverFilter")("FilterPrompt.Label")
+        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({
+            LocalizationService.ForSection("Designer.DriverFilter")("PublishedName.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("Original.File.Name.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("ProviderName.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("ClassName.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("InboxStatus.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("Boot.Critical.Status.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("SignatureStatus.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("Date.Item")
+        })
+        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        Label13.Text = LocalizationService.ForSection("Designer.DriverFilter")("MonthName.Label")
+        RemoveHandler ComboBox4.SelectedIndexChanged, AddressOf ComboBox4_SelectedIndexChanged
+        ComboBox4.Items.Clear()
+        ComboBox4.Items.AddRange({
+            LocalizationService.ForSection("Designer.DriverFilter")("Year.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("Month.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("Date.Item")
+        })
+        AddHandler ComboBox4.SelectedIndexChanged, AddressOf ComboBox4_SelectedIndexChanged
+        ComboBox3.Items.Clear()
+        ComboBox3.Items.AddRange({
+            LocalizationService.ForSection("Designer.DriverFilter")("Released.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("NotReleased.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("ReleasedBefore.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("ReleasedOnBefore.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("ReleasedAfter.Item"),
+            LocalizationService.ForSection("Designer.DriverFilter")("ReleasedOnAfter.Item")
+        })
+        Label12.Text = LocalizationService.ForSection("Designer.DriverFilter")("Date.Label")
+        CheckBox3.Text = LocalizationService.ForSection("Designer.DriverFilter")("Search.Signed.CheckBox")
+        Label11.Text = LocalizationService.ForSection("Designer.DriverFilter")("SignatureStatus.Label")
+        CheckBox2.Text = LocalizationService.ForSection("Designer.DriverFilter")("Search.BootCritical.CheckBox")
+        Label10.Text = LocalizationService.ForSection("Designer.DriverFilter")("Boot.Critical.Status.Label")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.DriverFilter")("Search.Inbox.CheckBox")
+        Label9.Text = LocalizationService.ForSection("Designer.DriverFilter")("InboxStatus.Label")
+        Label6.Text = LocalizationService.ForSection("Designer.DriverFilter")("ClassName.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.DriverFilter")("Class.Name.Notes.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.DriverFilter")("ProviderName.Label")
+        Label4.Text = LocalizationService.ForSection("Designer.DriverFilter")("Original.File.Name.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.DriverFilter")("PublishedName.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.DriverFilter")("Driver.Searches.Choose.Label")
+        Text = LocalizationService.ForSection("Designer.DriverFilter")("Title")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor

@@ -88,6 +88,49 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub ADDSJoinDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        GroupBox1.Text = LocalizationService.ForSection("Designer.DomainJoin")("Nicsettings.Group")
+        DnsSyntaxCheckerBtn.Text = LocalizationService.ForSection("Designer.DomainJoin")("Verify.DNS.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.DomainJoin")("Default.Adapter.Same.Message")
+        RadioButton2.Text = LocalizationService.ForSection("Designer.DomainJoin")("ManualAdapter.RadioButton")
+        Label7.Text = LocalizationService.ForSection("Designer.DomainJoin")("Address.First.Line.Message")
+        Label6.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSServer.Addresses.Label")
+        Label4.Text = LocalizationService.ForSection("Designer.DomainJoin")("PrimarySuffix.Label")
+        RadioButton1.Text = LocalizationService.ForSection("Designer.DomainJoin")("PickAdapter.RadioButton")
+        Label3.Text = LocalizationService.ForSection("Designer.DomainJoin")("InterfaceAlias.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Suffix.Added.Message")
+        Label1.Text = LocalizationService.ForSection("Designer.DomainJoin")("PrimarySuffix.Label")
+        DNSConfigHeader.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSSettings.Label")
+        Label17.Text = LocalizationService.ForSection("Designer.DomainJoin")("Type.Security.Account.Label")
+        Label15.Text = LocalizationService.ForSection("Designer.DomainJoin")("Organizational.Unit.Label")
+        Label16.Text = LocalizationService.ForSection("Designer.DomainJoin")("User.Label")
+        Label19.Text = LocalizationService.ForSection("Designer.DomainJoin")("SAM.Account.Label")
+        Label18.Text = LocalizationService.ForSection("Designer.DomainJoin")("Org.Unit.Account.Message")
+        DsAccountObjectPickerBtn.Text = LocalizationService.ForSection("Designer.DomainJoin")("Pick.Account.Object.Button")
+        RemoveHandler ComboBox4.SelectedIndexChanged, AddressOf ComboBox4_SelectedIndexChanged
+        ComboBox4.Items.Clear()
+        ComboBox4.Items.AddRange({LocalizationService.ForSection("Designer.DomainJoin")("User.Manually.Item"),
+                                  LocalizationService.ForSection("Designer.DomainJoin")("Pick.User.Org.Item"),
+                                  LocalizationService.ForSection("Designer.DomainJoin")("Pick.User.Object.Item")})
+        AddHandler ComboBox4.SelectedIndexChanged, AddressOf ComboBox4_SelectedIndexChanged
+        Label13.Text = LocalizationService.ForSection("Designer.DomainJoin")("User.Principal.Name.Label")
+        Label14.Text = LocalizationService.ForSection("Designer.DomainJoin")("Logon.Path.Pre.Label")
+        Label11.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Auto.Detected.Message")
+        Label12.Text = LocalizationService.ForSection("Designer.DomainJoin")("Ask.Admin.Provide.Message")
+        Label10.Text = LocalizationService.ForSection("Designer.DomainJoin")("Password.Label")
+        Label9.Text = LocalizationService.ForSection("Designer.DomainJoin")("UserAccount.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.DomainJoin")("DomainName.Label")
+        DSDomainConfigHeader.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Auth.Label")
+        DS7_Description.Text = LocalizationService.ForSection("Designer.DomainJoin")("Wizard.Helps.Set.Description")
+        DS7_Header.Text = LocalizationService.ForSection("Designer.DomainJoin")("Join.Active.Dir.Label")
+        DNS_Explanation_Link.Text = LocalizationService.ForSection("Designer.DomainJoin")("WhatDNS.Link")
+        Back_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Back.Button")
+        Next_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Next.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Cancel.Button")
+        Help_Button.Text = LocalizationService.ForSection("Designer.DomainJoin")("Help.Button")
+        DnsResolutionTSMI.Text = LocalizationService.ForSection("Designer.DomainJoin")("Test.Dnsresolution.Label")
+        DnsZoneTSMI.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSZone.Domain.Choose.Label")
+        Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Services.Wizard.Label")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = BackColor

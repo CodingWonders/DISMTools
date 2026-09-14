@@ -56,6 +56,31 @@ Public Class EnvVarManagementForm
     End Sub
 
     Private Sub EnvVarManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SaveAllChangesBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Save.Changes.Label")
+        Label1.Text = LocalizationService.ForSection("Designer.EnvVars")("Intro.Message")
+        SysEnvVarGB.Text = LocalizationService.ForSection("Designer.EnvVars")("TargetSystem.Label")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.EnvVars")("Name.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.EnvVars")("Value.Column")
+        RemoveMachineVarButton.Text = LocalizationService.ForSection("Designer.EnvVars")("Remove.Machine.Label")
+        AddMachineVarButton.Text = LocalizationService.ForSection("Designer.EnvVars")("Add.Machine.Variable.Button")
+        UserEnvVarGB.Text = LocalizationService.ForSection("Designer.EnvVars")("DefaultUser.Label")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.EnvVars")("Name.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.EnvVars")("Value.Column")
+        RemoveUserVarBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Remove.User.Variable.Label")
+        AddUserVarButton.Text = LocalizationService.ForSection("Designer.EnvVars")("Add.User.Variable.Button")
+        SaveVarBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("SaveVariable.Label")
+        Label4.Text = LocalizationService.ForSection("Designer.EnvVars")("Scope.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.EnvVars")("Hierarchical.Values.Message")
+        Label6.Text = LocalizationService.ForSection("Designer.EnvVars")("Variables.Location.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.EnvVars")("Value.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.EnvVars")("Name.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.EnvVars")("VariableInfo.Label")
+        CopyToUserScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Copy.Default.User.Label")
+        CopyToMachineScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Copy.Machine.Scope.Label")
+        MoveToMachineScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Move.Machine.Scope.Label")
+        MoveToUserScopeBtn.Text = LocalizationService.ForSection("Designer.EnvVars")("Move.Default.User.Label")
+        Text = LocalizationService.ForSection("Designer.EnvVars")("SystemVariables.Label")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         SysEnvVarLV.BackColor = BackColor

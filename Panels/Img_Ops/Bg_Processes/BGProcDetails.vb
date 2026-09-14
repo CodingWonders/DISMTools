@@ -4,6 +4,9 @@ Public Class BGProcDetails
     Private mouseOffset As Point
 
     Private Sub BGProcDetails_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Label1.Text = LocalizationService.ForSection("Designer.BgprocDetails")("Gathering.Image.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.BgprocDetails")("Processes.Take.Time.Label")
+
         If BGProcNotify.Visible Then BGProcNotify.Close()
         Control.CheckForIllegalCrossThreadCalls = False
         If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11

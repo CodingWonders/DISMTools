@@ -23,6 +23,13 @@ Public Class PxeServerPortSpecifier
     End Sub
 
     Private Sub PxeServerPortSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Other.Message")
+        Label2.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Port.Server.Label")
+        Button1.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Default.Button")
+        Button2.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Check.Button")
+        Text = LocalizationService.ForSection("Designer.PXEServerPort")("ServerComponents.Label")
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

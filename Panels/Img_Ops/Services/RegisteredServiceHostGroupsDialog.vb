@@ -10,6 +10,16 @@ Public Class RegisteredServiceHostGroupsDialog
     End Sub
 
     Private Sub RegisteredServiceHostGroupsDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Ok.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Windows.Message")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.ServiceGroups")("GroupName.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.ServiceGroups")("ServicesGroup.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.ServiceGroups")("ServiceName.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.ServiceGroups")("DisplayName.Column")
+        ColumnHeader5.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Type.Column")
+        Label2.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Total.Label")
+        Text = LocalizationService.ForSection("Designer.ServiceGroups")("Registered.Svc.Host.Label")
+
         ServiceGroupDetailsLv.Items.Clear()
         ServiceDetailsLv.Items.Clear()
         BackColor = CurrentTheme.SectionBackgroundColor

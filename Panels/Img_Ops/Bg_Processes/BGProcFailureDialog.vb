@@ -13,6 +13,10 @@ Public Class BGProcFailureDialog
     End Sub
 
     Private Sub BGProcFailureDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.BgprocFailure")("Ok.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.BgprocFailure")("Run.Issues.Message")
+        Text = LocalizationService.ForSection("Designer.BgprocFailure")("Failed.Bg.Procs.Label")
+
         TextBox1.Text = ""
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

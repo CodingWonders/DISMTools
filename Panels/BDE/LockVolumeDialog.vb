@@ -19,6 +19,11 @@ Public Class LockVolumeDialog
     End Function
 
     Private Sub UnlockVolumeDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Label1.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("Wait.Message")
+        Label2.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("DriveLetter.Label")
+        Label4.Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("PersistentVolumeId.Label")
+        Text = LocalizationService.ForSection("Designer.BDE.LockVolume")("Title")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
 
@@ -35,7 +40,7 @@ Public Class LockVolumeDialog
 
         Dim lockResult As UInteger = LockVolume(PersistentVolumeID)
         Select Case lockResult
-            Case Constants.S_OK : ' Ignore
+            Case Constants.S_OK ' Ignore
             Case Constants.E_ACCESS_DENIED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("AccessDenied.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Case Constants.E_ACCESS_DENIED : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("AccessDenied.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Case Constants.FVE_E_LOCKED_VOLUME : MessageBox.Show(LocalizationService.ForSection("BDE.LockVolume.Messages")("AlreadyLocked.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
