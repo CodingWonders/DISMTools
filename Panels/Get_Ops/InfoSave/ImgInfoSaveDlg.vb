@@ -112,7 +112,7 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetImageInformation] Populating info collection...")
             ImageInfoCollection = DismApi.GetImageInfo(SourceImage)
             Debug.WriteLine("[GetImageInformation] Information processes completed for the image. Obtained images: " & ImageInfoCollection.Count)
-            Contents &= CrLf & GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & ImageInfoCollection.Count & LocalizationService.ForSection("ImageInfoSave.Report")("ImageS.Label"), ParagraphStyle.Bold) & CrLf &
+            Contents &= CrLf & GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & ImageInfoCollection.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("ImageS.Label"), ParagraphStyle.Bold) & CrLf &
                 GetTableHeader(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("Version.Column"),
                                              LocalizationService.ForSection("ImageInfoSave.Report")("ImageName.Label"),
                                              LocalizationService.ForSection("ImageInfoSave.Report")("ImageDescription"),
@@ -183,7 +183,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetPackageInformation] Getting basic package information...")
                 ReportChanges(msg(0), 5)
                 InstalledPkgInfo = DismApi.GetPackages(imgSession)
-                Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & InstalledPkgInfo.Count & LocalizationService.ForSection("ImageInfoSave.Report")("PackageS.Label"), ParagraphStyle.Bold) & CrLf
+                Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & InstalledPkgInfo.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("PackageS.Label"), ParagraphStyle.Bold) & CrLf
                 msg(0) = LocalizationService.ForSection("ImageInfoSave.Packages")("PackagesObtained.Message")
                 ReportChanges(msg(0), 10)
                 Dim pkgCustomPropsList As String = "<ul>"
@@ -351,7 +351,7 @@ Public Class ImgInfoSaveDlg
             DismApi.Initialize(DismLogLevel.LogErrors)
             Debug.WriteLine("[GetPackageFileInformation] Creating image session...")
             ReportChanges(msg, 0)
-            Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("Amount.Package.Files.Label") & PackageFiles.Count, ParagraphStyle.Bold)
+            Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("Amount.Package.Files.Label") & " " & PackageFiles.Count, ParagraphStyle.Bold)
             Contents &= CrLf & GetTableHeader(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("PackageName.Label"),
                                                             LocalizationService.ForSection("ImageInfoSave.Report")("Applicable.Label"),
                                                             LocalizationService.ForSection("ImageInfoSave.Report")("Copyright.Label"),
@@ -510,7 +510,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetFeatureInformation] Getting basic feature information...")
                 ReportChanges(msg(0), 5)
                 InstalledFeatInfo = DismApi.GetFeatures(imgSession)
-                Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & InstalledFeatInfo.Count & LocalizationService.ForSection("ImageInfoSave.Report")("FeatureCount.Suffix"), ParagraphStyle.Bold) & CrLf
+                Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & InstalledFeatInfo.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("FeatureCount.Suffix"), ParagraphStyle.Bold) & CrLf
                 msg(0) = LocalizationService.ForSection("ImageInfoSave.Features")("FeaturesObtained.Message")
                 ReportChanges(msg(0), 10)
                 Dim featCustomPropsList As String = "<ul>"
@@ -589,7 +589,7 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count() & LocalizationService.ForSection("ImageInfoSave.Report")("AppXPackages.Label"), ParagraphStyle.Bold) & CrLf &
+                    Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count() & " " & LocalizationService.ForSection("ImageInfoSave.Report")("AppXPackages.Label"), ParagraphStyle.Bold) & CrLf &
                         GetTableHeader(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("PackageName.Label"),
                                                      LocalizationService.ForSection("ImageInfoSave.Report")("App.Display.Name.Label"),
                                                      LocalizationService.ForSection("ImageInfoSave.Report")("Architecture.Label"),
@@ -709,8 +709,8 @@ Public Class ImgInfoSaveDlg
                         ' Determine if MainForm arrays contain more stuff
                         Dim pkgNames As New List(Of String)
                         pkgNames.AddRange(InstalledAppxPackageInfo.Select(Function(appx) appx.PackageName))
-                        Contents &= CrLf & GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & If(ImageToGetInfoFrom.ImageAppxPackages_Backup.Count() > pkgNames.Count,
-                                                                                        ImageToGetInfoFrom.ImageAppxPackages_Backup.Count(), pkgNames.Count) & LocalizationService.ForSection("ImageInfoSave.Report")("AppXPackages.Label"), ParagraphStyle.Bold) & CrLf &
+                        Contents &= CrLf & GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & If(ImageToGetInfoFrom.ImageAppxPackages_Backup.Count() > pkgNames.Count,
+                                                                                        ImageToGetInfoFrom.ImageAppxPackages_Backup.Count(), pkgNames.Count) & " " & LocalizationService.ForSection("ImageInfoSave.Report")("AppXPackages.Label"), ParagraphStyle.Bold) & CrLf &
                             GetTableHeader(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("PackageName.Label"),
                                                          LocalizationService.ForSection("ImageInfoSave.Report")("App.Display.Name.Label"),
                                                          LocalizationService.ForSection("ImageInfoSave.Report")("Architecture.Label"),
@@ -968,7 +968,7 @@ Public Class ImgInfoSaveDlg
                     Debug.WriteLine("[GetCapabilityInformation] Getting basic capability information...")
                     ReportChanges(msg(0), 5)
                     InstalledCapInfo = DismApi.GetCapabilities(imgSession)
-                    Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & InstalledCapInfo.Count & LocalizationService.ForSection("ImageInfoSave.Report")("CapabilityIes.Label"), ParagraphStyle.Bold) & CrLf
+                    Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & InstalledCapInfo.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("CapabilityIes.Label"), ParagraphStyle.Bold) & CrLf
                     msg(0) = LocalizationService.ForSection("ImgInfo.Capabilities")("Loaded.Message")
                     ReportChanges(msg(0), 10)
                     If GetEverything Then
@@ -1035,7 +1035,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetDriverInformation] Getting basic driver information...")
                 ReportChanges(msg(0), 5)
                 InstalledDrvInfo = DismApi.GetDrivers(imgSession, GetInboxDrivers)
-                Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & InstalledDrvInfo.Count & LocalizationService.ForSection("ImageInfoSave.Report")("DriverS.Label"), ParagraphStyle.Bold) & CrLf
+                Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & InstalledDrvInfo.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("DriverS.Label"), ParagraphStyle.Bold) & CrLf
                 msg(0) = LocalizationService.ForSection("ImageInfoSave.Drivers")("DriversObtained.Message")
                 ReportChanges(msg(0), 10)
                 If GetEverything Then
@@ -1206,7 +1206,7 @@ Public Class ImgInfoSaveDlg
         ReportChanges(LocalizationService.ForSection("ImageInfoSave.Report")("Getting.Service.Label"), 0.0)
         Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImgMountDir, OnlineMode)
         If serviceList.Any() Then
-            Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & serviceList.Count & LocalizationService.ForSection("ImageInfoSave.Report")("Service.Default.Label"), ParagraphStyle.Bold) & CrLf &
+            Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & serviceList.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("Service.Default.Label"), ParagraphStyle.Bold) & CrLf &
                 GetTableHeader({LocalizationService.ForSection("ImageInfoSave.Report")("ServiceName.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("DisplayName.Column"), LocalizationService.ForSection("ImageInfoSave.Report")("Description"), LocalizationService.ForSection("ImageInfoSave.Report")("StartType.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("ServiceType.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("Web.Label")}.ToList())
             ' Do the service listing overview first; then do a loop again for each service.
             For Each service In serviceList
@@ -1329,7 +1329,7 @@ Public Class ImgInfoSaveDlg
         Contents = GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("DISM.Tools.Image.Title"), HeaderSize.Header1) &
                    GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("Automatically.Message") & CrLf & CrLf &
                                 LocalizationService.ForSection("ImageInfoSave.Report")("Report.Contains.Message") & CrLf & CrLf &
-                                LocalizationService.ForSection("ImageInfoSave.Report")("Process.Primarily.Message") & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote & CrLf, ParagraphStyle.Normal) & CrLf &
+                                LocalizationService.ForSection("ImageInfoSave.Report")("Process.Primarily.Message") & " " & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote & CrLf, ParagraphStyle.Normal) & CrLf &
                    GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("TaskDetails.Label"), HeaderSize.Header2) & CrLf &
                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ProcessesStarted.Label") & Date.Now, LocalizationService.ForSection("ImageInfoSave.Report")("Report.File.Target.Label") & Quote & SaveTarget & Quote}.ToList())
 

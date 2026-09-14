@@ -532,7 +532,7 @@ Module LocalizationService
             End Try
         End If
 
-        Return value
+        Return value.Replace(Quote, "").Replace("{quot;}", Quote).Replace("{lbrace;}", "{").Replace("{rbrace;}", "}").Replace("{crlf;}", vbCrLf).Replace("{space;}", " ").Replace("{tab;}", vbTab)
     End Function
 
     Private Sub RegisterMissingItem(cultureCode As String, itemKey As String)
