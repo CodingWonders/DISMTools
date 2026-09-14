@@ -1508,7 +1508,7 @@ Public Class ImgInfoSaveDlg
         End Select
 
         ' Put an ending to the contents
-        Contents &= CrLf & CrLf & GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("WeEnded.Label") & Date.Now & LocalizationService.ForSection("ImageInfoSave.Report")("NiceDay.Label"), HeaderSize.Header2)
+        Contents &= CrLf & CrLf & GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("WeEnded.Label") & " " & Date.Now & LocalizationService.ForSection("ImageInfoSave.Report")("NiceDay.Label"), HeaderSize.Header2)
 
         ' Inform user that we are saving the file
         Dim saveMsg As String = ""

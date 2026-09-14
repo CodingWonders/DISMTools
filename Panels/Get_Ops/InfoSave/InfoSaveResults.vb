@@ -156,7 +156,7 @@ Public Class InfoSaveResults
                                                           "                    content.classList.toggle(" & Quote & "shrink" & Quote & ");" & CrLf &
                                                           "                });" & CrLf & CrLf &
                                                           "                var headings = content.querySelectorAll(" & Quote & "h2, h4, h5, h6" & Quote & ");" & CrLf & CrLf &
-                                                          "                for (var i = 0; i < headings.length; i++) {" & CrLf &
+                                                          "                for (var i = 0; i < headings.length - 1; i++) {" & CrLf &
                                                           "                    var heading = headings[i];" & CrLf &
                                                           "                    var link = document.createElement(" & Quote & "a" & Quote & ");" & CrLf &
                                                           "                    link.href = " & Quote & "#" & Quote & " + heading.id;" & CrLf &
