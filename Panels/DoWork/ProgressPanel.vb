@@ -2799,7 +2799,7 @@ Public Class ProgressPanel
                 DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(LimitWUAccess, "Yes", "No"))
                 DynaLog.LogMessage("Boot mode of host system: " & SystemInformation.BootMode)
                 ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
-                        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Repairing.Component.Item")
+                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Repairing.Component.Item")
                 LogView.AppendText(CrLf &
                                    ProgressLogText("Repairing.The.Component.Store") & CrLf &
                                    ProgressLogText("Options") & CrLf &
