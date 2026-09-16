@@ -2808,8 +2808,12 @@ Public Class ProgressPanel
                                    If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ProgressLogText("The.System.Is.In.Safe.Mode"), ""))
                 ' Like image captures, cleanup/comp store restore will fail if the source is in the root
                 ' of a volume and is quoted.
-                Dim SourceIsRooted As Boolean = Path.GetPathRoot(ComponentRepairSource) = ComponentRepairSource
-                Dim SourcePath As String = If(SourceIsRooted, ComponentRepairSource, Quote & ComponentRepairSource & Quote)
+                Dim SourceIsRooted As Boolean = False
+                Dim SourcePath As String = ""
+                If UseCompRepairSource AndAlso ComponentRepairSource <> "" Then
+                    SourceIsRooted = Path.GetPathRoot(ComponentRepairSource) = ComponentRepairSource
+                    SourcePath = If(SourceIsRooted, ComponentRepairSource, Quote & ComponentRepairSource & Quote)
+                End If
                 CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
