@@ -3355,4 +3355,27 @@ Public Class NewUnattendWiz
     Private Sub Button23_MouseHover(sender As Object, e As EventArgs) Handles Button23.MouseHover
         WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("RearrangeScripts.Label"))
     End Sub
+
+    Private Sub AccDispNameCtrl_Leave(sender As Object, e As EventArgs) Handles TextBox23.Leave, TextBox22.Leave, TextBox21.Leave, TextBox20.Leave, TextBox19.Leave
+        Dim sourceControl As Control = CType(sender, Control),
+            targetControl As Control = Nothing
+
+        Select Case sourceControl.Name
+            Case "TextBox19" : targetControl = TextBox4
+            Case "TextBox20" : targetControl = TextBox8
+            Case "TextBox21" : targetControl = TextBox11
+            Case "TextBox22" : targetControl = TextBox14
+            Case "TextBox23" : targetControl = TextBox17
+        End Select
+
+        If targetControl Is Nothing Then Exit Sub
+
+        If sourceControl.Text <> "" AndAlso targetControl.Text = "" Then
+            DisplayNameFormatterDialog.SourceDisplayName = sourceControl.Text
+
+            If DisplayNameFormatterDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                targetControl.Text = DisplayNameFormatterDialog.FormattedAccountName
+            End If
+        End If
+    End Sub
 End Class

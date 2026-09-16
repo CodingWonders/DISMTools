@@ -1025,6 +1025,12 @@
     <Compile Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\UserAccounts\DisplayNameFormatterDialog.Designer.vb">
+      <DependentUpon>DisplayNameFormatterDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\UserAccounts\DisplayNameFormatterDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </Compile>
@@ -1444,6 +1450,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.resx">
       <DependentUpon>ScriptReorderDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\UserAccounts\DisplayNameFormatterDialog.resx">
+      <DependentUpon>DisplayNameFormatterDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
