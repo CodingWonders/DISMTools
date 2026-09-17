@@ -20,7 +20,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2683"
+    Const UnattendGenReleaseTag As String = "2692"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
