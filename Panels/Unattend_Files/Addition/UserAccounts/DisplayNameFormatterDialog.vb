@@ -111,22 +111,20 @@ Public Class DisplayNameFormatterDialog
             ' {rnd} keywords with no padding chars
             SetPattern("\{rnd:\}")
             FormattedAccountName = NameFormatter.Replace(FormattedAccountName, New Random().Next(UShort.MaxValue))
-            ' standalone {1}-{5}
-            SetPattern("\{[1-5]{1}\}")
+            ' standalone word indexes
+            SetPattern("\{\d+\}")
             expMatches = NameFormatter.Matches(FormattedAccountName)
             If expMatches IsNot Nothing AndAlso expMatches.Cast(Of Match)().Any() Then
                 For Each expMatch As Match In expMatches
-                    Select Case expMatch.Value
-                        Case "{1}" : If wordParts.Length >= 1 Then FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, wordParts(0).ToLower())
-                        Case "{2}" : If wordParts.Length >= 2 Then FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, wordParts(1).ToLower())
-                        Case "{3}" : If wordParts.Length >= 3 Then FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, wordParts(2).ToLower())
-                        Case "{4}" : If wordParts.Length >= 4 Then FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, wordParts(3).ToLower())
-                        Case "{5}" : If wordParts.Length >= 5 Then FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, wordParts(4).ToLower())
-                    End Select
+                    Dim wordIndex As Integer = CInt(expMatch.Value.TrimStart("{").TrimEnd("}"))
+
+                    If wordParts.Length >= wordIndex Then
+                        FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, wordParts(wordIndex - 1).ToLower())
+                    End If
                 Next
             End If
-            ' {1}-{5} with first N letters
-            SetPattern("\{[1-5]{1}:\d*\}")
+            ' Word indexes with first N letters
+            SetPattern("\{\d+:\d+\}")
             expMatches = NameFormatter.Matches(FormattedAccountName)
             If expMatches IsNot Nothing AndAlso expMatches.Cast(Of Match)().Any() Then
                 For Each expMatch As Match In expMatches
@@ -135,21 +133,14 @@ Public Class DisplayNameFormatterDialog
                         wordIndex As Integer = CInt(expressionParts(0)),
                         totalWordLength As Integer = CInt(expressionParts(1))
 
-                    Select Case wordIndex
-                        Case 1 : If wordParts.Length >= 1 Then targetWord = wordParts(0)
-                        Case 2 : If wordParts.Length >= 2 Then targetWord = wordParts(1)
-                        Case 3 : If wordParts.Length >= 3 Then targetWord = wordParts(2)
-                        Case 4 : If wordParts.Length >= 4 Then targetWord = wordParts(3)
-                        Case 5 : If wordParts.Length >= 5 Then targetWord = wordParts(4)
-                    End Select
-
+                    If wordParts.Length >= wordIndex Then targetWord = wordParts(wordIndex - 1)
                     If totalWordLength > 0 Then targetWord = targetWord.Substring(0, Math.Min(targetWord.Length, totalWordLength))
 
                     FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, targetWord)
                 Next
             End If
-            ' {1}-{5} with N letters with a starting index
-            SetPattern("\{[1-5]{1}:\d*-\d*\}")
+            ' Word indexes with N letters with a starting index
+            SetPattern("\{\d+:\d+-\d+\}")
             expMatches = NameFormatter.Matches(FormattedAccountName)
             If expMatches IsNot Nothing AndAlso expMatches.Cast(Of Match)().Any() Then
                 For Each expMatch As Match In expMatches
@@ -160,14 +151,7 @@ Public Class DisplayNameFormatterDialog
                         beginningIndex As Integer = CInt(wordLengthParts(0)),
                         characterLength As Integer = CInt(wordLengthParts(1))
 
-                    Select Case wordIndex
-                        Case 1 : If wordParts.Length >= 1 Then targetWord = wordParts(0)
-                        Case 2 : If wordParts.Length >= 2 Then targetWord = wordParts(1)
-                        Case 3 : If wordParts.Length >= 3 Then targetWord = wordParts(2)
-                        Case 4 : If wordParts.Length >= 4 Then targetWord = wordParts(3)
-                        Case 5 : If wordParts.Length >= 5 Then targetWord = wordParts(4)
-                    End Select
-
+                    If wordParts.Length >= wordIndex Then targetWord = wordParts(wordIndex - 1)
                     If beginningIndex > 0 AndAlso characterLength > 0 Then targetWord = targetWord.Substring(beginningIndex - 1, Math.Min(targetWord.Length - beginningIndex, characterLength))
 
                     FormattedAccountName = FormattedAccountName.Replace(expMatch.Value, targetWord)
