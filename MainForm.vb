@@ -211,7 +211,7 @@ Public Class MainForm
     Public SearchEngineAITolerance As Integer = 1    ' The amount of tolerance of AI in search engines
 
     ' Tour server
-    Public ReadOnly tourServer As DTHttpServer = New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+    Public ReadOnly tourServer As New DTHttpServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
     Private ReadOnly videoServer As New DTHttpServer(Path.Combine(Application.StartupPath, "videos"), 2026)
 
     ' Contemporaneus Preview
