@@ -609,4 +609,35 @@ Public Class ISOCreator
     Private Sub CheckBox3_MouseHover(sender As Object, e As EventArgs) Handles CheckBox3.MouseHover
         WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("ISOCreator")("AvailableADK.Message"))
     End Sub
+
+    Private Sub CreationJobsLV_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles CreationJobsLV.MouseDoubleClick
+        Try
+            If CreationJobsLV.SelectedItems.Count = 1 Then
+                ' check queued tasks first, then active tasks
+                Dim SelectedIsoTaskInQueue As IsoCreationTask = _jobManager.JobQueue.FirstOrDefault(Function(queueItem) queueItem.Key = CreationJobsLV.FocusedItem.SubItems(0).Text).Value
+                If SelectedIsoTaskInQueue Is Nothing Then SelectedIsoTaskInQueue = _jobManager.ActiveTasks.FirstOrDefault(Function(queueItem) queueItem.Key = CreationJobsLV.FocusedItem.SubItems(0).Text).Value
+
+                If SelectedIsoTaskInQueue IsNot Nothing Then
+                    ' load details about the creation task
+                    TextBox1.Text = SelectedIsoTaskInQueue.SourceImageFile
+                    TextBox3.Text = SelectedIsoTaskInQueue.DestinationIsoFile
+
+                    Select Case SelectedIsoTaskInQueue.DestinationIsoArchitecture
+                        Case IsoArchitecture.X86 : ComboBox1.SelectedItem = "x86"
+                        Case IsoArchitecture.AMD64 : ComboBox1.SelectedItem = "amd64"
+                        Case IsoArchitecture.ARM64 : ComboBox1.SelectedItem = "arm64"
+                    End Select
+
+                    CheckBox1.Checked = SelectedIsoTaskInQueue.UnattendedAnswerFile <> ""
+                    TextBox4.Text = SelectedIsoTaskInQueue.UnattendedAnswerFile
+
+                    CheckBox2.Checked = SelectedIsoTaskInQueue.CopyToVentoy
+                    CheckBox3.Checked = SelectedIsoTaskInQueue.UseUEFICA2023Binaries
+                    CheckBox4.Checked = SelectedIsoTaskInQueue.IncludeSystemDrivers
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class
