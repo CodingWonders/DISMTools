@@ -251,11 +251,8 @@ Module WindowsServiceHelper
         Dim buffer As New StringBuilder(260)
         Dim hr As Integer = NativeMethods.SHLoadIndirectString(source, buffer, buffer.Capacity, IntPtr.Zero)
         DynaLog.LogMessage("Resolver Result: " & hr)
-        If hr = 0 Then
-            Return buffer.ToString()
-        Else
-            Return source
-        End If
+
+        Return If(hr = 0, buffer.ToString(), source)
     End Function
 
     ''' <summary>
@@ -545,12 +542,42 @@ Module WindowsServiceHelper
                             End If
                         ElseIf serviceDisplayName.StartsWith("@") Then
                             DynaLog.LogMessage("Raw display name indicates an indirect string. Parsing...")
+
+                            serviceDisplayName = Regex.Replace(serviceDisplayName, "%systemroot%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+                            serviceDisplayName = Regex.Replace(serviceDisplayName, "%windir%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+
+                            ' If it points to a file without a path, automatically put the mount path's system32 folder and check if it exists
+                            Dim commaLocation As Integer = serviceDisplayName.IndexOf(","),
+                                indStrFileName As String = serviceDisplayName.Substring(1, commaLocation - 1)
+
+                            If Not Path.IsPathRooted(indStrFileName) Then
+                                Dim guessedFilePath As String = Path.Combine(MountPath, "Windows", "system32", indStrFileName)
+                                If File.Exists(guessedFilePath) Then
+                                    serviceDisplayName = serviceDisplayName.Replace(indStrFileName, guessedFilePath)
+                                End If
+                            End If
+
                             serviceDisplayName = ResolveIndirectString(serviceDisplayName)
                         End If
                         serviceDescription = ServiceInfoRk.GetValue("Description", "")
                         DynaLog.LogMessage("Raw service description: " & serviceDescription)
                         If serviceDescription.StartsWith("@") Then
                             DynaLog.LogMessage("Raw description indicates an indirect string. Parsing...")
+
+                            serviceDescription = Regex.Replace(serviceDescription, "%systemroot%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+                            serviceDescription = Regex.Replace(serviceDescription, "%windir%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+
+                            ' If it points to a file without a path, automatically put the mount path's system32 folder and check if it exists
+                            Dim commaLocation As Integer = serviceDescription.IndexOf(","),
+                                indStrFileName As String = serviceDescription.Substring(1, commaLocation - 1)
+
+                            If Not Path.IsPathRooted(indStrFileName) Then
+                                Dim guessedFilePath As String = Path.Combine(MountPath, "Windows", "system32", indStrFileName)
+                                If File.Exists(guessedFilePath) Then
+                                    serviceDescription = serviceDescription.Replace(indStrFileName, guessedFilePath)
+                                End If
+                            End If
+
                             serviceDescription = ResolveIndirectString(serviceDescription)
                         End If
                         serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")

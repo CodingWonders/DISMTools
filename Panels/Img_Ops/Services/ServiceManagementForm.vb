@@ -216,9 +216,9 @@ Public Class ServiceManagementForm
         ModifiedServiceList.Clear()
         isModified = False
 
-        DynaLog.DisableLogging()
+        If Not Debugger.IsAttached Then DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
-        DynaLog.EnableLogging()
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
 
@@ -351,9 +351,9 @@ Public Class ServiceManagementForm
         ModifiedServiceList.Clear()
         isModified = False
 
-        DynaLog.DisableLogging()
+        If Not Debugger.IsAttached Then DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
-        DynaLog.EnableLogging()
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
         
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
 
