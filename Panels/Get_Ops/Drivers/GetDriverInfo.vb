@@ -345,32 +345,7 @@ Public Class GetDriverInfo
                 Button2.Enabled = True
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then
                     Dim hwCount As Integer = DriverInfoList(ListBox1.SelectedIndex).Distinct().Count
-                    'Select Case MainForm.Language
-                    '    Case 0
-                    '        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    '            Case "ENU", "ENG"
-                    '                Label7.Text = "Hardware target 1 of " & hwCount
-                    '            Case "ESN"
-                    '                Label7.Text = "Hardware de destino 1 de " & hwCount
-                    '            Case "FRA"
-                    '                Label7.Text = "Cible matérielle 1 de " & hwCount
-                    '            Case "PTB", "PTG"
-                    '                Label7.Text = "Equipamento-alvo 1 de " & hwCount
-                    '            Case "ITA"
-                    '                Label7.Text = "Destinazione hardware 1 di " & hwCount
-                    '        End Select
-                    '    Case 1
-                    '        Label7.Text = "Hardware target 1 of " & hwCount
-                    '    Case 2
-                    '        Label7.Text = "Hardware de destino 1 de " & hwCount
-                    '    Case 3
-                    '        Label7.Text = "Cible matérielle 1 de " & hwCount
-                    '    Case 4
-                    '        Label7.Text = "Equipamento-alvo 1 de " & hwCount
-                    '    Case 5
-                    '        Label7.Text = "Destinazione hardware 1 di " & hwCount
-                    'End Select
-                    Label7.Text = LocalizationService.ForSection("GetDriverInfo.Hardware")("HardwareTarget.Label")
+                    Label7.Text = String.Format(LocalizationService.ForSection("GetDriverInfo.Hardware")("HardwareTarget.Label"), hwCount)
                 End If
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
                 Button4.Enabled = False
