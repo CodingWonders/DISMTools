@@ -272,7 +272,7 @@ Public Class DriverFilterAssistantDialog
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Try
-            If DriverClassInfoDictionary.ContainsKey(ComboBox1.SelectedItem) Then
+            If DriverClassInfoDictionary.ContainsKey(ComboBox2.SelectedItem) Then
                 Dim SelectedClassInfo As KeyValuePair(Of String, String) = DriverClassInfoDictionary.ElementAtOrDefault(ComboBox2.SelectedIndex)
                 If SelectedClassInfo.Value IsNot Nothing Then SelectedClassNamesLB.Items.Add(SelectedClassInfo.Key)
             Else
