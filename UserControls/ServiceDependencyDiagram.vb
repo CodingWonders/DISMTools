@@ -87,6 +87,7 @@ Public Class ServiceDependencyDiagram
     Private _descriptionTextColor As Color = Color.FromArgb(220, 220, 220)
     Private _arrowColor As Color = Color.FromArgb(150, 150, 150)
     Private _backgroundColor As Color = Color.FromArgb(32, 32, 32)
+    Private _arrowHeadSize As Single = 10
 
     ''' <summary>
     ''' Gets or sets the background color of the diagram.
@@ -188,6 +189,16 @@ Public Class ServiceDependencyDiagram
         End Get
         Set(value As Color)
             _arrowColor = value
+            Invalidate()
+        End Set
+    End Property
+
+    Public Property ArrowHeadSize As Single
+        Get
+            Return _arrowHeadSize
+        End Get
+        Set(value As Single)
+            _arrowHeadSize = Math.Max(2, value)
             Invalidate()
         End Set
     End Property
@@ -411,6 +422,20 @@ Public Class ServiceDependencyDiagram
 
 #Region "Layout"
 
+    Private Function CalculateNodeHeight(g As Graphics, node As DiagramNode) As Single
+        Dim padding As Single = 10,
+            titleHeight As Single = 24 + 8 ' title + padding
+
+        Dim bodyFont As New Font(Font.FontFamily, Font.Size, FontStyle.Regular),
+            bodyWidth As Single = NodeWidth - padding * 2
+
+        Dim description As String = If(String.IsNullOrWhiteSpace(node.Service.Description), "No description", node.Service.Description),
+            bodyText As String = String.Format("{1}{0}Start mode: {2}{0}Type: {3}", Environment.NewLine, description, node.Service.StartTypeToString(), node.Service.TypeToString())
+
+        Dim bodySize As SizeF = g.MeasureString(bodyText, bodyFont, CInt(bodyWidth))
+        Return titleHeight + bodySize.Height + padding * 2
+    End Function
+
     ''' <summary>
     ''' Arranges the graph into left, center, and right columns.
     ''' Dependencies are placed recursively in columns to the left.
@@ -418,6 +443,15 @@ Public Class ServiceDependencyDiagram
     ''' </summary>
     Private Sub LayoutGraph()
         If _mainService Is Nothing OrElse _nodes.Count = 0 Then Exit Sub
+
+        Using bmp As New Bitmap(1, 1)
+            Using g As Graphics = Graphics.FromImage(bmp)
+                g.TextRenderingHint = Drawing.Text.TextRenderingHint.ClearTypeGridFit
+                For Each node As DiagramNode In _nodes
+                    node.Height = CalculateNodeHeight(g, node)
+                Next
+            End Using
+        End Using
 
         Dim mainNode As DiagramNode = _nodes.First(Function(node) node.IsMain)
 
@@ -516,7 +550,7 @@ Public Class ServiceDependencyDiagram
             Dim columnX As Single = baseX + (col * columnSpacing * direction)
 
             ' Vertical positioning inside each column
-            Dim totalHeight As Single = columnNodes.Count * NodeHeight + (columnNodes.Count - 1) * VerticalSpacing
+            Dim totalHeight As Single = columnNodes.Sum(Function(n) n.Height) + (columnNodes.Count - 1) * VerticalSpacing
             Dim currentY As Single = -totalHeight / 2.0F
 
             For Each node As DiagramNode In columnNodes
@@ -582,7 +616,8 @@ Public Class ServiceDependencyDiagram
 
     Private Sub DrawConnections(g As Graphics)
         Using pen As New Pen(_arrowColor, 2.0F / _zoom)
-            pen.EndCap = LineCap.ArrowAnchor
+            Dim cap As New AdjustableArrowCap(_arrowHeadSize, _arrowHeadSize, True)
+            pen.CustomEndCap = cap
 
             For Each connection As DiagramConnection In _connections
                 DrawConnection(g, pen, connection)
@@ -1084,7 +1119,8 @@ Public Class ServiceDependencyDiagram
 
     Private Sub DrawConnectionsForExport(g As Graphics)
         Using pen As New Pen(_arrowColor, 2.0F)
-            pen.EndCap = LineCap.ArrowAnchor
+            Dim cap As New AdjustableArrowCap(_arrowHeadSize, _arrowHeadSize, True)
+            pen.CustomEndCap = cap
 
             For Each connection As DiagramConnection In _connections
                 DrawConnection(g, pen, connection)

@@ -27,10 +27,10 @@ Partial Class ServiceDependencyGraphViewer
         Me.btnZoomOut = New System.Windows.Forms.Button()
         Me.btnResetZoom = New System.Windows.Forms.Button()
         Me.btnSaveImage = New System.Windows.Forms.Button()
-        Me.depDiagram = New DISMTools.ServiceDependencyDiagram()
         Me.sfdDiagram = New System.Windows.Forms.SaveFileDialog()
         Me.btnSaveToMermaid = New System.Windows.Forms.Button()
         Me.sfdMermaidDiagram = New System.Windows.Forms.SaveFileDialog()
+        Me.depDiagram = New DISMTools.ServiceDependencyDiagram()
         Me.SuspendLayout()
         '
         'btnZoomIn
@@ -77,27 +77,6 @@ Partial Class ServiceDependencyGraphViewer
         Me.btnSaveImage.TabIndex = 1
         Me.btnSaveImage.UseVisualStyleBackColor = True
         '
-        'depDiagram
-        '
-        Me.depDiagram.ArrowColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer))
-        Me.depDiagram.BackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
-        Me.depDiagram.DescriptionTextColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
-        Me.depDiagram.DiagramBackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
-        Me.depDiagram.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.depDiagram.ForeColor = System.Drawing.Color.White
-        Me.depDiagram.Location = New System.Drawing.Point(0, 0)
-        Me.depDiagram.MainNodeBackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(86, Byte), Integer), CType(CType(120, Byte), Integer))
-        Me.depDiagram.MainNodeBorderColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(170, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.depDiagram.Name = "depDiagram"
-        Me.depDiagram.NodeBackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.depDiagram.NodeBorderColor = System.Drawing.Color.FromArgb(CType(CType(120, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(120, Byte), Integer))
-        Me.depDiagram.NodeCornerRadius = 0
-        Me.depDiagram.NodeTextColor = System.Drawing.Color.White
-        Me.depDiagram.Size = New System.Drawing.Size(1264, 681)
-        Me.depDiagram.TabIndex = 0
-        Me.depDiagram.Text = "ServiceDependencyDiagram1"
-        Me.depDiagram.Zoom = 1.0!
-        '
         'sfdDiagram
         '
         Me.sfdDiagram.Filter = "PNG files|*.png"
@@ -117,6 +96,28 @@ Partial Class ServiceDependencyGraphViewer
         '
         Me.sfdMermaidDiagram.Filter = "Markdown files|*.md"
         '
+        'depDiagram
+        '
+        Me.depDiagram.ArrowColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer))
+        Me.depDiagram.ArrowHeadSize = 6.0!
+        Me.depDiagram.BackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
+        Me.depDiagram.DescriptionTextColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.depDiagram.DiagramBackColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer), CType(CType(32, Byte), Integer))
+        Me.depDiagram.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.depDiagram.ForeColor = System.Drawing.Color.White
+        Me.depDiagram.Location = New System.Drawing.Point(0, 0)
+        Me.depDiagram.MainNodeBackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(86, Byte), Integer), CType(CType(120, Byte), Integer))
+        Me.depDiagram.MainNodeBorderColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(170, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.depDiagram.Name = "depDiagram"
+        Me.depDiagram.NodeBackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
+        Me.depDiagram.NodeBorderColor = System.Drawing.Color.FromArgb(CType(CType(120, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(120, Byte), Integer))
+        Me.depDiagram.NodeCornerRadius = 0
+        Me.depDiagram.NodeTextColor = System.Drawing.Color.White
+        Me.depDiagram.Size = New System.Drawing.Size(1264, 681)
+        Me.depDiagram.TabIndex = 0
+        Me.depDiagram.Text = "ServiceDependencyDiagram1"
+        Me.depDiagram.Zoom = 1.0!
+        '
         'ServiceDependencyGraphViewer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -134,6 +135,7 @@ Partial Class ServiceDependencyGraphViewer
         Me.Name = "ServiceDependencyGraphViewer"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Service Dependency Viewer"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.ResumeLayout(False)
 
     End Sub
