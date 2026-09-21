@@ -10019,4 +10019,23 @@ Public Class MainForm
         End Select
     End Sub
 
+    Private Sub CopyImageAnswerFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyImageAnswerFilesToolStripMenuItem.Click
+        Dim AnswerFileLocations() As String = New String(1) {Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"),
+                                                             Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml")}
+        If Not AnswerFileLocations.Any(Function(answerFile) File.Exists(answerFile)) Then
+            MessageBox.Show(Me, "No answer files have been found in the Windows image.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Exit Sub
+        End If
+        If Not UnattendSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then Exit Sub
+
+        Dim TargetAnswerFileDirectoryPath As String = Path.GetDirectoryName(UnattendSFD.FileName),
+            SysprepAnswerFilePath As String = Path.Combine(TargetAnswerFileDirectoryPath, String.Format("{0}_sysprep.xml", Path.GetFileNameWithoutExtension(UnattendSFD.FileName)))
+        Try
+            If File.Exists(AnswerFileLocations(0)) Then File.Copy(AnswerFileLocations(0), UnattendSFD.FileName, True)
+            If File.Exists(AnswerFileLocations(1)) Then File.Copy(AnswerFileLocations(1), SysprepAnswerFilePath, True)
+            MessageBox.Show(Me, "Answer files were copied to the destination.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            DynaLog.LogMessage(ex.Message)
+        End Try
+    End Sub
 End Class

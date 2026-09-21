@@ -516,6 +516,9 @@ Partial Class MainForm
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ToolStripSeparator50 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopyImageAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UnattendSFD = New System.Windows.Forms.SaveFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -655,70 +658,70 @@ Partial Class MainForm
         '
         Me.RecentProject1ToolStripMenuItem.Name = "RecentProject1ToolStripMenuItem"
         Me.RecentProject1ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D1), System.Windows.Forms.Keys)
-        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject1ToolStripMenuItem.Visible = False
         '
         'RecentProject2ToolStripMenuItem
         '
         Me.RecentProject2ToolStripMenuItem.Name = "RecentProject2ToolStripMenuItem"
         Me.RecentProject2ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D2), System.Windows.Forms.Keys)
-        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject2ToolStripMenuItem.Visible = False
         '
         'RecentProject3ToolStripMenuItem
         '
         Me.RecentProject3ToolStripMenuItem.Name = "RecentProject3ToolStripMenuItem"
         Me.RecentProject3ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D3), System.Windows.Forms.Keys)
-        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject3ToolStripMenuItem.Visible = False
         '
         'RecentProject4ToolStripMenuItem
         '
         Me.RecentProject4ToolStripMenuItem.Name = "RecentProject4ToolStripMenuItem"
         Me.RecentProject4ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D4), System.Windows.Forms.Keys)
-        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject4ToolStripMenuItem.Visible = False
         '
         'RecentProject5ToolStripMenuItem
         '
         Me.RecentProject5ToolStripMenuItem.Name = "RecentProject5ToolStripMenuItem"
         Me.RecentProject5ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D5), System.Windows.Forms.Keys)
-        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject5ToolStripMenuItem.Visible = False
         '
         'RecentProject6ToolStripMenuItem
         '
         Me.RecentProject6ToolStripMenuItem.Name = "RecentProject6ToolStripMenuItem"
         Me.RecentProject6ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D6), System.Windows.Forms.Keys)
-        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject6ToolStripMenuItem.Visible = False
         '
         'RecentProject7ToolStripMenuItem
         '
         Me.RecentProject7ToolStripMenuItem.Name = "RecentProject7ToolStripMenuItem"
         Me.RecentProject7ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D7), System.Windows.Forms.Keys)
-        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject7ToolStripMenuItem.Visible = False
         '
         'RecentProject8ToolStripMenuItem
         '
         Me.RecentProject8ToolStripMenuItem.Name = "RecentProject8ToolStripMenuItem"
         Me.RecentProject8ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D8), System.Windows.Forms.Keys)
-        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject8ToolStripMenuItem.Visible = False
         '
         'RecentProject9ToolStripMenuItem
         '
         Me.RecentProject9ToolStripMenuItem.Name = "RecentProject9ToolStripMenuItem"
         Me.RecentProject9ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D9), System.Windows.Forms.Keys)
-        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject9ToolStripMenuItem.Visible = False
         '
         'RecentProject10ToolStripMenuItem
         '
         Me.RecentProject10ToolStripMenuItem.Name = "RecentProject10ToolStripMenuItem"
         Me.RecentProject10ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D0), System.Windows.Forms.Keys)
-        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject10ToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator1
@@ -1375,7 +1378,7 @@ Partial Class MainForm
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem, Me.ToolStripSeparator48, Me.AuditModeTSMI})
+        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem, Me.ToolStripSeparator48, Me.AuditModeTSMI, Me.ToolStripSeparator50, Me.CopyImageAnswerFilesToolStripMenuItem})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
@@ -4780,6 +4783,21 @@ Partial Class MainForm
         'ThemeDesignerTimer
         '
         '
+        'ToolStripSeparator50
+        '
+        Me.ToolStripSeparator50.Name = "ToolStripSeparator50"
+        Me.ToolStripSeparator50.Size = New System.Drawing.Size(234, 6)
+        '
+        'CopyImageAnswerFilesToolStripMenuItem
+        '
+        Me.CopyImageAnswerFilesToolStripMenuItem.Name = "CopyImageAnswerFilesToolStripMenuItem"
+        Me.CopyImageAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.CopyImageAnswerFilesToolStripMenuItem.Text = "Copy image answer files..."
+        '
+        'UnattendSFD
+        '
+        Me.UnattendSFD.Filter = "Unattended answer files|*.xml"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -5381,4 +5399,7 @@ Partial Class MainForm
     Friend WithEvents FactLabel As System.Windows.Forms.Label
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents RefreshFactButton As System.Windows.Forms.Button
+    Friend WithEvents ToolStripSeparator50 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyImageAnswerFilesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UnattendSFD As System.Windows.Forms.SaveFileDialog
 End Class
