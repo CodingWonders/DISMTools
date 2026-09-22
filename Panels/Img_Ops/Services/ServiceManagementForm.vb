@@ -13,6 +13,10 @@ Public Class ServiceManagementForm
 
     Private isModified As Boolean = False
 
+    Private CriticalServiceNames As New List(Of String) From {"BFE", "CoreMessagingRegistrar", "CryptSvc", "DcomLaunch", "DeviceInstall", "Dhcp", "Dnscache", "EventLog",
+                                                              "gpsvc", "IKEEXT", "lmhosts", "LSM", "mpssvc", "nsi", "PlugPlay", "Power", "RpcSs", "RpcEptMapper", "SamSs", "SystemEventsBroker",
+                                                              "TcpIp", "UserManager", "ProfSvc", "LanmanWorkstation"}
+
     Private Sub OnServiceSaveReported(current As Integer, count As Integer) Handles Me.ServiceSaveReported
         progressMessage = LocalizationService.ForSection("ServiceManagement.Progress").Format("Saving.Label", current, count, Math.Round((current / count) * 100, 0))
     End Sub
@@ -265,6 +269,11 @@ Public Class ServiceManagementForm
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             Dim ForbiddenTypesForNonServices() As WindowsService.ServiceType = New WindowsService.ServiceType() {WindowsService.ServiceType.WindowsService, WindowsService.ServiceType.WindowsApplication}
             Dim ForbiddenStartTypesForNonServices() As WindowsService.ServiceStartType = New WindowsService.ServiceStartType() {WindowsService.ServiceStartType.BootLoader, WindowsService.ServiceStartType.IOSystem}
 
@@ -410,6 +419,11 @@ Public Class ServiceManagementForm
 
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             If MessageBox.Show(LocalizationService.ForSection("ServiceMgmt.Messages")("Continui.Removal.Svc.Message"),
                                LocalizationService.ForSection("Services.Messages")("RemoveService.Title"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
 
@@ -454,8 +468,17 @@ Public Class ServiceManagementForm
         CheckBox3.Checked = False
     End Sub
 
+    Private Sub DisplayCriticalServiceWarning()
+        MessageBox.Show(Me, "This service can only be viewed because it is critical for core Windows components to function. Improper configuration of this service will result in an unstable system.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
     Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             ' Hold a copy of the service so we can queue it for modification
             Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
 
@@ -649,6 +672,11 @@ Public Class ServiceManagementForm
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             ' Hold a copy of the service so we can queue it for modification
             Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
 
