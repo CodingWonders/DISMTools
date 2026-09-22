@@ -118,7 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label20.Text" xml:space="preserve">
-    <value>If you need this service available even when the target system can't boot into normal mode, consider changing the following options. However, keep in mind that you may be enabling an unreliable device or application service that may cause Safe Mode to crash:</value>
+    <value>If you need this service available even when the target system can't boot into normal mode, consider changing the following options. However, keep in mind that you may be enabling an unreliable device or application service that may cause Safe Mode to crash.
+
+Note that you must have the appropriate permissions when disabling services in Safe Mode. If you don't have the right permissions, no changes will be made.</value>
   </data>
   <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

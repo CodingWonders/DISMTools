@@ -691,14 +691,21 @@ Module WindowsServiceHelper
 
     Private Function ExportCurrentServiceInformation() As Boolean
         Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+        If defaultControlSet = -1 Then Return False
 
-        If defaultControlSet = -1 Then
-            Return False
-        End If
-
-        Return RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Services", defaultControlSet.ToString().PadLeft(3, "0"c)),
+        If Not RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Services", defaultControlSet.ToString().PadLeft(3, "0"c)),
                                                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                                                                String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
+                                                                String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0 Then Return False
+
+        ' Export safeboot information
+        If Not RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\SafeBoot\Minimal", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                String.Format("MinimalSafebootInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0 Then Return False
+        If Not RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\SafeBoot\Network", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                String.Format("NetworkSafebootInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0 Then Return False
+
+        Return True
     End Function
 
     Public Function SaveServiceInformation(MountPath As String, ServiceList As List(Of WindowsService), Optional reportProgress As Action(Of Integer, Integer) = Nothing) As Boolean
@@ -726,7 +733,7 @@ Module WindowsServiceHelper
                 serviceCount As Integer = ServiceList.Count
 
             ' Now, we can save the properties. Only the start type for now
-            DynaLog.DisableLogging()
+            If Not Debugger.IsAttached Then DynaLog.DisableLogging()
             For Each Service As WindowsService In ServiceList
                 currentService += 1
                 Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name),
@@ -775,7 +782,7 @@ Module WindowsServiceHelper
                 End If
                 If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
             Next
-            DynaLog.EnableLogging()
+            If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
             Debug.WriteLine("Service Count: " & ServiceList.Count)
             Debug.WriteLine("Failed Sets: " & failedSets)

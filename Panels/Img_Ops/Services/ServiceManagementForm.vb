@@ -50,8 +50,12 @@ Public Class ServiceManagementForm
         CheckBox1.Checked = If(selectedService.StartType = WindowsService.ServiceStartType.Automatic, selectedService.DelayedStart, False)
         CheckBox1.Enabled = selectedService.StartType = WindowsService.ServiceStartType.Automatic
 
+        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
         CheckBox2.Checked = selectedService.SafeModeOptions.AvailableInMinimalSafeBoot
         CheckBox3.Checked = selectedService.SafeModeOptions.AvailableInNetworkSafeBoot
+        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
 
         ' Only enable user service flags with certain service types
         Label19.Enabled = {80, 96}.Contains(selectedService.Type)
@@ -454,6 +458,148 @@ Public Class ServiceManagementForm
         If ListView1.SelectedItems.Count = 1 Then
             ' Hold a copy of the service so we can queue it for modification
             Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
+
+            ' For a service to work correctly in Safe Mode (when the checkbox is checked), any of its dependencies
+            ' need to be enabled in Safe Mode too, as well as the dependencies of those dependencies, as well as
+            ' the dependencies of the dependencies of those dependencies...
+            '
+            '                                                       Dependency 1 of dependency 1 \
+            '                                                                                     \
+            '                                                       Dependency 2 of dependency 1 ---- Dependency 1 \
+            '                                                                                     /                 \
+            '                                                       Dependency 3 of dependency 1 /                   \
+            '                                                                                                         \
+            '     Dependency 1 of dependency 1 of dependency 2 \                                                      ---------- Main Service
+            '                                                   --- Dependency 1 of dependency 2 \                   /
+            '     Dependency 2 of dependency 1 of dependency 2 /                                  \                 /
+            '                                                                                      -- Dependency 2 /
+            '                                                                                     /
+            '                                                       Dependency 2 of dependency 2 /
+            '
+            ' For disabling a service in Safe Mode, the dependencies need to be disabled, as well as its dependents, 
+            ' as well as the dependents of those dependents. Then, the dependents of that service need to be disabled,
+            ' plus other dependencies, plus their dependents; as well as those dependents' dependents...
+            '
+            '                                    /---- Dependent of dependency 1 of dependency 1
+            '                                   /
+            '     Dependency 1 of dependency 1 ---------------------------------------------------------------- Dependency 1 --------- Dependent                   ------ Dependent 1 ------------ Dependent 1 of dependent 1
+            '                                                                                         /                       \                                   /                        \
+            '                                    /---- Dependent 1 of dependency 2 of dependency 1   /                         \                                 /                          ------ Dependent 2 of dependent 1
+            '                                   /                                                   /                           \                               /                            \
+            '     Dependency 2 of dependency 1 -----------------------------------------------------                             \                             /                              ---- Dependent 3 of dependent 1
+            '                                   \                                                                                 \                           /
+            '                                    \---- Dependent 2 of dependency 2 of dependency 1                                 ------------ Main Service ------------ Dependent 2 ------------ Dependent of dependent 2
+            '                                                                                                                     /                           \
+            '                                                                                                                    /                             \
+            '                                                                                                                   /                               \                     
+            '                                                                                                                  /                                 \                      ---------- Dependent 1 of dependent 3
+            '                                                                                                                 /                                   \                    /
+            '                                                                                                   Dependency 2 --------- Dependent                   ------ Dependent 3 ------------ Dependent 2 of dependent 3
+            '                                                                                                                                                                          \
+            '                                                                                                                                                                           ---------- Dependent 3 of dependent 3
+            '
+            ' Alright, I'm going to stop.
+            Dim AdditionalServiceNames As New List(Of String),
+                ImpliedServices As IEnumerable(Of WindowsService) = Nothing
+            If CheckBox2.Checked Then
+                AdditionalServiceNames = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox2.Checked, False).Where(Function(service) Not service = newService.Name).Distinct().ToList()
+
+                If AdditionalServiceNames.Any() Then
+                    ImpliedServices = ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name))
+
+                    ImpliedServicesInSafeBootEnablementDialog.ImpliedServices = ImpliedServices
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootEnablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        CheckBox2.Checked = False
+                        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        ' Add the additional services first
+                        For Each ImpliedService In ImpliedServices
+                            ImpliedService.SafeModeOptions.AvailableInMinimalSafeBoot = True
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInMinimalSafeBoot = True
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            Else
+                AdditionalServiceNames = EnumerateServiceDependentsForSafeModeToggles(newService, Not CheckBox2.Checked, False).Distinct().ToList()
+                Dim ServiceDependencies As List(Of String) = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox2.Checked, False).Distinct().ToList(),
+                    ServiceDependentsExclusiveToMainService As List(Of String) = New List(Of String)(AdditionalServiceNames)
+
+                For Each ServiceDependency In ServiceDependencies
+                    If Not ServiceList.Any(Function(service) service.Name = ServiceDependency) Then Continue For
+
+                    Dim dependencyService As WindowsService = ServiceList.First(Function(service) service.Name = ServiceDependency)
+                    AdditionalServiceNames.AddRange(EnumerateServiceDependentsForSafeModeToggles(dependencyService, Not CheckBox2.Checked, False, newService.Name).Distinct().ToArray())
+                    AdditionalServiceNames = AdditionalServiceNames.Distinct().ToList()
+                Next
+
+                AdditionalServiceNames = AdditionalServiceNames.Where(Function(service) Not service = newService.Name).ToList()
+
+                Dim AdditionalServices As New Dictionary(Of String, List(Of WindowsService)) From {
+                    {"dependencies", ServiceList.Where(Function(service) ServiceDependencies.Contains(service.Name)).ToList()},
+                    {"allDependents", ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name)).ToList()},
+                    {"mainServiceDependents", ServiceList.Where(Function(service) ServiceDependentsExclusiveToMainService.Contains(service.Name)).ToList()}
+                }
+
+                Dim warrantedDialogShown As Boolean = AdditionalServices.Any(Function(kvp) kvp.Value.Any())
+                If warrantedDialogShown Then
+                    ImpliedServicesInSafeBootDisablementDialog.ImpliedServices = AdditionalServices
+
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootDisablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        CheckBox2.Checked = True
+                        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        If ImpliedServicesInSafeBootDisablementDialog.ImplyServiceDependencies Then
+                            ' Add the additional services first
+                            For Each ImpliedService In AdditionalServices("dependencies")
+                                ImpliedService.SafeModeOptions.AvailableInMinimalSafeBoot = False
+
+                                Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                    svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                                ServiceList(svcIndex).SafeModeOptions.AvailableInMinimalSafeBoot = False
+                                If modifiedSvcIndex > -1 Then
+                                    ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                                Else
+                                    ModifiedServiceList.Add(ImpliedService)
+                                End If
+                            Next
+                        End If
+
+                        For Each ImpliedService In AdditionalServices("allDependents")
+                            ImpliedService.SafeModeOptions.AvailableInMinimalSafeBoot = False
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInMinimalSafeBoot = False
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            End If
+
             ServiceList(ListView1.FocusedItem.Index).SafeModeOptions.AvailableInMinimalSafeBoot = CheckBox2.Checked
             newService.SafeModeOptions.AvailableInMinimalSafeBoot = CheckBox2.Checked
 
@@ -467,10 +613,147 @@ Public Class ServiceManagementForm
         End If
     End Sub
 
+    Private Function EnumerateServiceDependenciesForSafeModeToggles(BaseService As WindowsService, ExpectedSafebootSetting As Boolean, NetworkedSafeboot As Boolean) As List(Of String)
+        Dim svcDeps As New List(Of String)
+
+        For Each ServiceDependency In BaseService.Dependencies
+            If Not ServiceList.Any(Function(service) service.Name = ServiceDependency) Then Continue For
+            Dim dependencyService As WindowsService = ServiceList.First(Function(service) service.Name = ServiceDependency)
+
+            Dim serviceMeetsSafeModeToggles As Boolean = If(NetworkedSafeboot, dependencyService.SafeModeOptions.AvailableInNetworkSafeBoot, dependencyService.SafeModeOptions.AvailableInMinimalSafeBoot) = ExpectedSafebootSetting
+            If serviceMeetsSafeModeToggles Then svcDeps.Add(ServiceDependency)
+
+            If dependencyService.Dependencies.Any() Then svcDeps.AddRange(EnumerateServiceDependenciesForSafeModeToggles(dependencyService, ExpectedSafebootSetting, NetworkedSafeboot))
+        Next
+
+        Return svcDeps
+    End Function
+
+    Private Function EnumerateServiceDependentsForSafeModeToggles(BaseService As WindowsService, ExpectedSafebootSetting As Boolean, NetworkedSafeboot As Boolean, Optional BaseServiceName As String = "") As List(Of String)
+        Dim dependents As New List(Of String)
+
+        For Each ServiceDependent In ServiceList.Where(Function(service) service.Dependencies.Contains(BaseService.Name))
+            If BaseServiceName <> "" And ServiceDependent.Dependencies.Contains(BaseServiceName) Then Continue For
+
+            Dim serviceMeetsSafeModeToggles As Boolean = If(NetworkedSafeboot, ServiceDependent.SafeModeOptions.AvailableInNetworkSafeBoot, ServiceDependent.SafeModeOptions.AvailableInMinimalSafeBoot) = ExpectedSafebootSetting
+            If serviceMeetsSafeModeToggles Then dependents.Add(ServiceDependent.Name)
+
+            Dim ServiceDependentSubDependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceDependent.Name))
+            For Each ServiceDependentSubDependent In ServiceDependentSubDependents
+                dependents.AddRange(EnumerateServiceDependentsForSafeModeToggles(ServiceDependentSubDependent, ExpectedSafebootSetting, NetworkedSafeboot, BaseServiceName))
+            Next
+        Next
+
+        Return dependents
+    End Function
+
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
             ' Hold a copy of the service so we can queue it for modification
             Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
+
+            ' look at the comment from checkbox2; i'm not repeating it here.
+            Dim AdditionalServiceNames As New List(Of String),
+                ImpliedServices As IEnumerable(Of WindowsService) = Nothing
+            If CheckBox3.Checked Then
+                AdditionalServiceNames = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox3.Checked, True).Where(Function(service) Not service = newService.Name).Distinct().ToList()
+
+                If AdditionalServiceNames.Any() Then
+                    ImpliedServices = ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name))
+
+                    ImpliedServicesInSafeBootEnablementDialog.ImpliedServices = ImpliedServices
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootEnablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        CheckBox3.Checked = False
+                        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        ' Add the additional services first
+                        For Each ImpliedService In ImpliedServices
+                            ImpliedService.SafeModeOptions.AvailableInNetworkSafeBoot = True
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInNetworkSafeBoot = True
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            Else
+                AdditionalServiceNames = EnumerateServiceDependentsForSafeModeToggles(newService, Not CheckBox3.Checked, False).Distinct().ToList()
+                Dim ServiceDependencies As List(Of String) = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox3.Checked, True).Distinct().ToList(),
+                    ServiceDependentsExclusiveToMainService As List(Of String) = New List(Of String)(AdditionalServiceNames)
+
+                For Each ServiceDependency In ServiceDependencies
+                    If Not ServiceList.Any(Function(service) service.Name = ServiceDependency) Then Continue For
+
+                    Dim dependencyService As WindowsService = ServiceList.First(Function(service) service.Name = ServiceDependency)
+                    AdditionalServiceNames.AddRange(EnumerateServiceDependentsForSafeModeToggles(dependencyService, Not CheckBox3.Checked, True, newService.Name).Distinct().ToArray())
+                    AdditionalServiceNames = AdditionalServiceNames.Distinct().ToList()
+                Next
+
+                AdditionalServiceNames = AdditionalServiceNames.Where(Function(service) Not service = newService.Name).ToList()
+
+                Dim AdditionalServices As New Dictionary(Of String, List(Of WindowsService)) From {
+                    {"dependencies", ServiceList.Where(Function(service) ServiceDependencies.Contains(service.Name)).ToList()},
+                    {"allDependents", ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name)).ToList()},
+                    {"mainServiceDependents", ServiceList.Where(Function(service) ServiceDependentsExclusiveToMainService.Contains(service.Name)).ToList()}
+                }
+
+                Dim warrantedDialogShown As Boolean = AdditionalServices.Any(Function(kvp) kvp.Value.Any())
+                If warrantedDialogShown Then
+                    ImpliedServicesInSafeBootDisablementDialog.ImpliedServices = AdditionalServices
+
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootDisablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        CheckBox3.Checked = True
+                        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        If ImpliedServicesInSafeBootDisablementDialog.ImplyServiceDependencies Then
+                            ' Add the additional services first
+                            For Each ImpliedService In AdditionalServices("dependencies")
+                                ImpliedService.SafeModeOptions.AvailableInNetworkSafeBoot = False
+
+                                Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                    svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                                ServiceList(svcIndex).SafeModeOptions.AvailableInNetworkSafeBoot = False
+                                If modifiedSvcIndex > -1 Then
+                                    ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                                Else
+                                    ModifiedServiceList.Add(ImpliedService)
+                                End If
+                            Next
+                        End If
+
+                        For Each ImpliedService In AdditionalServices("allDependents")
+                            ImpliedService.SafeModeOptions.AvailableInNetworkSafeBoot = False
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInNetworkSafeBoot = False
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            End If
+
             ServiceList(ListView1.FocusedItem.Index).SafeModeOptions.AvailableInNetworkSafeBoot = CheckBox3.Checked
             newService.SafeModeOptions.AvailableInNetworkSafeBoot = CheckBox3.Checked
 

@@ -106,9 +106,9 @@ Partial Class ServiceManagementForm
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
         Me.ServiceInfoContainerPanel = New System.Windows.Forms.Panel()
-        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
         Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label15 = New System.Windows.Forms.Label()
+        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
         Me.ReportServiceInfoBtn = New System.Windows.Forms.Button()
         Me.ServiceInfoSFD = New System.Windows.Forms.SaveFileDialog()
         Me.RestoreServiceBtn = New System.Windows.Forms.Button()
@@ -128,8 +128,8 @@ Partial Class ServiceManagementForm
         Me.GroupBox2.SuspendLayout()
         Me.TabPage6.SuspendLayout()
         Me.ServiceInfoContainerPanel.SuspendLayout()
-        Me.SelectedServicePanel.SuspendLayout()
         Me.NoServiceSelectedPanel.SuspendLayout()
+        Me.SelectedServicePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -839,7 +839,7 @@ Partial Class ServiceManagementForm
         'btnNoSafeModes
         '
         Me.btnNoSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnNoSafeModes.Location = New System.Drawing.Point(278, 114)
+        Me.btnNoSafeModes.Location = New System.Drawing.Point(278, 142)
         Me.btnNoSafeModes.Name = "btnNoSafeModes"
         Me.btnNoSafeModes.Size = New System.Drawing.Size(192, 23)
         Me.btnNoSafeModes.TabIndex = 3
@@ -849,7 +849,7 @@ Partial Class ServiceManagementForm
         'btnAllSafeModes
         '
         Me.btnAllSafeModes.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.btnAllSafeModes.Location = New System.Drawing.Point(80, 114)
+        Me.btnAllSafeModes.Location = New System.Drawing.Point(80, 142)
         Me.btnAllSafeModes.Name = "btnAllSafeModes"
         Me.btnAllSafeModes.Size = New System.Drawing.Size(192, 23)
         Me.btnAllSafeModes.TabIndex = 3
@@ -859,7 +859,7 @@ Partial Class ServiceManagementForm
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(80, 91)
+        Me.CheckBox3.Location = New System.Drawing.Point(80, 119)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(479, 17)
         Me.CheckBox3.TabIndex = 2
@@ -870,7 +870,7 @@ Partial Class ServiceManagementForm
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(80, 68)
+        Me.CheckBox2.Location = New System.Drawing.Point(80, 96)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(403, 17)
         Me.CheckBox2.TabIndex = 2
@@ -884,7 +884,7 @@ Partial Class ServiceManagementForm
         Me.Label20.AutoEllipsis = True
         Me.Label20.Location = New System.Drawing.Point(16, 16)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(1196, 48)
+        Me.Label20.Size = New System.Drawing.Size(1196, 64)
         Me.Label20.TabIndex = 1
         Me.Label20.Text = resources.GetString("Label20.Text")
         '
@@ -936,15 +936,6 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
         Me.ServiceInfoContainerPanel.TabIndex = 7
         '
-        'SelectedServicePanel
-        '
-        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
-        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
-        Me.SelectedServicePanel.Name = "SelectedServicePanel"
-        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
-        Me.SelectedServicePanel.TabIndex = 1
-        '
         'NoServiceSelectedPanel
         '
         Me.NoServiceSelectedPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -966,6 +957,15 @@ Partial Class ServiceManagementForm
         Me.Label15.TabIndex = 0
         Me.Label15.Text = "No service has been selected. Select a service above to view details."
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'SelectedServicePanel
+        '
+        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
+        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
+        Me.SelectedServicePanel.Name = "SelectedServicePanel"
+        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
+        Me.SelectedServicePanel.TabIndex = 1
         '
         'ReportServiceInfoBtn
         '
@@ -1050,8 +1050,8 @@ Partial Class ServiceManagementForm
         Me.TabPage6.ResumeLayout(False)
         Me.TabPage6.PerformLayout()
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
-        Me.SelectedServicePanel.ResumeLayout(False)
         Me.NoServiceSelectedPanel.ResumeLayout(False)
+        Me.SelectedServicePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
