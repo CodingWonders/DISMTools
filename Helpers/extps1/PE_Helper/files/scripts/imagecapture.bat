@@ -132,7 +132,17 @@ if not exist "%sourcedrive%:\Windows\system32\sysprep\Sysprep_succeeded.tag" (
 if defined destdrive if %_DEBUG% equ 1 echo Destination drive already set by networking code.
 if not defined destdrive ( set /p destdrive=Please enter the letter of the volume the file will be stored on: )
 if not defined destdrive (
-	echo The letter of the volume where the image will be stored must be specified.
+	echo The letter of the volume where the image will be stored must be specified. Press ENTER to exit...
+	pause > nul
+	exit /b 1
+)
+
+for /F "delims=" %%A in ('powershell -executionpolicy bypass -noprofile -nologo -command "$v = Get-Volume -DriveLetter '%destdrive%'; if ($v.DriveType -eq 'CD-ROM') { $true } elseif ($v.DriveType -eq 'Network') { $false } else { (Get-Partition -DriveLetter '%destdrive%').IsReadOnly }"') do set "ISRO=%%A"
+IF %_DEBUG% EQU 1 echo Destination is READ-ONLY? %ISRO%
+if defined ISRO if /i "%ISRO%" == "true" (
+	IF %_DEBUG% EQU 1 echo Destination is READ-ONLY!
+	echo The destination appears to be read-only. Please choose a destination that is not marked as read-only. Press ENTER to exit...
+	pause > nul
 	exit /b 1
 )
 
@@ -144,9 +154,7 @@ if not defined destfile (
 )
 
 REM verify if we typed the correct extension -- if not, add it
-for %%a in (%destfile%) do (
-	if /i not "%%~xa" == ".WIM" set destfile=!destfile!.wim
-)
+for /f "delims=" %%a in ('echo %destfile%') do if /i not "%%~xa" == ".WIM" set "destfile=!destfile!.wim"
 
 set /p imagename=Provide a custom name (without quotes) for the resulting Windows image (e.g., "My Amazing Windows installation"): 
 if not defined imagename (

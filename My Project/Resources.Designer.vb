@@ -2265,14 +2265,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''--- Bugfixes
-        '''
-        '''- Fixed an issue where the WDS Helper Client would re-add essential drivers if selected
-        '''- Fixed issues with feature enablement, capability addition and component store repair tasks if they pointed to sources in roots of volumes
-        '''- Fixed an issue where saving image information of an image selected in the mounted image manager would make the program save information about the online/offline installation if in either mode
-        '''- Fixed issues with some image tasks targeting root [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.8.1_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

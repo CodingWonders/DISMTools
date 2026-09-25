@@ -54,27 +54,27 @@ Partial Class ISOCreator
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ProgressContainer = New System.Windows.Forms.Panel()
+        Me.ISOProgressPanel = New System.Windows.Forms.Panel()
+        Me.CreationJobsLV = New System.Windows.Forms.ListView()
+        Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.IdlePanel = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.ISOProgressPanel = New System.Windows.Forms.Panel()
-        Me.Label8 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
         Me.ADKDownloaderBW = New System.ComponentModel.BackgroundWorker()
-        Me.CreationJobsLV = New System.Windows.Forms.ListView()
-        Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.GroupBox1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.ProgressContainer.SuspendLayout()
-        Me.IdlePanel.SuspendLayout()
         Me.ISOProgressPanel.SuspendLayout()
+        Me.IdlePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label2
@@ -399,26 +399,6 @@ Partial Class ISOCreator
         Me.ProgressContainer.Size = New System.Drawing.Size(1232, 103)
         Me.ProgressContainer.TabIndex = 0
         '
-        'IdlePanel
-        '
-        Me.IdlePanel.Controls.Add(Me.Label3)
-        Me.IdlePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.IdlePanel.Location = New System.Drawing.Point(0, 0)
-        Me.IdlePanel.Name = "IdlePanel"
-        Me.IdlePanel.Size = New System.Drawing.Size(1232, 103)
-        Me.IdlePanel.TabIndex = 0
-        '
-        'Label3
-        '
-        Me.Label3.AutoEllipsis = True
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(0, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(1232, 103)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Once you're ready, click the Create button."
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'ISOProgressPanel
         '
         Me.ISOProgressPanel.Controls.Add(Me.CreationJobsLV)
@@ -429,47 +409,6 @@ Partial Class ISOCreator
         Me.ISOProgressPanel.Size = New System.Drawing.Size(1232, 103)
         Me.ISOProgressPanel.TabIndex = 0
         Me.ISOProgressPanel.Visible = False
-        '
-        'Label8
-        '
-        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Location = New System.Drawing.Point(12, 12)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(1204, 13)
-        Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Jobs:"
-        '
-        'OpenFileDialog1
-        '
-        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
-        '
-        'SaveFileDialog1
-        '
-        Me.SaveFileDialog1.Filter = "ISO files|*.iso"
-        Me.SaveFileDialog1.OverwritePrompt = False
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel1.AutoEllipsis = True
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(12, 651)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(343, 13)
-        Me.LinkLabel1.TabIndex = 11
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Download the Windows ADK"
-        '
-        'OpenFileDialog2
-        '
-        Me.OpenFileDialog2.Filter = "Answer files|*.xml"
-        '
-        'ADKDownloaderBW
-        '
-        Me.ADKDownloaderBW.WorkerReportsProgress = True
         '
         'CreationJobsLV
         '
@@ -501,6 +440,67 @@ Partial Class ISOCreator
         '
         Me.ColumnHeader8.Text = "Status"
         Me.ColumnHeader8.Width = 128
+        '
+        'Label8
+        '
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Location = New System.Drawing.Point(12, 12)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(1204, 13)
+        Me.Label8.TabIndex = 0
+        Me.Label8.Text = "Jobs:"
+        '
+        'IdlePanel
+        '
+        Me.IdlePanel.Controls.Add(Me.Label3)
+        Me.IdlePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.IdlePanel.Location = New System.Drawing.Point(0, 0)
+        Me.IdlePanel.Name = "IdlePanel"
+        Me.IdlePanel.Size = New System.Drawing.Size(1232, 103)
+        Me.IdlePanel.TabIndex = 0
+        '
+        'Label3
+        '
+        Me.Label3.AutoEllipsis = True
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Location = New System.Drawing.Point(0, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(1232, 103)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "Once you're ready, click the Create button."
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
+        '
+        'SaveFileDialog1
+        '
+        Me.SaveFileDialog1.Filter = "ISO files|*.iso"
+        Me.SaveFileDialog1.OverwritePrompt = False
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel1.AutoEllipsis = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(12, 651)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(343, 13)
+        Me.LinkLabel1.TabIndex = 11
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Download the Windows ADK"
+        '
+        'OpenFileDialog2
+        '
+        Me.OpenFileDialog2.Filter = "Answer files|*.xml"
+        '
+        'ADKDownloaderBW
+        '
+        Me.ADKDownloaderBW.WorkerReportsProgress = True
         '
         'ImageTaskHeader1
         '
@@ -543,8 +543,8 @@ Partial Class ISOCreator
         Me.Panel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.ProgressContainer.ResumeLayout(False)
-        Me.IdlePanel.ResumeLayout(False)
         Me.ISOProgressPanel.ResumeLayout(False)
+        Me.IdlePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
