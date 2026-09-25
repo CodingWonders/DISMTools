@@ -591,7 +591,7 @@ Namespace My.Resources
         '''                &lt;Mode&gt;Audit&lt;/Mode&gt;
         '''            &lt;/Reseal&gt;
         '''        &lt;/component&gt;
-        '''    &lt;/sett [resto de la cadena truncado]&quot;;.
+        '''   [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property DefaultUnattended_AuditMode() As String
             Get
@@ -1346,7 +1346,7 @@ Namespace My.Resources
         '''
         '''This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
         '''
-        '''You should have received  [resto de la cadena truncado]&quot;;.
+        '''You should have rec [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property LicenseOverview() As String
             Get
@@ -2367,15 +2367,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an exception when launching the AppX package information dialog on Windows 8 systems
+        '''- Fixed an issue where component store repair tasks would fail if no sources were specified
         '''
         '''New features:
         '''
-        '''- HotInstall and the Sysprep Preparation Tool now create rollback environments to undo boot configuration changes and environment deployments
-        '''- The Sysprep Preparation Tool now disables sleep mode when running preparation tasks
-        '''- You can now query and set Safe Mode preferences for services
-        '''- Getting information about items is now done asynchronously, making the UI responsive
-        '''- Wh [resto de la cadena truncado]&quot;;.
+        '''- The Sysprep Preparation Tool now clears BITS transfer queues during Windows Update cache cleanup
+        '''- ISO file creation tasks in the ISO creator can now be double-clicked to load their settings
+        '''- The &quot;Configure System Recovery Settings&quot; Starter Script has been introduced
+        '''- The Service Manager allows you to visualize dependencies in diagrams you can export to pictures or Mermaid diag [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
