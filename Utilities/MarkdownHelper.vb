@@ -53,7 +53,7 @@ Module MarkdownHelper
         If Contents = "" Then
             Return ""
         End If
-        Return String.Format("{0} {1}{2}", New String("#", Size), Contents, CrLf)
+        Return String.Format("{0} {1}{2}", New String("#", Size), Contents.TrimEnd(" ").TrimStart(" "), CrLf)
     End Function
 
     ''' <summary>
@@ -67,6 +67,7 @@ Module MarkdownHelper
         If Contents = "" Then
             Return ""
         End If
+        Contents = Contents.TrimEnd(" ").TrimStart(" ")
         Select Case Style
             Case ParagraphStyle.Normal
                 Return String.Format("{0}{1}{2}", CrLf, Contents, CrLf)

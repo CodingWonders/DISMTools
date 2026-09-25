@@ -12,61 +12,10 @@ Public Class DismComponents
     End Sub
 
     Private Sub DismComponents_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "DISM Components"
-                        ListView1.Columns(0).Text = "Component"
-                        ListView1.Columns(1).Text = "Version"
-                        OK_Button.Text = "OK"
-                    Case "ESN"
-                        Text = "Componentes de DISM"
-                        ListView1.Columns(0).Text = "Componente"
-                        ListView1.Columns(1).Text = "Versión"
-                        OK_Button.Text = "Aceptar"
-                    Case "FRA"
-                        Text = "Composants du DISM"
-                        ListView1.Columns(0).Text = "Composant"
-                        ListView1.Columns(1).Text = "Version"
-                        OK_Button.Text = "OK"
-                    Case "PTB", "PTG"
-                        Text = "Componentes DISM"
-                        ListView1.Columns(0).Text = " Componente"
-                        ListView1.Columns(1).Text = "Versão"
-                        OK_Button.Text = "OK"
-                    Case "ITA"
-                        Text = "Componenti DISM"
-                        ListView1.Columns(0).Text = "Componente"
-                        ListView1.Columns(1).Text = "Versione"
-                        OK_Button.Text = "OK"
-                End Select
-            Case 1
-                Text = "DISM Components"
-                ListView1.Columns(0).Text = "Component"
-                ListView1.Columns(1).Text = "Version"
-                OK_Button.Text = "OK"
-            Case 2
-                Text = "Componentes de DISM"
-                ListView1.Columns(0).Text = "Componente"
-                ListView1.Columns(1).Text = "Versión"
-                OK_Button.Text = "Aceptar"
-            Case 3
-                Text = "Composants du DISM"
-                ListView1.Columns(0).Text = "Composant"
-                ListView1.Columns(1).Text = "Version"
-                OK_Button.Text = "OK"
-            Case 4
-                Text = "Componentes DISM"
-                ListView1.Columns(0).Text = " Componente"
-                ListView1.Columns(1).Text = "Versão"
-                OK_Button.Text = "OK"
-            Case 5
-                Text = "Componenti DISM"
-                ListView1.Columns(0).Text = "Componente"
-                ListView1.Columns(1).Text = "Versione"
-                OK_Button.Text = "OK"
-        End Select
+        Text = LocalizationService.ForSection("DismComponents")("Title.Label")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("DismComponents")("Component.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("DismComponents")("Version.Column")
+        OK_Button.Text = LocalizationService.ForSection("DismComponents")("Ok.Button")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor

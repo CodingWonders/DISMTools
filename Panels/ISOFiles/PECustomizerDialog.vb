@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.Win32
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
@@ -136,7 +136,7 @@ Public Class PECustomizerDialog
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not SavePolicies() Then
-            MessageBox.Show(Me, "Policies could not be saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("PoliciesSaved.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -149,6 +149,62 @@ Public Class PECustomizerDialog
     End Sub
 
     Private Sub PECustomizerDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.PECustomizer")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Customize.Session.Label")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Wallpaper.Group")
+        Button1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Browse.Button")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("My.Desktop.CheckBox")
+        Label2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Path.Custom.Wallpaper.Label")
+        CheckBox2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Show.Version.Top.CheckBox")
+        CheckBox3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Display.Images.CheckBox")
+        CheckBox4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Show.Report.Hardware.Message")
+        Label3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Default.Partitio.Table.Label")
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({
+            LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer")("Default.Mbrpartition.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer")("Default.Gptpartition.Item")
+        })
+        ComboBox1.Text = LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Item")
+        Label4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Partition.Table.Message")
+        Label5.Text = LocalizationService.ForSection("Designer.PECustomizer")("SecureBoot.Label")
+        ComboBox2.Items.Clear()
+        ComboBox2.Items.AddRange({
+            LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Version.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.BootSign")("Windows.Production.PCA.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.BootSign")("Windows.UEFI.CA.Item")
+        })
+        ComboBox2.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Version.Item")
+        Label6.Text = LocalizationService.ForSection("Designer.PECustomizer")("Connection.Attempts.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.PECustomizer")("ConnectionAttempts.Label")
+        OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.PECustomizer")("JpgfilesJpg.Filter")
+        CheckBox5.Text = LocalizationService.ForSection("Designer.PECustomizer")("CopyAnswerFiles.Message")
+        Label8.Text = LocalizationService.ForSection("Designer.PECustomizer")("Port.Used.PXE.Label")
+        Label9.Text = LocalizationService.ForSection("Designer.PECustomizer")("Pick.Default.Keyboard.Label")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.PECustomizer")("LayoutCode.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.PECustomizer")("LayoutName.Column")
+        Label10.Text = LocalizationService.ForSection("Designer.PECustomizer")("Layout.Code.Selected.Label")
+        DefaultPolicySaveButton.Text = LocalizationService.ForSection("Designer.PECustomizer")("Save.Default.Policies.Label")
+        TabPage1.Text = LocalizationService.ForSection("Designer.PECustomizer")("General.Tab")
+        TabPage2.Text = LocalizationService.ForSection("Designer.PECustomizer")("PXEs.Tab")
+        TabPage3.Text = LocalizationService.ForSection("Designer.PECustomizer")("KeyboardLayouts.Tab")
+        Label11.Text = LocalizationService.ForSection("Designer.PECustomizer")("Option.Only.Take.Label")
+        CheckBox6.Text = LocalizationService.ForSection("Designer.PECustomizer")("KeyboardOverride.CheckBox")
+        TabPage4.Text = LocalizationService.ForSection("Designer.PECustomizer")("Unattended.Deployments.Tab")
+        Label12.Text = LocalizationService.ForSection("Designer.PECustomizer")("Unattended.AnswerFile.Label")
+        RemoveHandler ComboBox3.SelectedIndexChanged, AddressOf ComboBox3_SelectedIndexChanged
+        ComboBox3.Items.Clear()
+        ComboBox3.Items.AddRange({
+            LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Resolve.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.Conflict")("ISO.Item"),
+            LocalizationService.ForSection("Designer.PECustomizer.Conflict")("WindowsImage.Item")
+        })
+        AddHandler ComboBox3.SelectedIndexChanged, AddressOf ComboBox3_SelectedIndexChanged
+        ComboBox3.Text = LocalizationService.ForSection("Designer.PECustomizer")("Ask.Me.Resolve.Item")
+        Label13.Text = LocalizationService.ForSection("Designer.PECustomizer")("Assuming.Each.Answer.Message")
+        Text = LocalizationService.ForSection("Designer.PECustomizer")("CustomizePE.Label")
+
         ' Load from defined policies
         CheckBox2.Checked = MainForm.ShowWatermark
         CheckBox3.Checked = MainForm.WDSHCGraphoView
@@ -257,18 +313,18 @@ Public Class PECustomizerDialog
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" Then
             If Not File.Exists(TextBox1.Text) Then
-                MessageBox.Show(Me, "The specified wallpaper does not exist.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("Wallpaper.Exist.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 TextBox1.Text = ""
                 Exit Sub
             End If
 
             If Not Path.GetExtension(TextBox1.Text).Equals(".jpg", StringComparison.OrdinalIgnoreCase) Then
-                MessageBox.Show(Me, "The specified wallpaper is not supported. Only JPG files are supported.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("Wallpaper.Supported.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 TextBox1.Text = ""
                 Exit Sub
             End If
 
-            MessageBox.Show(Me, "By continuing with this wallpaper you will be overriding a background you may have already stored in your user data folder. That background will be reused the next time you launch DISMTools.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(Me, LocalizationService.ForSection("ISOFiles.PECustomizer")("WallpaperOverride.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
 
@@ -293,16 +349,15 @@ Public Class PECustomizerDialog
     End Sub
 
     Private Sub DefaultPolicySaveButton_MouseHover(sender As Object, e As EventArgs) Handles DefaultPolicySaveButton.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Default policies allow you to make the settings you specify here permanent." & Environment.NewLine &
-                                    "This also includes any wallpapers you specify here.")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PECustomizer.Tooltips")("DefaultPolicies.Message"))
     End Sub
 
     Private Sub DefaultPolicySaveButton_Click(sender As Object, e As EventArgs) Handles DefaultPolicySaveButton.Click
         If SaveDefaultPolicies() Then
             MainForm.WriteDefaultPEPolicy()
-            MessageBox.Show("Default policies have been saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("PECustomizer.Messages")("Default.Policies.Saved.Label"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            MessageBox.Show("Default policies could not be saved.", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(LocalizationService.ForSection("PECustomizer.Messages")("Policies.SaveFailed.Message"), Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 

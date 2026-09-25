@@ -17,6 +17,24 @@ Public Class FfuInfoDialog
     End Sub
 
     Private Sub FfuInfoDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Cancel.Button")
+        TabPage1.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Ffuheader.Tab")
+        Label10.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Label6.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Label4.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Value.Label")
+        Label9.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("CompressionType.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Ffuversion.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Physical.Disk.Path.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Vhdstorage.Device.ID.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("MountedVHDID.Label")
+        Label1.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("MountedVhdpath.Label")
+        TabPage2.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("MountedVHD.Tab")
+        Label12.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Selected.Partition.Label")
+        Label11.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Mounted.FFU.Message")
+        TabPage3.Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Manifest.Tab")
+        Text = LocalizationService.ForSection("Designer.FFUInfoDialog")("Full.Flash.Utility.Label")
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

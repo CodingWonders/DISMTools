@@ -1,10 +1,10 @@
-﻿Imports System.Threading.Tasks
+Imports System.Threading.Tasks
 
 Public Class ServiceManagementForm
 
     Dim ServiceList As New List(Of WindowsService),
         ModifiedServiceList As New List(Of WindowsService)
-    Dim ServiceStartTypes() As String = New String() {"Boot Loader", "I/O System", "Automatic", "Manual", "Disabled"}
+    Dim ServiceStartTypes() As String
 
     Public Event ServiceSaveReported(current As Integer, count As Integer)
 
@@ -13,8 +13,12 @@ Public Class ServiceManagementForm
 
     Private isModified As Boolean = False
 
+    Private CriticalServiceNames As New List(Of String) From {"BFE", "CoreMessagingRegistrar", "CryptSvc", "DcomLaunch", "DeviceInstall", "Dhcp", "Dnscache", "EventLog",
+                                                              "gpsvc", "IKEEXT", "lmhosts", "LSM", "mpssvc", "nsi", "PlugPlay", "Power", "RpcSs", "RpcEptMapper", "SamSs", "SystemEventsBroker",
+                                                              "TcpIp", "UserManager", "ProfSvc", "LanmanWorkstation"}
+
     Private Sub OnServiceSaveReported(current As Integer, count As Integer) Handles Me.ServiceSaveReported
-        progressMessage = String.Format("Saving service information... ({0}/{1}, {2}%)", current, count, Math.Round((current / count) * 100, 0))
+        progressMessage = LocalizationService.ForSection("ServiceManagement.Progress").Format("Saving.Label", current, count, Math.Round((current / count) * 100, 0))
     End Sub
 
     Public Sub ReportServiceSave(current As Integer, count As Integer)
@@ -44,20 +48,18 @@ Public Class ServiceManagementForm
         TextBox9.Text = selectedService.FailureActionToString(selectedService.FailureActions.FirstFailure)
         TextBox10.Text = selectedService.FailureActionToString(selectedService.FailureActions.SecondFailure)
         TextBox11.Text = selectedService.FailureActionToString(selectedService.FailureActions.SubsequentFailure)
-        TextBox12.Text = String.Format("{0} minute(s)", (selectedService.FailureActions.ResetDelayInSeconds / 60))
-        TextBox13.Text = String.Format("{0} minute(s) ({1} seconds) after first failure, {2} minute(s) ({3} seconds) after second failure, {4} minute(s) ({5} seconds) after subsequent failures",
-                                       Math.Round((selectedService.FailureActions.FirstDelayInMillis / 60000), 2),
-                                       Math.Round((selectedService.FailureActions.FirstDelayInMillis / 1000), 2),
-                                       Math.Round((selectedService.FailureActions.SecondDelayInMillis / 60000), 2),
-                                       Math.Round((selectedService.FailureActions.SecondDelayInMillis / 1000), 2),
-                                       Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 60000), 2),
-                                       Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 1000), 2))
+        TextBox12.Text = LocalizationService.ForSection("ServiceManagement.Display").Format("MinuteS.Label", (selectedService.FailureActions.ResetDelayInSeconds / 60))
+        TextBox13.Text = LocalizationService.ForSection("Services.Display").Format("MinutesSeconds.Message", Math.Round((selectedService.FailureActions.FirstDelayInMillis / 60000), 2), Math.Round((selectedService.FailureActions.FirstDelayInMillis / 1000), 2), Math.Round((selectedService.FailureActions.SecondDelayInMillis / 60000), 2), Math.Round((selectedService.FailureActions.SecondDelayInMillis / 1000), 2), Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 60000), 2), Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 1000), 2))
 
         CheckBox1.Checked = If(selectedService.StartType = WindowsService.ServiceStartType.Automatic, selectedService.DelayedStart, False)
         CheckBox1.Enabled = selectedService.StartType = WindowsService.ServiceStartType.Automatic
 
+        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
         CheckBox2.Checked = selectedService.SafeModeOptions.AvailableInMinimalSafeBoot
         CheckBox3.Checked = selectedService.SafeModeOptions.AvailableInNetworkSafeBoot
+        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
 
         ' Only enable user service flags with certain service types
         Label19.Enabled = {80, 96}.Contains(selectedService.Type)
@@ -65,12 +67,12 @@ Public Class ServiceManagementForm
 
         If {80, 96}.Contains(selectedService.Type) Then
             If selectedService.UserServiceFlags = Integer.MinValue Then
-                TextBox14.Text = "Undefined"
+                TextBox14.Text = LocalizationService.ForSection("ServiceManagement.Display")("Undefined.Label")
             Else
                 TextBox14.Text = selectedService.UserServiceFlags
             End If
         Else
-            TextBox14.Text = "Not a per-user service"
+            TextBox14.Text = LocalizationService.ForSection("ServiceManagement.Display")("Per.User.Label")
         End If
 
         ListView2.Items.Clear()
@@ -91,14 +93,73 @@ Public Class ServiceManagementForm
             ListView5.Items.AddRange(servicesInGroup.Select(Function(serviceInGroup) New ListViewItem(New String() {serviceInGroup.Name, serviceInGroup.DisplayName, serviceInGroup.TypeToString()})).ToArray())
             ListView5.Visible = True
         Else
-            TextBox6.Text = "<undefined service group>"
+            TextBox6.Text = LocalizationService.ForSection("ServiceManagement.Display")("Undefined.Group.Label")
             ListView5.Visible = False
         End If
     End Sub
 
     Private Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Label1.Text = LocalizationService.ForSection("Designer.Services")("Intro.Message")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.Services")("Description.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.Services")("StartType.Column")
+        ColumnHeader12.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
+        TabPage1.Text = LocalizationService.ForSection("Designer.Services")("ServiceInfo.Tab")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.Services")("DelayedStart.CheckBox")
+        Label4.Text = LocalizationService.ForSection("Designer.Services")("Description.Label")
+        Label19.Text = LocalizationService.ForSection("Designer.Services")("User.Flags.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.Services")("ServiceType.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.Services")("Start.Type.Label")
+        Label6.Text = LocalizationService.ForSection("Designer.Services")("Object.Name.Label")
+        Label5.Text = LocalizationService.ForSection("Designer.Services")("Image.Path.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.Services")("Display.Name.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Label")
+        TabPage2.Text = LocalizationService.ForSection("Designer.Services")("Required.Privileges.Tab")
+        ColumnHeader5.Text = LocalizationService.ForSection("Designer.Services")("PrivilegeName.Column")
+        ColumnHeader6.Text = LocalizationService.ForSection("Designer.Services")("PrivilegeName.Display.Column")
+        ColumnHeader7.Text = LocalizationService.ForSection("Designer.Services")("Privilege.Description.Column")
+        TabPage3.Text = LocalizationService.ForSection("Designer.Services")("ErrorControl.Tab")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.Services")("FailureActions.Group")
+        Label12.Text = LocalizationService.ForSection("Designer.Services")("FutureErrors.Label")
+        Label11.Text = LocalizationService.ForSection("Designer.Services")("NdError.Label")
+        Label14.Text = LocalizationService.ForSection("Designer.ServiceMgmt")("Restart.Minutes.Label")
+        Label13.Text = LocalizationService.ForSection("Designer.Services")("ResetErrorCount.Label")
+        Label10.Text = LocalizationService.ForSection("Designer.Services")("StError.Label")
+        Label9.Text = LocalizationService.ForSection("Designer.Services")("Error.Windows.Label")
+        TabPage4.Text = LocalizationService.ForSection("Designer.Services")("Dependencies.Tab")
+        ColumnHeader8.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
+        ColumnHeader9.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
+        ColumnHeader10.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
+        Label17.Text = LocalizationService.ForSection("Designer.ServiceMgmt")("Dependencies.Label")
+        ColumnHeader11.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
+        ColumnHeader13.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
+        ColumnHeader14.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
+        Label18.Text = LocalizationService.ForSection("Designer.ServiceMgmt")("Dependent.Services.Label")
+        TabPage5.Text = LocalizationService.ForSection("Designer.Services")("ServiceGroups.Tab")
+        GetSvchostGroupsBtn.Text = LocalizationService.ForSection("Designer.Services")("RegisteredHosts.Label")
+        GroupBox2.Text = LocalizationService.ForSection("Designer.Services")("Services.Belong.Group")
+        ColumnHeader15.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
+        ColumnHeader16.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
+        ColumnHeader17.Text = LocalizationService.ForSection("Designer.Services")("Type.Column")
+        Label16.Text = LocalizationService.ForSection("Designer.Services")("Part.Group.Label")
+        SaveServiceInfoBtn.Text = LocalizationService.ForSection("Designer.Services")("Save.Changes.Label")
+        ProgressLabel.Text = LocalizationService.ForSection("Designer.Services")("ProgressLabel.Label")
+        ReloadServiceInformationBtn.Text = LocalizationService.ForSection("Designer.Services")("Reload.Label")
+        Label15.Text = LocalizationService.ForSection("Designer.Services")("SelectService.Label")
+        ReportServiceInfoBtn.Text = LocalizationService.ForSection("Designer.Services")("Save.Button")
+        ServiceInfoSFD.Filter = LocalizationService.ForSection("Designer.Services")("MarkdownFiles.Filter")
+        RestoreServiceBtn.Text = LocalizationService.ForSection("Designer.Services")("RestoreService.Label")
+        DeleteServiceBtn.Text = LocalizationService.ForSection("Designer.Services")("DeleteService.Label")
+        Text = LocalizationService.ForSection("Designer.Services")("System.Label")
+
         ListView1.Items.Clear()
         ComboBox1.Items.Clear()
+        ServiceStartTypes = New String() {LocalizationService.ForSection("ServiceManagement.StartTypes")("BootLoader.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Iosystem.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Automatic.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Manual.Label"),
+                                          LocalizationService.ForSection("ServiceManagement.StartTypes")("Disabled.Label")}
         ComboBox1.Items.AddRange(ServiceStartTypes)
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -160,15 +221,12 @@ Public Class ServiceManagementForm
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
-        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
-        ListView4.Size = New Size(WindowHelper.ScaleLogical(ListView4.Width), WindowHelper.ScaleLogical(ListView4.Height))
-
         ModifiedServiceList.Clear()
         isModified = False
 
-        DynaLog.DisableLogging()
+        If Not Debugger.IsAttached Then DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
-        DynaLog.EnableLogging()
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
 
@@ -211,6 +269,11 @@ Public Class ServiceManagementForm
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             Dim ForbiddenTypesForNonServices() As WindowsService.ServiceType = New WindowsService.ServiceType() {WindowsService.ServiceType.WindowsService, WindowsService.ServiceType.WindowsApplication}
             Dim ForbiddenStartTypesForNonServices() As WindowsService.ServiceStartType = New WindowsService.ServiceStartType() {WindowsService.ServiceStartType.BootLoader, WindowsService.ServiceStartType.IOSystem}
 
@@ -218,7 +281,7 @@ Public Class ServiceManagementForm
 
             If ForbiddenTypesForNonServices.Contains(ServiceList(selectedIndex).Type) AndAlso
                 ForbiddenStartTypesForNonServices.Contains(ComboBox1.SelectedIndex) Then
-                If MsgBox("The selected start type is unsupported for services of this type. The selected service may not work correctly or at all if you continue with this start type." & vbCrLf & vbCrLf & "Do you want to reset this start type to its current value?", vbYesNo + vbExclamation) = MsgBoxResult.Yes Then
+                If MsgBox(LocalizationService.ForSection("Services.Messages")("StartType.Message"), vbYesNo + vbExclamation) = MsgBoxResult.Yes Then
                     ComboBox1.SelectedIndex = ServiceList(selectedIndex).StartType
                     Exit Sub
                 End If
@@ -257,11 +320,9 @@ Public Class ServiceManagementForm
                                                                                                                    ReportServiceSave(current, count)
                                                                                                                End Sub)
                           End Function) Then
-            MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
-                   "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
-                   "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("Services.Messages")("System.Done.Message"), vbOKOnly + vbInformation)
         Else
-            MsgBox("System service information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
+            MsgBox(LocalizationService.ForSection("Services.Messages")("InfoSaved.Message"), vbOKOnly + vbExclamation)
         End If
         WindowHelper.EnableCloseCapability(Handle)
         Cursor = Cursors.Arrow
@@ -283,7 +344,7 @@ Public Class ServiceManagementForm
         End If
 
         If isModified Then
-            If MsgBox("Some changes have been made. Closing this window will discard all your changes to Windows services. Do you want to discard these changes?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+            If MsgBox(LocalizationService.ForSection("Services.Messages")("UnsavedClose.Message"), vbYesNo + vbQuestion) = MsgBoxResult.No Then
                 e.Cancel = True
                 Beep()
                 Exit Sub
@@ -303,9 +364,9 @@ Public Class ServiceManagementForm
         ModifiedServiceList.Clear()
         isModified = False
 
-        DynaLog.DisableLogging()
+        If Not Debugger.IsAttached Then DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
-        DynaLog.EnableLogging()
+        If Not Debugger.IsAttached Then DynaLog.EnableLogging()
         
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
 
@@ -316,7 +377,7 @@ Public Class ServiceManagementForm
         If isBusy Then Exit Sub
 
         If isModified Then
-            If MsgBox("Some changes have been made. Reloading service information will discard all your changes to Windows services. Do you want to discard these changes?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+            If MsgBox(LocalizationService.ForSection("Services.Messages")("UnsavedReload.Message"), vbYesNo + vbQuestion) = MsgBoxResult.No Then
                 Exit Sub
             End If
         End If
@@ -358,8 +419,13 @@ Public Class ServiceManagementForm
 
     Private Sub DeleteServiceBtn_Click(sender As Object, e As EventArgs) Handles DeleteServiceBtn.Click
         If ListView1.SelectedItems.Count = 1 Then
-            If MessageBox.Show("Continuing with the removal of this service can cause the target system to become either unstable or unbootable. Do you want to continue?",
-                               "Remove service", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
+            If MessageBox.Show(LocalizationService.ForSection("ServiceMgmt.Messages")("Continui.Removal.Svc.Message"),
+                               LocalizationService.ForSection("Services.Messages")("RemoveService.Title"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then Exit Sub
 
             Dim selectedIndex As Integer = ListView1.FocusedItem.Index
 
@@ -375,9 +441,8 @@ Public Class ServiceManagementForm
                 ModifiedServiceList.Add(newService)
             End If
 
-            MessageBox.Show("The service has been successfully scheduled for deletion. The removal of this service will take place when you save the changes. " &
-                            "Should you ever need this service back, please import the service information backup that will be made during the save process.",
-                            "Remove service", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(LocalizationService.ForSection("Services.Messages")("Scheduled.Deletion.Message"),
+                            LocalizationService.ForSection("Services.Messages")("RemoveService.Title"), MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             ' Force refresh of service information
             DisplayServiceInformation(ListView1.FocusedItem.Index)
@@ -403,10 +468,161 @@ Public Class ServiceManagementForm
         CheckBox3.Checked = False
     End Sub
 
+    Private Sub DisplayCriticalServiceWarning()
+        MessageBox.Show(Me, "This service can only be viewed because it is critical for core Windows components to function. Improper configuration of this service will result in an unstable system.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
     Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             ' Hold a copy of the service so we can queue it for modification
             Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
+
+            ' For a service to work correctly in Safe Mode (when the checkbox is checked), any of its dependencies
+            ' need to be enabled in Safe Mode too, as well as the dependencies of those dependencies, as well as
+            ' the dependencies of the dependencies of those dependencies...
+            '
+            '                                                       Dependency 1 of dependency 1 \
+            '                                                                                     \
+            '                                                       Dependency 2 of dependency 1 ---- Dependency 1 \
+            '                                                                                     /                 \
+            '                                                       Dependency 3 of dependency 1 /                   \
+            '                                                                                                         \
+            '     Dependency 1 of dependency 1 of dependency 2 \                                                      ---------- Main Service
+            '                                                   --- Dependency 1 of dependency 2 \                   /
+            '     Dependency 2 of dependency 1 of dependency 2 /                                  \                 /
+            '                                                                                      -- Dependency 2 /
+            '                                                                                     /
+            '                                                       Dependency 2 of dependency 2 /
+            '
+            ' For disabling a service in Safe Mode, the dependencies need to be disabled, as well as its dependents, 
+            ' as well as the dependents of those dependents. Then, the dependents of that service need to be disabled,
+            ' plus other dependencies, plus their dependents; as well as those dependents' dependents...
+            '
+            '                                    /---- Dependent of dependency 1 of dependency 1
+            '                                   /
+            '     Dependency 1 of dependency 1 ---------------------------------------------------------------- Dependency 1 --------- Dependent                   ------ Dependent 1 ------------ Dependent 1 of dependent 1
+            '                                                                                         /                       \                                   /                        \
+            '                                    /---- Dependent 1 of dependency 2 of dependency 1   /                         \                                 /                          ------ Dependent 2 of dependent 1
+            '                                   /                                                   /                           \                               /                            \
+            '     Dependency 2 of dependency 1 -----------------------------------------------------                             \                             /                              ---- Dependent 3 of dependent 1
+            '                                   \                                                                                 \                           /
+            '                                    \---- Dependent 2 of dependency 2 of dependency 1                                 ------------ Main Service ------------ Dependent 2 ------------ Dependent of dependent 2
+            '                                                                                                                     /                           \
+            '                                                                                                                    /                             \
+            '                                                                                                                   /                               \                     
+            '                                                                                                                  /                                 \                      ---------- Dependent 1 of dependent 3
+            '                                                                                                                 /                                   \                    /
+            '                                                                                                   Dependency 2 --------- Dependent                   ------ Dependent 3 ------------ Dependent 2 of dependent 3
+            '                                                                                                                                                                          \
+            '                                                                                                                                                                           ---------- Dependent 3 of dependent 3
+            '
+            ' Alright, I'm going to stop.
+            Dim AdditionalServiceNames As New List(Of String),
+                ImpliedServices As IEnumerable(Of WindowsService) = Nothing
+            If CheckBox2.Checked Then
+                AdditionalServiceNames = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox2.Checked, False).Where(Function(service) Not service = newService.Name).Distinct().ToList()
+
+                If AdditionalServiceNames.Any() Then
+                    ImpliedServices = ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name))
+
+                    ImpliedServicesInSafeBootEnablementDialog.ImpliedServices = ImpliedServices
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootEnablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        CheckBox2.Checked = False
+                        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        ' Add the additional services first
+                        For Each ImpliedService In ImpliedServices
+                            ImpliedService.SafeModeOptions.AvailableInMinimalSafeBoot = True
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInMinimalSafeBoot = True
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            Else
+                AdditionalServiceNames = EnumerateServiceDependentsForSafeModeToggles(newService, Not CheckBox2.Checked, False).Distinct().ToList()
+                Dim ServiceDependencies As List(Of String) = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox2.Checked, False).Distinct().ToList(),
+                    ServiceDependentsExclusiveToMainService As List(Of String) = New List(Of String)(AdditionalServiceNames)
+
+                For Each ServiceDependency In ServiceDependencies
+                    If Not ServiceList.Any(Function(service) service.Name = ServiceDependency) Then Continue For
+
+                    Dim dependencyService As WindowsService = ServiceList.First(Function(service) service.Name = ServiceDependency)
+                    AdditionalServiceNames.AddRange(EnumerateServiceDependentsForSafeModeToggles(dependencyService, Not CheckBox2.Checked, False, newService.Name).Distinct().ToArray())
+                    AdditionalServiceNames = AdditionalServiceNames.Distinct().ToList()
+                Next
+
+                AdditionalServiceNames = AdditionalServiceNames.Where(Function(service) Not service = newService.Name).ToList()
+
+                Dim AdditionalServices As New Dictionary(Of String, List(Of WindowsService)) From {
+                    {"dependencies", ServiceList.Where(Function(service) ServiceDependencies.Contains(service.Name)).ToList()},
+                    {"allDependents", ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name)).ToList()},
+                    {"mainServiceDependents", ServiceList.Where(Function(service) ServiceDependentsExclusiveToMainService.Contains(service.Name)).ToList()}
+                }
+
+                Dim warrantedDialogShown As Boolean = AdditionalServices.Any(Function(kvp) kvp.Value.Any())
+                If warrantedDialogShown Then
+                    ImpliedServicesInSafeBootDisablementDialog.ImpliedServices = AdditionalServices
+
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootDisablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        CheckBox2.Checked = True
+                        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        If ImpliedServicesInSafeBootDisablementDialog.ImplyServiceDependencies Then
+                            ' Add the additional services first
+                            For Each ImpliedService In AdditionalServices("dependencies")
+                                ImpliedService.SafeModeOptions.AvailableInMinimalSafeBoot = False
+
+                                Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                    svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                                ServiceList(svcIndex).SafeModeOptions.AvailableInMinimalSafeBoot = False
+                                If modifiedSvcIndex > -1 Then
+                                    ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                                Else
+                                    ModifiedServiceList.Add(ImpliedService)
+                                End If
+                            Next
+                        End If
+
+                        For Each ImpliedService In AdditionalServices("allDependents")
+                            ImpliedService.SafeModeOptions.AvailableInMinimalSafeBoot = False
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInMinimalSafeBoot = False
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            End If
+
             ServiceList(ListView1.FocusedItem.Index).SafeModeOptions.AvailableInMinimalSafeBoot = CheckBox2.Checked
             newService.SafeModeOptions.AvailableInMinimalSafeBoot = CheckBox2.Checked
 
@@ -420,10 +636,152 @@ Public Class ServiceManagementForm
         End If
     End Sub
 
+    Private Function EnumerateServiceDependenciesForSafeModeToggles(BaseService As WindowsService, ExpectedSafebootSetting As Boolean, NetworkedSafeboot As Boolean) As List(Of String)
+        Dim svcDeps As New List(Of String)
+
+        For Each ServiceDependency In BaseService.Dependencies
+            If Not ServiceList.Any(Function(service) service.Name = ServiceDependency) Then Continue For
+            Dim dependencyService As WindowsService = ServiceList.First(Function(service) service.Name = ServiceDependency)
+
+            Dim serviceMeetsSafeModeToggles As Boolean = If(NetworkedSafeboot, dependencyService.SafeModeOptions.AvailableInNetworkSafeBoot, dependencyService.SafeModeOptions.AvailableInMinimalSafeBoot) = ExpectedSafebootSetting
+            If serviceMeetsSafeModeToggles Then svcDeps.Add(ServiceDependency)
+
+            If dependencyService.Dependencies.Any() Then svcDeps.AddRange(EnumerateServiceDependenciesForSafeModeToggles(dependencyService, ExpectedSafebootSetting, NetworkedSafeboot))
+        Next
+
+        Return svcDeps
+    End Function
+
+    Private Function EnumerateServiceDependentsForSafeModeToggles(BaseService As WindowsService, ExpectedSafebootSetting As Boolean, NetworkedSafeboot As Boolean, Optional BaseServiceName As String = "") As List(Of String)
+        Dim dependents As New List(Of String)
+
+        For Each ServiceDependent In ServiceList.Where(Function(service) service.Dependencies.Contains(BaseService.Name))
+            If BaseServiceName <> "" And ServiceDependent.Dependencies.Contains(BaseServiceName) Then Continue For
+
+            Dim serviceMeetsSafeModeToggles As Boolean = If(NetworkedSafeboot, ServiceDependent.SafeModeOptions.AvailableInNetworkSafeBoot, ServiceDependent.SafeModeOptions.AvailableInMinimalSafeBoot) = ExpectedSafebootSetting
+            If serviceMeetsSafeModeToggles Then dependents.Add(ServiceDependent.Name)
+
+            Dim ServiceDependentSubDependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceDependent.Name))
+            For Each ServiceDependentSubDependent In ServiceDependentSubDependents
+                dependents.AddRange(EnumerateServiceDependentsForSafeModeToggles(ServiceDependentSubDependent, ExpectedSafebootSetting, NetworkedSafeboot, BaseServiceName))
+            Next
+        Next
+
+        Return dependents
+    End Function
+
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
+            If CriticalServiceNames.Contains(ServiceList(ListView1.FocusedItem.Index).Name) Then
+                DisplayCriticalServiceWarning()
+                Exit Sub
+            End If
+
             ' Hold a copy of the service so we can queue it for modification
             Dim newService As WindowsService = ServiceList(ListView1.FocusedItem.Index)
+
+            ' look at the comment from checkbox2; i'm not repeating it here.
+            Dim AdditionalServiceNames As New List(Of String),
+                ImpliedServices As IEnumerable(Of WindowsService) = Nothing
+            If CheckBox3.Checked Then
+                AdditionalServiceNames = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox3.Checked, True).Where(Function(service) Not service = newService.Name).Distinct().ToList()
+
+                If AdditionalServiceNames.Any() Then
+                    ImpliedServices = ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name))
+
+                    ImpliedServicesInSafeBootEnablementDialog.ImpliedServices = ImpliedServices
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootEnablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        CheckBox3.Checked = False
+                        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        ' Add the additional services first
+                        For Each ImpliedService In ImpliedServices
+                            ImpliedService.SafeModeOptions.AvailableInNetworkSafeBoot = True
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInNetworkSafeBoot = True
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            Else
+                AdditionalServiceNames = EnumerateServiceDependentsForSafeModeToggles(newService, Not CheckBox3.Checked, False).Distinct().ToList()
+                Dim ServiceDependencies As List(Of String) = EnumerateServiceDependenciesForSafeModeToggles(newService, Not CheckBox3.Checked, True).Distinct().ToList(),
+                    ServiceDependentsExclusiveToMainService As List(Of String) = New List(Of String)(AdditionalServiceNames)
+
+                For Each ServiceDependency In ServiceDependencies
+                    If Not ServiceList.Any(Function(service) service.Name = ServiceDependency) Then Continue For
+
+                    Dim dependencyService As WindowsService = ServiceList.First(Function(service) service.Name = ServiceDependency)
+                    AdditionalServiceNames.AddRange(EnumerateServiceDependentsForSafeModeToggles(dependencyService, Not CheckBox3.Checked, True, newService.Name).Distinct().ToArray())
+                    AdditionalServiceNames = AdditionalServiceNames.Distinct().ToList()
+                Next
+
+                AdditionalServiceNames = AdditionalServiceNames.Where(Function(service) Not service = newService.Name).ToList()
+
+                Dim AdditionalServices As New Dictionary(Of String, List(Of WindowsService)) From {
+                    {"dependencies", ServiceList.Where(Function(service) ServiceDependencies.Contains(service.Name)).ToList()},
+                    {"allDependents", ServiceList.Where(Function(service) AdditionalServiceNames.Contains(service.Name)).ToList()},
+                    {"mainServiceDependents", ServiceList.Where(Function(service) ServiceDependentsExclusiveToMainService.Contains(service.Name)).ToList()}
+                }
+
+                Dim warrantedDialogShown As Boolean = AdditionalServices.Any(Function(kvp) kvp.Value.Any())
+                If warrantedDialogShown Then
+                    ImpliedServicesInSafeBootDisablementDialog.ImpliedServices = AdditionalServices
+
+                    Dim userChoice As DialogResult = ImpliedServicesInSafeBootDisablementDialog.ShowDialog(Me)
+                    If userChoice <> Windows.Forms.DialogResult.Yes Then
+                        ' restore the previous state
+                        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        CheckBox3.Checked = True
+                        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+                        Exit Sub
+                    End If
+
+                    If userChoice = Windows.Forms.DialogResult.Yes Then
+                        If ImpliedServicesInSafeBootDisablementDialog.ImplyServiceDependencies Then
+                            ' Add the additional services first
+                            For Each ImpliedService In AdditionalServices("dependencies")
+                                ImpliedService.SafeModeOptions.AvailableInNetworkSafeBoot = False
+
+                                Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                    svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                                ServiceList(svcIndex).SafeModeOptions.AvailableInNetworkSafeBoot = False
+                                If modifiedSvcIndex > -1 Then
+                                    ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                                Else
+                                    ModifiedServiceList.Add(ImpliedService)
+                                End If
+                            Next
+                        End If
+
+                        For Each ImpliedService In AdditionalServices("allDependents")
+                            ImpliedService.SafeModeOptions.AvailableInNetworkSafeBoot = False
+
+                            Dim modifiedSvcIndex As Integer = ModifiedServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase)),
+                                svcIndex As Integer = ServiceList.FindIndex(Function(svc) svc.Name.Equals(ImpliedService.Name, StringComparison.OrdinalIgnoreCase))
+                            ServiceList(svcIndex).SafeModeOptions.AvailableInNetworkSafeBoot = False
+                            If modifiedSvcIndex > -1 Then
+                                ModifiedServiceList(modifiedSvcIndex) = ImpliedService
+                            Else
+                                ModifiedServiceList.Add(ImpliedService)
+                            End If
+                        Next
+                    End If
+                End If
+            End If
+
             ServiceList(ListView1.FocusedItem.Index).SafeModeOptions.AvailableInNetworkSafeBoot = CheckBox3.Checked
             newService.SafeModeOptions.AvailableInNetworkSafeBoot = CheckBox3.Checked
 
@@ -434,6 +792,31 @@ Public Class ServiceManagementForm
             Else
                 ModifiedServiceList.Add(newService)
             End If
+        End If
+    End Sub
+
+    Private Sub ViewAsGraphBtn_Click(sender As Object, e As EventArgs) Handles ViewAsGraphBtn.Click
+        If ListView1.SelectedItems.Count = 0 Then Exit Sub
+
+        Dim selectedService As WindowsService = ServiceList.ElementAtOrDefault(ListView1.FocusedItem.Index)
+        If selectedService Is Nothing Then Exit Sub
+
+        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName),
+            dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(selectedService.Name)).OrderBy(Function(service) service.DisplayName)
+
+        Dim servicesToShow As New List(Of WindowsService)
+        servicesToShow.Add(selectedService)
+        servicesToShow.AddRange(dependencies)
+        servicesToShow.AddRange(dependents)
+
+        ServiceDependencyGraphViewer.ServicesToDisplay = servicesToShow.AsEnumerable()
+        ServiceDependencyGraphViewer.MainServiceName = selectedService.Name
+        If ServiceDependencyGraphViewer.Visible Then
+            ServiceDependencyGraphViewer.RedisplayServices()
+            If ServiceDependencyGraphViewer.WindowState = FormWindowState.Minimized Then ServiceDependencyGraphViewer.WindowState = FormWindowState.Normal
+            ServiceDependencyGraphViewer.BringToFront()
+        Else
+            ServiceDependencyGraphViewer.Show()
         End If
     End Sub
 End Class

@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class ImgOptimize
 
@@ -8,7 +8,7 @@ Public Class ImgOptimize
 
         If TextBox1.Text = "" OrElse Not Directory.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("The source mount directory has not been specified or it does not exist in the file system.")
-            MsgBox("Please specify the mount directory of the image you want to optimize and try again. Also, make sure that that path exists.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("ImageOps.Optimize.Messages")("Mount.Dir.Required.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
 
@@ -36,6 +36,17 @@ Public Class ImgOptimize
     End Sub
 
     Private Sub ImgOptimize_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Path.Mounted.Image.Label")
+        Button1.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Pick.Button")
+        Button2.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Mounted.Image.Button")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Image.Optimization.Mode")
+        RadioButton1.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Reduce.Online.RadioButton")
+        Label2.Text = LocalizationService.ForSection("Designer.ImgOptimize")("Image.Again.Label")
+        RadioButton2.Text = LocalizationService.ForSection("Designer.ImgOptimize")("OfflineImage.RadioButton")
+        Text = LocalizationService.ForSection("Designer.ImgOptimize")("OptimizeImages.Label")
+        ImageTaskHeader1.ItemText = Text
 
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor

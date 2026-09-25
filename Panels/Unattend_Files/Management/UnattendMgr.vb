@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 
 Public Class UnattendMgr
@@ -48,31 +48,7 @@ Public Class UnattendMgr
                 End If
             Else
                 DynaLog.LogMessage("The folder does not exist.")
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                errorMsg = "The folder path does not exist"
-                            Case "ESN"
-                                errorMsg = "La carpeta especificada no existe"
-                            Case "FRA"
-                                errorMsg = "Le chemin d'accès au dossier n'existe pas"
-                            Case "PTB", "PTG"
-                                errorMsg = "A localização da pasta não existe"
-                            Case "ITA"
-                                errorMsg = "Il percorso della cartella non esiste"
-                        End Select
-                    Case 1
-                        errorMsg = "The folder path does not exist"
-                    Case 2
-                        errorMsg = "La carpeta especificada no existe"
-                    Case 3
-                        errorMsg = "Le chemin d'accès au dossier n'existe pas"
-                    Case 4
-                        errorMsg = "A localização da pasta não existe"
-                    Case 5
-                        errorMsg = "Il percorso della cartella non esiste"
-                End Select
+                errorMsg = LocalizationService.ForSection("Unattend.Scan")("FolderMissing.Message")
                 Throw New Exception(errorMsg)
             End If
             If UnattendFiles.Length > 0 Then
@@ -82,31 +58,7 @@ Public Class UnattendMgr
                 Next
             Else
                 DynaLog.LogMessage("No unattended answer files have been detected.")
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                errorMsg = "Search concluded with no elements found"
-                            Case "ESN"
-                                errorMsg = "La búsqueda ha finalizado. No se han encontrado elementos"
-                            Case "FRA"
-                                errorMsg = "La recherche s'est terminée sans qu'aucun élément n'ait été trouvé"
-                            Case "PTB", "PTG"
-                                errorMsg = "Pesquisa concluída sem elementos encontrados"
-                            Case "ITA"
-                                errorMsg = "La ricerca si è conclusa con nessun elemento trovato"
-                        End Select
-                    Case 1
-                        errorMsg = "Search concluded with no elements found"
-                    Case 2
-                        errorMsg = "La búsqueda ha finalizado. No se han encontrado elementos"
-                    Case 3
-                        errorMsg = "La recherche s'est terminée sans qu'aucun élément n'ait été trouvé"
-                    Case 4
-                        errorMsg = "Pesquisa concluída sem elementos encontrados"
-                    Case 5
-                        errorMsg = "La ricerca si è conclusa con nessun elemento trovato"
-                End Select
+                errorMsg = LocalizationService.ForSection("Unattend.Scan")("ElementsFound.Message")
                 Throw New Exception(errorMsg)
             End If
         Catch ex As Exception
@@ -138,121 +90,16 @@ Public Class UnattendMgr
     End Sub
 
     Private Sub UnattendMgr_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Unattended answer file manager"
-                        Label1.Text = "Project path:"
-                        Button1.Text = "Browse..."
-                        Button2.Text = "Open file"
-                        Button3.Text = "Open file location"
-                        Button4.Text = "Apply to image..."
-                        ListView1.Columns(0).Text = "File name"
-                        ListView1.Columns(1).Text = "Created"
-                        ListView1.Columns(2).Text = "Last modified"
-                        ListView1.Columns(3).Text = "Last accessed"
-                    Case "ESN"
-                        Text = "Administrador de archivos de respuesta desatendida"
-                        Label1.Text = "Ubicación de proyecto:"
-                        Button1.Text = "Examinar..."
-                        Button2.Text = "Abrir archivo"
-                        Button3.Text = "Abrir ubicación del archivo"
-                        Button4.Text = "Aplicar a una imagen..."
-                        ListView1.Columns(0).Text = "Nombre de archivo"
-                        ListView1.Columns(1).Text = "Creado"
-                        ListView1.Columns(2).Text = "Última modificación"
-                        ListView1.Columns(3).Text = "Último acceso"
-                    Case "FRA"
-                        Text = "Gestionnaire de fichiers de réponse sans surveillance"
-                        Label1.Text = "Chemin du projet :"
-                        Button1.Text = "Parcourir..."
-                        Button2.Text = "Ouvrir le fichier"
-                        Button3.Text = "Ouvrir l'emplacement du fichier"
-                        Button4.Text = "Appliquer à l'image..."
-                        ListView1.Columns(0).Text = "Nom du fichier"
-                        ListView1.Columns(1).Text = "Créé"
-                        ListView1.Columns(2).Text = "Dernière modification"
-                        ListView1.Columns(3).Text = "Dernier accès"
-                    Case "PTB", "PTG"
-                        Text = "Gestor de ficheiros de resposta não assistida"
-                        Label1.Text = "Localização do projeto:"
-                        Button1.Text = "Procurar..."
-                        Button2.Text = "Abrir ficheiro"
-                        Button3.Text = "Abrir localização do ficheiro"
-                        Button4.Text = "Aplicar à imagem..."
-                        ListView1.Columns(0).Text = "Nome do ficheiro"
-                        ListView1.Columns(1).Text = "Criado"
-                        ListView1.Columns(2).Text = "Última modificação"
-                        ListView1.Columns(3).Text = "Último acesso"
-                    Case "ITA"
-                        Text = "Gestore file di risposta non presidiato"
-                        Label1.Text = "Posizione del progetto:"
-                        Button1.Text = "Sfoglia..."
-                        Button2.Text = "Apri file"
-                        Button3.Text = "Apri il percorso del file"
-                        Button4.Text = "Applica all'immagine..."
-                        ListView1.Columns(0).Text = "Nome del file"
-                        ListView1.Columns(1).Text = "Creato"
-                        ListView1.Columns(2).Text = "Ultima modifica"
-                        ListView1.Columns(3).Text = "Ultimo accesso"
-                End Select
-            Case 1
-                Text = "Unattended answer file manager"
-                Label1.Text = "Project path:"
-                Button1.Text = "Browse..."
-                Button2.Text = "Open file"
-                Button3.Text = "Open file location"
-                Button4.Text = "Apply to image..."
-                ListView1.Columns(0).Text = "File name"
-                ListView1.Columns(1).Text = "Created"
-                ListView1.Columns(2).Text = "Last modified"
-                ListView1.Columns(3).Text = "Last accessed"
-            Case 2
-                Text = "Administrador de archivos de respuesta desatendida"
-                Label1.Text = "Ubicación de proyecto:"
-                Button1.Text = "Examinar..."
-                Button2.Text = "Abrir archivo"
-                Button3.Text = "Abrir ubicación del archivo"
-                Button4.Text = "Aplicar a una imagen..."
-                ListView1.Columns(0).Text = "Nombre de archivo"
-                ListView1.Columns(1).Text = "Creado"
-                ListView1.Columns(2).Text = "Última modificación"
-                ListView1.Columns(3).Text = "Último acceso"
-            Case 3
-                Text = "Gestionnaire de fichiers de réponse sans surveillance"
-                Label1.Text = "Chemin du projet :"
-                Button1.Text = "Parcourir..."
-                Button2.Text = "Ouvrir le fichier"
-                Button3.Text = "Ouvrir l'emplacement du fichier"
-                Button4.Text = "Appliquer à l'image..."
-                ListView1.Columns(0).Text = "Nom du fichier"
-                ListView1.Columns(1).Text = "Créé"
-                ListView1.Columns(2).Text = "Dernière modification"
-                ListView1.Columns(3).Text = "Dernier accès"
-            Case 4
-                Text = "Gestor de ficheiros de resposta não assistida"
-                Label1.Text = "Localização do projeto:"
-                Button1.Text = "Procurar..."
-                Button2.Text = "Abrir ficheiro"
-                Button3.Text = "Abrir localização do ficheiro"
-                Button4.Text = "Aplicar à imagem..."
-                ListView1.Columns(0).Text = "Nome do ficheiro"
-                ListView1.Columns(1).Text = "Criado"
-                ListView1.Columns(2).Text = "Última modificação"
-                ListView1.Columns(3).Text = "Último acesso"
-            Case 5
-                Text = "Gestore file di risposta non presidiato"
-                Label1.Text = "Posizione del progetto:"
-                Button1.Text = "Sfoglia..."
-                Button2.Text = "Apri file"
-                Button3.Text = "Apri il percorso del file"
-                Button4.Text = "Applica all'immagine..."
-                ListView1.Columns(0).Text = "Nome del file"
-                ListView1.Columns(1).Text = "Creato"
-                ListView1.Columns(2).Text = "Ultima modifica"
-                ListView1.Columns(3).Text = "Ultimo accesso"
-        End Select
+        Text = LocalizationService.ForSection("UnattendMgr")("Unattended.AnswerFile.Label")
+        Label1.Text = LocalizationService.ForSection("UnattendMgr")("ProjectPath.Label")
+        Button1.Text = LocalizationService.ForSection("UnattendMgr")("Browse.Button")
+        Button2.Text = LocalizationService.ForSection("UnattendMgr")("OpenFile.Button")
+        Button3.Text = LocalizationService.ForSection("UnattendMgr")("Open.File.Location.Button")
+        Button4.Text = LocalizationService.ForSection("UnattendMgr")("ApplyImage.Button")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("UnattendMgr")("FileName.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("UnattendMgr")("Created.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("UnattendMgr")("LastModified.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("UnattendMgr")("LastAccessed.Column")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor

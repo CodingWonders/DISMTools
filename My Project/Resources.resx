@@ -991,21 +991,18 @@ A "contributor" is any person that distributes its contribution under this licen
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an exception when launching the AppX package information dialog on Windows 8 systems
+- Fixed an issue where component store repair tasks would fail if no sources were specified
 
 New features:
 
-- HotInstall and the Sysprep Preparation Tool now create rollback environments to undo boot configuration changes and environment deployments
-- The Sysprep Preparation Tool now disables sleep mode when running preparation tasks
-- You can now query and set Safe Mode preferences for services
-- Getting information about items is now done asynchronously, making the UI responsive
-- When dropping AppX packages to the addition queue, you will now see a progress indicator
-- When scanning AppX packages, 7-Zip is now forced to use all your processors
-- When enabling features, sources can now be configured to be used only on features that require them
-- The window layout has been improved on 1024x768 screens
-- 7-Zip has been updated to version 26.03
-- Keyboard shortcuts have been added to create, open, and save projects
-- DISMTools can now detect if the current network connection is metered and will warn you when attempting a download operation</value>
+- The Sysprep Preparation Tool now clears BITS transfer queues during Windows Update cache cleanup
+- ISO file creation tasks in the ISO creator can now be double-clicked to load their settings
+- The "Configure System Recovery Settings" Starter Script has been introduced
+- The Service Manager allows you to visualize dependencies in diagrams you can export to pictures or Mermaid diagrams
+- Configuring Safe Mode options for services can now carry changes over to dependencies and dependents
+- Services critical for core Windows components can no longer be configured
+- Markdig has been updated to version 1.4.0
+- The language system has seen a major overhaul that makes it easier to translate the program to other languages. As a result of this change, German translations have been introduced</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1114,5 +1111,35 @@ New features:
   </data>
   <data name="infinityhome_change_network_config" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\infinityhome_change_network_config.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_save_image_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_save_image_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_save_image_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_save_image_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_in_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_in_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_in_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_in_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_out_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_out_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_out_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_out_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_reset_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_reset_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_zoom_reset_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_zoom_reset_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_save_mermaid_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_save_mermaid_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diagram_save_mermaid_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diagrams\diagram_save_mermaid_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

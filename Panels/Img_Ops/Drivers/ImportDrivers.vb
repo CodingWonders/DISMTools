@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports DISMTools.Utilities
 Imports Microsoft.Dism
@@ -8,7 +8,7 @@ Public Class ImportDrivers
 
     Dim DIList As New List(Of DriveInfo)
     Dim ImportSourceInt As Integer = -1
-    Dim ImportSources() As String = New String(2) {"Windows image", "Online installation", "Offline installation"}
+    Dim ImportSources() As String = New String(2) {"", "", ""}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
@@ -121,271 +121,31 @@ Public Class ImportDrivers
         End If
         ComboBox1.Items.Clear()
         ComboBox1.SelectedText = ""
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Import drivers"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "This process will import all third-party drivers of the source you specify to this image or installation. This ensures that the target image will have the same hardware compatibility of the source image"
-                        Label3.Text = "Import source:"
-                        Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
-                        Label5.Text = "Windows image to import drivers from:"
-                        Label6.Text = "You can't use the import target as the import source"
-                        Label7.Text = "Offline installation to import drivers from:"
-                        Label8.Text = "You can't use the import target as the import source"
-                        Label9.Text = "Image file:"
-                        Button1.Text = "Pick..."
-                        Button2.Text = "Refresh"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        ListView1.Columns(0).Text = "Drive letter"
-                        ListView1.Columns(1).Text = "Drive label"
-                        ListView1.Columns(2).Text = "Drive type"
-                        ListView1.Columns(3).Text = "Total size"
-                        ListView1.Columns(4).Text = "Available free space"
-                        ListView1.Columns(5).Text = "Drive format"
-                        ListView1.Columns(6).Text = "Contains Windows?"
-                        ListView1.Columns(7).Text = "Windows version"
-                        ImportSources(0) = "Windows image"
-                        ImportSources(1) = "Online installation"
-                        ImportSources(2) = "Offline installation"
-                    Case "ESN"
-                        Text = "Importar controladores"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Este proceso importará todos los controladores de terceros del origen que especifique a esta imagen o instalación. Esto asegura que la imagen de destino tenga la misma compatibilidad de hardware de la imagen de origen"
-                        Label3.Text = "Origen de importación:"
-                        Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
-                        Label5.Text = "Imagen de Windows de la que importar controladores:"
-                        Label6.Text = "No puede utilizar el destino de importación como el origen de importación"
-                        Label7.Text = "Instalación fuera de línea de la que importar controladores:"
-                        Label8.Text = "No puede utilizar el destino de importación como el origen de importación"
-                        Label9.Text = "Archivo de imagen:"
-                        Button1.Text = "Escoger..."
-                        Button2.Text = "Actualizar"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "Letra de disco"
-                        ListView1.Columns(1).Text = "Etiqueta de disco"
-                        ListView1.Columns(2).Text = "Tipo de disco"
-                        ListView1.Columns(3).Text = "Tamaño total"
-                        ListView1.Columns(4).Text = "Espacio libre"
-                        ListView1.Columns(5).Text = "Formato del disco"
-                        ListView1.Columns(6).Text = "¿Contiene Windows?"
-                        ListView1.Columns(7).Text = "Versión de Windows"
-                        ImportSources(0) = "Imagen de Windows"
-                        ImportSources(1) = "Instalación en línea"
-                        ImportSources(2) = "Instalación fuera de línea"
-                    Case "FRA"
-                        Text = "Importer des pilotes"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Ce processus importera tous les pilotes tiers de la source que vous spécifiez dans cette image ou installation. Cela garantit que l'image cible aura la même compatibilité matérielle que l'image source."
-                        Label3.Text = "Source d'importation :"
-                        Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
-                        Label5.Text = "Image Windows à partir de laquelle les pilotes sont importés :"
-                        Label6.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
-                        Label7.Text = "Installation hors ligne à partir de laquelle les pilotes sont importés :"
-                        Label8.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
-                        Label9.Text = "Fichier de l'image :"
-                        Button1.Text = "Choisir..."
-                        Button2.Text = "Actualiser"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        ListView1.Columns(0).Text = "Lettre de disque"
-                        ListView1.Columns(1).Text = "Étiquette de disque"
-                        ListView1.Columns(2).Text = "Type de disque"
-                        ListView1.Columns(3).Text = "Taille totale"
-                        ListView1.Columns(4).Text = "Espace libre disponible"
-                        ListView1.Columns(5).Text = "Format de disque"
-                        ListView1.Columns(6).Text = "Contient Windows ?"
-                        ListView1.Columns(7).Text = "Version Windows"
-                        ImportSources(0) = "Image de Windows"
-                        ImportSources(1) = "Installation en ligne"
-                        ImportSources(2) = "Installation hors ligne"
-                    Case "PTB", "PTG"
-                        Text = "Importar controladores"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
-                        Label3.Text = "Importar fonte:"
-                        Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
-                        Label5.Text = "Imagem do Windows a partir da qual importar controladores:"
-                        Label6.Text = "Não é possível utilizar o destino de importação como fonte de importação"
-                        Label7.Text = "Instalação offline para importar controladores de:"
-                        Label8.Text = "Não é possível utilizar o destino de importação como fonte de importação"
-                        Label9.Text = "Ficheiro de imagem:"
-                        Button1.Text = "Escolher..."
-                        Button2.Text = "Atualizar"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "Letra da unidade"
-                        ListView1.Columns(1).Text = "Label da unidade"
-                        ListView1.Columns(2).Text = "Tipo de unidade"
-                        ListView1.Columns(3).Text = "Tamanho total"
-                        ListView1.Columns(4).Text = "Espaço livre disponível"
-                        ListView1.Columns(5).Text = "Formato da unidade"
-                        ListView1.Columns(6).Text = "Contém Windows?"
-                        ListView1.Columns(7).Text = "Versão do Windows"
-                        ImportSources(0) = "Imagem do Windows"
-                        ImportSources(1) = "Instalação online"
-                        ImportSources(2) = "Instalação offline"
-                    Case "ITA"
-                        Text = "Importare i driver"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Questo processo importerà tutti i driver di terze parti dell'origine specificata in questa immagine o installazione. Questo assicura che l'immagine di destinazione abbia la stessa compatibilità hardware dell'immagine di origine"
-                        Label3.Text = "Importazione dell'origine:"
-                        Label4.Text = If(ImportSourceInt = 1, "Questa sorgente non ha impostazioni aggiuntive disponibili.", "Scegliere una sorgente elencata sopra per configurarne le impostazioni.")
-                        Label5.Text = "Immagine di Windows da cui importare i driver:"
-                        Label6.Text = "Non è possibile utilizzare la destinazione di importazione come origine di importazione"
-                        Label7.Text = "Installazione offline da cui importare i driver:"
-                        Label8.Text = "Non è possibile utilizzare il target di importazione come sorgente di importazione"
-                        Label9.Text = "File immagine:"
-                        Button1.Text = "Scegliere..."
-                        Button2.Text = "Aggiorna"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        ListView1.Columns(0).Text = "Lettera unità"
-                        ListView1.Columns(1).Text = "Etichetta dell'unità"
-                        ListView1.Columns(2).Text = "Tipo di unità"
-                        ListView1.Columns(3).Text = "Dimensione totale"
-                        ListView1.Columns(4).Text = "Spazio libero disponibile"
-                        ListView1.Columns(5).Text = "Formato unità"
-                        ListView1.Columns(6).Text = "Contiene Windows?"
-                        ListView1.Columns(7).Text = "Versione di Windows"
-                        ImportSources(0) = "Immagine di Windows"
-                        ImportSources(1) = "Installazione attiva"
-                        ImportSources(2) = "Installazione offline"
-                End Select
-            Case 1
-                Text = "Import drivers"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "This process will import all third-party drivers of the source you specify to this image or installation. This ensures that the target image will have the same hardware compatibility of the source image"
-                Label3.Text = "Import source:"
-                Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
-                Label5.Text = "Windows image to import drivers from:"
-                Label6.Text = "You can't use the import target as the import source"
-                Label7.Text = "Offline installation to import drivers from:"
-                Label8.Text = "You can't use the import target as the import source"
-                Label9.Text = "Image file:"
-                Button1.Text = "Pick..."
-                Button2.Text = "Refresh"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                ListView1.Columns(0).Text = "Drive letter"
-                ListView1.Columns(1).Text = "Drive label"
-                ListView1.Columns(2).Text = "Drive type"
-                ListView1.Columns(3).Text = "Total size"
-                ListView1.Columns(4).Text = "Available free space"
-                ListView1.Columns(5).Text = "Drive format"
-                ListView1.Columns(6).Text = "Contains Windows?"
-                ListView1.Columns(7).Text = "Windows version"
-                ImportSources(0) = "Windows image"
-                ImportSources(1) = "Online installation"
-                ImportSources(2) = "Offline installation"
-            Case 2
-                Text = "Importar controladores"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Este proceso importará todos los controladores de terceros del origen que especifique a esta imagen o instalación. Esto asegura que la imagen de destino tenga la misma compatibilidad de hardware de la imagen de origen"
-                Label3.Text = "Origen de importación:"
-                Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
-                Label5.Text = "Imagen de Windows de la que importar controladores:"
-                Label6.Text = "No puede utilizar el destino de importación como el origen de importación"
-                Label7.Text = "Instalación fuera de línea de la que importar controladores:"
-                Label8.Text = "No puede utilizar el destino de importación como el origen de importación"
-                Label9.Text = "Archivo de imagen:"
-                Button1.Text = "Escoger..."
-                Button2.Text = "Actualizar"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "Letra de disco"
-                ListView1.Columns(1).Text = "Etiqueta de disco"
-                ListView1.Columns(2).Text = "Tipo de disco"
-                ListView1.Columns(3).Text = "Tamaño total"
-                ListView1.Columns(4).Text = "Espacio libre"
-                ListView1.Columns(5).Text = "Formato del disco"
-                ListView1.Columns(6).Text = "¿Contiene Windows?"
-                ListView1.Columns(7).Text = "Versión de Windows"
-                ImportSources(0) = "Imagen de Windows"
-                ImportSources(1) = "Instalación en línea"
-                ImportSources(2) = "Instalación fuera de línea"
-            Case 3
-                Text = "Importer des pilotes"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Ce processus importera tous les pilotes tiers de la source que vous spécifiez dans cette image ou installation. Cela garantit que l'image cible aura la même compatibilité matérielle que l'image source."
-                Label3.Text = "Source d'importation :"
-                Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
-                Label5.Text = "Image Windows à partir de laquelle les pilotes sont importés :"
-                Label6.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
-                Label7.Text = "Installation hors ligne à partir de laquelle les pilotes sont importés :"
-                Label8.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
-                Label9.Text = "Fichier de l'image :"
-                Button1.Text = "Choisir..."
-                Button2.Text = "Actualiser"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                ListView1.Columns(0).Text = "Lettre de disque"
-                ListView1.Columns(1).Text = "Étiquette de disque"
-                ListView1.Columns(2).Text = "Type de disque"
-                ListView1.Columns(3).Text = "Taille totale"
-                ListView1.Columns(4).Text = "Espace libre disponible"
-                ListView1.Columns(5).Text = "Format de disque"
-                ListView1.Columns(6).Text = "Contient Windows ?"
-                ListView1.Columns(7).Text = "Version Windows"
-                ImportSources(0) = "Image de Windows"
-                ImportSources(1) = "Installation en ligne"
-                ImportSources(2) = "Installation hors ligne"
-            Case 4
-                Text = "Importar controladores"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
-                Label3.Text = "Importar fonte:"
-                Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
-                Label5.Text = "Imagem do Windows a partir da qual importar controladores:"
-                Label6.Text = "Não é possível utilizar o destino de importação como fonte de importação"
-                Label7.Text = "Instalação offline para importar controladores de:"
-                Label8.Text = "Não é possível utilizar o destino de importação como fonte de importação"
-                Label9.Text = "Ficheiro de imagem:"
-                Button1.Text = "Escolher..."
-                Button2.Text = "Atualizar"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "Letra da unidade"
-                ListView1.Columns(1).Text = "Label da unidade"
-                ListView1.Columns(2).Text = "Tipo de unidade"
-                ListView1.Columns(3).Text = "Tamanho total"
-                ListView1.Columns(4).Text = "Espaço livre disponível"
-                ListView1.Columns(5).Text = "Formato da unidade"
-                ListView1.Columns(6).Text = "Contém Windows?"
-                ListView1.Columns(7).Text = "Versão do Windows"
-                ImportSources(0) = "Imagem do Windows"
-                ImportSources(1) = "Instalação online"
-                ImportSources(2) = "Instalação offline"
-            Case 5
-                Text = "Importare i driver"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Questo processo importerà tutti i driver di terze parti dell'origine specificata in questa immagine o installazione. Questo assicura che l'immagine di destinazione abbia la stessa compatibilità hardware dell'immagine di origine"
-                Label3.Text = "Importazione dell'origine:"
-                Label4.Text = If(ImportSourceInt = 1, "Questa sorgente non ha impostazioni aggiuntive disponibili.", "Scegliere una sorgente elencata sopra per configurarne le impostazioni.")
-                Label5.Text = "Immagine di Windows da cui importare i driver:"
-                Label6.Text = "Non è possibile utilizzare la destinazione di importazione come origine di importazione"
-                Label7.Text = "Installazione offline da cui importare i driver:"
-                Label8.Text = "Non è possibile utilizzare il target di importazione come sorgente di importazione"
-                Label9.Text = "File immagine:"
-                Button1.Text = "Scegliere..."
-                Button2.Text = "Aggiorna"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                ListView1.Columns(0).Text = "Lettera unità"
-                ListView1.Columns(1).Text = "Etichetta dell'unità"
-                ListView1.Columns(2).Text = "Tipo di unità"
-                ListView1.Columns(3).Text = "Dimensione totale"
-                ListView1.Columns(4).Text = "Spazio libero disponibile"
-                ListView1.Columns(5).Text = "Formato unità"
-                ListView1.Columns(6).Text = "Contiene Windows?"
-                ListView1.Columns(7).Text = "Versione di Windows"
-                ImportSources(0) = "Immagine di Windows"
-                ImportSources(1) = "Installazione attiva"
-                ImportSources(2) = "Installazione offline"
-        End Select
+        Text = LocalizationService.ForSection("ImportDrivers")("Title.Label")
+        ImageTaskHeader1.ItemText = Text
+        Label2.Text = LocalizationService.ForSection("ImportDrivers")("Process.Third.Message")
+        Label3.Text = LocalizationService.ForSection("ImportDrivers")("ImportSource.Label")
+        Label4.Text = If(ImportSourceInt = 1, LocalizationService.ForSection("ImportDrivers")("Source.Doesn.Tany.Label"), LocalizationService.ForSection("ImportDrivers")("Source.Listed.Choose.Label"))
+        Label5.Text = LocalizationService.ForSection("ImportDrivers")("Windows.Label")
+        Label6.Text = LocalizationService.ForSection("ImportDrivers")("Tuse.Target.Label")
+        Label7.Text = LocalizationService.ForSection("ImportDrivers")("Offline.Drivers.Label")
+        Label8.Text = LocalizationService.ForSection("ImportDrivers")("Tuse.Target.Label")
+        Label9.Text = LocalizationService.ForSection("ImportDrivers")("ImageFile.Label")
+        Button1.Text = LocalizationService.ForSection("ImportDrivers")("Pick.Button")
+        Button2.Text = LocalizationService.ForSection("ImportDrivers")("Refresh.Button")
+        OK_Button.Text = LocalizationService.ForSection("ImportDrivers")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("ImportDrivers")("Cancel.Button")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("ImportDrivers")("DriveLetter.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("ImportDrivers")("DriveLabel.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("ImportDrivers")("DriveType.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("ImportDrivers")("TotalSize.Column")
+        ListView1.Columns(4).Text = LocalizationService.ForSection("ImportDrivers")("Available.Free.Space.Column")
+        ListView1.Columns(5).Text = LocalizationService.ForSection("ImportDrivers")("DriveFormat.Column")
+        ListView1.Columns(6).Text = LocalizationService.ForSection("ImportDrivers")("ContainsWindows.Column")
+        ListView1.Columns(7).Text = LocalizationService.ForSection("ImportDrivers")("Windows.Column")
+        ImportSources(0) = LocalizationService.ForSection("ImportDrivers")("Windows.Item")
+        ImportSources(1) = LocalizationService.ForSection("ImportDrivers")("Online.Install.Item")
+        ImportSources(2) = LocalizationService.ForSection("ImportDrivers")("Offline.Install.Item")
         ComboBox1.Items.AddRange(ImportSources)
         If ImportSourceInt >= 0 Then ComboBox1.SelectedIndex = ImportSourceInt
         ImageTaskHeader1.SetColors()
@@ -449,31 +209,7 @@ Public Class ImportDrivers
             End Select
             ImportSourceInt = ComboBox1.SelectedIndex
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
-                    Case "ESN"
-                        Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
-                    Case "FRA"
-                        Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
-                    Case "PTB", "PTG"
-                        Label4.Text = If(ImportSourceInt = 1, "Esta origem não tem quaisquer configurações adicionais disponíveis.", "Escolha uma origem listada acima para configurar as suas configurações.")
-                    Case "ITA"
-                        Label4.Text = If(ImportSourceInt = 1, "Questa sorgente non ha impostazioni aggiuntive disponibili", "Scegliere una sorgente elencata sopra per configurarne le impostazioni")
-                End Select
-            Case 1
-                Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
-            Case 2
-                Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
-            Case 3
-                Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
-            Case 4
-                Label4.Text = If(ImportSourceInt = 1, "Esta origem não tem quaisquer configurações adicionais disponíveis.", "Escolha uma origem listada acima para configurar as suas configurações.")
-            Case 5
-                Label4.Text = If(ImportSourceInt = 1, "Questa sorgente non ha impostazioni aggiuntive disponibili", "Scegliere una sorgente elencata sopra per configurarne le impostazioni")
-        End Select
+        Label4.Text = If(ImportSourceInt = 1, LocalizationService.ForSection("ImportDrivers")("Source.Doesn.Tany.Label"), LocalizationService.ForSection("ImportDrivers")("Source.Listed.Choose.Label"))
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

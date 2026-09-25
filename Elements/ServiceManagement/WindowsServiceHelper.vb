@@ -1,4 +1,4 @@
-﻿Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
 Imports Microsoft.Win32
 Imports System.Runtime.InteropServices
@@ -251,11 +251,8 @@ Module WindowsServiceHelper
         Dim buffer As New StringBuilder(260)
         Dim hr As Integer = NativeMethods.SHLoadIndirectString(source, buffer, buffer.Capacity, IntPtr.Zero)
         DynaLog.LogMessage("Resolver Result: " & hr)
-        If hr = 0 Then
-            Return buffer.ToString()
-        Else
-            Return source
-        End If
+
+        Return If(hr = 0, buffer.ToString(), source)
     End Function
 
     ''' <summary>
@@ -545,12 +542,42 @@ Module WindowsServiceHelper
                             End If
                         ElseIf serviceDisplayName.StartsWith("@") Then
                             DynaLog.LogMessage("Raw display name indicates an indirect string. Parsing...")
+
+                            serviceDisplayName = Regex.Replace(serviceDisplayName, "%systemroot%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+                            serviceDisplayName = Regex.Replace(serviceDisplayName, "%windir%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+
+                            ' If it points to a file without a path, automatically put the mount path's system32 folder and check if it exists
+                            Dim commaLocation As Integer = serviceDisplayName.IndexOf(","),
+                                indStrFileName As String = serviceDisplayName.Substring(1, commaLocation - 1)
+
+                            If Not Path.IsPathRooted(indStrFileName) Then
+                                Dim guessedFilePath As String = Path.Combine(MountPath, "Windows", "system32", indStrFileName)
+                                If File.Exists(guessedFilePath) Then
+                                    serviceDisplayName = serviceDisplayName.Replace(indStrFileName, guessedFilePath)
+                                End If
+                            End If
+
                             serviceDisplayName = ResolveIndirectString(serviceDisplayName)
                         End If
                         serviceDescription = ServiceInfoRk.GetValue("Description", "")
                         DynaLog.LogMessage("Raw service description: " & serviceDescription)
                         If serviceDescription.StartsWith("@") Then
                             DynaLog.LogMessage("Raw description indicates an indirect string. Parsing...")
+
+                            serviceDescription = Regex.Replace(serviceDescription, "%systemroot%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+                            serviceDescription = Regex.Replace(serviceDescription, "%windir%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
+
+                            ' If it points to a file without a path, automatically put the mount path's system32 folder and check if it exists
+                            Dim commaLocation As Integer = serviceDescription.IndexOf(","),
+                                indStrFileName As String = serviceDescription.Substring(1, commaLocation - 1)
+
+                            If Not Path.IsPathRooted(indStrFileName) Then
+                                Dim guessedFilePath As String = Path.Combine(MountPath, "Windows", "system32", indStrFileName)
+                                If File.Exists(guessedFilePath) Then
+                                    serviceDescription = serviceDescription.Replace(indStrFileName, guessedFilePath)
+                                End If
+                            End If
+
                             serviceDescription = ResolveIndirectString(serviceDescription)
                         End If
                         serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
@@ -664,14 +691,21 @@ Module WindowsServiceHelper
 
     Private Function ExportCurrentServiceInformation() As Boolean
         Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+        If defaultControlSet = -1 Then Return False
 
-        If defaultControlSet = -1 Then
-            Return False
-        End If
-
-        Return RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Services", defaultControlSet.ToString().PadLeft(3, "0"c)),
+        If Not RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Services", defaultControlSet.ToString().PadLeft(3, "0"c)),
                                                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                                                                String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
+                                                                String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0 Then Return False
+
+        ' Export safeboot information
+        If Not RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\SafeBoot\Minimal", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                String.Format("MinimalSafebootInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0 Then Return False
+        If Not RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\SafeBoot\Network", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                String.Format("NetworkSafebootInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0 Then Return False
+
+        Return True
     End Function
 
     Public Function SaveServiceInformation(MountPath As String, ServiceList As List(Of WindowsService), Optional reportProgress As Action(Of Integer, Integer) = Nothing) As Boolean
@@ -682,9 +716,7 @@ Module WindowsServiceHelper
             If Not ExportCurrentServiceInformation() Then
                 ' Current service information could not be backed up. We'll ask the user
                 ' if we can continue or not given the backup.
-                If MsgBox("Current service information could not be backed up. Backups are used in case of a mistake during service management. You may continue, but at your own risk." & CrLf & CrLf &
-                          "The target image may not work correctly or at all after configuration, and you will not be able to recover it using previous service configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
-                          "Do you want to continue without backing up current service information?", vbYesNo + vbExclamation, "Service information could not be backed up") = MsgBoxResult.No Then
+                If MsgBox(LocalizationService.ForSection("WindowsServices.Helper")("Service.Backed.Message"), vbYesNo + vbExclamation, LocalizationService.ForSection("WindowsServices.Helper")("Service.Backed.Up.Title")) = MsgBoxResult.No Then
                     Return False
                 End If
             End If
@@ -701,7 +733,7 @@ Module WindowsServiceHelper
                 serviceCount As Integer = ServiceList.Count
 
             ' Now, we can save the properties. Only the start type for now
-            DynaLog.DisableLogging()
+            If Not Debugger.IsAttached Then DynaLog.DisableLogging()
             For Each Service As WindowsService In ServiceList
                 currentService += 1
                 Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name),
@@ -750,7 +782,7 @@ Module WindowsServiceHelper
                 End If
                 If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
             Next
-            DynaLog.EnableLogging()
+            If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
             Debug.WriteLine("Service Count: " & ServiceList.Count)
             Debug.WriteLine("Failed Sets: " & failedSets)

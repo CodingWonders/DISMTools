@@ -29,6 +29,20 @@ Public Class CapabilityFilterAssistantDialog
     End Sub
 
     Private Sub FeatureFilterAssistantDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("Apply.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("Clear.Button")
+        Label2.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("Name.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("State.Label")
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({
+            LocalizationService.ForSection("Designer.CapabilityFilter")("AnyState.Item"),
+            LocalizationService.ForSection("Designer.CapabilityFilter")("Installed.Item"),
+            LocalizationService.ForSection("Designer.CapabilityFilter")("Install.Pending.Item"),
+            LocalizationService.ForSection("Designer.CapabilityFilter")("Removed.Item")
+        })
+        Label1.Text = LocalizationService.ForSection("Designer.CapabilityFilter")("FilterInfo.Prompt.Label")
+        Text = LocalizationService.ForSection("Designer.CapabilityFilter")("FilterInfo.Title")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor

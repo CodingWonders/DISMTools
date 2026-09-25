@@ -1,8 +1,8 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class FfuCapture
 
-    Dim CompressionTypeStrings() As String = New String(1) {"No compression will be applied for FFU files. Choose this option if you want to split the resulting file.", "Default compression will be applied for FFU files."}
+    Dim CompressionTypeStrings() As String = New String(1) {"", ""}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
@@ -11,24 +11,22 @@ Public Class FfuCapture
         DynaLog.LogMessage("Checking fields...")
         If Not WMIDiskHelper.DriveIdExists(TextBox2.Text) Then
             DynaLog.LogMessage("A device with the provided ID does not exist.")
-            MsgBox("The specified source drive does not exist.", vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(LocalizationService.ForSection("FFU.Capture.Messages")("Source.Drive.Exist.Label"), vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
         End If
 
         If Not IsAnyPartitionSysprepped(TextBox2.Text) Then
-            If MsgBox(String.Format("The source drive that you are capturing may not have been previously prepared by Sysprep. " &
-                                    "It is recommended that you run it on that installation before proceeding with the capture task.{0}{0}" &
-                                    "Do you want to continue?", Environment.NewLine),
+            If MsgBox(LocalizationService.ForSection("FFU.Capture.Messages").Format("Source.Drive.Message", Environment.NewLine),
                                 vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then Exit Sub
         End If
 
         If TextBox1.Text = "" Then
-            MsgBox("Please provide a destination path for the FFU file.", vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(LocalizationService.ForSection("FFU.Capture.Messages")("Provide.Dest.Path.Label"), vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
         End If
 
         If TextBox3.Text = "" Then
-            MsgBox("Please provide a name for the destination FFU file.", vbOKOnly + vbCritical, Label1.Text)
+            MsgBox(LocalizationService.ForSection("FFU.Capture.Messages")("Provide.Name.Dest.Label"), vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
         End If
 
@@ -84,6 +82,8 @@ Public Class FfuCapture
 
     Private Sub FfuCapture_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        CompressionTypeStrings(0) = LocalizationService.ForSection("FfuCapture")("No.Compression.None.Message")
+        CompressionTypeStrings(1) = LocalizationService.ForSection("FfuCapture")("Default.Compression.Item")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -148,9 +148,9 @@ Public Class FfuCapture
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        If ComboBox1.SelectedItem = "none" Then
+        If ComboBox1.SelectedIndex = 0 Then
             Label8.Text = CompressionTypeStrings(0)
-        ElseIf ComboBox1.SelectedItem = "default" Then
+        ElseIf ComboBox1.SelectedIndex = 1 Then
             Label8.Text = CompressionTypeStrings(1)
         End If
     End Sub

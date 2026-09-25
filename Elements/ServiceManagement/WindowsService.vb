@@ -192,7 +192,7 @@
         ''' <remarks></remarks>
         Public Property AvailableInMinimalSafeBoot As Boolean
         ''' <summary>
-        ''' Determines whether a service is available in Safe Mode with Networking
+        ''' Determines whether a service is available in Safe Mode with Networking and Directory Services Restore Mode
         ''' </summary>
         ''' <remarks></remarks>
         Public Property AvailableInNetworkSafeBoot As Boolean

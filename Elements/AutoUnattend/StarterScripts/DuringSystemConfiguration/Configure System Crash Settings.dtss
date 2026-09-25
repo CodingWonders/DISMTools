@@ -1,0 +1,125 @@
+﻿Language: Batch
+Name: Configure System Recovery Settings
+Description: This script allows you to configure system error and recovery configuration.
+Customizable: Yes
+@ECHO OFF
+
+REM This script allows you to configure system recovery options on
+REM Windows NT systems. Configure the options below as you please.
+
+REM This option controls whether to log crash events in the system event log.
+REM - 1 - enable crash logging
+REM - 0 - disable crash logging
+SET _LOG_CRASH=1
+REM This option controls whether to automatically restart a crashed system
+REM after memory dump generation has finished.
+REM - 1 - enable rebooting after a crash
+REM - 0 - disable rebooting after a crash
+SET _REBOOT_AFTER_CRASH=1
+
+REM Options for memory dumps
+REM -------------------------------------
+
+REM This option controls the kind of dump file created during a system crash.
+REM - 0 - no crash dumps are made
+REM - 1 - small memory dump (64 kB on Windows 2000/XP/Server 2003/Vista ; 256 kB on Windows 7 and newer)
+REM - 2 - kernel memory dump
+REM - 3 - complete memory dump
+REM - 4 - automatic memory dump
+REM - 5 - active memory dump (Windows 10/11)
+SET _CRASH_DUMP_TYPE=2
+REM This option controls the location of minidump files (for small memory dump types). To
+REM make this option as portable as possible without forcing specific values, make use of
+REM environment variables. Escape the percent signs with the ^ character before the percent
+REM sign.
+SET "_CRASH_DUMP_MINIDUMP_LOCATION=^%SystemRoot^%\Minidump"
+REM This option controls the location of memory dump files (for complete memory dump types). To
+REM make this option as portable as possible without forcing specific values, make use of
+REM environment variables. Escape the percent signs with the ^ character before the percent
+REM sign.
+SET "_CRASH_DUMP_MEMDUMP_LOCATION=^%SystemRoot^%\MEMORY.DMP"
+REM This option controls whether to overwrite existing memory dump files with new ones (for
+REM complete memory dump types).
+REM - 1 - overwrite existing MEMORY.DMP files
+REM - 0 - do not overwrite existing MEMORY.DMP files
+SET _CRASH_DUMP_OVERWRITE=1
+REM This option controls whether to keep memory dumps on low disk space situations (Windows 10/11)
+REM - 1 - keep crash dumps on low disk space situations
+REM - 0 - do not keep crash dumps on low disk space situations
+SET _CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS=0
+
+REM Options for manual crash events -- uncomment these options to make
+REM them accessible when running this script. Only use these on extreme
+REM cases.
+REM -------------------------------------------------------------------
+
+REM This option controls whether to crash a system by pressing RIGHT CTRL + SCROLL LOCK (x2). This works with:
+REM - PS/2 keyboards (since Windows 2000)
+REM - USB keyboards (since Windows Vista)
+REM - Hyper-V keyboards (since Windows 10 1903)
+REM SET _CrashOnCtrlScroll=1
+
+REM This option controls whether to crash a system by holding the power button for 7 seconds, before forcefully
+REM shutting down the system by pressing it for 10 seconds (UEFI systems only)
+REM SET _CrashOnPowerButton=1
+
+REM leave the rest of this script as is
+
+REM verify options
+IF NOT DEFINED _LOG_CRASH SET _LOG_CRASH=1
+IF NOT DEFINED _REBOOT_AFTER_CRASH SET _REBOOT_AFTER_CRASH=1
+IF NOT DEFINED _CRASH_DUMP_TYPE SET _CRASH_DUMP_TYPE=2
+IF NOT DEFINED _CRASH_DUMP_MINIDUMP_LOCATION SET "_CRASH_DUMP_MINIDUMP_LOCATION=^%SystemRoot^%\Minidump"
+IF NOT DEFINED _CRASH_DUMP_MEMDUMP_LOCATION SET "_CRASH_DUMP_MEMDUMP_LOCATION=^%SystemRoot^%\MEMORY.DMP"
+IF NOT DEFINED _CRASH_DUMP_OVERWRITE SET _CRASH_DUMP_OVERWRITE=1
+IF NOT DEFINED _CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS SET _CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS=0
+
+REM verify whether values are in range
+REM ------------------------------------------
+
+IF %_LOG_CRASH% GTR 1 SET LOG_CRASH=1
+IF %_LOG_CRASH% LSS 0 SET LOG_CRASH=0
+
+IF %_REBOOT_AFTER_CRASH% GTR 1 SET _REBOOT_AFTER_CRASH=1
+IF %_REBOOT_AFTER_CRASH% LSS 0 SET _REBOOT_AFTER_CRASH=0
+
+IF %_CRASH_DUMP_OVERWRITE% GTR 1 SET _CRASH_DUMP_OVERWRITE=1
+IF %_CRASH_DUMP_OVERWRITE% LSS 0 SET _CRASH_DUMP_OVERWRITE=0
+
+IF %_CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS% GTR 1 SET _CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS=1
+IF %_CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS% LSS 0 SET _CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS=0
+
+REM CRASH_DUMP_TYPE does not follow the actual values defined in the registry for all possible values;
+REM we have to map the value to the actual one.
+SET CrashDumpEnabled=0
+
+IF %_CRASH_DUMP_TYPE% LSS 0 SET _CRASH_DUMP_TYPE=0
+IF %_CRASH_DUMP_TYPE% GTR 5 SET _CRASH_DUMP_TYPE=5
+
+IF %_CRASH_DUMP_TYPE% EQU 0 SET CrashDumpEnabled=0
+IF %_CRASH_DUMP_TYPE% EQU 1 SET CrashDumpEnabled=3
+IF %_CRASH_DUMP_TYPE% EQU 2 SET CrashDumpEnabled=2
+IF %_CRASH_DUMP_TYPE% EQU 3 SET CrashDumpEnabled=1
+IF %_CRASH_DUMP_TYPE% EQU 4 SET CrashDumpEnabled=7
+IF %_CRASH_DUMP_TYPE% EQU 5 SET CrashDumpEnabled=1
+
+
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V LogEvent /T REG_DWORD /D %_LOG_CRASH%
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V AutoReboot /T REG_DWORD /D %_REBOOT_AFTER_CRASH%
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V CrashDumpEnabled /T REG_DWORD /D %CrashDumpEnabled%
+IF %_CRASH_DUMP_TYPE% EQU 5 REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V FilterPages /T REG_DWORD /D 1
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V Overwrite /T REG_DWORD /D %_CRASH_DUMP_OVERWRITE%
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V AlwaysKeepMemoryDump /T REG_DWORD /D %_CRASH_DUMP_KEEP_DUMPS_ON_LOW_SPACE_EVENTS%
+
+REM path crash options
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V DumpFile /T REG_EXPAND_SZ /D "%_CRASH_DUMP_MEMDUMP_LOCATION%"
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /F /V MinidumpDir /T REG_EXPAND_SZ /D "%_CRASH_DUMP_MINIDUMP_LOCATION%"
+
+REM manual crash options
+IF DEFINED _CrashOnCtrlScroll (
+    REG ADD "HKLM\SYSTEM\CurrentControlSet\Services\i8042prt\Parameters" /F /V CrashOnCtrlScroll /T REG_DWORD /D 1
+    REG ADD "HKLM\SYSTEM\CurrentControlSet\Services\kbdhid\Parameters" /F /V CrashOnCtrlScroll /T REG_DWORD /D 1
+    REG ADD "HKLM\SYSTEM\CurrentControlSet\Services\hyperkbd\Parameters" /F /V CrashOnCtrlScroll /T REG_DWORD /D 1
+)
+
+IF DEFINED _CrashOnPowerButton REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Power" /F /V PowerButtonBugcheck /T REG_DWORD /D 1

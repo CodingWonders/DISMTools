@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
 Imports DISMTools.Utilities
@@ -19,36 +19,12 @@ Public Class RemProvAppxPackage
         DynaLog.LogMessage("Detecting AppX packages to remove...")
         If ListView1.CheckedItems.Count = 0 Then
             DynaLog.LogMessage("No items have been selected for removal.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("Please specify AppX packages to remove and try again.", vbOKOnly + vbCritical, "Remove provisioned AppX packages")
-                        Case "ESN"
-                            MsgBox("Especifique paquetes AppX a eliminar e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar paquetes aprovisionados AppX")
-                        Case "FRA"
-                            MsgBox("Veuillez indiquer les paquets AppX à supprimer et réessayer.", vbOKOnly + vbCritical, "Supprimer les paquets AppX provisionnés")
-                        Case "PTB", "PTG"
-                            MsgBox("Especifique os pacotes AppX a remover e tente novamente.", vbOKOnly + vbCritical, "Remover pacotes AppX aprovisionados")
-                        Case "ITA"
-                            MsgBox("Specificare i pacchetti AppX da rimuovere e riprovare", vbOKOnly + vbCritical, "Rimuovere i pacchetti AppX in dotazione")
-                    End Select
-                Case 1
-                    MsgBox("Please specify AppX packages to remove and try again.", vbOKOnly + vbCritical, "Remove provisioned AppX packages")
-                Case 2
-                    MsgBox("Especifique paquetes AppX a eliminar e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar paquetes aprovisionados AppX")
-                Case 3
-                    MsgBox("Veuillez indiquer les paquets AppX à supprimer et réessayer.", vbOKOnly + vbCritical, "Supprimer les paquets AppX provisionnés")
-                Case 4
-                    MsgBox("Especifique os pacotes AppX a remover e tente novamente.", vbOKOnly + vbCritical, "Remover pacotes AppX aprovisionados")
-                Case 5
-                    MsgBox("Specificare i pacchetti AppX da rimuovere e riprovare", vbOKOnly + vbCritical, "Rimuovere i pacchetti AppX in dotazione")
-            End Select
+            MsgBox(LocalizationService.ForSection("RemoveAppx.Validation")("Packages.Required.Message"), vbOKOnly + vbCritical, LocalizationService.ForSection("RemoveAppx.Validation")("Prov.Title"))
             Exit Sub
         Else
             DynaLog.LogMessage("AppX packages to remove: " & AppxRemovalCount)
             If AppxRemovalCount > 65535 Then
-                MsgBox("Right now, you can only specify less than 65535 AppX packages. This is a program limitation that will be gone in a future update.", vbOKOnly + vbCritical, "Remove provisioned AppX packages")
+                MsgBox(LocalizationService.ForSection("AppxPackages.Remove.Messages")("Right.Only.Message"), vbOKOnly + vbCritical, LocalizationService.ForSection("AppxPackages.Remove.Messages")("Prov.Label"))
                 Exit Sub
             Else
                 DynaLog.LogMessage("Adding AppX packages to queue...")
@@ -78,31 +54,7 @@ Public Class RemProvAppxPackage
                             DynaLog.LogMessage("Desktop Experience has been detected as a disabled feature.")
                             Dim msg As String = ""
                             ' Display incompatibility
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
-                                        Case "ESN"
-                                            msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
-                                        Case "FRA"
-                                            msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
-                                        Case "PTB", "PTG"
-                                            msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
-                                        Case "ITA"
-                                            msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
-                                    End Select
-                                Case 1
-                                    msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
-                                Case 2
-                                    msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
-                                Case 3
-                                    msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
-                                Case 4
-                                    msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
-                                Case 5
-                                    msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
-                            End Select
+                            msg = LocalizationService.ForSection("RemoveAppx.Validation")("DesktopExperience.Message")
                             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                             Exit Sub
                         End If
@@ -128,31 +80,7 @@ Public Class RemProvAppxPackage
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
+            MsgBox(LocalizationService.ForSection("RemoveAppx.Init")("UnsupportedImage.Message"), vbOKOnly + vbCritical, Text)
             Return False
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
@@ -174,7 +102,7 @@ Public Class RemProvAppxPackage
                                                                                                                                               Casters.CastDismArchitecture(appxPackage.PackageArchitecture),
                                                                                                                                               appxPackage.PackageResourceId,
                                                                                                                                               appxPackage.PackageVersion.ToString(),
-                                                                                                                                              appxPackage.GetLocalizedRegistrationStatus(MainForm.MountDir, MainForm.Language)})).ToArray())
+                                                                                                                                              appxPackage.GetLocalizedRegistrationStatus(MainForm.MountDir)})).ToArray())
         Else
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageName,
                                                                                                                                          String.Format("{0}{1}", If(MainForm.AppxDisplayNameFormatOnRemoval < 2, appxPackage.PackageName, ""),
@@ -195,121 +123,16 @@ Public Class RemProvAppxPackage
         If Not Initialize() Then
             Close()
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Remove provisioned AppX packages"
-                        ImageTaskHeader1.ItemText = Text
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        ListView1.Columns(0).Text = "Package name"
-                        ListView1.Columns(1).Text = "Application display name"
-                        ListView1.Columns(2).Text = "Architecture"
-                        ListView1.Columns(3).Text = "Resource ID"
-                        ListView1.Columns(4).Text = "Version"
-                        ListView1.Columns(5).Text = "Registered to any user?"
-                    Case "ESN"
-                        Text = "Eliminar paquetes aprovisionados AppX"
-                        ImageTaskHeader1.ItemText = Text
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "Nombre de paquete"
-                        ListView1.Columns(1).Text = "Nombre de aplicación"
-                        ListView1.Columns(2).Text = "Arquitectura"
-                        ListView1.Columns(3).Text = "ID de recursos"
-                        ListView1.Columns(4).Text = "Versión"
-                        ListView1.Columns(5).Text = "¿Registrada a un usuario?"
-                    Case "FRA"
-                        Text = "Supprimer les paquets AppX provisionnés"
-                        ImageTaskHeader1.ItemText = Text
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        ListView1.Columns(0).Text = "Nom du paquet"
-                        ListView1.Columns(1).Text = "Nom d'affichage de l'application"
-                        ListView1.Columns(2).Text = "Architecture"
-                        ListView1.Columns(3).Text = "ID de la ressource"
-                        ListView1.Columns(4).Text = "Version"
-                        ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
-                    Case "PTB", "PTG"
-                        Text = "Remover pacotes AppX provisionados"
-                        ImageTaskHeader1.ItemText = Text
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "Nome do pacote"
-                        ListView1.Columns(1).Text = "Nome de apresentação da aplicação"
-                        ListView1.Columns(2).Text = "Arquitetura"
-                        ListView1.Columns(3).Text = "ID do recurso"
-                        ListView1.Columns(4).Text = "Versão"
-                        ListView1.Columns(5).Text = "Registado por algum utilizador?"
-                    Case "ITA"
-                        Text = "Rimuovi i pacchetti AppX in provisioning"
-                        ImageTaskHeader1.ItemText = Text
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        ListView1.Columns(0).Text = "Nome del pacchetto"
-                        ListView1.Columns(1).Text = "Nome del display dell'applicazione"
-                        ListView1.Columns(2).Text = "Architettura"
-                        ListView1.Columns(3).Text = "ID risorsa"
-                        ListView1.Columns(4).Text = "Versione"
-                        ListView1.Columns(5).Text = "Registrato a qualche utente?"
-                End Select
-            Case 1
-                Text = "Remove provisioned AppX packages"
-                ImageTaskHeader1.ItemText = Text
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                ListView1.Columns(0).Text = "Package name"
-                ListView1.Columns(1).Text = "Application display name"
-                ListView1.Columns(2).Text = "Architecture"
-                ListView1.Columns(3).Text = "Resource ID"
-                ListView1.Columns(4).Text = "Version"
-                ListView1.Columns(5).Text = "Registered to any user?"
-            Case 2
-                Text = "Eliminar paquetes aprovisionados AppX"
-                ImageTaskHeader1.ItemText = Text
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "Nombre de paquete"
-                ListView1.Columns(1).Text = "Nombre de aplicación"
-                ListView1.Columns(2).Text = "Arquitectura"
-                ListView1.Columns(3).Text = "ID de recursos"
-                ListView1.Columns(4).Text = "Versión"
-                ListView1.Columns(5).Text = "¿Registrada a un usuario?"
-            Case 3
-                Text = "Supprimer les paquets AppX provisionnés"
-                ImageTaskHeader1.ItemText = Text
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                ListView1.Columns(0).Text = "Nom du paquet"
-                ListView1.Columns(1).Text = "Nom d'affichage de l'application"
-                ListView1.Columns(2).Text = "Architecture"
-                ListView1.Columns(3).Text = "ID de la ressource"
-                ListView1.Columns(4).Text = "Version"
-                ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
-            Case 4
-                Text = "Remover pacotes AppX provisionados"
-                ImageTaskHeader1.ItemText = Text
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "Nome do pacote"
-                ListView1.Columns(1).Text = "Nome de apresentação da aplicação"
-                ListView1.Columns(2).Text = "Arquitetura"
-                ListView1.Columns(3).Text = "ID do recurso"
-                ListView1.Columns(4).Text = "Versão"
-                ListView1.Columns(5).Text = "Registado por algum utilizador?"
-            Case 5
-                Text = "Rimuovi i pacchetti AppX in provisioning"
-                ImageTaskHeader1.ItemText = Text
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                ListView1.Columns(0).Text = "Nome del pacchetto"
-                ListView1.Columns(1).Text = "Nome del display dell'applicazione"
-                ListView1.Columns(2).Text = "Architettura"
-                ListView1.Columns(3).Text = "ID risorsa"
-                ListView1.Columns(4).Text = "Versione"
-                ListView1.Columns(5).Text = "Registrato a qualche utente?"
-        End Select
+        Text = LocalizationService.ForSection("RemoveAppx")("Prov.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("RemoveAppx").Format("Image.Task.Header.Label", Text)
+        OK_Button.Text = LocalizationService.ForSection("RemoveAppx")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("RemoveAppx")("Cancel.Button")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("RemoveAppx")("PackageName.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("RemoveAppx")("App.Display.Name.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("RemoveAppx")("Architecture.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("RemoveAppx")("ResourceID.Column")
+        ListView1.Columns(4).Text = LocalizationService.ForSection("RemoveAppx")("Version.Column")
+        ListView1.Columns(5).Text = LocalizationService.ForSection("RemoveAppx")("Registered.User.Column")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -370,31 +193,7 @@ Public Class RemProvAppxPackage
             End If
 
             Try
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                MainForm.ResViewTSMI.Text = "View resources of " & friendlyDisplayName
-                            Case "ESN"
-                                MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
-                            Case "FRA"
-                                MainForm.ResViewTSMI.Text = "Voir les ressources de " & friendlyDisplayName
-                            Case "PTB", "PTG"
-                                MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
-                            Case "ITA"
-                                MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & friendlyDisplayName
-                        End Select
-                    Case 1
-                        MainForm.ResViewTSMI.Text = "View resources of " & friendlyDisplayName
-                    Case 2
-                        MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
-                    Case 3
-                        MainForm.ResViewTSMI.Text = "Voir les ressources de " & friendlyDisplayName
-                    Case 4
-                        MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
-                    Case 5
-                        MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & friendlyDisplayName
-                End Select
+                MainForm.ResViewTSMI.Text = LocalizationService.ForSection("RemoveAppx").Format("ViewResources.Label", friendlyDisplayName)
             Catch ex As Exception
                 MainForm.ResViewTSMI.Text = ""
                 MainForm.ResViewTSMI.Visible = False
