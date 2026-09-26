@@ -1290,7 +1290,12 @@ Public Class MainForm
                 LanguageCode = LocalizationService.ResolveStartupCultureCode(PersKey.GetValue("LanguageCode", LocalizationService.DefaultCultureCode))
                 If Language > -1 Then
                     ParseLanguageCode(Language)
-                    PersKey.DeleteValue("Language", False)
+                    Try
+                        PersKey.DeleteValue("Language", False)
+                    Catch ex As Exception
+                        DynaLog.LogMessage("Could not delete this value. " & ex.Message & ". Attempting fallback...")
+                        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"), String.Format("delete HKCU\SOFTWARE\DISMTools\{0}\Personalization /v Language /f", If(dtBranch.Contains("pre"), "Preview", "Stable")))
+                    End Try
                 End If
                 LogFont = PersKey.GetValue("LogFont").ToString()
                 LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
