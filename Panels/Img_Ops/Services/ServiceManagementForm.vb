@@ -98,7 +98,7 @@ Public Class ServiceManagementForm
         End If
     End Sub
 
-    Private Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = LocalizationService.ForSection("Designer.Services")("Intro.Message")
         ColumnHeader1.Text = LocalizationService.ForSection("Designer.Services")("ServiceName.Column")
         ColumnHeader2.Text = LocalizationService.ForSection("Designer.Services")("DisplayName.Column")
@@ -225,7 +225,10 @@ Public Class ServiceManagementForm
         isModified = False
 
         If Not Debugger.IsAttached Then DynaLog.DisableLogging()
-        ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
+        Dim mountDir As String = MainForm.MountDir
+        Await Task.Run(Sub()
+                           ServiceList = WindowsServiceHelper.GetServiceList(mountDir)
+                       End Sub)
         If Not Debugger.IsAttached Then DynaLog.EnableLogging()
 
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
@@ -356,7 +359,7 @@ Public Class ServiceManagementForm
         If isBusy Then WindowHelper.DisableCloseCapability(Handle)
     End Sub
 
-    Sub ReloadServiceInformation()
+    Private Async Sub ReloadServiceInformation()
         Cursor = Cursors.WaitCursor
         NoServiceSelectedPanel.Visible = True
         ListView1.Items.Clear()
@@ -365,9 +368,12 @@ Public Class ServiceManagementForm
         isModified = False
 
         If Not Debugger.IsAttached Then DynaLog.DisableLogging()
-        ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
+        Dim mountDir As String = MainForm.MountDir
+        Await Task.Run(Sub()
+                           ServiceList = WindowsServiceHelper.GetServiceList(mountDir)
+                       End Sub)
         If Not Debugger.IsAttached Then DynaLog.EnableLogging()
-        
+
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
 
         Cursor = Cursors.Arrow
