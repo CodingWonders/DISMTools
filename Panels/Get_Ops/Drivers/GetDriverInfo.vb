@@ -522,7 +522,7 @@ Public Class GetDriverInfo
                     If Not (signer Is Nothing OrElse signer = "") Then
                         DynaLog.LogMessage("Driver signer information has been obtained.")
                         DynaLog.LogMessage(String.Format("Driver file: {0} ; Signer: {1}", Quote & Path.GetFileName(drv.OriginalFileName) & Quote, signer))
-                        Label44.Text &= LocalizationService.ForSection("GetDriverInfo")("Text1.Label") & signer
+                        Label44.Text &= " " & LocalizationService.ForSection("GetDriverInfo")("Text1.Label") & " " & signer
                     End If
                 End If
             Else
