@@ -7,7 +7,7 @@
 #      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
-#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) Helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
 #                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
@@ -32,7 +32,7 @@ using namespace System.Collections.Generic
 param (
     [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'StartDevelopment', 'Help')] [string]$cmd,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string]$arch,
-    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
+    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFiles,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [switch]$copyToVentoy,
@@ -296,22 +296,34 @@ function Start-PEGeneration
         Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $true | Out-Null
         Write-Host "PE generated successfully"
         # Continue ISO customization
-        Write-Host "Copying image file. This can take some time..."
-        $totalTime = 0
-        if (Test-Path "$imgFile" -PathType Leaf)
-        {
-            $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$taskRoot\media\sources\install.wim" -Verbose -Force -Recurse -Container }
-        }
-        if ($?)
-        {
-            Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
-        }
-        else
-        {
-            Write-Host "The image file has not been copied successfully."
-            Write-Host "`nPress ENTER to exit"
-            Read-Host | Out-Null
-            exit 1
+        Write-Host "Copying image file(s). This can take some time..."
+        $imgId = 1
+        $imgFilesArray = $imgFiles.Split("|")
+        foreach ($imgFile in $imgFilesArray) {
+            $totalTime = 0
+            if (Test-Path "$imgFile" -PathType Leaf)
+            {
+                $destinationImageFileName = "install"
+                if ($imgId -gt 1) {
+                    $destinationImageFileName += "_$imgId"
+                }
+                $destinationImageFilePath = "$taskRoot\media\sources\$($destinationImageFileName).wim"
+
+                # Display initial stats
+                Write-Host " --> Source Image File : $imgFile"
+                Write-Host " --> Destination Path  : $destinationImageFilePath"
+                Write-Host "Copying image file..."
+                $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$destinationImageFilePath" -Force -Recurse -Container }
+            }
+            if ($?)
+            {
+                Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
+                $imgId++
+            }
+            else
+            {
+                Write-Host "The image file has not been copied successfully."
+            }
         }
         Write-Host "Copying setup tools..."
         Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$taskRoot\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue

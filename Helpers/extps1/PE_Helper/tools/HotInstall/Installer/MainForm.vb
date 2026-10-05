@@ -447,13 +447,13 @@ Public Class MainForm
     ''' </summary>
     ''' <param name="Source">The source folder to copy files from</param>
     ''' <param name="Destination">The destination folder to copy files to</param>
-    ''' <param name="ExcludedFile">The file to exclude from the copy process</param>
+    ''' <param name="ExcludedFilePattern">The file to exclude from the copy process</param>
     ''' <remarks></remarks>
-    Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFile As String = "", Optional ReportProgress As Boolean = True)
+    Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFilePattern As String = "", Optional ReportProgress As Boolean = True)
         DynaLog.LogMessage("Preparing to copy files and directories...")
         DynaLog.LogMessage("- Source Directory: " & Source)
         DynaLog.LogMessage("- Destination Directory: " & Destination)
-        DynaLog.LogMessage("- Excluded File: " & ExcludedFile)
+        DynaLog.LogMessage("- Excluded File: " & ExcludedFilePattern)
         Try
             If Not Directory.Exists(Destination) Then
                 DynaLog.LogMessage("Destination does not exist. Creating...")
@@ -484,7 +484,7 @@ Public Class MainForm
                         For Each FileToCopy In Directory.GetFiles(SubDirInSource, "*", SearchOption.AllDirectories)
                             ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
                             If ReportProgress Then InstallerBW.ReportProgress(5)
-                            If Path.GetFileName(FileToCopy) = ExcludedFile Then Continue For
+                            If Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) AndAlso Path.GetFileName(FileToCopy).IndexOf(ExcludedFilePattern, StringComparison.OrdinalIgnoreCase) > -1 Then Continue For
                             Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                             Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
                             File.Copy(FileToCopy, destinationPath, True)
@@ -513,7 +513,7 @@ Public Class MainForm
                     For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
                         ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
                         If ReportProgress Then InstallerBW.ReportProgress(5)
-                        If Path.GetFileName(FileToCopy) = ExcludedFile Then Continue For
+                        If Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) AndAlso Path.GetFileName(FileToCopy) = ExcludedFilePattern Then Continue For
                         Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                         Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
                         File.Copy(FileToCopy, destinationPath, True)
@@ -842,7 +842,7 @@ Public Class MainForm
         ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_FileCopy")
         InstallerBW.ReportProgress(5)
         DynaLog.LogMessage("Copying files to temporary directory...")
-        CopyFiles(If(TestMode Or TestBCD, Application.StartupPath, Path.GetPathRoot(Application.StartupPath)), Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), "install.wim")
+        CopyFiles(If(TestMode Or TestBCD, Application.StartupPath, Path.GetPathRoot(Application.StartupPath)), Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), "install")
         If Not TestMode OrElse (TestMode AndAlso TestBCD) Then
             DynaLog.LogMessage("We either in official mode or BCD test mode. Creating BCD entry...")
             CurrentStage = InstallationStage.InstallerStage.BootEntryCreation

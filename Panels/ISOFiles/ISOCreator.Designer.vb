@@ -25,6 +25,10 @@ Partial Class ISOCreator
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ISOCreator))
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.lbImageFiles = New System.Windows.Forms.ListBox()
+        Me.btnRemoveImage = New System.Windows.Forms.Button()
+        Me.btnAddImage = New System.Windows.Forms.Button()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
@@ -69,6 +73,7 @@ Partial Class ISOCreator
         Me.ADKDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.GroupBox1.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -93,6 +98,9 @@ Partial Class ISOCreator
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.Panel3)
+        Me.GroupBox1.Controls.Add(Me.btnRemoveImage)
+        Me.GroupBox1.Controls.Add(Me.btnAddImage)
         Me.GroupBox1.Controls.Add(Me.CheckBox4)
         Me.GroupBox1.Controls.Add(Me.Button6)
         Me.GroupBox1.Controls.Add(Me.ListView1)
@@ -115,6 +123,50 @@ Partial Class ISOCreator
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Options"
+        '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Controls.Add(Me.lbImageFiles)
+        Me.Panel3.Location = New System.Drawing.Point(24, 73)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(1145, 65)
+        Me.Panel3.TabIndex = 15
+        '
+        'lbImageFiles
+        '
+        Me.lbImageFiles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbImageFiles.FormattingEnabled = True
+        Me.lbImageFiles.HorizontalScrollbar = True
+        Me.lbImageFiles.IntegralHeight = False
+        Me.lbImageFiles.Location = New System.Drawing.Point(0, 0)
+        Me.lbImageFiles.Name = "lbImageFiles"
+        Me.lbImageFiles.Size = New System.Drawing.Size(1145, 65)
+        Me.lbImageFiles.TabIndex = 13
+        '
+        'btnRemoveImage
+        '
+        Me.btnRemoveImage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRemoveImage.Enabled = False
+        Me.btnRemoveImage.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnRemoveImage.Location = New System.Drawing.Point(1175, 106)
+        Me.btnRemoveImage.Name = "btnRemoveImage"
+        Me.btnRemoveImage.Size = New System.Drawing.Size(37, 32)
+        Me.btnRemoveImage.TabIndex = 14
+        Me.btnRemoveImage.Text = "-"
+        Me.btnRemoveImage.UseVisualStyleBackColor = True
+        '
+        'btnAddImage
+        '
+        Me.btnAddImage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnAddImage.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.btnAddImage.Location = New System.Drawing.Point(1175, 73)
+        Me.btnAddImage.Name = "btnAddImage"
+        Me.btnAddImage.Size = New System.Drawing.Size(37, 32)
+        Me.btnAddImage.TabIndex = 14
+        Me.btnAddImage.Text = "+"
+        Me.btnAddImage.UseVisualStyleBackColor = True
         '
         'CheckBox4
         '
@@ -146,9 +198,9 @@ Partial Class ISOCreator
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
         Me.ListView1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ListView1.FullRowSelect = True
-        Me.ListView1.Location = New System.Drawing.Point(24, 73)
+        Me.ListView1.Location = New System.Drawing.Point(24, 144)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1188, 173)
+        Me.ListView1.Size = New System.Drawing.Size(1188, 102)
         Me.ListView1.TabIndex = 10
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -538,6 +590,7 @@ Partial Class ISOCreator
         Me.Text = "Create an ISO file"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -593,4 +646,8 @@ Partial Class ISOCreator
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents lbImageFiles As System.Windows.Forms.ListBox
+    Friend WithEvents btnRemoveImage As System.Windows.Forms.Button
+    Friend WithEvents btnAddImage As System.Windows.Forms.Button
 End Class
