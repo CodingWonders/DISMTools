@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Threading.Tasks
+Imports Microsoft.Dism
 
 Namespace Elements.ISOCreation
 
@@ -8,6 +9,8 @@ Namespace Elements.ISOCreation
         Public Property SourceImageFiles As List(Of String)
         Public Property DestinationIsoFile As String
         Public Property DestinationIsoArchitecture As IsoArchitecture
+
+        Public Property ImageInformationCollection As List(Of DismImageInfoCollection)
 
         Private ReadOnly Property IsoArchitectureString As String
             Get
@@ -25,8 +28,9 @@ Namespace Elements.ISOCreation
         Public Property UseUEFICA2023Binaries As Boolean
         Public Property IncludeSystemDrivers As Boolean
 
-        Public Sub New(SourceImage As List(Of String), DestinationIso As String, Architecture As IsoArchitecture)
+        Public Sub New(SourceImage As List(Of String), InfoCollection As List(Of DismImageInfoCollection), DestinationIso As String, Architecture As IsoArchitecture)
             SourceImageFiles = SourceImage
+            ImageInformationCollection = InfoCollection
             DestinationIsoFile = DestinationIso
             DestinationIsoArchitecture = Architecture
             UnattendedAnswerFile = ""
@@ -35,8 +39,9 @@ Namespace Elements.ISOCreation
             IncludeSystemDrivers = False
         End Sub
 
-        Public Sub New(SourceImage As List(Of String), DestinationIso As String, Architecture As IsoArchitecture, AnswerFile As String, ToVentoyDrive As Boolean, UseUEFICA23BootBins As Boolean, IncludeSysDrivers As Boolean)
+        Public Sub New(SourceImage As List(Of String), InfoCollection As List(Of DismImageInfoCollection), DestinationIso As String, Architecture As IsoArchitecture, AnswerFile As String, ToVentoyDrive As Boolean, UseUEFICA23BootBins As Boolean, IncludeSysDrivers As Boolean)
             SourceImageFiles = SourceImage
+            ImageInformationCollection = InfoCollection
             DestinationIsoFile = DestinationIso
             DestinationIsoArchitecture = Architecture
             UnattendedAnswerFile = AnswerFile
