@@ -2365,16 +2365,13 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a New features:
         '''
-        '''- Fixed an issue where component store repair tasks would fail if no sources were specified
-        '''
-        '''New features:
-        '''
-        '''- The Sysprep Preparation Tool now clears BITS transfer queues during Windows Update cache cleanup
-        '''- ISO file creation tasks in the ISO creator can now be double-clicked to load their settings
-        '''- The &quot;Configure System Recovery Settings&quot; Starter Script has been introduced
-        '''- The Service Manager allows you to visualize dependencies in diagrams you can export to pictures or Mermaid diag [resto de la cadena truncado]&quot;;.
+        '''- Multiple image files can now be added to ISO files
+        '''- The &quot;Enable Clipboard History&quot; Starter Script has been introduced
+        '''- Step indicators in the creation wizard have been redesigned
+        '''- Service information is now loaded asynchronously in the manager
+        '''- 7-Zip has been updated to version 26.04.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
