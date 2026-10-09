@@ -104,7 +104,7 @@ Public Class ImgInfoSaveDlg
                                        ToList()) & CrLf
             Exit Sub
         End If
-        Contents &= GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")}.ToList())
+        Contents &= GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")}.ToList())
         Debug.WriteLine("[GetImageInformation] Starting task...")
         Try
             Debug.WriteLine("[GetImageInformation] Starting API...")
@@ -172,7 +172,7 @@ Public Class ImgInfoSaveDlg
         msg(1) = LocalizationService.ForSection("ImageInfoSave.Packages")("Basic.Ready.Message") & LocalizationService.ForSection("ImageInfoSave.Packages")("May.Take.Long.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Packages")("Prompt.Label")
         msg(2) = LocalizationService.ForSection("ImageInfoSave.Packages")("PackageInfo.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("PackageInfo.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         Debug.WriteLine("[GetPackageInformation] Starting task...")
         Try
             Debug.WriteLine("[GetPackageInformation] Starting API...")
@@ -344,7 +344,7 @@ Public Class ImgInfoSaveDlg
         Dim msg As String = ""
         msg = LocalizationService.ForSection("ImgInfo.PkgFiles")("Preparing.Package.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("Package.File.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         Debug.WriteLine("[GetPackageFileInformation] Starting task...")
         Try
             Debug.WriteLine("[GetPackageFileInformation] Starting API...")
@@ -499,7 +499,7 @@ Public Class ImgInfoSaveDlg
         msg(1) = LocalizationService.ForSection("ImageInfoSave.Features")("Basic.Ready.Message") & LocalizationService.ForSection("ImageInfoSave.Features")("May.Take.Long.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Features")("Prompt.Label")
         msg(2) = LocalizationService.ForSection("ImageInfoSave.Features")("FeatureInfo.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("FeatureInfo.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         Debug.WriteLine("[GetFeatureInformation] Starting task...")
         Try
             Debug.WriteLine("[GetFeatureInformation] Starting API...")
@@ -575,7 +575,7 @@ Public Class ImgInfoSaveDlg
         msg(1) = LocalizationService.ForSection("ImageInfoSave.AppxInfo")("Basic.Ready.Message") & LocalizationService.ForSection("ImageInfoSave.AppxInfo")("May.Take.Long.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.AppxInfo")("Prompt.Label")
         msg(2) = LocalizationService.ForSection("ImageInfoSave.AppxInfo")("Package.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("AppX.Package.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
             ImageToGetInfoFrom.ImageEditionId = " "
         End If
@@ -951,7 +951,7 @@ Public Class ImgInfoSaveDlg
         msg(1) = LocalizationService.ForSection("ImgInfo.Capabilities")("Basic.Ready.Message") & LocalizationService.ForSection("ImgInfo.Capabilities")("May.Take.Long.Message") & CrLf & CrLf & LocalizationService.ForSection("ImgInfo.Capabilities")("Save.Prompt.Label")
         msg(2) = LocalizationService.ForSection("ImgInfo.Capabilities")("CapabilityInfo.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("CapabilityInfo.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
             ImageToGetInfoFrom.ImageEditionId = " "
         End If
@@ -1024,8 +1024,8 @@ Public Class ImgInfoSaveDlg
           msg(2) = LocalizationService.ForSection("ImageInfoSave.Drivers")("DriverInfo.Message")
           msg(3) = LocalizationService.ForSection("ImageInfoSave.GetDriverInfo")("BgProcessDetect.Message") & LocalizationService.ForSection("ImageInfoSave.Drivers")("Setting.Applied.Task.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Drivers")("Get.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("DriverInfo.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label")),
-                                               LocalizationService.ForSection("ImageInfoSave.Report")("Box.Driver.Label") & If(AllDrivers, LocalizationService.ForSection("ImageInfoSave.Report")("WasSaved.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("Saved.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label")),
+                                               LocalizationService.ForSection("ImageInfoSave.Report")("Box.Driver.Label") & " " & If(AllDrivers, LocalizationService.ForSection("ImageInfoSave.Report")("WasSaved.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("Saved.Label"))}.ToList()) & CrLf
         Debug.WriteLine("[GetDriverInformation] Starting task...")
         Try
             Debug.WriteLine("[GetDriverInformation] Starting API...")
@@ -1165,7 +1165,7 @@ Public Class ImgInfoSaveDlg
             Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("UnsupportedWin.Message"), ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
-            Contents &= GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+            Contents &= GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
             Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
             Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
             ReportChanges(msg, 0)
@@ -1202,7 +1202,7 @@ Public Class ImgInfoSaveDlg
 
     Private Sub GetDefaultCSServiceInformation()
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("ServiceInfo.Label"), HeaderSize.Header2) & CrLf &
-                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
+                    GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         ReportChanges(LocalizationService.ForSection("ImageInfoSave.Report")("Getting.Service.Label"), 0.0)
         Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImgMountDir, OnlineMode)
         If serviceList.Any() Then
@@ -1331,7 +1331,8 @@ Public Class ImgInfoSaveDlg
                                 LocalizationService.ForSection("ImageInfoSave.Report")("Report.Contains.Message") & CrLf & CrLf &
                                 LocalizationService.ForSection("ImageInfoSave.Report")("Process.Primarily.Message") & " " & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote & CrLf, ParagraphStyle.Normal) & CrLf &
                    GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("TaskDetails.Label"), HeaderSize.Header2) & CrLf &
-                   GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ProcessesStarted.Label") & Date.Now, LocalizationService.ForSection("ImageInfoSave.Report")("Report.File.Target.Label") & Quote & SaveTarget & Quote}.ToList())
+                   GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ProcessesStarted.Label") & " " & Date.Now,
+                                              LocalizationService.ForSection("ImageInfoSave.Report")("Report.File.Target.Label") & " " & Quote & SaveTarget & Quote}.ToList())
 
         If OfflineMode Then SourceImage = ImgMountDir
 

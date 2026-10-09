@@ -1,0 +1,6 @@
+﻿Language: Batch
+Name: Enable Clipboard History
+Description: This script enables Clipboard History on Windows 10 and 11.
+Customizable: No
+@ECHO OFF
+REG ADD "HKCU\Software\Microsoft\Clipboard" /F /V EnableClipboardHistory /T REG_DWORD /D 1

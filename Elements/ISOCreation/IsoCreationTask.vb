@@ -1,13 +1,16 @@
 ﻿Imports System.IO
 Imports System.Threading.Tasks
+Imports Microsoft.Dism
 
 Namespace Elements.ISOCreation
 
     Public Class IsoCreationTask
 
-        Public Property SourceImageFile As String
+        Public Property SourceImageFiles As List(Of String)
         Public Property DestinationIsoFile As String
         Public Property DestinationIsoArchitecture As IsoArchitecture
+
+        Public Property ImageInformationCollection As List(Of DismImageInfoCollection)
 
         Private ReadOnly Property IsoArchitectureString As String
             Get
@@ -25,8 +28,9 @@ Namespace Elements.ISOCreation
         Public Property UseUEFICA2023Binaries As Boolean
         Public Property IncludeSystemDrivers As Boolean
 
-        Public Sub New(SourceImage As String, DestinationIso As String, Architecture As IsoArchitecture)
-            SourceImageFile = SourceImage
+        Public Sub New(SourceImage As List(Of String), InfoCollection As List(Of DismImageInfoCollection), DestinationIso As String, Architecture As IsoArchitecture)
+            SourceImageFiles = SourceImage
+            ImageInformationCollection = InfoCollection
             DestinationIsoFile = DestinationIso
             DestinationIsoArchitecture = Architecture
             UnattendedAnswerFile = ""
@@ -35,8 +39,9 @@ Namespace Elements.ISOCreation
             IncludeSystemDrivers = False
         End Sub
 
-        Public Sub New(SourceImage As String, DestinationIso As String, Architecture As IsoArchitecture, AnswerFile As String, ToVentoyDrive As Boolean, UseUEFICA23BootBins As Boolean, IncludeSysDrivers As Boolean)
-            SourceImageFile = SourceImage
+        Public Sub New(SourceImage As List(Of String), InfoCollection As List(Of DismImageInfoCollection), DestinationIso As String, Architecture As IsoArchitecture, AnswerFile As String, ToVentoyDrive As Boolean, UseUEFICA23BootBins As Boolean, IncludeSysDrivers As Boolean)
+            SourceImageFiles = SourceImage
+            ImageInformationCollection = InfoCollection
             DestinationIsoFile = DestinationIso
             DestinationIsoArchitecture = Architecture
             UnattendedAnswerFile = AnswerFile
@@ -59,8 +64,10 @@ Namespace Elements.ISOCreation
                 }
             }
 
-            ISOCreator.StartInfo.Arguments = String.Format("-noprofile -nologo -executionpolicy unrestricted -file {0}{1}{0} -cmd StartPEGen -arch {2} -imgFile {0}{3}{0} -isoPath {0}{4}{0} -unattendFile {0}{5}{0}{6}{7}{8}",
-                                                           Quote, PEHelperScriptPath, IsoArchitectureString, SourceImageFile, DestinationIsoFile, UnattendedAnswerFile, If(CopyToVentoy, " -copytoventoy", ""), If(UseUEFICA2023Binaries, " -bootex", ""), If(IncludeSystemDrivers, " -includeSysDrivers", ""))
+            Dim SourceImageFilePaths() As String = SourceImageFiles.ToArray()
+
+            ISOCreator.StartInfo.Arguments = String.Format("-noprofile -nologo -executionpolicy unrestricted -file {0}{1}{0} -cmd StartPEGen -arch {2} -imgFiles {0}{3}{0} -isoPath {0}{4}{0} -unattendFile {0}{5}{0}{6}{7}{8}",
+                                                           Quote, PEHelperScriptPath, IsoArchitectureString, String.Join("|", SourceImageFilePaths), DestinationIsoFile, UnattendedAnswerFile, If(CopyToVentoy, " -copytoventoy", ""), If(UseUEFICA2023Binaries, " -bootex", ""), If(IncludeSystemDrivers, " -includeSysDrivers", ""))
 
             Dim ExitCode As Integer = 0
 

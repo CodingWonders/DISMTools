@@ -1,5 +1,6 @@
 Imports System.Collections.Concurrent
 Imports System.Threading.Tasks
+Imports Microsoft.Dism
 
 Namespace Elements.ISOCreation
 
@@ -40,11 +41,11 @@ Namespace Elements.ISOCreation
         ''' <summary>
         ''' Queues an ISO creation task for execution.
         ''' </summary>
-        Public Function QueueJob(sourceImage As String, destinationIso As String, architecture As IsoArchitecture,
+        Public Function QueueJob(sourceImage As List(Of String), infoCollection As List(Of DismImageInfoCollection), destinationIso As String, architecture As IsoArchitecture,
                                 unattendedFile As String, copyToVentoy As Boolean, useUEFICA2023 As Boolean,
                                 includeSystemDrivers As Boolean) As Integer
 
-            Dim task As New IsoCreationTask(sourceImage, destinationIso, architecture, unattendedFile,
+            Dim task As New IsoCreationTask(sourceImage, infoCollection, destinationIso, architecture, unattendedFile,
                                             copyToVentoy, useUEFICA2023, includeSystemDrivers)
 
             Dim jobId = System.Threading.Interlocked.Increment(_nextJobId)
@@ -197,7 +198,7 @@ Namespace Elements.ISOCreation
     ''' </summary>
     Public Class JobMetadata
         Public Property DestinationIsoFile As String
-        Public Property SourceImageFile As String
+        Public Property SourceImageFile As List(Of String)
         Public Property Architecture As IsoArchitecture
     End Class
 

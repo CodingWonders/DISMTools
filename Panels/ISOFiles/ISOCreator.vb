@@ -22,6 +22,9 @@ Public Class ISOCreator
     Private Shared _jobManager As IsoCreationJobManager = New IsoCreationJobManager(maxConcurrentTasks:=MainForm.PEHelper_MaxConcurrentISO)
     Private _currentJobId As Integer = -1
 
+    Private ImageInformationCollection As New List(Of DismImageInfoCollection)
+
+
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Text = LocalizationService.ForSection("ISOCreator")("CreateIsofile.Label")
         ImageTaskHeader1.ItemText = Text
@@ -58,12 +61,14 @@ Public Class ISOCreator
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        lbImageFiles.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         CreationJobsLV.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
+        lbImageFiles.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         CreationJobsLV.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -72,11 +77,7 @@ Public Class ISOCreator
         GroupBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
-        If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
-            Button4.Enabled = False
-        Else
-            Button4.Enabled = True
-        End If
+        Button4.Enabled = Not (MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
@@ -170,6 +171,10 @@ Public Class ISOCreator
         ColumnHeader7.Width = WindowHelper.ScaleLogical(960)
         ColumnHeader8.Width = WindowHelper.ScaleLogical(128)
 
+        ImageInformationCollection.Clear()
+        ListView1.Items.Clear()
+        lbImageFiles.Items.Clear()
+
         ' Hook into job manager events
         AddHandler _jobManager.JobStatusChanged, AddressOf JobManager_JobStatusChanged
         AddHandler _jobManager.JobProgressChanged, AddressOf JobManager_JobProgressChanged
@@ -245,26 +250,45 @@ Public Class ISOCreator
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         DynaLog.LogMessage("Source image file to test: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
+        btnAddImage.PerformClick()
     End Sub
 
-    Sub GetImageInfo(ImageFile As String)
-        DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
-        DynaLog.LogMessage("Checking if mounted image detector is busy...")
+    Private Sub GetInformationAboutImagesToAdd()
+        Button1.Enabled = False
+        Button2.Enabled = False
+        Button4.Enabled = False
         ListView1.Items.Clear()
         MainForm.StopMountedImageDetector()
+        ImageInformationCollection.Clear()
+
+        For Each ImageFile In lbImageFiles.Items
+            ImageInformationCollection.Add(GetImageInfo(ImageFile))
+        Next
+
+        DynaLog.LogMessage("This process has finished.")
+        Call MainForm.StartMountedImageDetector()
+        Button1.Enabled = True
+        Button2.Enabled = True
+        Button4.Enabled = Not (MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement)
+    End Sub
+
+    Private Function GetImageInfo(ImageFile As String) As DismImageInfoCollection
+        DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
+        DynaLog.LogMessage("Checking if mounted image detector is busy...")
+        Dim obtainedImageInfo As DismImageInfoCollection = Nothing
+        Do Until Not MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        Loop
+        Do Until Not MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        Loop
         Try
             DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
-            ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
-            DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
-            If ImageInfoCollection.Count > 0 Then
-                DynaLog.LogMessage("This file has images. Updating lists...")
-                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1),
-                                                                                                                       ImageInfo.ImageName,
-                                                                                                                       ImageInfo.ImageDescription,
-                                                                                                                       ImageInfo.ProductVersion.ToString(),
-                                                                                                                       Casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
-            End If
+            obtainedImageInfo = DismApi.GetImageInfo(ImageFile)
+            DynaLog.LogMessage("Information collection count: " & obtainedImageInfo.Count)
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = LocalizationService.ForSection("ISOCreator.GetImageInfo").Format("Gather.ImageFile.Message", ex.ToString(), ex.Message, Hex(ex.HResult))
@@ -277,9 +301,9 @@ Public Class ISOCreator
                 ' Don't do anything
             End Try
         End Try
-        DynaLog.LogMessage("This process has finished.")
-        MainForm.StartMountedImageDetector()
-    End Sub
+
+        Return obtainedImageInfo
+    End Function
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
         DynaLog.LogMessage("Specified destination: " & Quote & SaveFileDialog1.FileName & Quote)
@@ -332,7 +356,7 @@ Public Class ISOCreator
         Dim architecture As IsoArchitecture = GetArchitectureFromString(ComboBox1.SelectedItem.ToString())
         Dim unattFile As String = If(CheckBox1.Checked, TextBox4.Text, "")
 
-        _currentJobId = _jobManager.QueueJob(TextBox1.Text, TextBox3.Text, architecture, unattFile, CheckBox2.Checked, CheckBox3.Checked, CheckBox4.Checked)
+        _currentJobId = _jobManager.QueueJob(lbImageFiles.Items.Cast(Of String)().ToList(), ImageInformationCollection, TextBox3.Text, architecture, unattFile, CheckBox2.Checked, CheckBox3.Checked, CheckBox4.Checked)
 
         DynaLog.LogMessage("ISO creation job queued with ID: " & _currentJobId)
     End Sub
@@ -382,13 +406,7 @@ Public Class ISOCreator
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Selected image: " & selectedImage.ImageFile)
             TextBox1.Text = selectedImage.ImageFile
-        End If
-    End Sub
-
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
-            DynaLog.LogMessage("The specified file exists. Getting information...")
-            GetImageInfo(TextBox1.Text)
+            btnAddImage.PerformClick()
         End If
     End Sub
 
@@ -398,6 +416,7 @@ Public Class ISOCreator
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         TextBox1.Text = MainForm.SourceImg
+        btnAddImage.PerformClick()
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
@@ -619,8 +638,11 @@ Public Class ISOCreator
 
                 If SelectedIsoTaskInQueue IsNot Nothing Then
                     ' load details about the creation task
-                    TextBox1.Text = SelectedIsoTaskInQueue.SourceImageFile
                     TextBox3.Text = SelectedIsoTaskInQueue.DestinationIsoFile
+
+                    lbImageFiles.Items.Clear()
+                    lbImageFiles.Items.AddRange(SelectedIsoTaskInQueue.SourceImageFiles.ToArray())
+                    ImageInformationCollection = SelectedIsoTaskInQueue.ImageInformationCollection
 
                     Select Case SelectedIsoTaskInQueue.DestinationIsoArchitecture
                         Case IsoArchitecture.X86 : ComboBox1.SelectedItem = "x86"
@@ -634,6 +656,48 @@ Public Class ISOCreator
                     CheckBox2.Checked = SelectedIsoTaskInQueue.CopyToVentoy
                     CheckBox3.Checked = SelectedIsoTaskInQueue.UseUEFICA2023Binaries
                     CheckBox4.Checked = SelectedIsoTaskInQueue.IncludeSystemDrivers
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub btnAddImage_Click(sender As Object, e As EventArgs) Handles btnAddImage.Click
+        If TextBox1.Text <> "" AndAlso File.Exists(TextBox1.Text) Then
+            lbImageFiles.Items.Add(TextBox1.Text)
+            GetInformationAboutImagesToAdd()
+        Else
+            ISOMsg = LocalizationService.ForSection("ISOCreator.Validation")("Either.Source.Message")
+            MessageBox.Show(Me, ISOMsg, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
+
+    Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
+        If lbImageFiles.SelectedItems.Count = 1 Then
+            Try
+                Dim idx As Integer = lbImageFiles.SelectedIndex
+                lbImageFiles.Items.RemoveAt(idx)
+                ImageInformationCollection.RemoveAt(idx)
+            Catch ex As Exception
+
+            End Try
+        End If
+    End Sub
+
+    Private Sub lbImageFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbImageFiles.SelectedIndexChanged
+        If lbImageFiles.SelectedIndex < 0 Then Exit Sub
+        btnRemoveImage.Enabled = lbImageFiles.SelectedItems.Count = 1
+
+        Try
+            If ImageInformationCollection.Any() Then
+                ListView1.Items.Clear()
+                If ImageInformationCollection(lbImageFiles.SelectedIndex) IsNot Nothing Then
+                    ListView1.Items.AddRange(ImageInformationCollection(lbImageFiles.SelectedIndex).Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInformationCollection(lbImageFiles.SelectedIndex).IndexOf(ImageInfo) + 1),
+                                                                                                                                                               ImageInfo.ImageName,
+                                                                                                                                                               ImageInfo.ImageDescription,
+                                                                                                                                                               ImageInfo.ProductVersion.ToString(),
+                                                                                                                                                               Casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
                 End If
             End If
         Catch ex As Exception

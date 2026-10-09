@@ -675,19 +675,19 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        StepsTreeView.Nodes(0).Text = LocalizationService.ForSection("Designer.Unattend")("Welcome.Label")
-        StepsTreeView.Nodes(1).Text = LocalizationService.ForSection("Designer.Unattend")("RegionalConfig.Label")
-        StepsTreeView.Nodes(2).Text = LocalizationService.ForSection("Designer.Unattend")("Basic.System.Config.Label")
-        StepsTreeView.Nodes(3).Text = LocalizationService.ForSection("Designer.Unattend")("TreeNode.Label")
-        StepsTreeView.Nodes(4).Text = LocalizationService.ForSection("Designer.Unattend")("DiskConfig.Label")
-        StepsTreeView.Nodes(5).Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Label")
-        StepsTreeView.Nodes(6).Text = LocalizationService.ForSection("Designer.Unattend")("UserAccounts.Label")
-        StepsTreeView.Nodes(7).Text = LocalizationService.ForSection("Designer.Unattend")("VirtualMachine.Support.Label")
-        StepsTreeView.Nodes(8).Text = LocalizationService.ForSection("Designer.Unattend")("Wireless.Networking.Label")
-        StepsTreeView.Nodes(9).Text = LocalizationService.ForSection("Designer.Unattend")("SystemTelemetry.Label")
-        StepsTreeView.Nodes(10).Text = LocalizationService.ForSection("Designer.Unattend")("PostInstall.Scripts.Label")
-        StepsTreeView.Nodes(11).Text = LocalizationService.ForSection("Designer.Unattend")("Component.Settings.Label")
-        StepsTreeView.Nodes(12).Text = LocalizationService.ForSection("Designer.Unattend")("Finish.Label")
+        WizardStep1.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Welcome.Label")
+        WizardStep2.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("RegionalConfig.Label")
+        WizardStep3.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Basic.System.Config.Label")
+        WizardStep4.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("TreeNode.Label")
+        WizardStep5.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("DiskConfig.Label")
+        WizardStep6.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Label")
+        WizardStep7.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("UserAccounts.Label")
+        WizardStep8.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("VirtualMachine.Support.Label")
+        WizardStep9.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Wireless.Networking.Label")
+        WizardStep10.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("SystemTelemetry.Label")
+        WizardStep11.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("PostInstall.Scripts.Label")
+        WizardStep12.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Component.Settings.Label")
+        WizardStep13.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Finish.Label")
         Label2.Text = LocalizationService.ForSection("Designer.Unattend")("EditorMode.Label")
         Label1.Text = LocalizationService.ForSection("Designer.Unattend")("ExpressMode.Label")
         Label59.Text = LocalizationService.ForSection("Designer.Unattend")("Notereturn.Applying.Label")
@@ -890,7 +890,7 @@ Public Class NewUnattendWiz
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
-        StepsTreeView.BackColor = CurrentTheme.SectionBackgroundColor
+        flpWizardSteps.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = BackColor
         ComboBox2.BackColor = BackColor
         ComboBox3.BackColor = BackColor
@@ -985,7 +985,7 @@ Public Class NewUnattendWiz
         ToolStripButton1.Width = WindowHelper.ScaleLogical(96)
 
         SidePanel.BackColor = BackColor
-        StepsTreeView.ForeColor = ForeColor
+        flpWizardSteps.ForeColor = ForeColor
         PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox4.Image = If(CurrentTheme.IsDark, My.Resources.cmps_addfirstcomponent_dark, My.Resources.cmps_addfirstcomponent_light)
         PictureBox5.Image = If(CurrentTheme.IsDark, My.Resources.scripts_addfirstscript_dark, My.Resources.scripts_addfirstscript_light)
@@ -995,10 +995,8 @@ Public Class NewUnattendWiz
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
         InitScintilla("Consolas", 11)
-        StepsTreeView.ExpandAll()
 
         FontFamilyTSCB.SelectedItem = "Consolas"
-        SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
         DefaultContents = Scintilla1.Text
 
@@ -1239,11 +1237,6 @@ Public Class NewUnattendWiz
         SwitchScript(0)
     End Sub
 
-    Sub SelectTreeNode(NodeIndex As Integer)
-        StepsTreeView.SelectedNode = StepsTreeView.Nodes(NodeIndex)
-        StepsTreeView.Refresh()
-    End Sub
-
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
         DynaLog.LogMessage("Changing current page of the wizard...")
         DynaLog.LogMessage("New page to load: " & NewPage.ToString())
@@ -1279,35 +1272,20 @@ Public Class NewUnattendWiz
 
         Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
 
-        ' Select tree nodes according to page
-        Select Case CurrentWizardPage.WizardPage
-            Case UnattendedWizardPage.Page.WelcomePage
-                SelectTreeNode(0)
-            Case UnattendedWizardPage.Page.RegionalPage
-                SelectTreeNode(1)
-            Case UnattendedWizardPage.Page.SysConfigPage
-                SelectTreeNode(2)
-            Case UnattendedWizardPage.Page.TimeZonePage
-                SelectTreeNode(3)
-            Case UnattendedWizardPage.Page.DiskConfigPage
-                SelectTreeNode(4)
-            Case UnattendedWizardPage.Page.ProductKeyPage
-                SelectTreeNode(5)
-            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockoutPage
-                SelectTreeNode(6)
-            Case UnattendedWizardPage.Page.VirtualMachinePage
-                SelectTreeNode(7)
-            Case UnattendedWizardPage.Page.NetworkConnectionsPage
-                SelectTreeNode(8)
-            Case UnattendedWizardPage.Page.SystemTelemetryPage
-                SelectTreeNode(9)
-            Case UnattendedWizardPage.Page.PostInstallPage
-                SelectTreeNode(10)
-            Case UnattendedWizardPage.Page.ComponentPage
-                SelectTreeNode(11)
-            Case UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage
-                SelectTreeNode(12)
-        End Select
+        ' Select wizard step controls according to page
+        WizardStep1.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.WelcomePage
+        WizardStep2.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.RegionalPage
+        WizardStep3.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.SysConfigPage
+        WizardStep4.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.TimeZonePage
+        WizardStep5.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.DiskConfigPage
+        WizardStep6.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProductKeyPage
+        WizardStep7.WizardStepIsActive = {UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockoutPage}.Contains(CurrentWizardPage.WizardPage)
+        WizardStep8.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.VirtualMachinePage
+        WizardStep9.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.NetworkConnectionsPage
+        WizardStep10.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.SystemTelemetryPage
+        WizardStep11.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.PostInstallPage
+        WizardStep12.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ComponentPage
+        WizardStep13.WizardStepIsActive = {UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage}.Contains(CurrentWizardPage.WizardPage)
 
         ' Change sizes of controls if the normal resize event does not work
         'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
@@ -1611,7 +1589,7 @@ Public Class NewUnattendWiz
 
     Private Sub ExpressPanelTrigger_Click(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.Click
         IsInExpress = True
-        StepsTreeView.Enabled = True
+        flpWizardSteps.Enabled = True
         EditorPanelContainer.Visible = False
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
@@ -1660,7 +1638,7 @@ Public Class NewUnattendWiz
 
     Private Sub EditorPanelTrigger_Click(sender As Object, e As EventArgs) Handles EditorPanelTrigger.Click
         IsInExpress = False
-        StepsTreeView.Enabled = False
+        flpWizardSteps.Enabled = False
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
@@ -1703,14 +1681,6 @@ Public Class NewUnattendWiz
             ToolStripButton5.Checked = True
         End If
         Scintilla1.WrapMode = If(ToolStripButton5.Checked, WrapMode.Word, WrapMode.None)
-    End Sub
-
-    Sub SetNodeColors(nodes As TreeNodeCollection, bg As Color, fg As Color)
-        For Each node As TreeNode In nodes
-            node.BackColor = BackColor
-            node.ForeColor = ForeColor
-            SetNodeColors(node.Nodes, BackColor, ForeColor)
-        Next
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -2492,7 +2462,7 @@ Public Class NewUnattendWiz
         End If
     End Sub
 
-    Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs) Handles StepsTreeView.DrawNode
+    Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs)
         ' Determine the custom background color
         Dim customBackColor As Color = CurrentTheme.SectionBackgroundColor
 
@@ -2669,7 +2639,7 @@ Public Class NewUnattendWiz
         End Try
 
         IsInExpress = False
-        StepsTreeView.Enabled = False
+        flpWizardSteps.Enabled = False
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor

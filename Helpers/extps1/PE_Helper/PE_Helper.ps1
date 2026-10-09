@@ -7,7 +7,7 @@
 #      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
-#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) Helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
 #                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
@@ -32,7 +32,7 @@ using namespace System.Collections.Generic
 param (
     [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'StartDevelopment', 'Help')] [string]$cmd,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string]$arch,
-    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
+    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFiles,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [switch]$copyToVentoy,
@@ -296,22 +296,43 @@ function Start-PEGeneration
         Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $true | Out-Null
         Write-Host "PE generated successfully"
         # Continue ISO customization
-        Write-Host "Copying image file. This can take some time..."
-        $totalTime = 0
-        if (Test-Path "$imgFile" -PathType Leaf)
-        {
-            $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$taskRoot\media\sources\install.wim" -Verbose -Force -Recurse -Container }
+        Write-Host "Copying image file(s). This can take some time..."
+        $imgId = 1
+        $imgFilesArray = $imgFiles.Split("|")
+        $createImageFileMapping = $imgFilesArray.Count -gt 1
+        $imageMappingObjects = [List[PSCustomObject]]::new()
+        foreach ($imgFile in $imgFilesArray) {
+            $totalTime = 0
+            if (Test-Path "$imgFile" -PathType Leaf)
+            {
+                $destinationImageFileName = "install"
+                if ($imgId -gt 1) {
+                    $destinationImageFileName += "_$imgId"
+                }
+                $destinationImageFilePath = "$taskRoot\media\sources\$($destinationImageFileName).wim"
+
+                # Display initial stats
+                Write-Host " --> Source Image File : $imgFile"
+                Write-Host " --> Destination Path  : $destinationImageFilePath"
+                Write-Host "Copying image file..."
+                $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$destinationImageFilePath" -Force -Recurse -Container }
+                if ($?)
+                {
+                    Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
+                    $imgId++
+                    # Create the mapping object if we need to
+                    if ($createImageFileMapping) {
+                        $imageMappingObjects.Add([PSCustomObject]@{SourceImage = "$imgFile"; DestinationImage = "$($destinationImageFileName).wim"})
+                    }
+                }
+                else
+                {
+                    Write-Host "The image file has not been copied successfully."
+                }
+            }
         }
-        if ($?)
-        {
-            Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
-        }
-        else
-        {
-            Write-Host "The image file has not been copied successfully."
-            Write-Host "`nPress ENTER to exit"
-            Read-Host | Out-Null
-            exit 1
+        if ($imageMappingObjects.Count -gt 0) {
+            $imageMappingObjects | Select-Object @{Name = 'Source File'; Expression = 'SourceImage'}, @{Name = 'Image in Disc'; Expression = 'DestinationImage'} | ConvertTo-Csv -Delimiter '|' -NoTypeInformation | Out-File -FilePath "$taskRoot\media\sources\imagemap.csv"
         }
         Write-Host "Copying setup tools..."
         Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$taskRoot\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
@@ -2018,13 +2039,27 @@ function Get-WimIndexes
         $imageCount -= 1
     }
 
+    $canGoBack = $imageCount -gt 1
+
+    $imageMapFile = "$((Get-Location).Path)sources\imagemap.csv"
+
     if ($imageCount -gt 1) {
         switch ($imageSelectorBehavior) {
             "AskUser" {
                 Write-Host "`nMultiple installation images have been found in this installation medium. Please select an image file from the list and press ENTER."
-                Write-Host "`nDo note that, after the selection of an image, you may not be able to go back."
+                if (Test-Path -Path "$imageMapFile" -PathType Leaf) {
+                    Write-Host "Type `"MAP`" to view which images correspond to which image files during the creation of this installation medium."
+                }
                 $imageFiles | Out-Host
                 $wimPath = Read-Host "Choose the image file to apply"
+
+                if (($wimPath -eq "MAP") -and (Test-Path -Path "$imageMapFile" -PathType Leaf)) {
+                    # Show image file mappings
+                    Write-Host "`n`nThe source image files on the first column correspond to the image files on the second column. Use this table to"
+                    Write-Host "identify what image file to apply."
+                    Get-Content -Path "$imageMapFile" | ConvertFrom-Csv -Delimiter '|' | Out-Host | more
+                }
+
                 $wimPath = "$((Get-Location).Path)sources\$wimPath"
                 if (($wimPath -eq "") -or (-not (Test-Path "$wimPath" -PathType Leaf)))
                 {
@@ -2046,7 +2081,11 @@ function Get-WimIndexes
     }
     $imageInformation = (Get-WindowsImage -ImagePath "$wimPath")
     $imageInformation | Format-Table ImageIndex, ImageName | Out-Host
-    Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
+    Write-Host "To get more complete information about the Windows image, type `"INFO`""
+    if ($canGoBack) {
+        Write-Host "To select a different image file, press B."
+    }
+    Write-Host ""
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
@@ -2100,6 +2139,8 @@ function Get-WimIndexes
                 Write-Host "Could not get additional information."
                 Get-WimIndexes
             }
+        } elseif (($idx -eq "B") -and ($canGoBack)) {
+            Get-WimIndexes
         } else {
             Write-Host "Please specify an index and try again.`n"
             Get-WimIndexes
