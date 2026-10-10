@@ -8356,16 +8356,16 @@ Public Class MainForm
     End Function
 
 
-    Sub GetFeedNews()
+    Private Sub GetFeedNews()
         NewsLastUpdateDate = Date.Now
         DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
         FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         Try
-            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
+            Dim rssUrl As String = "https://codingwonders.github.io/feed.xml"
             Dim rssContent As String = ""
             Using client As New WebClient()
-                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0")
                 rssContent = client.DownloadString(rssUrl)
             End Using
             If Not String.IsNullOrWhiteSpace(rssContent) Then
@@ -8432,8 +8432,7 @@ Public Class MainForm
     Private Sub DisplayFeedItemCardContent(sender As Object, e As NewsFeedItemCardLinkClickedEventArgs)
         NewsFeedTextLabel.Text = e.Title
         Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
-        NewsFeedDateLabel.Text = String.Format("{0}, {1}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                           e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
+        NewsFeedDateLabel.Text = String.Format("{0}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture))
         ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
         ' we need to navigate to the blank page. https://stackoverflow.com/a/174483. But, as we pull stuff from
         ' the subreddit, we find that images just show as links to such -- not a good look. Change these too. Additionally,
@@ -8470,6 +8469,10 @@ Public Class MainForm
             If baseContents.StartsWith("<table> <tr><td> <a href=", StringComparison.OrdinalIgnoreCase) Then
                 baseContents = baseContents.Replace("<table> <tr><td> <a href=", "<table> <tr><td style=" & Quote & "width: 0px" & Quote & "> <a href=")
             End If
+
+            ' CWS Website (https://codingwonders.github.io) feeds have the title of an item as the H1. Find it and
+            ' replace it
+            baseContents = Regex.Replace(baseContents, String.Format("^<h1 id=.*>{0}<\/h1>", Regex.Escape(e.Title)), "", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
 
             Dim parsedContents As String = Regex.Replace(baseContents, "<p><a href=" & Quote & "(https?://preview\.redd\.it/[^" & Quote & "]+)" & Quote & ">\1</a></p>", "<p align=" & Quote & "center" & Quote & "><img src=" & Quote & "$1" & Quote & " /></p>")
             NewsFeedContent = contentStyle & parsedContents
@@ -8513,7 +8516,7 @@ Public Class MainForm
                     newsCard.FeedItemText = Article.Title.Text
                     newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
                     newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
-                    newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                    newsCard.FeedItemContents = CType(Article.Summary, TextSyndicationContent).Text
                     newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
                     newsCard.Left = WindowHelper.ScaleLogical(8)
                     newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)
@@ -9961,7 +9964,7 @@ Public Class MainForm
                 newsCard.FeedItemText = Article.Title.Text
                 newsCard.FeedItemDate = TimeZoneInfo.ConvertTime(Article.PublishDate.DateTime, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"))
                 newsCard.FeedItemLink = Article.Links(0).Uri.AbsoluteUri
-                newsCard.FeedItemContents = CType(Article.Content, TextSyndicationContent).Text
+                newsCard.FeedItemContents = CType(Article.Summary, TextSyndicationContent).Text
                 newsCard.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
                 newsCard.Left = WindowHelper.ScaleLogical(8)
                 newsCard.Top = If(FirstCard, ValueAddedTop, PreviousTop + newsCard.Height + ValueAddedTop)

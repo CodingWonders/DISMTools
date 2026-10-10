@@ -28,8 +28,7 @@ Public Class NewsFeedItemCard
         Set(value As Date)
             Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
             _date = value
-            FeedItemDateLabel.Text = String.Format("{0}, {1}", _date.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture),
-                                                               _date.ToString(currentOSCulture.DateTimeFormat.LongTimePattern, currentOSCulture))
+            FeedItemDateLabel.Text = String.Format("{0}", _date.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture))
         End Set
     End Property
 
