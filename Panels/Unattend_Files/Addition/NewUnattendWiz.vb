@@ -20,7 +20,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2692"
+    Const UnattendGenReleaseTag As String = "26102"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -487,10 +487,8 @@ Public Class NewUnattendWiz
         If Language <> "" Then
             DynaLog.LogMessage("Language is not nothing. Proceeding to add keywords...")
             Select Case Language
-                Case "powershell", "batch", "vbscript", "jscript"
-                    Scintilla3.SetKeywords(Index, KeywordSet)
-                Case "xml"
-                    Scintilla1.SetKeywords(Index, KeywordSet)
+                Case "powershell", "batch", "vbscript" : Scintilla3.SetKeywords(Index, KeywordSet)
+                Case "xml" : Scintilla1.SetKeywords(Index, KeywordSet)
             End Select
         End If
     End Sub
@@ -2335,8 +2333,6 @@ Public Class NewUnattendWiz
                                 scriptExt = "bat"
                             Case PostInstallScript.Extension.VBScript
                                 scriptExt = "vbs"
-                            Case PostInstallScript.Extension.JScript
-                                scriptExt = "js"
                         End Select
                         Dim scriptFile As String = String.Format("Script{0}.{1}", scriptCountFlag.ToString().PadLeft(4, "0"), scriptExt)
                         File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", StageString, scriptFile),
@@ -3126,7 +3122,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub UpdateScriptEditorLexer(LexerName As String)
-        If {"powershell", "batch", "vbscript", "jscript"}.Contains(LexerName) Then
+        If {"powershell", "batch", "vbscript"}.Contains(LexerName) Then
             ClearScriptEditorKeywords()
 
             ' I want a correct set of keywords whenever we switch the lexer language.
@@ -3144,11 +3140,6 @@ Public Class NewUnattendWiz
                 Case "vbscript"
                     Scintilla3.LexerName = "vb"
                     AddScintillaKeywords("vbscript", 0, "addhandler addressof aggregate alias and andalso ansi as assembly async attribute auto await begin binary boolean by byref byte byval call case catch cbool cbyte cchar ccur cdate cdbl cdec char cint class clng clnglng clngptr cobj compare const continue csbyte cshort csng cstr ctype cuint culng currency cushort custom cvar date decimal declare default defbool defbyte defcur defdate defdbl defdec defint deflng deflnglng deflngptr defobj defsng defstr defvar delegate dim directcast distinct do double each else elseif end endif enum equals erase error event exit explicit false finally for friend from function get gettype global gosub goto group handles if implement implements imports in inherits integer interface into is isfalse isnot istrue iterator join key let lib like load long longlong longptr loop lset me mid mod module mustinherit mustoverride mybase myclass namespace narrowing new next not nothing notinheritable notoverridable object of off on operator option optional or order orelse out overloads overridable overrides paramarray partial preserve private property protected ptrsafe public raiseevent readonly redim rem removehandler resume return rset sbyte select set shadows shared short single skip static step stop strict string structure sub synclock take text then throw to true try trycast type typeof uinteger ulong unicode unload until ushort using variant vbarray vbboolean vbbyte vbcurrency vbdataobject vbdate vbdecimal vbdouble vbempty vberror vbinteger vblong vblonglong vbnull vbobject vbsingle vbuserdefinedtype vbvariant wend when where while widening with withevents writeonly xor yield")
-                Case "jscript"
-                    Scintilla3.LexerName = "coffeescript"
-                    AddScintillaKeywords("jscript", 0, "abstract async await boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface let long native new null of package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with true false prototype yield")
-                    AddScintillaKeywords("jscript", 1, "Array Date eval hasOwnProperty Infinity isFinite isNaN isPrototypeOf Math NaN Number Object prototype String toString undefined valueOf")
-                    AddScintillaKeywords("jscript", 2, "alert all anchor anchors area assign blur button checkbox clearInterval clearTimeout clientInformation close closed confirm constructor crypto decodeURI decodeURIComponent defaultStatus document element elements embed embeds encodeURI encodeURIComponent escape event fileUpload focus form forms frame innerHeight innerWidth layer layers link location mimeTypes navigate navigator frames frameRate hidden history image images offscreenBuffering onblur onclick onerror onfocus onkeydown onkeypress onkeyup onmouseover onload onmouseup onmousedown onsubmit open opener option outerHeight outerWidth packages pageXOffset pageYOffset parent parseFloat parseInt password pkcs11 plugin prompt propertyIsEnum radio reset screenX screenY scroll secure select self setInterval setTimeout status submit taint text textarea top unescape untaint window")
             End Select
         End If
     End Sub
@@ -3163,8 +3154,6 @@ Public Class NewUnattendWiz
                     UpdateScriptEditorLexer("batch")
                 Case 2
                     UpdateScriptEditorLexer("vbscript")
-                Case 3
-                    UpdateScriptEditorLexer("jscript")
             End Select
         Catch ex As Exception
 
@@ -3194,8 +3183,6 @@ Public Class NewUnattendWiz
                     ComboBox16.SelectedIndex = 1
                 Case "Language: VBScript"
                     ComboBox16.SelectedIndex = 2
-                Case "Language: JScript"
-                    ComboBox16.SelectedIndex = 3
             End Select
 
             DynaLog.LogMessage("Loading contents...")

@@ -27,6 +27,19 @@ Partial Class NewUnattendWiz
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
         Me.flpWizardSteps = New System.Windows.Forms.FlowLayoutPanel()
+        Me.WizardStep1 = New DISMTools.WizardStep()
+        Me.WizardStep2 = New DISMTools.WizardStep()
+        Me.WizardStep3 = New DISMTools.WizardStep()
+        Me.WizardStep4 = New DISMTools.WizardStep()
+        Me.WizardStep5 = New DISMTools.WizardStep()
+        Me.WizardStep6 = New DISMTools.WizardStep()
+        Me.WizardStep7 = New DISMTools.WizardStep()
+        Me.WizardStep8 = New DISMTools.WizardStep()
+        Me.WizardStep9 = New DISMTools.WizardStep()
+        Me.WizardStep10 = New DISMTools.WizardStep()
+        Me.WizardStep11 = New DISMTools.WizardStep()
+        Me.WizardStep12 = New DISMTools.WizardStep()
+        Me.WizardStep13 = New DISMTools.WizardStep()
         Me.EditorPanelTrigger = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -360,19 +373,6 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.CPUnattendGenFBD = New System.Windows.Forms.FolderBrowserDialog()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
-        Me.WizardStep1 = New DISMTools.WizardStep()
-        Me.WizardStep2 = New DISMTools.WizardStep()
-        Me.WizardStep3 = New DISMTools.WizardStep()
-        Me.WizardStep4 = New DISMTools.WizardStep()
-        Me.WizardStep5 = New DISMTools.WizardStep()
-        Me.WizardStep6 = New DISMTools.WizardStep()
-        Me.WizardStep7 = New DISMTools.WizardStep()
-        Me.WizardStep8 = New DISMTools.WizardStep()
-        Me.WizardStep9 = New DISMTools.WizardStep()
-        Me.WizardStep10 = New DISMTools.WizardStep()
-        Me.WizardStep11 = New DISMTools.WizardStep()
-        Me.WizardStep12 = New DISMTools.WizardStep()
-        Me.WizardStep13 = New DISMTools.WizardStep()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.flpWizardSteps.SuspendLayout()
@@ -511,6 +511,136 @@ Partial Class NewUnattendWiz
         Me.flpWizardSteps.Name = "flpWizardSteps"
         Me.flpWizardSteps.Size = New System.Drawing.Size(244, 589)
         Me.flpWizardSteps.TabIndex = 1
+        '
+        'WizardStep1
+        '
+        Me.WizardStep1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep1.Location = New System.Drawing.Point(3, 3)
+        Me.WizardStep1.Name = "WizardStep1"
+        Me.WizardStep1.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep1.TabIndex = 0
+        Me.WizardStep1.WizardStepIsActive = False
+        Me.WizardStep1.WizardStepName = "Step"
+        '
+        'WizardStep2
+        '
+        Me.WizardStep2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep2.Location = New System.Drawing.Point(3, 37)
+        Me.WizardStep2.Name = "WizardStep2"
+        Me.WizardStep2.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep2.TabIndex = 1
+        Me.WizardStep2.WizardStepIsActive = False
+        Me.WizardStep2.WizardStepName = "Step"
+        '
+        'WizardStep3
+        '
+        Me.WizardStep3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep3.Location = New System.Drawing.Point(3, 71)
+        Me.WizardStep3.Name = "WizardStep3"
+        Me.WizardStep3.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep3.TabIndex = 2
+        Me.WizardStep3.WizardStepIsActive = False
+        Me.WizardStep3.WizardStepName = "Step"
+        '
+        'WizardStep4
+        '
+        Me.WizardStep4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep4.Location = New System.Drawing.Point(3, 105)
+        Me.WizardStep4.Name = "WizardStep4"
+        Me.WizardStep4.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep4.TabIndex = 3
+        Me.WizardStep4.WizardStepIsActive = False
+        Me.WizardStep4.WizardStepName = "Step"
+        '
+        'WizardStep5
+        '
+        Me.WizardStep5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep5.Location = New System.Drawing.Point(3, 139)
+        Me.WizardStep5.Name = "WizardStep5"
+        Me.WizardStep5.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep5.TabIndex = 4
+        Me.WizardStep5.WizardStepIsActive = False
+        Me.WizardStep5.WizardStepName = "Step"
+        '
+        'WizardStep6
+        '
+        Me.WizardStep6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep6.Location = New System.Drawing.Point(3, 173)
+        Me.WizardStep6.Name = "WizardStep6"
+        Me.WizardStep6.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep6.TabIndex = 5
+        Me.WizardStep6.WizardStepIsActive = False
+        Me.WizardStep6.WizardStepName = "Step"
+        '
+        'WizardStep7
+        '
+        Me.WizardStep7.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep7.Location = New System.Drawing.Point(3, 207)
+        Me.WizardStep7.Name = "WizardStep7"
+        Me.WizardStep7.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep7.TabIndex = 6
+        Me.WizardStep7.WizardStepIsActive = False
+        Me.WizardStep7.WizardStepName = "Step"
+        '
+        'WizardStep8
+        '
+        Me.WizardStep8.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep8.Location = New System.Drawing.Point(3, 241)
+        Me.WizardStep8.Name = "WizardStep8"
+        Me.WizardStep8.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep8.TabIndex = 7
+        Me.WizardStep8.WizardStepIsActive = False
+        Me.WizardStep8.WizardStepName = "Step"
+        '
+        'WizardStep9
+        '
+        Me.WizardStep9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep9.Location = New System.Drawing.Point(3, 275)
+        Me.WizardStep9.Name = "WizardStep9"
+        Me.WizardStep9.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep9.TabIndex = 8
+        Me.WizardStep9.WizardStepIsActive = False
+        Me.WizardStep9.WizardStepName = "Step"
+        '
+        'WizardStep10
+        '
+        Me.WizardStep10.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep10.Location = New System.Drawing.Point(3, 309)
+        Me.WizardStep10.Name = "WizardStep10"
+        Me.WizardStep10.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep10.TabIndex = 9
+        Me.WizardStep10.WizardStepIsActive = False
+        Me.WizardStep10.WizardStepName = "Step"
+        '
+        'WizardStep11
+        '
+        Me.WizardStep11.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep11.Location = New System.Drawing.Point(3, 343)
+        Me.WizardStep11.Name = "WizardStep11"
+        Me.WizardStep11.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep11.TabIndex = 10
+        Me.WizardStep11.WizardStepIsActive = False
+        Me.WizardStep11.WizardStepName = "Step"
+        '
+        'WizardStep12
+        '
+        Me.WizardStep12.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep12.Location = New System.Drawing.Point(3, 377)
+        Me.WizardStep12.Name = "WizardStep12"
+        Me.WizardStep12.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep12.TabIndex = 11
+        Me.WizardStep12.WizardStepIsActive = False
+        Me.WizardStep12.WizardStepName = "Step"
+        '
+        'WizardStep13
+        '
+        Me.WizardStep13.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WizardStep13.Location = New System.Drawing.Point(3, 411)
+        Me.WizardStep13.Name = "WizardStep13"
+        Me.WizardStep13.Size = New System.Drawing.Size(244, 28)
+        Me.WizardStep13.TabIndex = 12
+        Me.WizardStep13.WizardStepIsActive = False
+        Me.WizardStep13.WizardStepName = "Step"
         '
         'EditorPanelTrigger
         '
@@ -1925,7 +2055,7 @@ Partial Class NewUnattendWiz
         'ComboBox16
         '
         Me.ComboBox16.FormattingEnabled = True
-        Me.ComboBox16.Items.AddRange(New Object() {"PowerShell", "Batch", "VBScript", "JScript"})
+        Me.ComboBox16.Items.AddRange(New Object() {"PowerShell", "Batch", "VBScript"})
         Me.ComboBox16.Location = New System.Drawing.Point(89, 5)
         Me.ComboBox16.Name = "ComboBox16"
         Me.ComboBox16.Size = New System.Drawing.Size(121, 21)
@@ -4199,8 +4329,8 @@ Partial Class NewUnattendWiz
         '
         'ScriptEditorOFD
         '
-        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd|Visual Basic Scripts|*." & _
-    "vbs;*.vbe;*.wsf;*.wsc|JScript files|*.js;*.jse"
+        Me.ScriptEditorOFD.Filter = "PowerShell Scripts|*.ps1;*.psm1|Batch Scripts|*.bat;*.cmd|Visual Basic Scripts|*." & _
+    "vbs;*.vbe;*.wsf;*.wsc"
         Me.ScriptEditorOFD.Title = "Open script"
         '
         'CPUnattendGenFBD
@@ -4213,136 +4343,6 @@ Partial Class NewUnattendWiz
         '
         Me.OpenFileDialog2.Filter = "DISMTools Starter Scripts|*.dtss"
         Me.OpenFileDialog2.Title = "Pick a Starter Script"
-        '
-        'WizardStep1
-        '
-        Me.WizardStep1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep1.Location = New System.Drawing.Point(3, 3)
-        Me.WizardStep1.Name = "WizardStep1"
-        Me.WizardStep1.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep1.TabIndex = 0
-        Me.WizardStep1.WizardStepIsActive = False
-        Me.WizardStep1.WizardStepName = "Step"
-        '
-        'WizardStep2
-        '
-        Me.WizardStep2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep2.Location = New System.Drawing.Point(3, 37)
-        Me.WizardStep2.Name = "WizardStep2"
-        Me.WizardStep2.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep2.TabIndex = 1
-        Me.WizardStep2.WizardStepIsActive = False
-        Me.WizardStep2.WizardStepName = "Step"
-        '
-        'WizardStep3
-        '
-        Me.WizardStep3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep3.Location = New System.Drawing.Point(3, 71)
-        Me.WizardStep3.Name = "WizardStep3"
-        Me.WizardStep3.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep3.TabIndex = 2
-        Me.WizardStep3.WizardStepIsActive = False
-        Me.WizardStep3.WizardStepName = "Step"
-        '
-        'WizardStep4
-        '
-        Me.WizardStep4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep4.Location = New System.Drawing.Point(3, 105)
-        Me.WizardStep4.Name = "WizardStep4"
-        Me.WizardStep4.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep4.TabIndex = 3
-        Me.WizardStep4.WizardStepIsActive = False
-        Me.WizardStep4.WizardStepName = "Step"
-        '
-        'WizardStep5
-        '
-        Me.WizardStep5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep5.Location = New System.Drawing.Point(3, 139)
-        Me.WizardStep5.Name = "WizardStep5"
-        Me.WizardStep5.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep5.TabIndex = 4
-        Me.WizardStep5.WizardStepIsActive = False
-        Me.WizardStep5.WizardStepName = "Step"
-        '
-        'WizardStep6
-        '
-        Me.WizardStep6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep6.Location = New System.Drawing.Point(3, 173)
-        Me.WizardStep6.Name = "WizardStep6"
-        Me.WizardStep6.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep6.TabIndex = 5
-        Me.WizardStep6.WizardStepIsActive = False
-        Me.WizardStep6.WizardStepName = "Step"
-        '
-        'WizardStep7
-        '
-        Me.WizardStep7.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep7.Location = New System.Drawing.Point(3, 207)
-        Me.WizardStep7.Name = "WizardStep7"
-        Me.WizardStep7.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep7.TabIndex = 6
-        Me.WizardStep7.WizardStepIsActive = False
-        Me.WizardStep7.WizardStepName = "Step"
-        '
-        'WizardStep8
-        '
-        Me.WizardStep8.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep8.Location = New System.Drawing.Point(3, 241)
-        Me.WizardStep8.Name = "WizardStep8"
-        Me.WizardStep8.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep8.TabIndex = 7
-        Me.WizardStep8.WizardStepIsActive = False
-        Me.WizardStep8.WizardStepName = "Step"
-        '
-        'WizardStep9
-        '
-        Me.WizardStep9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep9.Location = New System.Drawing.Point(3, 275)
-        Me.WizardStep9.Name = "WizardStep9"
-        Me.WizardStep9.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep9.TabIndex = 8
-        Me.WizardStep9.WizardStepIsActive = False
-        Me.WizardStep9.WizardStepName = "Step"
-        '
-        'WizardStep10
-        '
-        Me.WizardStep10.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep10.Location = New System.Drawing.Point(3, 309)
-        Me.WizardStep10.Name = "WizardStep10"
-        Me.WizardStep10.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep10.TabIndex = 9
-        Me.WizardStep10.WizardStepIsActive = False
-        Me.WizardStep10.WizardStepName = "Step"
-        '
-        'WizardStep11
-        '
-        Me.WizardStep11.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep11.Location = New System.Drawing.Point(3, 343)
-        Me.WizardStep11.Name = "WizardStep11"
-        Me.WizardStep11.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep11.TabIndex = 10
-        Me.WizardStep11.WizardStepIsActive = False
-        Me.WizardStep11.WizardStepName = "Step"
-        '
-        'WizardStep12
-        '
-        Me.WizardStep12.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep12.Location = New System.Drawing.Point(3, 377)
-        Me.WizardStep12.Name = "WizardStep12"
-        Me.WizardStep12.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep12.TabIndex = 11
-        Me.WizardStep12.WizardStepIsActive = False
-        Me.WizardStep12.WizardStepName = "Step"
-        '
-        'WizardStep13
-        '
-        Me.WizardStep13.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WizardStep13.Location = New System.Drawing.Point(3, 411)
-        Me.WizardStep13.Name = "WizardStep13"
-        Me.WizardStep13.Size = New System.Drawing.Size(244, 28)
-        Me.WizardStep13.TabIndex = 12
-        Me.WizardStep13.WizardStepIsActive = False
-        Me.WizardStep13.WizardStepName = "Step"
         '
         'NewUnattendWiz
         '

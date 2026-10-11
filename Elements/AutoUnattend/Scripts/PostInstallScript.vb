@@ -27,8 +27,7 @@ Public Class PostInstallScript
         Batch = 1
         Reg = 2
         VBScript = 3
-        JScript = 4
-        Unknown = 5
+        Unknown = 4
     End Enum
 
     Public Property ScriptExtension As Extension
