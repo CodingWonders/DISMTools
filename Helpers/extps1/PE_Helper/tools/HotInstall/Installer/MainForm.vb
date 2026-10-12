@@ -20,7 +20,8 @@ Public Class MainForm
 
     Dim BCDEntryTextLocation As String
 
-    Dim BootMgrEntryName As String
+    Dim BootMgrEntryName As String,
+        RollbackEntryName As String
     Dim SlideshowPicture As Integer = 1
 
     Dim ProgressMessage As String = ""
@@ -49,6 +50,7 @@ Public Class MainForm
         NextButton.Text = GetValueFromLanguageData("Common.Common_Next")
         ExitButton.Text = GetValueFromLanguageData("Common.Common_Cancel")
         BootMgrEntryName = GetValueFromLanguageData("MainForm.BootMgrEntryName")
+        RollbackEntryName = GetValueFromLanguageData("MainForm.RollbackEntryName")
         Text = GetValueFromLanguageData("MainForm.WndTitle")
         Label1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Header")
         Label2.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Description")
@@ -792,7 +794,7 @@ Public Class MainForm
 
             If currentBcdEntryObtained Then
                 DynaLog.LogMessage("Creating rollback entry...")
-                BCDEditProcess.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & "Setup Rollback" & Quote)
+                BCDEditProcess.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & RollbackEntryName & Quote)
                 BCDEditProcess.Start()
                 TargetGuidOutput = BCDEditProcess.StandardOutput.ReadToEnd()
                 BCDEditProcess.WaitForExit()
