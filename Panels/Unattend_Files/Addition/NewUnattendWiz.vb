@@ -3177,12 +3177,9 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Determining file extension...")
             ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
             Select Case StarterScriptContents(0)
-                Case "Language: PowerShell"
-                    ComboBox16.SelectedIndex = 0
-                Case "Language: Batch"
-                    ComboBox16.SelectedIndex = 1
-                Case "Language: VBScript"
-                    ComboBox16.SelectedIndex = 2
+                Case "Language: PowerShell" : ComboBox16.SelectedIndex = 0
+                Case "Language: Batch" : ComboBox16.SelectedIndex = 1
+                Case "Language: VBScript" : ComboBox16.SelectedIndex = 2
             End Select
 
             DynaLog.LogMessage("Loading contents...")
@@ -3207,10 +3204,9 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Determining file extension...")
             ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
             Select Case SampleScriptBrowser.FinalScriptLanguage
-                Case "PowerShell"
-                    ComboBox16.SelectedIndex = 0
-                Case "Batch"
-                    ComboBox16.SelectedIndex = 1
+                Case "PowerShell" : ComboBox16.SelectedIndex = 0
+                Case "Batch" : ComboBox16.SelectedIndex = 1
+                Case "VBScript" : ComboBox16.SelectedIndex = 2
             End Select
 
             DynaLog.LogMessage("Loading contents...")
