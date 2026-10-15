@@ -151,6 +151,8 @@ Partial Class MainForm
         Me.RemoveAppliedAnswerFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator48 = New System.Windows.Forms.ToolStripSeparator()
         Me.AuditModeTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator50 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopyImageAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsPEServicingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetPESettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetScratchSpace = New System.Windows.Forms.ToolStripMenuItem()
@@ -516,9 +518,8 @@ Partial Class MainForm
         Me.CaptureFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ToolStripSeparator50 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CopyImageAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnattendSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.CWSSiteTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1406,6 +1407,17 @@ Partial Class MainForm
         Me.AuditModeTSMI.Size = New System.Drawing.Size(237, 22)
         Me.AuditModeTSMI.Text = "Make system enter audit mode"
         '
+        'ToolStripSeparator50
+        '
+        Me.ToolStripSeparator50.Name = "ToolStripSeparator50"
+        Me.ToolStripSeparator50.Size = New System.Drawing.Size(234, 6)
+        '
+        'CopyImageAnswerFilesToolStripMenuItem
+        '
+        Me.CopyImageAnswerFilesToolStripMenuItem.Name = "CopyImageAnswerFilesToolStripMenuItem"
+        Me.CopyImageAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.CopyImageAnswerFilesToolStripMenuItem.Text = "Copy image answer files..."
+        '
         'WindowsPEServicingToolStripMenuItem
         '
         Me.WindowsPEServicingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPESettings, Me.SetScratchSpace, Me.SetTargetPath})
@@ -1753,7 +1765,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.CWSSiteTSMI, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1762,59 +1774,59 @@ Partial Class MainForm
         '
         Me.HelpTopicsToolStripMenuItem.Name = "HelpTopicsToolStripMenuItem"
         Me.HelpTopicsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1
-        Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(299, 22)
         Me.HelpTopicsToolStripMenuItem.Text = "Help Topics"
         '
         'DISMToolsTourToolStripMenuItem
         '
         Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
         Me.DISMToolsTourToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(299, 22)
         Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
         '
         'ToolStripSeparator10
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(296, 6)
         '
         'AboutDISMToolsToolStripMenuItem
         '
         Me.AboutDISMToolsToolStripMenuItem.Name = "AboutDISMToolsToolStripMenuItem"
-        Me.AboutDISMToolsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.AboutDISMToolsToolStripMenuItem.Size = New System.Drawing.Size(299, 22)
         Me.AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
         '
         'ToolStripSeparator21
         '
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
-        Me.ToolStripSeparator21.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator21.Size = New System.Drawing.Size(296, 6)
         '
         'Discord
         '
         Me.Discord.Name = "Discord"
-        Me.Discord.Size = New System.Drawing.Size(286, 22)
+        Me.Discord.Size = New System.Drawing.Size(299, 22)
         Me.Discord.Text = "Join the discord (opens in web browser)"
         '
         'ReportFeedbackToolStripMenuItem
         '
         Me.ReportFeedbackToolStripMenuItem.Name = "ReportFeedbackToolStripMenuItem"
-        Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(299, 22)
         Me.ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
         '
         'OpenDiagnosticLogsInLogViewerToolStripMenuItem
         '
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Name = "OpenDiagnosticLogsInLogViewerToolStripMenuItem"
-        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(299, 22)
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = "Open diagnostic logs in log viewer"
         '
         'ToolStripSeparator35
         '
         Me.ToolStripSeparator35.Name = "ToolStripSeparator35"
-        Me.ToolStripSeparator35.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator35.Size = New System.Drawing.Size(296, 6)
         '
         'ContributeToTheHelpSystemToolStripMenuItem
         '
         Me.ContributeToTheHelpSystemToolStripMenuItem.Name = "ContributeToTheHelpSystemToolStripMenuItem"
-        Me.ContributeToTheHelpSystemToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ContributeToTheHelpSystemToolStripMenuItem.Size = New System.Drawing.Size(299, 22)
         Me.ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
         '
         'BranchTSMI
@@ -4783,20 +4795,15 @@ Partial Class MainForm
         'ThemeDesignerTimer
         '
         '
-        'ToolStripSeparator50
-        '
-        Me.ToolStripSeparator50.Name = "ToolStripSeparator50"
-        Me.ToolStripSeparator50.Size = New System.Drawing.Size(234, 6)
-        '
-        'CopyImageAnswerFilesToolStripMenuItem
-        '
-        Me.CopyImageAnswerFilesToolStripMenuItem.Name = "CopyImageAnswerFilesToolStripMenuItem"
-        Me.CopyImageAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
-        Me.CopyImageAnswerFilesToolStripMenuItem.Text = "Copy image answer files..."
-        '
         'UnattendSFD
         '
         Me.UnattendSFD.Filter = "Unattended answer files|*.xml"
+        '
+        'CWSSiteTSMI
+        '
+        Me.CWSSiteTSMI.Name = "CWSSiteTSMI"
+        Me.CWSSiteTSMI.Size = New System.Drawing.Size(299, 22)
+        Me.CWSSiteTSMI.Text = "Visit the CodingWonders Software Website"
         '
         'MainForm
         '
@@ -5402,4 +5409,5 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator50 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CopyImageAnswerFilesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnattendSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents CWSSiteTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class

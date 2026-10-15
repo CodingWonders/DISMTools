@@ -10046,4 +10046,10 @@ Public Class MainForm
             DynaLog.LogMessage(ex.Message)
         End Try
     End Sub
+
+    Public Const CWS_SITE As String = "https://codingwonders.github.io"
+
+    Private Sub CWSSiteTSMI_Click(sender As Object, e As EventArgs) Handles CWSSiteTSMI.Click
+        Process.Start(CWS_SITE)
+    End Sub
 End Class
