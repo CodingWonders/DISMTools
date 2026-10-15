@@ -217,6 +217,7 @@ Partial Class MainForm
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CWSSiteTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.Discord = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -242,6 +243,7 @@ Partial Class MainForm
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.NewsFeedTextLabel = New System.Windows.Forms.Label()
         Me.NewsFeedDateLabel = New System.Windows.Forms.Label()
+        Me.VisitNewsItemSiteBtn = New System.Windows.Forms.Button()
         Me.NewsFeedCloseBtn = New System.Windows.Forms.Button()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.HelpLinksPanel = New System.Windows.Forms.Panel()
@@ -519,7 +521,6 @@ Partial Class MainForm
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.UnattendSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.CWSSiteTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1800,6 +1801,12 @@ Partial Class MainForm
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
         Me.ToolStripSeparator21.Size = New System.Drawing.Size(296, 6)
         '
+        'CWSSiteTSMI
+        '
+        Me.CWSSiteTSMI.Name = "CWSSiteTSMI"
+        Me.CWSSiteTSMI.Size = New System.Drawing.Size(299, 22)
+        Me.CWSSiteTSMI.Text = "Visit the CodingWonders Software Website"
+        '
         'Discord
         '
         Me.Discord.Name = "Discord"
@@ -1969,6 +1976,7 @@ Partial Class MainForm
         '
         Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
         Me.Panel1.Controls.Add(Me.NewsFeedDateLabel)
+        Me.Panel1.Controls.Add(Me.VisitNewsItemSiteBtn)
         Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
@@ -1984,7 +1992,7 @@ Partial Class MainForm
         Me.NewsFeedTextLabel.Location = New System.Drawing.Point(41, 0)
         Me.NewsFeedTextLabel.Name = "NewsFeedTextLabel"
         Me.NewsFeedTextLabel.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(583, 32)
+        Me.NewsFeedTextLabel.Size = New System.Drawing.Size(670, 32)
         Me.NewsFeedTextLabel.TabIndex = 1
         Me.NewsFeedTextLabel.Text = "Item Feed Text"
         Me.NewsFeedTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -1992,13 +2000,25 @@ Partial Class MainForm
         'NewsFeedDateLabel
         '
         Me.NewsFeedDateLabel.Dock = System.Windows.Forms.DockStyle.Right
-        Me.NewsFeedDateLabel.Location = New System.Drawing.Point(624, 0)
+        Me.NewsFeedDateLabel.Location = New System.Drawing.Point(711, 0)
         Me.NewsFeedDateLabel.Name = "NewsFeedDateLabel"
         Me.NewsFeedDateLabel.Padding = New System.Windows.Forms.Padding(0, 0, 6, 0)
-        Me.NewsFeedDateLabel.Size = New System.Drawing.Size(384, 32)
+        Me.NewsFeedDateLabel.Size = New System.Drawing.Size(256, 32)
         Me.NewsFeedDateLabel.TabIndex = 3
         Me.NewsFeedDateLabel.Text = "Item Feed Date"
         Me.NewsFeedDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'VisitNewsItemSiteBtn
+        '
+        Me.VisitNewsItemSiteBtn.Dock = System.Windows.Forms.DockStyle.Right
+        Me.VisitNewsItemSiteBtn.FlatAppearance.BorderSize = 0
+        Me.VisitNewsItemSiteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.VisitNewsItemSiteBtn.Image = Global.DISMTools.My.Resources.Resources.newsfeed_visitsite_light
+        Me.VisitNewsItemSiteBtn.Location = New System.Drawing.Point(967, 0)
+        Me.VisitNewsItemSiteBtn.Name = "VisitNewsItemSiteBtn"
+        Me.VisitNewsItemSiteBtn.Size = New System.Drawing.Size(41, 32)
+        Me.VisitNewsItemSiteBtn.TabIndex = 4
+        Me.VisitNewsItemSiteBtn.UseVisualStyleBackColor = False
         '
         'NewsFeedCloseBtn
         '
@@ -4799,12 +4819,6 @@ Partial Class MainForm
         '
         Me.UnattendSFD.Filter = "Unattended answer files|*.xml"
         '
-        'CWSSiteTSMI
-        '
-        Me.CWSSiteTSMI.Name = "CWSSiteTSMI"
-        Me.CWSSiteTSMI.Size = New System.Drawing.Size(299, 22)
-        Me.CWSSiteTSMI.Text = "Visit the CodingWonders Software Website"
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -5410,4 +5424,5 @@ Partial Class MainForm
     Friend WithEvents CopyImageAnswerFilesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnattendSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents CWSSiteTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents VisitNewsItemSiteBtn As System.Windows.Forms.Button
 End Class

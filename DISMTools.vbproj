@@ -1952,6 +1952,8 @@
     <None Include="Resources\next_element_downward.png" />
     <None Include="Resources\infinityhome_admin_tools.png" />
     <None Include="Resources\infinityhome_change_network_config.png" />
+    <None Include="Resources\newsfeed_visitsite_light.png" />
+    <None Include="Resources\newsfeed_visitsite_dark.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

@@ -1135,4 +1135,10 @@ A "contributor" is any person that distributes its contribution under this licen
   <data name="diagram_save_mermaid_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\diagrams\diagram_save_mermaid_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="newsfeed_visitsite_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\newsfeed_visitsite_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="newsfeed_visitsite_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\newsfeed_visitsite_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

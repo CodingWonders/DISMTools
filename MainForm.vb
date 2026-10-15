@@ -250,6 +250,7 @@ Public Class MainForm
 
     ' Infinity Home
     Private InfinityHomeFacts As New List(Of InfinityFact)
+    Private SelectedNewsItemSite As String
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -4076,13 +4077,10 @@ Public Class MainForm
         ProjectSidePanel.ForeColor = ForeColor
         StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         StatusStrip.ForeColor = CurrentTheme.ForegroundColor
-        If ImgBW.IsBusy Then
-            BackgroundProcessesButton.Image = GetGlyphResource("bg_ops")
-        Else
-            BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
-        End If
+        BackgroundProcessesButton.Image = If(ImgBW.IsBusy, GetGlyphResource("bg_ops"), GetGlyphResource("bg_ops_complete"))
         ' Infinity Home
         ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
+        VisitNewsItemSiteBtn.Image = GetGlyphResource("newsfeed_visitsite")
 
         ' Set link label link controls
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -8431,6 +8429,7 @@ Public Class MainForm
 
     Private Sub DisplayFeedItemCardContent(sender As Object, e As NewsFeedItemCardLinkClickedEventArgs)
         NewsFeedTextLabel.Text = e.Title
+        SelectedNewsItemSite = e.Site
         Dim currentOSCulture As CultureInfo = CultureInfo.CurrentCulture
         NewsFeedDateLabel.Text = String.Format("{0}", e.PublishDate.ToString(currentOSCulture.DateTimeFormat.LongDatePattern, currentOSCulture))
         ' Do it like this because the IE webbrowser is quirky and doesn't want to change text using its property;
@@ -10051,5 +10050,9 @@ Public Class MainForm
 
     Private Sub CWSSiteTSMI_Click(sender As Object, e As EventArgs) Handles CWSSiteTSMI.Click
         Process.Start(CWS_SITE)
+    End Sub
+
+    Private Sub VisitNewsItemSiteBtn_Click(sender As Object, e As EventArgs) Handles VisitNewsItemSiteBtn.Click
+        Process.Start(SelectedNewsItemSite)
     End Sub
 End Class
