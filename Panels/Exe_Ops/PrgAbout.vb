@@ -230,7 +230,7 @@ Public Class PrgAbout
     End Sub
 
     Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click
-        Process.Start("https://reddit.com/r/DISMTools")
+        Process.Start("https://codingwonders.github.io")
     End Sub
 
     Private Sub PictureBox4_Click(sender As Object, e As EventArgs) Handles PictureBox4.Click
@@ -242,7 +242,7 @@ Public Class PrgAbout
     End Sub
 
     Private Sub PictureBox3_MouseHover(sender As Object, e As EventArgs) Handles PictureBox3.MouseHover
-        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PrgAbout.Tooltip")("Text1.Label"))
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("PrgAbout.Tooltip")("OfficialWebsite"))
     End Sub
 
     Private Sub PictureBox4_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseHover

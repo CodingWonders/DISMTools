@@ -573,7 +573,7 @@ Partial Class PrgAbout
         'PictureBox3
         '
         Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.subreddit
+        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.website
         Me.PictureBox3.Location = New System.Drawing.Point(56, 370)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(24, 24)
