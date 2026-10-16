@@ -526,7 +526,7 @@ Partial Class ISOCreator
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "WIM files|*.wim"
+        Me.OpenFileDialog1.Filter = "WIM files|*.wim|ESD files|*.esd"
         '
         'SaveFileDialog1
         '
