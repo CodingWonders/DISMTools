@@ -1256,10 +1256,10 @@ Public Class ImgInfoSaveDlg
                                                       Math.Round((service.FailureActions.SubsequentDelaysInMillis / 1000), 2))}.ToList()) & CrLf &
                           GetParagraph("Dependencies:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
-                          String.Join("", serviceList.Where(Function(srv) service.Dependencies.Contains(srv.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
+                          String.Join("", serviceList.Where(Function(srv) service.Dependencies.Select(Function(svc) svc.ToLowerInvariant()).Contains(srv.Name.ToLowerInvariant())).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
                           GetParagraph("Dependents:", ParagraphStyle.Italic) & CrLf &
                           GetTableHeader({"Name", "Display Name", "Type"}.ToList()) &
-                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Contains(service.Name)).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
+                          String.Join("", serviceList.Where(Function(srv) srv.Dependencies.Select(Function(svc) svc.ToLowerInvariant()).Contains(service.Name.ToLowerInvariant())).OrderBy(Function(srv) srv.DisplayName).Select(Function(srv) GetTableRow({srv.Name, srv.DisplayName, srv.TypeToString()}.ToList()))) & CrLf &
                           GetParagraph("Safe Mode Parameters:", ParagraphStyle.Italic) & CrLf &
                           GetListItems({String.Format("On Safe Mode and Safe Mode with Command Prompt: {0}", If(service.SafeModeOptions.AvailableInMinimalSafeBoot, "This service is available", "This service is not available")),
                                         String.Format("On Safe Mode and Safe Mode with Networking: {0}", If(service.SafeModeOptions.AvailableInNetworkSafeBoot, "This service is available", "This service is not available"))}.ToList()) & CrLf
