@@ -30,6 +30,7 @@ Partial Class ServiceDependencyGraphViewer
         Me.sfdDiagram = New System.Windows.Forms.SaveFileDialog()
         Me.btnSaveToMermaid = New System.Windows.Forms.Button()
         Me.sfdMermaidDiagram = New System.Windows.Forms.SaveFileDialog()
+        Me.btnNavigateToService = New System.Windows.Forms.Button()
         Me.depDiagram = New DISMTools.ServiceDependencyDiagram()
         Me.SuspendLayout()
         '
@@ -96,6 +97,17 @@ Partial Class ServiceDependencyGraphViewer
         '
         Me.sfdMermaidDiagram.Filter = "Markdown files|*.md"
         '
+        'btnNavigateToService
+        '
+        Me.btnNavigateToService.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnNavigateToService.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNavigateToService.Image = Global.DISMTools.My.Resources.Resources.diagram_navigate_to_svc_light
+        Me.btnNavigateToService.Location = New System.Drawing.Point(1216, 222)
+        Me.btnNavigateToService.Name = "btnNavigateToService"
+        Me.btnNavigateToService.Size = New System.Drawing.Size(36, 36)
+        Me.btnNavigateToService.TabIndex = 2
+        Me.btnNavigateToService.UseVisualStyleBackColor = True
+        '
         'depDiagram
         '
         Me.depDiagram.ArrowColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer))
@@ -123,6 +135,7 @@ Partial Class ServiceDependencyGraphViewer
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.btnNavigateToService)
         Me.Controls.Add(Me.btnSaveToMermaid)
         Me.Controls.Add(Me.btnSaveImage)
         Me.Controls.Add(Me.btnResetZoom)
@@ -131,6 +144,7 @@ Partial Class ServiceDependencyGraphViewer
         Me.Controls.Add(Me.depDiagram)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "ServiceDependencyGraphViewer"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -147,4 +161,5 @@ Partial Class ServiceDependencyGraphViewer
     Friend WithEvents sfdDiagram As System.Windows.Forms.SaveFileDialog
     Friend WithEvents btnSaveToMermaid As System.Windows.Forms.Button
     Friend WithEvents sfdMermaidDiagram As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents btnNavigateToService As System.Windows.Forms.Button
 End Class

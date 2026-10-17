@@ -817,6 +817,7 @@ Public Class ServiceManagementForm
 
         ServiceDependencyGraphViewer.ServicesToDisplay = servicesToShow.AsEnumerable()
         ServiceDependencyGraphViewer.MainServiceName = selectedService.Name
+        ServiceDependencyGraphViewer.AllSystemServices = ServiceList
         If ServiceDependencyGraphViewer.Visible Then
             ServiceDependencyGraphViewer.RedisplayServices()
             If ServiceDependencyGraphViewer.WindowState = FormWindowState.Minimized Then ServiceDependencyGraphViewer.WindowState = FormWindowState.Normal
