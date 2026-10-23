@@ -2405,13 +2405,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Multiple image files can now be added to ISO files
-        '''- The &quot;Enable Clipboard History&quot; Starter Script has been introduced
-        '''- Step indicators in the creation wizard have been redesigned
-        '''- Service information is now loaded asynchronously in the manager
-        '''- 7-Zip has been updated to version 26.04.
+        '''- Fixed an issue where some service dependencies and dependents would not be displayed in the Service Manager
+        '''
+        '''New features:
+        '''
+        '''- The ISO creation features now support ESD files
+        '''- BCD entries created by HotInstall and the Sysprep Preparation Tool are now localized
+        '''- From the service dependency viewer, you can now navigate through the displayed hierarchy
+        '''- 7-Zip has been updated to version 26.05
+        '''- Markdig has been updated to version 1.4.2
+        '''- News feed sources have been updated to point to  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
