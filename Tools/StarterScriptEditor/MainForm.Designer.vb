@@ -447,7 +447,7 @@ Partial Class MainForm
         '
         Me.comboLanguage.Dock = System.Windows.Forms.DockStyle.Fill
         Me.comboLanguage.FormattingEnabled = True
-        Me.comboLanguage.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript (obsolete)", "JScript (obsolete)"})
+        Me.comboLanguage.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript (obsolete)"})
         Me.comboLanguage.Location = New System.Drawing.Point(195, 57)
         Me.comboLanguage.Name = "comboLanguage"
         Me.comboLanguage.Size = New System.Drawing.Size(1052, 21)
@@ -474,8 +474,8 @@ Partial Class MainForm
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vbs;*.v" & _
-            "be;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
+        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd|PowerShell Scripts|*.ps1|Visual Basic Scripts|*.vbs;*.v" & _
+            "be;*.wsf;*.wsc"
         Me.OpenFileDialog2.Title = "Import Existing Script"
         '
         'ToolStripSeparator3

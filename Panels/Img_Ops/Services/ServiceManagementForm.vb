@@ -82,8 +82,8 @@ Public Class ServiceManagementForm
         ListView4.Items.Clear()
         ListView5.Items.Clear()
 
-        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName)
-        Dim dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(selectedService.Name)).OrderBy(Function(service) service.DisplayName)
+        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Select(Function(svc) svc.ToLowerInvariant()).Contains(service.Name.ToLowerInvariant())).OrderBy(Function(service) service.DisplayName)
+        Dim dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Select(Function(svc) svc.ToLowerInvariant()).Contains(selectedService.Name.ToLowerInvariant())).OrderBy(Function(service) service.DisplayName)
 
         ListView3.Items.AddRange(dependencies.Select(Function(dependency) New ListViewItem(New String() {dependency.Name, dependency.DisplayName, dependency.TypeToString()})).ToArray())
         ListView4.Items.AddRange(dependents.Select(Function(dependent) New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()})).ToArray())
@@ -807,8 +807,8 @@ Public Class ServiceManagementForm
         Dim selectedService As WindowsService = ServiceList.ElementAtOrDefault(ListView1.FocusedItem.Index)
         If selectedService Is Nothing Then Exit Sub
 
-        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName),
-            dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(selectedService.Name)).OrderBy(Function(service) service.DisplayName)
+        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Select(Function(svc) svc.ToLowerInvariant()).Contains(service.Name.ToLowerInvariant())).OrderBy(Function(service) service.DisplayName)
+        Dim dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Select(Function(svc) svc.ToLowerInvariant()).Contains(selectedService.Name.ToLowerInvariant())).OrderBy(Function(service) service.DisplayName)
 
         Dim servicesToShow As New List(Of WindowsService)
         servicesToShow.Add(selectedService)
@@ -817,6 +817,7 @@ Public Class ServiceManagementForm
 
         ServiceDependencyGraphViewer.ServicesToDisplay = servicesToShow.AsEnumerable()
         ServiceDependencyGraphViewer.MainServiceName = selectedService.Name
+        ServiceDependencyGraphViewer.AllSystemServices = ServiceList
         If ServiceDependencyGraphViewer.Visible Then
             ServiceDependencyGraphViewer.RedisplayServices()
             If ServiceDependencyGraphViewer.WindowState = FormWindowState.Minimized Then ServiceDependencyGraphViewer.WindowState = FormWindowState.Normal

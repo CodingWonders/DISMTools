@@ -1,4 +1,4 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class DocumentOutlineViewer
     Inherits System.Windows.Forms.Form
 
@@ -51,7 +51,7 @@ Partial Class DocumentOutlineViewer
         Me.comboLangMode.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.comboLangMode.FormattingEnabled = True
-        Me.comboLangMode.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript", "JScript"})
+        Me.comboLangMode.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript"})
         Me.comboLangMode.Location = New System.Drawing.Point(153, 9)
         Me.comboLangMode.Name = "comboLangMode"
         Me.comboLangMode.Size = New System.Drawing.Size(331, 21)

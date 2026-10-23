@@ -20,7 +20,8 @@ Public Class MainForm
 
     Dim BCDEntryTextLocation As String
 
-    Dim BootMgrEntryName As String
+    Dim BootMgrEntryName As String,
+        RollbackEntryName As String
     Dim SlideshowPicture As Integer = 1
 
     Dim ProgressMessage As String = ""
@@ -49,6 +50,7 @@ Public Class MainForm
         NextButton.Text = GetValueFromLanguageData("Common.Common_Next")
         ExitButton.Text = GetValueFromLanguageData("Common.Common_Cancel")
         BootMgrEntryName = GetValueFromLanguageData("MainForm.BootMgrEntryName")
+        RollbackEntryName = GetValueFromLanguageData("MainForm.RollbackEntryName")
         Text = GetValueFromLanguageData("MainForm.WndTitle")
         Label1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Header")
         Label2.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Description")
@@ -133,6 +135,11 @@ Public Class MainForm
         If TestMode Or TestBCD Then
             bootPath = Path.Combine(Application.StartupPath, "sources", "boot.wim")
             installPath = Path.Combine(Application.StartupPath, "sources", "install.wim")
+        End If
+
+        If Not File.Exists(installPath) Then
+            ' It may be the ESD file; try that one instead
+            installPath = installPath.Replace(".wim", ".esd")
         End If
 
         Dim BootImageInfo As DismImageInfoCollection = GetImageInformation(bootPath)
@@ -484,7 +491,8 @@ Public Class MainForm
                         For Each FileToCopy In Directory.GetFiles(SubDirInSource, "*", SearchOption.AllDirectories)
                             ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
                             If ReportProgress Then InstallerBW.ReportProgress(5)
-                            If Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) AndAlso Path.GetFileName(FileToCopy).IndexOf(ExcludedFilePattern, StringComparison.OrdinalIgnoreCase) > -1 Then Continue For
+                            If (Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) OrElse Path.GetExtension(FileToCopy).EndsWith(".esd", StringComparison.OrdinalIgnoreCase)) AndAlso
+                                Path.GetFileName(FileToCopy).IndexOf(ExcludedFilePattern, StringComparison.OrdinalIgnoreCase) > -1 Then Continue For
                             Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                             Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
                             File.Copy(FileToCopy, destinationPath, True)
@@ -513,7 +521,8 @@ Public Class MainForm
                     For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
                         ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
                         If ReportProgress Then InstallerBW.ReportProgress(5)
-                        If Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) AndAlso Path.GetFileName(FileToCopy) = ExcludedFilePattern Then Continue For
+                        If (Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) OrElse Path.GetExtension(FileToCopy).EndsWith(".esd", StringComparison.OrdinalIgnoreCase)) AndAlso
+                            Path.GetFileName(FileToCopy).IndexOf(ExcludedFilePattern, StringComparison.OrdinalIgnoreCase) > -1 Then Continue For
                         Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                         Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
                         File.Copy(FileToCopy, destinationPath, True)
@@ -792,7 +801,7 @@ Public Class MainForm
 
             If currentBcdEntryObtained Then
                 DynaLog.LogMessage("Creating rollback entry...")
-                BCDEditProcess.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & "Setup Rollback" & Quote)
+                BCDEditProcess.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & RollbackEntryName & Quote)
                 BCDEditProcess.Start()
                 TargetGuidOutput = BCDEditProcess.StandardOutput.ReadToEnd()
                 BCDEditProcess.WaitForExit()

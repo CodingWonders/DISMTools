@@ -20,8 +20,7 @@ Public Class DocumentOutlineViewer
 
     Private Const DO_LM_BATCH As Integer = 0, _
                   DO_LM_POWERSHELL As Integer = 1, _
-                  DO_LM_VBSCRIPT As Integer = 2, _
-                  DO_LM_JSCRIPT As Integer = 3
+                  DO_LM_VBSCRIPT As Integer = 2
 
     Private Sub cbPin_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbPin.CheckedChanged
         TopMost = cbPin.Checked
@@ -40,7 +39,6 @@ Public Class DocumentOutlineViewer
             Case DO_LM_BATCH : refEx = "^\s*:(?![:])(?<Name>[A-Za-z_][\w-]*)\b"
             Case DO_LM_POWERSHELL : refEx = "\b(?<Kind>function|filter)\s+(?<Scope>global:|local:|script:|private:)?(?<Name>[A-Za-z_][\w-]*)\s*(\{|\()"
             Case DO_LM_VBSCRIPT : refEx = "\b(?<Modifier>Public\s+Default\s+|Private\s+Default\s+|Public\s+|Private\s+|Default\s+)?(?<Kind>Sub|Function)\s+(?<Name>[A-Za-z_][\w]*)\s*\((?<Params>[^)]*)\)"
-            Case DO_LM_JSCRIPT : refEx = "(?<Declaration>\bfunction\s+(?<DeclName>[A-Za-z_$][\w$]*)\s*\((?<DeclParams>[^)]*)\))|(?<Assignment>\b(?:var|let|const)?\s*(?<AssignName>[A-Za-z_$][\w$.]*)\s*=\s*function\b\s*\((?<AssignParams>[^)]*\))"
         End Select
 
         Try

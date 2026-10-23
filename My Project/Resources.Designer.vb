@@ -612,6 +612,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property diagram_navigate_to_svc_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("diagram_navigate_to_svc_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property diagram_navigate_to_svc_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("diagram_navigate_to_svc_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property diagram_save_image_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("diagram_save_image_dark", resourceCulture)
@@ -1517,6 +1537,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property newsfeed_visitsite_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("newsfeed_visitsite_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property newsfeed_visitsite_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("newsfeed_visitsite_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property next_element() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("next_element", resourceCulture)
@@ -2237,16 +2277,6 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property subreddit() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("subreddit", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        '''</summary>
         Friend ReadOnly Property success_pic() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("success_pic", resourceCulture)
@@ -2365,13 +2395,28 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features:
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property website() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("website", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Multiple image files can now be added to ISO files
-        '''- The &quot;Enable Clipboard History&quot; Starter Script has been introduced
-        '''- Step indicators in the creation wizard have been redesigned
-        '''- Service information is now loaded asynchronously in the manager
-        '''- 7-Zip has been updated to version 26.04.
+        '''- Fixed an issue where some service dependencies and dependents would not be displayed in the Service Manager
+        '''
+        '''New features:
+        '''
+        '''- The ISO creation features now support ESD files
+        '''- BCD entries created by HotInstall and the Sysprep Preparation Tool are now localized
+        '''- From the service dependency viewer, you can now navigate through the displayed hierarchy
+        '''- 7-Zip has been updated to version 26.05
+        '''- Markdig has been updated to version 1.4.2
+        '''- News feed sources have been updated to point to  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

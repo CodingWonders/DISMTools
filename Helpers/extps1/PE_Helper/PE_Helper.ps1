@@ -309,7 +309,8 @@ function Start-PEGeneration
                 if ($imgId -gt 1) {
                     $destinationImageFileName += "_$imgId"
                 }
-                $destinationImageFilePath = "$taskRoot\media\sources\$($destinationImageFileName).wim"
+                $destinationImageFileExtension = [IO.Path]::GetExtension("$imgFile")
+                $destinationImageFilePath = "$taskRoot\media\sources\$destinationImageFileName$destinationImageFileExtension"
 
                 # Display initial stats
                 Write-Host " --> Source Image File : $imgFile"
@@ -322,7 +323,7 @@ function Start-PEGeneration
                     $imgId++
                     # Create the mapping object if we need to
                     if ($createImageFileMapping) {
-                        $imageMappingObjects.Add([PSCustomObject]@{SourceImage = "$imgFile"; DestinationImage = "$($destinationImageFileName).wim"})
+                        $imageMappingObjects.Add([PSCustomObject]@{SourceImage = "$imgFile"; DestinationImage = "$destinationImageFileName$destinationImageFileExtension"})
                     }
                 }
                 else
@@ -2025,9 +2026,9 @@ function Get-WimIndexes
     $imageCount = 0
     $imageFiles = $null
     if ($bootImagesIncluded) {
-        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim"
+        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
     } else {
-        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim"
+        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" -Exclude "boot.wim" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
     }
     $imageCount = $imageFiles.Count
 
