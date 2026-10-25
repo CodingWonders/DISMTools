@@ -4081,6 +4081,7 @@ Public Class MainForm
         ' Infinity Home
         ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
         VisitNewsItemSiteBtn.Image = GetGlyphResource("newsfeed_visitsite")
+        pnlNewsFeedItemHeader.BackColor = CurrentTheme.SectionBackgroundColor
 
         ' Set link label link controls
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))

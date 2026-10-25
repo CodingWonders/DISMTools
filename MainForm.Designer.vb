@@ -240,7 +240,7 @@ Partial Class MainForm
         Me.WelcomePanel = New System.Windows.Forms.Panel()
         Me.InfinityStartPanel = New System.Windows.Forms.Panel()
         Me.NewsContentPreviewerPanel = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pnlNewsFeedItemHeader = New System.Windows.Forms.Panel()
         Me.NewsFeedTextLabel = New System.Windows.Forms.Label()
         Me.NewsFeedDateLabel = New System.Windows.Forms.Label()
         Me.VisitNewsItemSiteBtn = New System.Windows.Forms.Button()
@@ -526,7 +526,7 @@ Partial Class MainForm
         Me.WelcomePanel.SuspendLayout()
         Me.InfinityStartPanel.SuspendLayout()
         Me.NewsContentPreviewerPanel.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.pnlNewsFeedItemHeader.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -1964,7 +1964,7 @@ Partial Class MainForm
         '
         'NewsContentPreviewerPanel
         '
-        Me.NewsContentPreviewerPanel.Controls.Add(Me.Panel1)
+        Me.NewsContentPreviewerPanel.Controls.Add(Me.pnlNewsFeedItemHeader)
         Me.NewsContentPreviewerPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.NewsContentPreviewerPanel.Location = New System.Drawing.Point(0, 160)
         Me.NewsContentPreviewerPanel.Name = "NewsContentPreviewerPanel"
@@ -1972,17 +1972,17 @@ Partial Class MainForm
         Me.NewsContentPreviewerPanel.TabIndex = 3
         Me.NewsContentPreviewerPanel.Visible = False
         '
-        'Panel1
+        'pnlNewsFeedItemHeader
         '
-        Me.Panel1.Controls.Add(Me.NewsFeedTextLabel)
-        Me.Panel1.Controls.Add(Me.NewsFeedDateLabel)
-        Me.Panel1.Controls.Add(Me.VisitNewsItemSiteBtn)
-        Me.Panel1.Controls.Add(Me.NewsFeedCloseBtn)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1008, 32)
-        Me.Panel1.TabIndex = 3
+        Me.pnlNewsFeedItemHeader.Controls.Add(Me.NewsFeedTextLabel)
+        Me.pnlNewsFeedItemHeader.Controls.Add(Me.NewsFeedDateLabel)
+        Me.pnlNewsFeedItemHeader.Controls.Add(Me.VisitNewsItemSiteBtn)
+        Me.pnlNewsFeedItemHeader.Controls.Add(Me.NewsFeedCloseBtn)
+        Me.pnlNewsFeedItemHeader.Dock = System.Windows.Forms.DockStyle.Top
+        Me.pnlNewsFeedItemHeader.Location = New System.Drawing.Point(0, 0)
+        Me.pnlNewsFeedItemHeader.Name = "pnlNewsFeedItemHeader"
+        Me.pnlNewsFeedItemHeader.Size = New System.Drawing.Size(1008, 32)
+        Me.pnlNewsFeedItemHeader.TabIndex = 3
         '
         'NewsFeedTextLabel
         '
@@ -4841,7 +4841,7 @@ Partial Class MainForm
         Me.WelcomePanel.ResumeLayout(False)
         Me.InfinityStartPanel.ResumeLayout(False)
         Me.NewsContentPreviewerPanel.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
+        Me.pnlNewsFeedItemHeader.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -5411,7 +5411,7 @@ Partial Class MainForm
     Friend WithEvents AdminToolsBtn As System.Windows.Forms.Button
     Friend WithEvents ComputerOSLabel As System.Windows.Forms.Label
     Friend WithEvents NewsContentPreviewerPanel As System.Windows.Forms.Panel
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents pnlNewsFeedItemHeader As System.Windows.Forms.Panel
     Friend WithEvents NewsFeedTextLabel As System.Windows.Forms.Label
     Friend WithEvents NewsFeedCloseBtn As System.Windows.Forms.Button
     Friend WithEvents NewsItemCardContainerPanel As System.Windows.Forms.Panel
