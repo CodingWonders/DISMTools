@@ -2343,6 +2343,10 @@
       <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
       <Name>BDELib</Name>
     </ProjectReference>
+    <ProjectReference Include="Tools\WimgApi.Interop\WimgApi.Interop.csproj">
+      <Project>{4acfc225-f102-4c32-873f-b265793bacee}</Project>
+      <Name>WimgApi.Interop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

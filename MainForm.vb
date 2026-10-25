@@ -9763,7 +9763,7 @@ Public Class MainForm
     Private Sub UploadThisImageToMyWDSServerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadThisImageToMyWDSServerToolStripMenuItem.Click
         If WDSInstallImageCopy.BackgroundWorker1.IsBusy Then Exit Sub
         DynaLog.LogMessage("Opening WDS upload wizard...")
-        WDSInstallImageCopy.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        WDSInstallImageCopy.tbSourceImageFile.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
         If WDSInstallImageCopy.Visible Then
             If WDSInstallImageCopy.WindowState = FormWindowState.Minimized Then
                 WDSInstallImageCopy.WindowState = FormWindowState.Normal
