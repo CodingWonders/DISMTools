@@ -1,0 +1,535 @@
+body:has(.dt-home) {
+	--dt-home-header-height: 2.4rem;
+	--dt-home-tabs-height: 0rem;
+	min-height: 100vh;
+	background-color: #183820;
+	background-image:
+		linear-gradient(90deg, rgb(14 35 21 / 38%), rgb(14 35 21 / 4%)),
+		url("../res/homepage/DT_PE_BLANK.png");
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	font-family: "Segoe UI"
+}
+
+body:has(.dt-home) .md-header {
+	background: transparent;
+	box-shadow: none;
+	font-family: "Inter"
+}
+
+body.dt-home--scrolled:has(.dt-home) .md-header {
+	background: rgb(14 35 21 / 96%);
+	box-shadow: 0 0.2rem 0.6rem rgb(0 0 0 / 28%);
+}
+
+body:has(.dt-home) .md-tabs {
+	background: transparent;
+	font-family: "Inter"
+}
+
+body:has(.dt-home) .md-tabs__inner {
+	background: rgb(10 28 16 / 28%);
+}
+
+@media (min-width: 76.25em) {
+	body:has(.dt-home) {
+		--dt-home-tabs-height: 2.4rem;
+	}
+
+	body:has(.dt-home) .md-tabs {
+		display: block;
+		height: var(--dt-home-tabs-height);
+	}
+
+	body:has(.dt-home) .md-sidebar {
+		display: none;
+	}
+}
+
+/* Let the homepage use the full browser width instead of the theme's reading column. */
+body:has(.dt-home) .md-main,
+body:has(.dt-home) .md-main__inner,
+body:has(.dt-home) .md-content,
+body:has(.dt-home) .md-content__inner {
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+}
+
+/* Reset only the homepage article so the search overlay keeps the theme's typography. */
+.md-main .md-typeset:has(.dt-home) {
+	margin: 0;
+	color: #f1f5ed;
+	font-size: 1rem;
+}
+
+/* Make the hero occupy exactly the space below the header and top navigation. */
+.dt-home__hero {
+	box-sizing: border-box;
+	display: grid;
+	height: calc(100vh - var(--dt-home-header-height) - var(--dt-home-tabs-height));
+	height: calc(100svh - var(--dt-home-header-height) - var(--dt-home-tabs-height));
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	grid-template-rows: minmax(0, 0.9fr) auto;
+	align-items: center;
+	gap: 0.75rem 2rem;
+	overflow: hidden;
+	padding: 1.25rem clamp(2rem, 8vw, 8rem);
+	background: transparent;
+}
+
+/* Keep the title and description together on the left side of the hero. */
+.dt-home__intro {
+	position: relative;
+	z-index: 1;
+	max-width: 38rem;
+}
+
+/* Use a restrained product label above the headline. */
+.dt-home__eyebrow {
+	margin: 0 0 0.55rem;
+	color: #b9e77e;
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+
+/* Make the main title prominent while allowing it to shrink on smaller screens. */
+.md-main .md-typeset:has(.dt-home) h1 {
+	margin: 0;
+	color: #f5f7ff;
+	font-size: clamp(1.4rem, 3.2vw, 2.8rem);
+	letter-spacing: -0.045em;
+	line-height: 1.08;
+}
+
+/* Separate the descriptive line from the title and primary action. */
+.dt-home__subtitle {
+	max-width: 34rem;
+	margin: 0.9rem 0 1.25rem;
+	color: #e0e9dc;
+	font-size: clamp(1rem, 1.4vw, 1.25rem);
+	line-height: 1.5;
+}
+
+/* Keep the download action hidden until the stable version and installer are available. */
+.dt-home__release[hidden] {
+	display: none;
+}
+
+/* Display both release actions as simple text links with monochrome inline icons. */
+body:has(.dt-home) .md-typeset a.dt-home__release-link,
+body:has(.dt-home) .md-typeset a.dt-home__preview-link,
+body:has(.dt-home) .md-typeset a.dt-home__releases-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	color: #fff;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	transition: color 160ms ease;
+}
+
+/* Use the surrounding link color for crisp, monochrome icons. */
+.dt-home__link-icon {
+	width: 1rem;
+	height: 1rem;
+	flex: 0 0 auto;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+}
+
+.dt-home__releases-link {
+	margin-top: 0.75rem;
+}
+
+.dt-home__preview-link {
+	margin-top: 0.5rem;
+}
+
+.dt-home__preview-link[hidden] {
+	display: none;
+}
+
+body:has(.dt-home) .md-typeset a.dt-home__release-link:hover,
+body:has(.dt-home) .md-typeset a.dt-home__preview-link:hover,
+body:has(.dt-home) .md-typeset a.dt-home__releases-link:hover {
+	color: #e0e9dc;
+}
+
+body:has(.dt-home) .md-typeset a.dt-home__release-link:focus-visible,
+body:has(.dt-home) .md-typeset a.dt-home__preview-link:focus-visible,
+body:has(.dt-home) .md-typeset a.dt-home__releases-link:focus-visible {
+	border-radius: 0.15rem;
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
+/* Put the supplied plane image on the right without creating any extra illustration. */
+.dt-home__artwork {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	min-width: 0;
+}
+
+.dt-home__artwork img {
+	display: block;
+	width: min(100%, 58rem);
+	height: auto;
+	object-fit: contain;
+	filter: drop-shadow(0 1.2rem 2rem rgb(0 0 0 / 28%));
+}
+
+/* Keep the custom button area in the lower row of the same screen as the hero copy. */
+.dt-home__custom {
+	display: flex;
+	grid-column: 1 / -1;
+	align-items: center;
+	justify-content: center;
+	padding-top: 0.75rem;
+	background-image: linear-gradient(
+		90deg,
+		transparent,
+		rgb(235 245 225 / 25%) 12%,
+		rgb(235 245 225 / 25%) 88%,
+		transparent
+	);
+	background-position: top;
+	background-repeat: no-repeat;
+	background-size: 100% 1px;
+}
+
+/* Arrange the customizable links in a centered row at the bottom of the hero. */
+.dt-home__custom-buttons {
+	display: grid;
+	width: 100%;
+	max-width: 64rem;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 128px), 1fr));
+	gap: 0.75rem;
+}
+
+/* Make the complete image-and-label tile clickable as one accessible link. */
+.dt-home__custom-button {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	min-height: 128px;
+	flex-direction: column;
+	gap: 0;
+	padding: 0;
+	border: 1px solid rgb(235 245 225 / 30%);
+	border-radius: 0.75rem;
+	background: rgb(7 20 11 / 38%);
+	color: #f5f7ff;
+	text-align: center;
+	text-decoration: none;
+	transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+/* Show a site-styled tooltip above each button when it is hovered or keyboard-focused. */
+.dt-home__custom-button::after {
+	position: absolute;
+	z-index: 2;
+	bottom: calc(100% + 0.5rem);
+	left: 50%;
+	padding: 0.4rem 0.6rem;
+	border-radius: 0.2rem;
+	background: var(--md-default-bg-color);
+	box-shadow: var(--md-shadow-z2);
+	color: var(--md-default-fg-color);
+	content: attr(data-tooltip);
+	font-size: 0.7rem;
+	font-weight: 400;
+	line-height: 1.4;
+	white-space: nowrap;
+	opacity: 0;
+	pointer-events: none;
+	transform: translate(-50%, 0.2rem);
+	transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.dt-home__custom-button:hover::after,
+.dt-home__custom-button:focus-visible::after {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+/* Round and clip the actual image placed directly inside each custom button link. */
+.dt-home__custom-button img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 0.65rem;
+	object-fit: cover;
+}
+
+/* Overlay the second button's alternate artwork when its hover image is added. */
+.dt-home__custom-button--hover-image::before {
+	position: absolute;
+	z-index: 1;
+	inset: 0;
+	border-radius: inherit;
+	background: url("../res/homepage/homepage_btn2_hover.png") center / cover no-repeat;
+	content: "";
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 160ms ease;
+}
+
+/* Fade the normal image out while the alternate image fades in. */
+.dt-home__custom-button--hover-image img {
+	transition: opacity 160ms ease-in-out;
+}
+
+.dt-home__custom-button--hover-image:hover img,
+.dt-home__custom-button--hover-image:focus-visible img {
+	opacity: 0;
+}
+
+.dt-home__custom-button--hover-image:hover::before,
+.dt-home__custom-button--hover-image:focus-visible::before {
+	opacity: 1;
+}
+
+/* Reveal the long-form feature overview only after the marker check succeeds. */
+.dt-home__features[hidden] {
+	display: none;
+}
+
+.dt-home__features {
+	max-width: 90rem;
+	margin: 0 auto;
+	padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 6vw, 6rem);
+}
+
+.dt-home__features-intro {
+	max-width: 48rem;
+	margin: 0 auto clamp(2rem, 5vw, 4rem);
+	text-align: center;
+}
+
+.dt-home__features-intro .dt-home__eyebrow {
+	margin-bottom: 0.6rem;
+}
+
+.md-main .md-typeset:has(.dt-home) h2 {
+	margin: 0;
+	color: #f5f7ff;
+	font-size: clamp(2rem, 4vw, 3.25rem);
+	letter-spacing: -0.035em;
+	line-height: 1.1;
+}
+
+.dt-home__features-intro > p:last-child {
+	margin: 0.9rem 0 0;
+	color: #e0e9dc;
+	font-size: 1.1rem;
+	line-height: 1.6;
+}
+
+.dt-home__feature {
+	display: grid;
+	grid-template-areas: "media copy";
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(1.5rem, 4vw, 4rem);
+	margin-top: clamp(2rem, 5vw, 4rem);
+	padding: clamp(1rem, 2.5vw, 2rem);
+	border: 1px solid rgb(235 245 225 / 18%);
+	border-radius: 1rem;
+	background: rgb(7 20 11 / 52%);
+	box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 18%);
+}
+
+.dt-home__feature--reverse {
+	grid-template-areas: "copy media";
+}
+
+.dt-home__feature-media {
+	grid-area: media;
+	overflow: hidden;
+	border: 1px solid rgb(235 245 225 / 24%);
+	border-radius: 0.65rem;
+	background: rgb(0 0 0 / 28%);
+}
+
+.dt-home__feature-media img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.dt-home__feature-copy {
+	grid-area: copy;
+	min-width: 0;
+}
+
+.md-main .md-typeset:has(.dt-home) h3 {
+	margin: 0 0 0.75rem;
+	color: #f5f7ff;
+	font-size: clamp(1.3rem, 2vw, 1.8rem);
+	line-height: 1.2;
+}
+
+.dt-home__feature-copy > p {
+	margin: 0;
+	color: #e0e9dc;
+	line-height: 1.6;
+}
+
+.dt-home__feature-list {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.55rem 1.25rem;
+	margin: 1.15rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.dt-home__feature-list li {
+	color: #f1f5ed;
+	font-size: 0.92rem;
+	line-height: 1.45;
+}
+
+/* Keep button names legible beneath the reserved artwork area. */
+.dt-home__button-label {
+	padding: 0.55rem 0.25rem;
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+
+/* Highlight an entire tile on hover or keyboard focus without obscuring its label. */
+.dt-home__custom-button:hover,
+.dt-home__custom-button:focus-visible {
+	transform: translateY(-2px);
+	border-color: #b9e77e;
+	background: rgb(7 20 11 / 55%);
+	outline: 2px solid #b9e77e;
+	outline-offset: 2px;
+}
+
+/* Stack the hero on narrow screens while keeping all content inside the mobile viewport. */
+@media (max-width: 760px) {
+	.dt-home__hero {
+		height: calc(100vh - var(--dt-home-header-height));
+		height: calc(100svh - var(--dt-home-header-height));
+		grid-template-columns: 1fr;
+		grid-template-rows: auto minmax(0, 1fr) auto;
+		gap: clamp(0.5rem, 2vh, 1rem);
+		overflow: hidden;
+		padding: clamp(0.75rem, 2.5vh, 1.25rem) 1.25rem;
+	}
+
+	/* Scale down the long title so the intro remains compact on portrait screens. */
+	.md-main .md-typeset:has(.dt-home) h1 {
+		font-size: clamp(1.7rem, 7vw, 2.5rem);
+	}
+
+	.dt-home__intro .dt-home__eyebrow {
+		margin-bottom: 0.3rem;
+	}
+
+	.dt-home__subtitle {
+		margin: 0.55rem 0 0.75rem;
+		font-size: 0.95rem;
+	}
+
+	/* Let the plane use the flexible middle row without forcing the page to scroll. */
+	.dt-home__artwork {
+		justify-content: center;
+		min-height: 0;
+	}
+
+	.dt-home__artwork img {
+		width: min(100%, 38rem);
+		max-height: 100%;
+		object-fit: contain;
+	}
+
+	/* Keep the bottom button section compact enough to share the screen with the hero. */
+	.dt-home__custom {
+		padding-top: 0.65rem;
+	}
+
+	.dt-home__custom-buttons {
+		gap: 0.45rem;
+	}
+
+	.dt-home__custom-button {
+		gap: 0;
+		padding: 0;
+	}
+
+	.dt-home__button-label {
+		padding: 0.3rem 0.15rem;
+		font-size: 0.75rem;
+	}
+
+	.dt-home__features {
+		padding: 3rem 1.25rem;
+	}
+
+	.dt-home__feature,
+	.dt-home__feature--reverse {
+		grid-template-areas:
+			"media"
+			"copy";
+		grid-template-columns: minmax(0, 1fr);
+		gap: 1.25rem;
+		margin-top: 1.5rem;
+		padding: 1rem;
+	}
+
+	.dt-home__feature-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	body:has(.dt-home) {
+		background-attachment: fixed;
+	}
+}
+
+@media (max-width: 480px) {
+	.dt-home__feature-list {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (max-width: 760px) and (max-height: 700px) {
+	.dt-home__hero {
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+
+	.md-main .md-typeset:has(.dt-home) h1 {
+		font-size: clamp(1.5rem, 6vw, 2rem);
+	}
+
+	.dt-home__subtitle {
+		margin: 0.35rem 0 0.5rem;
+		font-size: 0.85rem;
+	}
+
+	.dt-home__artwork img {
+		width: min(100%, 28rem);
+	}
+
+}
+
+/* Avoid animated hover movement for visitors who request reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+	.dt-home__custom-button,
+	.dt-home__custom-button--hover-image::before,
+	.dt-home__custom-button--hover-image img {
+		transition: none;
+	}
+}

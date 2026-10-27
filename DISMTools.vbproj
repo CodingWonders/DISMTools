@@ -2490,6 +2490,7 @@ IF NOT EXIST videos (
 IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
 	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
+	break &gt; "$(TargetDir)docs\NOTASITE"
 )
 IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	echo Creating sample userdata structure...
