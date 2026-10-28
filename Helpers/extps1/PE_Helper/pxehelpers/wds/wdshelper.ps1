@@ -879,10 +879,19 @@ function Start-OSApplication {
             # Check if the image already has an answer file in its panther directory. If it does, then that counts
             # as a conflict that must be resolved.
             if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
-                Show-SectionMessage -sectionTitle "Select answer file to deploy" -sectionDescription "Setup has detected answer files in both your network and the Windows image you are deploying."
-                # CONFLICT!
+                # CONFLICT! The only way we are sure that the files are the same is by hash. If hashes are the same,
+                # "throw".
                 $netUnattendInfo = Get-Item -Path "$finalAnswerPath"
                 $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
+                
+                $netUnattendHash = (Get-FileHash -Path "$finalAnswerPath").Hash
+                $wimUnattendHash = (Get-FileHash -Path "$($driveLetter):\Windows\Panther\unattend.xml").Hash
+                
+                if ($netUnattendHash -eq $wimUnattendHash) {
+                    throw
+                }
+                
+                Show-SectionMessage -sectionTitle "Select answer file to deploy" -sectionDescription "Setup has detected answer files in both your network and the Windows image you are deploying."
                 # The user may have used a policy to handle this conflict automatically. Guess it and use it.
                 $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
                 Write-Host "Unattended answer files have been found in both the network and the Windows image that you are deploying. Specify "
