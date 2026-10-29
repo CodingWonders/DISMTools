@@ -108,7 +108,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_infinity_mk3"
+    Public dtBranch As String = "dt_pre_infinity_mk3_relcndid"
     Public dt_codeName As String = "InfinityMk3"
 
     ' Arrays and other variables used on background processes
@@ -4081,6 +4081,7 @@ Public Class MainForm
         ' Infinity Home
         ComputerInfoPanel.BackColor = CurrentTheme.SectionBackgroundColor
         VisitNewsItemSiteBtn.Image = GetGlyphResource("newsfeed_visitsite")
+        pnlNewsFeedItemHeader.BackColor = CurrentTheme.SectionBackgroundColor
 
         ' Set link label link controls
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -9762,7 +9763,7 @@ Public Class MainForm
     Private Sub UploadThisImageToMyWDSServerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadThisImageToMyWDSServerToolStripMenuItem.Click
         If WDSInstallImageCopy.BackgroundWorker1.IsBusy Then Exit Sub
         DynaLog.LogMessage("Opening WDS upload wizard...")
-        WDSInstallImageCopy.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        WDSInstallImageCopy.tbSourceImageFile.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
         If WDSInstallImageCopy.Visible Then
             If WDSInstallImageCopy.WindowState = FormWindowState.Minimized Then
                 WDSInstallImageCopy.WindowState = FormWindowState.Normal

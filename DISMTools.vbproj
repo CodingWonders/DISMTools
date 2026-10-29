@@ -83,8 +83,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.4.2\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.1.5.1\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -2343,6 +2343,10 @@
       <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
       <Name>BDELib</Name>
     </ProjectReference>
+    <ProjectReference Include="Tools\WimgApi.Interop\WimgApi.Interop.csproj">
+      <Project>{4acfc225-f102-4c32-873f-b265793bacee}</Project>
+      <Name>WimgApi.Interop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
@@ -2486,6 +2490,7 @@ IF NOT EXIST videos (
 IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
 	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
+	break &gt; "$(TargetDir)docs\NOTASITE"
 )
 IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	echo Creating sample userdata structure...

@@ -18,42 +18,30 @@ Namespace Utilities
         ''' <remarks></remarks>
         Shared Function CastDismArchitecture(Arch As DismProcessorArchitecture, Optional Translate As Boolean = False) As String
             Select Case Arch
-                Case DismProcessorArchitecture.None
-                    If Translate Then
-                        Return LocalizationService.ForSection("Casters.DISMArchitecture")("Unknown.Label")
-                    Else
-                        Return "Unknown"
-                    End If
-                Case DismProcessorArchitecture.Neutral
-                    Return LocalizationService.ForSection("Casters.DISMArchitecture")("Neutral.Label")
-                Case DismProcessorArchitecture.Intel
-                    Return "x86"
-                Case DismProcessorArchitecture.IA64
-                    Return "Itanium"
-                Case DismProcessorArchitecture.ARM64
-                    Return "ARM64"
-                Case DismProcessorArchitecture.ARM
-                    Return "ARM"
-                Case DismProcessorArchitecture.AMD64
-                    Return "AMD64"
+                Case DismProcessorArchitecture.None : Return If(Translate, LocalizationService.ForSection("Casters.DISMArchitecture")("Unknown.Label"), "Unknown")
+                Case DismProcessorArchitecture.Neutral : Return LocalizationService.ForSection("Casters.DISMArchitecture")("Neutral.Label")
+                Case DismProcessorArchitecture.Intel : Return "x86"
+                Case DismProcessorArchitecture.IA64 : Return "Itanium"
+                Case DismProcessorArchitecture.ARM64 : Return "ARM64"
+                Case DismProcessorArchitecture.ARM : Return "ARM"
+                Case DismProcessorArchitecture.AMD64 : Return "AMD64"
             End Select
             Return Nothing
         End Function
 
         Shared Function CastDismArchitectureString(ArchitectureString As String) As DismProcessorArchitecture
             Select Case ArchitectureString.ToLower()
-                Case "x86"
-                    Return DismProcessorArchitecture.Intel
-                Case "x64"
-                    Return DismProcessorArchitecture.AMD64
-                Case "arm"
-                    Return DismProcessorArchitecture.ARM
-                Case "arm64"
-                    Return DismProcessorArchitecture.ARM64
-                Case "neutral"
-                    Return DismProcessorArchitecture.Neutral
+                Case "x86" : Return DismProcessorArchitecture.Intel
+                Case "x64" : Return DismProcessorArchitecture.AMD64
+                Case "arm" : Return DismProcessorArchitecture.ARM
+                Case "arm64" : Return DismProcessorArchitecture.ARM64
+                Case "neutral" : Return DismProcessorArchitecture.Neutral
             End Select
             Return DismProcessorArchitecture.None
+        End Function
+
+        Shared Function CastDismArchitecture(ArchitectureString As String) As String
+            Return CastDismArchitecture(CastDismArchitectureString(ArchitectureString), True)
         End Function
 
         Shared Function CastSignatureStatus(Signature As DismDriverSignature, Optional Translate As Boolean = False) As String

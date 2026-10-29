@@ -28,12 +28,12 @@ Partial Class WDSInstallImageCopy
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.tbSourceImageFile = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.tbDestinationWdsImageGroup = New System.Windows.Forms.TextBox()
+        Me.lvImages = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -118,14 +118,14 @@ Partial Class WDSInstallImageCopy
         Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'TextBox1
+        'tbSourceImageFile
         '
-        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.tbSourceImageFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(4, 21)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(660, 21)
-        Me.TextBox1.TabIndex = 13
+        Me.tbSourceImageFile.Location = New System.Drawing.Point(4, 21)
+        Me.tbSourceImageFile.Name = "tbSourceImageFile"
+        Me.tbSourceImageFile.Size = New System.Drawing.Size(660, 21)
+        Me.tbSourceImageFile.TabIndex = 13
         '
         'Label4
         '
@@ -156,30 +156,30 @@ Partial Class WDSInstallImageCopy
         Me.Label1.TabIndex = 12
         Me.Label1.Text = "The images will be added to the following group:"
         '
-        'TextBox2
+        'tbDestinationWdsImageGroup
         '
-        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.tbDestinationWdsImageGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Location = New System.Drawing.Point(4, 64)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(822, 21)
-        Me.TextBox2.TabIndex = 13
+        Me.tbDestinationWdsImageGroup.Location = New System.Drawing.Point(4, 64)
+        Me.tbDestinationWdsImageGroup.Name = "tbDestinationWdsImageGroup"
+        Me.tbDestinationWdsImageGroup.Size = New System.Drawing.Size(822, 21)
+        Me.tbDestinationWdsImageGroup.TabIndex = 13
         '
-        'ListView1
+        'lvImages
         '
-        Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.lvImages.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListView1.CheckBoxes = True
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
-        Me.ListView1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ListView1.FullRowSelect = True
-        Me.ListView1.Location = New System.Drawing.Point(4, 92)
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(984, 242)
-        Me.ListView1.TabIndex = 17
-        Me.ListView1.UseCompatibleStateImageBehavior = False
-        Me.ListView1.View = System.Windows.Forms.View.Details
+        Me.lvImages.CheckBoxes = True
+        Me.lvImages.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
+        Me.lvImages.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lvImages.FullRowSelect = True
+        Me.lvImages.Location = New System.Drawing.Point(4, 92)
+        Me.lvImages.Name = "lvImages"
+        Me.lvImages.Size = New System.Drawing.Size(984, 242)
+        Me.lvImages.TabIndex = 17
+        Me.lvImages.UseCompatibleStateImageBehavior = False
+        Me.lvImages.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader1
         '
@@ -327,14 +327,14 @@ Partial Class WDSInstallImageCopy
         Me.OptionsPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OptionsPanel.Controls.Add(Me.ListView1)
+        Me.OptionsPanel.Controls.Add(Me.lvImages)
         Me.OptionsPanel.Controls.Add(Me.Button6)
         Me.OptionsPanel.Controls.Add(Me.Button5)
         Me.OptionsPanel.Controls.Add(Me.Button4)
         Me.OptionsPanel.Controls.Add(Me.Button2)
         Me.OptionsPanel.Controls.Add(Me.Button1)
-        Me.OptionsPanel.Controls.Add(Me.TextBox2)
-        Me.OptionsPanel.Controls.Add(Me.TextBox1)
+        Me.OptionsPanel.Controls.Add(Me.tbDestinationWdsImageGroup)
+        Me.OptionsPanel.Controls.Add(Me.tbSourceImageFile)
         Me.OptionsPanel.Controls.Add(Me.Label1)
         Me.OptionsPanel.Controls.Add(Me.Label4)
         Me.OptionsPanel.Controls.Add(Me.Button3)
@@ -376,12 +376,12 @@ Partial Class WDSInstallImageCopy
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents tbSourceImageFile As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
-    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents tbDestinationWdsImageGroup As System.Windows.Forms.TextBox
+    Friend WithEvents lvImages As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader

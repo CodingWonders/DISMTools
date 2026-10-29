@@ -130,6 +130,7 @@ Source: ".\files\System.ValueTuple.dll"; DestDir: "{#pfDir}"; Flags: ignoreversi
 Source: ".\files\System.Windows.Forms.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.Linq.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\WimgApi.Interop.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WindowsBase.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WindowsFormsIntegration.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\AutoUnattend\*"; DestDir: "{#pfDir}\AutoUnattend"; Flags: ignoreversion recursesubdirs createallsubdirs

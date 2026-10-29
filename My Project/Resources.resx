@@ -986,22 +986,52 @@ A "contributor" is any person that distributes its contribution under this licen
     <value>..\Resources\set_layeredkeyboarddriver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Bugfixes:
+    <value>Overall changes:
 
+--- Bugfixes
+
+- Fixed an exception when launching the AppX package information dialog on Windows 8 systems
+- Fixed an issue where component store repair tasks would fail if no sources were specified
 - Fixed an issue where some service dependencies and dependents would not be displayed in the Service Manager
 
-New features:
+--- New features
 
+- HotInstall and the Sysprep Preparation Tool now create rollback environments to undo boot configuration changes and environment deployments
+- The Sysprep Preparation Tool now disables sleep mode when running preparation tasks, and clears BITS transfer queues during Windows Update cache cleanup
+- ISO file creation tasks in the ISO creator can now be double-clicked to load their settings
+- Multiple image files can now be added to ISO files
 - The ISO creation features now support ESD files
 - BCD entries created by HotInstall and the Sysprep Preparation Tool are now localized
-- From the service dependency viewer, you can now navigate through the displayed hierarchy
+- The Configure System Recovery Settings starter script has been introduced
+- The Enable Clipboard History starter script has been introduced
+- Step indicators in the creation wizard have been redesigned
+- You can now query and set Safe Mode preferences for services
+- The Service Manager allows you to visualize dependencies in diagrams you can export to pictures or Mermaid diagrams
+- Services critical for core Windows components can no longer be configured
+- Service information is now loaded asynchronously in the manager
+- Getting information about items is now done asynchronously, making the UI responsive
+- When dropping AppX packages to the addition queue, you will now see a progress indicator
+- When scanning AppX packages, 7-Zip is now forced to use all your processors
+- When enabling features, sources can now be configured to be used only on features that require them
+- The window layout has been improved on 1024x768 screens
 - 7-Zip has been updated to version 26.05
-- Markdig has been updated to version 1.4.2
+- Keyboard shortcuts have been added to create, open, and save projects
+- DISMTools can now detect if the current network connection is metered and will warn you when attempting a download operation
+- Markdig has been updated to version 1.5.1
+- The language system has seen a major overhaul that makes it easier to translate the program to other languages. As a result of this change, German translations have been introduced (#377, thanks @MinDeaDBlood)
 - News feed sources have been updated to point to the new CodingWonders Software website
 
-Removed features:
+--- Removed features
 
-- JScript support has been removed from unattended answer file features</value>
+- JScript support has been removed from unattended answer file features
+
+Changes made since last preview:
+
+--- New features
+
+- DISMTools now uses WIMGAPI to query information about images to upload to a WDS server, greatly improving the reliability of the entire process
+- Conflict resolution screens no longer appear in the PE Helper and the WDS Helper Client if the answer files in the disc/network and the image are the same
+- The documentation has been updated</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
