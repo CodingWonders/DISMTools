@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class PxeServerPortSpecifier
 
@@ -23,6 +23,13 @@ Public Class PxeServerPortSpecifier
     End Sub
 
     Private Sub PxeServerPortSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Cancel.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Other.Message")
+        Label2.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Port.Server.Label")
+        Button1.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Default.Button")
+        Button2.Text = LocalizationService.ForSection("Designer.PXEServerPort")("Check.Button")
+        Text = LocalizationService.ForSection("Designer.PXEServerPort")("ServerComponents.Label")
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -46,10 +53,10 @@ Public Class PxeServerPortSpecifier
             netstatProc.WaitForExit()
             If netstatProc.ExitCode = 0 Then
                 ' This port is in use
-                MessageBox.Show(String.Format("The specified port, {0}, is already in use.", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(LocalizationService.ForSection("ISOFiles.PXEServerPort").Format("Already.Label", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else
                 ' This port is free
-                MessageBox.Show(String.Format("The specified port, {0}, is not in use.", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(LocalizationService.ForSection("ISOFiles.PXEServerPort").Format("Port.Label", NumericUpDown1.Value), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         End Using
     End Sub

@@ -43,6 +43,7 @@ Partial Class EnableFeat
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
@@ -62,7 +63,7 @@ Partial Class EnableFeat
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(626, 520)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(626, 560)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -134,11 +135,12 @@ Partial Class EnableFeat
         Me.GroupBox2.Controls.Add(Me.CheckBox5)
         Me.GroupBox2.Controls.Add(Me.CheckBox4)
         Me.GroupBox2.Controls.Add(Me.CheckBox3)
+        Me.GroupBox2.Controls.Add(Me.CheckBox6)
         Me.GroupBox2.Controls.Add(Me.CheckBox2)
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 302)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(760, 212)
+        Me.GroupBox2.Size = New System.Drawing.Size(760, 252)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
@@ -248,7 +250,7 @@ Partial Class EnableFeat
         'CheckBox5
         '
         Me.CheckBox5.AutoSize = True
-        Me.CheckBox5.Location = New System.Drawing.Point(22, 178)
+        Me.CheckBox5.Location = New System.Drawing.Point(22, 206)
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(206, 17)
         Me.CheckBox5.TabIndex = 0
@@ -261,7 +263,7 @@ Partial Class EnableFeat
         Me.CheckBox4.Checked = True
         Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox4.Enabled = False
-        Me.CheckBox4.Location = New System.Drawing.Point(22, 155)
+        Me.CheckBox4.Location = New System.Drawing.Point(22, 183)
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(232, 17)
         Me.CheckBox4.TabIndex = 0
@@ -271,12 +273,25 @@ Partial Class EnableFeat
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(22, 132)
+        Me.CheckBox3.Location = New System.Drawing.Point(22, 160)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(150, 17)
         Me.CheckBox3.TabIndex = 0
         Me.CheckBox3.Text = "Enable all parent features"
         Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'CheckBox6
+        '
+        Me.CheckBox6.AutoSize = True
+        Me.CheckBox6.Checked = True
+        Me.CheckBox6.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox6.Enabled = False
+        Me.CheckBox6.Location = New System.Drawing.Point(40, 132)
+        Me.CheckBox6.Name = "CheckBox6"
+        Me.CheckBox6.Size = New System.Drawing.Size(250, 17)
+        Me.CheckBox6.TabIndex = 0
+        Me.CheckBox6.Text = "Use this source only on features that require it"
+        Me.CheckBox6.UseVisualStyleBackColor = True
         '
         'CheckBox2
         '
@@ -324,7 +339,7 @@ Partial Class EnableFeat
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(784, 561)
+        Me.ClientSize = New System.Drawing.Size(784, 601)
         Me.Controls.Add(Me.ImageTaskHeader1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -371,5 +386,6 @@ Partial Class EnableFeat
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
     Friend WithEvents WimFileSourcePanel As DISMTools.WimFileSourceControl
+    Friend WithEvents CheckBox6 As System.Windows.Forms.CheckBox
 
 End Class

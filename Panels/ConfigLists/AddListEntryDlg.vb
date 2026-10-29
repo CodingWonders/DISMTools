@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class AddListEntryDlg
 
@@ -13,7 +13,7 @@ Public Class AddListEntryDlg
             ' Check if entry contains wildcard characters and if it begins with a \
             If TextBox1.Text.Contains("*") And TextBox1.Text.StartsWith("\") Then
                 DynaLog.LogMessage("Item starts with a backslash and has a wildcard character. This is not valid.")
-                MsgBox("The entry can't start with a backslash if it contains wildcard characters", vbOKOnly + vbExclamation, Text)
+                MsgBox(LocalizationService.ForSection("ConfigLists.AddEntry")("Start.Backslash.Message"), vbOKOnly + vbExclamation, Text)
                 Exit Sub
             End If
         End If
@@ -35,61 +35,10 @@ Public Class AddListEntryDlg
     End Sub
 
     Private Sub AddListEntryDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label1.Text = "Entry:"
-                        Button1.Text = "Browse..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                    Case "ESN"
-                        Label1.Text = "Entrada:"
-                        Button1.Text = "Examinar..."
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "FRA"
-                        Label1.Text = "Entrée :"
-                        Button1.Text = "Parcourir..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                    Case "PTB", "PTG"
-                        Label1.Text = "Entrada:"
-                        Button1.Text = "Navegar..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "ITA"
-                        Label1.Text = "Voce:"
-                        Button1.Text = "Sfoglia..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annulla"
-                End Select
-            Case 1
-                Label1.Text = "Entry:"
-                Button1.Text = "Browse..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-            Case 2
-                Label1.Text = "Entrada:"
-                Button1.Text = "Examinar..."
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-            Case 3
-                Label1.Text = "Entrée :"
-                Button1.Text = "Parcourir..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-            Case 4
-                Label1.Text = "Entrada:"
-                Button1.Text = "Navegar..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-            Case 5
-                Label1.Text = "Voce:"
-                Button1.Text = "Sfoglia..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annulla"
-        End Select
+        Label1.Text = LocalizationService.ForSection("AddListEntry")("Entry.Label")
+        Button1.Text = LocalizationService.ForSection("AddListEntry")("Browse.Button")
+        OK_Button.Text = LocalizationService.ForSection("AddListEntry")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("AddListEntry")("Cancel.Button")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor

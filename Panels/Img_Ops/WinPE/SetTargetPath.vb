@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
 Imports System.IO
@@ -38,151 +38,31 @@ Public Class SetPETargetPath
         DynaLog.LogMessage("Checking specified target path...")
         If TextBox1.TextLength < 3 Or TextBox1.TextLength > 32 Then
             DynaLog.LogMessage("Target path is not long enough or is too long.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "The target path must be at least 3 characters and no longer than 32 characters"
-                        Case "ESN"
-                            msg = "La ruta de destino debe tener al menos 3 caracteres y no más de 32"
-                        Case "FRA"
-                            msg = "Le chemin cible doit être composé d'au moins 3 caractères et d'au plus 32 caractères."
-                        Case "PTB", "PTG"
-                            msg = "O local de destino tem de ter pelo menos 3 caracteres e não mais de 32 caracteres"
-                        Case "ITA"
-                            msg = "Il percorso di destinazione deve essere di almeno 3 caratteri e non più lungo di 32 caratteri"
-                    End Select
-                Case 1
-                    msg = "The target path must be at least 3 characters and no longer than 32 characters"
-                Case 2
-                    msg = "La ruta de destino debe tener al menos 3 caracteres y no más de 32"
-                Case 3
-                    msg = "Le chemin cible doit être composé d'au moins 3 caractères et d'au plus 32 caractères."
-                Case 4
-                    msg = "O local de destino tem de ter pelo menos 3 caracteres e não mais de 32 caracteres"
-                Case 5
-                    msg = "Il percorso di destinazione deve essere di almeno 3 caratteri e non più lungo di 32 caratteri"
-            End Select
+            msg = LocalizationService.ForSection("PETargetPath.Validation")("Target.Least.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox1.Text.StartsWith("A", StringComparison.OrdinalIgnoreCase) Or TextBox1.Text.StartsWith("B", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("Target path points to a drive commonly used by floppy disks.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "The target path must start with any letter other than A or B"
-                        Case "ESN"
-                            msg = "La ruta de destino debe empezar con cualquier letra que no sea A o B"
-                        Case "FRA"
-                            msg = "Le chemin cible doit commencer par une lettre autre que A ou B."
-                        Case "PTB", "PTG"
-                            msg = "O local de destino deve começar com uma letra diferente de A ou B"
-                        Case "ITA"
-                            msg = "Il percorso di destinazione deve iniziare con una lettera diversa da A o B"
-                    End Select
-                Case 1
-                    msg = "The target path must start with any letter other than A or B"
-                Case 2
-                    msg = "La ruta de destino debe empezar con cualquier letra que no sea A o B"
-                Case 3
-                    msg = "Le chemin cible doit commencer par une lettre autre que A ou B."
-                Case 4
-                    msg = "O local de destino deve começar com uma letra diferente de A ou B"
-                Case 5
-                    msg = "Il percorso di destinazione deve iniziare con una lettera diversa da A o B"
-            End Select
+            msg = LocalizationService.ForSection("PETargetPath.Validation")("Target.Start.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If Not TextBox1.Text.Chars(1).Equals(":"c) Then
             DynaLog.LogMessage("The drive letter is ill-formed.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "A drive letter must be followed by :"
-                        Case "ESN"
-                            msg = "Una letra de disco debe estar seguida por :"
-                        Case "FRA"
-                            msg = "Une lettre de disque doit être suivie de :"
-                        Case "PTB", "PTG"
-                            msg = "Uma letra de unidade deve ser seguida de :"
-                        Case "ITA"
-                            msg = "Una lettera di unità deve essere seguita da :"
-                    End Select
-                Case 1
-                    msg = "A drive letter must be followed by :"
-                Case 2
-                    msg = "Una letra de disco debe estar seguida por :"
-                Case 3
-                    msg = "Une lettre de disque doit être suivie de :"
-                Case 4
-                    msg = "Uma letra de unidade deve ser seguida de :"
-                Case 5
-                    msg = "Una lettera di unità deve essere seguita da :"
-            End Select
+            msg = LocalizationService.ForSection("PETargetPath.Validation")("DriveLetterFormat.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox1.Text.Contains(".\") Or TextBox1.Text.Contains("..\") Then
             DynaLog.LogMessage("A relative path is being used.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "The target path must be absolute, and must not contain relative elements"
-                        Case "ESN"
-                            msg = "La ruta de destino debe ser absoluta, y no debe contener elementos relativos"
-                        Case "FRA"
-                            msg = "Le chemin cible doit être absolu et ne doit pas contenir d'éléments relatifs."
-                        Case "PTB", "PTG"
-                            msg = "A localização de destino tem de ser absoluta e não pode conter elementos relativos"
-                        Case "ITA"
-                            msg = "Il percorso di destinazione deve essere assoluto e non deve contenere elementi relativi"
-                    End Select
-                Case 1
-                    msg = "The target path must be absolute, and must not contain relative elements"
-                Case 2
-                    msg = "La ruta de destino debe ser absoluta, y no debe contener elementos relativos"
-                Case 3
-                    msg = "Le chemin cible doit être absolu et ne doit pas contenir d'éléments relatifs."
-                Case 4
-                    msg = "A localização de destino tem de ser absoluta e não pode conter elementos relativos"
-                Case 5
-                    msg = "Il percorso di destinazione deve essere assoluto e non deve contenere elementi relativi"
-            End Select
+            msg = LocalizationService.ForSection("PETargetPath.Validation")("AbsolutePath.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         If TextBox1.Text.Contains(" ") Or TextBox1.Text.Contains(Quote) Then
             DynaLog.LogMessage("The target path contains spaces or quotes.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "The target path must not contain spaces or quotation marks"
-                        Case "ESN"
-                            msg = "La ruta de destino no debe contener espacios o comillas"
-                        Case "FRA"
-                            msg = "Le chemin cible ne doit pas contenir d'espaces ou de guillemets."
-                        Case "PTB", "PTG"
-                            msg = "A localização de destino não pode conter espaços ou aspas"
-                        Case "ITA"
-                            msg = "Il percorso di destinazione non deve contenere spazi o virgolette"
-                    End Select
-                Case 1
-                    msg = "The target path must not contain spaces or quotation marks"
-                Case 2
-                    msg = "La ruta de destino no debe contener espacios o comillas"
-                Case 3
-                    msg = "Le chemin cible ne doit pas contenir d'espaces ou de guillemets."
-                Case 4
-                    msg = "A localização de destino não pode conter espaços ou aspas"
-                Case 5
-                    msg = "Il percorso di destinazione non deve contenere spazi o virgolette"
-            End Select
+            msg = LocalizationService.ForSection("PETargetPath.Validation")("Target.Contain.Message")
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
@@ -213,81 +93,12 @@ Public Class SetPETargetPath
         If Not Initialize() Then
             Close()
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Set Windows PE target path"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "The target path is a directory where the Windows PE files will be copied to in order to boot to the environment. Please specify a target path and click OK."
-                        Label3.Text = "Target path:"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                    Case "ESN"
-                        Text = "Establecer ruta de destino de Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "La ruta de destino es una carpeta donde los archivos de Windows PE serán copiados para iniciar el entorno. Especifique una ruta de destino y haga clic en Aceptar."
-                        Label3.Text = "Ruta de destino:"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "FRA"
-                        Text = "Configurer le chemin cible de Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Le chemin cible est un répertoire dans lequel les fichiers Windows PE seront copiés afin de démarrer dans l'environnement. Veuillez indiquer un chemin cible et cliquer sur OK."
-                        Label3.Text = "Chemin cible :"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                    Case "PTB", "PTG"
-                        Text = "Configurar a localização de destino do Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "A localização de destino é um diretório para onde os ficheiros do Windows PE serão copiados para arrancar no ambiente. Especifique uma localização de destino e clique em OK."
-                        Label3.Text = "Localização de destino:"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                    Case "ITA"
-                        Text = "Imposta il percorso di destinazione di Windows PE"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Il percorso di destinazione è una directory in cui verranno copiati i file di Windows PE per l'avvio dell'ambiente. Specificare un percorso di destinazione e fare clic su OK"
-                        Label3.Text = "Percorso di destinazione:"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                End Select
-            Case 1
-                Text = "Set Windows PE target path"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "The target path is a directory where the Windows PE files will be copied to in order to boot to the environment. Please specify a target path and click OK."
-                Label3.Text = "Target path:"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-            Case 2
-                Text = "Establecer ruta de destino de Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "La ruta de destino es una carpeta donde los archivos de Windows PE serán copiados para iniciar el entorno. Especifique una ruta de destino y haga clic en Aceptar."
-                Label3.Text = "Ruta de destino:"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-            Case 3
-                Text = "Configurer le chemin cible de Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Le chemin cible est un répertoire dans lequel les fichiers Windows PE seront copiés afin de démarrer dans l'environnement. Veuillez indiquer un chemin cible et cliquer sur OK."
-                Label3.Text = "Chemin cible :"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-            Case 4
-                Text = "Configurar a localização de destino do Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "A localização de destino é um diretório para onde os ficheiros do Windows PE serão copiados para arrancar no ambiente. Especifique uma localização de destino e clique em OK."
-                Label3.Text = "Localização de destino:"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-            Case 5
-                Text = "Imposta il percorso di destinazione di Windows PE"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Il percorso di destinazione è una directory in cui verranno copiati i file di Windows PE per l'avvio dell'ambiente. Specificare un percorso di destinazione e fare clic su OK"
-                Label3.Text = "Percorso di destinazione:"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-        End Select
+        Text = LocalizationService.ForSection("PETargetPath.Target")("Set.Windows.Petarget.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("PETargetPath.Target").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("PETargetPath.Target")("Target.Dir.Message")
+        Label3.Text = LocalizationService.ForSection("PETargetPath.Target")("TargetPath.Label")
+        OK_Button.Text = LocalizationService.ForSection("PETargetPath.Target")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("PETargetPath.Target")("Cancel.Button")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

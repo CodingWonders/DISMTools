@@ -4,10 +4,10 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
-#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) Helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
 #                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
@@ -32,7 +32,7 @@ using namespace System.Collections.Generic
 param (
     [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'StartDevelopment', 'Help')] [string]$cmd,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string]$arch,
-    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
+    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFiles,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [switch]$copyToVentoy,
@@ -139,7 +139,7 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.8.1"
+    $version = "0.8.2"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
@@ -296,22 +296,44 @@ function Start-PEGeneration
         Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $true | Out-Null
         Write-Host "PE generated successfully"
         # Continue ISO customization
-        Write-Host "Copying image file. This can take some time..."
-        $totalTime = 0
-        if (Test-Path "$imgFile" -PathType Leaf)
-        {
-            $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$taskRoot\media\sources\install.wim" -Verbose -Force -Recurse -Container }
+        Write-Host "Copying image file(s). This can take some time..."
+        $imgId = 1
+        $imgFilesArray = $imgFiles.Split("|")
+        $createImageFileMapping = $imgFilesArray.Count -gt 1
+        $imageMappingObjects = [List[PSCustomObject]]::new()
+        foreach ($imgFile in $imgFilesArray) {
+            $totalTime = 0
+            if (Test-Path "$imgFile" -PathType Leaf)
+            {
+                $destinationImageFileName = "install"
+                if ($imgId -gt 1) {
+                    $destinationImageFileName += "_$imgId"
+                }
+                $destinationImageFileExtension = [IO.Path]::GetExtension("$imgFile")
+                $destinationImageFilePath = "$taskRoot\media\sources\$destinationImageFileName$destinationImageFileExtension"
+
+                # Display initial stats
+                Write-Host " --> Source Image File : $imgFile"
+                Write-Host " --> Destination Path  : $destinationImageFilePath"
+                Write-Host "Copying image file..."
+                $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$destinationImageFilePath" -Force -Recurse -Container }
+                if ($?)
+                {
+                    Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
+                    $imgId++
+                    # Create the mapping object if we need to
+                    if ($createImageFileMapping) {
+                        $imageMappingObjects.Add([PSCustomObject]@{SourceImage = "$imgFile"; DestinationImage = "$destinationImageFileName$destinationImageFileExtension"})
+                    }
+                }
+                else
+                {
+                    Write-Host "The image file has not been copied successfully."
+                }
+            }
         }
-        if ($?)
-        {
-            Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
-        }
-        else
-        {
-            Write-Host "The image file has not been copied successfully."
-            Write-Host "`nPress ENTER to exit"
-            Read-Host | Out-Null
-            exit 1
+        if ($imageMappingObjects.Count -gt 0) {
+            $imageMappingObjects | Select-Object @{Name = 'Source File'; Expression = 'SourceImage'}, @{Name = 'Image in Disc'; Expression = 'DestinationImage'} | ConvertTo-Csv -Delimiter '|' -NoTypeInformation | Out-File -FilePath "$taskRoot\media\sources\imagemap.csv"
         }
         Write-Host "Copying setup tools..."
         Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$taskRoot\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
@@ -780,6 +802,7 @@ function Start-PECustomization
             Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\rollback_utils\rollback.bat" -Destination "$imagePath\rollback.bat" -Force
             New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
             Copy-Item -Path "$((Get-Location).Path)\files\scripts\*" -Destination "$imagePath\scripts" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
             Write-Host "Startup commands changed"
@@ -797,7 +820,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT_$imageID\DISMTools" /f
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
-            $codename = "infinity_mk2"
+            $codename = "infinity_mk3"
             if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
                 reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$(Get-Content -Path "$((Get-Location).Path)\version")"
             } else {
@@ -1318,7 +1341,7 @@ function Start-OSApplication
         Write-Host "of the EFI boot binary that will later be used when creating boot files:`n"
         Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
         Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
-        Write-Host "   will expire in June 2026."
+        Write-Host "   started expiring in June 2026."
         Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
         Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
         Write-Host "   updates will not work using these boot binaries.`n"
@@ -1328,8 +1351,9 @@ function Start-OSApplication
             Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
         }
         Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
-        Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
-        Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
+        Write-Host "the new version of such files. Failure to do so can cause boot issues. These usually occur if you are"
+        Write-Host "deploying an image that has not yet received updated UEFI CA 2023 binaries. As a workaround, you can"
+        Write-Host "try to disable Secure Boot."
         $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/n)"
         if ($bootOptn -eq "") { $bootOptn = "Y" }
         $usebootex = ($bootOptn -eq "Y")
@@ -1373,9 +1397,18 @@ function Start-OSApplication
             # Check if the image already has an answer file in its panther directory. If it does, then that counts
             # as a conflict that must be resolved.
             if (Test-Path -Path "$($driveLetter):\Windows\Panther\unattend.xml" -PathType Leaf) {
-                # CONFLICT!
+                # CONFLICT! The only way we are sure that the files are the same is by hash. If hashes are the same,
+                # "throw".
                 $isoUnattendInfo = Get-Item -Path "$finalAnswerPath"
                 $wimUnattendInfo = Get-Item -Path "$($driveLetter):\Windows\Panther\unattend.xml"
+
+                $isoUnattendHash = (Get-FileHash -Path "$finalAnswerPath").Hash
+                $wimUnattendHash = (Get-FileHash -Path "$($driveLetter):\Windows\Panther\unattend.xml").Hash
+
+                if ($isoUnattendHash -eq $wimUnattendHash) {
+                    throw
+                }
+
                 # The user may have used a policy to handle this conflict automatically. Guess it and use it.
                 $policyDecision = Get-PolicyValue -PolicyName "AnswerFileConflictResponse" -DefaultPolicyValue "AskUser" -ValidOptions @("AskUser", "PreferISO", "PreferWIM")
                 Write-Host "`n`n"
@@ -2002,9 +2035,9 @@ function Get-WimIndexes
     $imageCount = 0
     $imageFiles = $null
     if ($bootImagesIncluded) {
-        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim"
+        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
     } else {
-        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim"
+        $imageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" -Exclude "boot.wim" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
     }
     $imageCount = $imageFiles.Count
 
@@ -2016,13 +2049,27 @@ function Get-WimIndexes
         $imageCount -= 1
     }
 
+    $canGoBack = $imageCount -gt 1
+
+    $imageMapFile = "$((Get-Location).Path)sources\imagemap.csv"
+
     if ($imageCount -gt 1) {
         switch ($imageSelectorBehavior) {
             "AskUser" {
                 Write-Host "`nMultiple installation images have been found in this installation medium. Please select an image file from the list and press ENTER."
-                Write-Host "`nDo note that, after the selection of an image, you may not be able to go back."
+                if (Test-Path -Path "$imageMapFile" -PathType Leaf) {
+                    Write-Host "Type `"MAP`" to view which images correspond to which image files during the creation of this installation medium."
+                }
                 $imageFiles | Out-Host
                 $wimPath = Read-Host "Choose the image file to apply"
+
+                if (($wimPath -eq "MAP") -and (Test-Path -Path "$imageMapFile" -PathType Leaf)) {
+                    # Show image file mappings
+                    Write-Host "`n`nThe source image files on the first column correspond to the image files on the second column. Use this table to"
+                    Write-Host "identify what image file to apply."
+                    Get-Content -Path "$imageMapFile" | ConvertFrom-Csv -Delimiter '|' | Out-Host | more
+                }
+
                 $wimPath = "$((Get-Location).Path)sources\$wimPath"
                 if (($wimPath -eq "") -or (-not (Test-Path "$wimPath" -PathType Leaf)))
                 {
@@ -2044,7 +2091,11 @@ function Get-WimIndexes
     }
     $imageInformation = (Get-WindowsImage -ImagePath "$wimPath")
     $imageInformation | Format-Table ImageIndex, ImageName | Out-Host
-    Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
+    Write-Host "To get more complete information about the Windows image, type `"INFO`""
+    if ($canGoBack) {
+        Write-Host "To select a different image file, press B."
+    }
+    Write-Host ""
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
@@ -2098,6 +2149,8 @@ function Get-WimIndexes
                 Write-Host "Could not get additional information."
                 Get-WimIndexes
             }
+        } elseif (($idx -eq "B") -and ($canGoBack)) {
+            Get-WimIndexes
         } else {
             Write-Host "Please specify an index and try again.`n"
             Get-WimIndexes
@@ -2457,7 +2510,15 @@ function New-BootFiles
                             Write-Host "Deleting BCD entry..."
                             $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
                             if ($entryGuid -ne "") {
-                                bcdedit /delete $entryGuid | Out-Host
+                                bcdedit /delete $entryGuid /f | Out-Host
+                            }
+                        }
+
+                        if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                            Write-Host "Deleting BCD entry..."
+                            $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                            if ($entryGuid -ne "") {
+                                bcdedit /delete $entryGuid /f | Out-Host
                             }
                         }
                     }
@@ -2521,6 +2582,14 @@ function New-BootFiles
                                 bcdedit /delete $entryGuid | Out-Host
                             }
                         }
+
+                        if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                            Write-Host "Deleting BCD entry..."
+                            $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                            if ($entryGuid -ne "") {
+                                bcdedit /delete $entryGuid /f | Out-Host
+                            }
+                        }
                     }
                     # We have to do this stupid thing to coax bootsect to work for BIOS
                     bootsect /nt60 "$espLetter`:"
@@ -2563,6 +2632,14 @@ function New-BootFiles
                         $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
                         if ($entryGuid -ne "") {
                             bcdedit /delete $entryGuid | Out-Host
+                        }
+                    }
+
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                        Write-Host "Deleting BCD entry..."
+                        $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                        if ($entryGuid -ne "") {
+                            bcdedit /delete $entryGuid /f | Out-Host
                         }
                     }
                 }
@@ -2608,6 +2685,14 @@ function New-BootFiles
                             bcdedit /delete $entryGuid | Out-Host
                         }
                     }
+
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback" -PathType Leaf) {
+                        Write-Host "Deleting BCD entry..."
+                        $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry_Rollback"
+                        if ($entryGuid -ne "") {
+                            bcdedit /delete $entryGuid /f | Out-Host
+                        }
+                    }
                 }
                 bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
             }
@@ -2651,7 +2736,7 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.8.1"
+    $version = "0.8.2"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"

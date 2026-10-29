@@ -158,6 +158,7 @@ Partial Class AppInstallerDownloader
         '
         'Cancel_Button
         '
+        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Cancel_Button.Enabled = False
         Me.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Cancel_Button.Location = New System.Drawing.Point(617, 249)
@@ -179,9 +180,11 @@ Partial Class AppInstallerDownloader
         '
         'AppInstallerDownloader
         '
+        Me.AcceptButton = Me.Cancel_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(704, 281)
         Me.Controls.Add(Me.Cancel_Button)
         Me.Controls.Add(Me.Label3)

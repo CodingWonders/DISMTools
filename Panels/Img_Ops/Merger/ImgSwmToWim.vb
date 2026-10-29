@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
 Imports System.Threading
@@ -41,191 +41,23 @@ Public Class ImgSwmToWim
     End Sub
 
     Private Sub ImgSwmToWim_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Merge SWM files"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Source SWM file:"
-                        Label3.Text = "NOTE: when specifying the SWM file, choose the first file. DISMTools will take care of additional SWM files stored in that directory."
-                        Label4.Text = "Destination WIM file:"
-                        Label5.Text = "Index:"
-                        Button1.Text = "Browse..."
-                        Button2.Text = "Browse..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        LinkLabel1.Text = "Learn how to do it"
-                        ListView1.Columns(0).Text = "Index"
-                        ListView1.Columns(1).Text = "Image name"
-                        ListView1.Columns(2).Text = "Image description"
-                        ListView1.Columns(3).Text = "Image version"
-                        OpenFileDialog1.Title = "Specify the source SWM file to merge"
-                        SaveFileDialog1.Title = "Specify the destination WIM file to merge the source SWM files to"
-                    Case "ESN"
-                        Text = "Combinar archivos SWM"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Archivo SWM de origen:"
-                        Label3.Text = "NOTA: al especificar el archivo SWM, escoja el primer archivo. DISMTools se encargará de los archivos SWM adicionales en ese directorio."
-                        Label4.Text = "Archivo WIM de destino:"
-                        Label5.Text = "Índice:"
-                        Button1.Text = "Examinar..."
-                        Button2.Text = "Examinar..."
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        LinkLabel1.Text = "Aprenda cómo hacerlo"
-                        ListView1.Columns(0).Text = "Índice"
-                        ListView1.Columns(1).Text = "Nombre de imagen"
-                        ListView1.Columns(2).Text = "Descripción de imagen"
-                        ListView1.Columns(3).Text = "Versión de imagen"
-                        OpenFileDialog1.Title = "Especifique el archivo SWM de origen a combinar"
-                        SaveFileDialog1.Title = "Especifique el archivo WIM de destino al que combinar los archivos SWM"
-                    Case "FRA"
-                        Text = "Fusionner des fichiers SWM"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Fichier SWM source :"
-                        Label3.Text = "NOTE : lorsque vous spécifiez le fichier SWM, choisissez le premier fichier. DISMTools s'occupera des fichiers SWM supplémentaires stockés dans ce répertoire."
-                        Label4.Text = "Fichier WIM de destination :"
-                        Label5.Text = "Index :"
-                        Button1.Text = "Parcourir..."
-                        Button2.Text = "Parcourir..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        LinkLabel1.Text = "Apprendre à le faire"
-                        ListView1.Columns(0).Text = "Index"
-                        ListView1.Columns(1).Text = "Nom de l'image"
-                        ListView1.Columns(2).Text = "Description de l'image"
-                        ListView1.Columns(3).Text = "Version de l'image"
-                        OpenFileDialog1.Title = "Spécifier le fichier SWM source à fusionner"
-                        SaveFileDialog1.Title = "Spécifier le fichier WIM de destination dans lequel fusionner les fichiers SWM sources"
-                    Case "PTB", "PTG"
-                        Text = "Combinar ficheiros SWM"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "Ficheiro SWM de origem:"
-                        Label3.Text = "NOTA: ao especificar o arquivo SWM, escolha o primeiro arquivo. DISMTools cuidará dos arquivos SWM adicionais armazenados nesse diretório."
-                        Label4.Text = "Ficheiro WIM de destino:"
-                        Label5.Text = "Índice:"
-                        Button1.Text = "Navegar..."
-                        Button2.Text = "Navegar..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        LinkLabel1.Text = "Saiba como o fazer"
-                        ListView1.Columns(0).Text = "Índice"
-                        ListView1.Columns(1).Text = "Nome da imagem"
-                        ListView1.Columns(2).Text = "Descrição da imagem"
-                        ListView1.Columns(3).Text = "Versão da imagem"
-                        OpenFileDialog1.Title = "Especificar o ficheiro SWM de origem a combinar"
-                        SaveFileDialog1.Title = "Especificar o ficheiro WIM de destino para combinar os ficheiros SWM de origem"
-                    Case "ITA"
-                        Text = "Unire i file SWM"
-                        ImageTaskHeader1.ItemText = Text
-                        Label2.Text = "File SWM di origine:"
-                        Label3.Text = "NOTA: quando si specifica il file SWM, scegliere il primo file. DISMTools si occuperà dei file SWM aggiuntivi memorizzati in quella directory."
-                        Label4.Text = "File WIM di destinazione:"
-                        Label5.Text = "Indice:"
-                        Button1.Text = "Sfoglia..."
-                        Button2.Text = "Sfoglia..."
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
-                        LinkLabel1.Text = "Impara come si fa"
-                        ListView1.Columns(0).Text = "Indice"
-                        ListView1.Columns(1).Text = "Nome dell'immagine"
-                        ListView1.Columns(2).Text = "Descrizione dell'immagine"
-                        ListView1.Columns(3).Text = "Versione dell'immagine"
-                        OpenFileDialog1.Title = "Specificare il file SWM di origine da unire"
-                        SaveFileDialog1.Title = "Specificare il file WIM di destinazione in cui unire i file SWM di origine"
-                End Select
-            Case 1
-                Text = "Merge SWM files"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Source SWM file:"
-                Label3.Text = "NOTE: when specifying the SWM file, choose the first file. DISMTools will take care of additional SWM files stored in that directory."
-                Label4.Text = "Destination WIM file:"
-                Label5.Text = "Index:"
-                Button1.Text = "Browse..."
-                Button2.Text = "Browse..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                LinkLabel1.Text = "Learn how to do it"
-                ListView1.Columns(0).Text = "Index"
-                ListView1.Columns(1).Text = "Image name"
-                ListView1.Columns(2).Text = "Image description"
-                ListView1.Columns(3).Text = "Image version"
-                OpenFileDialog1.Title = "Specify the source SWM file to merge"
-                SaveFileDialog1.Title = "Specify the destination WIM file to merge the source SWM files to"
-            Case 2
-                Text = "Combinar archivos SWM"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Archivo SWM de origen:"
-                Label3.Text = "NOTA: al especificar el archivo SWM, escoja el primer archivo. DISMTools se encargará de los archivos SWM adicionales en ese directorio."
-                Label4.Text = "Archivo WIM de destino:"
-                Label5.Text = "Índice:"
-                Button1.Text = "Examinar..."
-                Button2.Text = "Examinar..."
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                LinkLabel1.Text = "Aprenda cómo hacerlo"
-                ListView1.Columns(0).Text = "Índice"
-                ListView1.Columns(1).Text = "Nombre de imagen"
-                ListView1.Columns(2).Text = "Descripción de imagen"
-                ListView1.Columns(3).Text = "Versión de imagen"
-                OpenFileDialog1.Title = "Especifique el archivo SWM de origen a combinar"
-                SaveFileDialog1.Title = "Especifique el archivo WIM de destino al que combinar los archivos SWM"
-            Case 3
-                Text = "Fusionner des fichiers SWM"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Fichier SWM source :"
-                Label3.Text = "NOTE : lorsque vous spécifiez le fichier SWM, choisissez le premier fichier. DISMTools s'occupera des fichiers SWM supplémentaires stockés dans ce répertoire."
-                Label4.Text = "Fichier WIM de destination :"
-                Label5.Text = "Index :"
-                Button1.Text = "Parcourir..."
-                Button2.Text = "Parcourir..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                LinkLabel1.Text = "Apprendre à le faire"
-                ListView1.Columns(0).Text = "Index"
-                ListView1.Columns(1).Text = "Nom de l'image"
-                ListView1.Columns(2).Text = "Description de l'image"
-                ListView1.Columns(3).Text = "Version de l'image"
-                OpenFileDialog1.Title = "Spécifier le fichier SWM source à fusionner"
-                SaveFileDialog1.Title = "Spécifier le fichier WIM de destination dans lequel fusionner les fichiers SWM sources"
-            Case 4
-                Text = "Combinar ficheiros SWM"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "Ficheiro SWM de origem:"
-                Label3.Text = "NOTA: ao especificar o arquivo SWM, escolha o primeiro arquivo. DISMTools cuidará dos arquivos SWM adicionais armazenados nesse diretório."
-                Label4.Text = "Ficheiro WIM de destino:"
-                Label5.Text = "Índice:"
-                Button1.Text = "Navegar..."
-                Button2.Text = "Navegar..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                LinkLabel1.Text = "Saiba como o fazer"
-                ListView1.Columns(0).Text = "Índice"
-                ListView1.Columns(1).Text = "Nome da imagem"
-                ListView1.Columns(2).Text = "Descrição da imagem"
-                ListView1.Columns(3).Text = "Versão da imagem"
-                OpenFileDialog1.Title = "Especificar o ficheiro SWM de origem a combinar"
-                SaveFileDialog1.Title = "Especificar o ficheiro WIM de destino para combinar os ficheiros SWM de origem"
-            Case 5
-                Text = "Unire i file SWM"
-                ImageTaskHeader1.ItemText = Text
-                Label2.Text = "File SWM di origine:"
-                Label3.Text = "NOTA: quando si specifica il file SWM, scegliere il primo file. DISMTools si occuperà dei file SWM aggiuntivi memorizzati in quella directory."
-                Label4.Text = "File WIM di destinazione:"
-                Label5.Text = "Indice:"
-                Button1.Text = "Sfoglia..."
-                Button2.Text = "Sfoglia..."
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
-                LinkLabel1.Text = "Impara come si fa"
-                ListView1.Columns(0).Text = "Indice"
-                ListView1.Columns(1).Text = "Nome dell'immagine"
-                ListView1.Columns(2).Text = "Descrizione dell'immagine"
-                ListView1.Columns(3).Text = "Versione dell'immagine"
-                OpenFileDialog1.Title = "Specificare il file SWM di origine da unire"
-                SaveFileDialog1.Title = "Specificare il file WIM di destinazione in cui unire i file SWM di origine"
-        End Select
+        Text = LocalizationService.ForSection("Img.Swm")("MergeSwmfiles.Label")
+        ImageTaskHeader1.ItemText = LocalizationService.ForSection("Img.Swm").Format("Image.Task.Header.Label", Text)
+        Label2.Text = LocalizationService.ForSection("Img.Swm")("SourceSwmfile.Label")
+        Label3.Text = LocalizationService.ForSection("Img.Swm")("Notewhen.Specifying.Message")
+        Label4.Text = LocalizationService.ForSection("Img.Swm")("Destination.WIM.File.Label")
+        Label5.Text = LocalizationService.ForSection("Img.Swm")("Index.Label")
+        Button1.Text = LocalizationService.ForSection("Img.Swm")("Browse.Button")
+        Button2.Text = LocalizationService.ForSection("Img.Swm")("Browse.Button")
+        OK_Button.Text = LocalizationService.ForSection("Img.Swm")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Img.Swm")("Cancel.Button")
+        LinkLabel1.Text = LocalizationService.ForSection("Img.Swm")("LearnHow.Link")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("Img.Swm")("Index.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("Img.Swm")("ImageName.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("Img.Swm")("ImageDescription.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("Img.Swm")("ImageVersion.Column")
+        OpenFileDialog1.Title = LocalizationService.ForSection("Img.Swm")("Source.Swmfile.Title")
+        SaveFileDialog1.Title = LocalizationService.ForSection("Img.Swm")("Dest.WIM.File.Title")
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
@@ -271,7 +103,7 @@ Public Class ImgSwmToWim
                 ListView1.Items.AddRange(imgInfoCollection.Select(Function(imgInfo) New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()})).ToArray())
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
-                MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+                MsgBox(LocalizationService.ForSection("ImageConversion.SwmToWim")("Get.Index.Image.Label"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Finally
                 DynaLog.LogMessage("Shutting down API...")
                 Try

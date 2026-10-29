@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class RegisteredServiceHostGroupsDialog
 
@@ -10,6 +10,16 @@ Public Class RegisteredServiceHostGroupsDialog
     End Sub
 
     Private Sub RegisteredServiceHostGroupsDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Ok.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Windows.Message")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.ServiceGroups")("GroupName.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.ServiceGroups")("ServicesGroup.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.ServiceGroups")("ServiceName.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.ServiceGroups")("DisplayName.Column")
+        ColumnHeader5.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Type.Column")
+        Label2.Text = LocalizationService.ForSection("Designer.ServiceGroups")("Total.Label")
+        Text = LocalizationService.ForSection("Designer.ServiceGroups")("Registered.Svc.Host.Label")
+
         ServiceGroupDetailsLv.Items.Clear()
         ServiceDetailsLv.Items.Clear()
         BackColor = CurrentTheme.SectionBackgroundColor
@@ -25,10 +35,10 @@ Public Class RegisteredServiceHostGroupsDialog
         ' Order group information based on service count
         GroupInformation = GroupInformation.OrderByDescending(Function(serviceGroup) serviceGroup.Services.Count).ThenBy(Function(serviceGroup) serviceGroup.Name).ToList()
 
-        ServiceGroupDetailsLv.Items.AddRange(GroupInformation.Select(Function(Group) New ListViewItem(New String() {Group.Name, String.Format("{0} service(s) in group", Group.Services.Count)})).ToArray())
+        ServiceGroupDetailsLv.Items.AddRange(GroupInformation.Select(Function(Group) New ListViewItem(New String() {Group.Name, String.Format(LocalizationService.ForSection("ServiceGroups")("ServiceGroup.Label"), Group.Services.Count)})).ToArray())
 
         Dim count As Integer = GroupInformation.Sum(Function(serviceGroup) serviceGroup.Services.Count)
-        Label2.Text = String.Format("{0} service(s) are registered in the service host.", count)
+        Label2.Text = String.Format(LocalizationService.ForSection("ServiceGroups")("RegisteredHost.Label"), count)
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(274)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(233)

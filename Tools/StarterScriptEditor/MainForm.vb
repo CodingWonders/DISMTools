@@ -256,7 +256,7 @@ Public Class MainForm
         GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
 
-        SupportedLanguageList.AddRange(New String(3) {"batch", "powershell", "vbscript", "jscript"})
+        SupportedLanguageList.AddRange(New String(2) {"batch", "powershell", "vbscript"})
         If CurrentScript Is Nothing Then CurrentScript = GetNewStarterScript()
         UpdateScriptProperties()
         UpdateCaretPosition()
@@ -375,18 +375,15 @@ Public Class MainForm
         Dim scriptFileName As String = OpenFileDialog2.FileName
         Dim scriptExtension As String = Path.GetExtension(scriptFileName).ToLower()
 
-        Dim expectedBatchExtensions As New List(Of String), expectedVbScriptExtensions As New List(Of String), expectedJScriptExtensions As New List(Of String)
+        Dim expectedBatchExtensions As New List(Of String), expectedVbScriptExtensions As New List(Of String)
         expectedBatchExtensions.AddRange(New String(2) {".bat", ".cmd", ".nt"})
         expectedVbScriptExtensions.AddRange(New String(3) {".vbs", ".vbe", ".wsf", ".wsc"})
-        expectedJScriptExtensions.AddRange(New String(1) {".js", ".jse"})
         If expectedBatchExtensions.Contains(scriptExtension) Then
             comboLanguage.SelectedIndex = 0
         ElseIf scriptExtension.ToLower() = ".ps1" Then
             comboLanguage.SelectedIndex = 1
         ElseIf expectedVbScriptExtensions.Contains(scriptExtension) Then
             comboLanguage.SelectedIndex = 2
-        ElseIf expectedJScriptExtensions.Contains(scriptExtension) Then
-            comboLanguage.SelectedIndex = 3
         Else
             MessageBox.Show("This script is not supported by the Starter Script Editor.", "Unrecognized script", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
@@ -394,7 +391,8 @@ Public Class MainForm
 
         Try
             Dim scriptContents As String = File.ReadAllText(scriptFileName)
-            tbScriptCode.Text = scriptContents
+            tbScriptCode.Text = scriptContents.Replace(CrLf, Lf).Replace(Cr, Lf)
+            tbScriptCode.Text = tbScriptCode.Text.Replace(Lf, Environment.NewLine)
             UpdateCaretPosition()
         Catch ex As Exception
             MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)

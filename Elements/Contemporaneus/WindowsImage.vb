@@ -404,159 +404,33 @@ Namespace Elements.Contemporaneus
         ''' <summary>
         ''' Gets a localized string displaying mount status
         ''' </summary>
-        ''' <param name="LangCode">The language code. 0 to automatically detect from system languages; 1-5 for independent languages</param>
         ''' <returns>The localized string</returns>
-        Public Function MountStatusToString(LangCode As Integer) As String
-            Dim mountStatusString As String = ""
-
+        Public Function MountStatusToString() As String
             Select Case ImageMountStatus
                 Case DismMountStatus.Ok
-                    Select Case LangCode
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    mountStatusString = "OK"
-                                Case "ESN"
-                                    mountStatusString = "Correcto"
-                                Case "FRA"
-                                    mountStatusString = "OK"
-                                Case "PTB", "PTG"
-                                    mountStatusString = "OK"
-                                Case "ITA"
-                                    mountStatusString = "OK"
-                            End Select
-                        Case 1
-                            mountStatusString = "OK"
-                        Case 2
-                            mountStatusString = "Correcto"
-                        Case 3
-                            mountStatusString = "OK"
-                        Case 4
-                            mountStatusString = "OK"
-                        Case 5
-                            mountStatusString = "OK"
-                    End Select
+                    Return LocalizationService.ForSection("WindowsImage.MountStatus")("Ok.Button")
                 Case DismMountStatus.NeedsRemount
-                    Select Case LangCode
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    mountStatusString = "Needs Remount"
-                                Case "ESN"
-                                    mountStatusString = "Necesita recarga"
-                                Case "FRA"
-                                    mountStatusString = "Nécessite un remontage"
-                                Case "PTB", "PTG"
-                                    mountStatusString = "Necessita de remontagem"
-                                Case "ITA"
-                                    mountStatusString = "Necessità di rimontaggio"
-                            End Select
-                        Case 1
-                            mountStatusString = "Needs Remount"
-                        Case 2
-                            mountStatusString = "Necesita recarga"
-                        Case 3
-                            mountStatusString = "Nécessite un remontage"
-                        Case 4
-                            mountStatusString = "Necessita de remontagem"
-                        Case 5
-                            mountStatusString = "Necessità di rimontaggio"
-                    End Select
+                    Return LocalizationService.ForSection("WindowsImage.MountStatus")("NeedsRemount.Label")
                 Case DismMountStatus.Invalid
-                    Select Case LangCode
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    mountStatusString = "Invalid"
-                                Case "ESN"
-                                    mountStatusString = "Inválido"
-                                Case "FRA"
-                                    mountStatusString = "Invalide"
-                                Case "PTB", "PTG"
-                                    mountStatusString = "Inválido"
-                                Case "ITA"
-                                    mountStatusString = "Non valido"
-                            End Select
-                        Case 1
-                            mountStatusString = "Invalid"
-                        Case 2
-                            mountStatusString = "Inválido"
-                        Case 3
-                            mountStatusString = "Invalide"
-                        Case 4
-                            mountStatusString = "Inválido"
-                        Case 5
-                            mountStatusString = "Non valido"
-                    End Select
+                    Return LocalizationService.ForSection("WindowsImage.MountStatus")("Invalid.Label")
             End Select
 
-            Return mountStatusString
+            Return ""
         End Function
 
         ''' <summary>
         ''' Gets a localized string displaying mount mode
         ''' </summary>
-        ''' <param name="LangCode">The language code. 0 to automatically detect from system languages; 1-5 for independent languages</param>
         ''' <returns>The localized string</returns>
-        Public Function MountModeToString(LangCode As Integer) As String
-            Dim mountModeString As String = ""
-
+        Public Function MountModeToString() As String
             Select Case ImageMountMode
                 Case DismMountMode.ReadWrite
-                    Select Case LangCode
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    mountModeString = "Yes"
-                                Case "ESN"
-                                    mountModeString = "Sí"
-                                Case "FRA"
-                                    mountModeString = "Oui"
-                                Case "PTB", "PTG"
-                                    mountModeString = "Sim"
-                                Case "ITA"
-                                    mountModeString = "Sì"
-                            End Select
-                        Case 1
-                            mountModeString = "Yes"
-                        Case 2
-                            mountModeString = "Sí"
-                        Case 3
-                            mountModeString = "Oui"
-                        Case 4
-                            mountModeString = "Sim"
-                        Case 5
-                            mountModeString = "Sì"
-                    End Select
+                    Return LocalizationService.ForSection("WindowsImage.MountMode")("Yes.Button")
                 Case DismMountMode.ReadOnly
-                    Select Case LangCode
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    mountModeString = "No"
-                                Case "ESN"
-                                    mountModeString = "No"
-                                Case "FRA"
-                                    mountModeString = "Non"
-                                Case "PTB", "PTG"
-                                    mountModeString = "Não"
-                                Case "ITA"
-                                    mountModeString = "No"
-                            End Select
-                        Case 1
-                            mountModeString = "No"
-                        Case 2
-                            mountModeString = "No"
-                        Case 3
-                            mountModeString = "Non"
-                        Case 4
-                            mountModeString = "Não"
-                        Case 5
-                            mountModeString = "No"
-                    End Select
+                    Return LocalizationService.ForSection("WindowsImage.MountMode")("No.Button")
             End Select
 
-            Return mountModeString
+            Return ""
         End Function
 
         ''' <summary>

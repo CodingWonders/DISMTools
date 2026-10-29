@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
@@ -26,115 +26,19 @@ Public Class ApplicationDriveSpecifier
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT DeviceID, Model, Partitions, Size FROM Win32_DiskDrive")
         Dim dskResults As ManagementObjectCollection = searcher.Get()
         DynaLog.LogMessage("Management object searcher returned " & dskResults.Count & " result(s)")
-        ListView1.Items.AddRange(dskResults.Cast(Of ManagementObject)().OrderBy(Function(result) result("DeviceID")).Select(Function(result) New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " bytes (~" & Converters.BytesToReadableSize(result("Size")) & ")"})).ToArray())
+        ListView1.Items.AddRange(dskResults.Cast(Of ManagementObject)().OrderBy(Function(result) result("DeviceID")).Select(Function(result) New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & LocalizationService.ForSection("AppDrive")("Bytes.Label") & Converters.BytesToReadableSize(result("Size")) & ")"})).ToArray())
     End Sub
 
     Private Sub ApplicationDriveSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Text = "Specify target disk..."
-                        Label2.Text = "Destination disk ID (\\.\PHYSICALDRIVE(n)):"
-                        Button2.Text = "Refresh"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancel"
-                        ListView1.Columns(0).Text = "Device ID"
-                        ListView1.Columns(1).Text = "Model"
-                        ListView1.Columns(2).Text = "Partitions"
-                        ListView1.Columns(3).Text = "Size"
-                    Case "ESN"
-                        Text = "Especificar disco de destino..."
-                        Label2.Text = "ID de disco (\\.\PHYSICALDRIVE(n)):"
-                        Button2.Text = "Actualizar"
-                        OK_Button.Text = "Aceptar"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "ID de dispositivo"
-                        ListView1.Columns(1).Text = "Modelo"
-                        ListView1.Columns(2).Text = "Particiones"
-                        ListView1.Columns(3).Text = "Tamaño"
-                    Case "FRA"
-                        Text = "Spécifier le disque cible..."
-                        Label2.Text = "ID de disque de destination (\\.\PHYSICALDRIVE(n)):"
-                        Button2.Text = "Rafraîchir"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annuler"
-                        ListView1.Columns(0).Text = "ID de l'appareil"
-                        ListView1.Columns(1).Text = "Modèle"
-                        ListView1.Columns(2).Text = "Partitions"
-                        ListView1.Columns(3).Text = "Taille"
-                    Case "PTB", "PTG"
-                        Text = "Especificar o disco de destino..."
-                        Label2.Text = "ID do disco de destino (\\.\PHYSICALDRIVE(n)):"
-                        Button2.Text = "Atualizar"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Cancelar"
-                        ListView1.Columns(0).Text = "ID do dispositivo"
-                        ListView1.Columns(1).Text = "Modelo"
-                        ListView1.Columns(2).Text = "Partições"
-                        ListView1.Columns(3).Text = "Tamanho"
-                    Case "ITA"
-                        Text = "Specificare il disco di destinazione..."
-                        Label2.Text = "ID disco di destinazione (\\.\PHYSICALDRIVE(n)):"
-                        Button2.Text = "Aggiorna"
-                        OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annulla"
-                        ListView1.Columns(0).Text = "ID dispositivo"
-                        ListView1.Columns(1).Text = "Modello"
-                        ListView1.Columns(2).Text = "Partizioni"
-                        ListView1.Columns(3).Text = "Dimensione"
-                End Select
-            Case 1
-                Text = "Specify target disk..."
-                Label2.Text = "Destination disk ID (\\.\PHYSICALDRIVE(n)):"
-                Button2.Text = "Refresh"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancel"
-                ListView1.Columns(0).Text = "Device ID"
-                ListView1.Columns(1).Text = "Model"
-                ListView1.Columns(2).Text = "Partitions"
-                ListView1.Columns(3).Text = "Size"
-            Case 2
-                Text = "Especificar disco de destino..."
-                Label2.Text = "ID de disco (\\.\PHYSICALDRIVE(n)):"
-                Button2.Text = "Actualizar"
-                OK_Button.Text = "Aceptar"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "ID de dispositivo"
-                ListView1.Columns(1).Text = "Modelo"
-                ListView1.Columns(2).Text = "Particiones"
-                ListView1.Columns(3).Text = "Tamaño"
-            Case 3
-                Text = "Spécifier le disque cible..."
-                Label2.Text = "ID de disque de destination (\\.\PHYSICALDRIVE(n)):"
-                Button2.Text = "Rafraîchir"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annuler"
-                ListView1.Columns(0).Text = "ID de l'appareil"
-                ListView1.Columns(1).Text = "Modèle"
-                ListView1.Columns(2).Text = "Partitions"
-                ListView1.Columns(3).Text = "Taille"
-            Case 4
-                Text = "Especificar o disco de destino..."
-                Label2.Text = "ID do disco de destino (\\.\PHYSICALDRIVE(n)):"
-                Button2.Text = "Atualizar"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Cancelar"
-                ListView1.Columns(0).Text = "ID do dispositivo"
-                ListView1.Columns(1).Text = "Modelo"
-                ListView1.Columns(2).Text = "Partições"
-                ListView1.Columns(3).Text = "Tamanho"
-            Case 5
-                Text = "Specificare il disco di destinazione..."
-                Label2.Text = "ID disco di destinazione (\\.\PHYSICALDRIVE(n)):"
-                Button2.Text = "Aggiorna"
-                OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annulla"
-                ListView1.Columns(0).Text = "ID dispositivo"
-                ListView1.Columns(1).Text = "Modello"
-                ListView1.Columns(2).Text = "Partizioni"
-                ListView1.Columns(3).Text = "Dimensione"
-        End Select
+        Text = LocalizationService.ForSection("AppDrive")("Target.Disk.Button")
+        Label2.Text = LocalizationService.ForSection("AppDrive")("Destination.Disk.Id.Label")
+        Button2.Text = LocalizationService.ForSection("AppDrive")("Refresh.Button")
+        OK_Button.Text = LocalizationService.ForSection("AppDrive")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("AppDrive")("Cancel.Button")
+        ListView1.Columns(0).Text = LocalizationService.ForSection("AppDrive")("DeviceID.Column")
+        ListView1.Columns(1).Text = LocalizationService.ForSection("AppDrive")("Model.Column")
+        ListView1.Columns(2).Text = LocalizationService.ForSection("AppDrive")("Partitions.Column")
+        ListView1.Columns(3).Text = LocalizationService.ForSection("AppDrive")("Size.Column")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor

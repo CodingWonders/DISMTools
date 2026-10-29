@@ -32,7 +32,7 @@ Module WMIHelper
         Catch ex As Exception
             Dim wmiErrorStr As String = String.Format("An error occurred while executing the WMI query: {0}{1}{0}, on namespace {2} -- {3}", Quote, ManagementQuery, ManagementNamespace, ex.Message)
             DynaLog.LogMessage(wmiErrorStr)
-            If Debugger.IsAttached Then MessageBox.Show(wmiErrorStr, "WMI Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Debugger.IsAttached Then MessageBox.Show(wmiErrorStr, LocalizationService.ForSection("Utilities.WMIHelper")("Wmierror.Message"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return Nothing
         End Try
         Return Nothing

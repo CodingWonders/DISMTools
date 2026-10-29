@@ -6,7 +6,7 @@ Public Class SplashScreen
     Dim opacityFade As Single
 
     Private Sub SplashScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        VersionLabel.Text = String.Format("Version {0}.{1}.{2}",
+        VersionLabel.Text = String.Format(LocalizationService.ForSection("SplashScreen")("Version.Label"),
                                           My.Application.Info.Version.ToString(),
                                           MainForm.dtBranch,
                                           RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))

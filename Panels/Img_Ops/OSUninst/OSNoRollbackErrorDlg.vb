@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 
 Public Class OSNoRollbackErrorDlg
 
@@ -13,51 +13,9 @@ Public Class OSNoRollbackErrorDlg
     End Sub
 
     Private Sub OSNoRollbackErrorDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label1.Text = "You can't roll back to an older version"
-                        Label2.Text = "No old versions were detected, because its files were not found. You may have had this version for longer than the uninstall window lets you have, or you may have deleted the files of the old version (to save space). You don't need to do anything."
-                        OK_Button.Text = "OK"
-                    Case "ESN"
-                        Label1.Text = "No puede revertir a una versión anterior"
-                        Label2.Text = "No se detectaron versiones anteriores porque sus archivos no se encontraron. Podría haber tenido esta versión por más tiempo de lo que le permite el margen de desinstalación, o podría haber eliminado los archivos de la versión anterior (para liberar espacio). No tiene que hacer nada."
-                        OK_Button.Text = "Aceptar"
-                    Case "FRA"
-                        Label1.Text = "Vous ne pouvez pas revenir à une version antérieure"
-                        Label2.Text = "Aucune ancienne version n'a été détectée, car ses fichiers n'ont pas été trouvés. Il se peut que vous possédiez cette version depuis plus longtemps que la fenêtre de désinstallation ne vous le permet, ou que vous ayez supprimé les fichiers de l'ancienne version (pour économiser de l'espace). Vous n'avez rien à faire."
-                        OK_Button.Text = "OK"
-                    Case "PTB", "PTG"
-                        Label1.Text = "Não é possível retroceder para uma versão anterior"
-                        Label2.Text = "Não foram detectadas versões antigas, porque os seus ficheiros não foram encontrados. Poderá ter esta versão há mais tempo do que a janela de desinstalação lhe permite, ou poderá ter eliminado os ficheiros da versão antiga (para poupar espaço). Não precisa de fazer nada"
-                        OK_Button.Text = "OK"
-                    Case "ITA"
-                        Label1.Text = "Non è possibile tornare a una versione precedente"
-                        Label2.Text = "Non è stata rilevata alcuna vecchia versione, perché i suoi file non sono stati trovati. È possibile che si disponga di questa versione da un tempo superiore a quello consentito dalla finestra di disinstallazione, oppure che siano stati cancellati i file della vecchia versione (per risparmiare spazio). Non è necessario fare nulla"
-                        OK_Button.Text = "OK"
-                End Select
-            Case 1
-                Label1.Text = "You can't roll back to an older version"
-                Label2.Text = "No old versions were detected, because its files were not found. You may have had this version for longer than the uninstall window lets you have, or you may have deleted the files of the old version (to save space). You don't need to do anything."
-                OK_Button.Text = "OK"
-            Case 2
-                Label1.Text = "No puede revertir a una versión anterior"
-                Label2.Text = "No se detectaron versiones anteriores porque sus archivos no se encontraron. Podría haber tenido esta versión por más tiempo de lo que le permite el margen de desinstalación, o podría haber eliminado los archivos de la versión anterior (para liberar espacio). No tiene que hacer nada."
-                OK_Button.Text = "Aceptar"
-            Case 3
-                Label1.Text = "Vous ne pouvez pas revenir à une version antérieure"
-                Label2.Text = "Aucune ancienne version n'a été détectée, car ses fichiers n'ont pas été trouvés. Il se peut que vous possédiez cette version depuis plus longtemps que la fenêtre de désinstallation ne vous le permet, ou que vous ayez supprimé les fichiers de l'ancienne version (pour économiser de l'espace). Vous n'avez rien à faire."
-                OK_Button.Text = "OK"
-            Case 4
-                Label1.Text = "Não é possível retroceder para uma versão anterior"
-                Label2.Text = "Não foram detectadas versões antigas, porque os seus ficheiros não foram encontrados. Poderá ter esta versão há mais tempo do que a janela de desinstalação lhe permite, ou poderá ter eliminado os ficheiros da versão antiga (para poupar espaço). Não precisa de fazer nada"
-                OK_Button.Text = "OK"
-            Case 5
-                Label1.Text = "Non è possibile tornare a una versione precedente"
-                Label2.Text = "Non è stata rilevata alcuna vecchia versione, perché i suoi file non sono stati trovati. È possibile che si disponga di questa versione da un tempo superiore a quello consentito dalla finestra di disinstallazione, oppure che siano stati cancellati i file della vecchia versione (per risparmiare spazio). Non è necessario fare nulla"
-                OK_Button.Text = "OK"
-        End Select
+        Label1.Text = LocalizationService.ForSection("OS.No")("Troll.Back.Older.Label")
+        Label2.Text = LocalizationService.ForSection("OS.No")("Old.Versions.None.Message")
+        OK_Button.Text = LocalizationService.ForSection("OS.No")("Ok.Button")
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Panel1.BackColor = CurrentTheme.SectionBackgroundColor

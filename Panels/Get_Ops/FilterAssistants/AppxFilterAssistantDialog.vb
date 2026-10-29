@@ -60,6 +60,26 @@ Public Class AppxFilterAssistantDialog
     End Function
 
     Private Sub AppxFilterAssistantDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Apply.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Clear.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("FilterBy.Label")
+        NameFilterRadioButton.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Name.RadioButton")
+        RegStatusRadioButton.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegistrationStatus.RadioButton")
+        Label2.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredTo.Label")
+        RemoveHandler RegStatusComboBox.SelectedIndexChanged, AddressOf RegStatusComboBox_SelectedIndexChanged
+        RegStatusComboBox.Items.Clear()
+        RegStatusComboBox.Items.AddRange({LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToNoOne.Item"),
+                                          LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToAnyone.Item"),
+                                          LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToMe.Item"),
+                                          LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToUser.Item")})
+        AddHandler RegStatusComboBox.SelectedIndexChanged, AddressOf RegStatusComboBox_SelectedIndexChanged
+        RegStatusComboBox.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("RegisteredToMe.Item")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("AccountName.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("DisplayName.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Sid.Column")
+        Label3.Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("SelectUser.Message")
+        Text = LocalizationService.ForSection("Designer.AppxFilterAssistant")("Title")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         PackageNameTextBox.BackColor = BackColor

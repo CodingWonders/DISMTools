@@ -103,7 +103,7 @@ Partial Class GetPkgInfoDlg
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.PkgFilesPanel = New System.Windows.Forms.Panel()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.PackageControlsTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -189,7 +189,7 @@ Partial Class GetPkgInfoDlg
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.PkgFilesPanel.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
+        Me.PackageControlsTLP.SuspendLayout()
         Me.PackageFileContainerPanel.SuspendLayout()
         Me.PackageFileInfoPanel.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
@@ -523,7 +523,7 @@ Partial Class GetPkgInfoDlg
         Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label23.Size = New System.Drawing.Size(38, 15)
         Me.Label23.TabIndex = 0
-        Me.Label23.Text = "Label8"
+        Me.Label23.Text = "    "
         Me.Label23.UseMnemonic = False
         '
         'Label24
@@ -545,7 +545,7 @@ Partial Class GetPkgInfoDlg
         Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label25.Size = New System.Drawing.Size(38, 15)
         Me.Label25.TabIndex = 0
-        Me.Label25.Text = "Label8"
+        Me.Label25.Text = "    "
         Me.Label25.UseMnemonic = False
         '
         'Label26
@@ -567,7 +567,7 @@ Partial Class GetPkgInfoDlg
         Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label35.Size = New System.Drawing.Size(38, 15)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = "Label8"
+        Me.Label35.Text = "    "
         Me.Label35.UseMnemonic = False
         '
         'Label31
@@ -589,7 +589,7 @@ Partial Class GetPkgInfoDlg
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label32.Size = New System.Drawing.Size(38, 15)
         Me.Label32.TabIndex = 0
-        Me.Label32.Text = "Label8"
+        Me.Label32.Text = "    "
         Me.Label32.UseMnemonic = False
         '
         'Label41
@@ -611,7 +611,7 @@ Partial Class GetPkgInfoDlg
         Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label40.Size = New System.Drawing.Size(38, 15)
         Me.Label40.TabIndex = 0
-        Me.Label40.Text = "Label8"
+        Me.Label40.Text = "    "
         Me.Label40.UseMnemonic = False
         '
         'Label43
@@ -633,7 +633,7 @@ Partial Class GetPkgInfoDlg
         Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label42.Size = New System.Drawing.Size(38, 15)
         Me.Label42.TabIndex = 0
-        Me.Label42.Text = "Label8"
+        Me.Label42.Text = "    "
         Me.Label42.UseMnemonic = False
         '
         'Label47
@@ -655,7 +655,7 @@ Partial Class GetPkgInfoDlg
         Me.Label46.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label46.Size = New System.Drawing.Size(38, 15)
         Me.Label46.TabIndex = 0
-        Me.Label46.Text = "Label8"
+        Me.Label46.Text = "    "
         Me.Label46.UseMnemonic = False
         '
         'Label33
@@ -677,7 +677,7 @@ Partial Class GetPkgInfoDlg
         Me.Label34.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label34.Size = New System.Drawing.Size(38, 15)
         Me.Label34.TabIndex = 0
-        Me.Label34.Text = "Label8"
+        Me.Label34.Text = "    "
         Me.Label34.UseMnemonic = False
         '
         'Label28
@@ -699,7 +699,7 @@ Partial Class GetPkgInfoDlg
         Me.Label27.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label27.Size = New System.Drawing.Size(38, 15)
         Me.Label27.TabIndex = 0
-        Me.Label27.Text = "Label8"
+        Me.Label27.Text = "    "
         Me.Label27.UseMnemonic = False
         '
         'Label30
@@ -721,7 +721,7 @@ Partial Class GetPkgInfoDlg
         Me.Label29.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label29.Size = New System.Drawing.Size(38, 15)
         Me.Label29.TabIndex = 0
-        Me.Label29.Text = "Label8"
+        Me.Label29.Text = "    "
         Me.Label29.UseMnemonic = False
         '
         'Label39
@@ -743,7 +743,7 @@ Partial Class GetPkgInfoDlg
         Me.Label38.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label38.Size = New System.Drawing.Size(38, 15)
         Me.Label38.TabIndex = 0
-        Me.Label38.Text = "Label8"
+        Me.Label38.Text = "    "
         Me.Label38.UseMnemonic = False
         '
         'Label45
@@ -765,7 +765,7 @@ Partial Class GetPkgInfoDlg
         Me.Label44.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label44.Size = New System.Drawing.Size(38, 15)
         Me.Label44.TabIndex = 0
-        Me.Label44.Text = "Label8"
+        Me.Label44.Text = "    "
         Me.Label44.UseMnemonic = False
         '
         'Label14
@@ -787,7 +787,7 @@ Partial Class GetPkgInfoDlg
         Me.Label15.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label15.Size = New System.Drawing.Size(38, 15)
         Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Label8"
+        Me.Label15.Text = "    "
         Me.Label15.UseMnemonic = False
         '
         'Label16
@@ -809,7 +809,7 @@ Partial Class GetPkgInfoDlg
         Me.Label21.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label21.Size = New System.Drawing.Size(38, 15)
         Me.Label21.TabIndex = 0
-        Me.Label21.Text = "Label8"
+        Me.Label21.Text = "    "
         Me.Label21.UseMnemonic = False
         '
         'Label48
@@ -831,7 +831,7 @@ Partial Class GetPkgInfoDlg
         Me.Label13.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label13.Size = New System.Drawing.Size(38, 15)
         Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Label8"
+        Me.Label13.Text = "    "
         Me.Label13.UseMnemonic = False
         '
         'Label50
@@ -853,7 +853,7 @@ Partial Class GetPkgInfoDlg
         Me.Label49.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label49.Size = New System.Drawing.Size(38, 15)
         Me.Label49.TabIndex = 0
-        Me.Label49.Text = "Label8"
+        Me.Label49.Text = "    "
         Me.Label49.UseMnemonic = False
         '
         'Label52
@@ -875,7 +875,7 @@ Partial Class GetPkgInfoDlg
         Me.Label51.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label51.Size = New System.Drawing.Size(38, 15)
         Me.Label51.TabIndex = 0
-        Me.Label51.Text = "Label8"
+        Me.Label51.Text = "    "
         Me.Label51.UseMnemonic = False
         '
         'Label54
@@ -897,7 +897,7 @@ Partial Class GetPkgInfoDlg
         Me.Label53.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label53.Size = New System.Drawing.Size(38, 15)
         Me.Label53.TabIndex = 0
-        Me.Label53.Text = "Label8"
+        Me.Label53.Text = "    "
         Me.Label53.UseMnemonic = False
         '
         'Label61
@@ -919,7 +919,7 @@ Partial Class GetPkgInfoDlg
         Me.Label56.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label56.Size = New System.Drawing.Size(38, 15)
         Me.Label56.TabIndex = 0
-        Me.Label56.Text = "Label8"
+        Me.Label56.Text = "    "
         Me.Label56.UseMnemonic = False
         '
         'Label58
@@ -941,7 +941,7 @@ Partial Class GetPkgInfoDlg
         Me.Label57.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label57.Size = New System.Drawing.Size(38, 15)
         Me.Label57.TabIndex = 0
-        Me.Label57.Text = "Label8"
+        Me.Label57.Text = "    "
         Me.Label57.UseMnemonic = False
         Me.Label57.Visible = False
         '
@@ -1030,7 +1030,7 @@ Partial Class GetPkgInfoDlg
         Me.Label59.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label59.Size = New System.Drawing.Size(38, 15)
         Me.Label59.TabIndex = 0
-        Me.Label59.Text = "Label8"
+        Me.Label59.Text = "    "
         Me.Label59.UseMnemonic = False
         '
         'Label55
@@ -1122,7 +1122,7 @@ Partial Class GetPkgInfoDlg
         'PkgFilesPanel
         '
         Me.PkgFilesPanel.Controls.Add(Me.ListBox1)
-        Me.PkgFilesPanel.Controls.Add(Me.TableLayoutPanel2)
+        Me.PkgFilesPanel.Controls.Add(Me.PackageControlsTLP)
         Me.PkgFilesPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PkgFilesPanel.Location = New System.Drawing.Point(0, 0)
         Me.PkgFilesPanel.Name = "PkgFilesPanel"
@@ -1139,22 +1139,22 @@ Partial Class GetPkgInfoDlg
         Me.ListBox1.Size = New System.Drawing.Size(440, 348)
         Me.ListBox1.TabIndex = 0
         '
-        'TableLayoutPanel2
+        'PackageControlsTLP
         '
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 2, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
-        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 348)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(440, 28)
-        Me.TableLayoutPanel2.TabIndex = 1
+        Me.PackageControlsTLP.ColumnCount = 3
+        Me.PackageControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PackageControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PackageControlsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PackageControlsTLP.Controls.Add(Me.Button3, 2, 0)
+        Me.PackageControlsTLP.Controls.Add(Me.Button2, 1, 0)
+        Me.PackageControlsTLP.Controls.Add(Me.Button1, 0, 0)
+        Me.PackageControlsTLP.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PackageControlsTLP.Location = New System.Drawing.Point(0, 348)
+        Me.PackageControlsTLP.Name = "PackageControlsTLP"
+        Me.PackageControlsTLP.RowCount = 1
+        Me.PackageControlsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.PackageControlsTLP.Size = New System.Drawing.Size(440, 28)
+        Me.PackageControlsTLP.TabIndex = 1
         '
         'Button3
         '
@@ -1285,7 +1285,7 @@ Partial Class GetPkgInfoDlg
         Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label9.Size = New System.Drawing.Size(38, 15)
         Me.Label9.TabIndex = 24
-        Me.Label9.Text = "Label8"
+        Me.Label9.Text = "    "
         Me.Label9.UseMnemonic = False
         '
         'Label10
@@ -1307,7 +1307,7 @@ Partial Class GetPkgInfoDlg
         Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label11.Size = New System.Drawing.Size(38, 15)
         Me.Label11.TabIndex = 26
-        Me.Label11.Text = "Label8"
+        Me.Label11.Text = "    "
         Me.Label11.UseMnemonic = False
         '
         'Label12
@@ -1329,7 +1329,7 @@ Partial Class GetPkgInfoDlg
         Me.Label17.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label17.Size = New System.Drawing.Size(38, 15)
         Me.Label17.TabIndex = 28
-        Me.Label17.Text = "Label8"
+        Me.Label17.Text = "    "
         Me.Label17.UseMnemonic = False
         '
         'Label18
@@ -1351,7 +1351,7 @@ Partial Class GetPkgInfoDlg
         Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label19.Size = New System.Drawing.Size(38, 15)
         Me.Label19.TabIndex = 30
-        Me.Label19.Text = "Label8"
+        Me.Label19.Text = "    "
         Me.Label19.UseMnemonic = False
         '
         'Label20
@@ -1373,7 +1373,7 @@ Partial Class GetPkgInfoDlg
         Me.Label62.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label62.Size = New System.Drawing.Size(38, 15)
         Me.Label62.TabIndex = 33
-        Me.Label62.Text = "Label8"
+        Me.Label62.Text = "    "
         Me.Label62.UseMnemonic = False
         '
         'Label63
@@ -1395,7 +1395,7 @@ Partial Class GetPkgInfoDlg
         Me.Label64.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label64.Size = New System.Drawing.Size(38, 15)
         Me.Label64.TabIndex = 34
-        Me.Label64.Text = "Label8"
+        Me.Label64.Text = "    "
         Me.Label64.UseMnemonic = False
         '
         'Label65
@@ -1417,7 +1417,7 @@ Partial Class GetPkgInfoDlg
         Me.Label66.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label66.Size = New System.Drawing.Size(38, 15)
         Me.Label66.TabIndex = 36
-        Me.Label66.Text = "Label8"
+        Me.Label66.Text = "    "
         Me.Label66.UseMnemonic = False
         '
         'Label67
@@ -1439,7 +1439,7 @@ Partial Class GetPkgInfoDlg
         Me.Label68.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label68.Size = New System.Drawing.Size(38, 15)
         Me.Label68.TabIndex = 38
-        Me.Label68.Text = "Label8"
+        Me.Label68.Text = "    "
         Me.Label68.UseMnemonic = False
         '
         'Label69
@@ -1461,7 +1461,7 @@ Partial Class GetPkgInfoDlg
         Me.Label70.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label70.Size = New System.Drawing.Size(38, 15)
         Me.Label70.TabIndex = 40
-        Me.Label70.Text = "Label8"
+        Me.Label70.Text = "    "
         Me.Label70.UseMnemonic = False
         '
         'Label71
@@ -1483,7 +1483,7 @@ Partial Class GetPkgInfoDlg
         Me.Label72.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label72.Size = New System.Drawing.Size(38, 15)
         Me.Label72.TabIndex = 23
-        Me.Label72.Text = "Label8"
+        Me.Label72.Text = "    "
         Me.Label72.UseMnemonic = False
         '
         'Label73
@@ -1505,7 +1505,7 @@ Partial Class GetPkgInfoDlg
         Me.Label74.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label74.Size = New System.Drawing.Size(38, 15)
         Me.Label74.TabIndex = 22
-        Me.Label74.Text = "Label8"
+        Me.Label74.Text = "    "
         Me.Label74.UseMnemonic = False
         '
         'Label75
@@ -1527,7 +1527,7 @@ Partial Class GetPkgInfoDlg
         Me.Label76.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label76.Size = New System.Drawing.Size(38, 15)
         Me.Label76.TabIndex = 2
-        Me.Label76.Text = "Label8"
+        Me.Label76.Text = "    "
         Me.Label76.UseMnemonic = False
         '
         'Label77
@@ -1549,7 +1549,7 @@ Partial Class GetPkgInfoDlg
         Me.Label78.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label78.Size = New System.Drawing.Size(38, 15)
         Me.Label78.TabIndex = 4
-        Me.Label78.Text = "Label8"
+        Me.Label78.Text = "    "
         Me.Label78.UseMnemonic = False
         '
         'Label79
@@ -1571,7 +1571,7 @@ Partial Class GetPkgInfoDlg
         Me.Label80.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label80.Size = New System.Drawing.Size(38, 15)
         Me.Label80.TabIndex = 6
-        Me.Label80.Text = "Label8"
+        Me.Label80.Text = "    "
         Me.Label80.UseMnemonic = False
         '
         'Label81
@@ -1593,7 +1593,7 @@ Partial Class GetPkgInfoDlg
         Me.Label82.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label82.Size = New System.Drawing.Size(38, 15)
         Me.Label82.TabIndex = 8
-        Me.Label82.Text = "Label8"
+        Me.Label82.Text = "    "
         Me.Label82.UseMnemonic = False
         '
         'Label83
@@ -1615,7 +1615,7 @@ Partial Class GetPkgInfoDlg
         Me.Label84.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label84.Size = New System.Drawing.Size(38, 15)
         Me.Label84.TabIndex = 11
-        Me.Label84.Text = "Label8"
+        Me.Label84.Text = "    "
         Me.Label84.UseMnemonic = False
         '
         'Label85
@@ -1637,7 +1637,7 @@ Partial Class GetPkgInfoDlg
         Me.Label86.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label86.Size = New System.Drawing.Size(38, 15)
         Me.Label86.TabIndex = 12
-        Me.Label86.Text = "Label8"
+        Me.Label86.Text = "    "
         Me.Label86.UseMnemonic = False
         '
         'Label87
@@ -1659,7 +1659,7 @@ Partial Class GetPkgInfoDlg
         Me.Label88.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label88.Size = New System.Drawing.Size(38, 15)
         Me.Label88.TabIndex = 14
-        Me.Label88.Text = "Label8"
+        Me.Label88.Text = "    "
         Me.Label88.UseMnemonic = False
         '
         'Label89
@@ -1681,7 +1681,7 @@ Partial Class GetPkgInfoDlg
         Me.Label90.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label90.Size = New System.Drawing.Size(38, 15)
         Me.Label90.TabIndex = 45
-        Me.Label90.Text = "Label8"
+        Me.Label90.Text = "    "
         Me.Label90.UseMnemonic = False
         '
         'Label91
@@ -1703,7 +1703,7 @@ Partial Class GetPkgInfoDlg
         Me.Label92.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label92.Size = New System.Drawing.Size(38, 15)
         Me.Label92.TabIndex = 18
-        Me.Label92.Text = "Label8"
+        Me.Label92.Text = "    "
         Me.Label92.UseMnemonic = False
         '
         'Label93
@@ -1725,7 +1725,7 @@ Partial Class GetPkgInfoDlg
         Me.Label94.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label94.Size = New System.Drawing.Size(38, 15)
         Me.Label94.TabIndex = 21
-        Me.Label94.Text = "Label8"
+        Me.Label94.Text = "    "
         Me.Label94.UseMnemonic = False
         '
         'Label95
@@ -1868,7 +1868,7 @@ Partial Class GetPkgInfoDlg
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.PkgFilesPanel.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.PackageControlsTLP.ResumeLayout(False)
         Me.PackageFileContainerPanel.ResumeLayout(False)
         Me.PackageFileInfoPanel.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
@@ -1893,7 +1893,7 @@ Partial Class GetPkgInfoDlg
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents PkgFilesPanel As System.Windows.Forms.Panel
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
-    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents PackageControlsTLP As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button

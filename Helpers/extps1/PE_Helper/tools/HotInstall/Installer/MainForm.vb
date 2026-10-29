@@ -20,7 +20,8 @@ Public Class MainForm
 
     Dim BCDEntryTextLocation As String
 
-    Dim BootMgrEntryName As String
+    Dim BootMgrEntryName As String,
+        RollbackEntryName As String
     Dim SlideshowPicture As Integer = 1
 
     Dim ProgressMessage As String = ""
@@ -49,6 +50,7 @@ Public Class MainForm
         NextButton.Text = GetValueFromLanguageData("Common.Common_Next")
         ExitButton.Text = GetValueFromLanguageData("Common.Common_Cancel")
         BootMgrEntryName = GetValueFromLanguageData("MainForm.BootMgrEntryName")
+        RollbackEntryName = GetValueFromLanguageData("MainForm.RollbackEntryName")
         Text = GetValueFromLanguageData("MainForm.WndTitle")
         Label1.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Header")
         Label2.Text = GetValueFromLanguageData("MainForm.DisclaimerPanel_Description")
@@ -133,6 +135,11 @@ Public Class MainForm
         If TestMode Or TestBCD Then
             bootPath = Path.Combine(Application.StartupPath, "sources", "boot.wim")
             installPath = Path.Combine(Application.StartupPath, "sources", "install.wim")
+        End If
+
+        If Not File.Exists(installPath) Then
+            ' It may be the ESD file; try that one instead
+            installPath = installPath.Replace(".wim", ".esd")
         End If
 
         Dim BootImageInfo As DismImageInfoCollection = GetImageInformation(bootPath)
@@ -447,13 +454,13 @@ Public Class MainForm
     ''' </summary>
     ''' <param name="Source">The source folder to copy files from</param>
     ''' <param name="Destination">The destination folder to copy files to</param>
-    ''' <param name="ExcludedFile">The file to exclude from the copy process</param>
+    ''' <param name="ExcludedFilePattern">The file to exclude from the copy process</param>
     ''' <remarks></remarks>
-    Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFile As String = "", Optional ReportProgress As Boolean = True)
+    Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFilePattern As String = "", Optional ReportProgress As Boolean = True)
         DynaLog.LogMessage("Preparing to copy files and directories...")
         DynaLog.LogMessage("- Source Directory: " & Source)
         DynaLog.LogMessage("- Destination Directory: " & Destination)
-        DynaLog.LogMessage("- Excluded File: " & ExcludedFile)
+        DynaLog.LogMessage("- Excluded File: " & ExcludedFilePattern)
         Try
             If Not Directory.Exists(Destination) Then
                 DynaLog.LogMessage("Destination does not exist. Creating...")
@@ -484,7 +491,8 @@ Public Class MainForm
                         For Each FileToCopy In Directory.GetFiles(SubDirInSource, "*", SearchOption.AllDirectories)
                             ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
                             If ReportProgress Then InstallerBW.ReportProgress(5)
-                            If Path.GetFileName(FileToCopy) = ExcludedFile Then Continue For
+                            If (Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) OrElse Path.GetExtension(FileToCopy).EndsWith(".esd", StringComparison.OrdinalIgnoreCase)) AndAlso
+                                Path.GetFileName(FileToCopy).IndexOf(ExcludedFilePattern, StringComparison.OrdinalIgnoreCase) > -1 Then Continue For
                             Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                             Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
                             File.Copy(FileToCopy, destinationPath, True)
@@ -513,7 +521,8 @@ Public Class MainForm
                     For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
                         ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), Path.GetFileName(FileToCopy))
                         If ReportProgress Then InstallerBW.ReportProgress(5)
-                        If Path.GetFileName(FileToCopy) = ExcludedFile Then Continue For
+                        If (Path.GetExtension(FileToCopy).EndsWith(".wim", StringComparison.OrdinalIgnoreCase) OrElse Path.GetExtension(FileToCopy).EndsWith(".esd", StringComparison.OrdinalIgnoreCase)) AndAlso
+                            Path.GetFileName(FileToCopy).IndexOf(ExcludedFilePattern, StringComparison.OrdinalIgnoreCase) > -1 Then Continue For
                         Dim sourcePath As String = FileToCopy.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                         Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
                         File.Copy(FileToCopy, destinationPath, True)
@@ -538,7 +547,7 @@ Public Class MainForm
     ''' <param name="Mount">(Optional) Determines whether or not to mount an image</param>
     ''' <param name="Commit">(Optional) Determines whether or not to save changes</param>
     ''' <remarks>If Mount is true, an index must be specified.</remarks>
-    Sub UseWindowsImage(ImageFile As String, MountDirectory As String, Optional Index As Integer = 0, Optional Mount As Boolean = False, Optional Commit As Boolean = False)
+    Sub UseWindowsImage(ImageFile As String, MountDirectory As String, Optional Index As Integer = 0, Optional Mount As Boolean = False, Optional Commit As Boolean = False, Optional reportProgress As Boolean = True)
         DynaLog.LogMessage("Preparing to perform operations with Windows images...")
         DynaLog.LogMessage("- Image File: " & ImageFile)
         DynaLog.LogMessage("- Mount Directory: " & MountDirectory)
@@ -574,6 +583,7 @@ Public Class MainForm
                 End If
                 DynaLog.LogMessage("Mounting image...")
                 DismApi.MountImage(ImageFile, MountDirectory, Index, False, Sub(progress As DismProgress)
+                                                                                If Not reportProgress Then Exit Sub
                                                                                 If progress.Current > 100 Then Exit Sub
                                                                                 DismProgressPercentage = progress.Current
                                                                                 ProgressMessage = MountString & " (" & DismProgressPercentage & "%)"
@@ -585,6 +595,7 @@ Public Class MainForm
             Else
                 DynaLog.LogMessage("Unmounting image...")
                 DismApi.UnmountImage(MountDirectory, Commit, Sub(progress As DismProgress)
+                                                                 If Not reportProgress Then Exit Sub
                                                                  If (progress.Current / 2) > 100 Then Exit Sub
                                                                  DismProgressPercentage = progress.Current / 2
                                                                  ProgressMessage = UnmountString & " (" & DismProgressPercentage & "%)"
@@ -606,7 +617,10 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private ReadOnly GUID_WINDOWS_SETUP_RAMDISK_OPTIONS As New Guid("AE5534E0-A924-466C-B836-758539A3EE3A")
+    Private ReadOnly GUID_WINDOWS_SETUP_RAMDISK_OPTIONS As New Guid("AE5534E0-A924-466C-B836-758539A3EE3A"),
+                     GUID_WINDOWS_BOOTMGR As New Guid("9DEA862C-5CDD-4E70-ACC1-F32B344D4795")
+
+    Private Const DefaultElementDefinition As String = "23000003"
 
     ''' <summary>
     ''' Runs BCDEdit with the provided arguments
@@ -752,12 +766,7 @@ Public Class MainForm
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_BootEntryConfig")
             InstallerBW.ReportProgress(35)
             DynaLog.LogMessage("Defining boot entry properties for " & If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI", "modern UEFI systems", "legacy BIOS systems") & "...")
-            Dim osloaderPath As String = ""
-            If Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI" Then
-                osloaderPath = "\Windows\system32\Boot\winload.efi"
-            Else
-                osloaderPath = "\Windows\system32\winload.exe"
-            End If
+            Dim osloaderPath As String = If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI", "\Windows\system32\Boot\winload.efi", "\Windows\system32\winload.exe")
             RunBCDConfigurator("/set " & TargetGuid & " device ramdisk=[" & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim() & "]\$DISMTOOLS.~BT\sources\boot.wim,{ramdiskoptions}")
             RunBCDConfigurator("/set " & TargetGuid & " osdevice ramdisk=[" & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim() & "]\$DISMTOOLS.~BT\sources\boot.wim,{ramdiskoptions}")
             RunBCDConfigurator("/set " & TargetGuid & " path " & osloaderPath)
@@ -765,16 +774,63 @@ Public Class MainForm
             RunBCDConfigurator("/set " & TargetGuid & " systemroot \Windows")
             RunBCDConfigurator("/set " & TargetGuid & " detecthal Yes")
             RunBCDConfigurator("/set " & TargetGuid & " winpe Yes")
+
+            ' Configure the rollback entry
+            Dim defaultEntryPath As String = String.Format("BCD00000000\Objects\{{{0}}}\Elements\{1}", GUID_WINDOWS_BOOTMGR.ToString(), DefaultElementDefinition),
+                rollbackEntryInfoFile As String = String.Format("{0}\BcdEntry_Rollback", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                currentEntryInfoFile As String = String.Format("{0}\BcdEntry_Current", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                currentBcdGuid As String = ""
+            Dim defEntryRk As RegistryKey = Nothing
+            Dim currentBcdEntryObtained As Boolean
+            Try
+                defEntryRk = Registry.LocalMachine.OpenSubKey(defaultEntryPath, False)
+                currentBcdGuid = defEntryRk.GetValue("Element")
+                File.WriteAllText(currentEntryInfoFile, currentBcdGuid)
+                currentBcdEntryObtained = True
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not get current BCD entry... " & ex.Message)
+            Finally
+                If defEntryRk IsNot Nothing Then defEntryRk.Close()
+            End Try
+
+            Dim bcdGuids As New List(Of String),
+                installEnvironmentGuid As String = TargetGuid,
+                rollbackEnvironmentGuid As String = ""
+
+            TargetGuidOutput = ""
+
+            If currentBcdEntryObtained Then
+                DynaLog.LogMessage("Creating rollback entry...")
+                BCDEditProcess.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & RollbackEntryName & Quote)
+                BCDEditProcess.Start()
+                TargetGuidOutput = BCDEditProcess.StandardOutput.ReadToEnd()
+                BCDEditProcess.WaitForExit()
+
+                startIndex = TargetGuidOutput.IndexOf("{")
+                endIndex = TargetGuidOutput.LastIndexOf("}")
+                TargetGuid = TargetGuidOutput.Substring(startIndex, endIndex - startIndex + 1)
+                DynaLog.LogMessage("Obtained target BCD entry GUID: " & TargetGuid)
+
+                DynaLog.LogMessage("Defining boot entry properties for " & If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI", "modern UEFI systems", "legacy BIOS systems") & "...")
+                RunBCDConfigurator("/set " & TargetGuid & " device ramdisk=[" & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim() & "]\$DISMTOOLS.~BT\sources\boot_rollback.wim,{ramdiskoptions}")
+                RunBCDConfigurator("/set " & TargetGuid & " osdevice ramdisk=[" & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim() & "]\$DISMTOOLS.~BT\sources\boot_rollback.wim,{ramdiskoptions}")
+                RunBCDConfigurator("/set " & TargetGuid & " path " & osloaderPath)
+                RunBCDConfigurator("/set " & TargetGuid & " locale en-US")
+                RunBCDConfigurator("/set " & TargetGuid & " systemroot \Windows")
+                RunBCDConfigurator("/set " & TargetGuid & " detecthal Yes")
+                RunBCDConfigurator("/set " & TargetGuid & " winpe Yes")
+
+                rollbackEnvironmentGuid = TargetGuid
+                File.WriteAllText(String.Format("{0}\BcdEntry_Rollback", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), rollbackEnvironmentGuid)
+            End If
+
+            bcdGuids.AddRange({installEnvironmentGuid, rollbackEnvironmentGuid, currentBcdGuid})
+
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_BootEntryDispOrderModify")
             InstallerBW.ReportProgress(38)
             DynaLog.LogMessage("Configuring display order of target BCD entry...")
-            RunBCDConfigurator("/displayorder " & TargetGuid & " /addfirst")
-            RunBCDConfigurator("/default " & TargetGuid)
-
-            ' Write removal script
-            DynaLog.LogMessage("Writing BCD entry removal script...")
-            File.WriteAllText(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\$DISMTOOLS.~BT\remove.cmd",
-                              String.Format(My.Resources.HI_UninstallScript, TargetGuid), ASCII)
+            RunBCDConfigurator("/displayorder " & String.Join(" ", bcdGuids.Where(Function(bcdGuid) bcdGuid <> "")))
+            RunBCDConfigurator("/default " & installEnvironmentGuid)
 
         Catch ex As Exception
             Throw
@@ -795,7 +851,7 @@ Public Class MainForm
         ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_FileCopy")
         InstallerBW.ReportProgress(5)
         DynaLog.LogMessage("Copying files to temporary directory...")
-        CopyFiles(If(TestMode Or TestBCD, Application.StartupPath, Path.GetPathRoot(Application.StartupPath)), Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), "install.wim")
+        CopyFiles(If(TestMode Or TestBCD, Application.StartupPath, Path.GetPathRoot(Application.StartupPath)), Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), "install")
         If Not TestMode OrElse (TestMode AndAlso TestBCD) Then
             DynaLog.LogMessage("We either in official mode or BCD test mode. Creating BCD entry...")
             CurrentStage = InstallationStage.InstallerStage.BootEntryCreation
@@ -819,11 +875,25 @@ Public Class MainForm
             If TestMode And Not TestBCD Then Exit Try
             CurrentStage = InstallationStage.InstallerStage.WIMCustomize
             DynaLog.LogMessage("Copying BCD entry GUID and DSC information to WinPE image...")
-            Dim HotInstallInfoPath As String = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS", "HotInstall")
-            If Not Directory.Exists(HotInstallInfoPath) Then
-                Directory.CreateDirectory(HotInstallInfoPath)
-            End If
+            Dim HotInstallInfoPath As String = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS", "HotInstall"),
+                RollbackBcdInfoPath As String = String.Format("{0}\$DISMTOOLS.~WS\bcdinfo", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+            If Not Directory.Exists(HotInstallInfoPath) Then Directory.CreateDirectory(HotInstallInfoPath)
+            If Not Directory.Exists(RollbackBcdInfoPath) Then Directory.CreateDirectory(RollbackBcdInfoPath)
+
             File.WriteAllText(Path.Combine(HotInstallInfoPath, "BcdEntry"), File.ReadAllText(BCDEntryTextLocation))
+            File.WriteAllText(Path.Combine(RollbackBcdInfoPath, "capture_env_entry_guid.txt"), File.ReadAllText(BCDEntryTextLocation))
+
+            Dim CurrentEnvInfoFile As String = String.Format("{0}\BcdEntry_Current", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+            If File.Exists(CurrentEnvInfoFile) Then
+                File.Move(CurrentEnvInfoFile, Path.Combine(RollbackBcdInfoPath, "current_bcd_entry_guid.txt"))
+            End If
+
+            If File.Exists(String.Format("{0}\BcdEntry_Rollback", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))) Then
+                File.Copy(String.Format("{0}\BcdEntry_Rollback", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                          Path.Combine(HotInstallInfoPath, "BcdEntry_Rollback"), True)
+                File.Move(String.Format("{0}\BcdEntry_Rollback", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                          Path.Combine(RollbackBcdInfoPath, "rollback_env_entry_guid.txt"))
+            End If
             If File.Exists(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "DscReport.txt")) Then
                 File.Move(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "DscReport.txt"),
                           Path.Combine(HotInstallInfoPath, "DscReport.txt"))
@@ -861,22 +931,29 @@ Public Class MainForm
         UseWindowsImage(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT", "sources", "boot.wim"),
                         Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"),
                         0, False, True)
+        ProgressMessage = "Creating rollback environment; this will take some time..."
+        InstallerBW.ReportProgress(95)
+        Try
+            File.Copy(String.Format("{0}\$DISMTOOLS.~BT\sources\boot.wim", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                      String.Format("{0}\$DISMTOOLS.~BT\sources\boot_rollback.wim", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), True)
+
+            UseWindowsImage(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT", "sources", "boot_rollback.wim"),
+                            Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"),
+                            1, True, reportProgress:=False)
+            ' Prepare for rollback
+            File.WriteAllText(String.Format("{0}\$DISMTOOLS.~WS\BarylRollback", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), String.Empty)
+            UseWindowsImage(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT", "sources", "boot_rollback.wim"),
+                            Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"),
+                            0, False, True, False)
+        Catch ex As Exception
+
+        End Try
         ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_DeleteFiles")
         InstallerBW.ReportProgress(95)
         Try
             DynaLog.LogMessage("Invoking removal script on startup...")
             If TestMode Then Directory.Delete(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), True)
             Directory.Delete(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"), True)
-            If File.Exists(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\$DISMTOOLS.~BT\remove.cmd") Then
-                ' Run on startup (set reg key)
-                Dim RemovalAdderProcess As New Process()
-                RemovalAdderProcess.StartInfo.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe")
-                RemovalAdderProcess.StartInfo.Arguments = "add " & Quote & "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" & Quote & " /f /v HotInstallDelete /t REG_SZ /d " & Quote & "cmd /c " & Quote & "%SYSTEMDRIVE%\$DISMTOOLS.~BT\remove.cmd" & Quote & Quote
-                RemovalAdderProcess.StartInfo.CreateNoWindow = True
-                RemovalAdderProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                RemovalAdderProcess.Start()
-                RemovalAdderProcess.WaitForExit()
-            End If
         Catch ex As Exception
 
         End Try

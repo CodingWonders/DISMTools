@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms
+Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
 
@@ -142,91 +142,13 @@ Public Class PopupMountedImagePicker
         AddHandler MainForm.MountedImagesUpdated, mountedUpdatedHandler
 
         ' Translate
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        pmipForm.Text = "Pick image"
-                        pmipOkButton.Text = "OK"
-                        pmipCancelButton.Text = "Cancel"
-                        pmipInstructionLabel.Text = "Pick an image from the list below:"
-                        pmipMountedImageList.Columns(0).Text = "Image file"
-                        pmipMountedImageList.Columns(1).Text = "Index"
-                        pmipMountedImageList.Columns(2).Text = "Mount directory"
-                    Case "ESN"
-                        pmipForm.Text = "Escoger imagen"
-                        pmipOkButton.Text = "Aceptar"
-                        pmipCancelButton.Text = "Cancelar"
-                        pmipInstructionLabel.Text = "Escoja una imagen de la lista de abajo:"
-                        pmipMountedImageList.Columns(0).Text = "Archivo de imagen"
-                        pmipMountedImageList.Columns(1).Text = "Índice"
-                        pmipMountedImageList.Columns(2).Text = "Directorio de montaje"
-                    Case "FRA"
-                        pmipForm.Text = "Choisir l'image"
-                        pmipOkButton.Text = "OK"
-                        pmipCancelButton.Text = "Annuler"
-                        pmipInstructionLabel.Text = "Choisissez une image dans la liste ci-dessous :"
-                        pmipMountedImageList.Columns(0).Text = "Fichier de l'image"
-                        pmipMountedImageList.Columns(1).Text = "Index"
-                        pmipMountedImageList.Columns(2).Text = "Répertoire de montage"
-                    Case "PTB", "PTG"
-                        pmipForm.Text = "Escolher imagem"
-                        pmipOkButton.Text = "OK"
-                        pmipCancelButton.Text = "Cancelar"
-                        pmipInstructionLabel.Text = "Escolher uma imagem da lista abaixo:"
-                        pmipMountedImageList.Columns(0).Text = "Ficheiro de imagem"
-                        pmipMountedImageList.Columns(1).Text = "Índice"
-                        pmipMountedImageList.Columns(2).Text = "Diretório de montagem"
-                    Case "ITA"
-                        pmipForm.Text = "Scegli immagine"
-                        pmipOkButton.Text = "OK"
-                        pmipCancelButton.Text = "Annulla"
-                        pmipInstructionLabel.Text = "Scegli un'immagine dall'elenco sottostante:"
-                        pmipMountedImageList.Columns(0).Text = "File immagine"
-                        pmipMountedImageList.Columns(1).Text = "Indice"
-                        pmipMountedImageList.Columns(2).Text = "Directory di montaggio"
-                End Select
-            Case 1
-                pmipForm.Text = "Pick image"
-                pmipOkButton.Text = "OK"
-                pmipCancelButton.Text = "Cancel"
-                pmipInstructionLabel.Text = "Pick an image from the list below:"
-                pmipMountedImageList.Columns(0).Text = "Image file"
-                pmipMountedImageList.Columns(1).Text = "Index"
-                pmipMountedImageList.Columns(2).Text = "Mount directory"
-            Case 2
-                pmipForm.Text = "Escoger imagen"
-                pmipOkButton.Text = "Aceptar"
-                pmipCancelButton.Text = "Cancelar"
-                pmipInstructionLabel.Text = "Escoja una imagen de la lista de abajo:"
-                pmipMountedImageList.Columns(0).Text = "Archivo de imagen"
-                pmipMountedImageList.Columns(1).Text = "Índice"
-                pmipMountedImageList.Columns(2).Text = "Directorio de montaje"
-            Case 3
-                pmipForm.Text = "Choisir l'image"
-                pmipOkButton.Text = "OK"
-                pmipCancelButton.Text = "Annuler"
-                pmipInstructionLabel.Text = "Choisissez une image dans la liste ci-dessous :"
-                pmipMountedImageList.Columns(0).Text = "Fichier de l'image"
-                pmipMountedImageList.Columns(1).Text = "Index"
-                pmipMountedImageList.Columns(2).Text = "Répertoire de montage"
-            Case 4
-                pmipForm.Text = "Escolher imagem"
-                pmipOkButton.Text = "OK"
-                pmipCancelButton.Text = "Cancelar"
-                pmipInstructionLabel.Text = "Escolher uma imagem da lista abaixo:"
-                pmipMountedImageList.Columns(0).Text = "Ficheiro de imagem"
-                pmipMountedImageList.Columns(1).Text = "Índice"
-                pmipMountedImageList.Columns(2).Text = "Diretório de montagem"
-            Case 5
-                pmipForm.Text = "Scegli immagine"
-                pmipOkButton.Text = "OK"
-                pmipCancelButton.Text = "Annulla"
-                pmipInstructionLabel.Text = "Scegli un'immagine dall'elenco sottostante:"
-                pmipMountedImageList.Columns(0).Text = "File immagine"
-                pmipMountedImageList.Columns(1).Text = "Indice"
-                pmipMountedImageList.Columns(2).Text = "Directory di montaggio"
-        End Select
+        pmipForm.Text = LocalizationService.ForSection("MountedImagePicker.Pick")("Title.Label")
+        pmipOkButton.Text = LocalizationService.ForSection("MountedImagePicker")("Ok.Button")
+        pmipCancelButton.Text = LocalizationService.ForSection("MountedImagePicker")("Cancel.Button")
+        pmipInstructionLabel.Text = LocalizationService.ForSection("MountedImagePicker.Pick")("Image.List.Label")
+        pmipMountedImageList.Columns(0).Text = LocalizationService.ForSection("MountedImagePicker.Pick")("ImageFile.Column")
+        pmipMountedImageList.Columns(1).Text = LocalizationService.ForSection("MountedImagePicker.Pick")("Index.Column")
+        pmipMountedImageList.Columns(2).Text = LocalizationService.ForSection("MountedImagePicker.Pick")("MountDirectory.Column")
 
         ' Initial population and show the dialog
         GetMountedImages()

@@ -83,8 +83,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.3.2\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.1.5.1\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -814,10 +814,34 @@
     <Compile Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Services\SafeMode\ImpliedServicesInSafeBootDisablementDialog.Designer.vb">
+      <DependentUpon>ImpliedServicesInSafeBootDisablementDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\SafeMode\ImpliedServicesInSafeBootDisablementDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\SafeMode\ImpliedServicesInSafeBootEnablementDialog.Designer.vb">
+      <DependentUpon>ImpliedServicesInSafeBootEnablementDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\SafeMode\ImpliedServicesInSafeBootEnablementDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceDependencyGraphViewer.Designer.vb">
+      <DependentUpon>ServiceDependencyGraphViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceDependencyGraphViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.Designer.vb">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceNavigatorDialog.Designer.vb">
+      <DependentUpon>ServiceNavigatorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceNavigatorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.Designer.vb">
@@ -947,6 +971,12 @@
     <Compile Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Questions\MeteredConnectionWarningDialog.Designer.vb">
+      <DependentUpon>MeteredConnectionWarningDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\MeteredConnectionWarningDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Questions\MountOpDirCreationDialog.Designer.vb">
       <DependentUpon>MountOpDirCreationDialog.vb</DependentUpon>
     </Compile>
@@ -1013,6 +1043,12 @@
     <Compile Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\UserAccounts\DisplayNameFormatterDialog.Designer.vb">
+      <DependentUpon>DisplayNameFormatterDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\UserAccounts\DisplayNameFormatterDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </Compile>
@@ -1031,10 +1067,19 @@
     <Compile Include="UserControls\NewsFeedItemCard.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ServiceDependencyDiagram.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\WimFileSourceControl.Designer.vb">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>
     </Compile>
     <Compile Include="UserControls\WimFileSourceControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\WizardStep.Designer.vb">
+      <DependentUpon>WizardStep.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\WizardStep.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Utilities\AppxUtilities\AppxHelper.vb" />
@@ -1046,9 +1091,11 @@
     <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
-    <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
+    <Compile Include="Utilities\Language\LanguageHelper.vb" />
+    <Compile Include="Utilities\Language\LocalizationService.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
+    <Compile Include="Utilities\NetworkUtilities\NetworkCostHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PowerManagement\PowerManagementHelper.vb" />
@@ -1323,8 +1370,20 @@
     <EmbeddedResource Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.resx">
       <DependentUpon>RegisteredServiceHostGroupsDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\SafeMode\ImpliedServicesInSafeBootDisablementDialog.resx">
+      <DependentUpon>ImpliedServicesInSafeBootDisablementDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\SafeMode\ImpliedServicesInSafeBootEnablementDialog.resx">
+      <DependentUpon>ImpliedServicesInSafeBootEnablementDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceDependencyGraphViewer.resx">
+      <DependentUpon>ServiceDependencyGraphViewer.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceManagementForm.resx">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceNavigatorDialog.resx">
+      <DependentUpon>ServiceNavigatorDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
@@ -1389,6 +1448,9 @@
     <EmbeddedResource Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.resx">
       <DependentUpon>ImgWinVistaIncompatibilityDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\MeteredConnectionWarningDialog.resx">
+      <DependentUpon>MeteredConnectionWarningDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\MountOpDirCreationDialog.resx">
       <DependentUpon>MountOpDirCreationDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -1422,6 +1484,9 @@
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\ScriptManagement\ScriptReorderDialog.resx">
       <DependentUpon>ScriptReorderDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\UserAccounts\DisplayNameFormatterDialog.resx">
+      <DependentUpon>DisplayNameFormatterDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </EmbeddedResource>
@@ -1433,6 +1498,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WimFileSourceControl.resx">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\WizardStep.resx">
+      <DependentUpon>WizardStep.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -1460,6 +1528,7 @@
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Current Power Plan Timeout Values.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure Server Processor Scheduling.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Configure System Crash Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Control Terminal Services Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Automatic BitLocker Encryption.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Disable Fast Startup.dtss" />
@@ -1486,6 +1555,7 @@
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Drag Tray.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Enable Clipboard History.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Restore Context Menu for Windows 11.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Set File Explorer Launch Folder.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Show Extensions for Known File Types.dtss" />
@@ -1528,6 +1598,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\install_image_to_wds.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\rollback_utils\rollback.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
@@ -1631,6 +1704,12 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="language\de-DE.ini" />
+    <Content Include="language\en-US.ini" />
+    <Content Include="language\es-ES.ini" />
+    <Content Include="language\fr-FR.ini" />
+    <Content Include="language\it-IT.ini" />
+    <Content Include="language\pt-PT.ini" />
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1860,6 +1939,18 @@
     <Content Include="Resources\assistant_light.png" />
     <None Include="Resources\copy_img_to_wds.png" />
     <None Include="Resources\first_element_upward.png" />
+    <None Include="Resources\diagrams\diagram_save_image_dark.png" />
+    <None Include="Resources\diagrams\diagram_save_image_light.png" />
+    <None Include="Resources\diagrams\diagram_zoom_in_dark.png" />
+    <None Include="Resources\diagrams\diagram_zoom_in_light.png" />
+    <None Include="Resources\diagrams\diagram_zoom_out_dark.png" />
+    <None Include="Resources\diagrams\diagram_zoom_out_light.png" />
+    <None Include="Resources\diagrams\diagram_zoom_reset_dark.png" />
+    <None Include="Resources\diagrams\diagram_zoom_reset_light.png" />
+    <None Include="Resources\diagrams\diagram_save_mermaid_dark.png" />
+    <None Include="Resources\diagrams\diagram_save_mermaid_light.png" />
+    <None Include="Resources\diagrams\diagram_navigate_to_svc_light.png" />
+    <None Include="Resources\diagrams\diagram_navigate_to_svc_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
@@ -1872,6 +1963,9 @@
     <None Include="Resources\next_element_downward.png" />
     <None Include="Resources\infinityhome_admin_tools.png" />
     <None Include="Resources\infinityhome_change_network_config.png" />
+    <None Include="Resources\newsfeed_visitsite_light.png" />
+    <None Include="Resources\newsfeed_visitsite_dark.png" />
+    <None Include="Resources\website.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -2229,7 +2323,7 @@
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
-    <Folder Include="Utilities\LanguageUtilities\LanguageFiles\" />
+    <Folder Include="Utilities\Language\LanguageFiles\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
   <ItemGroup>
@@ -2249,11 +2343,15 @@
       <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
       <Name>BDELib</Name>
     </ProjectReference>
+    <ProjectReference Include="Tools\WimgApi.Interop\WimgApi.Interop.csproj">
+      <Project>{4acfc225-f102-4c32-873f-b265793bacee}</Project>
+      <Name>WimgApi.Interop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 SET CREATE_SAMPLE_USERDATA="Yes"
@@ -2287,6 +2385,7 @@ IF NOT EXIST bin (
 	IF EXIST HELPERS (
 		rd HELPERS /s /q
 	)
+	IF EXIST "$(ProjectDir)language" XCOPY "$(ProjectDir)language\*.ini" bin\language /cehyi
 ) ELSE (
 	echo A bin folder already exists
 )
@@ -2391,6 +2490,7 @@ IF NOT EXIST videos (
 IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
 	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
+	break &gt; "$(TargetDir)docs\NOTASITE"
 )
 IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
 	echo Creating sample userdata structure...

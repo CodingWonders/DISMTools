@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports System.Threading
@@ -9,6 +9,7 @@ Imports System.Net
 Imports System.Net.NetworkInformation
 Imports System.Text.RegularExpressions
 Imports System.Text
+Imports DISMTools.Utilities.NetworkUtilities
 
 Public Class NewUnattendWiz
 
@@ -19,7 +20,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2683"
+    Const UnattendGenReleaseTag As String = "26102"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -486,10 +487,8 @@ Public Class NewUnattendWiz
         If Language <> "" Then
             DynaLog.LogMessage("Language is not nothing. Proceeding to add keywords...")
             Select Case Language
-                Case "powershell", "batch", "vbscript", "jscript"
-                    Scintilla3.SetKeywords(Index, KeywordSet)
-                Case "xml"
-                    Scintilla1.SetKeywords(Index, KeywordSet)
+                Case "powershell", "batch", "vbscript" : Scintilla3.SetKeywords(Index, KeywordSet)
+                Case "xml" : Scintilla1.SetKeywords(Index, KeywordSet)
             End Select
         End If
     End Sub
@@ -674,9 +673,222 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        WizardStep1.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Welcome.Label")
+        WizardStep2.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("RegionalConfig.Label")
+        WizardStep3.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Basic.System.Config.Label")
+        WizardStep4.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("TreeNode.Label")
+        WizardStep5.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("DiskConfig.Label")
+        WizardStep6.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Label")
+        WizardStep7.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("UserAccounts.Label")
+        WizardStep8.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("VirtualMachine.Support.Label")
+        WizardStep9.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Wireless.Networking.Label")
+        WizardStep10.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("SystemTelemetry.Label")
+        WizardStep11.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("PostInstall.Scripts.Label")
+        WizardStep12.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Component.Settings.Label")
+        WizardStep13.WizardStepName = LocalizationService.ForSection("Designer.Unattend")("Finish.Label")
+        Label2.Text = LocalizationService.ForSection("Designer.Unattend")("EditorMode.Label")
+        Label1.Text = LocalizationService.ForSection("Designer.Unattend")("ExpressMode.Label")
+        Label59.Text = LocalizationService.ForSection("Designer.Unattend")("Notereturn.Applying.Label")
+        LinkLabel7.Text = LocalizationService.ForSection("Designer.Unattend")("EditAnswerFile.Link")
+        LinkLabel6.Text = LocalizationService.ForSection("Designer.Unattend")("Open.Windows.System.Link")
+        LinkLabel4.Text = LocalizationService.ForSection("Designer.Unattend")("Apply.Unattended.Link")
+        LinkLabel3.Text = LocalizationService.ForSection("Designer.Unattend")("Open.Location.File.Link")
+        LinkLabel2.Text = LocalizationService.ForSection("Designer.Unattend")("Create.Another.Link")
+        Label58.Text = LocalizationService.ForSection("Designer.Unattend")("FileCreated.Message")
+        FinishHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Congratulations.Done.Label")
+        Label57.Text = LocalizationService.ForSection("Designer.Unattend")("Wait.Take.Label")
+        Label56.Text = LocalizationService.ForSection("Designer.Unattend")("Progress.Label")
+        UnattendProgressHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Wait.UnattendAnswer.Button")
+        Label54.Text = LocalizationService.ForSection("Designer.Unattend")("Something.Right.Go.Message")
+        CheckBox17.Text = LocalizationService.ForSection("Designer.Unattend")("WordWrap.CheckBox")
+        FinalReviewHeader.Text = LocalizationService.ForSection("Designer.Unattend")("ReviewSettings.Label")
+        Label65.Text = LocalizationService.ForSection("Designer.Unattend")("Don.Twant.Add.Label")
+        Label15.Text = LocalizationService.ForSection("Designer.Unattend")("No.Custom.None.Message")
+        LinkLabel5.Text = LocalizationService.ForSection("Designer.Unattend")("Learn.Custom.Link")
+        Label64.Text = LocalizationService.ForSection("Designer.Unattend")("Pass.Label")
+        Label61.Text = LocalizationService.ForSection("Designer.Unattend")("Component.Label")
+        Label60.Text = LocalizationService.ForSection("Designer.Unattend")("Component.Count.Label")
+        LinkLabel9.Text = LocalizationService.ForSection("Designer.Unattend")("Learn.Component.Link")
+        Label52.Text = LocalizationService.ForSection("Designer.Unattend")("Screen.Add.Message")
+        ComponentHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Components.Label")
+        CheckBox22.Text = LocalizationService.ForSection("Designer.Unattend")("Hide.Script.Windows.CheckBox")
+        CheckBox20.Text = LocalizationService.ForSection("Designer.Unattend")("RestartExplorer.CheckBox")
+        Button20.Text = LocalizationService.ForSection("Designer.Unattend")("Import.StarterScript.Button")
+        Button19.Text = LocalizationService.ForSection("Designer.Unattend")("ImportScript.Button")
+        Label67.Text = LocalizationService.ForSection("Designer.Unattend")("Language.Label")
+        Button4.Text = LocalizationService.ForSection("Designer.Unattend")("OpenScript.Button")
+        Label68.Text = LocalizationService.ForSection("Designer.Unattend")("Scripts.Have.None.Message")
+        Label66.Text = LocalizationService.ForSection("Designer.Unattend")("Script.Count.Label")
+        StageEditorDescriptionLabel.Text = LocalizationService.ForSection("Designer.Unattend")("ScriptRun.Description")
+        StageLink1.Text = LocalizationService.ForSection("Designer.Unattend")("System.Config.Link")
+        StageLink2.Text = LocalizationService.ForSection("Designer.Unattend")("First.User.Logs.Link")
+        StageLink3.Text = LocalizationService.ForSection("Designer.Unattend")("Whenever.User.Logs.Link")
+        Label51.Text = LocalizationService.ForSection("Designer.Unattend")("ScriptScreenHelp.Message")
+        PostInstallHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Run.Install.Label")
+        RadioButton27.Text = LocalizationService.ForSection("Designer.Unattend")("EnableTelemetry.RadioButton")
+        RadioButton26.Text = LocalizationService.ForSection("Designer.Unattend")("DisableTelemetry.RadioButton")
+        CheckBox16.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        SystemTelemetryHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Control.Limit.Much.Message")
+        RadioButton25.Text = LocalizationService.ForSection("Designer.Unattend")("WirelessSettings.RadioButton")
+        LinkLabel8.Text = LocalizationService.ForSection("Designer.Unattend")("Access.Router.Config.Link")
+        RemoveHandler ComboBox13.SelectedIndexChanged, AddressOf ComboBox13_SelectedIndexChanged
+        ComboBox13.Items.Clear()
+        ComboBox13.Items.AddRange({
+            LocalizationService.ForSection("Designer.Unattend")("Open.Least.Secure.Item"),
+            LocalizationService.ForSection("Designer.Unattend")("Wpapsk.Item"),
+            LocalizationService.ForSection("Designer.Unattend")("Wpasae.Item")
+        })
+        AddHandler ComboBox13.SelectedIndexChanged, AddressOf ComboBox13_SelectedIndexChanged
+        CheckBox15.Text = LocalizationService.ForSection("Designer.Unattend")("ConnectHidden.CheckBox")
+        Label49.Text = LocalizationService.ForSection("Designer.Unattend")("Password.Label")
+        Label48.Text = LocalizationService.ForSection("Designer.Unattend")("AuthTechnology.Label")
+        Label50.Text = LocalizationService.ForSection("Designer.Unattend")("Technology.Both.Choose.Label")
+        Label47.Text = LocalizationService.ForSection("Designer.Unattend")("SsidnetworkName.Label")
+        RadioButton30.Text = LocalizationService.ForSection("Designer.Unattend")("SkipConfig.RadioButton")
+        Label55.Text = LocalizationService.ForSection("Designer.Unattend")("Option.Either.Choose.Label")
+        CheckBox14.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        NetworkConnectionHeader.Text = LocalizationService.ForSection("Designer.Unattend")("WirelessSettings.Label")
+        Label46.Text = LocalizationService.ForSection("Designer.Unattend")("Guest.Additions.Message")
+        RemoveHandler ComboBox8.SelectedIndexChanged, AddressOf ComboBox8_SelectedIndexChanged
+        ComboBox8.Items.Clear()
+        ComboBox8.Items.AddRange({
+            LocalizationService.ForSection("Designer.Unattend")("Virtual.Box.Guest.Item"),
+            LocalizationService.ForSection("Designer.Unattend")("VmwareTools.Item"),
+            LocalizationService.ForSection("Designer.Unattend")("Virt.Ioguest.Tools.Item"),
+            LocalizationService.ForSection("Designer.Unattend")("ParallelsTools.Item")
+        })
+        AddHandler ComboBox8.SelectedIndexChanged, AddressOf ComboBox8_SelectedIndexChanged
+        ComboBox8.Text = LocalizationService.ForSection("Designer.Unattend")("Virt.Ioguest.Tools.Item")
+        Label45.Text = LocalizationService.ForSection("Designer.Unattend")("VirtualMachine.Label")
+        RadioButton24.Text = LocalizationService.ForSection("Designer.Unattend")("Iplan.Target.RadioButton")
+        RadioButton23.Text = LocalizationService.ForSection("Designer.Unattend")("Iwant.Target.RadioButton")
+        VirtualMachineHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Add.Enhanced.Support.Message")
+        Label44.Text = LocalizationService.ForSection("Designer.Unattend")("Checking.Option.Target.Label")
+        Label41.Text = LocalizationService.ForSection("Designer.Unattend")("Amount.Failed.Attempts.Label")
+        Label43.Text = LocalizationService.ForSection("Designer.Unattend")("UnlockMinutes.Label")
+        Label40.Text = LocalizationService.ForSection("Designer.Unattend")("Lock.Out.Account.Label")
+        Label42.Text = LocalizationService.ForSection("Designer.Unattend")("TimeframeMinutes.Label")
+        RadioButton22.Text = LocalizationService.ForSection("Designer.Unattend")("CustomLockout.RadioButton")
+        RadioButton21.Text = LocalizationService.ForSection("Designer.Unattend")("DefaultLockout.RadioButton")
+        CheckBox13.Text = LocalizationService.ForSection("Designer.Unattend")("DisablePolicy.CheckBox")
+        AccountLockdownHeader.Text = LocalizationService.ForSection("Designer.Unattend")("AccountLockout.Label")
+        Label39.Text = LocalizationService.ForSection("Designer.Unattend")("Days.Label")
+        RadioButton20.Text = LocalizationService.ForSection("Designer.Unattend")("ExpirePassword.RadioButton")
+        RadioButton19.Text = LocalizationService.ForSection("Designer.Unattend")("Expire42Days.RadioButton")
+        RadioButton18.Text = LocalizationService.ForSection("Designer.Unattend")("PasswordsExpire.RadioButton")
+        RadioButton17.Text = LocalizationService.ForSection("Designer.Unattend")("NeverExpire.RadioButton")
+        PWExpirationHeader.Text = LocalizationService.ForSection("Designer.Unattend")("PasswordsExpire.Label")
+        Label34.Text = LocalizationService.ForSection("Designer.NewUnattend.LocalAccounts")("OnlyNow.Label")
+        CheckBox6.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        Label35.Text = LocalizationService.ForSection("Designer.Unattend")("AccountName.Label")
+        Label38.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Label")
+        CheckBox8.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option2.CheckBox")
+        CheckBox9.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option3.CheckBox")
+        CheckBox10.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option4.CheckBox")
+        CheckBox11.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option5.CheckBox")
+        UserListOverviewLabel.Text = LocalizationService.ForSection("Designer.Unattend")("UserList.Label")
+        Label37.Text = LocalizationService.ForSection("Designer.Unattend")("AccountGroup.Label")
+        Label36.Text = LocalizationService.ForSection("Designer.Unattend")("AccountPassword.Label")
+        Label69.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Display.Name.Label")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.Unattend")("FirstLog.Group")
+        RadioButton16.Text = LocalizationService.ForSection("Designer.Unattend")("Log.Built.Admin.RadioButton")
+        RadioButton15.Text = LocalizationService.ForSection("Designer.Unattend")("Log.First.Admin.RadioButton")
+        CheckBox12.Text = LocalizationService.ForSection("Designer.Unattend")("Auto.Login.Admin.CheckBox")
+        CheckBox7.Text = LocalizationService.ForSection("Designer.Unattend")("ObscurePasswords.CheckBox")
+        CheckBox18.Text = LocalizationService.ForSection("Designer.Unattend")("Ask.Microsoft.CheckBox")
+        UserAccountHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Target.Install.Label")
+        CheckBox21.Text = LocalizationService.ForSection("Designer.Unattend")("FirmwareProductKey.CheckBox")
+        Label32.Text = LocalizationService.ForSection("Designer.Unattend")("Product.Label")
+        Label31.Text = LocalizationService.ForSection("Designer.Unattend")("DISM.Tools.Cannot.Label")
+        Label33.Text = LocalizationService.ForSection("Designer.Unattend")("Type.Each.Character.Label")
+        Label30.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Custom.Label")
+        Button21.Text = LocalizationService.ForSection("Designer.Unattend")("Detect.Image.Edition.Button")
+        Button5.Text = LocalizationService.ForSection("Designer.Unattend")("Copy.Button")
+        Label29.Text = LocalizationService.ForSection("Designer.Unattend")("Only.Generic.Key.Label")
+        Label28.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Generic.Label")
+        Label27.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Edition.Label")
+        RadioButton14.Text = LocalizationService.ForSection("Designer.Unattend")("CustomProductKey.RadioButton")
+        RadioButton13.Text = LocalizationService.ForSection("Designer.Unattend")("GenericKey.RadioButton")
+        ProductKeyHeader.Text = LocalizationService.ForSection("Designer.Unattend")("ProductKey.Type.Label")
+        Label23.Text = LocalizationService.ForSection("Designer.Unattend")("RecoveryPartition.Label")
+        CheckBox5.Text = LocalizationService.ForSection("Designer.Unattend")("InstallRecoveryEnv.CheckBox")
+        Label22.Text = LocalizationService.ForSection("Designer.Unattend")("EFI.System.Label")
+        RadioButton8.Text = LocalizationService.ForSection("Designer.Unattend")("MBR.RadioButton")
+        RadioButton7.Text = LocalizationService.ForSection("Designer.Unattend")("GPT.RadioButton")
+        Label21.Text = LocalizationService.ForSection("Designer.Unattend")("PartitionTable.Label")
+        Label20.Text = LocalizationService.ForSection("Designer.Unattend")("Skip.Disk.Config.Label")
+        CheckBox4.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
+        DiskConfigurationHeader.Text = LocalizationService.ForSection("Designer.Unattend")("DiskLayout.Label")
+        CurrentTimeSelTZ.Text = LocalizationService.ForSection("Designer.Unattend")("Time.Label")
+        CurrentTimeUTC.Text = LocalizationService.ForSection("Designer.Unattend")("CurrentTime.Label")
+        Label19.Text = LocalizationService.ForSection("Designer.Unattend")("Time.Selected.Zone.Label")
+        Label18.Text = LocalizationService.ForSection("Designer.Unattend")("Time.UTC.Label")
+        Label17.Text = LocalizationService.ForSection("Designer.Unattend")("TimeZone.Label")
+        RadioButton4.Text = LocalizationService.ForSection("Designer.Unattend")("Set.Time.Zone.RadioButton")
+        RadioButton3.Text = LocalizationService.ForSection("Designer.Unattend")("Windows.Decide.RadioButton")
+        TimeZoneHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Configure.Time.Zone.Label")
+        CheckedListBox1.Items(0) = LocalizationService.ForSection("Designer.Unattend")("DesktopX86.Item")
+        CheckedListBox1.Items(1) = LocalizationService.ForSection("Designer.Unattend")("DesktopX64.Item")
+        CheckedListBox1.Items(2) = LocalizationService.ForSection("Designer.Unattend")("Armwindows.Item")
+        CheckBox19.Text = LocalizationService.ForSection("Designer.Unattend")("UseConfigSet.CheckBox")
+        CheckBox3.Text = LocalizationService.ForSection("Designer.Unattend")("Windows.Set.Random.CheckBox")
+        Label62.Text = LocalizationService.ForSection("Designer.Unattend")("Config.Set.Message")
+        RadioButton29.Text = LocalizationService.ForSection("Designer.Unattend")("Script.Sets.Name.RadioButton")
+        RadioButton28.Text = LocalizationService.ForSection("Designer.Unattend")("ComputerName.RadioButton")
+        Button3.Text = LocalizationService.ForSection("Designer.Unattend")("Get.Computer.Name.Button")
+        Label16.Text = LocalizationService.ForSection("Designer.Unattend")("ComputerName.Label")
+        Label63.Text = LocalizationService.ForSection("Designer.Unattend")("Type.Computer.Name.Label")
+        Label14.Text = LocalizationService.ForSection("Designer.Unattend")("Check.Option.Only.Message")
+        CheckBox2.Text = LocalizationService.ForSection("Designer.Unattend")("BypassNetwork.CheckBox")
+        CheckBox1.Text = LocalizationService.ForSection("Designer.Unattend")("BypassRequirements.CheckBox")
+        Label13.Text = LocalizationService.ForSection("Designer.Unattend")("Windows11.Label")
+        Label12.Text = LocalizationService.ForSection("Designer.Unattend")("System.Architec.Label")
+        Label11.Text = LocalizationService.ForSection("Designer.Unattend")("Processor.Architecture.Label")
+        SysConfigHeader.Text = LocalizationService.ForSection("Designer.Unattend")("BasicSettings.Label")
+        Label10.Text = LocalizationService.ForSection("Designer.Unattend")("Configure.Settings.Label")
+        Label6.Text = LocalizationService.ForSection("Designer.Unattend")("SystemLanguage.Label")
+        Label7.Text = LocalizationService.ForSection("Designer.Unattend")("SystemLocale.Label")
+        Label9.Text = LocalizationService.ForSection("Designer.Unattend")("HomeLocation.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.Unattend")("Keyboard.Layout.IME.Label")
+        Button22.Text = LocalizationService.ForSection("Designer.Unattend")("Country.EEA.Choose.Button")
+        Button1.Text = LocalizationService.ForSection("Designer.Unattend")("Additional.Layouts.Button")
+        RadioButton2.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureLater.RadioButton")
+        RadioButton1.Text = LocalizationService.ForSection("Designer.Unattend")("SettingsNow.RadioButton")
+        RegionalSettingsHeader.Text = LocalizationService.ForSection("Designer.Unattend")("LanguageKeyboard.Label")
+        LinkLabel10.Text = LocalizationService.ForSection("Designer.Unattend")("Copy.Linux.Mac.Link")
+        LinkLabel1.Text = LocalizationService.ForSection("Designer.Unattend")("OnlineGenerator.Link")
+        WelcomeHeader.Text = LocalizationService.ForSection("Designer.Unattend")("Welcome.Unattended.Label")
+        WelcomeDesc.Text = LocalizationService.ForSection("Designer.Unattend")("CreationHelp.Message")
+        Label5.Text = LocalizationService.ForSection("Designer.Unattend")("AvailableNow.Label")
+        ToolStripButton2.Text = LocalizationService.ForSection("Designer.Unattend")("NewOverwrite.Label")
+        ToolStripButton3.Text = LocalizationService.ForSection("Designer.Unattend")("Open.Button")
+        ToolStripButton4.Text = LocalizationService.ForSection("Designer.Unattend")("Save.Button")
+        ToolStripButton5.Text = LocalizationService.ForSection("Designer.Unattend")("WordWrap.Label")
+        ToolStripButton6.Text = LocalizationService.ForSection("Designer.Unattend")("Help.Label")
+        ToolStripButton1.Text = LocalizationService.ForSection("Designer.Unattend")("NormalizeSpacing.Label")
+        ToolStripButton1.ToolTipText = LocalizationService.ForSection("Designer.Unattend")("NormalizeSpacing.Tooltip")
+        Label4.Text = LocalizationService.ForSection("Designer.Unattend")("WizardHelp.Label")
+        Label3.Text = LocalizationService.ForSection("Designer.Unattend")("ExpressMode.Label")
+        Button12.Text = LocalizationService.ForSection("Designer.Unattend")("Join.Target.Device.Button")
+        Back_Button.Text = LocalizationService.ForSection("Designer.Unattend")("BackButton.Button")
+        Next_Button.Text = LocalizationService.ForSection("Designer.Unattend")("NextButton.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.Unattend")("Cancel.Button")
+        Help_Button.Text = LocalizationService.ForSection("Designer.Unattend")("Help.Button")
+        SaveFileDialog1.Filter = LocalizationService.ForSection("Designer.Unattend")("Answer.Files.XML.Filter")
+        UGNotify.BalloonTipText = LocalizationService.ForSection("Designer.Unattend")("SelfContained.Message")
+        UGNotify.BalloonTipTitle = LocalizationService.ForSection("Designer.Unattend")("Gen.Download.Complete.Title")
+        EditorModeOFD.Filter = LocalizationService.ForSection("Designer.Unattend")("EditorMode.Filter")
+        EditorModeSFD.Filter = LocalizationService.ForSection("Designer.Unattend")("Answer.Files.XML.Filter")
+        ScriptEditorOFD.Filter = LocalizationService.ForSection("Designer.Unattend")("Power.Shell.Scripts.Filter")
+        ScriptEditorOFD.Title = LocalizationService.ForSection("Designer.Unattend")("OpenScript.Title")
+        CPUnattendGenFBD.Description = LocalizationService.ForSection("Designer.Unattend")("Path.Description")
+        OpenFileDialog2.Filter = LocalizationService.ForSection("Designer.Unattend")("DISM.Tools.Starter.Filter")
+        OpenFileDialog2.Title = LocalizationService.ForSection("Designer.Unattend")("Pick.StarterScript.Title")
+        Text = LocalizationService.ForSection("Designer.Unattend")("CreationHelp.Label")
+
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
-        StepsTreeView.BackColor = CurrentTheme.SectionBackgroundColor
+        flpWizardSteps.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = BackColor
         ComboBox2.BackColor = BackColor
         ComboBox3.BackColor = BackColor
@@ -771,7 +983,7 @@ Public Class NewUnattendWiz
         ToolStripButton1.Width = WindowHelper.ScaleLogical(96)
 
         SidePanel.BackColor = BackColor
-        StepsTreeView.ForeColor = ForeColor
+        flpWizardSteps.ForeColor = ForeColor
         PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox4.Image = If(CurrentTheme.IsDark, My.Resources.cmps_addfirstcomponent_dark, My.Resources.cmps_addfirstcomponent_light)
         PictureBox5.Image = If(CurrentTheme.IsDark, My.Resources.scripts_addfirstscript_dark, My.Resources.scripts_addfirstscript_light)
@@ -781,10 +993,8 @@ Public Class NewUnattendWiz
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
         InitScintilla("Consolas", 11)
-        StepsTreeView.ExpandAll()
 
         FontFamilyTSCB.SelectedItem = "Consolas"
-        SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
         DefaultContents = Scintilla1.Text
 
@@ -877,7 +1087,7 @@ Public Class NewUnattendWiz
         If Not DotNetRuntimeSupported Then
             DynaLog.LogMessage("Detections have concluded with no recognized .NET Core-based installations. The included copy of UnattendGen cannot be used.")
             DynaLog.LogMessage("Asking user whether or not to download self-contained UnattendGen...")
-            If MsgBox("This wizard requires the .NET 10 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+            If MsgBox(LocalizationService.ForSection("Unattend.Messages")("Requires.Netruntime.Message"), vbYesNo + vbQuestion, LocalizationService.ForSection("Unattend.Messages")("Netruntime.Missing.Title")) = Windows.Forms.DialogResult.Yes Then
                 DynaLog.LogMessage("Proceeding to download self-contained UnattendGen...")
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
@@ -1025,11 +1235,6 @@ Public Class NewUnattendWiz
         SwitchScript(0)
     End Sub
 
-    Sub SelectTreeNode(NodeIndex As Integer)
-        StepsTreeView.SelectedNode = StepsTreeView.Nodes(NodeIndex)
-        StepsTreeView.Refresh()
-    End Sub
-
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
         DynaLog.LogMessage("Changing current page of the wizard...")
         DynaLog.LogMessage("New page to load: " & NewPage.ToString())
@@ -1065,35 +1270,20 @@ Public Class NewUnattendWiz
 
         Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
 
-        ' Select tree nodes according to page
-        Select Case CurrentWizardPage.WizardPage
-            Case UnattendedWizardPage.Page.WelcomePage
-                SelectTreeNode(0)
-            Case UnattendedWizardPage.Page.RegionalPage
-                SelectTreeNode(1)
-            Case UnattendedWizardPage.Page.SysConfigPage
-                SelectTreeNode(2)
-            Case UnattendedWizardPage.Page.TimeZonePage
-                SelectTreeNode(3)
-            Case UnattendedWizardPage.Page.DiskConfigPage
-                SelectTreeNode(4)
-            Case UnattendedWizardPage.Page.ProductKeyPage
-                SelectTreeNode(5)
-            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockoutPage
-                SelectTreeNode(6)
-            Case UnattendedWizardPage.Page.VirtualMachinePage
-                SelectTreeNode(7)
-            Case UnattendedWizardPage.Page.NetworkConnectionsPage
-                SelectTreeNode(8)
-            Case UnattendedWizardPage.Page.SystemTelemetryPage
-                SelectTreeNode(9)
-            Case UnattendedWizardPage.Page.PostInstallPage
-                SelectTreeNode(10)
-            Case UnattendedWizardPage.Page.ComponentPage
-                SelectTreeNode(11)
-            Case UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage
-                SelectTreeNode(12)
-        End Select
+        ' Select wizard step controls according to page
+        WizardStep1.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.WelcomePage
+        WizardStep2.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.RegionalPage
+        WizardStep3.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.SysConfigPage
+        WizardStep4.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.TimeZonePage
+        WizardStep5.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.DiskConfigPage
+        WizardStep6.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProductKeyPage
+        WizardStep7.WizardStepIsActive = {UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockoutPage}.Contains(CurrentWizardPage.WizardPage)
+        WizardStep8.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.VirtualMachinePage
+        WizardStep9.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.NetworkConnectionsPage
+        WizardStep10.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.SystemTelemetryPage
+        WizardStep11.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.PostInstallPage
+        WizardStep12.WizardStepIsActive = CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ComponentPage
+        WizardStep13.WizardStepIsActive = {UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage}.Contains(CurrentWizardPage.WizardPage)
 
         ' Change sizes of controls if the normal resize event does not work
         'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
@@ -1132,7 +1322,7 @@ Public Class NewUnattendWiz
                 DynaLog.LogMessage("Checking selected architectures...")
                 If CheckedListBox1.CheckedItems.Count = 0 Then
                     DynaLog.LogMessage("No architectures have been selected.")
-                    MessageBox.Show("Please select an architecture and try again", "Validation error")
+                    MessageBox.Show(LocalizationService.ForSection("Unattend.Validation")("Arch.Try.Label"), LocalizationService.ForSection("Unattend.Validation")("ValidationError.Title"))
                     Return False
                 End If
                 If RadioButton28.Checked Then
@@ -1141,7 +1331,7 @@ Public Class NewUnattendWiz
                         Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
                         If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
                             DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
-                            MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                            MessageBox.Show(testerPC.ErrorMessage, LocalizationService.ForSection("Unattend.Validation")("Computer.Name.Error.Title"))
                             Return False
                         End If
                     End If
@@ -1149,7 +1339,7 @@ Public Class NewUnattendWiz
                     DynaLog.LogMessage("Checking if a computer name script has been specified...")
                     If String.IsNullOrEmpty(PCNameScript) Then
                         DynaLog.LogMessage("No script has been provided")
-                        MessageBox.Show("No script has been passed for the computer name", "Computer name error")
+                        MessageBox.Show(LocalizationService.ForSection("Unattend.Validation")("Script.Has.None.Label"), LocalizationService.ForSection("Unattend.Validation")("Computer.Name.Error.Title"))
                         Return False
                     End If
                 End If
@@ -1158,18 +1348,18 @@ Public Class NewUnattendWiz
                     DynaLog.LogMessage("Checking user-specified product key...")
                     If TextBox3.Text = "" Then
                         DynaLog.LogMessage("No product key has been specified.")
-                        MessageBox.Show("Please type a product key and try again", "Product Key error")
+                        MessageBox.Show(LocalizationService.ForSection("Unattend.Validation")("Type.ProductKey.Label"), LocalizationService.ForSection("Unattend.Validation")("ProductKeyError.Title"))
                         Return False
                     ElseIf TextBox3.Text <> "" And TextBox3.Text.Length <> 29 Then
                         DynaLog.LogMessage("Not all characters of the product key have been typed. Expected length: 29; Current length: " & TextBox3.Text.Length)
-                        MessageBox.Show("Please type all of the product key and try again", "Product Key error")
+                        MessageBox.Show(LocalizationService.ForSection("Unattend.Validation")("Type.Product.Label"), LocalizationService.ForSection("Unattend.Validation")("ProductKeyError.Title"))
                         Return False
                     ElseIf TextBox3.Text <> "" And TextBox3.Text.Length = 29 Then
                         DynaLog.LogMessage("Validating product key...")
                         Dim pKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox3.Text)
                         If Not pKey.Valid Then
                             DynaLog.LogMessage("Previously run regex match did not return results. This product key is bad.")
-                            MessageBox.Show("The product key entered:" & CrLf & CrLf & TextBox3.Text & CrLf & CrLf & "is ill-formed. Please type it again", "Product Key error")
+                            MessageBox.Show(LocalizationService.ForSection("Unattend.Validation").Format("ProductKey.Entered.Ill.Label", TextBox3.Text), LocalizationService.ForSection("Unattend.Validation")("ProductKeyError.Title"))
                             Return False
                         End If
                     End If
@@ -1179,7 +1369,7 @@ Public Class NewUnattendWiz
                 Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList, PCName)
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
                     DynaLog.LogMessage("Validation has failed due to the reasons that appear above this line.")
-                    MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show(LocalizationService.ForSection("Unattend.Validation").Format("Problem.One.Message", validationResults.ValidationErrorReason), LocalizationService.ForSection("Unattend.Validation")("User.Accounts.Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
                 Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">", Quote, "%"}
@@ -1199,7 +1389,7 @@ Public Class NewUnattendWiz
                     If Not AtLeastOneAdmin Then
                         DynaLog.LogMessage("No users have been detected as part of the Administrators group. All users are part of the Users group.")
                         DynaLog.LogMessage("At least one user must be part of the Administrators group.")
-                        MessageBox.Show("At least one account must be part of the Administrators user group. Please configure the user groups accordingly and try again", "User Accounts error")
+                        MessageBox.Show(LocalizationService.ForSection("Unattend.Validation")("Least.One.Account.Message"), LocalizationService.ForSection("Unattend.Validation")("User.Accounts.Error.Title"))
                         Return False
                     End If
                 End If
@@ -1207,7 +1397,7 @@ Public Class NewUnattendWiz
                 DynaLog.LogMessage("Validating wireless settings if they have been specified...")
                 If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
                     DynaLog.LogMessage("Wireless setting validation has failed.")
-                    MessageBox.Show("There is a problem with the specified wireless settings. Make sure that you have specified a network name and try again", "Wireless Networks error")
+                    MessageBox.Show(LocalizationService.ForSection("Unattend.Validation")("Problem.Wireless.Message"), LocalizationService.ForSection("Unattend.Validation")("WirelessError.Title"))
                     Return False
                 End If
         End Select
@@ -1231,7 +1421,7 @@ Public Class NewUnattendWiz
         DynaLog.LogMessage("Showing overview of settings...")
         TextBox13.Clear()
         ' Display settings in the following order:
-        TextBox13.Text = "Current configurations for the unattended answer file:" & CrLf
+        TextBox13.Text = LocalizationService.ForSection("UnattendWizard.Review")("Configs.UnattendAnswer.Label") & CrLf
         ' 1. -- REGIONAL CONFIGURATION
         TextBox13.AppendText("Regional settings: " & If(RegionalInteractive, "configured during setup" & CrLf, CrLf))
         If Not RegionalInteractive Then
@@ -1397,7 +1587,7 @@ Public Class NewUnattendWiz
 
     Private Sub ExpressPanelTrigger_Click(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.Click
         IsInExpress = True
-        StepsTreeView.Enabled = True
+        flpWizardSteps.Enabled = True
         EditorPanelContainer.Visible = False
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
@@ -1407,8 +1597,8 @@ Public Class NewUnattendWiz
         EditorPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
         PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox3.Image = My.Resources.express_mode_fc
-        Label3.Text = "Express mode"
-        Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
+        Label3.Text = LocalizationService.ForSection("Unattend.Mode")("ExpressMode.Title")
+        Label4.Text = LocalizationService.ForSection("Unattend.Mode")("WizardHelp.Description")
         FooterContainer.Visible = True
     End Sub
 
@@ -1446,7 +1636,7 @@ Public Class NewUnattendWiz
 
     Private Sub EditorPanelTrigger_Click(sender As Object, e As EventArgs) Handles EditorPanelTrigger.Click
         IsInExpress = False
-        StepsTreeView.Enabled = False
+        flpWizardSteps.Enabled = False
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
@@ -1456,8 +1646,8 @@ Public Class NewUnattendWiz
         EditorPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox2.Image = My.Resources.editor_mode_select
         PictureBox3.Image = My.Resources.editor_mode_fc
-        Label3.Text = "Editor mode"
-        Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        Label3.Text = LocalizationService.ForSection("Unattend.Mode")("EditorMode.Title")
+        Label4.Text = LocalizationService.ForSection("Unattend.Mode")("CreateUnattended.Description")
         FooterContainer.Visible = False
     End Sub
 
@@ -1489,14 +1679,6 @@ Public Class NewUnattendWiz
             ToolStripButton5.Checked = True
         End If
         Scintilla1.WrapMode = If(ToolStripButton5.Checked, WrapMode.Word, WrapMode.None)
-    End Sub
-
-    Sub SetNodeColors(nodes As TreeNodeCollection, bg As Color, fg As Color)
-        For Each node As TreeNode In nodes
-            node.BackColor = BackColor
-            node.ForeColor = ForeColor
-            SetNodeColors(node.Nodes, BackColor, ForeColor)
-        Next
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -1884,7 +2066,7 @@ Public Class NewUnattendWiz
 
     Private Sub UnattendGeneratorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGeneratorBW.DoWork
         DynaLog.LogMessage("Preparing file generation...")
-        ReportMessage("Preparing to generate file...", 0)
+        ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Preparing.Generate.Label"), 0)
         DynaLog.LogMessage("Checking save target...")
         DynaLog.LogMessage("Save target: " & Quote & SaveTarget & Quote)
         If SaveTarget = "" Then
@@ -1892,7 +2074,7 @@ Public Class NewUnattendWiz
             e.Cancel = True
             Exit Sub
         End If
-        ReportMessage("Preparing to generate file...", 0)
+        ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Preparing.Generate.Label"), 0)
         Dim UnattendGen As New Process()
         ' Get most appropriate binary of UnattendGen
         DynaLog.LogMessage("Getting the most appropriate UnattendGen executable...")
@@ -1933,7 +2115,7 @@ Public Class NewUnattendWiz
         End If
         Try
             ' Save settings to appropriate XML files
-            ReportMessage("Saving user settings...", 2)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 2)
             DynaLog.LogMessage("Saving regional settings...")
             Dim regSetContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                 "<root>" & CrLf &
@@ -1945,7 +2127,7 @@ Public Class NewUnattendWiz
                 "</root>"
             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
             UnattendGen.StartInfo.Arguments &= " --regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
-            ReportMessage("Saving user settings...", 4)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 4)
             DynaLog.LogMessage("Saving architecture settings...")
             ' Build architecture string for UnattendGen
             Dim Architectures As New List(Of String)
@@ -1957,7 +2139,7 @@ Public Class NewUnattendWiz
             Next
             ArchitectureString = String.Join(",", Architectures.ToArray())
             UnattendGen.StartInfo.Arguments &= " --architecture=" & ArchitectureString
-            ReportMessage("Saving user settings...", 6)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 6)
             DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
                 UnattendGen.StartInfo.Arguments &= " --LabConfig"
@@ -1965,7 +2147,7 @@ Public Class NewUnattendWiz
             If Win11Config.OOBE_BypassNRO Then
                 UnattendGen.StartInfo.Arguments &= " --BypassNRO"
             End If
-            ReportMessage("Saving user settings...", 8)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 8)
             DynaLog.LogMessage("Saving computer settings...")
             If RadioButton28.Checked Then
                 If Not PCName.DefaultName Then
@@ -1980,12 +2162,12 @@ Public Class NewUnattendWiz
             If UseConfigSet Then
                 UnattendGen.StartInfo.Arguments &= " --ConfigSet"
             End If
-            ReportMessage("Saving user settings...", 10)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 10)
             DynaLog.LogMessage("Saving time zone settings...")
             If TimeOffsetInteractive Then
                 UnattendGen.StartInfo.Arguments &= " --tzImplicit"
             End If
-            ReportMessage("Saving user settings...", 12)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 12)
             DynaLog.LogMessage("Saving disk configuration...")
             If DiskConfigurationInteractive Then
                 DynaLog.LogMessage("Disks will be configured interactively.")
@@ -2000,7 +2182,7 @@ Public Class NewUnattendWiz
                     "</root>"
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
             End If
-            ReportMessage("Saving user settings...", 14)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 14)
             DynaLog.LogMessage("Saving edition settings...")
             If FirmwareChosen Then
                 DynaLog.LogMessage("The product key will be grabbed from firmware.")
@@ -2018,7 +2200,7 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --customkey=" & SelectedKey.Key
             End If
             If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
-                ReportMessage("Saving user settings...", 16)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 16)
                 DynaLog.LogMessage("Saving user accounts...")
                 UnattendGen.StartInfo.Arguments &= " --customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -2052,15 +2234,15 @@ Public Class NewUnattendWiz
                 End If
             ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
                 DynaLog.LogMessage("A Microsoft account is expected to be used in the target installation.")
-                ReportMessage("Saving user settings...", 16)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 16)
                 UnattendGen.StartInfo.Arguments &= " --msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
-                ReportMessage("Saving user settings...", 18)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 18)
                 DynaLog.LogMessage("Saving password expiration settings...")
                 UnattendGen.StartInfo.Arguments &= " --pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
             End If
-            ReportMessage("Saving user settings...", 20)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 20)
             DynaLog.LogMessage("Saving Account Lockout settings...")
             If SelectedLockoutSettings.Enabled Then
                 UnattendGen.StartInfo.Arguments &= " --lockout=yes"
@@ -2081,7 +2263,7 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --lockout=no"
             End If
             If VirtualMachineSupported Then
-                ReportMessage("Saving user settings...", 22)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 22)
                 DynaLog.LogMessage("Saving VM provider settings...")
                 Select Case SelectedVMSettings.Provider
                     Case VMProvider.VirtualBox_GAs
@@ -2095,7 +2277,7 @@ Public Class NewUnattendWiz
                 End Select
             End If
             If Not NetworkConfigInteractive Then
-                ReportMessage("Saving user settings...", 24)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 24)
                 DynaLog.LogMessage("Saving wireless settings...")
                 If NetworkConfigManualSkip Then
                     UnattendGen.StartInfo.Arguments &= " --wifi=no"
@@ -2109,7 +2291,7 @@ Public Class NewUnattendWiz
                 End If
             End If
             If Not SystemTelemetryInteractive Then
-                ReportMessage("Saving user settings...", 24.5)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 24.5)
                 DynaLog.LogMessage("Saving system telemetry settings...")
                 If SelectedTelemetrySettings.Enabled Then
                     UnattendGen.StartInfo.Arguments &= " --telem=yes"
@@ -2117,7 +2299,7 @@ Public Class NewUnattendWiz
                     UnattendGen.StartInfo.Arguments &= " --telem=no"
                 End If
             End If
-            ReportMessage("Saving user settings...", 24.625)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 24.625)
             DynaLog.LogMessage("Checking if scripts directory exists...")
             If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts")) Then
                 DynaLog.LogMessage("Scripts directory does not exist. Attempting to create it...")
@@ -2151,8 +2333,6 @@ Public Class NewUnattendWiz
                                 scriptExt = "bat"
                             Case PostInstallScript.Extension.VBScript
                                 scriptExt = "vbs"
-                            Case PostInstallScript.Extension.JScript
-                                scriptExt = "js"
                         End Select
                         Dim scriptFile As String = String.Format("Script{0}.{1}", scriptCountFlag.ToString().PadLeft(4, "0"), scriptExt)
                         File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", StageString, scriptFile),
@@ -2177,7 +2357,7 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --hidewindows"
             End If
             If SystemComponentsEx.Count > 0 Then
-                ReportMessage("Saving user settings...", 24.75)
+                ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 24.75)
                 DynaLog.LogMessage("Checking if components directory exists...")
                 If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components")) Then
                     DynaLog.LogMessage("Components directory does not exist. Attempting to create it...")
@@ -2191,14 +2371,14 @@ Public Class NewUnattendWiz
                 Next
                 DynaLog.LogMessage("Components were saved.")
             End If
-            ReportMessage("Generating unattended answer file...", 25)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("GenerateAnswerFile.Label"), 25)
             DynaLog.LogMessage("Starting UnattendGen...")
             If Debugger.IsAttached Then UnattendGen.StartInfo.Arguments &= " --debug"
             UnattendGen.Start()
             UnattendGen.WaitForExit()
             DynaLog.LogMessage("UnattendGen finished with exit code " & Hex(UnattendGen.ExitCode))
-            ReportMessage("Generating unattended answer file...", 50)
-            ReportMessage("Deleting temporary files...", 75)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("GenerateAnswerFile.Label"), 50)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Deleting.Temporary.Label"), 75)
             If File.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp")) Then
                 DynaLog.LogMessage("Deleting temporary DiskPart scripts...")
                 File.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"))
@@ -2210,14 +2390,14 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Deleting temporary scripts...")
             Directory.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts"), True)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested:" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
+                MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("GeneratorExit.Message", Hex(UnattendGen.ExitCode)))
                 e.Cancel = True
             End If
-            ReportMessage("Generation has completed", 100)
+            ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Generation.Completed.Label"), 100)
         Catch ex As Exception
             DynaLog.LogMessage("Could not generate the answer file. Error message: " & ex.Message)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested:" & CrLf & CrLf & "Error: " & ex.Message)
+                MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("Generator.Message", ex.Message))
                 e.Cancel = True
             End If
         End Try
@@ -2246,7 +2426,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
-        If MsgBox("Do you want to reuse the settings you've used in this answer file for the new one?", vbQuestion + vbYesNo, Text) = MsgBoxResult.No Then
+        If MsgBox(LocalizationService.ForSection("Unattend.Messages")("Reuse.Settings.Ve.Message"), vbQuestion + vbYesNo, Text) = MsgBoxResult.No Then
             ' Refresh the settings
             ReloadSettings()
         End If
@@ -2265,7 +2445,7 @@ Public Class NewUnattendWiz
             ApplyUnattendFile.ShowDialog(MainForm)
             WindowState = FormWindowState.Normal
         Else
-            MsgBox("You need to load a project in order to apply this file.", vbOKOnly + vbExclamation, Text)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages")("Load.Project.Order.Label"), vbOKOnly + vbExclamation, Text)
             Exit Sub
         End If
     End Sub
@@ -2278,7 +2458,7 @@ Public Class NewUnattendWiz
         End If
     End Sub
 
-    Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs) Handles StepsTreeView.DrawNode
+    Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs)
         ' Determine the custom background color
         Dim customBackColor As Color = CurrentTheme.SectionBackgroundColor
 
@@ -2320,6 +2500,10 @@ Public Class NewUnattendWiz
             If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
                 DynaLog.LogMessage("Creating self-contained package directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
+            End If
+            If NetworkCostHelper.IsNetworkConnectionMetered() Then
+
+                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled.")
             End If
             Using UnattClient As New WebClient()
                 DynaLog.LogMessage("Downloading UnattendGen installer from the UnattendGen repository...")
@@ -2365,7 +2549,7 @@ Public Class NewUnattendWiz
 
     Private Sub UnattendGenBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UnattendGenBW.RunWorkerCompleted
         If e.Error IsNot Nothing Then
-            MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & e.Error.Message, "UnattendGen error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("PrepareFailed.Label", e.Error.Message), LocalizationService.ForSection("NewUnattend.Validation")("Gen.Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
                 Try
                     Directory.Delete(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained"), True)
@@ -2396,7 +2580,7 @@ Public Class NewUnattendWiz
             Scintilla1.Text = File.ReadAllText(EditorModeOFD.FileName)
         Catch ex As Exception
             DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
-            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages").Format("OpenFile.Label", ex.Message), vbOKOnly + vbCritical, Text)
         End Try
     End Sub
 
@@ -2411,7 +2595,7 @@ Public Class NewUnattendWiz
             File.WriteAllText(EditorModeSFD.FileName, Scintilla1.Text, UTF8)
         Catch ex As Exception
             DynaLog.LogMessage("Could not save file. Error message: " & ex.Message)
-            MsgBox("Could not save file: " & ex.Message, vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages").Format("SaveFile.Label", ex.Message), vbOKOnly + vbCritical, Text)
         End Try
     End Sub
 
@@ -2446,12 +2630,12 @@ Public Class NewUnattendWiz
             Scintilla1.Text = File.ReadAllText(SaveTarget)
         Catch ex As Exception
             DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
-            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages").Format("OpenFile.Label", ex.Message), vbOKOnly + vbCritical, Text)
             Exit Sub
         End Try
 
         IsInExpress = False
-        StepsTreeView.Enabled = False
+        flpWizardSteps.Enabled = False
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
@@ -2461,8 +2645,8 @@ Public Class NewUnattendWiz
         EditorPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox2.Image = My.Resources.editor_mode_select
         PictureBox3.Image = My.Resources.editor_mode_fc
-        Label3.Text = "Editor mode"
-        Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        Label3.Text = LocalizationService.ForSection("Unattend.Mode")("EditorMode.Title")
+        Label4.Text = LocalizationService.ForSection("Unattend.Mode")("CreateUnattended.Description")
         FooterContainer.Visible = False
     End Sub
 
@@ -2472,7 +2656,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
-        CNameTTip.Show("Uses the name of your computer as the computer name of the unattended answer file." & CrLf & "Only use this if the system you want to target is this one", sender)
+        CNameTTip.Show(LocalizationService.ForSection("Unattend.Tooltips")("Uses.Name.Computer.Message"), sender)
     End Sub
 
     Private Sub CheckBox19_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox19.CheckedChanged
@@ -2658,10 +2842,10 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Copying key to clipboard...")
             My.Computer.Clipboard.SetText(TextBox2.Text)
             DynaLog.LogMessage("Key copied successfully.")
-            MsgBox("The product key was copied successfully to your clipboard.", vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages")("ProductKey.Copied.Done.Label"), vbOKOnly + vbInformation)
         Catch ex As Exception
             DynaLog.LogMessage("Could not copy key. Error message: " & ex.Message)
-            MsgBox("We could not copy the key to your clipboard. Error message: " & ex.Message, vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages").Format("Copy.Key.Clipboard.Label", ex.Message), vbOKOnly + vbInformation)
         End Try
     End Sub
 
@@ -2748,7 +2932,7 @@ Public Class NewUnattendWiz
 
     Sub ShowReservedComponentStatusMessage(SelectedComponentIndex As Integer)
         If IsAReservedComponent(SystemComponentsEx(SelectedComponentIndex).Id, SystemComponentsEx(SelectedComponentIndex).Pass) Then
-            MessageBox.Show("This component is already reserved for proper OS installation. If you overwrite this component with your data, OS installation may not give you expected results.", "Component in use", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(LocalizationService.ForSection("Unattend.Messages")("Component.Already.Message"), LocalizationService.ForSection("Unattend.Messages")("ComponentUse.Title"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -2875,7 +3059,7 @@ Public Class NewUnattendWiz
                     DynaLog.LogMessage("Could not copy this file. Error message: " & ex.Message)
                 End Try
             Next
-            MsgBox("Cross-platform versions of UnattendGen are now copied to " & CPUnattendGenFBD.SelectedPath, vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages").Format("Cross.Platform.Label", CPUnattendGenFBD.SelectedPath), vbOKOnly + vbInformation)
         End If
     End Sub
 
@@ -2938,7 +3122,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub UpdateScriptEditorLexer(LexerName As String)
-        If {"powershell", "batch", "vbscript", "jscript"}.Contains(LexerName) Then
+        If {"powershell", "batch", "vbscript"}.Contains(LexerName) Then
             ClearScriptEditorKeywords()
 
             ' I want a correct set of keywords whenever we switch the lexer language.
@@ -2956,11 +3140,6 @@ Public Class NewUnattendWiz
                 Case "vbscript"
                     Scintilla3.LexerName = "vb"
                     AddScintillaKeywords("vbscript", 0, "addhandler addressof aggregate alias and andalso ansi as assembly async attribute auto await begin binary boolean by byref byte byval call case catch cbool cbyte cchar ccur cdate cdbl cdec char cint class clng clnglng clngptr cobj compare const continue csbyte cshort csng cstr ctype cuint culng currency cushort custom cvar date decimal declare default defbool defbyte defcur defdate defdbl defdec defint deflng deflnglng deflngptr defobj defsng defstr defvar delegate dim directcast distinct do double each else elseif end endif enum equals erase error event exit explicit false finally for friend from function get gettype global gosub goto group handles if implement implements imports in inherits integer interface into is isfalse isnot istrue iterator join key let lib like load long longlong longptr loop lset me mid mod module mustinherit mustoverride mybase myclass namespace narrowing new next not nothing notinheritable notoverridable object of off on operator option optional or order orelse out overloads overridable overrides paramarray partial preserve private property protected ptrsafe public raiseevent readonly redim rem removehandler resume return rset sbyte select set shadows shared short single skip static step stop strict string structure sub synclock take text then throw to true try trycast type typeof uinteger ulong unicode unload until ushort using variant vbarray vbboolean vbbyte vbcurrency vbdataobject vbdate vbdecimal vbdouble vbempty vberror vbinteger vblong vblonglong vbnull vbobject vbsingle vbuserdefinedtype vbvariant wend when where while widening with withevents writeonly xor yield")
-                Case "jscript"
-                    Scintilla3.LexerName = "coffeescript"
-                    AddScintillaKeywords("jscript", 0, "abstract async await boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface let long native new null of package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with true false prototype yield")
-                    AddScintillaKeywords("jscript", 1, "Array Date eval hasOwnProperty Infinity isFinite isNaN isPrototypeOf Math NaN Number Object prototype String toString undefined valueOf")
-                    AddScintillaKeywords("jscript", 2, "alert all anchor anchors area assign blur button checkbox clearInterval clearTimeout clientInformation close closed confirm constructor crypto decodeURI decodeURIComponent defaultStatus document element elements embed embeds encodeURI encodeURIComponent escape event fileUpload focus form forms frame innerHeight innerWidth layer layers link location mimeTypes navigate navigator frames frameRate hidden history image images offscreenBuffering onblur onclick onerror onfocus onkeydown onkeypress onkeyup onmouseover onload onmouseup onmousedown onsubmit open opener option outerHeight outerWidth packages pageXOffset pageYOffset parent parseFloat parseInt password pkcs11 plugin prompt propertyIsEnum radio reset screenX screenY scroll secure select self setInterval setTimeout status submit taint text textarea top unescape untaint window")
             End Select
         End If
     End Sub
@@ -2975,8 +3154,6 @@ Public Class NewUnattendWiz
                     UpdateScriptEditorLexer("batch")
                 Case 2
                     UpdateScriptEditorLexer("vbscript")
-                Case 3
-                    UpdateScriptEditorLexer("jscript")
             End Select
         Catch ex As Exception
 
@@ -2988,7 +3165,7 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Detemining contents of current Scintilla control...")
             If Scintilla3.Text <> "" Then
                 DynaLog.LogMessage("Current Scintilla control is not empty. Asking before proceeding...")
-                If MsgBox("Importing this script will overwrite any existing data in the current post-installation script. It is best that you create a new entry before proceeding. Do you want to continue?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+                If MsgBox(LocalizationService.ForSection("Unattend.Messages")("ImportOverwrite.Message"), vbYesNo + vbQuestion) = MsgBoxResult.No Then
                     DynaLog.LogMessage("User said no. Exiting...")
                     Exit Sub
                 End If
@@ -3000,14 +3177,9 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Determining file extension...")
             ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
             Select Case StarterScriptContents(0)
-                Case "Language: PowerShell"
-                    ComboBox16.SelectedIndex = 0
-                Case "Language: Batch"
-                    ComboBox16.SelectedIndex = 1
-                Case "Language: VBScript"
-                    ComboBox16.SelectedIndex = 2
-                Case "Language: JScript"
-                    ComboBox16.SelectedIndex = 3
+                Case "Language: PowerShell" : ComboBox16.SelectedIndex = 0
+                Case "Language: Batch" : ComboBox16.SelectedIndex = 1
+                Case "Language: VBScript" : ComboBox16.SelectedIndex = 2
             End Select
 
             DynaLog.LogMessage("Loading contents...")
@@ -3032,10 +3204,9 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Determining file extension...")
             ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
             Select Case SampleScriptBrowser.FinalScriptLanguage
-                Case "PowerShell"
-                    ComboBox16.SelectedIndex = 0
-                Case "Batch"
-                    ComboBox16.SelectedIndex = 1
+                Case "PowerShell" : ComboBox16.SelectedIndex = 0
+                Case "Batch" : ComboBox16.SelectedIndex = 1
+                Case "VBScript" : ComboBox16.SelectedIndex = 2
             End Select
 
             DynaLog.LogMessage("Loading contents...")
@@ -3049,12 +3220,12 @@ Public Class NewUnattendWiz
         If EditionMapping.ContainsKey(MainForm.CurrentImage.ImageEditionId) Then
             ComboBox6.SelectedItem = EditionMapping(MainForm.CurrentImage.ImageEditionId)
         Else
-            MsgBox("There is no product key for the " & Quote & MainForm.CurrentImage.ImageEditionId & Quote & " edition.", vbOKOnly + vbInformation)
+            MsgBox(LocalizationService.ForSection("Unattend.Messages").Format("ProductKey.None.Label", MainForm.CurrentImage.ImageEditionId), vbOKOnly + vbInformation)
         End If
     End Sub
 
     Private Sub Button21_MouseHover(sender As Object, e As EventArgs) Handles Button21.MouseHover
-        CNameTTip.Show("Click here to attempt to grab the edition of the currently loaded image. This will help you use a suitable product key for said Windows image.", sender)
+        CNameTTip.Show(LocalizationService.ForSection("Unattend.Tooltips")("Attempt.Grab.Message"), sender)
     End Sub
 
     Private Sub Button22_Click(sender As Object, e As EventArgs) Handles Button22.Click
@@ -3062,13 +3233,11 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button22_MouseHover(sender As Object, e As EventArgs) Handles Button22.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Choose this option to automatically configure the target location to one of the countries in the European Economic Area (EEA). This will let you" & CrLf &
-                                    "configure settings in the target system that you would not be able to when using a region outside the EEA. After Setup is complete, you can reconfigure" & CrLf &
-                                    "the region to your current location.")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("AutoChoose.Message"))
     End Sub
 
     Private Sub CheckBox23_MouseHover(sender As Object, e As EventArgs) Handles CheckBox27.MouseHover, CheckBox26.MouseHover, CheckBox25.MouseHover, CheckBox24.MouseHover, CheckBox23.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Check this field to customize this user's display name")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("Check.Field.Customize.Label"))
     End Sub
 
     Private Sub CheckBox27_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox27.CheckedChanged
@@ -3137,6 +3306,29 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button23_MouseHover(sender As Object, e As EventArgs) Handles Button23.MouseHover
-        WindowHelper.DisplayToolTip(sender, "Rearrange post-installation scripts...")
+        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("RearrangeScripts.Label"))
+    End Sub
+
+    Private Sub AccDispNameCtrl_Leave(sender As Object, e As EventArgs) Handles TextBox23.Leave, TextBox22.Leave, TextBox21.Leave, TextBox20.Leave, TextBox19.Leave
+        Dim sourceControl As Control = CType(sender, Control),
+            targetControl As Control = Nothing
+
+        Select Case sourceControl.Name
+            Case "TextBox19" : targetControl = TextBox4
+            Case "TextBox20" : targetControl = TextBox8
+            Case "TextBox21" : targetControl = TextBox11
+            Case "TextBox22" : targetControl = TextBox14
+            Case "TextBox23" : targetControl = TextBox17
+        End Select
+
+        If targetControl Is Nothing Then Exit Sub
+
+        If sourceControl.Text <> "" AndAlso targetControl.Text = "" Then
+            DisplayNameFormatterDialog.SourceDisplayName = sourceControl.Text
+
+            If DisplayNameFormatterDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                targetControl.Text = DisplayNameFormatterDialog.FormattedAccountName
+            End If
+        End If
     End Sub
 End Class

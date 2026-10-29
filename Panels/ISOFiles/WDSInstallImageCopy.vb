@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Dism
+Imports Microsoft.Dism
+Imports WimgApi.Interop
 
 Public Class WDSInstallImageCopy
 
@@ -9,31 +10,29 @@ Public Class WDSInstallImageCopy
 
     Private Sub OK_Button_Click(sender As Object, e As EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Checking provided information...")
-        DynaLog.LogMessage("- Source image to add to WDS: " & Quote & TextBox1.Text & Quote)
-        DynaLog.LogMessage("- Group to add image to: " & Quote & TextBox2.Text & Quote)
-        If TextBox1.Text = "" OrElse Not File.Exists(TextBox1.Text) Then
-            MsgBox("Either the source image file does not exist or you haven't provided any image file. Please specify a valid image file and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+        DynaLog.LogMessage("- Source image to add to WDS: " & Quote & tbSourceImageFile.Text & Quote)
+        DynaLog.LogMessage("- Group to add image to: " & Quote & tbDestinationWdsImageGroup.Text & Quote)
+        If tbSourceImageFile.Text = "" OrElse Not File.Exists(tbSourceImageFile.Text) Then
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Either.Source.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If TextBox2.Text = "" Then
-            MsgBox("No group has been specified. Please specify a new or an existing WDS group and try again.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+        If tbDestinationWdsImageGroup.Text = "" Then
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Group.Has.None.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If ListView1.CheckedItems.Count < 1 Then
-            MsgBox("No images have been selected for addition to your WDS server.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+        If lvImages.CheckedItems.Count < 1 Then
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Images.Have.None.Label"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        If MsgBox("Make sure that the image you are adding has been prepared with Sysprep." & CrLf & CrLf &
-                  "If you have not done so, click No, prepare the image, and start the process again. You don't have to close this window." & CrLf & CrLf &
-                  "Do you want to add this image to your WDS server?", vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
+        If MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Image.Add.Message"), vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.No Then
             Exit Sub
         End If
         OK_Button.Enabled = False
         Cancel_Button.Enabled = False
         OptionsPanel.Enabled = False
 
-        UploadAllImages = ListView1.CheckedItems.Count = ListView1.Items.Count
-        SelectedIndexes = ListView1.CheckedIndices.Cast(Of Integer)().ToArray()
+        UploadAllImages = lvImages.CheckedItems.Count = lvImages.Items.Count
+        SelectedIndexes = lvImages.CheckedIndices.Cast(Of Integer)().ToArray()
 
         BackgroundWorker1.RunWorkerAsync()
     End Sub
@@ -43,9 +42,31 @@ Public Class WDSInstallImageCopy
     End Sub
 
     Private Sub WDSInstallImageCopy_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OK_Button.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Ok.Button")
+        Cancel_Button.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Cancel.Button")
+        Button2.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Pick.Button")
+        Button1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Browse.Button")
+        Label4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageFile.Server.Label")
+        Button3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Mounted.Image.Button")
+        Label1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Images.Added.Group.Label")
+        ColumnHeader1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Value.Column")
+        ColumnHeader2.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageName.Column")
+        ColumnHeader3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageDescription.Column")
+        ColumnHeader4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ImageVersion.Column")
+        ColumnHeader5.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Image.Architecture.Column")
+        Button4.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Pick.Server.Groups.Button")
+        Button5.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("SelectAll.Button")
+        Button6.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("ClearSelection.Button")
+        GroupBox1.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Progress.Group")
+        Label3.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Re.Ready.OK.Label")
+        Label8.Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Status.Label")
+        OpenFileDialog1.Filter = LocalizationService.ForSection("Designer.WDSImageCopy")("WIM.Files.Filter")
+        Text = LocalizationService.ForSection("Designer.WDSImageCopy")("Image.Win.Deploy.Label")
+        ImageTaskHeader1.ItemText = Text
+
         If WindowsServiceHelper.GetOnlineSystemServiceInformationByName("WDSServer") Is Nothing Then
             ' We are either not running this on Windows Server, or we are, but without the WDS role
-            MsgBox("This wizard does not support this computer. Make sure that this computer is running Windows Server and that it has the Windows Deployment Services role installed.", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+            MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Wizard.Support.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Close()
             Exit Sub
         End If
@@ -57,12 +78,12 @@ Public Class WDSInstallImageCopy
         ImageTaskHeader1.SetColors()
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
-        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
-        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
-        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
-        TextBox1.ForeColor = ForeColor
-        TextBox2.ForeColor = ForeColor
-        ListView1.ForeColor = ForeColor
+        tbSourceImageFile.BackColor = CurrentTheme.SectionBackgroundColor
+        tbDestinationWdsImageGroup.BackColor = CurrentTheme.SectionBackgroundColor
+        lvImages.BackColor = CurrentTheme.SectionBackgroundColor
+        tbSourceImageFile.ForeColor = ForeColor
+        tbDestinationWdsImageGroup.ForeColor = ForeColor
+        lvImages.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
@@ -74,9 +95,9 @@ Public Class WDSInstallImageCopy
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
         ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
-        Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
-        Graphics.FromImage(bm).Clear(ListView1.BackColor)
-        ListView1.BackgroundImage = bm
+        Dim bm As New Bitmap(lvImages.ClientSize.Width, lvImages.ClientSize.Height)
+        Graphics.FromImage(bm).Clear(lvImages.BackColor)
+        lvImages.BackgroundImage = bm
 
         ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
         ColumnHeader2.Width = WindowHelper.ScaleLogical(265)
@@ -94,18 +115,37 @@ Public Class WDSInstallImageCopy
         Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage(".wim")
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Selected image: " & selectedImage.ImageFile)
-            TextBox1.Text = selectedImage.ImageFile
+            tbSourceImageFile.Text = selectedImage.ImageFile
         End If
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        TextBox1.Text = OpenFileDialog1.FileName
+        tbSourceImageFile.Text = OpenFileDialog1.FileName
     End Sub
 
-    Sub GetImageInfo(ImageFile As String)
+    Private Sub GetImageInfoWithWimgApi(ImageFile As String)
         DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
+        DynaLog.LogMessage("---> Using WIMGAPI...")
+        lvImages.Items.Clear()
+        Try
+            If File.Exists(ImageFile) Then
+                Dim imageInfo As WimFileInfo = WimReader.GetWimInfo(ImageFile)
+                lvImages.Items.AddRange(imageInfo.Images.Select(Function(imgInfo) New ListViewItem(New String() {(imageInfo.Images.IndexOf(imgInfo) + 1),
+                                                                                                                  imgInfo.Name,
+                                                                                                                  imgInfo.Description,
+                                                                                                                  imgInfo.Version,
+                                                                                                                  Casters.CastDismArchitecture(imgInfo.Architecture)})).ToArray())
+            End If
+        Catch ex As Exception
+            DynaLog.LogMessage("Exception occurred: " & ex.Message)
+            GetImageInfoWithDismApi(ImageFile)
+        End Try
+    End Sub
+
+    Private Sub GetImageInfoWithDismApi(ImageFile As String)
+        DynaLog.LogMessage("WIMGAPI method failed.")
+        DynaLog.LogMessage("---> Using DISM API...")
         DynaLog.LogMessage("Checking if mounted image detector is busy...")
-        ListView1.Items.Clear()
         MainForm.StopMountedImageDetector()
         Try
             DynaLog.LogMessage("Initializing API...")
@@ -114,48 +154,24 @@ Public Class WDSInstallImageCopy
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
-                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1),
+                lvImages.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1),
                                                                                                                        ImageInfo.ImageName,
                                                                                                                        ImageInfo.ImageDescription,
                                                                                                                        ImageInfo.ProductVersion.ToString(),
                                                                                                                        Casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
 
                 ' By default check them all
-                WindowHelper.CheckAllItems(ListView1)
+                WindowHelper.CheckAllItems(lvImages)
 
                 ' Block all boot images (or at least warn)
                 If ImageInfoCollection.Any(Function(ImageInfo) ImageInfo.EditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)) Then
-                    MsgBox("A boot image has been detected. You should not use these as installation images in your server.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
+                    MsgBox(LocalizationService.ForSection("WDSImageCopy.Messages")("Boot.Image.Detected.Message"), vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
                 End If
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ESN"
-                            msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "FRA"
-                            msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "PTB", "PTG"
-                            msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                        Case "ITA"
-                            msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                    End Select
-                Case 1
-                    msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 2
-                    msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 3
-                    msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 4
-                    msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-                Case 5
-                    msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
-            End Select
+            msg = LocalizationService.ForSection("WDSImageCopy.ImageInfo").Format("Gather.ImageFile.Message", ex.ToString(), ex.Message, Hex(ex.HResult))
             MsgBox(msg, vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -169,19 +185,19 @@ Public Class WDSInstallImageCopy
         MainForm.StartMountedImageDetector()
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles tbSourceImageFile.TextChanged
+        If tbSourceImageFile.Text <> "" And File.Exists(tbSourceImageFile.Text) Then
             DynaLog.LogMessage("The specified file exists. Getting information...")
-            GetImageInfo(TextBox1.Text)
+            GetImageInfoWithWimgApi(tbSourceImageFile.Text)
         End If
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        WindowHelper.CheckAllItems(ListView1)
+        WindowHelper.CheckAllItems(lvImages)
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        WindowHelper.UncheckAllItems(ListView1)
+        WindowHelper.UncheckAllItems(lvImages)
     End Sub
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
@@ -192,7 +208,7 @@ Public Class WDSInstallImageCopy
         WDSUploader.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper\files"
         If UploadAllImages Then
             WDSUploader.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\files\install_image_to_wds.ps1" & Quote &
-                " -imageGroup " & Quote & TextBox2.Text & Quote & " -installImagePath " & Quote & TextBox1.Text & Quote
+                " -imageGroup " & Quote & tbDestinationWdsImageGroup.Text & Quote & " -installImagePath " & Quote & tbSourceImageFile.Text & Quote
             WDSUploader.Start()
             WDSUploader.WaitForExit()
             DynaLog.LogMessage("The process finished with exit code " & Hex(WDSUploader.ExitCode))
@@ -203,7 +219,7 @@ Public Class WDSInstallImageCopy
 
             For i = 0 To SelectedIndexes.Count - 1
                 WDSUploader.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\files\install_image_to_wds.ps1" & Quote &
-                    " -imageGroup " & Quote & TextBox2.Text & Quote & " -installImagePath " & Quote & TextBox1.Text & Quote & " -installImageIndex " & SelectedIndexes(i) + 1
+                    " -imageGroup " & Quote & tbDestinationWdsImageGroup.Text & Quote & " -installImagePath " & Quote & tbSourceImageFile.Text & Quote & " -installImageIndex " & SelectedIndexes(i) + 1
                 WDSUploader.Start()
                 WDSUploader.WaitForExit()
                 DynaLog.LogMessage("The process finished with exit code " & Hex(WDSUploader.ExitCode))
@@ -224,12 +240,12 @@ Public Class WDSInstallImageCopy
         ISOProgressPanel.Visible = True
         If e.ProgressPercentage < 100 Then
             WindowHelper.DisableCloseCapability(Handle)
-            Label8.Text = "Uploading images..."
+            Label8.Text = LocalizationService.ForSection("WDSImageCopy.Progress")("UploadingImages.Label")
             ProgressBar1.Style = ProgressBarStyle.Marquee
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
         Else
             WindowHelper.EnableCloseCapability(Handle)
-            If success Then Label8.Text = "Image uploads done."
+            If success Then Label8.Text = LocalizationService.ForSection("WDSImageCopy.Progress")("Image.Uploads.Done.Label")
             ProgressBar1.Style = ProgressBarStyle.Blocks
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         End If
@@ -239,7 +255,7 @@ Public Class WDSInstallImageCopy
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         DynaLog.LogMessage("The process has finished.")
         DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
-        MsgBox(If(success, "The images were uploaded successfully.", "The images were not uploaded successfully."),
+        MsgBox(If(success, LocalizationService.ForSection("WDSImageCopy.Messages")("UploadSuccessful.Label"), LocalizationService.ForSection("WDSImageCopy.Messages")("Images.Uploaded.Done.Label")),
                vbOKOnly + vbInformation, ImageTaskHeader1.ItemText)
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
@@ -260,9 +276,9 @@ Public Class WDSInstallImageCopy
     Private Sub WDSInstallImageCopy_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
         If Visible And WindowState <> FormWindowState.Minimized Then
             ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
-            Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
-            Graphics.FromImage(bm).Clear(ListView1.BackColor)
-            ListView1.BackgroundImage = bm
+            Dim bm As New Bitmap(lvImages.ClientSize.Width, lvImages.ClientSize.Height)
+            Graphics.FromImage(bm).Clear(lvImages.BackColor)
+            lvImages.BackgroundImage = bm
         End If
         If BackgroundWorker1.IsBusy Then
             WindowHelper.DisableCloseCapability(Handle)
@@ -270,12 +286,12 @@ Public Class WDSInstallImageCopy
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        TextBox1.Text = MainForm.SourceImg
+        tbSourceImageFile.Text = MainForm.SourceImg
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If WDSImageGroupSpecifier.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            TextBox2.Text = WDSImageGroupSpecifier.SpecifiedImageGroup
+            tbDestinationWdsImageGroup.Text = WDSImageGroupSpecifier.SpecifiedImageGroup
         End If
     End Sub
 End Class

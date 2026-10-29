@@ -61,24 +61,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a @ECHO OFF
-        '''SETLOCAL ENABLEDELAYEDEXPANSION
-        '''TITLE Revert Installation Changes
-        '''
-        '''IF &quot;%1&quot; NEQ &quot;doit&quot; (
-        '''    ECHO This device has rebooted to the full Windows installation. Do you want to remove the DISMTools Preinstallation Environment?
-        '''    CHOICE /C YN /M &quot;Delete the DISMTools Preinstallation Environment BCD entries&quot;
-        '''
-        '''    REM for some stupid reason, cmd decides to evaluate errorlevel at parse time, therefore returning 0, regardless of the option chosen in choice command
-        '''    REM if we delay the expansion [resto de la cadena truncado]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property HI_UninstallScript() As String
-            Get
-                Return ResourceManager.GetString("HI_UninstallScript", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property hotinstall_step1() As System.Drawing.Bitmap

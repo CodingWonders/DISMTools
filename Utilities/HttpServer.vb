@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Net
 Imports System.Threading
 Imports System.Threading.Tasks
@@ -34,7 +34,7 @@ Public Class DTHttpServer
         If IsListenerAlive() Then Exit Sub
 
         If Not Directory.Exists(_rootDir) Then
-            MessageBox.Show("Root directory " & ControlChars.Quote & _rootDir & ControlChars.Quote & " does not exist in the file system. The server cannot be started.", "Tour Server", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(LocalizationService.ForSection("HttpServer.Messages").Format("Root.Dir.Exist.Message", _rootDir), LocalizationService.ForSection("HttpServer.Messages")("TourServer.Label"), MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
