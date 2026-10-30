@@ -33,14 +33,12 @@
 class ServerAuthentication {
     [string]$serverIP
     [string]$serverPort
-    [string]$serverUser
-    [string]$serverPassword
+    [pscredential]$credential
 
-    ServerAuthentication($ip, $port, $user, $password) {
+    ServerAuthentication($ip, $port, $credential) {
         $this.serverIP = $ip
         $this.serverPort = $port
-        $this.serverUser = $user
-        $this.serverPassword = $password
+        $this.credential = $credential
 
         if ((Test-IPAddressSyntax -ipAddr $this.serverIP) -eq [IPAddress]::IPv6) {
             $this.serverIP = "[$($this.serverIP)]"
@@ -94,7 +92,6 @@ function Invoke-ServerAuthentication {
     
     $ip = ""
     $port = 0
-    $user = ""
     
     $ipMessage = "Please enter the IP address of the server"
     
@@ -134,17 +131,43 @@ function Invoke-ServerAuthentication {
             $validPort = $false
         }
     } until ($validPort -eq $true)
+
+    $credential = $null
     
     do {
-        $user = Read-Host -Prompt "Please enter the user name for server authentication"
-        
-        if ($user -eq "") {
-            Write-Host "Please enter a user."
-        }
-    } until ($user -ne "")
-    
-    $password = Read-Host -Prompt "Please enter the password for server authentication (WILL BE SHOWN!)"
-    return [ServerAuthentication]::new($ip, $port, $user, $password)
+        $credential = Get-Credential -Message "Enter the credentials to log on to this system. The account you specify here must be an administrator."
+    } until ($null -ne $credential)
+
+    $auth = [ServerAuthentication]::new($ip, $port, $credential)
+
+    # Offer a screen for credential validation
+    $confirmed = Confirm-ServerConnectionCredentials -auth $auth
+    if (-not $confirmed) {
+        $auth = Invoke-ServerAuthentication
+    }
+
+    return $auth
+}
+
+function Confirm-ServerConnectionCredentials {
+    param (
+        [Parameter(Mandatory, Position = 0)] [ServerAuthentication] $auth
+    )
+
+    if ($null -eq $auth) {
+        return $false
+    }
+
+    Show-SectionMessage -sectionTitle "Confirm authentication settings" -sectionDescription "Are the following authentication settings correct?"
+    Write-Host "These are the provided credentials that will be used for this session:"
+    Write-Host "- Server IP  : $($auth.serverIP)"
+    Write-Host "- Server Port: $($auth.serverPort)"
+    Write-Host "- Server User: $($auth.credential.UserName)"
+    $option = Read-Host -Prompt "Confirm the settings by pressing Y. Otherwise, press N. [Y]"
+    if ($option -eq "") {
+        $option = "Y"
+    }
+    return $option -eq "Y"
 }
 
 function Get-SystemArchitecture
@@ -1864,25 +1887,12 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
     $shareResults = Invoke-RestMethod -Method Post -Body $shareBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/deploy"
     if ($shareResults.success) {
         Show-CenteredTextBox -Text "Mounting network share to this system . . ." -MaxWidth 100 -CenterOfAll
-        net use * $($shareResults.output.mountPath) $($authInfo.serverPassword) /user:$($shareResults.output.username) /P:Yes
-        # Start querying mapped network share information to get the drive letter, otherwise
-        # default to Z:
-        try {
-            $shareSet = $false
-            Get-ChildItem -Path "HKCU:\Network" | Foreach-Object {
-                $shareProps = Get-ItemProperty -Path $_.PSPath
-                if (($shareSet -eq $false) -and ($shareProps.RemotePath -eq "$($shareResults.output.mountPath)")) {
-                    # Get actual drive letter and not the full path, like HKEY_CURRENT_USER\Network\
-                    $global:destShareLetter = "$($_.Name.Replace('HKEY_CURRENT_USER\Network\', '')):"
-                    $shareSet = $true
-                }
-            }
-            if (-not $shareSet) {
-                $global:destShareLetter = "Z:"
-            }
-        } catch {
-            $global:destShareLetter = "Z:"
-        }
+        # Get the first free drive letter for the network share
+        $usedDriveLetters = (Get-PSDrive -PSProvider FileSystem).Name
+        $driveLetter = 'ZYXWVUTSRQPONMLKJHGFED'.ToCharArray() | Where-Object { $usedDriveLetters -notcontains $_.ToString() } | Select-Object -First 1
+
+        New-PSDrive -Name "$driveLetter" -PSProvider FileSystem -Root "$($shareResults.output.mountPath)" -Persist -Credential $($authInfo.credential) -Scope Global -ErrorAction Stop
+        $global:destShareLetter = "$($driveLetter):"
     } else {
         Show-CenteredTextBox -Text "Could not prepare the deployment of this image file. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
         Start-Sleep -Seconds 5
