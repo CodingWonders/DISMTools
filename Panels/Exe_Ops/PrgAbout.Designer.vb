@@ -46,11 +46,8 @@ Partial Class PrgAbout
         Me.Label16 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
-        Me.Label17 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel11 = New System.Windows.Forms.LinkLabel()
-        Me.Label18 = New System.Windows.Forms.Label()
         Me.LicensesPanel = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.WhatsNewPanel = New System.Windows.Forms.Panel()
@@ -156,7 +153,7 @@ Partial Class PrgAbout
         Me.ModernPanelContainer.Controls.Add(Me.WhatsNewPanel)
         Me.ModernPanelContainer.Controls.Add(Me.TableLayoutPanel3)
         Me.ModernPanelContainer.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ModernPanelContainer.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ModernPanelContainer.ForeColor = System.Drawing.Color.White
         Me.ModernPanelContainer.Location = New System.Drawing.Point(412, 12)
         Me.ModernPanelContainer.Name = "ModernPanelContainer"
         Me.ModernPanelContainer.Size = New System.Drawing.Size(420, 382)
@@ -192,11 +189,8 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Controls.Add(Me.Label16, 0, 8)
         Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 12)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 12)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label17, 0, 15)
         Me.TableLayoutPanel2.Controls.Add(Me.Label19, 0, 9)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel12, 1, 9)
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel11, 1, 16)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label18, 0, 16)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
@@ -391,16 +385,6 @@ Partial Class PrgAbout
         Me.LinkLabel7.Text = "Microsoft"
         Me.LinkLabel7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(3, 210)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(129, 21)
-        Me.Label17.TabIndex = 1
-        Me.Label17.Text = "Branding assets"
-        '
         'Label19
         '
         Me.Label19.AutoSize = True
@@ -424,29 +408,6 @@ Partial Class PrgAbout
         Me.LinkLabel12.Text = "Visit website"
         Me.LinkLabel12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'LinkLabel11
-        '
-        Me.LinkLabel11.AutoSize = True
-        Me.LinkLabel11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel11.LinkArea = New System.Windows.Forms.LinkArea(0, 0)
-        Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel11.LinkColor = System.Drawing.Color.Lime
-        Me.LinkLabel11.Location = New System.Drawing.Point(337, 231)
-        Me.LinkLabel11.Name = "LinkLabel11"
-        Me.LinkLabel11.Size = New System.Drawing.Size(80, 15)
-        Me.LinkLabel11.TabIndex = 9
-        Me.LinkLabel11.Text = "Microsoft"
-        Me.LinkLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(3, 231)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(154, 15)
-        Me.Label18.TabIndex = 2
-        Me.Label18.Text = "Windows Home Server 2011"
-        '
         'LicensesPanel
         '
         Me.LicensesPanel.Controls.Add(Me.RichTextBox1)
@@ -459,9 +420,10 @@ Partial Class PrgAbout
         '
         'RichTextBox1
         '
-        Me.RichTextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(25, Byte), Integer))
+        Me.RichTextBox1.BackColor = System.Drawing.Color.Black
         Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox1.ForeColor = System.Drawing.Color.White
         Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ReadOnly = True
@@ -482,9 +444,10 @@ Partial Class PrgAbout
         '
         'RichTextBox2
         '
-        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(25, Byte), Integer))
+        Me.RichTextBox2.BackColor = System.Drawing.Color.Black
         Me.RichTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox2.ForeColor = System.Drawing.Color.White
         Me.RichTextBox2.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBox2.Name = "RichTextBox2"
         Me.RichTextBox2.ReadOnly = True
@@ -518,7 +481,7 @@ Partial Class PrgAbout
         Me.LinkLabel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel3.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel3.LinkColor = System.Drawing.Color.White
         Me.LinkLabel3.Location = New System.Drawing.Point(283, 0)
         Me.LinkLabel3.Name = "LinkLabel3"
         Me.LinkLabel3.Size = New System.Drawing.Size(134, 28)
@@ -534,7 +497,7 @@ Partial Class PrgAbout
         Me.LinkLabel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel2.LinkColor = System.Drawing.Color.White
         Me.LinkLabel2.Location = New System.Drawing.Point(143, 0)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(134, 28)
@@ -550,7 +513,7 @@ Partial Class PrgAbout
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.White
         Me.LinkLabel1.Location = New System.Drawing.Point(3, 0)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(134, 28)
@@ -632,6 +595,7 @@ Partial Class PrgAbout
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.ModernPanelContainer)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -689,10 +653,7 @@ Partial Class PrgAbout
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
     Friend WithEvents RichTextBox2 As System.Windows.Forms.RichTextBox
-    Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Label17 As System.Windows.Forms.Label
-    Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents Label19 As System.Windows.Forms.Label
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox

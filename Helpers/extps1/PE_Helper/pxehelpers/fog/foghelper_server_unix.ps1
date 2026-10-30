@@ -4,12 +4,12 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.9                                         |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for UNIX Servers |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2027 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -114,7 +114,7 @@ function Get-FogHosts {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.8.2"
+$version = "0.9"
 
 Clear-Host
 
@@ -126,7 +126,7 @@ if ($env:TEMP -eq $null) {
 Start-Transcript -Path "$env:TEMP/DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems)"
-Write-Host "(c) 2025-2026. CodingWonders Software"
+Write-Host "(c) 2025-2027. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."

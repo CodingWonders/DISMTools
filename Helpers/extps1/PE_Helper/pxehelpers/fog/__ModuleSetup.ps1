@@ -1,7 +1,7 @@
-$version = "0.8.2"
+$version = "0.9"
 
 Write-Host "DISMTools $version - FOG Module Preparation"
-Write-Host "(c) 2025-2026. CodingWonders Software"
+Write-Host "(c) 2025-2027. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-Host "Grabbing latest release from GitHub..."

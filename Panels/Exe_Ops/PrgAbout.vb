@@ -32,8 +32,6 @@ Public Class PrgAbout
             Label15.Visible = True
         End If
         Label16.Text = LocalizationService.ForSection("PrgAbout")("Managed.Dismnu.Get.Label")
-        Label17.Text = LocalizationService.ForSection("PrgAbout")("BrandingAssets.Label")
-        Label18.Text = LocalizationService.ForSection("PrgAbout")("Windows.Label")
         LinkLabel1.Text = LocalizationService.ForSection("PrgAbout")("Credits.Link")
         LinkLabel2.Text = LocalizationService.ForSection("PrgAbout")("Licenses.Link")
         LinkLabel3.Text = LocalizationService.ForSection("PrgAbout")("Whatsnew.Link")
@@ -42,7 +40,6 @@ Public Class PrgAbout
         LinkLabel7.Text = LocalizationService.ForSection("PrgAbout")("Microsoft.Link")
         LinkLabel9.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
         LinkLabel10.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
-        LinkLabel11.Text = LocalizationService.ForSection("PrgAbout")("Microsoft.Link")
         LinkLabel12.Text = LocalizationService.ForSection("PrgAbout")("VisitWebsite.Link")
         OK_Button.Text = LocalizationService.ForSection("PrgAbout")("Ok.Button")
         UpdCheckBtn.Text = LocalizationService.ForSection("PrgAbout")("CheckUpdates.Label")
@@ -68,7 +65,7 @@ Public Class PrgAbout
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
-        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(handle, True)
         UpdCheckBtn.Enabled = Not MainForm.SkipUpdates
     End Sub
 
@@ -114,7 +111,7 @@ Public Class PrgAbout
         Process.Start("https://github.com/jeffkl/ManagedDism")
     End Sub
 
-    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("https://web.archive.org/web/20210907191944/https://twitter.com/prsymatic/status/1435317646346522628")
     End Sub
 

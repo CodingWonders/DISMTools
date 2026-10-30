@@ -4,12 +4,12 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.9                                         |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) Helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2027 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -139,9 +139,9 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.8.2"
+    $version = "0.9"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+    Write-Host "(c) 2024-2027. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
@@ -820,7 +820,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT_$imageID\DISMTools" /f
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
-            $codename = "infinity_mk3"
+            $codename = "discovery"
             if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
                 reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$codename.$(Get-Content -Path "$((Get-Location).Path)\version")"
             } else {
@@ -2736,10 +2736,10 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.8.2"
+    $version = "0.9"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+    Write-Host "(c) 2024-2027. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"

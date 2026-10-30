@@ -108,8 +108,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "InfinityMk3"
+    Public dtBranch As String = "dt_pre_discovery"
+    Public dt_codeName As String = "Discovery"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean

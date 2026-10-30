@@ -4,12 +4,12 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.8.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.9                                         |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for Servers      |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2027 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -131,7 +131,7 @@ function Get-FogHosts {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.8.2"
+$version = "0.9"
 
 Clear-Host
 
@@ -141,7 +141,7 @@ $tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
 Start-Transcript -Path "$tempDir\DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - FOG Helper Server"
-Write-Host "(c) 2025-2026. CodingWonders Software"
+Write-Host "(c) 2025-2027. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."

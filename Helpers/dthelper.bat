@@ -1,10 +1,10 @@
-:: DISMTools Helper Script - version 0.8.2
+:: DISMTools Helper Script - version 0.9
 @echo off
 
 
 :init
 :: Set initial vars
-set script_ver=v0.8.2
+set script_ver=v0.9
 set outputmode=0
 :: outputmode=0 (output to file)
 ::            1 (output to console)

@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("DISMTools - Preinstallation Environment Helper Main Menu")> 
-<Assembly: AssemblyCopyright("© 2025 CodingWonders Software")> 
+<Assembly: AssemblyCopyright("© 2025-2027 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
