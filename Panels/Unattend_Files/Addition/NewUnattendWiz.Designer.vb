@@ -292,9 +292,7 @@ Partial Class NewUnattendWiz
         Me.TimeZoneHeader = New System.Windows.Forms.Label()
         Me.SysConfigPanel = New System.Windows.Forms.Panel()
         Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
-        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.Label62 = New System.Windows.Forms.Label()
         Me.ComputerNamePanel = New System.Windows.Forms.Panel()
         Me.ScriptedComputerNamePanel = New System.Windows.Forms.Panel()
         Me.TextBox16 = New System.Windows.Forms.TextBox()
@@ -3475,9 +3473,7 @@ Partial Class NewUnattendWiz
         'SysConfigPanel
         '
         Me.SysConfigPanel.Controls.Add(Me.CheckedListBox1)
-        Me.SysConfigPanel.Controls.Add(Me.CheckBox19)
         Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
-        Me.SysConfigPanel.Controls.Add(Me.Label62)
         Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
         Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
         Me.SysConfigPanel.Controls.Add(Me.Label13)
@@ -3502,16 +3498,6 @@ Partial Class NewUnattendWiz
         Me.CheckedListBox1.Size = New System.Drawing.Size(761, 68)
         Me.CheckedListBox1.TabIndex = 10
         '
-        'CheckBox19
-        '
-        Me.CheckBox19.AutoSize = True
-        Me.CheckBox19.Location = New System.Drawing.Point(54, 480)
-        Me.CheckBox19.Name = "CheckBox19"
-        Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
-        Me.CheckBox19.TabIndex = 9
-        Me.CheckBox19.Text = "Use a configuration set or distribution share"
-        Me.CheckBox19.UseVisualStyleBackColor = True
-        '
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
@@ -3523,17 +3509,6 @@ Partial Class NewUnattendWiz
         Me.CheckBox3.TabIndex = 8
         Me.CheckBox3.Text = "Let Windows set a random computer name"
         Me.CheckBox3.UseVisualStyleBackColor = True
-        '
-        'Label62
-        '
-        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label62.AutoEllipsis = True
-        Me.Label62.Location = New System.Drawing.Point(70, 503)
-        Me.Label62.Name = "Label62"
-        Me.Label62.Size = New System.Drawing.Size(872, 33)
-        Me.Label62.TabIndex = 1
-        Me.Label62.Text = resources.GetString("Label62.Text")
         '
         'ComputerNamePanel
         '
@@ -4748,8 +4723,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents CheckBox18 As System.Windows.Forms.CheckBox
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents CNameTTip As System.Windows.Forms.ToolTip
-    Friend WithEvents CheckBox19 As System.Windows.Forms.CheckBox
-    Friend WithEvents Label62 As System.Windows.Forms.Label
     Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
     Friend WithEvents ScriptEditorContainerPanel As System.Windows.Forms.Panel
     Friend WithEvents ScriptEditorPanel As System.Windows.Forms.Panel

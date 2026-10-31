@@ -38,7 +38,6 @@ Public Class NewUnattendWiz
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
     Dim PCNameScript As String = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEach-Object {[char]$_})"
-    Dim UseConfigSet As Boolean
 
     ' Time Zone Panel
     Dim TimeOffsets As New List(Of TimeOffset)
@@ -830,9 +829,7 @@ Public Class NewUnattendWiz
         CheckedListBox1.Items(0) = LocalizationService.ForSection("Designer.Unattend")("DesktopX86.Item")
         CheckedListBox1.Items(1) = LocalizationService.ForSection("Designer.Unattend")("DesktopX64.Item")
         CheckedListBox1.Items(2) = LocalizationService.ForSection("Designer.Unattend")("Armwindows.Item")
-        CheckBox19.Text = LocalizationService.ForSection("Designer.Unattend")("UseConfigSet.CheckBox")
         CheckBox3.Text = LocalizationService.ForSection("Designer.Unattend")("Windows.Set.Random.CheckBox")
-        Label62.Text = LocalizationService.ForSection("Designer.Unattend")("Config.Set.Message")
         RadioButton29.Text = LocalizationService.ForSection("Designer.Unattend")("Script.Sets.Name.RadioButton")
         RadioButton28.Text = LocalizationService.ForSection("Designer.Unattend")("ComputerName.RadioButton")
         Button3.Text = LocalizationService.ForSection("Designer.Unattend")("Get.Computer.Name.Button")
@@ -1143,7 +1140,6 @@ Public Class NewUnattendWiz
         TextBox16.Text = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEach-Object {[char]$_})"
         CheckBox3.Checked = True
         TextBox1.Text = ""
-        CheckBox19.Checked = False
         ' Restore time zone
         ComboBox5.SelectedItem = DefaultOffset.DisplayName
         RadioButton1.Checked = True
@@ -1440,8 +1436,7 @@ Public Class NewUnattendWiz
                                                       If(PCName.DefaultName,
                                                          "random by Windows",
                                                          PCName.Name),
-                                                      "determined by script " & Quote & PCNameScript & Quote) & CrLf &
-                             "- Will a configuration set or distribution share be used? " & If(UseConfigSet, "Yes", "No") & CrLf)
+                                                      "determined by script " & Quote & PCNameScript & Quote) & CrLf)
         ' 3. -- TIME ZONE
         TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
         If Not TimeOffsetInteractive Then
@@ -2159,9 +2154,6 @@ Public Class NewUnattendWiz
                 End If
             End If
             DynaLog.LogMessage("Saving configuration set/distribution share settings...")
-            If UseConfigSet Then
-                UnattendGen.StartInfo.Arguments &= " --ConfigSet"
-            End If
             ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 10)
             DynaLog.LogMessage("Saving time zone settings...")
             If TimeOffsetInteractive Then
@@ -2657,10 +2649,6 @@ Public Class NewUnattendWiz
 
     Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
         CNameTTip.Show(LocalizationService.ForSection("Unattend.Tooltips")("Uses.Name.Computer.Message"), sender)
-    End Sub
-
-    Private Sub CheckBox19_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox19.CheckedChanged
-        UseConfigSet = CheckBox19.Checked
     End Sub
 
     Sub SaveConfiguredScripts(Stage As Integer)
