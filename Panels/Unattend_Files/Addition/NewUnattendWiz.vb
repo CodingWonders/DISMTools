@@ -10,6 +10,7 @@ Imports System.Net.NetworkInformation
 Imports System.Text.RegularExpressions
 Imports System.Text
 Imports DISMTools.Utilities.NetworkUtilities
+Imports System.Xml.Serialization
 
 Public Class NewUnattendWiz
 
@@ -57,11 +58,16 @@ Public Class NewUnattendWiz
     ' User Accounts Panel
     Dim UserAccountsInteractive As Boolean = True
     Dim MicrosoftAccountInteractive As Boolean
-    Dim UserAccountsList As New List(Of User)
+    Dim UserCardList As New List(Of UserCard)
     Dim AutoLogon As New AutoLogonSettings()
     Dim PasswordObfuscate As Boolean
     Dim SelectedExpirationSettings As New PasswordExpirationSettings()
     Dim SelectedLockoutSettings As New AccountLockoutSettings()
+
+    ' --- Discovery
+    Dim ValueAddedTop As Integer = WindowHelper.ScaleLogical(8),
+        PreviousTop As Integer
+    Dim FirstCard As Boolean = True
 
     ' Virtual Machine Panel
     Dim VirtualMachineSupported As Boolean
@@ -552,11 +558,29 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("XGVPP-NMH47-7TTHJ-W3FW7-8HV2C"))     ' Enterprise
         GenericKeys.Add(NewKeyVar("WGGHN-J84D6-QYCPR-T7PJ7-X766F"))     ' Enterprise N
 
-        DynaLog.LogMessage("Adding default users. 1 Admin and 4 unused Users...")
-        UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
-        For i = 1 To 4
-            UserAccountsList.Add(New User(False, "", "", UserGroup.Users))
-        Next
+        ' Discovery
+        UserCardList.Clear()
+        AccountCardContainerPanel.Controls.Clear()
+        PreviousTop = 0
+        FirstCard = True
+        Dim firstUserCard As New UserCard() With {
+            .Id = 1,
+            .DisplayName = "Admin",
+            .AccountName = "admin",
+            .IsAdministrator = True,
+            .CanDeleteUser = False,
+            .Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right,
+            .Left = WindowHelper.ScaleLogical(8),
+            .Top = ValueAddedTop,
+            .Width = AccountCardContainerPanel.Width - 16
+        }
+        firstUserCard.SetColors()
+        AddHandler firstUserCard.AccountDeletionEvent, AddressOf HandleAccountCardDeletion
+        AddHandler firstUserCard.AccountNameGenerationEvent, AddressOf HandleAccountCardNameGeneration
+        FirstCard = False
+        PreviousTop = firstUserCard.Top
+        UserCardList.Add(firstUserCard)
+        AccountCardContainerPanel.Controls.AddRange(UserCardList.ToArray())
 
         DynaLog.LogMessage("Setting default password expiration configuration...")
         DefaultExpirationSettings.Mode = PasswordExpirationMode.NIST_Unlimited
@@ -779,16 +803,6 @@ Public Class NewUnattendWiz
         PWExpirationHeader.Text = LocalizationService.ForSection("Designer.Unattend")("PasswordsExpire.Label")
         Label34.Text = LocalizationService.ForSection("Designer.NewUnattend.LocalAccounts")("OnlyNow.Label")
         CheckBox6.Text = LocalizationService.ForSection("Designer.Unattend")("ConfigureSettings.CheckBox")
-        Label35.Text = LocalizationService.ForSection("Designer.Unattend")("AccountName.Label")
-        Label38.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Label")
-        CheckBox8.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option2.CheckBox")
-        CheckBox9.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option3.CheckBox")
-        CheckBox10.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option4.CheckBox")
-        CheckBox11.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Option5.CheckBox")
-        UserListOverviewLabel.Text = LocalizationService.ForSection("Designer.Unattend")("UserList.Label")
-        Label37.Text = LocalizationService.ForSection("Designer.Unattend")("AccountGroup.Label")
-        Label36.Text = LocalizationService.ForSection("Designer.Unattend")("AccountPassword.Label")
-        Label69.Text = LocalizationService.ForSection("Designer.Unattend")("Account.Display.Name.Label")
         GroupBox1.Text = LocalizationService.ForSection("Designer.Unattend")("FirstLog.Group")
         RadioButton16.Text = LocalizationService.ForSection("Designer.Unattend")("Log.Built.Admin.RadioButton")
         RadioButton15.Text = LocalizationService.ForSection("Designer.Unattend")("Log.First.Admin.RadioButton")
@@ -892,37 +906,17 @@ Public Class NewUnattendWiz
         ComboBox4.BackColor = BackColor
         ComboBox5.BackColor = BackColor
         ComboBox6.BackColor = BackColor
-        ComboBox7.BackColor = BackColor
         ComboBox8.BackColor = BackColor
-        ComboBox9.BackColor = BackColor
-        ComboBox10.BackColor = BackColor
-        ComboBox11.BackColor = BackColor
-        ComboBox12.BackColor = BackColor
         ComboBox13.BackColor = BackColor
         CheckedListBox1.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox3.BackColor = BackColor
-        TextBox4.BackColor = BackColor
         TextBox5.BackColor = BackColor
-        TextBox6.BackColor = BackColor
         TextBox7.BackColor = BackColor
-        TextBox8.BackColor = BackColor
-        TextBox9.BackColor = BackColor
         TextBox10.BackColor = BackColor
-        TextBox11.BackColor = BackColor
-        TextBox12.BackColor = BackColor
         TextBox13.BackColor = BackColor
-        TextBox14.BackColor = BackColor
-        TextBox15.BackColor = BackColor
         TextBox16.BackColor = BackColor
-        TextBox17.BackColor = BackColor
-        TextBox18.BackColor = BackColor
-        TextBox19.BackColor = BackColor
-        TextBox20.BackColor = BackColor
-        TextBox21.BackColor = BackColor
-        TextBox22.BackColor = BackColor
-        TextBox23.BackColor = BackColor
         NumericUpDown1.BackColor = BackColor
         NumericUpDown2.BackColor = BackColor
         NumericUpDown5.BackColor = BackColor
@@ -936,37 +930,17 @@ Public Class NewUnattendWiz
         ComboBox4.ForeColor = ForeColor
         ComboBox5.ForeColor = ForeColor
         ComboBox6.ForeColor = ForeColor
-        ComboBox7.ForeColor = ForeColor
         ComboBox8.ForeColor = ForeColor
-        ComboBox9.ForeColor = ForeColor
-        ComboBox10.ForeColor = ForeColor
-        ComboBox11.ForeColor = ForeColor
-        ComboBox12.ForeColor = ForeColor
         ComboBox13.ForeColor = ForeColor
         CheckedListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
-        TextBox4.ForeColor = ForeColor
         TextBox5.ForeColor = ForeColor
-        TextBox6.ForeColor = ForeColor
         TextBox7.ForeColor = ForeColor
-        TextBox8.ForeColor = ForeColor
-        TextBox9.ForeColor = ForeColor
         TextBox10.ForeColor = ForeColor
-        TextBox11.ForeColor = ForeColor
-        TextBox12.ForeColor = ForeColor
         TextBox13.ForeColor = ForeColor
-        TextBox14.ForeColor = ForeColor
-        TextBox15.ForeColor = ForeColor
         TextBox16.ForeColor = ForeColor
-        TextBox17.ForeColor = ForeColor
-        TextBox18.ForeColor = ForeColor
-        TextBox19.ForeColor = ForeColor
-        TextBox20.ForeColor = ForeColor
-        TextBox21.ForeColor = ForeColor
-        TextBox22.ForeColor = ForeColor
-        TextBox23.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
         NumericUpDown2.ForeColor = ForeColor
         NumericUpDown5.ForeColor = ForeColor
@@ -974,6 +948,7 @@ Public Class NewUnattendWiz
         NumericUpDown7.ForeColor = ForeColor
         NumericUpDown8.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
+        AccountCardContainerPanel.BackColor = CurrentTheme.BackgroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
@@ -1155,27 +1130,6 @@ Public Class NewUnattendWiz
         ComboBox6.SelectedItem = "Pro"
         TextBox3.Text = ""
         CheckBox21.Checked = False
-        ' Restore user accounts
-        CheckBox6.Checked = True
-        TextBox4.Text = "Admin"
-        TextBox6.Text = ""
-        TextBox8.Text = ""
-        TextBox9.Text = ""
-        TextBox11.Text = ""
-        TextBox12.Text = ""
-        TextBox14.Text = ""
-        TextBox15.Text = ""
-        TextBox17.Text = ""
-        TextBox18.Text = ""
-        CheckBox8.Checked = False
-        CheckBox9.Checked = False
-        CheckBox10.Checked = False
-        CheckBox11.Checked = False
-        ComboBox7.SelectedIndex = 0
-        ComboBox9.SelectedIndex = 1
-        ComboBox10.SelectedIndex = 1
-        ComboBox11.SelectedIndex = 1
-        ComboBox12.SelectedIndex = 1
         CheckBox12.Checked = False
         RadioButton15.Checked = True
         TextBox5.Text = ""
@@ -1219,7 +1173,28 @@ Public Class NewUnattendWiz
         LinkLabel9.Visible = False
 
         ' Restore variables
-        UserAccountsList.Clear()
+        UserCardList.Clear()
+        AccountCardContainerPanel.Controls.Clear()
+        PreviousTop = 0
+        FirstCard = True
+        Dim firstUserCard As New UserCard() With {
+            .Id = 1,
+            .DisplayName = "Admin",
+            .AccountName = "admin",
+            .IsAdministrator = True,
+            .CanDeleteUser = False,
+            .Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right,
+            .Left = WindowHelper.ScaleLogical(8),
+            .Top = ValueAddedTop,
+            .Width = AccountCardContainerPanel.Width - 16
+        }
+        firstUserCard.SetColors()
+        AddHandler firstUserCard.AccountDeletionEvent, AddressOf HandleAccountCardDeletion
+        AddHandler firstUserCard.AccountNameGenerationEvent, AddressOf HandleAccountCardNameGeneration
+        FirstCard = False
+        PreviousTop = firstUserCard.Top
+        UserCardList.Add(firstUserCard)
+        AccountCardContainerPanel.Controls.AddRange(UserCardList.ToArray())
         SetDefaultSettings()
 
         ' Reconfigure the keys
@@ -1282,10 +1257,6 @@ Public Class NewUnattendWiz
         WizardStep13.WizardStepIsActive = {UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage}.Contains(CurrentWizardPage.WizardPage)
 
         ' Change sizes of controls if the normal resize event does not work
-        'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
-        GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
-        AccountsPanel.Width = UserAccountListing.Width
-        UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
 
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
@@ -1362,7 +1333,24 @@ Public Class NewUnattendWiz
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
                 DynaLog.LogMessage("Validating user accounts...")
-                Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList, PCName)
+
+                ' Get rid of account slots that are completely empty by holding the indexes to the
+                ' cards in question; then removing them all at once.
+                Dim AccountCardIndexesToRemoveList As New List(Of Integer)
+                For i = 0 To UserCardList.Count - 1
+                    If i >= UserCardList.Count Then Exit For
+
+                    Dim accCard As UserCard = UserCardList(i)
+                    If accCard.AccountName = "" AndAlso accCard.DisplayName = "" Then AccountCardIndexesToRemoveList.Add(i)
+                Next
+
+                If AccountCardIndexesToRemoveList.Any() Then
+                    For i = AccountCardIndexesToRemoveList.Count - 1 To 0 Step -1
+                        HandleAccountCardDeletion(Nothing, New AccountCardDeletionEventArgs(UserCardList(AccountCardIndexesToRemoveList(i)).Id))
+                    Next
+                End If
+
+                Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserCardList, PCName)
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
                     DynaLog.LogMessage("Validation has failed due to the reasons that appear above this line.")
                     MessageBox.Show(LocalizationService.ForSection("Unattend.Validation").Format("Problem.One.Message", validationResults.ValidationErrorReason), LocalizationService.ForSection("Unattend.Validation")("User.Accounts.Error.Title"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -1373,13 +1361,10 @@ Public Class NewUnattendWiz
                     DynaLog.LogMessage("Checking account names and groups...")
                     DynaLog.LogMessage("This process will trim any invalid characters from user accounts automatically.")
                     Dim AtLeastOneAdmin As Boolean = False
-                    If UserAccountsList.Count > 0 Then
-                        For Each UserAccount As User In UserAccountsList
-                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray()).TrimEnd(".")
-                            If UserAccount.Group = UserGroup.Administrators Then
-                                AtLeastOneAdmin = True
-                                Exit For
-                            End If
+                    If UserCardList.Count > 0 Then
+                        For Each UserAccountCard As UserCard In UserCardList
+                            UserAccountCard.AccountName = New String(UserAccountCard.AccountName.Where(Function(c) Not invalidChars.Contains(c)).ToArray()).TrimEnd(".")
+                            If UserAccountCard.IsAdministrator Then AtLeastOneAdmin = True
                         Next
                     End If
                     If Not AtLeastOneAdmin Then
@@ -1464,13 +1449,12 @@ Public Class NewUnattendWiz
         ' 6. -- USER ACCOUNTS
         TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
         If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
-            For Each UserAccount As User In UserAccountsList
-                TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
-                If UserAccount.Enabled Then
-                    TextBox13.AppendText("    - Name: " & UserAccount.Name & CrLf &
-                                         "    - Display Name: " & UserAccount.DisplayName & CrLf &
-                                         "    - Password: " & UserAccount.Password & CrLf &
-                                         "    - Group: " & If(UserAccount.Group = UserGroup.Administrators, "Administrators", "Users") & CrLf)
+            For Each AccountCard As UserCard In UserCardList
+                TextBox13.AppendText("- Account " & UserCardList.IndexOf(AccountCard) + 1 & ":" & CrLf)
+                If AccountCard.Enabled Then
+                    TextBox13.AppendText("    - Name: " & AccountCard.AccountName & CrLf &
+                                         "    - Display Name: " & AccountCard.DisplayName & CrLf &
+                                         "    - Group: " & If(AccountCard.IsAdministrator, "Administrators", "Users") & CrLf)
                 End If
             Next
             ' First logon settings
@@ -1582,7 +1566,6 @@ Public Class NewUnattendWiz
 
     Private Sub ExpressPanelTrigger_Click(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.Click
         IsInExpress = True
-        flpWizardSteps.Enabled = True
         EditorPanelContainer.Visible = False
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
@@ -1631,7 +1614,6 @@ Public Class NewUnattendWiz
 
     Private Sub EditorPanelTrigger_Click(sender As Object, e As EventArgs) Handles EditorPanelTrigger.Click
         IsInExpress = False
-        flpWizardSteps.Enabled = False
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
@@ -1725,11 +1707,7 @@ Public Class NewUnattendWiz
         defVal = PCName.DefaultName
         PCName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
         PCName.DefaultName = defVal
-        If Not PCName.Valid AndAlso PCName.ErrorMessage <> "" Then
-            Label63.Visible = True
-        Else
-            Label63.Visible = False
-        End If
+        Label63.Visible = Not PCName.Valid AndAlso PCName.ErrorMessage <> ""
     End Sub
 
     Private Sub TimeZonePageTimer_Tick(sender As Object, e As EventArgs) Handles TimeZonePageTimer.Tick
@@ -1794,120 +1772,74 @@ Public Class NewUnattendWiz
         ManualAccountPanel.Enabled = Not CheckBox6.Checked
     End Sub
 
-#Region "User Account settings"
-
-    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, displayName As String, password As String, group As UserGroup)
-        If UserAccountsList Is Nothing OrElse UserAccountsList.Count = 0 Then Exit Sub
-        UserAccountsList(index).Enabled = enabled
-        UserAccountsList(index).Name = name
-        UserAccountsList(index).DisplayName = If(String.IsNullOrWhiteSpace(displayName), name, displayName)
-        UserAccountsList(index).Password = password
-        UserAccountsList(index).Group = group
+    Private Sub ReconfigureCardDeletion()
+        For Each Card In AccountCardContainerPanel.Controls.OfType(Of UserCard)()
+            Card.CanDeleteUser = AccountCardContainerPanel.Controls.OfType(Of UserCard).Count > 1
+        Next
     End Sub
 
-    Function GroupFromSelectedItem(index As Integer) As UserGroup
-        Select Case index
-            Case 0
-                Return UserGroup.Administrators
-            Case 1
-                Return UserGroup.Users
-        End Select
-        Return Nothing
-    End Function
+    Private Sub RepositionCards()
+        Dim gap As Integer = WindowHelper.ScaleLogical(8)
+        Dim nextTop As Integer = gap + AccountCardContainerPanel.AutoScrollPosition.Y
 
-    Private Sub CheckBox8_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox8.CheckedChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
-        TextBox8.Enabled = CheckBox8.Checked
-        TextBox9.Enabled = CheckBox8.Checked
-        ComboBox9.Enabled = CheckBox8.Checked
-        DisplayNamePanel2.Enabled = CheckBox8.Checked
+        btnAddNewAccountCard.Enabled = UserCardList.Count < 100
+
+        AccountCardContainerPanel.SuspendLayout()
+        For Each card In UserCardList
+            card.Id = UserCardList.IndexOf(card) + 1
+            card.Top = nextTop
+            nextTop += card.Height + gap
+        Next
+        AccountCardContainerPanel.ResumeLayout()
     End Sub
 
-    Private Sub CheckBox9_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox9.CheckedChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
-        TextBox11.Enabled = CheckBox9.Checked
-        TextBox12.Enabled = CheckBox9.Checked
-        ComboBox10.Enabled = CheckBox9.Checked
-        DisplayNamePanel3.Enabled = CheckBox9.Checked
+    Private Sub btnAddNewAccountCard_Click(sender As Object, e As EventArgs) Handles btnAddNewAccountCard.Click
+        Dim clientWidthDifference As Integer = AccountCardContainerPanel.Width - AccountCardContainerPanel.ClientSize.Width
+
+        Dim newCard As New UserCard() With {
+            .Id = UserCardList.Count + 1,
+            .IsAdministrator = False,
+            .CanDeleteUser = True,
+            .Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right,
+            .Left = WindowHelper.ScaleLogical(8),
+            .Width = AccountCardContainerPanel.ClientSize.Width - 16
+        }
+        newCard.SetColors()
+        AddHandler newCard.AccountDeletionEvent, AddressOf HandleAccountCardDeletion
+        AddHandler newCard.AccountNameGenerationEvent, AddressOf HandleAccountCardNameGeneration
+        UserCardList.Add(newCard)
+        AccountCardContainerPanel.Controls.Add(newCard)
+        RepositionCards()
+        ReconfigureCardDeletion()
+        WindowHelper.ScrollControlToBottom(AccountCardContainerPanel.Handle)
     End Sub
 
-    Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
-        TextBox14.Enabled = CheckBox10.Checked
-        TextBox15.Enabled = CheckBox10.Checked
-        ComboBox11.Enabled = CheckBox10.Checked
-        DisplayNamePanel4.Enabled = CheckBox10.Checked
+    Private Sub HandleAccountCardDeletion(sender As Object, e As AccountCardDeletionEventArgs)
+        If e Is Nothing Then Exit Sub
+        If e.Id < 1 OrElse e.Id > UserCardList.Count Then Exit Sub
+
+        ' dispose of the card and reposition cards
+        Dim cardToRemove As UserCard = UserCardList(e.Id - 1)
+        UserCardList.Remove(cardToRemove)
+        AccountCardContainerPanel.Controls.Remove(cardToRemove)
+        cardToRemove.Dispose()
+        RepositionCards()
+        ReconfigureCardDeletion()
     End Sub
 
-    Private Sub CheckBox11_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox11.CheckedChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
-        TextBox17.Enabled = CheckBox11.Checked
-        TextBox18.Enabled = CheckBox11.Checked
-        ComboBox12.Enabled = CheckBox11.Checked
-        DisplayNamePanel5.Enabled = CheckBox11.Checked
-    End Sub
+    Private Sub HandleAccountCardNameGeneration(sender As Object, e As AccountCardNameGenerationEventArgs)
+        If e Is Nothing Then Exit Sub
+        If e.Id < 1 OrElse e.Id > UserCardList.Count Then Exit Sub
+        If e.Name = "" Then
+            MessageBox.Show(Me, "Please provide a display name for the account.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Exit Sub
+        End If
 
-    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+        DisplayNameFormatterDialog.SourceDisplayName = e.Name
+        If DisplayNameFormatterDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            UserCardList.ElementAt(e.Id - 1).AccountName = DisplayNameFormatterDialog.FormattedAccountName
+        End If
     End Sub
-
-    Private Sub TextBox6_TextChanged(sender As Object, e As EventArgs) Handles TextBox6.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox8_TextChanged(sender As Object, e As EventArgs) Handles TextBox8.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox9_TextChanged(sender As Object, e As EventArgs) Handles TextBox9.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox11_TextChanged(sender As Object, e As EventArgs) Handles TextBox11.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox12_TextChanged(sender As Object, e As EventArgs) Handles TextBox12.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox14_TextChanged(sender As Object, e As EventArgs) Handles TextBox14.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox15_TextChanged(sender As Object, e As EventArgs) Handles TextBox15.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox17_TextChanged(sender As Object, e As EventArgs) Handles TextBox17.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox18_TextChanged(sender As Object, e As EventArgs) Handles TextBox18.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
-    End Sub
-
-    Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
-        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
-    End Sub
-
-    Private Sub ComboBox9_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox9.SelectedIndexChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
-    End Sub
-
-    Private Sub ComboBox10_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox10.SelectedIndexChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
-    End Sub
-
-    Private Sub ComboBox11_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox11.SelectedIndexChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
-    End Sub
-
-    Private Sub ComboBox12_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox12.SelectedIndexChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
-    End Sub
-
-#End Region
 
     Private Sub CheckBox12_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox12.CheckedChanged
         AutoLogon.EnableAutoLogon = CheckBox12.Checked
@@ -1929,7 +1861,6 @@ Public Class NewUnattendWiz
 
     Private Sub CheckBox18_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox18.CheckedChanged
         MicrosoftAccountInteractive = CheckBox18.Checked
-        AccountsPanel.Enabled = Not CheckBox18.Checked
         GroupBox1.Enabled = Not CheckBox18.Checked
         CheckBox7.Enabled = Not CheckBox18.Checked
     End Sub
@@ -2029,32 +1960,19 @@ Public Class NewUnattendWiz
         DynaLog.LogMessage("Grabbing target Edition ID from specified display name...")
         DynaLog.LogMessage("Display name of edition: " & displayName)
         Select Case displayName
-            Case "Home"
-                Return "home"
-            Case "Home N"
-                Return "home_n"
-            Case "Home Single Language"
-                Return "home_single"
-            Case "Education"
-                Return "education"
-            Case "Education N"
-                Return "education_n"
-            Case "Pro"
-                Return "pro"
-            Case "Pro N"
-                Return "pro_n"
-            Case "Pro Education"
-                Return "pro_education"
-            Case "Pro Education N"
-                Return "pro_education_n"
-            Case "Pro for Workstations"
-                Return "pro_workstations"
-            Case "Pro N for Workstations"
-                Return "pro_workstations_n"
-            Case "Enterprise"
-                Return "enterprise"
-            Case "Enterprise N"
-                Return "enterprise_n"
+            Case "Home" : Return "home"
+            Case "Home N" : Return "home_n"
+            Case "Home Single Language" : Return "home_single"
+            Case "Education" : Return "education"
+            Case "Education N" : Return "education_n"
+            Case "Pro" : Return "pro"
+            Case "Pro N" : Return "pro_n"
+            Case "Pro Education" : Return "pro_education"
+            Case "Pro Education N" : Return "pro_education_n"
+            Case "Pro for Workstations" : Return "pro_workstations"
+            Case "Pro N for Workstations" : Return "pro_workstations_n"
+            Case "Enterprise" : Return "enterprise"
+            Case "Enterprise N" : Return "enterprise_n"
         End Select
         Return ""
     End Function
@@ -2197,10 +2115,15 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
-                If UserAccountsList.Count > 0 Then
-                    For Each account As User In UserAccountsList
-                        DynaLog.LogMessage("Saving information of account " & Quote & account.Name & Quote & " to file...")
-                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " DisplayName=" & Quote & account.DisplayName.Replace("&", "&amp;") & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
+                If UserCardList.Count > 0 Then
+                    For Each accountCard As UserCard In UserCardList
+                        DynaLog.LogMessage("Saving information of account " & Quote & accountCard.AccountName & Quote & " to file...")
+
+                        Dim escapedSysName As String = Uri.EscapeUriString(accountCard.AccountName),
+                            escapedDisplayName As String = If(accountCard.DisplayName <> "", Uri.EscapeUriString(accountCard.DisplayName), escapedSysName),
+                            escapedPassword As String = If(accountCard.Password <> "", Uri.EscapeUriString(accountCard.Password), "")
+
+                        customUserContents &= "   <UserAccount Enabled=" & Quote & "1" & Quote & " Name=" & Quote & escapedSysName & Quote & " DisplayName=" & Quote & escapedDisplayName & Quote & " Password=" & Quote & escapedPassword & Quote & " Group=" & Quote & If(accountCard.IsAdministrator, "Admins", "Users") & Quote & " />" & CrLf
                     Next
                     customUserContents &= "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
@@ -2210,9 +2133,10 @@ Public Class NewUnattendWiz
                             UnattendGen.StartInfo.Arguments &= " --autologon=firstadmin"
                         ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
                             UnattendGen.StartInfo.Arguments &= " --autologon=builtinadmin"
+                            Dim escapedPwd As String = If(AutoLogon.LogonPassword <> "", Uri.EscapeUriString(AutoLogon.LogonPassword), "")
                             Dim builtinAdminContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                                 "<root>" & CrLf &
-                                "   <BuiltInAdmin Password=" & Quote & If(AutoLogon.LogonPassword.Contains("&"), AutoLogon.LogonPassword.Replace("&", "&amp;").Trim(), AutoLogon.LogonPassword) & Quote & " />" & CrLf &
+                                "   <BuiltInAdmin Password=" & Quote & escapedPwd & Quote & " />" & CrLf &
                                 "</root>"
                             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "autoLogon.xml"), builtinAdminContents, UTF8)
                         End If
@@ -2596,10 +2520,6 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
-        'AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
-        GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
-        AccountsPanel.Width = UserAccountListing.Width
-        UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
     End Sub
 
@@ -2627,7 +2547,6 @@ Public Class NewUnattendWiz
         End Try
 
         IsInExpress = False
-        flpWizardSteps.Enabled = False
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
@@ -3224,55 +3143,6 @@ Public Class NewUnattendWiz
         WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("AutoChoose.Message"))
     End Sub
 
-    Private Sub CheckBox23_MouseHover(sender As Object, e As EventArgs) Handles CheckBox27.MouseHover, CheckBox26.MouseHover, CheckBox25.MouseHover, CheckBox24.MouseHover, CheckBox23.MouseHover
-        WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("Check.Field.Customize.Label"))
-    End Sub
-
-    Private Sub CheckBox27_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox27.CheckedChanged
-        TextBox23.Enabled = CheckBox27.Checked
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
-    End Sub
-
-    Private Sub CheckBox26_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox26.CheckedChanged
-        TextBox22.Enabled = CheckBox26.Checked
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
-    End Sub
-
-    Private Sub CheckBox25_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox25.CheckedChanged
-        TextBox21.Enabled = CheckBox25.Checked
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
-    End Sub
-
-    Private Sub CheckBox24_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox24.CheckedChanged
-        TextBox20.Enabled = CheckBox24.Checked
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
-    End Sub
-
-    Private Sub CheckBox23_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox23.CheckedChanged
-        TextBox19.Enabled = CheckBox23.Checked
-        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox19_TextChanged(sender As Object, e As EventArgs) Handles TextBox19.TextChanged
-        ModifyUserDetails(0, True, TextBox4.Text, If(CheckBox23.Checked, TextBox19.Text, ""), TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox20_TextChanged(sender As Object, e As EventArgs) Handles TextBox20.TextChanged
-        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, If(CheckBox24.Checked, TextBox20.Text, ""), TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox21_TextChanged(sender As Object, e As EventArgs) Handles TextBox21.TextChanged
-        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, If(CheckBox25.Checked, TextBox21.Text, ""), TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox22_TextChanged(sender As Object, e As EventArgs) Handles TextBox22.TextChanged
-        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, If(CheckBox26.Checked, TextBox22.Text, ""), TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
-    End Sub
-
-    Private Sub TextBox23_TextChanged(sender As Object, e As EventArgs) Handles TextBox23.TextChanged
-        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, If(CheckBox27.Checked, TextBox23.Text, ""), TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
-    End Sub
-
     Private Sub Button23_Click(sender As Object, e As EventArgs) Handles Button23.Click
         SaveConfiguredScripts(CurrentlyEditedStage)
         Select Case CurrentlyEditedStage
@@ -3297,26 +3167,55 @@ Public Class NewUnattendWiz
         WindowHelper.DisplayToolTip(sender, LocalizationService.ForSection("Unattend.Tooltips")("RearrangeScripts.Label"))
     End Sub
 
-    Private Sub AccDispNameCtrl_Leave(sender As Object, e As EventArgs) Handles TextBox23.Leave, TextBox22.Leave, TextBox21.Leave, TextBox20.Leave, TextBox19.Leave
-        Dim sourceControl As Control = CType(sender, Control),
-            targetControl As Control = Nothing
+    Private Sub btnExportAccountSlots_Click(sender As Object, e As EventArgs) Handles btnExportAccountSlots.Click
+        If sfdExportedAccountSlots.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            Try
+                Dim accountCardCollection As New AccountCardCollection() With {.Cards = UserCardList.Take(100).Select(Function(card) card.ToData()).ToList()}
+                Dim serializer As New XmlSerializer(GetType(AccountCardCollection))
+                Using fs As New FileStream(sfdExportedAccountSlots.FileName, FileMode.Create)
+                    serializer.Serialize(fs, accountCardCollection)
+                End Using
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not export slots: " & ex.Message)
+            End Try
+        End If
+    End Sub
 
-        Select Case sourceControl.Name
-            Case "TextBox19" : targetControl = TextBox4
-            Case "TextBox20" : targetControl = TextBox8
-            Case "TextBox21" : targetControl = TextBox11
-            Case "TextBox22" : targetControl = TextBox14
-            Case "TextBox23" : targetControl = TextBox17
-        End Select
+    Private Sub ClearAllAccountCards()
+        For i = UserCardList.Count - 1 To 0 Step -1
+            Dim cardToRemove As UserCard = UserCardList(i)
+            UserCardList.Remove(cardToRemove)
+            AccountCardContainerPanel.Controls.Remove(cardToRemove)
+            cardToRemove.Dispose()
+        Next
+    End Sub
 
-        If targetControl Is Nothing Then Exit Sub
+    Private Sub btnImportAccountSlots_Click(sender As Object, e As EventArgs) Handles btnImportAccountSlots.Click
+        If ofdExportedAccountSlots.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            Try
+                Dim accountCardCollection As New AccountCardCollection()
+                Dim serializer As New XmlSerializer(GetType(AccountCardCollection))
+                Using fs As New FileStream(ofdExportedAccountSlots.FileName, FileMode.Open)
+                    accountCardCollection = CType(serializer.Deserialize(fs), AccountCardCollection)
+                    ' We have to dispose of all account cards to release USER object handles.
+                    ClearAllAccountCards()
+                    For Each Card In accountCardCollection.Cards.Take(100)
+                        Dim userCard As New UserCard() With {
+                            .Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right,
+                            .Left = WindowHelper.ScaleLogical(8),
+                            .Width = AccountCardContainerPanel.ClientSize.Width - 16
+                        }
+                        userCard.FromData(Card)
 
-        If sourceControl.Text <> "" AndAlso targetControl.Text = "" Then
-            DisplayNameFormatterDialog.SourceDisplayName = sourceControl.Text
+                        UserCardList.Add(userCard)
+                    Next
+                    AccountCardContainerPanel.Controls.AddRange(UserCardList.OrderBy(Function(card) card.Id).ToArray())
+                    RepositionCards()
+                    ReconfigureCardDeletion()
+                End Using
+            Catch ex As Exception
 
-            If DisplayNameFormatterDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                targetControl.Text = DisplayNameFormatterDialog.FormattedAccountName
-            End If
+            End Try
         End If
     End Sub
 End Class

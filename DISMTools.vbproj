@@ -303,7 +303,7 @@
     <Compile Include="Elements\ISOCreation\IsoCreationTask.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
-    <Compile Include="Elements\SearchBox.vb">
+    <Compile Include="Elements\CuedTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
@@ -1070,6 +1070,13 @@
     <Compile Include="UserControls\ServiceDependencyDiagram.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\UnattendWizard\UserCard.Designer.vb">
+      <DependentUpon>UserCard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UnattendWizard\UserCard.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UnattendWizard\UserCardData.vb" />
     <Compile Include="UserControls\WimFileSourceControl.Designer.vb">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>
     </Compile>
@@ -1495,6 +1502,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\NewsFeedItemCard.resx">
       <DependentUpon>NewsFeedItemCard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UnattendWizard\UserCard.resx">
+      <DependentUpon>UserCard.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WimFileSourceControl.resx">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>

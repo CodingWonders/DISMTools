@@ -2,83 +2,14 @@
 
 Namespace Elements
 
-    Public Class User
-
-        ''' <summary>
-        ''' Determines whether the account can be added
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property Enabled As Boolean
-
-        ''' <summary>
-        ''' The name of the account
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks>Account names must not exceed 20 characters</remarks>
-        Public Property Name As String
-
-        ''' <summary>
-        ''' The display name of the account
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property DisplayName As String
-
-        ''' <summary>
-        ''' The password of the account
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property Password As String
-
-        ''' <summary>
-        ''' The group of the user account
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks>See enum for more information</remarks>
-        Public Property Group As UserGroup
-
-        Public Sub New(enabled As Boolean, name As String, password As String, group As UserGroup)
-            Me.Enabled = enabled
-            Me.Name = name
-            Me.DisplayName = name
-            Me.Password = password
-            Me.Group = group
-        End Sub
-
-        Public Sub New(enabled As Boolean, name As String, displayName As String, password As String, group As UserGroup)
-            Me.Enabled = enabled
-            Me.Name = name
-            Me.DisplayName = displayName
-            Me.Password = password
-            Me.Group = group
-        End Sub
-
-        Public Overrides Function ToString() As String
-            ' You thought that I was going to leak user passwords, hackers?
-            Return "User, with name: " & Quote & Me.Name & Quote & "; Display Name: " & Quote & Me.DisplayName & Quote & "; Enabled: " & If(Me.Enabled, "Yes", "No") & "; Password: " & Quote & New String("*", Password.Length) & Quote & "; Group: " & Me.Group.ToString()
-        End Function
-
-    End Class
-
-    Public Enum UserGroup As Integer
-        Administrators = 0
-        Users = 1
-    End Enum
-
     Public Class UserValidationResults
 
         Public Property ValidationErrorReason As String
         Public Property IsValid As Boolean
 
         Public Sub New()
-
+            ValidationErrorReason = ""
+            IsValid = False
         End Sub
 
         Public Sub New(Valid As Boolean, Reason As String)
@@ -92,29 +23,66 @@ Namespace Elements
 
     End Class
 
+    Public Class UserNameSuggester
+
+        ''' <summary>
+        ''' From a user account name, suggest a user display name from the first 5 letters of the first word.
+        ''' </summary>
+        ''' <param name="UserName">The user account name</param>
+        ''' <returns>The first 5 characters of the first word of the user name as the account display name</returns>
+        ''' <remarks>
+        ''' This function replicates the behavior of a system when a user creates a new user account using their
+        ''' Microsoft account. In those cases, the system uses the first 5 letters of the account email as the user name.
+        ''' In the case of DISMTools, this is the first 5 letters of the first word. This can be changed by the user
+        ''' at any time by clicking "Generate..." on a given user card.
+        ''' </remarks>
+        Public Shared Function SuggestUserName(UserName As String) As String
+            If UserName = "" Then Return ""
+
+            Dim wordParts() As String = UserName.Split(" ")
+            Return wordParts(0).ToLower().Substring(0, Math.Min(5, wordParts(0).Length))
+        End Function
+
+    End Class
+
     Public Class UserValidator
 
-        Public Shared Function ValidateUsers(userList As List(Of User), Optional computerName As ComputerName = Nothing) As UserValidationResults
-            DynaLog.LogMessage("Beginning validation of users in user list, with " & userList.Count & " user(s)...")
+        Private Shared Function GetUserNamesByRID(ParamArray UserRids As Integer()) As List(Of String)
+            Dim userNames As New List(Of String)
+
+            For Each UserRid In UserRids
+                Dim UserMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Name FROM Win32_UserAccount WHERE SID LIKE {0}S-1-5-21-%-{1}{0}", Quote, UserRid))
+                If UserMOC Is Nothing Then Continue For
+
+                userNames.Add(WMIHelper.GetObjectValue(UserMOC(0), "Name"))
+            Next
+
+            Return userNames
+        End Function
+
+        Public Shared Function ValidateUsers(UserCardList As List(Of UserCard), Optional computerName As ComputerName = Nothing) As UserValidationResults
+            DynaLog.LogMessage("Beginning validation of users in user list, with " & UserCardList.Count & " user(s)...")
             DynaLog.LogMessage("- Computer name passed for extended validation: " & Quote & computerName.Name & Quote)
             Dim ProblematicAccountNumbers As New List(Of Integer)
             Dim validationResults As New UserValidationResults()
             DynaLog.LogMessage("Checking if list contains any users...")
-            If userList Is Nothing OrElse userList.Count = 0 Then
+            If UserCardList Is Nothing OrElse UserCardList.Count = 0 Then
                 DynaLog.LogMessage("There are no users in the list. Perhaps it's the user that's being too smart, or an error occurred when grabbing user accounts.")
                 Return New UserValidationResults(False, "Either no users have been specified, or a program error occurred.")
             End If
             Dim errorReason As String = ""
-            Dim ExistingUsers() As String = New String(7) {"administrator", "guest", "defaultaccount", "system", "network service", "local service", "none", "wdagutilityaccount"}
+            Dim ExistingUsers As New List(Of String) From {"administrator", "guest", "defaultaccount", "system", "network service", "local service", "none", "wdagutilityaccount"}
+            ExistingUsers.AddRange(GetUserNamesByRID(500, 501))     ' Add the localized Administrator and Guest accounts; their RIDs don't change, so we're good.
+
             ' Assume it's true by default
             Dim FullyValid As Boolean = True
-            For Each listedUser As User In userList
-                DynaLog.LogMessage("=== " & listedUser.ToString() & " ===")
-                If listedUser.Enabled Then
-                    DynaLog.LogMessage("Checking if account name " & Quote & listedUser.Name & Quote & " doesn't use system-reserved names...")
-                    If listedUser.Name = "" OrElse ExistingUsers.Contains(listedUser.Name, StringComparer.OrdinalIgnoreCase) Then
-                        DynaLog.LogMessage("Account name " & Quote & listedUser.Name & Quote & " uses system-reserved names.")
-                        ProblematicAccountNumbers.Add(userList.IndexOf(listedUser) + 1)
+            For Each listedUserCard As UserCard In UserCardList
+                DynaLog.LogMessage("=== User, with name: " & Quote & listedUserCard.AccountName & Quote & "; Display Name: " & Quote & listedUserCard.DisplayName & Quote & "; Group: " & If(listedUserCard.IsAdministrator, "Administrators", "Users") & " ===")
+                If listedUserCard.Enabled Then
+                    DynaLog.LogMessage("Checking if account name " & Quote & listedUserCard.AccountName & Quote & " doesn't use system-reserved names...")
+                    If listedUserCard.AccountName = "" OrElse ExistingUsers.Contains(listedUserCard.AccountName, StringComparer.OrdinalIgnoreCase) Then
+                        DynaLog.LogMessage("Account name " & Quote & listedUserCard.AccountName & Quote & " uses system-reserved names.")
+                        ProblematicAccountNumbers.Add(UserCardList.IndexOf(listedUserCard) + 1)
                         FullyValid = False
                     End If
                 End If
@@ -123,16 +91,12 @@ Namespace Elements
             If ProblematicAccountNumbers.Count > 0 Then
                 errorReason = "- User account names have been checked and " & ProblematicAccountNumbers.Count & " use system-reserved names:" & CrLf
                 For Each accountNumber In ProblematicAccountNumbers
-                    errorReason &= "    - Account " & accountNumber & ", with name " & Quote & userList(accountNumber - 1).Name & Quote & CrLf
+                    errorReason &= "    - Account " & accountNumber & ", with name " & Quote & UserCardList(accountNumber - 1).AccountName & Quote & CrLf
                 Next
             End If
             DynaLog.LogMessage("Checking if account list has duplicate user account names...")
             ' Check collisions
-            Dim Collisions = userList _
-                             .Where(Function(User) User.Enabled) _
-                             .GroupBy(Function(User) User.Name, StringComparer.OrdinalIgnoreCase) _
-                             .Where(Function(group) group.Count() > 1) _
-                             .Select(Function(group) String.Format("'{0}'", group.Key))
+            Dim Collisions = UserCardList.Where(Function(User) User.AccountName <> "").GroupBy(Function(User) User.AccountName, StringComparer.OrdinalIgnoreCase).Where(Function(group) group.Count() > 1).Select(Function(group) String.Format("'{0}'", group.Key))
             DynaLog.LogMessage("Collision count: " & Collisions.Count)
             If Collisions.Any() Then
                 DynaLog.LogMessage("There are duplicate accounts.")
@@ -146,7 +110,7 @@ Namespace Elements
 
             If computerName IsNot Nothing AndAlso Not computerName.DefaultName Then
                 DynaLog.LogMessage("Checking if there are accounts that use the computer name...")
-                Dim computerNameCollisions = userList.Where(Function(User) User.Name.Equals(computerName.Name, StringComparison.OrdinalIgnoreCase))
+                Dim computerNameCollisions = UserCardList.Where(Function(User) User.Name.Equals(computerName.Name, StringComparison.OrdinalIgnoreCase))
                 DynaLog.LogMessage("Collision count: " & computerNameCollisions.Count)
                 If computerNameCollisions.Any() Then
                     DynaLog.LogMessage("Some accounts use the computer name as their name.")

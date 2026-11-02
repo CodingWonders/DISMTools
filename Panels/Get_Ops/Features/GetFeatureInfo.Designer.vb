@@ -31,7 +31,7 @@ Partial Class GetFeatureInfoDlg
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.WizardBtn = New System.Windows.Forms.Button()
-        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchBox1 = New DISMTools.CuedTextBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
@@ -619,7 +619,7 @@ Partial Class GetFeatureInfoDlg
     Friend WithEvents SearchPanel As System.Windows.Forms.Panel
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents SearchBox1 As DISMTools.SearchBox
+    Friend WithEvents SearchBox1 As DISMTools.CuedTextBox
     Friend WithEvents CPropViewer As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents cPropPathView As System.Windows.Forms.TreeView

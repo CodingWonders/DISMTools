@@ -41,7 +41,6 @@ Namespace Elements
     Public Class ComputerNameValidator
 
         Public Shared Function ValidateComputerName(compName As String) As ComputerName
-            DynaLog.LogMessage("Validating computer name " & Quote & compName & Quote & "...")
             Dim cName As New ComputerName()
             ' Assume computer name is valid...
             cName.Valid = True

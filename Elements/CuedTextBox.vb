@@ -2,7 +2,7 @@
 Imports System.Windows.Forms
 Imports System.Runtime.InteropServices
 
-Public Class SearchBox
+Public Class CuedTextBox
     Inherits TextBox
 
     Private Const EM_SETCUEBANNER As Integer = &H1501
