@@ -306,6 +306,7 @@
     <Compile Include="Elements\CuedTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\ServiceManagement\MuiStringReader.vb" />
     <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsService.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
