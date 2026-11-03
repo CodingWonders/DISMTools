@@ -319,6 +319,26 @@ Module WindowsServiceHelper
         Return ""
     End Function
 
+    Private Function GetResourceFromMui(IndirectString As String) As String
+        If IndirectString = "" OrElse Not IndirectString.StartsWith("@") Then Return ""
+
+        Dim FinalMuiPath As String = IndirectString.TrimStart("@"),
+            ResIndex As Integer = IndirectString.LastIndexOf(",")
+
+        Dim finalPath As String = FinalMuiPath.Substring(0, ResIndex - 1),
+            resourceIdStr As String = FinalMuiPath.Substring(ResIndex, FinalMuiPath.Length - ResIndex).TrimStart("-")
+        Dim resourceId As Integer = 0
+        If Not Integer.TryParse(resourceIdStr, resourceId) Then Return IndirectString
+
+        Dim finalString As String = IndirectString
+        Try
+            finalString = MuiStringReader.GetString(finalPath, resourceId)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not extract values from MUI: " & ex.Message)
+        End Try
+        Return finalString
+    End Function
+
     Private Function GetOnlineServiceList() As List(Of WindowsService)
         Dim serviceList As New List(Of WindowsService)
 
@@ -547,17 +567,24 @@ Module WindowsServiceHelper
                             serviceDisplayName = Regex.Replace(serviceDisplayName, "%windir%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
 
                             ' If it points to a file without a path, automatically put the mount path's system32 folder and check if it exists
-                            Dim commaLocation As Integer = serviceDisplayName.IndexOf(","),
+                            Dim commaLocation As Integer = serviceDisplayName.LastIndexOf(","),
                                 indStrFileName As String = serviceDisplayName.Substring(1, commaLocation - 1)
 
                             If Not Path.IsPathRooted(indStrFileName) Then
                                 Dim guessedFilePath As String = Path.Combine(MountPath, "Windows", "system32", indStrFileName)
                                 If File.Exists(guessedFilePath) Then
                                     serviceDisplayName = serviceDisplayName.Replace(indStrFileName, guessedFilePath)
+
                                 End If
                             End If
 
+                            Dim oldServiceDisplayName As String = serviceDisplayName
+
                             serviceDisplayName = ResolveIndirectString(serviceDisplayName)
+
+                            If serviceDisplayName = oldServiceDisplayName Then
+                                serviceDisplayName = GetResourceFromMui(serviceDisplayName)
+                            End If
                         End If
                         serviceDescription = ServiceInfoRk.GetValue("Description", "")
                         DynaLog.LogMessage("Raw service description: " & serviceDescription)
@@ -567,8 +594,9 @@ Module WindowsServiceHelper
                             serviceDescription = Regex.Replace(serviceDescription, "%systemroot%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
                             serviceDescription = Regex.Replace(serviceDescription, "%windir%", Path.Combine(MountPath, "Windows"), RegexOptions.IgnoreCase)
 
+
                             ' If it points to a file without a path, automatically put the mount path's system32 folder and check if it exists
-                            Dim commaLocation As Integer = serviceDescription.IndexOf(","),
+                            Dim commaLocation As Integer = serviceDescription.LastIndexOf(","),
                                 indStrFileName As String = serviceDescription.Substring(1, commaLocation - 1)
 
                             If Not Path.IsPathRooted(indStrFileName) Then
@@ -578,7 +606,13 @@ Module WindowsServiceHelper
                                 End If
                             End If
 
+                            Dim oldServiceDescription As String = serviceDescription
+
                             serviceDescription = ResolveIndirectString(serviceDescription)
+
+                            If serviceDescription = oldServiceDescription Then
+                                serviceDescription = GetResourceFromMui(serviceDescription)
+                            End If
                         End If
                         serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
                         serviceGroupName = ServiceInfoRk.GetValue("Group", "")
