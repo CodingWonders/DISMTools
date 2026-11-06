@@ -2405,18 +2405,12 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a New features:
         '''
-        '''--- Bugfixes
-        '''
-        '''- Fixed an exception when launching the AppX package information dialog on Windows 8 systems
-        '''- Fixed an issue where component store repair tasks would fail if no sources were specified
-        '''- Fixed an issue where some service dependencies and dependents would not be displayed in the Service Manager
-        '''
-        '''--- New features
-        '''
-        '''- HotInstall and the Sysprep Preparation Tool now create rollback environments to undo boot configuration changes and environment deployments
-        '''- The Sysprep [resto de la cadena truncado]&quot;;.
+        '''- In the WDS Helper Client, authentication flows have been revamped to make them more secure. Additionally, you will now be asked if the provided credentials are valid
+        '''- DISMTools now downloads and installs Windows ADK version 10.1.28000.3481
+        '''- In addition to user account names blocked in an English installation of Windows, user account names of the Windows installation in your language are now blocked
+        '''- User accounts are now specified in cards. You can now add more than 5 local accounts [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
