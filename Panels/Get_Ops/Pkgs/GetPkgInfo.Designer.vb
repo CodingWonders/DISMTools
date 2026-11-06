@@ -40,7 +40,7 @@ Partial Class GetPkgInfoDlg
         Me.ListBox2 = New System.Windows.Forms.ListBox()
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchBox1 = New DISMTools.CuedTextBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
@@ -2008,7 +2008,7 @@ Partial Class GetPkgInfoDlg
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents SearchPanel As System.Windows.Forms.Panel
     Friend WithEvents Panel6 As System.Windows.Forms.Panel
-    Friend WithEvents SearchBox1 As DISMTools.SearchBox
+    Friend WithEvents SearchBox1 As DISMTools.CuedTextBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents CPropViewer As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel

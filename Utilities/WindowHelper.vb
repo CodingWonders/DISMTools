@@ -9,6 +9,10 @@ Public Class WindowHelper
         End Sub
 
         <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+        Public Shared Function GetWindowLong(hwnd As Long, nIndex As Long) As Long
+        End Function
+
+        <DllImport("user32.dll", CharSet:=CharSet.Auto)>
         Public Shared Function GetSystemMenu(hWnd As IntPtr, bRevert As Boolean) As IntPtr
         End Function
 
@@ -18,6 +22,10 @@ Public Class WindowHelper
 
         <DllImport("dwmapi.dll")>
         Public Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
+
+        <DllImport("user32.dll")>
+        Public Shared Function SendMessage(hwnd As IntPtr, wMsg As UInteger, wParam As UInteger, lParam As IntPtr) As IntPtr
         End Function
 
         <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Auto)>
@@ -49,6 +57,12 @@ Public Class WindowHelper
     Const MF_ENABLED As Long = 0
     Const MF_GRAYED As Long = 1
     Const MF_DISABLED As Long = 2
+    Const GWL_STYLE As Integer = -16
+    Const WS_HSCROLL As Integer = &H100000
+    Const WS_VSCROLL As Integer = &H200000
+    Const WM_VSCROLL As Integer = &H115
+    Const SB_TOP As Integer = 6
+    Const SB_BOTTOM As Integer = 7
 
     ' DWMAPI Constants
     Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
@@ -171,6 +185,35 @@ Public Class WindowHelper
         lvi.stateMask = mask
         lvi.state = value
         NativeMethods.SendMessageLVItem(lv.Handle, LVM_SETITEMSTATE, itemIndex, lvi)
+    End Sub
+
+    Public Enum ScrollBarType As Integer
+        Horizontal = 0
+        Vertical = 1
+        Both = 2
+    End Enum
+
+    Public Shared Function IsScrollbarVisible(Handle As IntPtr, ScrollType As ScrollBarType) As Boolean
+        If Handle = IntPtr.Zero Then Return False
+        Dim windowLong As Long = NativeMethods.GetWindowLong(Handle, GWL_STYLE)
+
+        ' Sample VB6 code: https://web.archive.org/web/20150401072828/http://support.microsoft.com/en-us/kb/299686
+        Select Case ScrollType
+            Case ScrollBarType.Horizontal : Return (windowLong And WS_HSCROLL) <> 0
+            Case ScrollBarType.Vertical : Return (windowLong And WS_VSCROLL) <> 0
+            Case ScrollBarType.Both : Return ((windowLong And WS_HSCROLL) <> 0 AndAlso (windowLong And WS_VSCROLL) <> 0)
+            Case Else : Return False
+        End Select
+    End Function
+
+    Public Shared Sub ScrollControlToTop(Handle As IntPtr)
+        If Handle = IntPtr.Zero Then Exit Sub
+        NativeMethods.SendMessage(Handle, WM_VSCROLL, SB_TOP, IntPtr.Zero)
+    End Sub
+
+    Public Shared Sub ScrollControlToBottom(Handle As IntPtr)
+        If Handle = IntPtr.Zero Then Exit Sub
+        NativeMethods.SendMessage(Handle, WM_VSCROLL, SB_BOTTOM, IntPtr.Zero)
     End Sub
 
 End Class

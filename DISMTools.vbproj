@@ -83,8 +83,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.1.5.1\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.1.6.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.9\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -303,9 +303,10 @@
     <Compile Include="Elements\ISOCreation\IsoCreationTask.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
-    <Compile Include="Elements\SearchBox.vb">
+    <Compile Include="Elements\CuedTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\ServiceManagement\MuiStringReader.vb" />
     <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsService.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
@@ -1070,6 +1071,13 @@
     <Compile Include="UserControls\ServiceDependencyDiagram.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\UnattendWizard\UserCard.Designer.vb">
+      <DependentUpon>UserCard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UnattendWizard\UserCard.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UnattendWizard\UserCardData.vb" />
     <Compile Include="UserControls\WimFileSourceControl.Designer.vb">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>
     </Compile>
@@ -1495,6 +1503,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\NewsFeedItemCard.resx">
       <DependentUpon>NewsFeedItemCard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UnattendWizard\UserCard.resx">
+      <DependentUpon>UserCard.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WimFileSourceControl.resx">
       <DependentUpon>WimFileSourceControl.vb</DependentUpon>

@@ -40,7 +40,7 @@ Partial Class GetDriverInfo
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel8 = New System.Windows.Forms.Panel()
         Me.WizardBtn = New System.Windows.Forms.Button()
-        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchBox1 = New DISMTools.CuedTextBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
@@ -1476,7 +1476,7 @@ Partial Class GetDriverInfo
     Friend WithEvents Button9 As System.Windows.Forms.Button
     Friend WithEvents SearchPanel As System.Windows.Forms.Panel
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
-    Friend WithEvents SearchBox1 As DISMTools.SearchBox
+    Friend WithEvents SearchBox1 As DISMTools.CuedTextBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
     Friend WithEvents WizardBtn As System.Windows.Forms.Button
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader

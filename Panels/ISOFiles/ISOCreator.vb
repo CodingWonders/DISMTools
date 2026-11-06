@@ -15,7 +15,9 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim success As Boolean
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
-    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/615540bc-be0b-433a-b91b-1f2b0642bb24/adk/adksetup.exe", "https://download.microsoft.com/download/2472e9a0-7c74-4ffd-a3e4-27ed1fa30d30/adkwinpeaddons/adkwinpesetup.exe"}
+    ' ADK Download Locations for ADK 10.1.28000.3481
+    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/0dfa675f-bff6-4c31-bad9-86bc5b7db5ed/adk/adksetup.exe",
+                                                          "https://download.microsoft.com/download/74e1ba00-69cb-4bdd-a382-eb96ece4a589/adkwinpeaddons/adkwinpesetup.exe"}
     Dim adkDownloadSuccess As Boolean
 
     ' Job manager for concurrent ISO creation tasks
