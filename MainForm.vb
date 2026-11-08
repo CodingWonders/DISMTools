@@ -110,6 +110,7 @@ Public Class MainForm
     ' Set branch name and codenames
     Public dtBranch As String = "dt_pre_discovery"
     Public dt_codeName As String = "Discovery"
+    Private Const SongCode As String = "Nightvision"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
@@ -548,6 +549,7 @@ Public Class MainForm
     Sub InitDynaLog()
         DynaLog.CheckLogAge()
         DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
+        DynaLog.LogMessage("---------------- " & SongCode & " ----------------")
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
@@ -663,7 +665,6 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        ' Load theme files (EXPERIMENTS ONLY)
         ThemeHelper.LoadThemes()
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then

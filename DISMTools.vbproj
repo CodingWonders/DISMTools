@@ -248,6 +248,12 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSDomainControllerConnectionTestProgressForm.Designer.vb">
+      <DependentUpon>ADDSDomainControllerConnectionTestProgressForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSDomainControllerConnectionTestProgressForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
     </Compile>
@@ -262,6 +268,7 @@
     </Compile>
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainRole.vb" />
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ForestEntry.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
     <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
@@ -1126,6 +1133,9 @@
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSDomainControllerConnectionTestProgressForm.resx">
+      <DependentUpon>ADDSDomainControllerConnectionTestProgressForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -1962,6 +1972,7 @@
     <None Include="Resources\diagrams\diagram_save_mermaid_light.png" />
     <None Include="Resources\diagrams\diagram_navigate_to_svc_light.png" />
     <None Include="Resources\diagrams\diagram_navigate_to_svc_dark.png" />
+    <None Include="Resources\computers_on_network.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />

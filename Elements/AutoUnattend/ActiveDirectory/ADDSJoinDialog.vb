@@ -4,11 +4,13 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.RegularExpressions
 Imports System.DirectoryServices.AccountManagement
 Imports Tulpep.ActiveDirectoryObjectPicker
+Imports System.DirectoryServices
 
 Public Class ADDSJoinDialog
 
     Private dsIsInDomain As Boolean
     Private dsDomainName As String = ""
+    Private dsDefaultDomainName As String = ""
     Private netAdapters As NetworkInterface()
     Private dnsMappings As New Dictionary(Of String, DnsProperties)
     Private dnsAliasName As String = ""
@@ -75,12 +77,17 @@ Public Class ADDSJoinDialog
     Private dnsInfo As DnsInformation
     Private dsInfo As DomainInformation
 
+    Private DomainsInForest As New List(Of ForestEntry)
+
     Private dnsAddresses As String()
 
     Private NtLogonPathStart As String = ""
+    Private NtDefaultLogonPathStart As String = ""
 
     Private userMappings As Dictionary(Of String, List(Of Principal))
     Private initialUserName As String = ""
+
+    Private IsDomainController As Boolean
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         DialogResult = Windows.Forms.DialogResult.Cancel
@@ -97,7 +104,6 @@ Public Class ADDSJoinDialog
         Label4.Text = LocalizationService.ForSection("Designer.DomainJoin")("PrimarySuffix.Label")
         RadioButton1.Text = LocalizationService.ForSection("Designer.DomainJoin")("PickAdapter.RadioButton")
         Label3.Text = LocalizationService.ForSection("Designer.DomainJoin")("InterfaceAlias.Label")
-        Label2.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Suffix.Added.Message")
         Label1.Text = LocalizationService.ForSection("Designer.DomainJoin")("PrimarySuffix.Label")
         DNSConfigHeader.Text = LocalizationService.ForSection("Designer.DomainJoin")("DNSSettings.Label")
         Label17.Text = LocalizationService.ForSection("Designer.DomainJoin")("Type.Security.Account.Label")
@@ -106,12 +112,12 @@ Public Class ADDSJoinDialog
         Label19.Text = LocalizationService.ForSection("Designer.DomainJoin")("SAM.Account.Label")
         Label18.Text = LocalizationService.ForSection("Designer.DomainJoin")("Org.Unit.Account.Message")
         DsAccountObjectPickerBtn.Text = LocalizationService.ForSection("Designer.DomainJoin")("Pick.Account.Object.Button")
-        RemoveHandler ComboBox4.SelectedIndexChanged, AddressOf ComboBox4_SelectedIndexChanged
-        ComboBox4.Items.Clear()
-        ComboBox4.Items.AddRange({LocalizationService.ForSection("Designer.DomainJoin")("User.Manually.Item"),
+        RemoveHandler comboAccountMode.SelectedIndexChanged, AddressOf comboAccountMode_SelectedIndexChanged
+        comboAccountMode.Items.Clear()
+        comboAccountMode.Items.AddRange({LocalizationService.ForSection("Designer.DomainJoin")("User.Manually.Item"),
                                   LocalizationService.ForSection("Designer.DomainJoin")("Pick.User.Org.Item"),
                                   LocalizationService.ForSection("Designer.DomainJoin")("Pick.User.Object.Item")})
-        AddHandler ComboBox4.SelectedIndexChanged, AddressOf ComboBox4_SelectedIndexChanged
+        AddHandler comboAccountMode.SelectedIndexChanged, AddressOf comboAccountMode_SelectedIndexChanged
         Label13.Text = LocalizationService.ForSection("Designer.DomainJoin")("User.Principal.Name.Label")
         Label14.Text = LocalizationService.ForSection("Designer.DomainJoin")("Logon.Path.Pre.Label")
         Label11.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Auto.Detected.Message")
@@ -119,6 +125,8 @@ Public Class ADDSJoinDialog
         Label10.Text = LocalizationService.ForSection("Designer.DomainJoin")("Password.Label")
         Label9.Text = LocalizationService.ForSection("Designer.DomainJoin")("UserAccount.Label")
         Label8.Text = LocalizationService.ForSection("Designer.DomainJoin")("DomainName.Label")
+        rbAutoDomainsInForest.Text = LocalizationService.ForSection("Designer.DomainJoin")("PDS_AutoDomainForest")
+        rbManualDomain.Text = LocalizationService.ForSection("Designer.DomainJoin")("PDS_ManualDomain")
         DSDomainConfigHeader.Text = LocalizationService.ForSection("Designer.DomainJoin")("Domain.Auth.Label")
         DS7_Description.Text = LocalizationService.ForSection("Designer.DomainJoin")("Wizard.Helps.Set.Description")
         DS7_Header.Text = LocalizationService.ForSection("Designer.DomainJoin")("Join.Active.Dir.Label")
@@ -133,32 +141,34 @@ Public Class ADDSJoinDialog
 
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
-        ComboBox1.BackColor = BackColor
-        ComboBox2.BackColor = BackColor
-        ComboBox3.BackColor = BackColor
-        ComboBox4.BackColor = BackColor
-        TextBox1.BackColor = BackColor
-        TextBox2.BackColor = BackColor
-        TextBox3.BackColor = BackColor
-        TextBox4.BackColor = BackColor
-        TextBox5.BackColor = BackColor
-        TextBox6.BackColor = BackColor
-        TextBox7.BackColor = BackColor
+        cbNicsInSystem.BackColor = BackColor
+        comboOU.BackColor = BackColor
+        comboUserInOU.BackColor = BackColor
+        comboAccountMode.BackColor = BackColor
+        comboDomainsInForest.BackColor = BackColor
+        tbManualDomainName.BackColor = BackColor
+        tbManualNicName.BackColor = BackColor
+        tbNicPDS.BackColor = BackColor
+        tbDomainName.BackColor = BackColor
+        tbManualSamName.BackColor = BackColor
+        tbAccountPassword.BackColor = BackColor
+        tbSamNameInDomain.BackColor = BackColor
         GroupBox1.BackColor = BackColor
-        RichTextBox1.BackColor = BackColor
-        ComboBox1.ForeColor = ForeColor
-        ComboBox2.ForeColor = ForeColor
-        ComboBox3.ForeColor = ForeColor
-        ComboBox4.ForeColor = ForeColor
-        TextBox1.ForeColor = ForeColor
-        TextBox2.ForeColor = ForeColor
-        TextBox3.ForeColor = ForeColor
-        TextBox4.ForeColor = ForeColor
-        TextBox5.ForeColor = ForeColor
-        TextBox6.ForeColor = ForeColor
-        TextBox7.ForeColor = ForeColor
+        rtbDNSAddresses.BackColor = BackColor
+        cbNicsInSystem.ForeColor = ForeColor
+        comboOU.ForeColor = ForeColor
+        comboUserInOU.ForeColor = ForeColor
+        comboAccountMode.ForeColor = ForeColor
+        comboDomainsInForest.ForeColor = ForeColor
+        tbManualDomainName.ForeColor = ForeColor
+        tbManualNicName.ForeColor = ForeColor
+        tbNicPDS.ForeColor = ForeColor
+        tbDomainName.ForeColor = ForeColor
+        tbManualSamName.ForeColor = ForeColor
+        tbAccountPassword.ForeColor = ForeColor
+        tbSamNameInDomain.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        RichTextBox1.ForeColor = ForeColor
+        rtbDNSAddresses.ForeColor = ForeColor
         DsJoinCMS.Renderer = GetProfessionalRenderer()
         DsJoinCMS.ForeColor = ForeColor
         DnsResolutionTSMI.Image = GetGlyphResource("search")
@@ -167,24 +177,46 @@ Public Class ADDSJoinDialog
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
         VerifyInPages.AddRange(New WizardPage() {WizardPage.DnsConfigPage, WizardPage.DsConfigPage})
         ChangePage(WizardPage.DnsConfigPage)
+        IsDomainController = GetSystemDomainRole() >= DomainRole.PrimaryDomainController
         dnsMappings.Clear()
-        ComboBox1.Items.Clear()
-        ComboBox2.Items.Clear()
-        ComboBox3.Items.Clear()
+        comboDomainsInForest.Items.Clear()
+        cbNicsInSystem.Items.Clear()
+        comboOU.Items.Clear()
+        comboUserInOU.Items.Clear()
+        EnsureHandlesCreated(Me)
         Visible = True
         ADDSInitBW.RunWorkerAsync()
         Do Until Not ADDSInitBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         Loop
+    End Sub
 
-        ' Let's leave the domain controller-exclusive stuff, well, exclusive to domain controllers ;)
-        DnsZoneTSMI.Enabled = GetSystemDomainRole() >= DomainRole.PrimaryDomainController
+    Private Sub EnsureHandlesCreated(parentControl As Control)
+        Dim forcedHandle As IntPtr = parentControl.Handle
+        For Each childControl As Control In parentControl.Controls
+            EnsureHandlesCreated(childControl)
+        Next
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        ComboBox1.Enabled = RadioButton1.Checked
-        TextBox2.Enabled = RadioButton2.Checked
+        cbNicsInSystem.Enabled = RadioButton1.Checked
+        tbManualNicName.Enabled = RadioButton2.Checked
+    End Sub
+
+    Private Sub rbAutoDomainsInForest_CheckedChanged(sender As Object, e As EventArgs) Handles rbAutoDomainsInForest.CheckedChanged
+        comboDomainsInForest.Enabled = rbAutoDomainsInForest.Checked
+        tbManualDomainName.Enabled = Not rbAutoDomainsInForest.Checked
+        tbDomainName.ReadOnly = rbAutoDomainsInForest.Checked
+
+        dsDomainName = If(rbAutoDomainsInForest.Checked, comboDomainsInForest.SelectedItem, tbManualDomainName.Text)
+        If Not rbAutoDomainsInForest.Checked Then NtLogonPathStart = NtDefaultLogonPathStart ' default to the default NT NETBIOS name
+        tbDomainName.Text = dsDomainName
+
+        ' Let's leave the domain controller-exclusive stuff, well, exclusive to domain controllers ;)
+        DnsZoneTSMI.Enabled = IsDomainController AndAlso rbManualDomain.Checked
+
+        tbNicPDS.Text = dsDomainName
     End Sub
 
     Private Sub InitializeWizard()
@@ -192,9 +224,22 @@ Public Class ADDSJoinDialog
         ADDSInitBW.ReportProgress(5)
         dsIsInDomain = DomainServicesModule.DSIsInDomain()
         If dsIsInDomain Then
+            rbAutoDomainsInForest.Enabled = True
+            rbAutoDomainsInForest.Checked = True
+            rbManualDomain.Checked = False
             ProgressReporter.SetMessage("Getting name of assigned domain...")
             ADDSInitBW.ReportProgress(20)
             dsDomainName = DomainServicesModule.DSGetDomainName()
+            dsDefaultDomainName = dsDomainName
+            ProgressReporter.SetMessage("Getting domains in current forest...")
+            ADDSInitBW.ReportProgress(30)
+            DomainsInForest = DomainServicesModule.DSGetDomainsInForest()
+            comboDomainsInForest.Items.AddRange(DomainsInForest.Select(Function(domain) domain.DnsPath).ToArray())
+            comboDomainsInForest.SelectedItem = dsDomainName
+        Else
+            rbAutoDomainsInForest.Checked = False
+            rbManualDomain.Checked = True
+            rbAutoDomainsInForest.Enabled = False
         End If
         ProgressReporter.SetMessage("Getting network adapters...")
         ADDSInitBW.ReportProgress(40)
@@ -205,21 +250,22 @@ Public Class ADDSJoinDialog
         ProgressReporter.SetMessage("Getting primary domain controller NetBIOS name...")
         ADDSInitBW.ReportProgress(80)
         NtLogonPathStart = DomainServicesModule.DSGetDomainControllerNetBIOSName()
+        NtDefaultLogonPathStart = NtLogonPathStart
         If dsIsInDomain Then
-            ComboBox4.SelectedIndex = 1
+            comboAccountMode.SelectedIndex = 1
             ProgressReporter.SetMessage("Mapping organizational units and users...")
             ADDSInitBW.ReportProgress(90)
             userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
             If userMappings IsNot Nothing Then
-                ComboBox2.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
-                ComboBox2.SelectedIndex = 0
+                comboOU.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
+                comboOU.SelectedIndex = 0
             End If
         Else
-            ComboBox4.SelectedIndex = 0
-            If ComboBox4.Items.Count > 1 Then
+            comboAccountMode.SelectedIndex = 0
+            If comboAccountMode.Items.Count > 1 Then
                 ' We do this twice to get rid of both items
-                ComboBox4.Items.RemoveAt(1)
-                ComboBox4.Items.RemoveAt(1)
+                comboAccountMode.Items.RemoveAt(1)
+                comboAccountMode.Items.RemoveAt(1)
             End If
         End If
         DsAccountObjectPickerBtn.Enabled = dsIsInDomain
@@ -249,41 +295,44 @@ Public Class ADDSJoinDialog
 
     Private Sub ADDSInitBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADDSInitBW.RunWorkerCompleted
         For Each mapping In dnsMappings
-            ComboBox1.Items.Add(mapping.Key)
+            cbNicsInSystem.Items.Add(mapping.Key)
         Next
         ProgressReporter.Hide()
         DSNoDomainPanel.Visible = Not dsIsInDomain
         If dsIsInDomain Then
-            RemoveHandler TextBox4.TextChanged, AddressOf TextBox4_TextChanged
-            TextBox4.Text = dsDomainName
-            AddHandler TextBox4.TextChanged, AddressOf TextBox4_TextChanged
+            RemoveHandler tbDomainName.TextChanged, AddressOf TextBox4_TextChanged
+            tbDomainName.Text = dsDomainName
+            AddHandler tbDomainName.TextChanged, AddressOf TextBox4_TextChanged
             If NtLogonPathStart = "" Then
                 NtLogonPathStart = "Primary DC NetBIOS"
             End If
         Else
             NtLogonPathStart = "Primary DC NetBIOS"
         End If
-        If ComboBox3.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\<user>", NtLogonPathStart)
+        If comboUserInOU.SelectedIndex < 0 Then AddsNtLogonPathText.Text = String.Format("{0}\<user>", NtLogonPathStart)
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbNicsInSystem.SelectedIndexChanged
         Try
-            Dim dnsConfig As DnsProperties = dnsMappings(ComboBox1.SelectedItem)
-            TextBox1.Text = dnsConfig.Suffix
-            RichTextBox1.Text = ""
+            Dim dnsConfig As DnsProperties = dnsMappings(cbNicsInSystem.SelectedItem)
+            tbManualDomainName.Text = dnsConfig.Suffix
+            rtbDNSAddresses.Text = ""
             If dnsConfig.Addresses.Count > 0 Then
                 For Each Address In dnsConfig.Addresses
-                    RichTextBox1.AppendText(Address.ToString() & CrLf)
+                    rtbDNSAddresses.AppendText(Address.ToString() & CrLf)
                 Next
             End If
-            dnsAliasName = ComboBox1.SelectedItem
+            dnsAliasName = cbNicsInSystem.SelectedItem
+
+            If rbAutoDomainsInForest.Checked Then tbNicPDS.Text = dsDomainName
         Catch ex As Exception
 
         End Try
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        TextBox3.Text = TextBox1.Text
+    Private Sub tbManualDomainName_TextChanged(sender As Object, e As EventArgs) Handles tbManualDomainName.TextChanged
+        tbNicPDS.Text = tbManualDomainName.Text
+        dsDomainName = tbManualDomainName.Text
     End Sub
 
     Private Sub ChangePage(NewPage As WizardPage)
@@ -293,9 +342,11 @@ Public Class ADDSJoinDialog
             If Not VerifyOptionsInPage(CurrentWizardPage) Then Exit Sub
         End If
 
+        tbDomainName.Text = dsDomainName
+
         ' Apply settings in the DNS class if in DNS page
         If CurrentWizardPage = WizardPage.DnsConfigPage Then
-            dnsInfo = New DnsInformation(TextBox1.Text, dnsAliasName, RichTextBox1.Lines)
+            dnsInfo = New DnsInformation(dsDomainName, dnsAliasName, rtbDNSAddresses.Lines)
         End If
 
         DNSConfigPanel.Visible = (NewPage = WizardPage.DnsConfigPage)
@@ -314,20 +365,98 @@ Public Class ADDSJoinDialog
         DynaLog.LogMessage("Page in which we need to verify user settings: " & page.ToString())
         Select Case page
             Case WizardPage.DnsConfigPage
-                If TextBox1.Text = "" Then
-                    MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("PrimarySuffix.Required"), vbOKOnly + vbCritical)
-                    Return False
+                DynaLog.LogMessage("Verifying DNS configuration options...")
+
+                If rbAutoDomainsInForest.Checked Then
+                    DynaLog.LogMessage("Automatic domain selection is enabled.")
+                    DynaLog.LogMessage("Selected domain: " & If(comboDomainsInForest.SelectedItem Is Nothing, "<none>", comboDomainsInForest.SelectedItem.ToString()))
+
+                    ' If it isn't the current domain, we test connectivity and get the users for that.
+                    Dim connectionDetails As New Dictionary(Of String, Object),
+                        errorMessage As String = ""
+                    Dim connectionSucceeded As Boolean = False
+                    Do Until connectionSucceeded
+                        DynaLog.LogMessage("Testing connectivity to the selected domain controller...")
+                        Cursor = Cursors.WaitCursor
+                        ADDSDomainControllerConnectionTestProgressForm.DomainName = dsDomainName
+                        ADDSDomainControllerConnectionTestProgressForm.Show(Me)
+                        ADDSDomainControllerConnectionTestProgressForm.BringToFront()
+                        Application.DoEvents()
+                        connectionDetails = DomainServicesModule.DSTestDomainControllerConnection(comboDomainsInForest.SelectedItem)
+                        ADDSDomainControllerConnectionTestProgressForm.Close()
+                        Cursor = Cursors.Arrow
+
+                        connectionSucceeded = CBool(connectionDetails("connected"))
+                        DynaLog.LogMessage("Domain controller connectivity test result: " & connectionSucceeded.ToString())
+
+                        If Not connectionSucceeded Then
+                            DynaLog.LogMessage("Domain controller connectivity test failed.")
+
+                            If TypeOf (connectionDetails("connectionFailureDetails")) Is DirectoryServicesCOMException Then
+                                Dim finalEx As DirectoryServicesCOMException = CType(connectionDetails("connectionFailureDetails"), DirectoryServicesCOMException)
+
+                                DynaLog.LogMessage("Directory Services connection error: " & finalEx.Message)
+                                errorMessage = LocalizationService.ForSection("DomainJoin.Messages").Format("ConnectionToDomainFailed", comboDomainsInForest.SelectedItem, String.Format("{0} - {1}", finalEx.Message.TrimEnd(Environment.NewLine), finalEx.ExtendedErrorMessage))
+
+                                If MessageBox.Show(Me, errorMessage, Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.No Then
+                                    DynaLog.LogMessage("User chose not to retry the domain controller connectivity test.")
+                                    Return False
+                                End If
+                            Else
+                                Dim connectionException As Exception = CType(connectionDetails("connectionFailureDetails"), Exception)
+
+                                DynaLog.LogMessage("Domain connection error: " & connectionException.Message)
+                                errorMessage = connectionException.Message
+                                MessageBox.Show(Me, errorMessage, Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                Return False
+                            End If
+
+                            DynaLog.LogMessage("User chose to retry the domain controller connectivity test.")
+                        End If
+                    Loop
+
+                    Cursor = Cursors.WaitCursor
+                    DynaLog.LogMessage("Loading organizational units and users for the selected domain...")
+
+                    comboUserInOU.Items.Clear()
+                    comboOU.Items.Clear()
+                    userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
+
+                    If userMappings IsNot Nothing Then
+                        DynaLog.LogMessage("Organizational unit mappings loaded: " & userMappings.Count.ToString())
+                        comboOU.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
+                        comboOU.SelectedIndex = 0
+                    Else
+                        DynaLog.LogMessage("No organizational unit mappings were returned.")
+                    End If
+
+                    Cursor = Cursors.Arrow
+                Else
+                    DynaLog.LogMessage("Manual domain selection is enabled.")
+
+                    ' Check if we have put anything in the manual domain field.
+                    If dsDomainName = "" Then
+                        DynaLog.LogMessage("Manual primary DNS suffix validation failed: no value was provided.")
+                        MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("PrimarySuffix.Required"), vbOKOnly + vbCritical)
+                        Return False
+                    End If
                 End If
+
                 If dnsAliasName = "" Then
+                    DynaLog.LogMessage("DNS interface alias validation failed: no interface alias was provided.")
                     MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("InterfaceAlias.Message"), vbOKOnly + vbCritical)
                     Return False
                 End If
-                If RichTextBox1.Text = "" Then
+
+                If rtbDNSAddresses.Text = "" Then
+                    DynaLog.LogMessage("DNS server validation failed: no DNS server addresses were provided.")
                     MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("No.DNSServer.None.Label"), vbOKOnly + vbCritical)
                     Return False
                 End If
+
+                DynaLog.LogMessage("DNS configuration options validated successfully.")
             Case WizardPage.DsConfigPage
-                If TextBox4.Text = "" Then
+                If tbDomainName.Text = "" Then
                     MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("DomainName.Label"), vbOKOnly + vbCritical)
                     Return False
                 End If
@@ -335,7 +464,7 @@ Public Class ADDSJoinDialog
                     MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("User.Name.Label"), vbOKOnly + vbCritical)
                     Return False
                 End If
-                If TextBox6.Text = "" Then
+                If tbAccountPassword.Text = "" Then
                     Try
                         If DomainServicesModule.DSAccountRequiresPassword(dsDomainName, initialUserName) Then
                             MsgBox(LocalizationService.ForSection("DomainJoin.Messages").Format("Password.User.Message", initialUserName), vbOKOnly + vbCritical)
@@ -366,7 +495,7 @@ Public Class ADDSJoinDialog
                 DialogResult = Windows.Forms.DialogResult.None
                 Exit Sub
             Else
-                dsInfo = New DomainInformation(TextBox4.Text, initialUserName, TextBox6.Text)
+                dsInfo = New DomainInformation(tbDomainName.Text, initialUserName, tbAccountPassword.Text)
             End If
             If ApplyDsSettings() Then
                 MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Domain.Settings.Message"))
@@ -436,18 +565,18 @@ Public Class ADDSJoinDialog
     Sub SetDefaultSettings()
         DynaLog.LogMessage("Setting default configuration...")
         DynaLog.LogMessage("Setting default DNS settings...")
-        TextBox1.Text = ""
-        TextBox2.Text = ""
-        RichTextBox1.Clear()
+        tbManualDomainName.Text = ""
+        tbManualNicName.Text = ""
+        rtbDNSAddresses.Clear()
         RadioButton1.Checked = True
         DynaLog.LogMessage("Setting default domain settings...")
-        TextBox4.Text = ""
-        TextBox5.Text = ""
-        TextBox6.Text = ""
+        tbDomainName.Text = ""
+        tbManualSamName.Text = ""
+        tbAccountPassword.Text = ""
     End Sub
 
-    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
-        dnsAliasName = TextBox2.Text
+    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles tbManualNicName.TextChanged
+        dnsAliasName = tbManualNicName.Text
     End Sub
 
     Private Sub DNS_Explanation_Link_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DNS_Explanation_Link.LinkClicked
@@ -460,7 +589,7 @@ Public Class ADDSJoinDialog
             Exit Sub
         End If
         DnsSyntaxCheckerBtn.Enabled = False
-        dnsAddresses = RichTextBox1.Lines.Where(Function(address) Not String.IsNullOrEmpty(address)).ToArray()
+        dnsAddresses = rtbDNSAddresses.Lines.Where(Function(address) Not String.IsNullOrEmpty(address)).ToArray()
         DnsValidatorBW.RunWorkerAsync()
     End Sub
 
@@ -556,33 +685,33 @@ Public Class ADDSJoinDialog
         DnsSyntaxCheckerBtn.Enabled = True
     End Sub
 
-    Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles RichTextBox1.TextChanged
-        DnsSyntaxCheckerBtn.Enabled = Not String.IsNullOrEmpty(RichTextBox1.Text)
+    Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles rtbDNSAddresses.TextChanged
+        DnsSyntaxCheckerBtn.Enabled = Not String.IsNullOrEmpty(rtbDNSAddresses.Text)
     End Sub
 
-    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
+    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles tbDomainName.TextChanged
+        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(tbManualSamName.Text), "<user>", tbManualSamName.Text), If(String.IsNullOrEmpty(tbDomainName.Text), "domain", tbDomainName.Text))
     End Sub
 
-    Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
-        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
-        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text))
-        initialUserName = TextBox5.Text
+    Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles tbManualSamName.TextChanged
+        AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(tbManualSamName.Text), "<user>", tbManualSamName.Text), If(String.IsNullOrEmpty(tbDomainName.Text), "domain", tbDomainName.Text))
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(tbManualSamName.Text), "<user>", tbManualSamName.Text))
+        initialUserName = tbManualSamName.Text
     End Sub
 
-    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboOU.SelectedIndexChanged
         Try
-            ComboBox3.Items.Clear()
-            ComboBox3.Items.AddRange(userMappings(ComboBox2.SelectedItem).OrderBy(Function(adUser) adUser.DisplayName).Select(Function(adUser) adUser.DisplayName).ToArray())
-            ComboBox3.SelectedIndex = 0
+            comboUserInOU.Items.Clear()
+            comboUserInOU.Items.AddRange(userMappings(comboOU.SelectedItem).OrderBy(Function(adUser) adUser.DisplayName).Select(Function(adUser) adUser.DisplayName).ToArray())
+            comboUserInOU.SelectedIndex = 0
         Catch ex As Exception
 
         End Try
     End Sub
 
-    Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
-        Dim referenceUserDispName As String = ComboBox3.SelectedItem
-        Dim referenceUser As Principal = userMappings(ComboBox2.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
+    Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboUserInOU.SelectedIndexChanged
+        Dim referenceUserDispName As String = comboUserInOU.SelectedItem
+        Dim referenceUser As Principal = userMappings(comboOU.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
         If referenceUser Is Nothing Then Exit Sub
 
         AddsUpnPathText.Text = referenceUser.UserPrincipalName
@@ -613,45 +742,51 @@ Public Class ADDSJoinDialog
         }
         Using dsaPicker
             If dsaPicker.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                TextBox7.Text = DomainServicesModule.DSGetSamNameFromUserLdapPath(dsaPicker.SelectedObject.Path)
+                tbSamNameInDomain.Text = DomainServicesModule.DSGetSamNameFromUserLdapPath(dsaPicker.SelectedObject.Path)
             End If
         End Using
     End Sub
 
-    Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
-        ManualUserPickerPanel.Visible = ComboBox4.SelectedIndex = 0
-        UserInDomainOuPickerPanel.Visible = ComboBox4.SelectedIndex = 1
-        UserInDomainPickerPanel.Visible = ComboBox4.SelectedIndex = 2
+    Private Sub comboAccountMode_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboAccountMode.SelectedIndexChanged
+        If {1, 2}.Contains(comboAccountMode.SelectedIndex) AndAlso Not rbAutoDomainsInForest.Checked Then
+            MessageBox.Show(Me, LocalizationService.ForSection("Designer.DomainJoin")("AccountMode_ManualDomainNotice"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            comboAccountMode.SelectedIndex = 0
+            Exit Sub
+        End If
+
+        ManualUserPickerPanel.Visible = comboAccountMode.SelectedIndex = 0
+        UserInDomainOuPickerPanel.Visible = comboAccountMode.SelectedIndex = 1
+        UserInDomainPickerPanel.Visible = comboAccountMode.SelectedIndex = 2
 
         ' Reconfigure initial user
         Try
-            Select Case ComboBox4.SelectedIndex
+            Select Case comboAccountMode.SelectedIndex
                 Case 0
-                    AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text), If(String.IsNullOrEmpty(TextBox4.Text), "domain", TextBox4.Text))
-                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(TextBox5.Text), "<user>", TextBox5.Text))
-                    initialUserName = TextBox5.Text
+                    AddsUpnPathText.Text = String.Format("{0}@{1}", If(String.IsNullOrEmpty(tbManualSamName.Text), "<user>", tbManualSamName.Text), If(String.IsNullOrEmpty(tbDomainName.Text), "domain", tbDomainName.Text))
+                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, If(String.IsNullOrEmpty(tbManualSamName.Text), "<user>", tbManualSamName.Text))
+                    initialUserName = tbManualSamName.Text
                 Case 1
-                    Dim referenceUserDispName As String = ComboBox3.SelectedItem
-                    Dim referenceUser As Principal = userMappings(ComboBox2.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
+                    Dim referenceUserDispName As String = comboUserInOU.SelectedItem
+                    Dim referenceUser As Principal = userMappings(comboOU.SelectedItem).FirstOrDefault(Function(adUser) adUser.DisplayName.Equals(referenceUserDispName, StringComparison.OrdinalIgnoreCase))
                     If referenceUser Is Nothing Then Exit Sub
 
                     AddsUpnPathText.Text = referenceUser.UserPrincipalName
                     AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, referenceUser.SamAccountName)
                     initialUserName = referenceUser.SamAccountName
                 Case 2
-                    initialUserName = TextBox7.Text
+                    initialUserName = tbSamNameInDomain.Text
                     AddsUpnPathText.Text = DomainServicesModule.DSGetUserPrincipalNameFromSamAccountName(dsDomainName, initialUserName)
-                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox7.Text)
+                    AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, tbSamNameInDomain.Text)
             End Select
         Catch ex As Exception
 
         End Try
     End Sub
 
-    Private Sub TextBox7_TextChanged(sender As Object, e As EventArgs) Handles TextBox7.TextChanged
-        initialUserName = TextBox7.Text
+    Private Sub TextBox7_TextChanged(sender As Object, e As EventArgs) Handles tbSamNameInDomain.TextChanged
+        initialUserName = tbSamNameInDomain.Text
         AddsUpnPathText.Text = DomainServicesModule.DSGetUserPrincipalNameFromSamAccountName(dsDomainName, initialUserName)
-        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox7.Text)
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, tbSamNameInDomain.Text)
     End Sub
 
     Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click
@@ -660,7 +795,7 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub DnsResolutionTSMI_Click(sender As Object, e As EventArgs) Handles DnsResolutionTSMI.Click
-        If String.IsNullOrEmpty(TextBox1.Text) OrElse String.IsNullOrWhiteSpace(TextBox1.Text) Then
+        If String.IsNullOrEmpty(dsDomainName) OrElse String.IsNullOrWhiteSpace(dsDomainName) Then
             MsgBox(LocalizationService.ForSection("DomainJoin.Messages")("Provide.Domain.Label"), vbOKOnly + vbExclamation, Text)
             Exit Sub
         End If
@@ -669,7 +804,7 @@ Public Class ADDSJoinDialog
         Dim nslookupProc As New Process() With {
             .StartInfo = New ProcessStartInfo() With {
                 .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "nslookup.exe"),
-                .Arguments = TextBox1.Text,
+                .Arguments = dsDomainName,
                 .CreateNoWindow = True,
                 .WindowStyle = ProcessWindowStyle.Hidden,
                 .UseShellExecute = False,
@@ -696,7 +831,16 @@ Public Class ADDSJoinDialog
 
     Private Sub DnsZoneTSMI_Click(sender As Object, e As EventArgs) Handles DnsZoneTSMI.Click
         If DnsZoneChooserDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            TextBox1.Text = DnsZoneChooserDialog.SelectedDnsZone
+            tbManualDomainName.Text = DnsZoneChooserDialog.SelectedDnsZone
+        End If
+    End Sub
+
+    Private Sub comboDomainsInForest_SelectedIndexChanged(sender As Object, e As EventArgs) Handles comboDomainsInForest.SelectedIndexChanged
+        If comboDomainsInForest.SelectedIndex > -1 Then
+            dsDomainName = comboDomainsInForest.SelectedItem
+            NtLogonPathStart = If(dsDomainName = dsDefaultDomainName, NtDefaultLogonPathStart, DomainsInForest(comboDomainsInForest.SelectedIndex).NetBIOSName)
+            tbDomainName.Text = dsDomainName
+            tbNicPDS.Text = dsDomainName
         End If
     End Sub
 End Class
