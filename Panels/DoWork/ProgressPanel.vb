@@ -4774,7 +4774,7 @@ Public Class ProgressPanel
         End Try
     End Sub
 
-    Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
+    Private Async Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
         TaskList.Clear()
         If PreventSystemFromSleeping Then
             ' Restore sleep mode
@@ -4823,7 +4823,7 @@ Public Class ProgressPanel
                 If imgIndexDeletionUnmount Then
                     DynaLog.LogMessage("Refreshing mounted image lists...")
                     ' Detect mounted images if the program needed to unmount the source image
-                    MainForm.DetectMountedImages(False)
+                    Await MainForm.RefreshMountedImagesAsync()
                     If UMountLocalDir Then
                         DynaLog.LogMessage("Updating project properties...")
                         MainForm.UpdateProjProperties(False, False)
@@ -4844,7 +4844,7 @@ Public Class ProgressPanel
                 MainForm.bwBackgroundProcessAction = 0
                 MainForm.bwGetImageInfo = True
                 MainForm.bwGetAdvImgInfo = True
-                MainForm.DetectMountedImages(False)
+                Await MainForm.RefreshMountedImagesAsync()
                 If isReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
                 Else
@@ -4854,7 +4854,7 @@ Public Class ProgressPanel
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 18 Then
                 DynaLog.LogMessage("Refreshing mounted image lists and updating project configuration...")
-                MainForm.DetectMountedImages(False)
+                Await MainForm.RefreshMountedImagesAsync()
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
                     MainForm.bwBackgroundProcessAction = 0
                     MainForm.bwGetImageInfo = True
@@ -4867,7 +4867,7 @@ Public Class ProgressPanel
                     MainForm.isModified = False
                 End If
             ElseIf OperationNum = 20 Then
-                MainForm.DetectMountedImages(False)
+                Await MainForm.RefreshMountedImagesAsync()
             ElseIf OperationNum = 21 Then
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
                     DynaLog.LogMessage("Updating project configuration and saving project...")
@@ -4884,7 +4884,7 @@ Public Class ProgressPanel
                     End If
                 End If
                 DynaLog.LogMessage("Refreshing mounted image lists...")
-                MainForm.DetectMountedImages(False)
+                Await MainForm.RefreshMountedImagesAsync()
             ElseIf OperationNum = 26 Then
                 DynaLog.LogMessage("Updating project configuration and saving project...")
                 MainForm.ReinitializeCurImage = False
@@ -4995,7 +4995,7 @@ Public Class ProgressPanel
                 End If
             ElseIf OperationNum = 996 Then
                 DynaLog.LogMessage("Updating mounted image lists, updating project configuration and saving project...")
-                MainForm.DetectMountedImages(False)
+                Await MainForm.RefreshMountedImagesAsync()
                 MainForm.ImgIndex = SwitchTargetIndex
                 MainForm.SaveDTProj()
                 If SwitchMountAsReadOnly Then
