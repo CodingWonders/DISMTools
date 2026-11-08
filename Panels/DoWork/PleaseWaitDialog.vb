@@ -140,13 +140,6 @@ Public Class PleaseWaitDialog
             Visible = False
             BGProcsBusyDialog.ShowDialog(MainForm)
         ElseIf ProgressPanel.OperationNum = 995 Then
-            DynaLog.LogMessage("Waiting until mounted image detector has stopped...")
-            If MainForm.MountedImageDetectorBW.CancellationPending Then
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(100)
-                End While
-            End If
             DynaLog.LogMessage("Getting image file information...")
             Dim imgInfoCollection As DismImageInfoCollection = Nothing
             Try

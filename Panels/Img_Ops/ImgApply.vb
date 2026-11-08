@@ -147,7 +147,6 @@ Public Class ImgApply
 
     Sub GetIndexes(ImgFile As String)
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         MainForm.StopMountedImageDetector()
         Dim imgInfo As DismImageInfoCollection = Nothing
         ComboBox1.Items.Clear()

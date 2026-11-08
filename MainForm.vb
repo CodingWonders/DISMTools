@@ -221,6 +221,9 @@ Public Class MainForm
     ' Contemporaneus Preview
     Public MountedImageList As New List(Of WindowsImage)
     Public CurrentImage As New WindowsImage()
+    Private WithEvents MountedImageDetectorTimer As New Windows.Forms.Timer()
+    Private MountedImageDetectionTask As Task
+    Private MountedImageDetectionInProgress As Boolean
 
     ' Default PE Policy settings
     Public ShowWatermark As Boolean = False
@@ -279,7 +282,7 @@ Public Class MainForm
                         argProjPath = arg.Replace("/load=", "").Trim()
                     Else
                         DynaLog.LogMessage("Specified project does NOT satisfy all requirements (either projfile or dir doesn't exist). Cannot continue loading project")
-                                MsgBox(LocalizationService.ForSection("Main.GetArguments")("Project.Message"), vbOKOnly + vbCritical, Text)
+                        MsgBox(LocalizationService.ForSection("Main.GetArguments")("Project.Message"), vbOKOnly + vbCritical, Text)
                     End If
                 ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Detecting if no projects had been passed by the /load flag...")
@@ -656,7 +659,7 @@ Public Class MainForm
         DynaLog.LogMessage("Detecting program arguments...")
         GetArguments()
         ' Detect mounted images
-        DetectMountedImages(True)
+        Await RefreshMountedImagesAsync(True)
         DynaLog.LogMessage("Finished detecting mounted images. Continuing program startup...")
         Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
@@ -710,7 +713,7 @@ Public Class MainForm
             UpdatePanel.Visible = False
         End If
         DynaLog.LogMessage("Beginning to detect mounted images in the background. No logging will be performed here")
-        If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
+        StartMountedImageDetector()
         DynaLog.LogMessage("Enabling image status watchers...")
         WatcherTimer.Enabled = True
         If dtBranch.Contains("pre") And Not Debugger.IsAttached Then
@@ -1125,45 +1128,31 @@ Public Class MainForm
         Return Nothing
     End Function
 
-    ''' <summary>
-    ''' Detects all mounted images and their state. Calls the DISM API at program startup
-    ''' </summary>
-    ''' <param name="DebugLog">Check if the program should output debug information. This is always called at program startup, but never after</param>
-    ''' <remarks>This yields results for the MountedImageImgFiles, MountedImageMountDirs, MountedImageImgIndexes, MountedImageMountedRewr and MountedImageImgStatuses string arrays in code</remarks>
-    Sub DetectMountedImages(DebugLog As Boolean)
+    Public Async Function RefreshMountedImagesAsync(Optional DebugLog As Boolean = False) As Task(Of List(Of WindowsImage))
         If DebugLog Then DynaLog.LogMessage("Getting mounted images...")
-        If MountedImageList IsNot Nothing Then
-            If DebugLog Then DynaLog.LogMessage("Clearing lists...")
-            MountedImageList.Clear()
-        End If
         Try
-            If DebugLog Then DynaLog.LogMessage("Initializing API...")
-            DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
-            If DebugLog Then DynaLog.LogMessage("Calling API function to grab mounted images...")
-            Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
-            If DebugLog Then DynaLog.LogMessage(MountedImgs.Count & " mounted image(s) have been detected on this system. Grabbing information...")
-            For Each imageInfo As DismMountedImageInfo In MountedImgs
-                If DebugLog Then DynaLog.LogMessage("Image information:")
-                If DebugLog Then DynaLog.LogMessage("- Image file : " & imageInfo.ImageFilePath)
-                If DebugLog Then DynaLog.LogMessage("- Image index : " & imageInfo.ImageIndex)
-                If DebugLog Then DynaLog.LogMessage("- Mount directory : " & imageInfo.MountPath)
-                If DebugLog Then DynaLog.LogMessage("- Mount status : " & imageInfo.MountStatus & If(imageInfo.MountStatus = DismMountStatus.Ok, " (OK)", If(imageInfo.MountStatus = DismMountStatus.NeedsRemount, " (Orphaned)", " (Invalid)")))
-                If DebugLog Then DynaLog.LogMessage("- Mount mode : " & imageInfo.MountMode & If(imageInfo.MountMode = DismMountMode.ReadWrite, " (Write permissions enabled)", "(Write permissions disabled)"))
-
-                MountedImageList.Add(New WindowsImage(imageInfo.ImageFilePath, imageInfo.ImageIndex, imageInfo.MountPath, imageInfo.MountStatus, imageInfo.MountMode))
-            Next
+            Dim mountedImages As List(Of WindowsImage) = Await ImageUtils.GetMountedImages()
+            If DebugLog Then
+                DynaLog.LogMessage("Initializing API and querying mounted images through ImageUtils...")
+                DynaLog.LogMessage(mountedImages.Count & " mounted image(s) have been detected on this system. Grabbing information...")
+                For Each mountedImage As WindowsImage In mountedImages
+                    DynaLog.LogMessage("Image information:")
+                    DynaLog.LogMessage("- Image file : " & mountedImage.ImageFile)
+                    DynaLog.LogMessage("- Image index : " & mountedImage.ImageIndex)
+                    DynaLog.LogMessage("- Mount directory : " & mountedImage.ImageMountDirectory)
+                    DynaLog.LogMessage("- Mount status : " & mountedImage.ImageMountStatus & If(mountedImage.ImageMountStatus = DismMountStatus.Ok, " (OK)", If(mountedImage.ImageMountStatus = DismMountStatus.NeedsRemount, " (Orphaned)", " (Invalid)")))
+                    DynaLog.LogMessage("- Mount mode : " & mountedImage.ImageMountMode & If(mountedImage.ImageMountMode = DismMountMode.ReadWrite, " (Write permissions enabled)", "(Write permissions disabled)"))
+                Next
+            End If
+            MountedImageList.Clear()
+            MountedImageList.AddRange(mountedImages)
             RaiseMountedImagesUpdated()
+            Return mountedImages
         Catch ex As Exception
             DynaLog.LogMessage("Could not detect mounted images. Error message: " & ex.Message)
-        Finally
-            Try
-                If DebugLog Then DynaLog.LogMessage("Shutting down API...")
-                DismApi.Shutdown()
-            Catch ex As Exception
-                ' ignore
-            End Try
+            Return New List(Of WindowsImage)
         End Try
-    End Sub
+    End Function
 
     ''' <summary>
     ''' Remounts orphaned images (images in need of a servicing session reload)
@@ -3427,7 +3416,7 @@ Public Class MainForm
     ''' Deletes temporary files created by the background processes
     ''' </summary>
     Sub DeleteTempFiles()
-        If MountedImageDetectorBW.IsBusy Then
+        If MountedImageDetectionInProgress Then
             DynaLog.LogMessage("The mounted image detector is busy and uses this folder. Skipping...")
             Exit Sub
         End If
@@ -6648,7 +6637,7 @@ Public Class MainForm
         End If
         CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
         BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        StartMountedImageDetector()
         WatcherTimer.Enabled = True
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
@@ -6806,23 +6795,6 @@ Public Class MainForm
     Private Sub DeleteImage_Click(sender As Object, e As EventArgs) Handles DeleteImage.Click
         DynaLog.LogMessage("Opening image index removal dialog...")
         ImgIndexDelete.ShowDialog(Me)
-    End Sub
-
-    Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
-        DynaLog.LogMessage("Images will be detected in a loop with a 1s break. No logging will be performed here...")
-        Do
-            If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
-            Try
-                DetectMountedImages(False)
-            Catch ex As AccessViolationException
-                DynaLog.LogMessage("Procedure failed due to handled access violation.")
-            End Try
-            Thread.Sleep(1000)
-        Loop
-    End Sub
-
-    Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
-        DynaLog.LogMessage("The mounted image detector is no longer busy.")
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
@@ -7612,8 +7584,7 @@ Public Class MainForm
                 UpdateProjProperties(True, False, False)
             Else
                 DynaLog.LogMessage("Restarting mounted image detector and watcher...")
-                If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-                WatcherTimer.Enabled = True
+                StartMountedImageDetector()
             End If
         End If
     End Sub
@@ -9312,26 +9283,18 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub RestartDetector()
-        Debug.WriteLine("Restarting mounted image detector...")
+    Private Async Sub MountedImageDetectorTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorTimer.Tick
+        If ImgBW.IsBusy OrElse MountedImageDetectionInProgress Then Exit Sub
+        MountedImageDetectionInProgress = True
         Try
-            If Not MountedImageDetectorBW.IsBusy Then
-                Debug.WriteLine("The detector is not busy. Calling it...")
-                Call MountedImageDetectorBW.RunWorkerAsync()
-            Else
-                Debug.WriteLine("The detector is busy.")
-                Exit Sub
-            End If
-            Debug.WriteLine("Mounted Image Detector Restart Successful")
-            MountedImageDetectorBWRestarterTimer.Enabled = False
+            MountedImageDetectionTask = RefreshMountedImagesAsync()
+            Await MountedImageDetectionTask
         Catch ex As Exception
-            Debug.WriteLine("Mounted Image Detector Restart Not Successful")
+            DynaLog.LogMessage("Could not refresh mounted images. Error message: " & ex.Message)
+        Finally
+            MountedImageDetectionTask = Nothing
+            MountedImageDetectionInProgress = False
         End Try
-    End Sub
-
-    Private Sub MountedImageDetectorBWRestarterTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorBWRestarterTimer.Tick
-        Debug.WriteLine("An event that requires the mounted image detector to be restarted has been triggered.")
-        RestartDetector()
     End Sub
 
     Private Sub LanguagesAndOptionalFeaturesISOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndOptionalFeaturesISOToolStripMenuItem.Click
@@ -9405,7 +9368,7 @@ Public Class MainForm
         End Try
         MsgBox(msg, vbOKOnly + If(msgSuccess, vbInformation, vbExclamation), Text)
         DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        StartMountedImageDetector()
         WatcherTimer.Enabled = True
     End Sub
 
@@ -9446,11 +9409,10 @@ Public Class MainForm
 
     Sub StopMountedImageDetector()
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
+        MountedImageDetectorTimer.Enabled = False
+        While MountedImageDetectionInProgress
             Application.DoEvents()
-            Thread.Sleep(500)
+            Thread.Sleep(100)
         End While
         DynaLog.LogMessage("Stopping image status watchers...")
         WatcherTimer.Enabled = False
@@ -9463,7 +9425,8 @@ Public Class MainForm
 
     Sub StartMountedImageDetector()
         DynaLog.LogMessage("Restarting mounted image detector and watchers...")
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        MountedImageDetectorTimer.Interval = 1000
+        MountedImageDetectorTimer.Enabled = True
         WatcherTimer.Enabled = True
     End Sub
 
