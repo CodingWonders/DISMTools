@@ -442,7 +442,6 @@ Partial Class MainForm
         Me.ImgBW = New System.ComponentModel.BackgroundWorker()
         Me.ImgProcesses = New System.Diagnostics.Process()
         Me.LocalMountDirFBD = New System.Windows.Forms.FolderBrowserDialog()
-        Me.MountedImageDetectorBW = New System.ComponentModel.BackgroundWorker()
         Me.ImgUMountPopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CommitAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -511,7 +510,6 @@ Partial Class MainForm
         Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
-        Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
         Me.ImgApplyModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ApplyWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -4381,10 +4379,6 @@ Partial Class MainForm
         Me.LocalMountDirFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.LocalMountDirFBD.ShowNewFolderButton = False
         '
-        'MountedImageDetectorBW
-        '
-        Me.MountedImageDetectorBW.WorkerSupportsCancellation = True
-        '
         'ImgUMountPopupCMS
         '
         Me.ImgUMountPopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CommitAndUnmountTSMI, Me.DiscardAndUnmountTSMI, Me.ToolStripSeparator20, Me.UnmountSettingsToolStripMenuItem})
@@ -4767,10 +4761,6 @@ Partial Class MainForm
         Me.VideoGetterBW.WorkerReportsProgress = True
         Me.VideoGetterBW.WorkerSupportsCancellation = True
         '
-        'MountedImageDetectorBWRestarterTimer
-        '
-        Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
-        '
         'ImgApplyModeCMS
         '
         Me.ImgApplyModeCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyWimTSMI, Me.ApplyFfuTSMI})
@@ -5109,7 +5099,6 @@ Partial Class MainForm
     Friend WithEvents ImgProcesses As Process
     Friend WithEvents BackgroundProcessesButton As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents LocalMountDirFBD As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents MountedImageDetectorBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents MountedImageManagerTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgUMountPopupCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CommitAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
@@ -5323,7 +5312,6 @@ Partial Class MainForm
     Friend WithEvents VideoGetterBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripSeparator42 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RegCplToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MountedImageDetectorBWRestarterTimer As System.Windows.Forms.Timer
     Friend WithEvents ToolStripSeparator43 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents WebResourcesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
