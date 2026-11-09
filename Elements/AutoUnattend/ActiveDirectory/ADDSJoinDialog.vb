@@ -5,6 +5,8 @@ Imports System.Text.RegularExpressions
 Imports System.DirectoryServices.AccountManagement
 Imports Tulpep.ActiveDirectoryObjectPicker
 Imports System.DirectoryServices
+Imports System.Net
+Imports System.Net.Sockets
 
 Public Class ADDSJoinDialog
 
@@ -37,9 +39,9 @@ Public Class ADDSJoinDialog
     Private Class DnsInformation
         Public Property Suffix As String
         Public Property NicAlias As String
-        Public Property DnsAddresses As String()
+        Public Property DnsAddresses As New List(Of String)
 
-        Public Sub New(suffix As String, interfaceAlias As String, addresses As String())
+        Public Sub New(suffix As String, interfaceAlias As String, addresses As List(Of String))
             Me.Suffix = suffix
             Me.NicAlias = interfaceAlias
             Me.DnsAddresses = addresses
@@ -346,7 +348,7 @@ Public Class ADDSJoinDialog
 
         ' Apply settings in the DNS class if in DNS page
         If CurrentWizardPage = WizardPage.DnsConfigPage Then
-            dnsInfo = New DnsInformation(dsDomainName, dnsAliasName, rtbDNSAddresses.Lines)
+            dnsInfo = New DnsInformation(dsDomainName, dnsAliasName, rtbDNSAddresses.Lines.ToList())
         End If
 
         DNSConfigPanel.Visible = (NewPage = WizardPage.DnsConfigPage)
@@ -518,11 +520,37 @@ Public Class ADDSJoinDialog
                                "- NIC (Network Adapter) Alias: " & dnsInfo.NicAlias & CrLf &
                                "- Addresses: " & String.Join(", ", dnsInfo.DnsAddresses.Where(Function(address) Not String.IsNullOrEmpty(address)).ToArray()))
             DynaLog.LogMessage("Specified DS information: " & dsInfo.ToString())
+            If rbAutoDomainsInForest.Checked Then
+                Try
+                    ' Try to get the address of the DNS server hosting the domain. If not present, a client
+                    ' may not be able to join the domain. So, try to help.
+                    Dim serverDnsAddresses As IPAddress() = Dns.GetHostAddresses(dsDomainName)
+                    Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
+                    If RouteTableMOC Is Nothing Then Throw New Exception()
+
+                    Dim interfaceIndex As Integer = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
+
+                    Dim DefaultNICAddressMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT IPAddress FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", interfaceIndex))
+                    Dim DefaultNICAddresses As String() = WMIHelper.GetObjectValue(DefaultNICAddressMOC(0), "IPAddress")
+
+                    For Each serverDnsAddress In serverDnsAddresses
+                        Dim finalAddress As String = DefaultNICAddresses.FirstOrDefault(Function(address) address = serverDnsAddress.ToString())
+
+                        If finalAddress <> "" AndAlso Not dnsInfo.DnsAddresses.Contains(finalAddress) Then
+                            dnsInfo.DnsAddresses.Insert(0, finalAddress)
+                        End If
+                    Next
+                Catch notConnectedEx As SocketException
+
+                Catch ex As Exception
+
+                End Try
+            End If
             Dim dnsServerSearchOrder As String = "        <DNSServerSearchOrder>" & CrLf
             For Each Address In dnsInfo.DnsAddresses
                 If String.IsNullOrEmpty(Address) Then Continue For
                 dnsServerSearchOrder &= String.Format("            <IpAddress wcm:action=" & Quote & "add" & Quote & " wcm:keyValue=" & Quote & "{0}" & Quote & ">{1}</IpAddress>" & CrLf,
-                                                      dnsInfo.DnsAddresses.ToList().IndexOf(Address) + 1,
+                                                      dnsInfo.DnsAddresses.IndexOf(Address) + 1,
                                                       Address)
             Next
             dnsServerSearchOrder &= "        </DNSServerSearchOrder>"
