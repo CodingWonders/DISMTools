@@ -56,7 +56,7 @@ UsePreviousLanguage=no
 LanguageDetectionMethod=uilanguage
 
 ;Wizard setup
-WizardStyle=modern dynamic windows11
+WizardStyle=modern dark windows11
 WizardImageFile=mainImg.bmp
 WizardImageFileDynamicDark=mainImg_dark.bmp
 WizardSmallImageFile=logo.png
