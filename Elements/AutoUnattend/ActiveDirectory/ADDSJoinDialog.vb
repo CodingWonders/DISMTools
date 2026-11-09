@@ -536,7 +536,7 @@ Public Class ADDSJoinDialog
                     For Each serverDnsAddress In serverDnsAddresses
                         Dim finalAddress As String = DefaultNICAddresses.FirstOrDefault(Function(address) address = serverDnsAddress.ToString())
 
-                        If finalAddress <> "" AndAlso Not dnsInfo.DnsAddresses.Contains(finalAddress) Then
+                        If finalAddress <> "" AndAlso Not dnsInfo.DnsAddresses.Select(Function(addr) addr.ToLowerInvariant()).Contains(finalAddress.ToLowerInvariant()) Then
                             dnsInfo.DnsAddresses.Insert(0, finalAddress)
                         End If
                     Next
@@ -551,7 +551,7 @@ Public Class ADDSJoinDialog
                 If String.IsNullOrEmpty(Address) Then Continue For
                 dnsServerSearchOrder &= String.Format("            <IpAddress wcm:action=" & Quote & "add" & Quote & " wcm:keyValue=" & Quote & "{0}" & Quote & ">{1}</IpAddress>" & CrLf,
                                                       dnsInfo.DnsAddresses.IndexOf(Address) + 1,
-                                                      Address)
+                                                      Uri.EscapeUriString(Address))
             Next
             dnsServerSearchOrder &= "        </DNSServerSearchOrder>"
             Dim dnsXml As String = String.Format("<DNSDomain>{0}</DNSDomain>" & CrLf &
@@ -569,7 +569,7 @@ Public Class ADDSJoinDialog
                                                  "        <DisableDynamicUpdate>false</DisableDynamicUpdate>" & CrLf &
                                                  "    </Interface>" & CrLf &
                                                  "    <!-- Copy the whole Interface block above this line and configure it if you want to add more network adapters for which you want to set up DNS -->" & CrLf &
-                                                 "</Interfaces>", dnsInfo.Suffix, dnsInfo.NicAlias, dnsServerSearchOrder)
+                                                 "</Interfaces>", Uri.EscapeUriString(dnsInfo.Suffix), Uri.EscapeUriString(dnsInfo.NicAlias), dnsServerSearchOrder)
             Dim dsXml As String = String.Format("<Identification>" & CrLf &
                                                 "    <JoinDomain>{0}</JoinDomain>" & CrLf &
                                                 "    <Credentials>" & CrLf &
@@ -577,7 +577,7 @@ Public Class ADDSJoinDialog
                                                 "        <Username>{1}</Username>" & CrLf &
                                                 "        <Password>{2}</Password>" & CrLf &
                                                 "    </Credentials>" & CrLf &
-                                                "</Identification>", dsInfo.DomainName, dsInfo.DomainUser, dsInfo.DomainPassword)
+                                                "</Identification>", Uri.EscapeUriString(dsInfo.DomainName), Uri.EscapeUriString(dsInfo.DomainUser), Uri.EscapeUriString(dsInfo.DomainPassword))
             DynaLog.LogMessage("Adding components...")
             NewUnattendWiz.AddComponent("Microsoft-Windows-DNS-Client", "specialize", dnsXml)
             NewUnattendWiz.AddComponent("Microsoft-Windows-UnattendedJoin", "specialize", dsXml)
