@@ -4324,7 +4324,7 @@ Partial Class MainForm
         Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
         Me.BackgroundProcessesButton.Size = New System.Drawing.Size(25, 24)
-        Me.BackgroundProcessesButton.ToolTipText = "View background processes"
+        Me.BackgroundProcessesButton.ToolTipText = "Show current background process status"
         '
         'MenuDesc
         '
