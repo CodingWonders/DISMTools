@@ -883,6 +883,7 @@ function Start-OSApplication {
     }
 
     Show-SectionMessage -sectionTitle "Collecting information and copying files needed for Setup" -sectionDescription "Please wait while Setup applies the Windows image. This can take some time, depending on the speed of your computer's disks."
+    Write-Host "`n`n"
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
         Write-Host "The Windows image has been applied successfully."
