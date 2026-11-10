@@ -115,6 +115,27 @@ Public Class MainForm
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
 
+    Public ReadOnly Property IsImageBackgroundProcessRunning As Boolean
+        Get
+            Return Not ImgBW.CompletionTask.IsCompleted
+        End Get
+    End Property
+
+    Public ReadOnly Property ImageBackgroundProcessTask As Task
+        Get
+            Return ImgBW.CompletionTask
+        End Get
+    End Property
+
+    Public Function StartImageBackgroundProcessesAsync() As Task
+        Return ImgBW.RunWorkerAsync()
+    End Function
+
+    Public Function CancelImageBackgroundProcessesAsync() As Task
+        ImgBW.CancelAsync()
+        Return ImgBW.CompletionTask
+    End Function
+
     Dim pbOpNums As Integer
     Dim progressMin As Integer = 0
     Dim progressDivs As Double
@@ -596,6 +617,7 @@ Public Class MainForm
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ImgBW.Work = AddressOf ImgBW_DoWorkAsync
         InitDynaLog()
 
         ' Prepare all user data
@@ -1732,6 +1754,7 @@ Public Class MainForm
     ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
+        ImgBW.CancellationToken.ThrowIfCancellationRequested()
         IsCompatible = True
         DynaLog.LogMessage("Preparing to run background processes...")
         BWFailPanel.Visible = False
@@ -1844,7 +1867,7 @@ Public Class MainForm
             If ImgBW.CancellationPending Then
                 'If session IsNot Nothing Then DismApi.CloseSession(session)
                 DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
-                Exit Sub
+                Throw New OperationCanceledException(ImgBW.CancellationToken)
             End If
             DynaLog.LogMessage("Detecting whether or not the Windows image is compatible with DISMTools/DISM...")
             DetectNTVersion(If(OnlineMode, Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe", MountDir & "\Windows\system32\ntoskrnl.exe"))
@@ -1856,6 +1879,7 @@ Public Class MainForm
                 progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("AdvancedImageInfo.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetAdvancedImageInfo(OnlineMode, OfflineMode)
+                ImgBW.CancellationToken.ThrowIfCancellationRequested()
             End If
         End If
         DynaLog.LogMessage("Creating temporary directory for information...")
@@ -1924,7 +1948,7 @@ Public Class MainForm
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
-                    Exit Sub
+                    Throw New OperationCanceledException(ImgBW.CancellationToken)
                 End If
                 progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Features.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
@@ -1932,7 +1956,7 @@ Public Class MainForm
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
-                    Exit Sub
+                    Throw New OperationCanceledException(ImgBW.CancellationToken)
                 End If
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
                     If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
@@ -1944,7 +1968,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                             If session IsNot Nothing Then DismApi.CloseSession(session)
-                            Exit Sub
+                            Throw New OperationCanceledException(ImgBW.CancellationToken)
                         End If
                     Else
                         DynaLog.LogMessage("Not Windows 8 or later")
@@ -1962,7 +1986,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                             If session IsNot Nothing Then DismApi.CloseSession(session)
-                            Exit Sub
+                            Throw New OperationCanceledException(ImgBW.CancellationToken)
                         End If
                     Else
                         DynaLog.LogMessage("Not Windows 10 or later")
@@ -1976,7 +2000,7 @@ Public Class MainForm
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
-                    Exit Sub
+                    Throw New OperationCanceledException(ImgBW.CancellationToken)
                 End If
             Case 1
                 DynaLog.LogMessage("Updating recorded OS package information...")
@@ -2018,14 +2042,17 @@ Public Class MainForm
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(OnlineMode)
         End Select
+        ImgBW.CancellationToken.ThrowIfCancellationRequested()
         If bgProcOptn <> 0 And PendingTasks.Contains(True) Then
             DynaLog.LogMessage("Some tasks need to be finished before we're happy. Finishing them...")
             progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Running.Pending.Tasks.Label")
             ImgBW.ReportProgress(99)
             DynaLog.LogMessage("Determining whether or not OS package information processes remain. Do them if they do remain...")
             If PendingTasks(0) Then GetImagePackages(OnlineMode)
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not feature information processes remain. Do them if they do remain...")
             If PendingTasks(1) Then GetImageFeatures(OnlineMode)
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not AppX package information processes remain. Do them if they do remain...")
             If PendingTasks(2) Then
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
@@ -2034,6 +2061,7 @@ Public Class MainForm
                     End If
                 End If
             End If
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not capability information processes remain. Do them if they do remain...")
             If PendingTasks(3) Then
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Then
@@ -2042,8 +2070,10 @@ Public Class MainForm
                     End If
                 End If
             End If
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not driver information processes remain. Do them if they do remain...")
             If PendingTasks(4) Then GetImageDrivers(OnlineMode)
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Deleting temporary files...")
             DeleteTempFiles()
             If session IsNot Nothing Then
@@ -6312,7 +6342,7 @@ Public Class MainForm
                 UnloadDTProj(True, False)
             End If
         End If
-        If ImgBW.IsBusy Then
+        If IsImageBackgroundProcessRunning Then
             DynaLog.LogMessage("Background processes are still running. Cannot continue closure")
             e.Cancel = True
             Beep()
@@ -6561,16 +6591,23 @@ Public Class MainForm
         SaveDTProj()
     End Sub
 
-    Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+    Private Async Function ImgBW_DoWorkAsync(cancellationToken As CancellationToken) As Task
+        Dim processAction As Integer = bwBackgroundProcessAction
+        Dim getImageInfo As Boolean = bwGetImageInfo
+        Dim getAdvancedImageInfo As Boolean = bwGetAdvImgInfo
+        Dim onlineMode As Boolean = OnlineManagement
+        Dim offlineMode As Boolean = OfflineManagement
+
         DynaLog.LogMessage("Preparing background processes...")
-        DynaLog.LogMessage("- Background process action: " & bwBackgroundProcessAction)
-        DynaLog.LogMessage("- Get basic image information? " & If(bwGetImageInfo, "Yes", "No"))
-        DynaLog.LogMessage("- Get advanced image information? " & If(bwGetAdvImgInfo, "Yes", "No"))
+        DynaLog.LogMessage("- Background process action: " & processAction)
+        DynaLog.LogMessage("- Get basic image information? " & If(getImageInfo, "Yes", "No"))
+        DynaLog.LogMessage("- Get advanced image information? " & If(getAdvancedImageInfo, "Yes", "No"))
         DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
+        Await StopMountedImageDetectorAsync()
+        cancellationToken.ThrowIfCancellationRequested()
         DynaLog.LogMessage("Starting background processes...")
-        RunBackgroundProcesses(bwBackgroundProcessAction, bwGetImageInfo, bwGetAdvImgInfo, OnlineManagement, OfflineManagement)
-    End Sub
+        Await Task.Run(Sub() RunBackgroundProcesses(processAction, getImageInfo, getAdvancedImageInfo, onlineMode, offlineMode), cancellationToken)
+    End Function
 
     Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles Button21.Click
         DynaLog.LogMessage("Unloading project/mode...")
@@ -6620,30 +6657,36 @@ Public Class MainForm
         If bwBackgroundProcessAction <> 0 Then BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Marquee Else BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If regJumps Then
             DynaLog.LogMessage("Regular progress bar value jumps are being done")
-            BGProcDetails.ProgressBar1.Value = e.ProgressPercentage
+            BGProcDetails.ProgressBar1.Value = Math.Max(BGProcDetails.ProgressBar1.Minimum, Math.Min(BGProcDetails.ProgressBar1.Maximum, e.ProgressPercentage))
         Else
             DynaLog.LogMessage("Regular progress bar value jumps are not being done")
-            BGProcDetails.ProgressBar1.Value = irregVal
+            BGProcDetails.ProgressBar1.Value = Math.Max(BGProcDetails.ProgressBar1.Minimum, Math.Min(BGProcDetails.ProgressBar1.Maximum, irregVal))
         End If
         progressMin = BGProcDetails.ProgressBar1.Value
     End Sub
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
         DynaLog.LogMessage("Background processes have finished")
+        If e.Error IsNot Nothing Then
+            DynaLog.LogMessage("Background process failed unexpectedly: " & e.Error.ToString())
+            FailedBGProcResultDic("Image background process") = e.Error
+        ElseIf e.Cancelled Then
+            DynaLog.LogMessage("Background processes were cancelled.")
+        End If
         If FailedBGProcResultDic.Count > 0 Then
             DynaLog.LogMessage("One or more background processes has failed.")
             BWFailPanel.Visible = True
             Beep()
         End If
-        CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
+        If e.Error Is Nothing AndAlso Not e.Cancelled Then
+            CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
+        End If
         BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
-        StartMountedImageDetector()
-        WatcherTimer.Enabled = True
-        areBackgroundProcessesDone = True
-        BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
+        areBackgroundProcessesDone = e.Error Is Nothing AndAlso Not e.Cancelled
+        BackgroundProcessesButton.Image = GetGlyphResource(If(areBackgroundProcessesDone, "bg_ops_complete", "bg_ops"))
         progressLabel = LocalizationService.ForSection("Main.BgProcesses")("ImageCompleted.Label")
-        BGProcDetails.Label2.Text = progressLabel
-        BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
+        BGProcDetails.Label2.Text = If(e.Error IsNot Nothing, e.Error.Message, progressLabel)
+        If areBackgroundProcessesDone Then BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
@@ -6669,7 +6712,6 @@ Public Class MainForm
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("User decided not to reload the servicing session. Unloading project...")
                 UnloadDTProj(False, False)
-                ImgBW.CancelAsync()
             End If
         End If
         If Not IsCompatible Then
@@ -6722,6 +6764,10 @@ Public Class MainForm
                         Button56.Enabled = False
                         Button57.Enabled = False
                         Button58.Enabled = False
+                        If e.Error Is Nothing Then
+                            StartMountedImageDetector()
+                            WatcherTimer.Enabled = True
+                        End If
                         Exit Sub
                     ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         DynaLog.LogMessage("User decided to unmount the image")
@@ -6769,6 +6815,10 @@ Public Class MainForm
                 ProgressPanel.OperationNum = 21
                 ProgressPanel.ShowDialog(Me)
             End If
+        End If
+        If e.Error Is Nothing Then
+            StartMountedImageDetector()
+            WatcherTimer.Enabled = True
         End If
     End Sub
 
@@ -9423,6 +9473,20 @@ Public Class MainForm
         End While
     End Sub
 
+    Private Async Function StopMountedImageDetectorAsync() As Task
+        DynaLog.LogMessage("Stopping mounted image detector...")
+        MountedImageDetectorTimer.Enabled = False
+        Dim detectionTask As Task = MountedImageDetectionTask
+        If detectionTask IsNot Nothing Then Await detectionTask
+
+        DynaLog.LogMessage("Stopping image status watchers...")
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Await Task.Delay(50)
+        End While
+    End Function
+
     Sub StartMountedImageDetector()
         DynaLog.LogMessage("Restarting mounted image detector and watchers...")
         MountedImageDetectorTimer.Interval = 1000
@@ -10020,4 +10084,119 @@ Public Class MainForm
     Private Sub VisitNewsItemSiteBtn_Click(sender As Object, e As EventArgs) Handles VisitNewsItemSiteBtn.Click
         Process.Start(SelectedNewsItemSite)
     End Sub
+End Class
+
+Public Class AsyncBackgroundWorker
+    Inherits System.ComponentModel.Component
+
+    Public Sub New(container As IContainer)
+        MyBase.New()
+        container.Add(Me)
+    End Sub
+
+    Private ReadOnly _syncLock As New Object()
+    Private _cancellationTokenSource As CancellationTokenSource
+    Private _isRunning As Boolean
+    Private _completionTask As Task = Task.CompletedTask
+    Private _progress As IProgress(Of Integer)
+
+    Public Property Work As Func(Of CancellationToken, Task)
+
+    Public Event ProgressChanged As ProgressChangedEventHandler
+    Public Event RunWorkerCompleted As RunWorkerCompletedEventHandler
+
+    Public ReadOnly Property IsBusy As Boolean
+        Get
+            SyncLock _syncLock
+                Return _isRunning
+            End SyncLock
+        End Get
+    End Property
+
+    Public ReadOnly Property CancellationPending As Boolean
+        Get
+            SyncLock _syncLock
+                Return _cancellationTokenSource IsNot Nothing AndAlso _cancellationTokenSource.IsCancellationRequested
+            End SyncLock
+        End Get
+    End Property
+
+    Public ReadOnly Property CancellationToken As CancellationToken
+        Get
+            SyncLock _syncLock
+                Return If(_cancellationTokenSource Is Nothing, System.Threading.CancellationToken.None, _cancellationTokenSource.Token)
+            End SyncLock
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletionTask As Task
+        Get
+            SyncLock _syncLock
+                Return _completionTask
+            End SyncLock
+        End Get
+    End Property
+
+    Public Function RunWorkerAsync() As Task
+        SyncLock _syncLock
+            If _isRunning Then
+                DynaLog.LogMessage("Ignoring a duplicate image background process request because the current operation has not finished.")
+                Return _completionTask
+            End If
+            If Work Is Nothing Then Throw New InvalidOperationException("The image background process operation has not been configured.")
+
+            _cancellationTokenSource = New CancellationTokenSource()
+            _isRunning = True
+            _progress = New Progress(Of Integer)(Sub(value) RaiseEvent ProgressChanged(Me, New ProgressChangedEventArgs(value, Nothing)))
+            _completionTask = ExecuteAsync(_cancellationTokenSource.Token)
+            _completionTask.ContinueWith(
+                Sub(completedTask)
+                    Dim observedException As AggregateException = completedTask.Exception
+                End Sub,
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted Or TaskContinuationOptions.ExecuteSynchronously,
+                TaskScheduler.Default)
+            Return _completionTask
+        End SyncLock
+    End Function
+
+    Public Sub CancelAsync()
+        SyncLock _syncLock
+            If _cancellationTokenSource IsNot Nothing AndAlso _isRunning Then _cancellationTokenSource.Cancel()
+        End SyncLock
+    End Sub
+
+    Public Sub ReportProgress(progressPercentage As Integer)
+        Dim currentProgress As IProgress(Of Integer)
+        SyncLock _syncLock
+            currentProgress = _progress
+        End SyncLock
+        If currentProgress Is Nothing Then Throw New InvalidOperationException("Progress can only be reported while image background processes are running.")
+        currentProgress.Report(progressPercentage)
+    End Sub
+
+    Private Async Function ExecuteAsync(cancellationToken As CancellationToken) As Task
+        Dim operationError As Exception = Nothing
+        Dim wasCancelled As Boolean
+        Try
+            Await Work(cancellationToken)
+        Catch ex As OperationCanceledException When cancellationToken.IsCancellationRequested
+            wasCancelled = True
+        Catch ex As Exception
+            operationError = ex
+        Finally
+            SyncLock _syncLock
+                _isRunning = False
+                If _cancellationTokenSource IsNot Nothing Then
+                    _cancellationTokenSource.Dispose()
+                    _cancellationTokenSource = Nothing
+                End If
+                _progress = Nothing
+            End SyncLock
+        End Try
+
+        RaiseEvent RunWorkerCompleted(Me, New RunWorkerCompletedEventArgs(wasCancelled, operationError, Nothing))
+        If wasCancelled Then Throw New OperationCanceledException(cancellationToken)
+        If operationError IsNot Nothing Then System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(operationError).Throw()
+    End Function
 End Class
