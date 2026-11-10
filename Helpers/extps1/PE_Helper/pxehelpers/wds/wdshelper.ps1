@@ -1054,6 +1054,96 @@ function Start-OSApplication {
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -bootEx $usebootex -override $global:override
 }
 
+function Invoke-DismWithProgressBar
+{
+    <#
+        .SYNOPSIS
+            Runs DISM and shows its progress using the setup-style progress bar instead of the DISM console output
+        .PARAMETER Arguments
+            The command-line arguments to pass to dism.exe
+        .OUTPUTS
+            $true if DISM exited with code 0, $false otherwise
+        .NOTES
+            DISM draws its own progress bar ("[=====   25.0%   ]") and updates it by rewriting the same console line with
+            carriage returns. We redirect its output so that it never reaches the screen, and read it one "line" at a time:
+            StreamReader.ReadLine() treats a lone carriage return as a line terminator, so every progress update arrives as
+            its own line, and we only have to extract the percentage from it. Any other output (errors, for example) is kept
+            and printed after the progress screen is closed, so that failures are still visible.
+        .EXAMPLE
+            Invoke-DismWithProgressBar -Arguments "/apply-image /imagefile=`"X:\install.wim`" /index=1 /applydir=C:\"
+    #>
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] $Arguments
+    )
+
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = "$env:SYSTEMROOT\system32\dism.exe"
+    $startInfo.Arguments = $Arguments
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+
+    $outputLines = New-Object 'System.Collections.Generic.List[string]'
+    $errorText = ""
+    $exitCode = -1
+
+    try
+    {
+        # Draw the whole screen at 0% before DISM has had time to print anything
+        Show-SetupProgressBar -Percent 0 -Redraw -Activity "Setup is applying the Windows image..."
+
+        $process = [System.Diagnostics.Process]::Start($startInfo)
+
+        while ($null -ne ($line = $process.StandardOutput.ReadLine()))
+        {
+            # Matches "25.0%" as well as "25,0%" (some locales use a comma as the decimal separator)
+            $match = [regex]::Match($line, '(\d{1,3}(?:[.,]\d+)?)\s*%')
+            if ($match.Success)
+            {
+                $value = [double]::Parse($match.Groups[1].Value.Replace(",", "."), [System.Globalization.CultureInfo]::InvariantCulture)
+                Show-SetupProgressBar -Percent $value -Activity "Setup is applying the Windows image..."
+            }
+            elseif ($line.Trim() -ne "")
+            {
+                $outputLines.Add($line.Trim())
+            }
+        }
+
+        $process.WaitForExit()
+        $errorText = $process.StandardError.ReadToEnd()
+        $exitCode = $process.ExitCode
+
+        if ($exitCode -eq 0)
+        {
+            # DISM sometimes ends without printing the final 100.0%, so make sure the bar ends full
+            Show-SetupProgressBar -Percent 100
+            Start-Sleep -Milliseconds 400
+        }
+    }
+    finally
+    {
+        # Always restore the console, even if DISM could not be started
+        Hide-SetupProgressBar
+    }
+
+    if ($exitCode -ne 0)
+    {
+        Write-Host "DISM exited with code $exitCode."
+        foreach ($outputLine in ($outputLines | Select-Object -Last 10))
+        {
+            Write-Host "  $outputLine"
+        }
+        if ($errorText.Trim() -ne "")
+        {
+            Write-Host "  $($errorText.Trim())"
+        }
+        Write-Host "More information may be available in `"$env:SYSTEMROOT\Logs\DISM\dism.log`".`n"
+    }
+
+    return ($exitCode -eq 0)
+}
+
 function Start-DismCommand
 {
     <#
@@ -1167,8 +1257,8 @@ function Start-DismCommand
                 }
             }
             "Apply" {
-                $dismProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\dism.exe" -ArgumentList "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath" -Wait -PassThru -NoNewWindow
-                return ($($dismProc.ExitCode) -eq 0)
+                # DISM output is redirected to the setup-style progress bar instead of being shown in the console
+                return (Invoke-DismWithProgressBar -Arguments "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath")
             }
             "Add-Package" {
                 Add-WindowsPackage -Path "$ImagePath" -PackagePath "$PackagePath" -NoRestart | Out-Null
