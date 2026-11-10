@@ -558,12 +558,6 @@
     <Compile Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.Designer.vb">
-      <DependentUpon>BGProcDetails.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.Designer.vb">
       <DependentUpon>BGProcFailureDialog.vb</DependentUpon>
     </Compile>
@@ -1256,9 +1250,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.resx">
       <DependentUpon>RemProvAppxPackage.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.resx">
-      <DependentUpon>BGProcDetails.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.resx">
       <DependentUpon>BGProcFailureDialog.vb</DependentUpon>

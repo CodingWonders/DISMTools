@@ -444,10 +444,6 @@ Public Class Options
             MountedImgMgr.Close()
             MountedImgMgr.Show()
         End If
-        If BGProcDetails.Visible Then
-            BGProcDetails.Visible = False
-            BGProcDetails.Visible = True
-        End If
         If MainForm.isProjectLoaded Then
             MainForm.UnpopulateProjectTree()
             MainForm.PopulateProjectTree(MainForm.prjName)
