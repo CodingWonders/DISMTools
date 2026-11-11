@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B2FF41A9-A823-4874-8E92-6C88767D400D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>DrvPakCreator.My.MyApplication</StartupObject>
+    <RootNamespace>DrvPakCreator</RootNamespace>
+    <AssemblyName>DrvPakCreator</AssemblyName>
+    <MyType>WindowsForms</MyType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publicar\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>DrvPakCreator.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>DrvPakCreator.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.ControlChars" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Management" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\ColorUtilities\ColorMode.vb" />
+    <Compile Include="Classes\Computer.vb" />
+    <Compile Include="Classes\ComputerInfo.vb" />
+    <Compile Include="Classes\Driver.vb" />
+    <Compile Include="Classes\DriverPack.vb" />
+    <Compile Include="Classes\DriverPackProject.vb" />
+    <Compile Include="Classes\Exceptions\CorruptPackMetadataException.vb" />
+    <Compile Include="Classes\Exceptions\InvalidProjectFormatException.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellBrand.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellDisplay.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellDriverPackage.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellDriverPackCatalog.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellDriverPackMetadata.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellHash.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellImportantInfo.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellLanguage.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellModel.vb" />
+    <Compile Include="Classes\ModelCatalogs\Dell\DellOperatingSystemDefinition.vb" />
+    <Compile Include="Classes\ModelCatalogs\HP\HPDataSet.vb" />
+    <Compile Include="Classes\ModelCatalogs\HP\HPDriverPackCatalog.vb" />
+    <Compile Include="Classes\ModelCatalogs\HP\HPOperatingSystemDefinition.vb" />
+    <Compile Include="Classes\ModelCatalogs\HP\HPProductOSDriverPack.vb" />
+    <Compile Include="Classes\ModelCatalogs\HP\HPSoftPaq.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoBios.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoDownload.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoDriverPack.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoDriverPackCatalog.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoGraphicsDriverPack.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoModel.vb" />
+    <Compile Include="Classes\ModelCatalogs\Lenovo\LenovoTool.vb" />
+    <Compile Include="Classes\ModelCatalogs\ModelCatalog.vb" />
+    <Compile Include="Classes\Options.vb" />
+    <Compile Include="Classes\ProgressReporting\TaskReporter.vb" />
+    <Compile Include="Classes\SetupAPI\InfDriverEntry.vb" />
+    <Compile Include="Classes\SetupAPI\InfParser.vb" />
+    <Compile Include="Classes\SetupAPI\NativeMethods.vb" />
+    <Compile Include="ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="ColorTables\LightModeColorTable.vb" />
+    <Compile Include="Dialogs\Computers\AddComputerDialog.Designer.vb">
+      <DependentUpon>AddComputerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Computers\AddComputerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Computers\ChangeComputerInfoDialog.Designer.vb">
+      <DependentUpon>ChangeComputerInfoDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Computers\ChangeComputerInfoDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Computers\AddComputerFromModelCatalogDialog.Designer.vb">
+      <DependentUpon>AddComputerFromModelCatalogDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Computers\AddComputerFromModelCatalogDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Computers\AddCurrentComputerDialog.Designer.vb">
+      <DependentUpon>AddCurrentComputerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Computers\AddCurrentComputerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Computers\ModelCatalogPreparers\HPSoftPaqPreparerDialog.Designer.vb">
+      <DependentUpon>HPSoftPaqPreparerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Computers\ModelCatalogPreparers\HPSoftPaqPreparerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DriverPack\DriverPackImportProgressDialog.Designer.vb">
+      <DependentUpon>DriverPackImportProgressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DriverPack\DriverPackImportProgressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DriverPack\DriverPackBuildProgressDialog.Designer.vb">
+      <DependentUpon>DriverPackBuildProgressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DriverPack\DriverPackBuildProgressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\AddDriverDialog.Designer.vb">
+      <DependentUpon>AddDriverDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\AddDriverDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\ChangeMainDriverDialog.Designer.vb">
+      <DependentUpon>ChangeMainDriverDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\ChangeMainDriverDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\DriverAdditionProgressDialog.Designer.vb">
+      <DependentUpon>DriverAdditionProgressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\DriverAdditionProgressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\DriverReindexProgressDialog.Designer.vb">
+      <DependentUpon>DriverReindexProgressDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\DriverReindexProgressDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\DriverRemovalReferencesComputersDialog.Designer.vb">
+      <DependentUpon>DriverRemovalReferencesComputersDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\DriverRemovalReferencesComputersDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\ManageDeviceSubdrivers.Designer.vb">
+      <DependentUpon>ManageDeviceSubdrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Drivers\ManageDeviceSubdrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ModelCatalogs\ModelCatalogDownloadDialog.Designer.vb">
+      <DependentUpon>ModelCatalogDownloadDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ModelCatalogs\ModelCatalogDownloadDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ModelCatalogs\ModelCatalogViewerForm.Designer.vb">
+      <DependentUpon>ModelCatalogViewerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ModelCatalogs\ModelCatalogViewerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Projects\CreateProjectFromDriverPack.Designer.vb">
+      <DependentUpon>CreateProjectFromDriverPack.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Projects\CreateProjectFromDriverPack.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Projects\NewProject.Designer.vb">
+      <DependentUpon>NewProject.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Projects\NewProject.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\DriverPackHelper.vb" />
+    <Compile Include="Helpers\DriverPackProjectHelper.vb" />
+    <Compile Include="Helpers\ExplorerHelper.vb" />
+    <Compile Include="Helpers\FileIO\PathUtilities.vb" />
+    <Compile Include="Helpers\ModelCatalogs\LenovoModelCatalogLoader.vb" />
+    <Compile Include="Helpers\ModelCatalogs\DellModelCatalogLoader.vb" />
+    <Compile Include="Helpers\ModelCatalogs\HPModelCatalogLoader.vb" />
+    <Compile Include="Helpers\ModelCatalogs\ModelCatalogLoader.vb" />
+    <Compile Include="Helpers\OptionsHelper.vb" />
+    <Compile Include="Helpers\SystemDriverHelper.vb" />
+    <Compile Include="MainForm.Designer.vb">
+      <DependentUpon>MainForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControls\ProgressTask.Designer.vb">
+      <DependentUpon>ProgressTask.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ProgressTask.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\WizardStep.Designer.vb">
+      <DependentUpon>WizardStep.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\WizardStep.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utilities\Converters.vb" />
+    <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
+    <Compile Include="Utilities\WMIHelper.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Utilities\ZipUtilities.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Dialogs\Computers\AddComputerDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddComputerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Computers\ChangeComputerInfoDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChangeComputerInfoDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Computers\AddComputerFromModelCatalogDialog.resx">
+      <DependentUpon>AddComputerFromModelCatalogDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Computers\AddCurrentComputerDialog.resx">
+      <DependentUpon>AddCurrentComputerDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Computers\ModelCatalogPreparers\HPSoftPaqPreparerDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HPSoftPaqPreparerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\DriverPack\DriverPackImportProgressDialog.resx">
+      <DependentUpon>DriverPackImportProgressDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\DriverPack\DriverPackBuildProgressDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DriverPackBuildProgressDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Drivers\AddDriverDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddDriverDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Drivers\ChangeMainDriverDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChangeMainDriverDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Drivers\DriverAdditionProgressDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DriverAdditionProgressDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Drivers\DriverReindexProgressDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DriverReindexProgressDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Drivers\DriverRemovalReferencesComputersDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DriverRemovalReferencesComputersDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Drivers\ManageDeviceSubdrivers.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ManageDeviceSubdrivers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ModelCatalogs\ModelCatalogDownloadDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ModelCatalogDownloadDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ModelCatalogs\ModelCatalogViewerForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ModelCatalogViewerForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Projects\CreateProjectFromDriverPack.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CreateProjectFromDriverPack.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Projects\NewProject.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>NewProject.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ProgressTask.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProgressTask.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\WizardStep.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WizardStep.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\savefile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\unload_project.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\build_pack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ProgressTaskGlyphs\Succeeded.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ProgressTaskGlyphs\Failed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ProgressTaskGlyphs\Skipped.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\app.manifest" />
+    <None Include="Resources\ProgressTaskGlyphs\InProgress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo.ico" />
+    <None Include="Resources\ProgressTaskGlyphs\succeeded_light.png" />
+    <None Include="Resources\ProgressTaskGlyphs\succeeded_dark.png" />
+    <None Include="Resources\ProgressTaskGlyphs\skipped_light.png" />
+    <None Include="Resources\ProgressTaskGlyphs\skipped_dark.png" />
+    <None Include="Resources\ProgressTaskGlyphs\inprogress_light.png" />
+    <None Include="Resources\ProgressTaskGlyphs\inprogress_dark.png" />
+    <None Include="Resources\ProgressTaskGlyphs\failed_light.png" />
+    <None Include="Resources\ProgressTaskGlyphs\failed_dark.png" />
+    <None Include="Resources\ModelCatalogManufacturers\man_lenovo.png" />
+    <None Include="Resources\ModelCatalogManufacturers\man_hp.png" />
+    <None Include="Resources\ModelCatalogManufacturers\man_dell.png" />
+    <None Include="settings.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\Options\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>IF EXIST "$(DevEnvDir)..\..\SDK\v2.0\bin\mt.exe" (
+	"$(DevEnvDir)..\..\SDK\v2.0\bin\mt.exe" -manifest "$(ProjectDir)My Project\app.manifest" -outputresource:"$(TargetPath)";#1
+)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -9711,6 +9711,13 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub DrvPakCreator_TSMI_Click(sender As Object, e As EventArgs) Handles DrvPakCreator_TSMI.Click
+        Dim DrvPakCreatorPath As String = Path.Combine(Application.StartupPath, "tools", "DrvPakCreator", "DrvPakCreator.exe")
+        If File.Exists(DrvPakCreatorPath) Then
+            Process.Start(DrvPakCreatorPath)
+        End If
+    End Sub
+
     Private Sub SSETimer_Tick(sender As Object, e As EventArgs) Handles SSETimer.Tick
         If Not Process.GetProcessesByName("StarterScriptEditor").Any() Then
             UserDataManagerModule.CopyUserDataToProgramFiles("starter_scripts")

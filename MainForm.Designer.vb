@@ -519,6 +519,7 @@ Partial Class MainForm
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.UnattendSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.DrvPakCreator_TSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1521,7 +1522,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.DrvPakCreator_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1849,7 +1850,7 @@ Partial Class MainForm
         Me.VersionTSMI.Name = "VersionTSMI"
         Me.VersionTSMI.Size = New System.Drawing.Size(66, 20)
         Me.VersionTSMI.Text = "PREVIEW"
-        Me.VersionTSMI.ToolTipText = "This is a beta release. In it, you will encounter lots of bugs and incomplete fea" &
+        Me.VersionTSMI.ToolTipText = "This is a beta release. In it, you will encounter lots of bugs and incomplete fea" & _
     "tures."
         Me.VersionTSMI.Visible = False
         '
@@ -2662,7 +2663,7 @@ Partial Class MainForm
         Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
         Me.UpdateLink.TabIndex = 0
         Me.UpdateLink.TabStop = True
-        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" &
+        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
     "e"
         Me.UpdateLink.UseCompatibleTextRendering = True
         '
@@ -3381,7 +3382,7 @@ Partial Class MainForm
         Me.BWFailLabel.Name = "BWFailLabel"
         Me.BWFailLabel.Size = New System.Drawing.Size(530, 13)
         Me.BWFailLabel.TabIndex = 0
-        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " &
+        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " & _
     "may not be available."
         '
         'ProjectSidePanel
@@ -3447,9 +3448,9 @@ Partial Class MainForm
         Me.PrjTasks.Location = New System.Drawing.Point(10, 410)
         Me.PrjTasks.Name = "PrjTasks"
         Me.PrjTasks.RowCount = 3
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
         Me.PrjTasks.Size = New System.Drawing.Size(283, 94)
         Me.PrjTasks.TabIndex = 13
         '
@@ -3579,8 +3580,8 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel6.ColumnCount = 2
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.4444389!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.5555611!))
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 163.0!))
         Me.TableLayoutPanel6.Controls.Add(Me.LinkLabel14, 1, 3)
         Me.TableLayoutPanel6.Controls.Add(Me.Label50, 1, 2)
@@ -3917,8 +3918,8 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel5.ColumnCount = 2
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.8!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2000008!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.7999992!))
         Me.TableLayoutPanel5.Controls.Add(Me.Label39, 0, 0)
         Me.TableLayoutPanel5.Controls.Add(Me.Label40, 0, 4)
         Me.TableLayoutPanel5.Controls.Add(Me.Label41, 1, 0)
@@ -4115,8 +4116,8 @@ Partial Class MainForm
         '
         Me.TableLayoutPanel1.ColumnCount = 3
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.72727!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.27273!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.727272!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.2727299!))
         Me.TableLayoutPanel1.Controls.Add(Me.TimeLabel, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.GreetingLabel, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.MenuToggle, 0, 0)
@@ -4810,6 +4811,12 @@ Partial Class MainForm
         '
         Me.UnattendSFD.Filter = "Unattended answer files|*.xml"
         '
+        'DrvPakCreator_TSMI
+        '
+        Me.DrvPakCreator_TSMI.Name = "DrvPakCreator_TSMI"
+        Me.DrvPakCreator_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.DrvPakCreator_TSMI.Text = "Create a Driver Pack"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -5414,4 +5421,5 @@ Partial Class MainForm
     Friend WithEvents UnattendSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents CWSSiteTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VisitNewsItemSiteBtn As System.Windows.Forms.Button
+    Friend WithEvents DrvPakCreator_TSMI As System.Windows.Forms.ToolStripMenuItem
 End Class
