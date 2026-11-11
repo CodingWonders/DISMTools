@@ -301,6 +301,12 @@
     <Compile Include="Elements\Contemporaneus\ImageFeature.vb" />
     <Compile Include="Elements\Contemporaneus\WindowsImage.vb" />
     <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
+    <Compile Include="Elements\DriverPacks\Computer.vb" />
+    <Compile Include="Elements\DriverPacks\ComputerInfo.vb" />
+    <Compile Include="Elements\DriverPacks\Driver.vb" />
+    <Compile Include="Elements\DriverPacks\DriverPack.vb" />
+    <Compile Include="Elements\DriverPacks\DriverPackHelper.vb" />
+    <Compile Include="Elements\DriverPacks\ZipUtilities.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
     <Compile Include="Elements\InfinityHome\InfinityFact.vb" />
@@ -532,6 +538,12 @@
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\DriverPacks\SelectDriversFromDriverPack.Designer.vb">
+      <DependentUpon>SelectDriversFromDriverPack.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\DriverPacks\SelectDriversFromDriverPack.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.Designer.vb">
@@ -1238,6 +1250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\DriverPacks\SelectDriversFromDriverPack.resx">
+      <DependentUpon>SelectDriversFromDriverPack.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>

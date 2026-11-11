@@ -45,6 +45,7 @@ Partial Class AddDrivers
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
+        Me.bwDriverPackExtractor = New System.ComponentModel.BackgroundWorker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -274,7 +275,7 @@ Partial Class AddDrivers
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.Filter = "Driver files|*.inf"
+        Me.OpenFileDialog1.Filter = "Driver files|*.inf|DISMTools Driver Packs|*.dtdrvpak"
         Me.OpenFileDialog1.Title = "Specify the driver package to add"
         '
         'FolderBrowserDialog1
@@ -296,6 +297,10 @@ Partial Class AddDrivers
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 8
+        '
+        'bwDriverPackExtractor
+        '
+        Me.bwDriverPackExtractor.WorkerReportsProgress = True
         '
         'AddDrivers
         '
@@ -350,5 +355,6 @@ Partial Class AddDrivers
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ImageTaskHeader1 As DISMTools.ImageTaskHeader
+    Friend WithEvents bwDriverPackExtractor As System.ComponentModel.BackgroundWorker
 
 End Class
