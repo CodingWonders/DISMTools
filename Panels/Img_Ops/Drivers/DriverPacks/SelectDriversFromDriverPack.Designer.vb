@@ -33,7 +33,6 @@ Partial Class SelectDriversFromDriverPack
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.tbComputerInfo = New System.Windows.Forms.TabControl()
         Me.tpHardware = New System.Windows.Forms.TabPage()
-        Me.tpSoftware = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.nudStorage = New System.Windows.Forms.NumericUpDown()
         Me.nudMemory = New System.Windows.Forms.NumericUpDown()
@@ -43,6 +42,7 @@ Partial Class SelectDriversFromDriverPack
         Me.tbSysProcessor = New System.Windows.Forms.TextBox()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
+        Me.tpSoftware = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
@@ -53,10 +53,10 @@ Partial Class SelectDriversFromDriverPack
         Me.TableLayoutPanel1.SuspendLayout()
         Me.tbComputerInfo.SuspendLayout()
         Me.tpHardware.SuspendLayout()
-        Me.tpSoftware.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.nudStorage, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nudMemory, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpSoftware.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -172,24 +172,13 @@ Partial Class SelectDriversFromDriverPack
         Me.tpHardware.Text = "Hardware Information"
         Me.tpHardware.UseVisualStyleBackColor = True
         '
-        'tpSoftware
-        '
-        Me.tpSoftware.Controls.Add(Me.TableLayoutPanel3)
-        Me.tpSoftware.Location = New System.Drawing.Point(4, 22)
-        Me.tpSoftware.Name = "tpSoftware"
-        Me.tpSoftware.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpSoftware.Size = New System.Drawing.Size(672, 103)
-        Me.tpSoftware.TabIndex = 1
-        Me.tpSoftware.Text = "Software Information"
-        Me.tpSoftware.UseVisualStyleBackColor = True
-        '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.3917503!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.6082535!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 59.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.nudStorage, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.nudMemory, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label15, 2, 2)
@@ -215,7 +204,7 @@ Partial Class SelectDriversFromDriverPack
         Me.nudStorage.Minimum = New Decimal(New Integer() {16, 0, 0, 0})
         Me.nudStorage.Name = "nudStorage"
         Me.nudStorage.ReadOnly = True
-        Me.nudStorage.Size = New System.Drawing.Size(327, 21)
+        Me.nudStorage.Size = New System.Drawing.Size(326, 21)
         Me.nudStorage.TabIndex = 6
         Me.nudStorage.Value = New Decimal(New Integer() {16, 0, 0, 0})
         '
@@ -227,7 +216,7 @@ Partial Class SelectDriversFromDriverPack
         Me.nudMemory.Minimum = New Decimal(New Integer() {16, 0, 0, 0})
         Me.nudMemory.Name = "nudMemory"
         Me.nudMemory.ReadOnly = True
-        Me.nudMemory.Size = New System.Drawing.Size(327, 21)
+        Me.nudMemory.Size = New System.Drawing.Size(326, 21)
         Me.nudMemory.TabIndex = 6
         Me.nudMemory.Value = New Decimal(New Integer() {16, 0, 0, 0})
         '
@@ -235,9 +224,9 @@ Partial Class SelectDriversFromDriverPack
         '
         Me.Label15.AutoSize = True
         Me.Label15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label15.Location = New System.Drawing.Point(455, 54)
+        Me.Label15.Location = New System.Drawing.Point(454, 54)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(54, 28)
+        Me.Label15.Size = New System.Drawing.Size(55, 28)
         Me.Label15.TabIndex = 7
         Me.Label15.Text = "MB"
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -246,9 +235,9 @@ Partial Class SelectDriversFromDriverPack
         '
         Me.Label14.AutoSize = True
         Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label14.Location = New System.Drawing.Point(455, 27)
+        Me.Label14.Location = New System.Drawing.Point(454, 27)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(54, 27)
+        Me.Label14.Size = New System.Drawing.Size(55, 27)
         Me.Label14.TabIndex = 7
         Me.Label14.Text = "MB"
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -295,6 +284,17 @@ Partial Class SelectDriversFromDriverPack
         Me.Label13.TabIndex = 4
         Me.Label13.Text = "Storage:"
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'tpSoftware
+        '
+        Me.tpSoftware.Controls.Add(Me.TableLayoutPanel3)
+        Me.tpSoftware.Location = New System.Drawing.Point(4, 22)
+        Me.tpSoftware.Name = "tpSoftware"
+        Me.tpSoftware.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpSoftware.Size = New System.Drawing.Size(672, 103)
+        Me.tpSoftware.TabIndex = 1
+        Me.tpSoftware.Text = "Software Information"
+        Me.tpSoftware.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel3
         '
@@ -400,11 +400,11 @@ Partial Class SelectDriversFromDriverPack
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.tbComputerInfo.ResumeLayout(False)
         Me.tpHardware.ResumeLayout(False)
-        Me.tpSoftware.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         CType(Me.nudStorage, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nudMemory, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpSoftware.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)

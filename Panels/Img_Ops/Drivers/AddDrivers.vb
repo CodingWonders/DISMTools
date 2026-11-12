@@ -106,7 +106,7 @@ Public Class AddDrivers
         IsDriverPack = Path.GetExtension(OpenFileDialog1.FileName).EndsWith("dtdrvpak", StringComparison.OrdinalIgnoreCase)
         If IsDriverPack Then
             If DriverPackHelper.IsPackValid(OpenFileDialog1.FileName) Then
-                If MessageBox.Show(Me, "The provided driver pack will be extracted to a temporary folder on the system volume. Make sure you have enough space on it. Do you want to begin?", ImageTaskHeader1.ItemText, MessageBoxButtons.YesNo, MessageBoxIcon.Information) = Windows.Forms.DialogResult.No Then
+                If MessageBox.Show(Me, LocalizationService.ForSection("AddDrivers")("DriverPackExtractionNotice"), ImageTaskHeader1.ItemText, MessageBoxButtons.YesNo, MessageBoxIcon.Information) = Windows.Forms.DialogResult.No Then
                     Exit Sub
                 End If
                 SourceDriverPackLocations.Add(OpenFileDialog1.FileName)
@@ -118,7 +118,7 @@ Public Class AddDrivers
                 End Try
                 bwDriverPackExtractor.RunWorkerAsync()
             Else
-                MessageBox.Show(Me, "The provided driver pack is not valid.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MessageBox.Show(Me, LocalizationService.ForSection("AddDrivers")("InvalidDriverPackError"), ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Else
             lvDriverFiles.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, LocalizationService.ForSection("AddDrivers.FileOk")("File.Label")}))
@@ -270,7 +270,7 @@ Public Class AddDrivers
 
     Private Sub bwDriverPackExtractor_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bwDriverPackExtractor.DoWork
         Try
-            ProgressReporter.SetMessage("Extracting Driver Pack contents...")
+            ProgressReporter.SetMessage(LocalizationService.ForSection("AddDrivers")("DriverPackExtractionProgress"))
             Dim unzipper As New ZipExtractor()
             ' set as fallback
             unzipper.SevenZipExecutablePath = Path.Combine(Application.StartupPath, "bin", "utils", If(Environment.Is64BitOperatingSystem, "x64", "x86"), "7z.exe")

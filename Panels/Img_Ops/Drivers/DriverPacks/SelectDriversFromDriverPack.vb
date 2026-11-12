@@ -11,7 +11,7 @@ Public Class SelectDriversFromDriverPack
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If lvDriverFiles.CheckedItems.Count = 0 Then
-            MessageBox.Show(Me, "Please select the driver files to add and try again.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(Me, LocalizationService.ForSection("SelectDriversFromDriverPack")("NoSelectedDriversError"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         Else
             For i = 0 To lvDriverFiles.Items.Count - 1
@@ -31,6 +31,30 @@ Public Class SelectDriversFromDriverPack
     Private Sub SelectDriversFromDriverPack_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
+
+        Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("WndTitle")
+        Label1.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("WndHeader")
+        Label2.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("ComputerLabel")
+
+        tpHardware.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_Hardware")
+        tpSoftware.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_Software")
+
+        ' Hardware Tab
+        Label11.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_HW_Processor")
+        Label12.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_HW_Memory")
+        Label13.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_HW_Storage")
+        ' Software Tab
+        Label17.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_SW_OSName")
+        Label18.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_SW_OSSku")
+        Label19.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("TP_SW_OSVer")
+
+        ColumnHeader1.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("LV_CH_DriverName")
+        ColumnHeader2.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("LV_CH_DriverMainFile")
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
+
+        OK_Button.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("OK_Button")
+        Cancel_Button.Text = LocalizationService.ForSection("SelectDriversFromDriverPack")("Cancel_Button")
 
         tpHardware.BackColor = BackColor
         tpHardware.ForeColor = ForeColor
@@ -67,7 +91,7 @@ Public Class SelectDriversFromDriverPack
             lvDriverFiles.Items.Clear()
             lvDriverFiles.Items.AddRange(DriverPackMetadata.DriverFiles.Drivers.Select(Function(drv) New ListViewItem(New String() {drv.Name, Path.GetFileName(drv.MainFile)})).ToArray())
             comboComputerSelect.Items.Clear()
-            comboComputerSelect.Items.Add("Manual Driver Selection")
+            comboComputerSelect.Items.Add(LocalizationService.ForSection("SelectDriversFromDriverPack")("LV_ManualDriverSelect"))
             comboComputerSelect.Items.AddRange(DriverPackMetadata.Computers.Computers.Select(Function(comp) String.Format("{0} {1}", comp.ComputerInformation.Manufacturer, comp.ComputerInformation.Model)).ToArray())
         Catch ex As Exception
 
