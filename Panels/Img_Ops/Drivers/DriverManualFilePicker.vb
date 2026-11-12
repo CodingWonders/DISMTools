@@ -12,13 +12,13 @@ Public Class DriverManualFilePicker
         If ListView1.CheckedItems.Count <= 0 Then Exit Sub
         DynaLog.LogMessage("Adding selected items...")
         Dim SelectedDrivers As New List(Of String)
-        For Each DrvItem As ListViewItem In AddDrivers.ListView1.Items
+        For Each DrvItem As ListViewItem In AddDrivers.lvDriverFiles.Items
             SelectedDrivers.Add(DrvItem.SubItems(0).Text)
         Next
         If ListView1.Items.Count > 0 Then
             For Each Item As ListViewItem In ListView1.CheckedItems
                 If SelectedDrivers.Contains(Item.Text) Then Continue For
-                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item.Text, LocalizationService.ForSection("DriverFilePicker.Validation")("File.Label")}))
+                AddDrivers.lvDriverFiles.Items.Add(New ListViewItem(New String() {Item.Text, LocalizationService.ForSection("DriverFilePicker.Validation")("File.Label")}))
             Next
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK

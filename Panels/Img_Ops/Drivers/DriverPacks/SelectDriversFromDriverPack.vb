@@ -91,7 +91,7 @@ Public Class SelectDriversFromDriverPack
             WindowHelper.UncheckAllItems(lvDriverFiles)
             If DriverPackMetadata.DriverFiles.Drivers.Any() Then
                 For i = 0 To lvDriverFiles.Items.Count - 1
-                    If AssociatedDriverIds.Contains(i) Then lvDriverFiles.Items(i).Checked = True
+                    If AssociatedDriverIds.Contains(i + 1) Then lvDriverFiles.Items(i).Checked = True
                 Next
             End If
         Else

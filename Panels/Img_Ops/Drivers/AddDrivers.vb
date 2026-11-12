@@ -23,19 +23,43 @@ Public Class AddDrivers
         drvPkgList.Clear()
         drvRecursiveList.Clear()
         ProgressPanel.MountDir = MainForm.MountDir
-        drvPkgCount = ListView1.Items.Count
+        drvPkgCount = lvDriverFiles.Items.Count
         DynaLog.LogMessage("Detecting drivers to add...")
-        If ListView1.Items.Count > 0 Then
-            For x = 0 To ListView1.Items.Count - 1
-                drvPkgList.Add(ListView1.Items(x).SubItems(0).Text)
+        If lvDriverFiles.Items.Count > 0 Then
+            For x = 0 To lvDriverFiles.Items.Count - 1
+                drvPkgList.Add(lvDriverFiles.Items(x).SubItems(0).Text)
             Next
+            ' Verify if items exist; remove entries that don't
+            Dim nonExistentEntries As List(Of String) = drvPkgList.Where(Function(drvPkg)
+                                                                             Dim exists As Boolean = True
+
+                                                                             exists = Directory.Exists(drvPkg)
+                                                                             If Not exists Then exists = File.Exists(drvPkg)
+
+                                                                             Return Not exists
+                                                                         End Function).ToList()
+            If nonExistentEntries.Any() Then
+                DynaLog.LogMessage("Some provided items do not exist.")
+                For i = nonExistentEntries.Count - 1 To 0 Step -1
+                    lvDriverFiles.Items.RemoveAt(drvPkgList.IndexOf(nonExistentEntries(i)))
+                    drvPkgList.Remove(nonExistentEntries(i))
+                    If CheckedListBox1.Items.Contains(nonExistentEntries(i)) Then CheckedListBox1.Items.RemoveAt(CheckedListBox1.FindStringExact(nonExistentEntries(i)))
+                Next
+
+                If drvPkgList.Count = 0 Then Exit Sub
+            End If
+
+            drvPkgCount = lvDriverFiles.Items.Count
+
             drvPkgs = drvPkgList.ToArray()
             For x = 0 To drvPkgs.Length - 1
                 ProgressPanel.drvAdditionPkgs(x) = drvPkgs(x)
             Next
             For x = 0 To drvPkgCount - 1
-                If (File.GetAttributes(ListView1.Items(x).SubItems(0).Text) And FileAttributes.Directory) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
-                    drvRecursiveList.Add(ListView1.Items(x).SubItems(0).Text)
+                If lvDriverFiles.Items(x).SubItems(0).Text = "" Then Continue For
+
+                If (File.GetAttributes(lvDriverFiles.Items(x).SubItems(0).Text) And FileAttributes.Directory) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(lvDriverFiles.Items(x).SubItems(0).Text) Then
+                    drvRecursiveList.Add(lvDriverFiles.Items(x).SubItems(0).Text)
                 End If
             Next
             If drvRecursiveList.Count > 0 Then
@@ -59,7 +83,7 @@ Public Class AddDrivers
             MsgBox(LocalizationService.ForSection("AddDrivers.Validation")("DriverPackages.None.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
-        ProgressPanel.drvAdditionLastPkg = ListView1.Items(drvPkgCount - 1).SubItems(0).Text
+        ProgressPanel.drvAdditionLastPkg = lvDriverFiles.Items(drvPkgCount - 1).SubItems(0).Text
         ProgressPanel.drvAdditionCount = drvPkgCount
         ProgressPanel.OperationNum = 75
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -97,8 +121,8 @@ Public Class AddDrivers
                 MessageBox.Show(Me, "The provided driver pack is not valid.", ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Else
-            ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, LocalizationService.ForSection("AddDrivers.FileOk")("File.Label")}))
-            Button3.Enabled = ListView1.Items.Count > 0
+            lvDriverFiles.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, LocalizationService.ForSection("AddDrivers.FileOk")("File.Label")}))
+            Button3.Enabled = lvDriverFiles.Items.Count > 0
         End If
     End Sub
 
@@ -113,7 +137,7 @@ Public Class AddDrivers
                 Select Case MsgBox(msg, vbYesNoCancel + vbInformation, ImageTaskHeader1.ItemText)
                     Case MsgBoxResult.Yes
                         DynaLog.LogMessage("Adding folder to queue...")
-                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, LocalizationService.ForSection("AddDrivers")("Folder.Label")}))
+                        lvDriverFiles.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, LocalizationService.ForSection("AddDrivers")("Folder.Label")}))
                         CheckedListBox1.Items.Add(FolderBrowserDialog1.SelectedPath)
                         CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(FolderBrowserDialog1.SelectedPath), True)
                     Case MsgBoxResult.No
@@ -130,11 +154,11 @@ Public Class AddDrivers
             End If
             Cursor = Cursors.Arrow
         End If
-        Button3.Enabled = ListView1.Items.Count > 0
+        Button3.Enabled = lvDriverFiles.Items.Count > 0
     End Sub
 
-    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
-        If ListView1.SelectedItems.Count = 1 Then
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvDriverFiles.SelectedIndexChanged
+        If lvDriverFiles.SelectedItems.Count = 1 Then
             Button3.Enabled = True
             Button4.Enabled = True
         Else
@@ -144,16 +168,16 @@ Public Class AddDrivers
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        If ListView1.FocusedItem.Text <> "" Then
-            If CheckedListBox1.Items.Contains(ListView1.FocusedItem.Text) Then
-                CheckedListBox1.Items.RemoveAt(CheckedListBox1.FindStringExact(ListView1.FocusedItem.Text))
+        If lvDriverFiles.FocusedItem.Text <> "" Then
+            If CheckedListBox1.Items.Contains(lvDriverFiles.FocusedItem.Text) Then
+                CheckedListBox1.Items.RemoveAt(CheckedListBox1.FindStringExact(lvDriverFiles.FocusedItem.Text))
             End If
-            ListView1.Items.Remove(ListView1.FocusedItem)
+            lvDriverFiles.Items.Remove(lvDriverFiles.FocusedItem)
         End If
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        ListView1.Items.Clear()
+        lvDriverFiles.Items.Clear()
         CheckedListBox1.Items.Clear()
         Button3.Enabled = False
         Button4.Enabled = False
@@ -183,8 +207,8 @@ Public Class AddDrivers
         GroupBox1.Text = LocalizationService.ForSection("AddDrivers")("DriverFiles.Group")
         GroupBox2.Text = LocalizationService.ForSection("AddDrivers")("DriverFolders.Group")
         GroupBox3.Text = LocalizationService.ForSection("AddDrivers")("Options.Group")
-        ListView1.Columns(0).Text = LocalizationService.ForSection("AddDrivers")("FileFolder.Column")
-        ListView1.Columns(1).Text = LocalizationService.ForSection("AddDrivers")("Type.Column")
+        lvDriverFiles.Columns(0).Text = LocalizationService.ForSection("AddDrivers")("FileFolder.Column")
+        lvDriverFiles.Columns(1).Text = LocalizationService.ForSection("AddDrivers")("Type.Column")
         OpenFileDialog1.Title = LocalizationService.ForSection("AddDrivers")("DriverPackage.Title")
         FolderBrowserDialog1.Description = LocalizationService.ForSection("AddDrivers")("DriverFolder.Description")
         ImageTaskHeader1.SetColors()
@@ -193,9 +217,9 @@ Public Class AddDrivers
         GroupBox1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         GroupBox3.ForeColor = CurrentTheme.ForegroundColor
-        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        lvDriverFiles.BackColor = CurrentTheme.SectionBackgroundColor
         CheckedListBox1.BackColor = CurrentTheme.SectionBackgroundColor
-        ListView1.ForeColor = ForeColor
+        lvDriverFiles.ForeColor = ForeColor
         CheckedListBox1.ForeColor = ForeColor
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
@@ -206,13 +230,13 @@ Public Class AddDrivers
         ImageTaskHeader1.HideWindowTitle(handle)
     End Sub
 
-    Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter
+    Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles lvDriverFiles.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
         End If
     End Sub
 
-    Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
+    Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles lvDriverFiles.DragDrop
         DynaLog.LogMessage("Getting dropped items...")
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each PkgFile In PackageFiles
@@ -225,7 +249,7 @@ Public Class AddDrivers
                 Select Case MsgBox(msg, vbYesNoCancel + vbInformation, ImageTaskHeader1.ItemText)
                     Case MsgBoxResult.Yes
                         DynaLog.LogMessage("Adding folder to queue...")
-                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, LocalizationService.ForSection("AddDrivers.DragDrop")("Folder.Label")}))
+                        lvDriverFiles.Items.Add(New ListViewItem(New String() {PkgFile, LocalizationService.ForSection("AddDrivers.DragDrop")("Folder.Label")}))
                         CheckedListBox1.Items.Add(PkgFile)
                         CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(PkgFile), True)
                     Case MsgBoxResult.No
@@ -238,10 +262,10 @@ Public Class AddDrivers
                 End Select
             Else
                 DynaLog.LogMessage("The specified item is a file.")
-                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, LocalizationService.ForSection("AddDrivers.DragDrop")("File.Item")}))
+                lvDriverFiles.Items.Add(New ListViewItem(New String() {PkgFile, LocalizationService.ForSection("AddDrivers.DragDrop")("File.Item")}))
             End If
         Next
-        Button3.Enabled = ListView1.Items.Count > 0
+        Button3.Enabled = lvDriverFiles.Items.Count > 0
     End Sub
 
     Private Sub bwDriverPackExtractor_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bwDriverPackExtractor.DoWork
@@ -303,7 +327,7 @@ Public Class AddDrivers
                 Dim folderName As String = String.Format("DRV_{0}", SelectedDriverId.ToString().PadLeft(10, "0")),
                     finalFolderPath As String = Path.Combine(driverFilesPath, folderName)
 
-                ListView1.Items.Add(New ListViewItem(New String() {finalFolderPath, LocalizationService.ForSection("AddDrivers")("Folder.Label")}))
+                lvDriverFiles.Items.Add(New ListViewItem(New String() {finalFolderPath, LocalizationService.ForSection("AddDrivers")("Folder.Label")}))
                 CheckedListBox1.Items.Add(finalFolderPath)
                 CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(finalFolderPath), True)
             Next

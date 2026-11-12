@@ -32,7 +32,7 @@ Partial Class AddDrivers
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.lvDriverFiles = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -44,8 +44,8 @@ Partial Class AddDrivers
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.bwDriverPackExtractor = New System.ComponentModel.BackgroundWorker()
+        Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -94,7 +94,7 @@ Partial Class AddDrivers
         '
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.TableLayoutPanel2)
-        Me.GroupBox1.Controls.Add(Me.ListView1)
+        Me.GroupBox1.Controls.Add(Me.lvDriverFiles)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 54)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(548, 360)
@@ -179,16 +179,16 @@ Partial Class AddDrivers
         Me.Button1.Text = "Add file..."
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'ListView1
+        'lvDriverFiles
         '
-        Me.ListView1.AllowDrop = True
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.ListView1.Location = New System.Drawing.Point(7, 56)
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(535, 264)
-        Me.ListView1.TabIndex = 0
-        Me.ListView1.UseCompatibleStateImageBehavior = False
-        Me.ListView1.View = System.Windows.Forms.View.Details
+        Me.lvDriverFiles.AllowDrop = True
+        Me.lvDriverFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.lvDriverFiles.Location = New System.Drawing.Point(7, 56)
+        Me.lvDriverFiles.Name = "lvDriverFiles"
+        Me.lvDriverFiles.Size = New System.Drawing.Size(535, 264)
+        Me.lvDriverFiles.TabIndex = 0
+        Me.lvDriverFiles.UseCompatibleStateImageBehavior = False
+        Me.lvDriverFiles.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader1
         '
@@ -284,6 +284,10 @@ Partial Class AddDrivers
     "f it needs to be scanned recursively:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
+        'bwDriverPackExtractor
+        '
+        Me.bwDriverPackExtractor.WorkerReportsProgress = True
+        '
         'ImageTaskHeader1
         '
         Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
@@ -297,10 +301,6 @@ Partial Class AddDrivers
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(1008, 48)
         Me.ImageTaskHeader1.TabIndex = 8
-        '
-        'bwDriverPackExtractor
-        '
-        Me.bwDriverPackExtractor.WorkerReportsProgress = True
         '
         'AddDrivers
         '
@@ -336,7 +336,7 @@ Partial Class AddDrivers
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents lvDriverFiles As System.Windows.Forms.ListView
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
