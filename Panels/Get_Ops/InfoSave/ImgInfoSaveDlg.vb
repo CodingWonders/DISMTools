@@ -7,6 +7,7 @@ Imports System.Threading
 Imports DISMTools.Utilities
 Imports Microsoft.Win32
 Imports System.Threading.Tasks
+Imports DISMTools.Elements.Contemporaneus.ImageEXProperties
 
 Public Class ImgInfoSaveDlg
 
@@ -62,6 +63,8 @@ Public Class ImgInfoSaveDlg
 
     Private IsBusy As Boolean = False
 
+    Private ReportedInformation As New ObtainedImageInformation()
+
     Private Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -82,6 +85,8 @@ Public Class ImgInfoSaveDlg
         If ImageInfoList.Count <> 0 Then ImageInfoList.Clear()
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("ImageInfo.Label"), HeaderSize.Header2) & CrLf
         If OnlineMode Then
+            ReportedInformation.Mode = ImageInformationMode.OnlineInstallation
+
             Dim revisionNumber As Integer
             Try
                 Dim ubrRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
@@ -98,12 +103,17 @@ Public Class ImgInfoSaveDlg
                                        ToList()) & CrLf
             Exit Sub
         ElseIf OfflineMode Then
+            ReportedInformation.Mode = ImageInformationMode.OfflineInstallation
+
             Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("Offline.Install.Label"), HeaderSize.Header3) & CrLf &
                 GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("Boot.Point.Mount.Label") & ImgMountDir,
                                            LocalizationService.ForSection("ImageInfoSave.Report")("OfflineVersion.Label") & FileVersionInfo.GetVersionInfo(ImgMountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion.ToString()}.
                                        ToList()) & CrLf
             Exit Sub
         End If
+
+        ReportedInformation.Mode = ImageInformationMode.WindowsImage
+
         Contents &= GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")}.ToList())
         Debug.WriteLine("[GetImageInformation] Starting task...")
         Try
@@ -130,6 +140,7 @@ Public Class ImgInfoSaveDlg
                                              LocalizationService.ForSection("ImageInfoSave.Report")("DateCreation.Label"),
                                              LocalizationService.ForSection("ImageInfoSave.Report")("DateModification.Label")}.ToList())
             Debug.WriteLine("[GetImageInformation] Exporting information to contents...")
+            ReportedInformation.ImageList = ImageInfoCollection.ToList()
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
                 Dim msg As String = ""
                 msg = LocalizationService.ForSection("ImageInfoSave.Image").Format("Getting.Image.Message", ImageInfoCollection.IndexOf(ImageInfo) + 1, ImageInfoCollection.Count)
@@ -246,6 +257,27 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = LocalizationService.ForSection("ImageInfoSave.Report")("None.Label")
                             End If
+
+                            Dim reportedPackage As New ImagePackageEX(pkgInfoEx.PackageName, pkgInfoEx.PackageState, pkgInfoEx.InstallTime, pkgInfoEx.ReleaseType) With {
+                                .PackageApplicable = pkgInfoEx.Applicable,
+                                .PackageCopyright = pkgInfoEx.Copyright,
+                                .PackageCompany = pkgInfoEx.Company,
+                                .PackageCreationTime = pkgInfoEx.CreationTime,
+                                .PackageDescription = pkgInfoEx.Description,
+                                .PackageInstallClient = pkgInfoEx.InstallClient,
+                                .PackageInstallPackageName = pkgInfoEx.InstallPackageName,
+                                .PackageLastUpdateTime = pkgInfoEx.LastUpdateTime,
+                                .PackageDisplayName = pkgInfoEx.DisplayName,
+                                .PackageProductName = pkgInfoEx.ProductName,
+                                .PackageProductVersion = pkgInfoEx.ProductVersion,
+                                .PackageRestartRequired = pkgInfoEx.RestartRequired,
+                                .PackageSupportInformation = pkgInfoEx.SupportInformation,
+                                .PackageFullyOffline = pkgInfoEx.FullyOffline,
+                                .PackageCapabilityId = pkgInfoEx.CapabilityId,
+                                .PackageCustomProperties = pkgInfoEx.CustomProperties,
+                                .PackageFeatures = pkgInfoEx.Features
+                            }
+                            ReportedInformation.PackageList.Add(reportedPackage)
                             Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
                                                                   Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
                                                                   pkgInfoEx.Copyright,
@@ -289,6 +321,26 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = LocalizationService.ForSection("ImageInfoSave.Report")("None.Label")
                             End If
+
+                            Dim reportedPackage As New ImagePackageEX(pkgInfo.PackageName, pkgInfo.PackageState, pkgInfo.InstallTime, pkgInfo.ReleaseType) With {
+                                .PackageApplicable = pkgInfo.Applicable,
+                                .PackageCopyright = pkgInfo.Copyright,
+                                .PackageCompany = pkgInfo.Company,
+                                .PackageCreationTime = pkgInfo.CreationTime,
+                                .PackageDescription = pkgInfo.Description,
+                                .PackageInstallClient = pkgInfo.InstallClient,
+                                .PackageInstallPackageName = pkgInfo.InstallPackageName,
+                                .PackageLastUpdateTime = pkgInfo.LastUpdateTime,
+                                .PackageDisplayName = pkgInfo.DisplayName,
+                                .PackageProductName = pkgInfo.ProductName,
+                                .PackageProductVersion = pkgInfo.ProductVersion,
+                                .PackageRestartRequired = pkgInfo.RestartRequired,
+                                .PackageSupportInformation = pkgInfo.SupportInformation,
+                                .PackageFullyOffline = pkgInfo.FullyOffline,
+                                .PackageCustomProperties = pkgInfo.CustomProperties,
+                                .PackageFeatures = pkgInfo.Features
+                            }
+                            ReportedInformation.PackageList.Add(reportedPackage)
                             Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
                                                                   Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
                                                                   pkgInfo.Copyright,
@@ -324,10 +376,11 @@ Public Class ImgInfoSaveDlg
                                                          ToList())
                     For Each installedPackage As DismPackage In InstalledPkgInfo
                         Contents &= GetTableRow(New String() {CodeBlockChar & installedPackage.PackageName & CodeBlockChar,
-                                                              Casters.CastDismPackageState(installedPackage.PackageState),
-                                                              Casters.CastDismReleaseType(installedPackage.ReleaseType),
-                                                              installedPackage.InstallTime}.
-                                                          ToList())
+                                                               Casters.CastDismPackageState(installedPackage.PackageState),
+                                                               Casters.CastDismReleaseType(installedPackage.ReleaseType),
+                                                               installedPackage.InstallTime}.
+                                                           ToList())
+                        ReportedInformation.PackageList.Add(New ImagePackageEX(installedPackage.PackageName, installedPackage.PackageState, installedPackage.InstallTime, installedPackage.ReleaseType))
                     Next
                     Contents &= CrLf & GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("PackageInfo.Missing.Label")) & CrLf
                 End If
@@ -413,6 +466,31 @@ Public Class ImgInfoSaveDlg
                                 Else
                                     pkgFeaturesList = LocalizationService.ForSection("ImageInfoSave.Report")("None.Label")
                                 End If
+
+                                Dim reportedPackageFile As New ImagePackageFile(pkgFile) With {
+                                    .PackageName = pkgInfoEx.PackageName,
+                                    .PackageApplicable = pkgInfoEx.Applicable,
+                                    .PackageCopyright = pkgInfoEx.Copyright,
+                                    .PackageCompany = pkgInfoEx.Company,
+                                    .PackageCreationTime = pkgInfoEx.CreationTime,
+                                    .PackageDescription = pkgInfoEx.Description,
+                                    .PackageInstallClient = pkgInfoEx.InstallClient,
+                                    .PackageInstallPackageName = pkgInfoEx.InstallPackageName,
+                                    .PackageInstallTime = pkgInfoEx.InstallTime,
+                                    .PackageLastUpdateTime = pkgInfoEx.LastUpdateTime,
+                                    .PackageDisplayName = pkgInfoEx.DisplayName,
+                                    .PackageProductName = pkgInfoEx.ProductName,
+                                    .PackageProductVersion = pkgInfoEx.ProductVersion,
+                                    .PackageReleaseType = pkgInfoEx.ReleaseType,
+                                    .PackageRestartRequired = pkgInfoEx.RestartRequired,
+                                    .PackageSupportInformation = pkgInfoEx.SupportInformation,
+                                    .PackageState = pkgInfoEx.PackageState,
+                                    .PackageFullyOffline = pkgInfoEx.FullyOffline,
+                                    .PackageCapabilityId = pkgInfoEx.CapabilityId,
+                                    .PackageCustomProperties = pkgInfoEx.CustomProperties,
+                                    .PackageFeatures = pkgInfoEx.Features
+                                }
+                                ReportedInformation.PackageFileList.Add(reportedPackageFile)
                                 Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
                                                                       Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
                                                                       pkgInfoEx.Copyright,
@@ -455,6 +533,30 @@ Public Class ImgInfoSaveDlg
                                 Else
                                     pkgFeaturesList = LocalizationService.ForSection("ImageInfoSave.Report")("None.Label")
                                 End If
+
+                                Dim reportedPackageFile As New ImagePackageFile(pkgFile) With {
+                                    .PackageName = pkgInfo.PackageName,
+                                    .PackageApplicable = pkgInfo.Applicable,
+                                    .PackageCopyright = pkgInfo.Copyright,
+                                    .PackageCompany = pkgInfo.Company,
+                                    .PackageCreationTime = pkgInfo.CreationTime,
+                                    .PackageDescription = pkgInfo.Description,
+                                    .PackageInstallClient = pkgInfo.InstallClient,
+                                    .PackageInstallPackageName = pkgInfo.InstallPackageName,
+                                    .PackageInstallTime = pkgInfo.InstallTime,
+                                    .PackageLastUpdateTime = pkgInfo.LastUpdateTime,
+                                    .PackageDisplayName = pkgInfo.DisplayName,
+                                    .PackageProductName = pkgInfo.ProductName,
+                                    .PackageProductVersion = pkgInfo.ProductVersion,
+                                    .PackageReleaseType = pkgInfo.ReleaseType,
+                                    .PackageRestartRequired = pkgInfo.RestartRequired,
+                                    .PackageSupportInformation = pkgInfo.SupportInformation,
+                                    .PackageState = pkgInfo.PackageState,
+                                    .PackageFullyOffline = pkgInfo.FullyOffline,
+                                    .PackageCustomProperties = pkgInfo.CustomProperties,
+                                    .PackageFeatures = pkgInfo.Features
+                                }
+                                ReportedInformation.PackageFileList.Add(reportedPackageFile)
                                 Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
                                                                       Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
                                                                       pkgInfo.Copyright,
@@ -528,6 +630,13 @@ Public Class ImgInfoSaveDlg
                         msg(0) = LocalizationService.ForSection("ImgInfo.Features").Format("Loading.Feature.Message", InstalledFeatInfo.IndexOf(feature) + 1, InstalledFeatInfo.Count)
                         ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
+                        Dim reportedFeature As New ImageFeatureEX(featInfo.FeatureName, featInfo.FeatureState) With {
+                            .FeatureDisplayName = featInfo.DisplayName,
+                            .FeatureDescription = featInfo.Description,
+                            .FeatureRestartRequired = featInfo.RestartRequired,
+                            .FeatureCustomProperties = featInfo.CustomProperties
+                        }
+                        ReportedInformation.FeatureList.Add(reportedFeature)
                         Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
                         If cProps.Count > 0 Then
                             For Each cProp As DismCustomProperty In cProps
@@ -553,6 +662,7 @@ Public Class ImgInfoSaveDlg
                                                              LocalizationService.ForSection("ImageInfoSave.Report")("FeatureState.Label"),
                                                              LocalizationService.ForSection("ImageInfoSave.Report")("Web.Label")}.ToList())
                     For Each installedFeature As DismFeature In InstalledFeatInfo
+                        ReportedInformation.FeatureList.Add(New ImageFeatureEX(installedFeature.FeatureName, installedFeature.State))
                         Contents &= GetTableRow(New String() {installedFeature.FeatureName,
                                                               Casters.CastDismFeatureState(installedFeature.State),
                                                               MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, installedFeature.FeatureName)), LocalizationService.ForSection("ImageInfoSave.Report")("Look.Item.Online.Label"))}.ToList()) & CrLf
@@ -685,6 +795,15 @@ Public Class ImgInfoSaveDlg
                         Else
                             mainLogo = LocalizationService.ForSection("ImageInfoSave.Report")("Unknown.Label")
                         End If
+
+                        Dim reportedAppxPackage As New ImageAppxPackageEX(AppxPackage.PackageName, AppxPackage.PackageFullName, AppxPackage.PackageArchitecture, AppxPackage.PackageResourceId, AppxPackage.PackageVersion) With {
+                            .PackageInstallLocation = installationLocation,
+                            .PackageRegistrationStatus = registrationStatus,
+                            .PackageManifestLocation = instDir,
+                            .PackageStoreLogoAssetDirectory = logoAssetDir.TrimEnd("\"),
+                            .PackageMainStoreLogoAsset = mainLogo.TrimEnd(Quote)
+                        }
+                        ReportedInformation.AppxList.Add(reportedAppxPackage)
                         Contents &= GetTableRow(New String() {AppxPackage.PackageFullName,
                                                               AppxPackage.PackageName,
                                                               Casters.CastDismArchitecture(AppxPackage.PackageArchitecture),
@@ -811,6 +930,15 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         mainLogo = LocalizationService.ForSection("ImageInfoSave.Report")("Unknown.Label")
                                     End If
+
+                                    Dim reportedAppxPackage As New ImageAppxPackageEX(AppxPackage.PackageName, AppxPackage.PackageFullName, AppxPackage.PackageArchitecture, AppxPackage.PackageResourceId, AppxPackage.PackageVersion) With {
+                                        .PackageInstallLocation = installationLocation,
+                                        .PackageRegistrationStatus = registrationStatus,
+                                        .PackageManifestLocation = instDir,
+                                        .PackageStoreLogoAssetDirectory = logoAssetDir.TrimEnd("\"),
+                                        .PackageMainStoreLogoAsset = mainLogo.TrimEnd(Quote)
+                                    }
+                                    ReportedInformation.AppxList.Add(reportedAppxPackage)
                                     Contents &= GetTableRow(New String() {AppxPackage.PackageFullName,
                                                                           AppxPackage.PackageName,
                                                                           Casters.CastDismArchitecture(AppxPackage.PackageArchitecture),
@@ -902,6 +1030,16 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         mainLogo = LocalizationService.ForSection("ImageInfoSave.Report")("Unknown.Label")
                                     End If
+
+                                    Dim reportedAppxPackage As New ImageAppxPackageEX(appxPkg.PackageName, "", appxPkg.Architecture, appxPkg.ResourceId, appxPkg.Version) With {
+                                        .PackageDisplayName = appxPkg.DisplayName,
+                                        .PackageInstallLocation = installationLocation,
+                                        .PackageRegistrationStatus = registrationStatus,
+                                        .PackageManifestLocation = pkgManifestLocation,
+                                        .PackageStoreLogoAssetDirectory = logoAssetDir.TrimEnd("\"),
+                                        .PackageMainStoreLogoAsset = mainLogo
+                                    }
+                                    ReportedInformation.AppxList.Add(reportedAppxPackage)
                                     Contents &= GetTableRow(New String() {appxPkg.PackageName,
                                                                           appxPkg.DisplayName,
                                                                           Casters.CastDismArchitecture(appxPkg.Architecture),
@@ -925,6 +1063,10 @@ Public Class ImgInfoSaveDlg
                                                                      LocalizationService.ForSection("ImageInfoSave.Report")("ResourceID.Label"),
                                                                      LocalizationService.ForSection("ImageInfoSave.Report")("Version.Column")}.ToList())
                             For Each installedAppxPkg As DismAppxPackage In InstalledAppxPackageInfo
+                                ReportedInformation.AppxList.Add(New ImageAppxPackageEX(installedAppxPkg.PackageName, "", installedAppxPkg.Architecture, installedAppxPkg.ResourceId, installedAppxPkg.Version) With {
+                                    .PackageDisplayName = installedAppxPkg.DisplayName,
+                                    .PackageInstallLocation = installedAppxPkg.InstallLocation
+                                })
                                 Contents &= GetTableRow(New String() {installedAppxPkg.PackageName,
                                                                       installedAppxPkg.DisplayName,
                                                                       Casters.CastDismArchitecture(installedAppxPkg.Architecture),
@@ -984,6 +1126,13 @@ Public Class ImgInfoSaveDlg
                             msg(0) = LocalizationService.ForSection("ImgInfo.Capabilities").Format("Loading.Capability.Message", InstalledCapInfo.IndexOf(capability) + 1, InstalledCapInfo.Count)
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
+                            Dim reportedCapability As New ImageCapabilityEX(capInfo.Name, capInfo.State) With {
+                                .CapabilityDisplayName = capInfo.DisplayName,
+                                .CapabilityDescription = capInfo.Description,
+                                .CapabilityDownloadSize = capInfo.DownloadSize,
+                                .CapabilityInstallSize = capInfo.InstallSize
+                            }
+                            ReportedInformation.CapabilityList.Add(reportedCapability)
                             Contents &= GetTableRow(New String() {CodeBlockChar & capInfo.Name & CodeBlockChar,
                                                                   CodeBlockChar & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CodeBlockChar,
                                                                   Casters.CastDismPackageState(capInfo.State),
@@ -1000,6 +1149,7 @@ Public Class ImgInfoSaveDlg
                                                                  LocalizationService.ForSection("ImageInfoSave.Report")("CapabilityState.Label"),
                                                                  LocalizationService.ForSection("ImageInfoSave.Report")("Web.Label")}.ToList())
                         For Each installedCapability As DismCapability In InstalledCapInfo
+                            ReportedInformation.CapabilityList.Add(New ImageCapabilityEX(installedCapability.Name, installedCapability.State))
                             Contents &= GetTableRow(New String() {CodeBlockChar & installedCapability.Name & CodeBlockChar,
                                                                   Casters.CastDismPackageState(installedCapability.State),
                                                                   MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(String.Format("microsoft windows {0}{1}{0}", Quote, installedCapability.Name)), LocalizationService.ForSection("ImageInfoSave.Report")("Look.Item.Online.Label"))}.ToList())
@@ -1019,10 +1169,10 @@ Public Class ImgInfoSaveDlg
     Private Sub GetDriverInformation(GetEverything As Boolean, GetInboxDrivers As Boolean)
         Dim InstalledDrvInfo As DismDriverPackageCollection = Nothing
         Dim msg As String() = New String(3) {"", "", "", ""}
-          msg(0) = LocalizationService.ForSection("ImageInfoSave.Drivers")("Preparing.Message")
-          msg(1) = LocalizationService.ForSection("ImageInfoSave.Drivers")("Basic.Ready.Message") & LocalizationService.ForSection("ImageInfoSave.Drivers")("May.Take.Long.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Drivers")("Prompt.Label")
-          msg(2) = LocalizationService.ForSection("ImageInfoSave.Drivers")("DriverInfo.Message")
-          msg(3) = LocalizationService.ForSection("ImageInfoSave.GetDriverInfo")("BgProcessDetect.Message") & LocalizationService.ForSection("ImageInfoSave.Drivers")("Setting.Applied.Task.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Drivers")("Get.Message")
+        msg(0) = LocalizationService.ForSection("ImageInfoSave.Drivers")("Preparing.Message")
+        msg(1) = LocalizationService.ForSection("ImageInfoSave.Drivers")("Basic.Ready.Message") & LocalizationService.ForSection("ImageInfoSave.Drivers")("May.Take.Long.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Drivers")("Prompt.Label")
+        msg(2) = LocalizationService.ForSection("ImageInfoSave.Drivers")("DriverInfo.Message")
+        msg(3) = LocalizationService.ForSection("ImageInfoSave.GetDriverInfo")("BgProcessDetect.Message") & LocalizationService.ForSection("ImageInfoSave.Drivers")("Setting.Applied.Task.Message") & CrLf & CrLf & LocalizationService.ForSection("ImageInfoSave.Drivers")("Get.Message")
         Contents &= GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("DriverInfo.Label"), HeaderSize.Header2) & CrLf &
                     GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label")),
                                                LocalizationService.ForSection("ImageInfoSave.Report")("Box.Driver.Label") & " " & If(AllDrivers, LocalizationService.ForSection("ImageInfoSave.Report")("WasSaved.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("Saved.Label"))}.ToList()) & CrLf
@@ -1056,6 +1206,14 @@ Public Class ImgInfoSaveDlg
                         msg(0) = LocalizationService.ForSection("ImageInfoSave.Drivers").Format("Get.Driver.Message", InstalledDrvInfo.IndexOf(driver) + 1, InstalledDrvInfo.Count)
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Dim signer As String = DriverSignerViewer.GetSignerInfo(driver.OriginalFileName)
+                        Dim reportedDriver As New ImageDriverEX(driver.PublishedName, driver.OriginalFileName, driver.InBox, driver.ClassName, driver.ProviderName, driver.Date.ToString(), driver.Version) With {
+                            .DriverClassDescription = driver.ClassDescription,
+                            .DriverClassGuid = driver.ClassGuid,
+                            .DriverCatalogFile = driver.CatalogFile,
+                            .DriverBootCritical = driver.BootCritical,
+                            .DriverSignature = driver.DriverSignature
+                        }
+                        ReportedInformation.DriverList.Add(reportedDriver)
                         Contents &= GetTableRow(New String() {CodeBlockChar & driver.PublishedName & CodeBlockChar,
                                                               Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")",
                                                               driver.ProviderName,
@@ -1081,6 +1239,7 @@ Public Class ImgInfoSaveDlg
                                                              LocalizationService.ForSection("ImageInfoSave.Report")("Date.Label"),
                                                              LocalizationService.ForSection("ImageInfoSave.Report")("Version.Column")}.ToList())
                     For Each installedDriver As DismDriverPackage In InstalledDrvInfo
+                        ReportedInformation.DriverList.Add(New ImageDriverEX(installedDriver.PublishedName, installedDriver.OriginalFileName, installedDriver.InBox, installedDriver.ClassName, installedDriver.ProviderName, installedDriver.Date.ToString(), installedDriver.Version))
                         Contents &= GetTableRow(New String() {CodeBlockChar & installedDriver.PublishedName & CodeBlockChar,
                                                               Path.GetFileName(installedDriver.OriginalFileName) & " (" & Path.GetDirectoryName(installedDriver.OriginalFileName) & ")",
                                                               If(installedDriver.InBox, LocalizationService.ForSection("ImageInfoSave.Report")("Yes.Button"), LocalizationService.ForSection("ImageInfoSave.Report")("No.Button")),
@@ -1117,10 +1276,13 @@ Public Class ImgInfoSaveDlg
                     msg = LocalizationService.ForSection("ImgInfo.DriverFiles").Format("Loading.Driver.Message", DriverPkgs.IndexOf(drvPkg) + 1, DriverPkgs.Count)
                     ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
                     If File.Exists(drvPkg) Then
+                        Dim reportedDriverFile As New ImageDriverFile(drvPkg)
+                        ReportedInformation.DriverFileList.Add(reportedDriverFile)
                         Try
                             Contents &= GetHeader("Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & " (" & Path.GetFileName(drvPkg) & ")", HeaderSize.Header4) & CrLf
                             Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
-                            Dim hwCount As Integer = drvInfoCollection.Distinct().Count
+                            reportedDriverFile.HardwareTargets = drvInfoCollection.Distinct().ToList()
+                            Dim hwCount As Integer = reportedDriverFile.HardwareTargets.Count
                             If hwCount > 0 Then
                                 Contents &= GetParagraph("Information summary for " & hwCount & " hardware target(s):", ParagraphStyle.Bold) & CrLf &
                                     GetTableHeader(New String() {"Hardware description",
@@ -1130,7 +1292,7 @@ Public Class ImgInfoSaveDlg
                                                                  "Hardware manufacturer",
                                                                  "Architecture",
                                                                  "Service"}.ToList())
-                                For Each hwTarget As DismDriver In drvInfoCollection.Distinct()
+                                For Each hwTarget As DismDriver In reportedDriverFile.HardwareTargets
                                     Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
                                                                           String.Format("{0} ({1})", hwTarget.HardwareId, MarkdownHelper.GetLink(SearchEngineHelper.GetSearchQueryUri(hwTarget.HardwareId), "Look up")),
                                                                           If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
@@ -1205,6 +1367,7 @@ Public Class ImgInfoSaveDlg
                     GetListItems(New String() {LocalizationService.ForSection("ImageInfoSave.Report")("ImageFile.Get.Label") & " " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, LocalizationService.ForSection("ImageInfoSave.Report")("Active.Install.Label.Label"))}.ToList()) & CrLf
         ReportChanges(LocalizationService.ForSection("ImageInfoSave.Report")("Getting.Service.Label"), 0.0)
         Dim serviceList As List(Of WindowsService) = WindowsServiceHelper.GetServiceList(ImgMountDir, OnlineMode)
+        ReportedInformation.ServiceList.AddRange(serviceList)
         If serviceList.Any() Then
             Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("InfoSummary.Label") & " " & serviceList.Count & " " & LocalizationService.ForSection("ImageInfoSave.Report")("Service.Default.Label"), ParagraphStyle.Bold) & CrLf &
                 GetTableHeader({LocalizationService.ForSection("ImageInfoSave.Report")("ServiceName.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("DisplayName.Column"), LocalizationService.ForSection("ImageInfoSave.Report")("Description"), LocalizationService.ForSection("ImageInfoSave.Report")("StartType.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("ServiceType.Label"), LocalizationService.ForSection("ImageInfoSave.Report")("Web.Label")}.ToList())
@@ -1325,6 +1488,11 @@ Public Class ImgInfoSaveDlg
             End Try
         End If
 
+        ReportedInformation = New ObtainedImageInformation() With {
+            .InformationSnapshotTime = Date.Now,
+            .Mode = If(OnlineMode, ImageInformationMode.OnlineInstallation, If(OfflineMode, ImageInformationMode.OfflineInstallation, ImageInformationMode.WindowsImage))
+        }
+
         ' Set the beginning of the contents
         Contents = GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("DISM.Tools.Image.Title"), HeaderSize.Header1) &
                    GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("Automatically.Message") & CrLf & CrLf &
@@ -1335,6 +1503,7 @@ Public Class ImgInfoSaveDlg
                                               LocalizationService.ForSection("ImageInfoSave.Report")("Report.File.Target.Label") & " " & Quote & SaveTarget & Quote}.ToList())
 
         If OfflineMode Then SourceImage = ImgMountDir
+        ReportedInformation.InformationSourcePath = If(OnlineMode, Environment.GetFolderPath(Environment.SpecialFolder.Windows), SourceImage)
 
         ' Disable logger to avoid degraded performance
         DynaLog.DisableLogging()
@@ -1433,6 +1602,12 @@ Public Class ImgInfoSaveDlg
                 End If
         End Select
 
+        ReportedInformation.EveryPackageObtained = GetEveryPackage
+        ReportedInformation.EveryFeatureObtained = GetEveryFeature
+        ReportedInformation.EveryAppxPackageObtained = GetEveryAppxPackage
+        ReportedInformation.EveryCapabilityObtained = GetEveryCapability
+        ReportedInformation.EveryDriverObtained = GetEveryDriver
+
         ' Begin performing operations
         IsBusy = True
         Select Case SaveTask
@@ -1509,6 +1684,7 @@ Public Class ImgInfoSaveDlg
         End Select
 
         ' Put an ending to the contents
+        ReportedInformation.InformationEndTime = Now
         Contents &= CrLf & CrLf & GetHeader(LocalizationService.ForSection("ImageInfoSave.Report")("WeEnded.Label") & " " & Date.Now & LocalizationService.ForSection("ImageInfoSave.Report")("NiceDay.Label"), HeaderSize.Header2)
 
         ' Inform user that we are saving the file
@@ -1526,6 +1702,7 @@ Public Class ImgInfoSaveDlg
         If Contents <> "" Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget)
         InfoSaveResults.FilePath = SaveTarget
+        InfoSaveResults.StoredInformation = ReportedInformation
         MainForm.StartMountedImageDetector()
         WindowHelper.EnableCloseCapability(handle)
         Close()

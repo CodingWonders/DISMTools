@@ -110,7 +110,7 @@ Public Class MainForm
     ' Set branch name and codenames
     Public dtBranch As String = "dt_pre_discovery"
     Public dt_codeName As String = "Discovery"
-    Private Const SongCode As String = "Nightvision"
+    Public Const SongCode As String = "Nightvision"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean

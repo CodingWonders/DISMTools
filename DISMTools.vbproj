@@ -92,6 +92,10 @@
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.6.1.0\lib\net472\Microsoft.Dism.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.16.0.18925.20022\lib\net40\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.15.2, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.15.2\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -295,8 +299,15 @@
     <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageCapability.vb" />
     <Compile Include="Elements\Contemporaneus\ImageDriver.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageDriverFile.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageAppxPackageEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageCapabilityEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageDriverEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageFeatureEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImagePackageEX.vb" />
     <Compile Include="Elements\Contemporaneus\ImageOperations\ImageOperation.vb" />
     <Compile Include="Elements\Contemporaneus\ImageOperations\MountImageIO.vb" />
+    <Compile Include="Elements\Contemporaneus\ImagePackageFile.vb" />
     <Compile Include="Elements\Contemporaneus\PSInterop\PSObjects.vb" />
     <Compile Include="Elements\Contemporaneus\ImageFeature.vb" />
     <Compile Include="Elements\Contemporaneus\WindowsImage.vb" />
@@ -515,6 +526,7 @@
     <Compile Include="Panels\Get_Ops\InfoSave\InfoSaveResults.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\InfoSave\ObtainedImageInformation.vb" />
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.Designer.vb">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </Compile>
@@ -1118,6 +1130,9 @@
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\NetworkUtilities\NetworkCostHelper.vb" />
+    <Compile Include="Utilities\OfficeUtilities\CellStyle.vb" />
+    <Compile Include="Utilities\OfficeUtilities\ChartOptions.vb" />
+    <Compile Include="Utilities\OfficeUtilities\ExcelHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PowerManagement\PowerManagementHelper.vb" />
@@ -1995,6 +2010,8 @@
     <None Include="Resources\newsfeed_visitsite_light.png" />
     <None Include="Resources\newsfeed_visitsite_dark.png" />
     <None Include="Resources\website.png" />
+    <None Include="Resources\report_target_excel_dark.png" />
+    <None Include="Resources\report_target_excel_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

@@ -22,6 +22,7 @@ Partial Class InfoSaveResults
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(InfoSaveResults))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -30,9 +31,14 @@ Partial Class InfoSaveResults
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.sfdHtmlReport = New System.Windows.Forms.SaveFileDialog()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.cmsSaveTargets = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.HTMLFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExcelTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.sfdExcelSpreadsheet = New System.Windows.Forms.SaveFileDialog()
         Me.Panel1.SuspendLayout()
+        Me.cmsSaveTargets.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -111,9 +117,9 @@ Partial Class InfoSaveResults
         Me.Button2.Text = "Save report..."
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'SaveFileDialog1
+        'sfdHtmlReport
         '
-        Me.SaveFileDialog1.Filter = "HTML Reports|*.html"
+        Me.sfdHtmlReport.Filter = "HTML Reports|*.html"
         '
         'Panel1
         '
@@ -126,6 +132,28 @@ Partial Class InfoSaveResults
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1235, 598)
         Me.Panel1.TabIndex = 7
+        '
+        'cmsSaveTargets
+        '
+        Me.cmsSaveTargets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HTMLFileToolStripMenuItem, Me.ExcelTSMI})
+        Me.cmsSaveTargets.Name = "ContextMenuStrip1"
+        Me.cmsSaveTargets.Size = New System.Drawing.Size(168, 48)
+        '
+        'HTMLFileToolStripMenuItem
+        '
+        Me.HTMLFileToolStripMenuItem.Name = "HTMLFileToolStripMenuItem"
+        Me.HTMLFileToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
+        Me.HTMLFileToolStripMenuItem.Text = "HTML File"
+        '
+        'ExcelTSMI
+        '
+        Me.ExcelTSMI.Name = "ExcelTSMI"
+        Me.ExcelTSMI.Size = New System.Drawing.Size(167, 22)
+        Me.ExcelTSMI.Text = "Excel Spreadsheet"
+        '
+        'sfdExcelSpreadsheet
+        '
+        Me.sfdExcelSpreadsheet.Filter = "Excel Spreadsheets|*.xlsx|Open Document Spreadsheets|*.ods"
         '
         'InfoSaveResults
         '
@@ -146,6 +174,7 @@ Partial Class InfoSaveResults
         Me.Text = "Image information report results"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.cmsSaveTargets.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -156,6 +185,10 @@ Partial Class InfoSaveResults
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents WebBrowser1 As System.Windows.Forms.WebBrowser
     Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents sfdHtmlReport As System.Windows.Forms.SaveFileDialog
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents cmsSaveTargets As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents HTMLFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExcelTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents sfdExcelSpreadsheet As System.Windows.Forms.SaveFileDialog
 End Class
