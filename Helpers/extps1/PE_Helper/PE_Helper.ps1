@@ -1195,7 +1195,8 @@ function Start-OSApplication
         return
     }
     . "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
-    if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -lt 1)
+    $installImageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" -Exclude "boot.wim" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
+    if ($installImageFiles.Count -lt 1)
     {
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
         exit 1
