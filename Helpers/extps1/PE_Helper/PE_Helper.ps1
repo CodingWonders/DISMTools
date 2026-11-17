@@ -1033,13 +1033,23 @@ function Get-LocalizedUsers
     param (
         [Parameter(Mandatory = $true, Position = 0)] [bool]$admins
     )
-    if ($admins)
-    {
-        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "S-1-5-32-544" }).Name
+
+    $domainRole = Get-CimInstance -Query "SELECT DomainRole FROM Win32_ComputerSystem" | Select-Object -ExpandProperty DomainRole
+    $targetSid = ""
+
+    if ($admins) {
+        $targetSid = "S-1-5-32-544"
+    } else {
+        $targetSid = "S-1-5-32-545"
     }
-    else
-    {
-        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "S-1-5-32-545" }).Name
+
+    # DomainRole 4 -- Backup Domain Controller
+    # DomainRole 5 -- Primary Domain Controller
+    if (@(4, 5).Contains([int]$domainRole)) {
+        # The built-in groups are not present in a DC setting and we have to query ADDS.
+        return (Get-ADGroup -Filter "objectSid -eq '$($targetSid)'").Name
+    } else {
+        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "$targetSid" }).Name
     }
 }
 
