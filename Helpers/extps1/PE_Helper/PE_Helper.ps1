@@ -1892,6 +1892,8 @@ function Write-DiskConfiguration
             The partition number
         .PARAMETER override
             The partition table override mode
+        .PARAMETER fullOSPartFormat
+            Determine whether to perform a full format of the system partition
         .NOTES
             The partition ID is 0 if the user decides to clean a drive
         .EXAMPLE
