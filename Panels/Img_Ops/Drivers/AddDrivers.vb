@@ -315,6 +315,7 @@ Public Class AddDrivers
     Private Sub bwDriverPackExtractor_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwDriverPackExtractor.RunWorkerCompleted
         ProgressReporter.Hide()
         If e.Error IsNot Nothing Then
+            MessageBox.Show(Me, "The driver pack could not be extracted: " & e.Error.Message, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Error)
             DynaLog.LogMessage(e.Error.Message)
         Else
             SelectDriversFromDriverPack.SourceDriverPackFolder = DriverPackExtractedFolders.Last()
