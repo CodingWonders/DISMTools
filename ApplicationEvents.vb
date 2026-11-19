@@ -126,19 +126,26 @@ Namespace My
 
         Private Sub SysEvts_UserPreferenceChanged(sender As Object, e As Microsoft.Win32.UserPreferenceChangedEventArgs)
             DynaLog.LogMessage("A user preference of type " & e.Category.ToString() & " has changed.")
-            If e.Category = UserPreferenceCategory.General And DISMTools.MainForm.ColorMode = 0 Then
-                DynaLog.LogMessage("Detecting if the system color theme changed...")
-                Dim currentTime As DateTime = DateTime.Now
-                DynaLog.LogMessage("Current system time: " & currentTime.ToString())
-                DynaLog.LogMessage("Time theme last changed: " & lastThemeChangeTime.ToString())
-                DynaLog.LogMessage("Time difference in seconds: " & (currentTime - lastThemeChangeTime).TotalSeconds)
-                DynaLog.LogMessage("Debounce interval: " & debounceInterval.TotalSeconds)
-                If currentTime - lastThemeChangeTime > debounceInterval Then
-                    DynaLog.LogMessage("Time difference is over debounce interval. Changing color theme...")
-                    DISMTools.MainForm.ChangePrgColors(0)
-                    DynaLog.LogMessage("Setting the time the theme last changed...")
-                    lastThemeChangeTime = currentTime
-                End If
+            If e.Category <> UserPreferenceCategory.General Then Exit Sub
+
+            ' This runs on the SystemEvents thread. Never touch the default instance here:
+            ' use the real form and marshal the work to the UI thread.
+            Dim uiForm As DISMTools.MainForm = DISMTools.MainForm.Current
+            If uiForm Is Nothing OrElse uiForm.IsDisposed OrElse Not uiForm.IsHandleCreated Then Exit Sub
+
+            uiForm.BeginInvoke(New MethodInvoker(Sub() ApplySystemThemeChange(uiForm)))
+        End Sub
+
+        Private Sub ApplySystemThemeChange(uiForm As DISMTools.MainForm)
+            If uiForm.ColorMode <> 0 Then Exit Sub
+
+            DynaLog.LogMessage("Detecting if the system color theme changed...")
+            Dim currentTime As DateTime = DateTime.Now
+            DynaLog.LogMessage("Time difference in seconds: " & (currentTime - lastThemeChangeTime).TotalSeconds)
+            If currentTime - lastThemeChangeTime > debounceInterval Then
+                DynaLog.LogMessage("Time difference is over debounce interval. Changing color theme...")
+                uiForm.ChangePrgColors(0)
+                lastThemeChangeTime = currentTime
             End If
         End Sub
 
