@@ -261,9 +261,13 @@ Public Class InfoSaveResults
     Private Sub ExcelTSMI_Click(sender As Object, e As EventArgs) Handles ExcelTSMI.Click
         If sfdExcelSpreadsheet.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             Dim finalSheetFormat As Excel.XlFileFormat = If(sfdExcelSpreadsheet.FilterIndex = 1, Excel.XlFileFormat.xlOpenXMLWorkbook, Excel.XlFileFormat.xlOpenDocumentSpreadsheet)
-
-            If SaveReportToExcel(sfdExcelSpreadsheet.FileName, finalSheetFormat) Then
-                Process.Start(sfdExcelSpreadsheet.FileName)
+            Cursor = Cursors.WaitCursor
+            Dim exported As Boolean = SaveReportToExcel(sfdExcelSpreadsheet.FileName, finalSheetFormat)
+            Cursor = Cursors.Arrow
+            If exported Then
+                WindowHelper.DisplayNotificationBalloon(ToolTipIcon.Info, Text, "The report was successfully exported to an Excel spreadsheet.")
+            Else
+                WindowHelper.DisplayNotificationBalloon(ToolTipIcon.Warning, Text, "The report could not be exported to an Excel spreadsheet.")
             End If
         End If
     End Sub
