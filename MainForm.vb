@@ -108,12 +108,14 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_discovery"
-    Public dt_codeName As String = "Discovery"
+    Public Shared dtBranch As String = "dt_pre_discovery"
+    Public Shared dt_codeName As String = "Discovery"
     Public Const SongCode As String = "Nightvision"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
+
+    Public Shared Current As MainForm
 
     Public ReadOnly Property IsImageBackgroundProcessRunning As Boolean
         Get
@@ -622,6 +624,7 @@ Public Class MainForm
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Current = Me
         ImgBW.Work = AddressOf ImgBW_DoWorkAsync
         InitDynaLog()
 
