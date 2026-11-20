@@ -2435,12 +2435,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- In the WDS Helper Client, authentication flows have been revamped to make them more secure. Additionally, you will now be asked if the provided credentials are valid
-        '''- DISMTools now downloads and installs Windows ADK version 10.1.28000.3481
-        '''- In addition to user account names blocked in an English installation of Windows, user account names of the Windows installation in your language are now blocked
-        '''- User accounts are now specified in cards. You can now add more than 5 local accounts [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue with installer colors in light mode
+        '''- Fixed an issue where the PE Helper operating system installer would fail to load if no WIM files were added to the ISO file
+        '''- Fixed an issue with ICACLS commands invoked by the PE Helper on domain controllers
+        '''
+        '''New features:
+        '''
+        '''- DISM progress is now rendered with a custom progress bar in the WDS Helper Client
+        '''- The PE Helper can now perform a full format of the main system partition of a disk, configurable via policies
+        '''- Active Direct [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
